@@ -8,6 +8,8 @@ let s:running_windows = has("win16") || has("win32") || has("win64")
 "load all the syntax checkers
 runtime! syntax_checkers/*.vim
 
+"refresh and redraw all the error info for this buf upon saving or changing
+"filetypes
 autocmd filetype,bufwritepost * call s:UpdateErrors()
 function! s:UpdateErrors()
     call s:CacheErrors()
@@ -15,6 +17,13 @@ function! s:UpdateErrors()
     call s:SignErrors()
 endfunction
 
+"detect and cache all syntax errors in this buffer
+"
+"depends on a function called SyntaxCheckers_{&ft}_GetQFList() existing
+"elsewhere
+"
+"saves and restores some settings that the syntax checking function may wish
+"to screw with if it uses :make!
 function! s:CacheErrors()
     let b:syntastic_qflist = []
 
@@ -39,14 +48,22 @@ function! s:CacheErrors()
     endif
 endfunction
 
+"return true if there are cached errors for this buf
 function! s:BufHasErrors()
     return exists("b:syntastic_qflist") && !empty(b:syntastic_qflist)
 endfunction
 
+
+"use >> to display syntax errors in the sign column
 sign define SyntaxError text=>> texthl=error
+
+"start counting sign ids at 5000, start here to hopefully avoid conflicting
+"wiht any other code that places signs (not sure if this precaution is
+"actually needed)
 let s:first_sign_id = 5000
 let s:next_sign_id = s:first_sign_id
 
+"place SyntaxError signs by all syntax errs in the buffer
 function s:SignErrors()
     if s:BufHasErrors()
         for i in b:syntastic_qflist
@@ -57,6 +74,7 @@ function s:SignErrors()
     endif
 endfunction
 
+"remove all SyntaxError signs in the buffer
 function! s:ClearSigns()
     for i in s:BufSignIds()
         exec "sign unplace " . i
@@ -64,6 +82,7 @@ function! s:ClearSigns()
     let b:syntastic_sign_ids = []
 endfunction
 
+"get all the ids of the SyntaxError signs in the buffer
 function! s:BufSignIds()
     if !exists("b:syntastic_sign_ids")
         let b:syntastic_sign_ids = []
@@ -71,7 +90,7 @@ function! s:BufSignIds()
     return b:syntastic_sign_ids
 endfunction
 
-command Errors call s:ShowQFList()
+"display the cached errors for this buf in the quickfix list
 function! s:ShowQFList()
     if exists("b:syntastic_qflist")
         call setqflist(b:syntastic_qflist)
@@ -79,10 +98,14 @@ function! s:ShowQFList()
     endif
 endfunction
 
-"return [syntax:X] if syntax errors are detected in the buffer, where X is the
-"line number of the first error.
-"return '' if no errors or if no syntax checker exists for the current filetype
-function! StatuslineSyntaxWarning()
+command Errors call s:ShowQFList()
+
+"return [syntax:X(Y)] if syntax errors are detected in the buffer, where X is the
+"line number of the first error and Y is the number of errors detected. (Y) is
+"only displayed if > 1 errors are detected
+"
+"return '' if no errors are cached for the buffer
+function! SyntasticStatuslineFlag()
     if s:BufHasErrors()
         let first_err_line = b:syntastic_qflist[0]['lnum']
         let err_count = ""
@@ -94,3 +117,5 @@ function! StatuslineSyntaxWarning()
         return ''
     endif
 endfunction
+
+" vim: set et sts=4 sw=4:
