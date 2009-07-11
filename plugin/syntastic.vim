@@ -47,15 +47,19 @@
 "
 "This way, a typical syntax checker function can look like this:
 "
-"   function! SyntaxCheckers_php_GetQFList()
-"       set makeprg=php\ -l\ %
-"       set errorformat=something\ really\ long\ and\ horrid
+"   function! SyntaxCheckers_ruby_GetQFList()
+"       set makeprg=ruby\ -c\ %
+"       set errorformat=%A%f:%l:\ syntax\ error\\,\ %m,%Z%p^,%-C%.%#
 "       silent make!
 "       return getqflist()
 "   endfunction
 "
 "After this function is called, makeprg, errorformat and the quickfix list
 "will be restored to their previous settings.
+"
+"NOTE: syntax checkers *can* piggy back off :make, but they dont *have* to. If
+"&errorformat is too crazy for you then you can parse the syntax checker
+"output yourself and compile it into the qflist style data structure.
 "
 "
 "Options:
