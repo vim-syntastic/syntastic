@@ -174,6 +174,7 @@ function! s:ClearSigns()
         exec "sign unplace " . i
     endfor
     let b:syntastic_sign_ids = []
+    let s:next_sign_id = s:first_sign_id
 endfunction
 
 "get all the ids of the SyntaxError signs in the buffer
