@@ -14,8 +14,8 @@ if exists("loaded_html_syntax_checker")
 endif
 let loaded_html_syntax_checker = 1
 
-"bail if the user doesnt have tidy installed
-if !executable("tidy")
+"bail if the user doesnt have tidy or grep installed
+if !executable("tidy") || !executable("grep")
     finish
 endif
 
