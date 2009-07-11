@@ -20,6 +20,7 @@
 "To use the above functionality, a syntax checker plugin must be present for
 "the filetype in question (more about that below).
 "
+"
 "Implementing syntax checker plugins:
 "----------------------------------------------------------------------------
 "
@@ -55,6 +56,16 @@
 "
 "After this function is called, makeprg, errorformat and the quickfix list
 "will be restored to their previous settings.
+"
+"
+"Options:
+"----------------------------------------------------------------------------
+"
+"Use this option to tell syntastic to use the :sign interface to mark syntax
+"errors
+"    let g:syntastic_enable_signs=1
+"
+"
 "============================================================================
 
 if exists("g:loaded_syntastic_plugin")
@@ -64,6 +75,10 @@ let g:loaded_syntastic_plugin = 1
 
 let s:running_windows = has("win16") || has("win32") || has("win64")
 
+if !exists("g:syntastic_enable_signs")
+    let g:syntastic_enable_signs = 0
+endif
+
 "load all the syntax checkers
 runtime! syntax_checkers/*.vim
 
@@ -72,8 +87,11 @@ runtime! syntax_checkers/*.vim
 autocmd filetype,bufwritepost * call s:UpdateErrors()
 function! s:UpdateErrors()
     call s:CacheErrors()
-    call s:ClearSigns()
-    call s:SignErrors()
+
+    if g:syntastic_enable_signs
+        call s:ClearSigns()
+        call s:SignErrors()
+    endif
 endfunction
 
 "detect and cache all syntax errors in this buffer
