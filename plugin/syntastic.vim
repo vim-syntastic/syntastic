@@ -21,6 +21,19 @@
 "the filetype in question (more about that below).
 "
 "
+"Using the statusline flag
+"----------------------------------------------------------------------------
+"
+"To use the statusline flag, this must appear in your &statusline setting:
+"    %{SyntasticStatuslineFlag()}
+"
+"Something like this could be more useful:
+"
+"    set statusline+=%#warningmsg#
+"    set statusline+=%{SyntasticStatuslineFlag()}
+"    set statusline+=%*
+"
+"
 "Implementing syntax checker plugins:
 "----------------------------------------------------------------------------
 "
