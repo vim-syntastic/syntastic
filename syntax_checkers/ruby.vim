@@ -21,7 +21,7 @@ endif
 
 function! SyntaxCheckers_ruby_GetQFList()
     set makeprg=ruby\ -c\ %
-    set errorformat=%-GSyntax\ OK,%A%f:%l:\ syntax\ error\\,\ %m,%Z%p^,%-C%.%#
+    set errorformat=%-GSyntax\ OK,%E%f:%l:\ syntax\ error\\,\ %m,%Z%p^,%W%f:%l:\ warning:\ %m,%Z%p^,%-C%.%#
     silent make!
     return getqflist()
 endfunction
