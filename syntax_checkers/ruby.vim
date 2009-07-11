@@ -10,6 +10,7 @@ endif
 
 function! SyntaxCheckers_ruby_GetQFList()
     set makeprg=ruby\ -c\ %
+    set errorformat=%A%f:%l:\ syntax\ error\\,\ %m,%Z%p^,%-C%.%#
     silent make!
     return getqflist()
 endfunction
