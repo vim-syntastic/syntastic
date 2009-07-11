@@ -1,3 +1,62 @@
+"============================================================================
+"File:        syntastic.vim
+"Description: vim plugin for on the fly syntax checking
+"Maintainer:  Martin Grenfell <martin_grenfell at msn dot com>
+"License:     This program is free software. It comes without any warranty,
+"             to the extent permitted by applicable law. You can redistribute
+"             it and/or modify it under the terms of the Do What The Fuck You
+"             Want To Public License, Version 2, as published by Sam Hocevar.
+"             See http://sam.zoy.org/wtfpl/COPYING for more details.
+"
+"============================================================================
+"
+"Syntastic does the following:
+"----------------------------------------------------------------------------
+"
+"1. Provides a statusline flag to notify you of errors in the buffer
+"2. Uses the :sign interface to point out lines with syntax errors
+"3. Defines :Errors, which opens the syntax errors in quickfix window
+"
+"To use the above functionality, a syntax checker plugin must be present for
+"the filetype in question (more about that below).
+"
+"Implementing syntax checker plugins:
+"----------------------------------------------------------------------------
+"
+"A syntax checker plugin is really nothing more than a single function.  You
+"should define them in ~/.vim/syntax_checkers/<filetype>.vim. This is purely
+"for convenience; Syntastic doesn't actually care where these functions are
+"defined.
+"
+"A syntax checker plugin should define a function of the form:
+"
+"    SyntaxCheckers_<filetype>_GetQFList()
+"
+"The output of this function should be of the same form as the getqflist()
+"function. See :help getqflist() for details.
+"
+"Syntastic is designed so that the syntax checker plugins can be implemented
+"using vims :make facility without screwing up the users current make
+"settings. To this end, the following settings are saved and restored after
+"the syntax checking function is called:
+"
+"   * the users quickfix list
+"   * &makeprg
+"   * &errorformat
+"
+"This way, a typical syntax checker function can look like this:
+"
+"   function! SyntaxCheckers_php_GetQFList()
+"       set makeprg=php\ -l\ %
+"       set errorformat=something\ really\ long\ and\ horrid
+"       silent make!
+"       return getqflist()
+"   endfunction
+"
+"After this function is called, makeprg, errorformat and the quickfix list
+"will be restored to their previous settings.
+"============================================================================
+
 if exists("g:loaded_syntastic_plugin")
     finish
 endif
