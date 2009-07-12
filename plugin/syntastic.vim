@@ -99,9 +99,8 @@ endif
 "load all the syntax checkers
 runtime! syntax_checkers/*.vim
 
-"refresh and redraw all the error info for this buf upon saving or changing
-"filetypes
-autocmd filetype,bufwritepost * call s:UpdateErrors()
+"refresh and redraw all the error info for this buf when saving or reading
+autocmd bufreadpost,bufwritepost * call s:UpdateErrors()
 function! s:UpdateErrors()
     call s:CacheErrors()
 
