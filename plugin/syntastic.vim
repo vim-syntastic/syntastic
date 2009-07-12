@@ -121,25 +121,27 @@ endfunction
 function! s:CacheErrors()
     let b:syntastic_qflist = []
 
-    if exists("*SyntaxCheckers_". &ft ."_GetQFList") && filereadable(expand("%"))
-        let oldqfixlist = getqflist()
-        let old_makeprg = &makeprg
-        let old_shellpipe = &shellpipe
-        let old_errorformat = &errorformat
+    for ft in split(&ft, '\.')
+        if exists("*SyntaxCheckers_". ft ."_GetQFList") && filereadable(expand("%"))
+            let oldqfixlist = getqflist()
+            let old_makeprg = &makeprg
+            let old_shellpipe = &shellpipe
+            let old_errorformat = &errorformat
 
-        if !s:running_windows
-            "this is a hack to stop the screen needing to be ':redraw'n when
-            "when :make is run. Otherwise the screen flickers annoyingly
-            let &shellpipe='&>'
+            if !s:running_windows
+                "this is a hack to stop the screen needing to be ':redraw'n when
+                "when :make is run. Otherwise the screen flickers annoyingly
+                let &shellpipe='&>'
+            endif
+
+            let b:syntastic_qflist = extend(b:syntastic_qflist, SyntaxCheckers_{ft}_GetQFList())
+
+            call setqflist(oldqfixlist)
+            let &makeprg = old_makeprg
+            let &errorformat = old_errorformat
+            let &shellpipe=old_shellpipe
         endif
-
-        let b:syntastic_qflist =  SyntaxCheckers_{&ft}_GetQFList()
-
-        call setqflist(oldqfixlist)
-        let &makeprg = old_makeprg
-        let &errorformat = old_errorformat
-        let &shellpipe=old_shellpipe
-    endif
+    endfor
 endfunction
 
 "return true if there are cached errors for this buf
