@@ -19,7 +19,7 @@ if !executable("sass")
     finish
 endif
 
-function! SyntaxCheckers_sass_GetQFList()
+function! SyntaxCheckers_sass_GetLocList()
     let output = system("sass -c " . expand("%"))
     if v:shell_error != 0
         "sass only outputs the first error, so parse it ourselves

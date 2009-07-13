@@ -19,7 +19,7 @@ if !executable("tidy") || !executable("grep")
     finish
 endif
 
-function! SyntaxCheckers_html_GetQFList()
+function! SyntaxCheckers_html_GetLocList()
 
     "grep out the '<table> lacks "summary" attribute' since it is almost
     "always present and almost always useless
@@ -29,10 +29,10 @@ function! SyntaxCheckers_html_GetQFList()
     silent make!
 
     "the file name isnt in the output so stick in the buf num manually
-    let qflist = getqflist()
-    for i in qflist
+    let loclist = getloclist(0)
+    for i in loclist
         let i['bufnr'] = bufnr("")
     endfor
 
-    return qflist
+    return loclist
 endfunction

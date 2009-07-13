@@ -15,7 +15,7 @@
 "
 "1. Provides a statusline flag to notify you of errors in the buffer
 "2. Uses the :sign interface to point out lines with syntax errors
-"3. Defines :Errors, which opens the syntax errors in quickfix window
+"3. Defines :Errors, which opens the syntax errors in location list window
 "
 "To use the above functionality, a syntax checker plugin must be present for
 "the filetype in question (more about that below).
@@ -44,35 +44,35 @@
 "
 "A syntax checker plugin should define a function of the form:
 "
-"    SyntaxCheckers_<filetype>_GetQFList()
+"    SyntaxCheckers_<filetype>_GetLocList()
 "
-"The output of this function should be of the same form as the getqflist()
-"function. See :help getqflist() for details.
+"The output of this function should be of the same form as the getloclist()
+"function. See :help getloclist() and :help getqflist() for details.
 "
 "Syntastic is designed so that the syntax checker plugins can be implemented
-"using vims :make facility without screwing up the users current make
+"using vims :lmake facility without screwing up the users current make
 "settings. To this end, the following settings are saved and restored after
 "the syntax checking function is called:
 "
-"   * the users quickfix list
+"   * the users location list
 "   * &makeprg
 "   * &errorformat
 "
 "This way, a typical syntax checker function can look like this:
 "
-"   function! SyntaxCheckers_ruby_GetQFList()
+"   function! SyntaxCheckers_ruby_GetLocList()
 "       set makeprg=ruby\ -c\ %
 "       set errorformat=%-GSyntax\ OK,%A%f:%l:\ syntax\ error\\,\ %m,%Z%p^,%-C%.%#
-"       silent make!
-"       return getqflist()
+"       silent lmake!
+"       return getloclist(0)
 "   endfunction
 "
-"After this function is called, makeprg, errorformat and the quickfix list
+"After this function is called, makeprg, errorformat and the location list
 "will be restored to their previous settings.
 "
-"NOTE: syntax checkers *can* piggy back off :make, but they dont *have* to. If
+"NOTE: syntax checkers *can* piggy back off :lmake, but they dont *have* to. If
 "&errorformat is too crazy for you then you can parse the syntax checker
-"output yourself and compile it into the qflist style data structure.
+"output yourself and compile it into the loclist style data structure.
 "
 "
 "Options:
@@ -96,8 +96,8 @@ if !exists("g:syntastic_enable_signs")
     let g:syntastic_enable_signs = 0
 endif
 
-if !exists("g:syntastic_enable_auto_copen")
-    let g:syntastic_enable_auto_copen = 0
+if !exists("g:syntastic_auto_loc_list")
+    let g:syntastic_auto_loc_list = 0
 endif
 
 "load all the syntax checkers
@@ -113,37 +113,41 @@ function! s:UpdateErrors()
         call s:SignErrors()
     endif
 
-    if g:syntastic_enable_auto_copen && s:BufHasErrors()
-        call s:ShowQFList()
+    if g:syntastic_auto_loc_list
+        if s:BufHasErrors()
+            call s:ShowLocList()
+        else
+            lclose
+        endif
     endif
 endfunction
 
 "detect and cache all syntax errors in this buffer
 "
-"depends on a function called SyntaxCheckers_{&ft}_GetQFList() existing
+"depends on a function called SyntaxCheckers_{&ft}_GetLocList() existing
 "elsewhere
 "
 "saves and restores some settings that the syntax checking function may wish
-"to screw with if it uses :make!
+"to screw with if it uses :lmake!
 function! s:CacheErrors()
-    let b:syntastic_qflist = []
+    let b:syntastic_loclist = []
 
     for ft in split(&ft, '\.')
-        if exists("*SyntaxCheckers_". ft ."_GetQFList") && filereadable(expand("%"))
-            let oldqfixlist = getqflist()
+        if exists("*SyntaxCheckers_". ft ."_GetLocList") && filereadable(expand("%"))
+            let oldlocixlist = getloclist(0)
             let old_makeprg = &makeprg
             let old_shellpipe = &shellpipe
             let old_errorformat = &errorformat
 
             if !s:running_windows
                 "this is a hack to stop the screen needing to be ':redraw'n when
-                "when :make is run. Otherwise the screen flickers annoyingly
+                "when :lmake is run. Otherwise the screen flickers annoyingly
                 let &shellpipe='&>'
             endif
 
-            let b:syntastic_qflist = extend(b:syntastic_qflist, SyntaxCheckers_{ft}_GetQFList())
+            let b:syntastic_loclist = extend(b:syntastic_loclist, SyntaxCheckers_{ft}_GetLocList())
 
-            call setqflist(oldqfixlist)
+            call setloclist(0, oldlocixlist)
             let &makeprg = old_makeprg
             let &errorformat = old_errorformat
             let &shellpipe=old_shellpipe
@@ -153,7 +157,7 @@ endfunction
 
 "return true if there are cached errors for this buf
 function! s:BufHasErrors()
-    return exists("b:syntastic_qflist") && !empty(b:syntastic_qflist)
+    return exists("b:syntastic_loclist") && !empty(b:syntastic_loclist)
 endfunction
 
 
@@ -169,7 +173,7 @@ let s:next_sign_id = s:first_sign_id
 "place SyntaxError signs by all syntax errs in the buffer
 function s:SignErrors()
     if s:BufHasErrors()
-        for i in b:syntastic_qflist
+        for i in b:syntastic_loclist
             exec "sign place ". s:next_sign_id ." line=". i['lnum'] ." name=SyntaxError file=". expand("%:p")
             call add(s:BufSignIds(), s:next_sign_id)
             let s:next_sign_id += 1
@@ -194,15 +198,15 @@ function! s:BufSignIds()
     return b:syntastic_sign_ids
 endfunction
 
-"display the cached errors for this buf in the quickfix list
-function! s:ShowQFList()
-    if exists("b:syntastic_qflist")
-        call setqflist(b:syntastic_qflist)
-        copen
+"display the cached errors for this buf in the location list
+function! s:ShowLocList()
+    if exists("b:syntastic_loclist")
+        call setloclist(0, b:syntastic_loclist)
+        lopen
     endif
 endfunction
 
-command Errors call s:ShowQFList()
+command Errors call s:ShowLocList()
 
 "return [syntax:X(Y)] if syntax errors are detected in the buffer, where X is the
 "line number of the first error and Y is the number of errors detected. (Y) is
@@ -211,10 +215,10 @@ command Errors call s:ShowQFList()
 "return '' if no errors are cached for the buffer
 function! SyntasticStatuslineFlag()
     if s:BufHasErrors()
-        let first_err_line = b:syntastic_qflist[0]['lnum']
+        let first_err_line = b:syntastic_loclist[0]['lnum']
         let err_count = ""
-        if len(b:syntastic_qflist) > 1
-            let err_count = "(" . len(b:syntastic_qflist) . ")"
+        if len(b:syntastic_loclist) > 1
+            let err_count = "(" . len(b:syntastic_loclist) . ")"
         endif
         return '[syntax:' . first_err_line . err_count . ']'
     else

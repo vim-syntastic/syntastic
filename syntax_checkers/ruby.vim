@@ -19,9 +19,9 @@ if !executable("ruby")
     finish
 endif
 
-function! SyntaxCheckers_ruby_GetQFList()
+function! SyntaxCheckers_ruby_GetLocList()
     set makeprg=ruby\ -c\ %
     set errorformat=%-GSyntax\ OK,%E%f:%l:\ syntax\ error\\,\ %m,%Z%p^,%W%f:%l:\ warning:\ %m,%Z%p^,%-C%.%#
     silent make!
-    return getqflist()
+    return getloclist(0)
 endfunction

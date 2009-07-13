@@ -19,7 +19,7 @@ if !executable("haml")
     finish
 endif
 
-function! SyntaxCheckers_haml_GetQFList()
+function! SyntaxCheckers_haml_GetLocList()
     let output = system("haml -c " . expand("%"))
     if v:shell_error != 0
         "haml only outputs the first error, so parse it ourselves
