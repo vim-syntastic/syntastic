@@ -117,6 +117,8 @@ function! s:UpdateErrors()
         if s:BufHasErrors()
             call s:ShowLocList()
         else
+            "TODO: this will close the loc list window if one was opened by
+            "something other than syntastic
             lclose
         endif
     endif
