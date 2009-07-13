@@ -165,7 +165,7 @@ endfunction
 sign define SyntaxError text=>> texthl=error
 
 "start counting sign ids at 5000, start here to hopefully avoid conflicting
-"wiht any other code that places signs (not sure if this precaution is
+"with any other code that places signs (not sure if this precaution is
 "actually needed)
 let s:first_sign_id = 5000
 let s:next_sign_id = s:first_sign_id
