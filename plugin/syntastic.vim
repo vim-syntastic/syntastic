@@ -96,6 +96,10 @@ if !exists("g:syntastic_enable_signs")
     let g:syntastic_enable_signs = 0
 endif
 
+if !exists("g:syntastic_enable_auto_copen")
+    let g:syntastic_enable_auto_copen = 0
+endif
+
 "load all the syntax checkers
 runtime! syntax_checkers/*.vim
 
@@ -107,6 +111,10 @@ function! s:UpdateErrors()
     if g:syntastic_enable_signs
         call s:ClearSigns()
         call s:SignErrors()
+    endif
+
+    if g:syntastic_enable_auto_copen && s:BufHasErrors()
+        call s:ShowQFList()
     endif
 endfunction
 
