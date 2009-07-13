@@ -26,7 +26,7 @@ function! SyntaxCheckers_html_GetLocList()
     let &makeprg="tidy -e % 2>&1 \\| grep -v '\<table\> lacks \"summary\" attribute'"
 
     set errorformat=%Wline\ %l\ column\ %c\ -\ Warning:\ %m,%Eline\ %l\ column\ %c\ -\ Error:\ %m,%-G%.%#,%-G%.%#
-    silent make!
+    silent lmake!
 
     "the file name isnt in the output so stick in the buf num manually
     let loclist = getloclist(0)
