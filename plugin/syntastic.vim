@@ -83,6 +83,11 @@
 "    let g:syntastic_enable_signs=1
 "
 "
+"Use this option tell the script to automatically open the location list (i.e.
+"the error window) when a buffer has errors
+"    let g:syntastic_auto_loc_list=1
+"
+"
 "============================================================================
 
 if exists("g:loaded_syntastic_plugin")
