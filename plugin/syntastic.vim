@@ -163,7 +163,8 @@ endfunction
 
 
 "use >> to display syntax errors in the sign column
-sign define SyntaxError text=>> texthl=error
+sign define SyntasticError text=>> texthl=error
+sign define SyntasticWarning text=>> texthl=warningmsg
 
 "start counting sign ids at 5000, start here to hopefully avoid conflicting
 "with any other code that places signs (not sure if this precaution is
@@ -171,11 +172,16 @@ sign define SyntaxError text=>> texthl=error
 let s:first_sign_id = 5000
 let s:next_sign_id = s:first_sign_id
 
-"place SyntaxError signs by all syntax errs in the buffer
+"place signs by all syntax errs in the buffer
 function s:SignErrors()
     if s:BufHasErrors()
         for i in b:syntastic_loclist
-            exec "sign place ". s:next_sign_id ." line=". i['lnum'] ." name=SyntaxError file=". expand("%:p")
+            let sign_type = 'SyntasticError'
+            if i['type'] == 'W'
+                let sign_type = 'SyntasticWarning'
+            endif
+
+            exec "sign place ". s:next_sign_id ." line=". i['lnum'] ." name=". sign_type ." file=". expand("%:p")
             call add(s:BufSignIds(), s:next_sign_id)
             let s:next_sign_id += 1
         endfor
