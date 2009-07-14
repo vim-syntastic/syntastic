@@ -20,7 +20,7 @@ if !executable("ruby")
 endif
 
 function! SyntaxCheckers_ruby_GetLocList()
-    set makeprg=ruby\ -c\ %
+    set makeprg=ruby\ -w\ -c\ %
     set errorformat=%-GSyntax\ OK,%E%f:%l:\ syntax\ error\\,\ %m,%Z%p^,%W%f:%l:\ warning:\ %m,%Z%p^,%-C%.%#
     silent lmake!
     return getloclist(0)
