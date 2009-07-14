@@ -109,8 +109,7 @@ function! s:UpdateErrors()
     call s:CacheErrors()
 
     if g:syntastic_enable_signs
-        call s:ClearSigns()
-        call s:SignErrors()
+        call s:RefreshSigns()
     endif
 
     if g:syntastic_auto_loc_list
@@ -183,13 +182,12 @@ function s:SignErrors()
     endif
 endfunction
 
-"remove all SyntaxError signs in the buffer
-function! s:ClearSigns()
-    for i in s:BufSignIds()
+"remove the signs with the given ids from this buffer
+function! s:RemoveSigns(ids)
+    for i in a:ids
         exec "sign unplace " . i
+        call remove(s:BufSignIds(), index(s:BufSignIds(), i))
     endfor
-    let b:syntastic_sign_ids = []
-    let s:next_sign_id = s:first_sign_id
 endfunction
 
 "get all the ids of the SyntaxError signs in the buffer
@@ -198,6 +196,14 @@ function! s:BufSignIds()
         let b:syntastic_sign_ids = []
     endif
     return b:syntastic_sign_ids
+endfunction
+
+"update the error signs
+function! s:RefreshSigns()
+    let old_signs = copy(s:BufSignIds())
+    call s:SignErrors()
+    call s:RemoveSigns(old_signs)
+    let s:first_sign_id = s:next_sign_id
 endfunction
 
 "display the cached errors for this buf in the location list
