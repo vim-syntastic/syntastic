@@ -169,7 +169,7 @@ endfunction
 
 "use >> to display syntax errors in the sign column
 sign define SyntasticError text=>> texthl=error
-sign define SyntasticWarning text=>> texthl=warningmsg
+sign define SyntasticWarning text=>> texthl=todo
 
 "start counting sign ids at 5000, start here to hopefully avoid conflicting
 "with any other code that places signs (not sure if this precaution is
