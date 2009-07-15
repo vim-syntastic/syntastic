@@ -140,7 +140,7 @@ function! s:CacheErrors()
 
     for ft in split(&ft, '\.')
         if exists("*SyntaxCheckers_". ft ."_GetLocList") && filereadable(expand("%"))
-            let oldlocixlist = getloclist(0)
+            let oldloclist = getloclist(0)
             let old_makeprg = &makeprg
             let old_shellpipe = &shellpipe
             let old_errorformat = &errorformat
@@ -153,7 +153,7 @@ function! s:CacheErrors()
 
             let b:syntastic_loclist = extend(b:syntastic_loclist, SyntaxCheckers_{ft}_GetLocList())
 
-            call setloclist(0, oldlocixlist)
+            call setloclist(0, oldloclist)
             let &makeprg = old_makeprg
             let &errorformat = old_errorformat
             let &shellpipe=old_shellpipe
