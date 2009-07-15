@@ -20,8 +20,8 @@ if !executable("ruby")
 endif
 
 function! SyntaxCheckers_ruby_GetLocList()
-    set makeprg=ruby\ -w\ -c\ %
-    set errorformat=%-GSyntax\ OK,%E%f:%l:\ syntax\ error\\,\ %m,%Z%p^,%W%f:%l:\ warning:\ %m,%Z%p^,%-C%.%#
-    silent lmake!
-    return getloclist(0)
+    let makeprg = 'ruby -w -c %'
+    let errorformat =  '%-GSyntax OK,%E%f:%l: syntax error\, %m,%Z%p^,%W%f:%l: warning: %m,%Z%p^,%-C%.%#'
+
+    return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 endfunction

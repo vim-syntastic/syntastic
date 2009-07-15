@@ -24,19 +24,17 @@ function! SyntaxCheckers_php_GetLocList()
 endfunction
 
 function! s:PhpErrors()
-    set makeprg=php\ -l\ %
-    set errorformat=%-GNo\ syntax\ errors\ detected\ in%.%#,%-GErrors\ parsing\ %.%#,%-G\\s%#,%EParse\ error:\ syntax\ error\\,\ %m\ in\ %f\ on\ line\ %l,
-    silent lmake!
-    return getloclist(0)
+    let makeprg = "php -l %"
+    let errorformat='%-GNo syntax errors detected in%.%#,%-GErrors parsing %.%#,%-G\s%#,%EParse error: syntax error\, %m in %f on line %l'
+    return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 endfunction
 
 function! s:HtmlErrors()
-    let &makeprg="tidy -e % 2>&1"
+    let makeprg="tidy -e % 2>&1"
+    let errorformat='%Wline %l column %c - Warning: %m,%Eline %l column %c - Error: %m,%-G%.%#,%-G%.%#'
+    let loclist = SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 
-    set errorformat=%Wline\ %l\ column\ %c\ -\ Warning:\ %m,%Eline\ %l\ column\ %c\ -\ Error:\ %m,%-G%.%#,%-G%.%#
-    silent lmake!
-
-    let loclist = filter(getloclist(0), 'index(s:html_ignored_errors, v:val["text"]) == -1')
+    call filter(loclist, 'index(s:html_ignored_errors, v:val["text"]) == -1')
 
     "the file name isnt in the output so stick in the buf num manually
     for i in loclist

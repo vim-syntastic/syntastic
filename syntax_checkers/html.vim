@@ -23,13 +23,11 @@ function! SyntaxCheckers_html_GetLocList()
 
     "grep out the '<table> lacks "summary" attribute' since it is almost
     "always present and almost always useless
-    let &makeprg="tidy -e % 2>&1 \\| grep -v '\<table\> lacks \"summary\" attribute'"
-
-    set errorformat=%Wline\ %l\ column\ %c\ -\ Warning:\ %m,%Eline\ %l\ column\ %c\ -\ Error:\ %m,%-G%.%#,%-G%.%#
-    silent lmake!
+    let makeprg="tidy -e % 2>&1 \\| grep -v '\<table\> lacks \"summary\" attribute'"
+    let errorformat='%Wline %l column %c - Warning: %m,%Eline %l column %c - Error: %m,%-G%.%#,%-G%.%#'
+    let loclist = SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 
     "the file name isnt in the output so stick in the buf num manually
-    let loclist = getloclist(0)
     for i in loclist
         let i['bufnr'] = bufnr("")
     endfor
