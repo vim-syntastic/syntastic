@@ -15,36 +15,12 @@ endif
 let loaded_php_syntax_checker = 1
 
 "bail if the user doesnt have php installed
-if !executable("php") || !executable("tidy")
+if !executable("php")
     finish
 endif
 
 function! SyntaxCheckers_php_GetLocList()
-    return extend(s:PhpErrors(), s:HtmlErrors())
-endfunction
-
-function! s:PhpErrors()
     let makeprg = "php -l %"
     let errorformat='%-GNo syntax errors detected in%.%#,%-GErrors parsing %.%#,%-G\s%#,%EParse error: syntax error\, %m in %f on line %l'
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 endfunction
-
-function! s:HtmlErrors()
-    let makeprg="tidy -e % 2>&1"
-    let errorformat='%Wline %l column %c - Warning: %m,%Eline %l column %c - Error: %m,%-G%.%#,%-G%.%#'
-    let loclist = SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
-
-    call filter(loclist, 'index(s:html_ignored_errors, v:val["text"]) == -1')
-
-    "the file name isnt in the output so stick in the buf num manually
-    for i in loclist
-        let i['bufnr'] = bufnr("")
-    endfor
-
-    return loclist
-endfunction
-
-let s:html_ignored_errors = ["inserting missing 'title' element",
-                           \ 'missing <!DOCTYPE> declaration',
-                           \ 'inserting implicit <body>',
-                           \ '<table> lacks "summary" attribute']
