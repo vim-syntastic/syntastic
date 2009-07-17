@@ -146,8 +146,19 @@ function! s:CacheErrors()
 endfunction
 
 "return true if there are cached errors for this buf
-function! s:BufHasErrors()
+function! s:BufHasErrorsOrWarnings()
     return exists("b:syntastic_loclist") && !empty(b:syntastic_loclist)
+endfunction
+
+function! s:BufHasErrors()
+    if exists("b:syntastic_loclist")
+        for i in b:syntastic_loclist
+            if i['type'] == 'E'
+                return 1
+            endif
+        endfor
+    endif
+    return 0
 endfunction
 
 
@@ -163,7 +174,7 @@ let s:next_sign_id = s:first_sign_id
 
 "place signs by all syntax errs in the buffer
 function s:SignErrors()
-    if s:BufHasErrors()
+    if s:BufHasErrorsOrWarnings()
         for i in b:syntastic_loclist
             let sign_type = 'SyntasticError'
             if i['type'] == 'W'
@@ -217,7 +228,7 @@ command Errors call s:ShowLocList()
 "
 "return '' if no errors are cached for the buffer
 function! SyntasticStatuslineFlag()
-    if s:BufHasErrors()
+    if s:BufHasErrorsOrWarnings()
         let first_err_line = b:syntastic_loclist[0]['lnum']
         let err_count = ""
         if len(b:syntastic_loclist) > 1
