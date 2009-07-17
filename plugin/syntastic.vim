@@ -145,11 +145,12 @@ function! s:CacheErrors()
     endfor
 endfunction
 
-"return true if there are cached errors for this buf
+"return true if there are cached errors/warnings for this buf
 function! s:BufHasErrorsOrWarnings()
     return exists("b:syntastic_loclist") && !empty(b:syntastic_loclist)
 endfunction
 
+"return true if there are cached errors for this buf
 function! s:BufHasErrors()
     if exists("b:syntastic_loclist")
         for i in b:syntastic_loclist
@@ -158,9 +159,7 @@ function! s:BufHasErrors()
             endif
         endfor
     endif
-    return 0
 endfunction
-
 
 "use >> to display syntax errors in the sign column
 sign define SyntasticError text=>> texthl=error
