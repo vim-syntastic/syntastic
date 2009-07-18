@@ -1,0 +1,171 @@
+*syntastic.txt*   Syntax checking on the fly has never been so pimp.
+*syntastic*
+
+
+                    It's a bird! It's a plane! ZOMG It's ... ~
+
+                   _____             __             __  _      ~
+                  / ___/__  ______  / /_____ ______/ /_(_)____ ~
+                  \__ \/ / / / __ \/ __/ __ `/ ___/ __/ / ___/ ~
+                 ___/ / /_/ / / / / /_/ /_/ (__  ) /_/ / /__   ~
+                /____/\__, /_/ /_/\__/\__,_/____/\__/_/\___/   ~
+                     /____/                                    ~
+
+
+
+                              Reference Manual~
+
+
+==============================================================================
+CONTENTS                                                  *syntastic-contents*
+
+    1.Intro...................................|syntastic-intro|
+    2.Functionality provided..................|syntastic-functionality|
+        2.1.The statusline flag...............|syntastic-statusline-flag|
+        2.2.Error signs.......................|syntastic-error-signs|
+        2.3.Error window......................|syntastic-error-window|
+    3.Options.................................|syntastic-options|
+    4.Writing syntax checkers.................|syntastic-syntax-checkers|
+    5.About...................................|syntastic-about|
+    6.License.................................|syntastic-license|
+
+
+==============================================================================
+1. Intro                                                     *syntastic-intro*
+
+Syntastic is a syntax checking plugin that runs buffers through external syntax
+checkers every time they are saved or opened. If syntax errors are detected,
+the user is notified and is happy because they didn't have to compile their
+code or execute their script to find them.
+
+The following features and functionality are provided:
+    * A statusline flag to alert you to syntax errors
+    * |signs| can be placed beside syntax errors, where a different sign is
+      used for errors and warnings.
+    * The :Error command is provided to open a |location-list| containing
+      the syntax errors in the current buffer
+
+==============================================================================
+2. Functionality provided                            *syntastic-functionality*
+
+
+Note: This functionality is only available if a syntax checker plugin is
+present for the filetype of the buffer in question. See
+|syntastic-syntax-checkers| for details.
+
+------------------------------------------------------------------------------
+2.1. The statusline flag                           *syntastic-statusline-flag*
+
+To use the statusline flag, this must appear in your &statusline setting >
+    %{SyntasticStatuslineFlag()}
+<
+Something like this could be more useful: >
+    set statusline+=%#warningmsg#
+    set statusline+=%{SyntasticStatuslineFlag()}
+    set statusline+=%*
+<
+
+When syntax errors are detected, the following will be displayed on your
+statusline: >
+    [syntax:X(Y)]
+<
+Where X is the line number of the first error and Y is the total number of
+errors. Note that "(Y)" only appears  if there is more than one error.
+
+------------------------------------------------------------------------------
+2.2. Error signs                                       *syntastic-error-signs*
+
+Syntastic uses the |:sign| commands to mark errors and warnings in the sign
+column. To enable this feature, use the |'syntastic_enable_signs'| option.
+
+------------------------------------------------------------------------------
+2.3. The error window                       *:Errors* *syntastic-error-window*
+
+You can use the :Errors command to display the errors for the current buffer
+in the |location-list|.
+
+Note that when you use :Errors, the current location list is overwritten with
+Syntastic's own location list.
+
+==============================================================================
+3. Options                                                 *syntastic-options*
+
+                                                    *'syntastic_enable_signs'*
+Use this option to tell syntastic to use the |:sign| interface to mark syntax
+errors: >
+    let g:syntastic_enable_signs=1
+<
+
+                                                   *'syntastic_auto_loc_list'*
+Use this option tell syntastic to automatically open the location list (see
+|syntastic-error-window|) when a buffer has errors: >
+    let g:syntastic_auto_loc_list=1
+<
+==============================================================================
+4. Writing syntax checkers                         *syntastic-syntax-checkers*
+
+
+A syntax checker plugin is really nothing more than a single function.  You
+should define them in ~/.vim/syntax_checkers/<filetype>.vim. This is purely for
+convenience; Syntastic doesn't actually care where these functions are defined.
+
+A syntax checker plugin must define a function of the form:
+>
+    SyntaxCheckers_<filetype>_GetLocList()
+<
+The output of this function must be of the same format as that returned by
+the |getloclist()| function. See |getloclist()| and |getqflist()| for
+details.
+
+To achieve this, the function should call |SyntasticMake()| or shell out to a
+syntax checker, parse the output and munge it into the format.
+
+There are several syntax checker plugins provided with this plugin. The ruby
+one is a good example of |SyntasticMake()|, while the haml one is a good
+example of how to create the data structure manually.
+
+
+SyntasticMake({options})                                     *SyntasticMake()*
+    {options} must be a dictionary. It can contain "makeprg" and "errorformat"
+    as keys (both optional).
+
+    SyntasticMake will run |:lmake| with the given |'makeprg'| and
+    |'errorformat'| (using the current settings if none are supplied). It will
+    store the resulting error list and use it to provide all of the
+    |syntastic-functionality|. The previous makeprg and errorformat settings
+    will then be restored, as well as the location list for the window.  From
+    the user's perspective, it will be as though |:lmake| was never run.
+
+    Note that the given "makeprg" and "errorformat" will be set using |:let-&|,
+    so you should not escape spaces.
+
+
+==============================================================================
+5. About                                                     *syntastic-about*
+
+The author of syntastic is a mighty wild stallion, hear him roar! >
+     _   _ _____ _____ ___ ___ ___ ____ _   _ _
+    | \ | | ____| ____|_ _|_ _|_ _/ ___| | | | |
+    |  \| |  _| |  _|  | | | | | | |  _| |_| | |
+    | |\  | |___| |___ | | | | | | |_| |  _  |_|
+    |_| \_|_____|_____|___|___|___\____|_| |_(_)
+
+<
+He likes to trot around in the back yard reading his emails and sipping a
+scolding hot cup of Earl Grey. Email him at martin_grenfell at msn dot com. He
+can also be found trolling the #vim channel on the freenode IRC network as
+scrooloose.
+
+Bug reports, feedback, suggestions etc are welcomed.
+
+
+The latest official releases will be on vim.org at some point.
+
+The latest dev versions are on github
+    http://github.com/scrooloose/syntastic
+
+==============================================================================
+6. License                                                 *syntastic-license*
+
+Syntastic is released under the wtfpl.
+See http://sam.zoy.org/wtfpl/COPYING.
