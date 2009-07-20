@@ -34,7 +34,7 @@ CONTENTS                                                  *syntastic-contents*
 1. Intro                                                     *syntastic-intro*
 
 Syntastic is a syntax checking plugin that runs buffers through external syntax
-checkers every time they are saved or opened. If syntax errors are detected,
+checkers as they are saved and opened. If syntax errors are detected,
 the user is notified and is happy because they didn't have to compile their
 code or execute their script to find them.
 
@@ -56,7 +56,7 @@ present for the filetype of the buffer in question. See
 ------------------------------------------------------------------------------
 2.1. The statusline flag                           *syntastic-statusline-flag*
 
-To use the statusline flag, this must appear in your &statusline setting >
+To use the statusline flag, this must appear in your |'statusline'| setting >
     %{SyntasticStatuslineFlag()}
 <
 Something like this could be more useful: >
@@ -75,8 +75,9 @@ errors. Note that "(Y)" only appears  if there is more than one error.
 ------------------------------------------------------------------------------
 2.2. Error signs                                       *syntastic-error-signs*
 
-Syntastic uses the |:sign| commands to mark errors and warnings in the sign
-column. To enable this feature, use the |'syntastic_enable_signs'| option.
+Syntastic uses the |:sign| commands to mark lines with errors and warnings in
+the sign column. To enable this feature, use the |'syntastic_enable_signs'|
+option.
 
 ------------------------------------------------------------------------------
 2.3. The error window                       *:Errors* *syntastic-error-window*
@@ -97,10 +98,11 @@ errors: >
 <
 
                                                    *'syntastic_auto_loc_list'*
-Use this option tell syntastic to automatically open the location list (see
-|syntastic-error-window|) when a buffer has errors: >
+Use this option to tell syntastic to automatically open the |location-list|
+(see |syntastic-error-window|) when a buffer has errors: >
     let g:syntastic_auto_loc_list=1
 <
+The location list is also closed again when there are no errors.
 
                                                   *'syntastic_quiet_warnings'*
 
@@ -120,8 +122,9 @@ this option has the following effects:
 
 
 A syntax checker plugin is really nothing more than a single function.  You
-should define them in ~/.vim/syntax_checkers/<filetype>.vim. This is purely for
-convenience; Syntastic doesn't actually care where these functions are defined.
+should define them in ~/.vim/syntax_checkers/<filetype>.vim, but this is
+purely for convenience; Syntastic doesn't actually care where these functions
+are defined.
 
 A syntax checker plugin must define a function of the form:
 >
