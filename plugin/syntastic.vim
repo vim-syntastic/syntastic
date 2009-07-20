@@ -25,6 +25,10 @@ if !exists("g:syntastic_auto_loc_list")
     let g:syntastic_auto_loc_list = 0
 endif
 
+if !exists("g:syntastic_quiet_warnings")
+    let g:syntastic_quiet_warnings = 0
+endif
+
 "load all the syntax checkers
 runtime! syntax_checkers/*.vim
 
@@ -38,7 +42,7 @@ function! s:UpdateErrors()
     endif
 
     if g:syntastic_auto_loc_list
-        if s:BufHasErrors()
+        if s:BufHasErrorsOrWarningsToDisplay()
             call s:ShowLocList()
         else
             "TODO: this will close the loc list window if one was opened by
@@ -72,13 +76,18 @@ endfunction
 
 "return true if there are cached errors for this buf
 function! s:BufHasErrors()
-    if exists("b:syntastic_loclist")
-        for i in b:syntastic_loclist
-            if i['type'] == 'E'
-                return 1
-            endif
-        endfor
+    return len(s:ErrorsForType('E')) > 0
+endfunction
+
+function! s:BufHasErrorsOrWarningsToDisplay()
+    return s:BufHasErrors() || (!g:syntastic_quiet_warnings && s:BufHasErrorsOrWarnings())
+endfunction
+
+function! s:ErrorsForType(type)
+    if !exists("b:syntastic_loclist")
+        return []
     endif
+    return filter(copy(b:syntastic_loclist), 'v:val["type"] ==# "' . a:type . '"')
 endfunction
 
 "use >> to display syntax errors in the sign column
@@ -93,7 +102,7 @@ let s:next_sign_id = s:first_sign_id
 
 "place signs by all syntax errs in the buffer
 function s:SignErrors()
-    if s:BufHasErrorsOrWarnings()
+    if s:BufHasErrorsOrWarningsToDisplay()
         for i in b:syntastic_loclist
             let sign_type = 'SyntasticError'
             if i['type'] == 'W'
@@ -147,13 +156,27 @@ command Errors call s:ShowLocList()
 "
 "return '' if no errors are cached for the buffer
 function! SyntasticStatuslineFlag()
-    if s:BufHasErrorsOrWarnings()
+    if s:BufHasErrorsOrWarningsToDisplay()
+
         let first_err_line = b:syntastic_loclist[0]['lnum']
-        let err_count = ""
-        if len(b:syntastic_loclist) > 1
-            let err_count = "(" . len(b:syntastic_loclist) . ")"
+        if g:syntastic_quiet_warnings
+            let first_err_line = s:ErrorsForType('E')[0]['lnum']
         endif
-        return '[syntax:' . first_err_line . err_count . ']'
+
+        let err_count = len(b:syntastic_loclist)
+        if g:syntastic_quiet_warnings
+            let err_count = len(s:ErrorsForType('E'))
+        endif
+
+        let toReturn = '[syntax:' . first_err_line
+
+        if err_count > 1
+            let toReturn .= '(' . err_count . ')'
+        endif
+
+        let toReturn .= ']'
+
+        return toReturn
     else
         return ''
     endif

@@ -101,6 +101,20 @@ Use this option tell syntastic to automatically open the location list (see
 |syntastic-error-window|) when a buffer has errors: >
     let g:syntastic_auto_loc_list=1
 <
+
+                                                  *'syntastic_quiet_warnings'*
+
+Use this option if you only care about syntax errors, not warnings. When set,
+this option has the following effects:
+    * the statusline flag only counts syntax errors
+    * no |signs| appear unless there is at least one error, whereupon both
+      errors and warnings are displayed
+    * the |'syntastic_auto_loc_list'| option only pops up the error window if
+      there's at least one error, whereupon both errors and warnings are
+      displayed
+>
+    let g:syntastic_quiet_warnings=1
+<
 ==============================================================================
 4. Writing syntax checkers                         *syntastic-syntax-checkers*
 
