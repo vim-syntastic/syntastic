@@ -25,7 +25,7 @@ function! SyntaxCheckers_haml_GetLocList()
         "haml only outputs the first error, so parse it ourselves
         let line = substitute(output, '^Syntax error on line \(\d*\):.*', '\1', '')
         let msg = substitute(output, '^Syntax error on line \d*:\(.*\)', '\1', '')
-        return [{'lnum' : line, 'text' : msg, 'bufnr': bufnr("") }]
+        return [{'lnum' : line, 'text' : msg, 'bufnr': bufnr(""), 'type': 'E' }]
     endif
     return []
 endfunction
