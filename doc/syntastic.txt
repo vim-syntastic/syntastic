@@ -38,16 +38,17 @@ checkers as they are saved and opened. If syntax errors are detected,
 the user is notified and is happy because they didn't have to compile their
 code or execute their script to find them.
 
-The following features and functionality are provided:
-    * A statusline flag to alert you to syntax errors
-    * |signs| can be placed beside syntax errors, where a different sign is
-      used for errors and warnings.
-    * The :Error command is provided to open a |location-list| containing
-      the syntax errors in the current buffer
-
 ==============================================================================
 2. Functionality provided                            *syntastic-functionality*
 
+By default, the script does nothing. The following functionality is provided
+and must be enabled/activated as indicated (see the sections below for more in
+depth descriptions):
+    * A statusline flag appears when syntax errors are detected
+    * |signs| are placed beside lines with syntax errors, where a different
+      sign is used for errors and warnings.
+    * The :Errors command is provided to open a |location-list| for
+      the syntax errors in the current buffer
 
 Note: This functionality is only available if a syntax checker plugin is
 present for the filetype of the buffer in question. See
@@ -64,7 +65,6 @@ Something like this could be more useful: >
     set statusline+=%{SyntasticStatuslineFlag()}
     set statusline+=%*
 <
-
 When syntax errors are detected, the following will be displayed on your
 statusline: >
     [syntax:X(Y)]
