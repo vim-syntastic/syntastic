@@ -58,9 +58,6 @@ endfunction
 "
 "depends on a function called SyntaxCheckers_{&ft}_GetLocList() existing
 "elsewhere
-"
-"saves and restores some settings that the syntax checking function may wish
-"to screw with if it uses :lmake!
 function! s:CacheErrors()
     let b:syntastic_loclist = []
 
