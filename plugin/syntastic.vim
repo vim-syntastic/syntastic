@@ -19,7 +19,7 @@ let g:loaded_syntastic_plugin = 1
 
 let s:running_windows = has("win16") || has("win32") || has("win64")
 
-if !exists("g:syntastic_enable_signs")
+if !exists("g:syntastic_enable_signs") || !has('signs')
     let g:syntastic_enable_signs = 0
 endif
 
@@ -89,9 +89,11 @@ function! s:ErrorsForType(type)
     return filter(copy(b:syntastic_loclist), 'v:val["type"] ==# "' . a:type . '"')
 endfunction
 
-"use >> to display syntax errors in the sign column
-sign define SyntasticError text=>> texthl=error
-sign define SyntasticWarning text=>> texthl=todo
+if g:syntastic_enable_signs
+    "use >> to display syntax errors in the sign column
+    sign define SyntasticError text=>> texthl=error
+    sign define SyntasticWarning text=>> texthl=todo
+endif
 
 "start counting sign ids at 5000, start here to hopefully avoid conflicting
 "with any other code that places signs (not sure if this precaution is
