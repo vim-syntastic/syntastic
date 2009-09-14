@@ -145,7 +145,11 @@ endfunction
 function! s:ShowLocList()
     if exists("b:syntastic_loclist")
         call setloclist(0, b:syntastic_loclist)
+        let num = winnr()
         lopen
+        if num != winnr()
+            wincmd p
+        endif
     endif
 endfunction
 
