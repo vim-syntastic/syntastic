@@ -28,7 +28,9 @@ CONTENTS                                                  *syntastic-contents*
     4.Options.................................|syntastic-options|
     5.Writing syntax checkers.................|syntastic-syntax-checkers|
     6.About...................................|syntastic-about|
-    7.License.................................|syntastic-license|
+    7.Changelog...............................|syntastic-changelog|
+    8.Credits.................................|syntastic-credits|
+    9.License.................................|syntastic-license|
 
 
 ==============================================================================
@@ -220,7 +222,36 @@ The latest dev versions are on github
     http://github.com/scrooloose/syntastic
 
 ==============================================================================
-7. License                                                 *syntastic-license*
+7. Changelog                                             *syntastic-changelog*
+
+1.1.0 [codenamed: tpimp]
+    - Dont load rubygems for ruby/eruby syntax checkers. Thanks tpope.
+    - Improve the javascript syntax checker to catch some warnings that were
+      getting missed. Thanks tpope.
+    - Dont automatically focus the error window. Thanks tpope.
+    - Add support for cucumber [tpope], haskell & perl [Anthony Carapetis],
+      and xhtml
+    - Add commands to enable/disable syntax checking at runtime. See :help
+      syntastic-commands.
+    - Add an option to specifiy syntax checkers that should be disabled by
+      default. See :help syntastic_disabled_filetypes.
+    - Dont use :signs if vim wasnt compiled with support for them.
+
+
+==============================================================================
+8. Credits                                                 *syntastic-credits*
+
+Thanks to the following people for testing, bug reports, patches etc. They own,
+hard.
+
+    Tim Carey-Smith (halorgium)
+    Tim Pope (tpope)
+    Travis Jeffery
+    Anthony Carapetis
+
+
+==============================================================================
+9. License                                                 *syntastic-license*
 
 Syntastic is released under the wtfpl.
 See http://sam.zoy.org/wtfpl/COPYING.
