@@ -1,5 +1,5 @@
 "============================================================================
-"File:        c.vim
+"File:        cpp.vim
 "Description: Syntax checking plugin for syntastic.vim
 "Maintainer:  Martin Grenfell <martin.grenfell at gmail dot com>
 "License:     This program is free software. It comes without any warranty,
@@ -9,22 +9,22 @@
 "             See http://sam.zoy.org/wtfpl/COPYING for more details.
 "
 "============================================================================
-if exists('loaded_c_syntax_checker')
+if exists('loaded_cpp_syntax_checker')
     finish
 endif
-let loaded_c_syntax_checker = 1
+let loaded_cpp_syntax_checker = 1
 
-if !executable('gcc')
+if !executable('g++')
     finish
 endif
 
-function! SyntaxCheckers_c_GetLocList()
-    let makeprg = 'gcc -fsyntax-only %'
+function! SyntaxCheckers_cpp_GetLocList()
+    let makeprg = 'g++ -fsyntax-only %'
     let errorformat =  '%-G%f:%s:,%f:%l: %m'
 
-    if expand('%') =~? '.h$'
-        if exists('g:syntastic_c_check_header')
-            let makeprg = 'gcc -c %'
+    if expand('%') =~? '\%(.h\|.hpp\|.hh\)$'
+        if exists('g:syntastic_cpp_check_header')
+            let makeprg = 'g++ -c %'
         else
             return []
         endif
@@ -32,4 +32,3 @@ function! SyntaxCheckers_c_GetLocList()
 
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 endfunction
-
