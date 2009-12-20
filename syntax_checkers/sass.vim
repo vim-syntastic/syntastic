@@ -20,7 +20,7 @@ if !executable("sass")
 endif
 
 function! SyntaxCheckers_sass_GetLocList()
-    let output = system("sass -c " . expand("%"))
+    let output = system("sass -c " . shellescape(expand("%")))
     if v:shell_error != 0
         "sass only outputs the first error, so parse it ourselves
         let line = substitute(output, '^Syntax error on line \(\d*\):.*', '\1', '')
