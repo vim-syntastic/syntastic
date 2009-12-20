@@ -15,7 +15,7 @@ endif
 let loaded_sh_syntax_checker = 1
 
 " bail if there is no proper shell (bash, zsh) to execute
-if !executable(&shell)
+if !executable(&shell) || &shell !~ 'bash\|zsh'
     finish
 endif
 
