@@ -20,12 +20,19 @@ if !executable(&shell) || &shell !~ 'bash\|zsh'
 endif
 
 function! SyntaxCheckers_sh_GetLocList()
-    let output = system(&shell . " -n " . expand("%"))
+    let output = split(system(&shell . " -n " . expand("%")), '\n')
     if v:shell_error != 0
         " bash/zsh only output the first error, so parse it ourselves
-        let line = substitute(output, '^[^:]*:\(\d*\):.*', '\1', '')
-        let msg = substitute(output, '^[^:]*:\d*: \(.*\)', '\1', '')
-        return [{'lnum' : line, 'text' : msg, 'bufnr': bufnr(""), 'type': 'E' }]
+        let result = []
+        for err_line in output
+            let line = substitute(err_line, '^[^:]*:\D\{-}\(\d\+\):.*', '\1', '')
+            let msg = substitute(err_line, '^[^:]*:\D\{-}\d\+: \(.*\)', '\1', '')
+            call add(result, {'lnum' : line,
+                            \ 'text' : msg,
+                            \ 'bufnr': bufnr(""),
+                            \ 'type': 'E' })
+        endfor
+        return result
     endif
     return []
 endfunction
