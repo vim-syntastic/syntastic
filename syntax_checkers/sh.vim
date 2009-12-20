@@ -20,7 +20,7 @@ if !executable(&shell) || &shell !~ 'bash\|zsh'
 endif
 
 function! SyntaxCheckers_sh_GetLocList()
-    let output = split(system(&shell . " -n " . expand("%")), '\n')
+    let output = split(system(&shell." -n ".shellescape(expand("%"))), '\n')
     if v:shell_error != 0
         " bash/zsh only output the first error, so parse it ourselves
         let result = []

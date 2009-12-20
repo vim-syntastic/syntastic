@@ -20,7 +20,7 @@ if !executable("haml")
 endif
 
 function! SyntaxCheckers_haml_GetLocList()
-    let output = system("haml -c " . expand("%"))
+    let output = system("haml -c " . shellescape(expand("%")))
     if v:shell_error != 0
         "haml only outputs the first error, so parse it ourselves
         let line = substitute(output, '^Syntax error on line \(\d*\):.*', '\1', '')
