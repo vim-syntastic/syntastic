@@ -19,12 +19,16 @@ if !executable("gcc")
 endif
 
 function! SyntaxCheckers_c_GetLocList()
-    " only check c files
-    if expand('%') =~ '.h$'
-        return []
-    endif
     let makeprg = 'gcc -fsyntax-only %'
     let errorformat =  '%-G%f:%s:,%f:%l: %m'
+
+    if expand('%') =~ '.h$'
+        if exists('g:syntastic_c_check_header')
+            let makeprg = 'gcc -c %'
+        else
+            return []
+        endif
+    endif
 
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 endfunction
