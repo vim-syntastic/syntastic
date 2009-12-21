@@ -9,6 +9,12 @@
 "             See http://sam.zoy.org/wtfpl/COPYING for more details.
 "
 "============================================================================
+
+" in order to also check header files add this to your .vimrc:
+" (this usually creates a .gch file in your source directory)
+"
+"   let g:syntastic_cpp_check_header = 1
+
 if exists('loaded_cpp_syntax_checker')
     finish
 endif

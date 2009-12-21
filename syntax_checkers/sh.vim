@@ -9,27 +9,25 @@
 "             See http://sam.zoy.org/wtfpl/COPYING for more details.
 "
 "============================================================================
-if exists("loaded_sh_syntax_checker")
+if exists('loaded_sh_syntax_checker')
     finish
 endif
 let loaded_sh_syntax_checker = 1
 
-" bail if there is no proper shell (bash, zsh) to execute
-if !executable(&shell) || &shell !~ 'bash\|zsh'
+if !executable(&shell) || &shell !~? 'bash\|zsh'
     finish
 endif
 
 function! SyntaxCheckers_sh_GetLocList()
-    let output = split(system(&shell." -n ".shellescape(expand("%"))), '\n')
+    let output = split(system(&shell.' -n '.shellescape(expand('%'))), '\n')
     if v:shell_error != 0
-        " bash/zsh only output the first error, so parse it ourselves
         let result = []
         for err_line in output
             let line = substitute(err_line, '^[^:]*:\D\{-}\(\d\+\):.*', '\1', '')
             let msg = substitute(err_line, '^[^:]*:\D\{-}\d\+: \(.*\)', '\1', '')
             call add(result, {'lnum' : line,
                             \ 'text' : msg,
-                            \ 'bufnr': bufnr(""),
+                            \ 'bufnr': bufnr(''),
                             \ 'type': 'E' })
         endfor
         return result

@@ -9,6 +9,12 @@
 "             See http://sam.zoy.org/wtfpl/COPYING for more details.
 "
 "============================================================================
+
+" in order to also check header files add this to your .vimrc:
+" (this usually creates a .gch file in your source directory)
+"
+"   let g:syntastic_c_check_header = 1
+
 if exists('loaded_c_syntax_checker')
     finish
 endif
@@ -32,4 +38,3 @@ function! SyntaxCheckers_c_GetLocList()
 
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 endfunction
-
