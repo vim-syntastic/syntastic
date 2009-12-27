@@ -14,12 +14,26 @@ if exists('loaded_sh_syntax_checker')
 endif
 let loaded_sh_syntax_checker = 1
 
-if !executable(&shell) || &shell !~? 'bash\|zsh'
-    finish
-endif
+function! GetShell()
+    let shebang = getbufline(bufname('.'), 1)[0]
+    if len(shebang) > 0
+        if match(shebang, 'bash') >= 0
+            return 'bash'
+        elseif match(shebang, 'zsh') >= 0
+            return 'zsh'
+        endif
+    endif
+    return ''
+endfunction
 
 function! SyntaxCheckers_sh_GetLocList()
-    let output = split(system(&shell.' -n '.shellescape(expand('%'))), '\n')
+    if !exists('b:shell')
+        let b:shell = GetShell()
+    endif
+    if len(b:shell) == 0
+        return []
+    endif
+    let output = split(system(b:shell.' -n '.shellescape(expand('%'))), '\n')
     if v:shell_error != 0
         let result = []
         for err_line in output
