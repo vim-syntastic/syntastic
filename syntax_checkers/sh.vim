@@ -21,6 +21,8 @@ function! GetShell()
             return 'bash'
         elseif match(shebang, 'zsh') >= 0
             return 'zsh'
+        elseif match(shebang, 'sh') >= 0
+            return 'sh'
         endif
     endif
     return ''
@@ -30,7 +32,7 @@ function! SyntaxCheckers_sh_GetLocList()
     if !exists('b:shell')
         let b:shell = GetShell()
     endif
-    if len(b:shell) == 0
+    if len(b:shell) == 0 || !executable(b:shell)
         return []
     endif
     let output = split(system(b:shell.' -n '.shellescape(expand('%'))), '\n')
