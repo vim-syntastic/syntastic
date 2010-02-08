@@ -36,5 +36,24 @@ function! SyntaxCheckers_c_GetLocList()
         endif
     endif
 
+    let makeprg .= s:CheckGtk()
+
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
+endfunction
+
+" search for a gtk include statement in the first 50 lines
+" if true, try to find the gtk headers with 'pkg-config'
+function! s:CheckGtk()
+    if executable('pkg-config')
+        for i in range(50)
+            if getline(i) =~? '^#include.*gtk'
+                if !exists('s:gtk_flags')
+                    let s:gtk_flags = system('pkg-config --cflags gtk+-2.0')
+                    let s:gtk_flags = ' '.s:gtk_flags
+                endif
+                return s:gtk_flags
+            endif
+        endfor
+    endif
+    return ''
 endfunction
