@@ -49,6 +49,7 @@ function! s:CheckGtk()
             if getline(i) =~? '^#include.*\%(gtk\|glib\)'
                 if !exists('s:gtk_flags')
                     let s:gtk_flags = system('pkg-config --cflags gtk+-2.0')
+                    let s:gtk_flags = substitute(s:gtk_flags, "\n", '', '')
                     let s:gtk_flags = ' '.s:gtk_flags
                 endif
                 return s:gtk_flags
