@@ -37,6 +37,7 @@ function! SyntaxCheckers_c_GetLocList()
     endif
 
     let makeprg .= s:CheckGtk()
+    let makeprg .= s:CheckRuby()
 
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 endfunction
@@ -53,6 +54,25 @@ function! s:CheckGtk()
                     let s:gtk_flags = ' '.s:gtk_flags
                 endif
                 return s:gtk_flags
+            endif
+        endfor
+    endif
+    return ''
+endfunction
+
+" search for a ruby include statement in the first 50 lines
+" if true, try to find the headers with rbconfig
+function! s:CheckRuby()
+    if executable('ruby')
+        for i in range(50)
+            if getline(i) =~? '^#include.*\%(ruby\)'
+                if !exists('s:ruby_flags')
+                    let s:ruby_flags = system('ruby -r rbconfig -e '
+                                \ . '''puts Config::CONFIG["archdir"]''')
+                    let s:ruby_flags = substitute(s:ruby_flags, "\n", '', '')
+                    let s:ruby_flags = ' -I'.s:ruby_flags
+                endif
+                return s:ruby_flags
             endif
         endfor
     endif
