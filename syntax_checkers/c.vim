@@ -55,16 +55,42 @@ endfunction
 function! s:SearchHeaders(handlers)
     let includes = ''
     let found = {}
+    let files = []
+
+    " search current buffer
     for i in range(100)
         for handler in a:handlers
             if !has_key(found, handler["func"]) 
-                if getline(i) =~? '^#include.*' . handler["regex"]
+                let line = getline(i)
+                if line =~? '^#include.*' . handler["regex"]
                     let includes .= handler["func"]
                     let found[handler["func"]] = 1
+                elseif line =~? '^#include\s\+"\S\+"'
+                    call add(files, matchstr(line, '^#include\s\+"\zs\S\+\ze"'))
                 endif
             endif
         endfor
     endfor
+
+    " search included headers
+    for hfile in files
+        if hfile != ''
+            let filename = expand('%:p:h') . ((has('win32') || has('win64')) ?
+                        \ '\' : '/') . hfile
+            let lines = readfile(filename, '', 100)
+            for line in lines
+                for handler in a:handlers
+                    if !has_key(found, handler["func"]) 
+                        if line =~? '^#include.*' . handler["regex"]
+                            let includes .= handler["func"]
+                            let found[handler["func"]] = 1
+                        endif
+                    endif
+                endfor
+            endfor
+        endif
+    endfor
+
     return includes
 endfunction
 
