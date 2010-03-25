@@ -54,20 +54,20 @@ endfunction
 " given in the s:handlers dictionary
 function! s:SearchHeaders(handlers)
     let includes = ''
+    let l:handlers = copy(a:handlers)
     let found = {}
     let files = []
 
     " search current buffer
     for i in range(100)
-        for handler in a:handlers
-            if !has_key(found, handler["func"]) 
-                let line = getline(i)
-                if line =~? '^#include.*' . handler["regex"]
-                    let includes .= handler["func"]
-                    let found[handler["func"]] = 1
-                elseif line =~? '^#include\s\+"\S\+"'
-                    call add(files, matchstr(line, '^#include\s\+"\zs\S\+\ze"'))
-                endif
+        for handler in l:handlers
+            let line = getline(i)
+            if line =~? '^#include.*' . handler["regex"]
+                let includes .= handler["func"]
+                let found[handler["func"]] = 1
+                call remove(l:handlers, index(l:handlers, handler))
+            elseif line =~? '^#include\s\+"\S\+"'
+                call add(files, matchstr(line, '^#include\s\+"\zs\S\+\ze"'))
             endif
         endfor
     endfor
@@ -77,14 +77,17 @@ function! s:SearchHeaders(handlers)
         if hfile != ''
             let filename = expand('%:p:h') . ((has('win32') || has('win64')) ?
                         \ '\' : '/') . hfile
-            let lines = readfile(filename, '', 100)
+            try
+                let lines = readfile(filename, '', 100)
+            catch /E484/
+                continue
+            endtry
             for line in lines
-                for handler in a:handlers
-                    if !has_key(found, handler["func"]) 
-                        if line =~? '^#include.*' . handler["regex"]
-                            let includes .= handler["func"]
-                            let found[handler["func"]] = 1
-                        endif
+                for handler in l:handlers
+                    if line =~? '^#include.*' . handler["regex"]
+                        let includes .= handler["func"]
+                        let found[handler["func"]] = 1
+                        call remove(l:handlers, index(l:handlers, handler))
                     endif
                 endfor
             endfor
