@@ -14,6 +14,11 @@
 " (this usually creates a .gch file in your source directory)
 "
 "   let g:syntastic_c_check_header = 1
+"
+" to disable the search of included header files after special
+" libraries like gtk and glib add this line to your .vimrc:
+"
+"   let g:syntastic_c_no_include_search = 1
 
 if exists('loaded_c_syntax_checker')
     finish
@@ -45,7 +50,10 @@ function! SyntaxCheckers_c_GetLocList()
         endif
     endif
 
-    let makeprg .= s:SearchHeaders(s:handlers)
+    if !exists('g:syntastic_c_no_include_search') ||
+                \ g:syntastic_c_no_include_search != 1
+        let makeprg .= s:SearchHeaders(s:handlers)
+    endif
 
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 endfunction
