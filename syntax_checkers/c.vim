@@ -41,6 +41,7 @@ function! s:Init()
     call s:RegHandler('\%(gtk\|glib\)', s:CheckGtk())
     call s:RegHandler('ruby', s:CheckRuby())
     call s:RegHandler('Python\.h', s:CheckPython())
+    call s:RegHandler('glade', s:CheckGlade())
 
     unlet! s:RegHandler
 endfunction
@@ -150,6 +151,19 @@ function! s:CheckPython()
             let s:python_flags = ' -I' . s:python_flags
         endif
         return s:python_flags
+    endif
+    return ''
+endfunction
+
+" try to find the glade headers with 'pkg-config'
+function! s:CheckGlade()
+    if executable('pkg-config')
+        if !exists('s:glade_flags')
+            let s:glade_flags = system('pkg-config --cflags libglade-2.0')
+            let s:glade_flags = substitute(s:glade_flags, "\n", '', '')
+            let s:glade_flags = ' ' . s:glade_flags
+        endif
+        return s:glade_flags
     endif
     return ''
 endfunction
