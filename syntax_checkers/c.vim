@@ -55,7 +55,6 @@ endfunction
 function! s:SearchHeaders(handlers)
     let includes = ''
     let l:handlers = copy(a:handlers)
-    let found = {}
     let files = []
 
     " search current buffer
@@ -64,7 +63,6 @@ function! s:SearchHeaders(handlers)
             let line = getline(i)
             if line =~? '^#include.*' . handler["regex"]
                 let includes .= handler["func"]
-                let found[handler["func"]] = 1
                 call remove(l:handlers, index(l:handlers, handler))
             elseif line =~? '^#include\s\+"\S\+"'
                 call add(files, matchstr(line, '^#include\s\+"\zs\S\+\ze"'))
@@ -86,7 +84,6 @@ function! s:SearchHeaders(handlers)
                 for handler in l:handlers
                     if line =~? '^#include.*' . handler["regex"]
                         let includes .= handler["func"]
-                        let found[handler["func"]] = 1
                         call remove(l:handlers, index(l:handlers, handler))
                     endif
                 endfor
