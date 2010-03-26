@@ -40,6 +40,7 @@ function! s:Init()
     let s:handlers = []
     call s:RegHandler('\%(gtk\|glib\)', s:CheckGtk())
     call s:RegHandler('ruby', s:CheckRuby())
+    call s:RegHandler('Python\.h', s:CheckPython())
 
     unlet! s:RegHandler
 endfunction
@@ -125,7 +126,7 @@ function! s:CheckGtk()
     return ''
 endfunction
 
-" try to find the headers with 'rbconfig'
+" try to find the ruby headers with 'rbconfig'
 function! s:CheckRuby()
     if executable('ruby')
         if !exists('s:ruby_flags')
@@ -135,6 +136,20 @@ function! s:CheckRuby()
             let s:ruby_flags = ' -I' . s:ruby_flags
         endif
         return s:ruby_flags
+    endif
+    return ''
+endfunction
+
+" try to find the python headers with distutils
+function! s:CheckPython()
+    if executable('python')
+        if !exists('s:python_flags')
+            let s:python_flags = system('python -c ''from distutils import '
+                        \ . 'sysconfig; print sysconfig.get_python_inc()''')
+            let s:python_flags = substitute(s:python_flags, "\n", '', '')
+            let s:python_flags = ' -I' . s:python_flags
+        endif
+        return s:python_flags
     endif
     return ''
 endfunction
