@@ -81,10 +81,10 @@ function! s:SearchHeaders(handlers)
     for i in range(100)
         for handler in l:handlers
             let line = getline(i)
-            if line =~? '^#include.*' . handler["regex"]
+            if line =~# '^#include.*' . handler["regex"]
                 let includes .= handler["func"]
                 call remove(l:handlers, index(l:handlers, handler))
-            elseif line =~? '^#include\s\+"\S\+"'
+            elseif line =~# '^#include\s\+"\S\+"'
                 call add(files, matchstr(line, '^#include\s\+"\zs\S\+\ze"'))
             endif
         endfor
@@ -102,7 +102,7 @@ function! s:SearchHeaders(handlers)
             endtry
             for line in lines
                 for handler in l:handlers
-                    if line =~? '^#include.*' . handler["regex"]
+                    if line =~# '^#include.*' . handler["regex"]
                         let includes .= handler["func"]
                         call remove(l:handlers, index(l:handlers, handler))
                     endif
