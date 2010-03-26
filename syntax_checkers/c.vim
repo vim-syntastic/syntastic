@@ -19,6 +19,12 @@
 " libraries like gtk and glib add this line to your .vimrc:
 "
 "   let g:syntastic_c_no_include_search = 1
+"
+" alternatively you can set the buffer local variable b:syntastic_c_cflags.
+" If this variable is set for the current buffer no search for additional
+" libraries is done. I.e. set the variable like this:
+"
+"   let b:syntastic_c_cflags = ' -I/usr/include/libsoup-2.4'
 
 if exists('loaded_c_syntax_checker')
     finish
@@ -50,9 +56,13 @@ function! SyntaxCheckers_c_GetLocList()
         endif
     endif
 
-    if !exists('g:syntastic_c_no_include_search') ||
-                \ g:syntastic_c_no_include_search != 1
-        let makeprg .= s:SearchHeaders(s:handlers)
+    if !exists('b:syntastic_c_cflags')
+        if !exists('g:syntastic_c_no_include_search') ||
+                    \ g:syntastic_c_no_include_search != 1
+            let makeprg .= s:SearchHeaders(s:handlers)
+        endif
+    else
+        let makeprg .= b:syntastic_c_cflags
     endif
 
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
