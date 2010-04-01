@@ -46,6 +46,8 @@ function! s:Init()
                 \ ['gtk', 'gtk+-2.0', 'gtk+', 'glib-2.0', 'glib'])
     call s:RegHandler('glade', 's:CheckPKG',
                 \ ['glade', 'libglade-2.0', 'libglade'])
+    call s:RegHandler('libsoup', 's:CheckPKG',
+                \ ['libsoup', 'libsoup-2.4', 'libsoup-2.2'])
     call s:RegHandler('ruby', 's:CheckRuby', [])
     call s:RegHandler('Python\.h', 's:CheckPython', [])
 
