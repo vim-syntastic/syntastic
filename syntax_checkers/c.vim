@@ -41,10 +41,13 @@ set cpo&vim
 " initialize handlers
 function! s:Init()
     let s:handlers = []
-    call s:RegHandler('\%(gtk\|glib\)', s:CheckGtk())
-    call s:RegHandler('ruby', s:CheckRuby())
-    call s:RegHandler('Python\.h', s:CheckPython())
-    call s:RegHandler('glade', s:CheckGlade())
+    let s:cflags = {}
+    call s:RegHandler('\%(gtk\|glib\)', 's:CheckPKG',
+                \ ['gtk', 'gtk+-2.0', 'gtk+', 'glib-2.0', 'glib'])
+    call s:RegHandler('glade', 's:CheckPKG',
+                \ ['glade', 'libglade-2.0', 'libglade'])
+    call s:RegHandler('ruby', 's:CheckRuby', [])
+    call s:RegHandler('Python\.h', 's:CheckPython', [])
 
     unlet! s:RegHandler
 endfunction
@@ -85,7 +88,7 @@ function! s:SearchHeaders(handlers)
         for handler in l:handlers
             let line = getline(i)
             if line =~# '^#include.*' . handler["regex"]
-                let includes .= handler["func"]
+                let includes .= call(handler["func"], handler["args"])
                 call remove(l:handlers, index(l:handlers, handler))
             elseif line =~# '^#include\s\+"\S\+"'
                 call add(files, matchstr(line, '^#include\s\+"\zs\S\+\ze"'))
@@ -106,7 +109,7 @@ function! s:SearchHeaders(handlers)
             for line in lines
                 for handler in l:handlers
                     if line =~# '^#include.*' . handler["regex"]
-                        let includes .= handler["func"]
+                        let includes .= call(handler["func"], handler["args"])
                         call remove(l:handlers, index(l:handlers, handler))
                     endif
                 endfor
@@ -117,15 +120,23 @@ function! s:SearchHeaders(handlers)
     return includes
 endfunction
 
-" try to find the gtk headers with 'pkg-config'
-function! s:CheckGtk()
+" try to find library with 'pkg-config'
+" search possible libraries from first to last given
+" argument until one is found
+function! s:CheckPKG(name, ...)
     if executable('pkg-config')
-        if !exists('s:gtk_flags')
-            let s:gtk_flags = system('pkg-config --cflags gtk+-2.0')
-            let s:gtk_flags = substitute(s:gtk_flags, "\n", '', '')
-            let s:gtk_flags = ' ' . s:gtk_flags
+        if !has_key(s:cflags, a:name)
+            for i in range(a:0)
+                let l:cflags = system('pkg-config --cflags '.a:000[i])
+                if v:shell_error == 0
+                    let l:cflags = ' '.substitute(l:cflags, "\n", '', '')
+                    let s:cflags[a:name] = l:cflags
+                    return l:cflags
+                endif
+            endfor
+        else
+            return s:cflags[a:name]
         endif
-        return s:gtk_flags
     endif
     return ''
 endfunction
@@ -158,24 +169,12 @@ function! s:CheckPython()
     return ''
 endfunction
 
-" try to find the glade headers with 'pkg-config'
-function! s:CheckGlade()
-    if executable('pkg-config')
-        if !exists('s:glade_flags')
-            let s:glade_flags = system('pkg-config --cflags libglade-2.0')
-            let s:glade_flags = substitute(s:glade_flags, "\n", '', '')
-            let s:glade_flags = ' ' . s:glade_flags
-        endif
-        return s:glade_flags
-    endif
-    return ''
-endfunction
-
 " return a handler dictionary object
-function! s:RegHandler(regex, function)
+function! s:RegHandler(regex, function, args)
     let handler = {}
     let handler["regex"] = a:regex
-    let handler["func"] = a:function
+    let handler["func"] = function(a:function)
+    let handler["args"] = a:args
     call add(s:handlers, handler)
 endfunction
 
