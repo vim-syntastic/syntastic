@@ -35,6 +35,9 @@ if !executable('gcc')
     finish
 endif
 
+let s:save_cpo = &cpo
+set cpo&vim
+
 " initialize handlers
 function! s:Init()
     let s:handlers = []
@@ -177,3 +180,6 @@ function! s:RegHandler(regex, function)
 endfunction
 
 call s:Init()
+
+let &cpo = s:save_cpo
+unlet s:save_cpo
