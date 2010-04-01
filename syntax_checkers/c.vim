@@ -50,6 +50,14 @@ function! s:Init()
                 \ ['libsoup', 'libsoup-2.4', 'libsoup-2.2'])
     call s:RegHandler('webkit', 's:CheckPKG',
                 \ ['webkit', 'webkit-1.0'])
+    call s:RegHandler('cairo', 's:CheckPKG',
+                \ ['cairo', 'cairo'])
+    call s:RegHandler('pango', 's:CheckPKG',
+                \ ['pango', 'pango'])
+    call s:RegHandler('libxml', 's:CheckPKG',
+                \ ['libxml', 'libxml-2.0', 'libxml'])
+    call s:RegHandler('freetype', 's:CheckPKG',
+                \ ['freetype', 'freetype2', 'freetype'])
     call s:RegHandler('ruby', 's:CheckRuby', [])
     call s:RegHandler('Python\.h', 's:CheckPython', [])
 
