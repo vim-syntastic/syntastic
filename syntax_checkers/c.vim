@@ -48,6 +48,8 @@ function! s:Init()
                 \ ['glade', 'libglade-2.0', 'libglade'])
     call s:RegHandler('libsoup', 's:CheckPKG',
                 \ ['libsoup', 'libsoup-2.4', 'libsoup-2.2'])
+    call s:RegHandler('webkit', 's:CheckPKG',
+                \ ['webkit', 'webkit-1.0'])
     call s:RegHandler('ruby', 's:CheckRuby', [])
     call s:RegHandler('Python\.h', 's:CheckPython', [])
 
