@@ -42,6 +42,7 @@ set cpo&vim
 function! s:Init()
     let s:handlers = []
     let s:cflags = {}
+
     call s:RegHandler('\%(gtk\|glib\)', 's:CheckPKG',
                 \ ['gtk', 'gtk+-2.0', 'gtk+', 'glib-2.0', 'glib'])
     call s:RegHandler('glade', 's:CheckPKG',
@@ -58,6 +59,10 @@ function! s:Init()
                 \ ['libxml', 'libxml-2.0', 'libxml'])
     call s:RegHandler('freetype', 's:CheckPKG',
                 \ ['freetype', 'freetype2', 'freetype'])
+    call s:RegHandler('SDL', 's:CheckPKG',
+                \ ['sdl', 'sdl'])
+    call s:RegHandler('opengl', 's:CheckPKG',
+                \ ['opengl', 'gl'])
     call s:RegHandler('ruby', 's:CheckRuby', [])
     call s:RegHandler('Python\.h', 's:CheckPython', [])
 
