@@ -15,7 +15,7 @@ endif
 let loaded_sh_syntax_checker = 1
 
 function! GetShell()
-    let shebang = getbufline(bufname('.'), 1)[0]
+    let shebang = getbufline(bufnr('%'), 1)[0]
     if len(shebang) > 0
         if match(shebang, 'bash') >= 0
             return 'bash'
