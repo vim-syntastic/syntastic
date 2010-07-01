@@ -10,23 +10,26 @@
 "
 "============================================================================
 
-" in order to also check header files add this to your .vimrc:
+" In order to also check header files add this to your .vimrc:
 " (this usually creates a .gch file in your source directory)
 "
 "   let g:syntastic_c_check_header = 1
 "
-" to disable the search of included header files after special
+" To disable the search of included header files after special
 " libraries like gtk and glib add this line to your .vimrc:
 "
 "   let g:syntastic_c_no_include_search = 1
 "
-" to enable header files being re-checked on every file write add this line
-" to your .vimrc (otherwise the header files are checked only one time on
-" initially loading the file):
+" To enable header files being re-checked on every file write add the
+" following line to your .vimrc. Otherwise the header files are checked only
+" one time on initially loading the file.
+" In order to force syntastic to refresh the header includes simply
+" unlet b:syntastic_c_includes. Then the header files are being re-checked on
+" the next file write.
 "
 "   let g:syntastic_c_auto_refresh_headers = 1
 "
-" alternatively you can set the buffer local variable b:syntastic_c_cflags.
+" Alternatively you can set the buffer local variable b:syntastic_c_cflags.
 " If this variable is set for the current buffer no search for additional
 " libraries is done. I.e. set the variable like this:
 "
@@ -93,10 +96,10 @@ function! SyntaxCheckers_c_GetLocList()
             if exists('g:syntastic_c_auto_refresh_headers')
                 let makeprg .= s:SearchHeaders(s:handlers)
             else
-                if !exists('b:syntastic_c_flags')
-                    let b:syntastic_c_flags = s:SearchHeaders(s:handlers)
+                if !exists('b:syntastic_c_includes')
+                    let b:syntastic_c_includes = s:SearchHeaders(s:handlers)
                 endif
-                let makeprg .= b:syntastic_c_flags
+                let makeprg .= b:syntastic_c_includes
             endif
         endif
     else
