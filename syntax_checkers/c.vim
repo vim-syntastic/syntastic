@@ -27,7 +27,7 @@
 " unlet b:syntastic_c_includes. Then the header files are being re-checked on
 " the next file write.
 "
-"   let g:syntastic_c_auto_refresh_headers = 1
+"   let g:syntastic_c_auto_refresh_includes = 1
 "
 " Alternatively you can set the buffer local variable b:syntastic_c_cflags.
 " If this variable is set for the current buffer no search for additional
@@ -93,8 +93,8 @@ function! SyntaxCheckers_c_GetLocList()
     if !exists('b:syntastic_c_cflags')
         if !exists('g:syntastic_c_no_include_search') ||
                     \ g:syntastic_c_no_include_search != 1
-            if exists('g:syntastic_c_auto_refresh_headers') &&
-                        \ g:syntastic_c_auto_refresh_headers != 0
+            if exists('g:syntastic_c_auto_refresh_includes') &&
+                        \ g:syntastic_c_auto_refresh_includes != 0
                 let makeprg .= s:SearchHeaders(s:handlers)
             else
                 if !exists('b:syntastic_c_includes')
