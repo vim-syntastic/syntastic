@@ -20,6 +20,12 @@
 "
 "   let g:syntastic_c_no_include_search = 1
 "
+" to enable header files being re-checked on every file write add this line
+" to your .vimrc (otherwise the header files are checked only one time on
+" initially loading the file):
+"
+"   let g:syntastic_c_auto_refresh_headers = 1
+"
 " alternatively you can set the buffer local variable b:syntastic_c_cflags.
 " If this variable is set for the current buffer no search for additional
 " libraries is done. I.e. set the variable like this:
@@ -84,7 +90,14 @@ function! SyntaxCheckers_c_GetLocList()
     if !exists('b:syntastic_c_cflags')
         if !exists('g:syntastic_c_no_include_search') ||
                     \ g:syntastic_c_no_include_search != 1
-            let makeprg .= s:SearchHeaders(s:handlers)
+            if exists('g:syntastic_c_auto_refresh_headers')
+                let makeprg .= s:SearchHeaders(s:handlers)
+            else
+                if !exists('b:syntastic_c_flags')
+                    let b:syntastic_c_flags = s:SearchHeaders(s:handlers)
+                endif
+                let makeprg .= b:syntastic_c_flags
+            endif
         endif
     else
         let makeprg .= b:syntastic_c_cflags
