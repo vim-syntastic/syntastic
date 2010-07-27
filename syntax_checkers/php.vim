@@ -21,6 +21,6 @@ endif
 
 function! SyntaxCheckers_php_GetLocList()
     let makeprg = "php -l %"
-    let errorformat='%-GNo syntax errors detected in%.%#,PHP Parse error: %#syntax %trror\, %m in %f on line %l,%-GErrors parsing %.%#,%-G\s%#'
+    let errorformat='%-GNo syntax errors detected in%.%#,PHP Parse error: %#syntax %trror\, %m in %f on line %l,PHP Fatal %trror: %m in %f on line %l,%-GErrors parsing %.%#,%-G\s%#'
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 endfunction
