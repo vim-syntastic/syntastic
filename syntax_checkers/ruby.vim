@@ -15,12 +15,16 @@ endif
 let loaded_ruby_syntax_checker = 1
 
 "bail if the user doesnt have ruby installed
-if !executable("ruby")
+if !exists('g:ruby_path') && !executable("ruby")
     finish
 endif
 
 function! SyntaxCheckers_ruby_GetLocList()
+  if exists('g:ruby_path')
+    let makeprg = 'RUBYOPT= ' . g:ruby_path . ' -W1 -c %'
+  else
     let makeprg = 'RUBYOPT= ruby -W1 -c %'
+  endif
     let errorformat =  '%-GSyntax OK,%E%f:%l: syntax error\, %m,%Z%p^,%W%f:%l: warning: %m,%Z%p^,%-C%.%#'
 
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
