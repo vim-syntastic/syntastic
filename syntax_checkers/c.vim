@@ -180,7 +180,8 @@ endfunction
 function! s:CheckPhp()
     if executable('php-config')
         if !exists('s:php_flags')
-            let s:php_flags = ' ' . system('php-config --includes')
+            let s:php_flags = system('php-config --includes')
+            let s:php_flags = ' ' . substitute(s:php_flags, "\n", '', '')
         endif
         return s:php_flags
     endif
