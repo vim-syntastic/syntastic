@@ -74,6 +74,7 @@ function! s:Init()
                 \ ['opengl', 'gl'])
     call s:RegHandler('ruby', 's:CheckRuby', [])
     call s:RegHandler('Python\.h', 's:CheckPython', [])
+    call s:RegHandler('php\.h', 's:CheckPhp', [])
 
     unlet! s:RegHandler
 endfunction
@@ -171,6 +172,17 @@ function! s:CheckPKG(name, ...)
         else
             return s:cflags[a:name]
         endif
+    endif
+    return ''
+endfunction
+
+" try to find PHP includes with 'php-config'
+function! s:CheckPhp()
+    if executable('php-config')
+        if !exists('s:php_flags')
+            let s:php_flags = ' ' . system('php-config --includes')
+        endif
+        return s:php_flags
     endif
     return ''
 endfunction
