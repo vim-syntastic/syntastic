@@ -10,17 +10,26 @@
 "
 "============================================================================
 
-" in order to also check header files add this to your .vimrc:
+" In order to also check header files add this to your .vimrc:
 " (this usually creates a .gch file in your source directory)
 "
 "   let g:syntastic_c_check_header = 1
 "
-" to disable the search of included header files after special
+" To disable the search of included header files after special
 " libraries like gtk and glib add this line to your .vimrc:
 "
 "   let g:syntastic_c_no_include_search = 1
 "
-" alternatively you can set the buffer local variable b:syntastic_c_cflags.
+" To enable header files being re-checked on every file write add the
+" following line to your .vimrc. Otherwise the header files are checked only
+" one time on initially loading the file.
+" In order to force syntastic to refresh the header includes simply
+" unlet b:syntastic_c_includes. Then the header files are being re-checked on
+" the next file write.
+"
+"   let g:syntastic_c_auto_refresh_includes = 1
+"
+" Alternatively you can set the buffer local variable b:syntastic_c_cflags.
 " If this variable is set for the current buffer no search for additional
 " libraries is done. I.e. set the variable like this:
 "
@@ -65,6 +74,7 @@ function! s:Init()
                 \ ['opengl', 'gl'])
     call s:RegHandler('ruby', 's:CheckRuby', [])
     call s:RegHandler('Python\.h', 's:CheckPython', [])
+    call s:RegHandler('php\.h', 's:CheckPhp', [])
 
     unlet! s:RegHandler
 endfunction
@@ -84,7 +94,15 @@ function! SyntaxCheckers_c_GetLocList()
     if !exists('b:syntastic_c_cflags')
         if !exists('g:syntastic_c_no_include_search') ||
                     \ g:syntastic_c_no_include_search != 1
-            let makeprg .= s:SearchHeaders(s:handlers)
+            if exists('g:syntastic_c_auto_refresh_includes') &&
+                        \ g:syntastic_c_auto_refresh_includes != 0
+                let makeprg .= s:SearchHeaders(s:handlers)
+            else
+                if !exists('b:syntastic_c_includes')
+                    let b:syntastic_c_includes = s:SearchHeaders(s:handlers)
+                endif
+                let makeprg .= b:syntastic_c_includes
+            endif
         endif
     else
         let makeprg .= b:syntastic_c_cflags
@@ -154,6 +172,18 @@ function! s:CheckPKG(name, ...)
         else
             return s:cflags[a:name]
         endif
+    endif
+    return ''
+endfunction
+
+" try to find PHP includes with 'php-config'
+function! s:CheckPhp()
+    if executable('php-config')
+        if !exists('s:php_flags')
+            let s:php_flags = system('php-config --includes')
+            let s:php_flags = ' ' . substitute(s:php_flags, "\n", '', '')
+        endif
+        return s:php_flags
     endif
     return ''
 endfunction
