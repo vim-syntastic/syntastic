@@ -20,7 +20,7 @@ if !executable("cucumber")
 endif
 
 function! SyntaxCheckers_cucumber_GetLocList()
-    let makeprg = 'cucumber --dry-run --quiet --strict --format pretty %'
+    let makeprg = 'cucumber --dry-run --quiet --strict --format pretty '.shellescape(expand('%'))
     let errorformat =  '%f:%l:%c:%m,%W      %.%# (%m),%-Z%f:%l:%.%#,%-G%.%#'
 
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
