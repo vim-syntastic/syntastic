@@ -111,6 +111,10 @@ let s:next_sign_id = s:first_sign_id
 function s:SignErrors()
     if s:BufHasErrorsOrWarningsToDisplay()
         for i in b:syntastic_loclist
+            if i['bufnr'] != bufnr("")
+                continue
+            endif
+
             let sign_type = 'SyntasticError'
             if i['type'] == 'W'
                 let sign_type = 'SyntasticWarning'
