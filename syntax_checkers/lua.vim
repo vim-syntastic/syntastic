@@ -24,6 +24,14 @@ function! SyntaxCheckers_lua_GetLocList()
     let makeprg = 'luac -p ' . shellescape(expand('%'))
     let errorformat =  'luac: %#%f:%l: %m'
 
-    return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
+    let loclist = SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
+
+    let bn = bufnr('')
+    for loc in loclist
+        let loc['bufnr'] = bn
+        let loc['type'] = 'E'
+    endfor
+
+    return loclist
 endfunction
 
