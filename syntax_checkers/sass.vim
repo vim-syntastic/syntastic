@@ -20,7 +20,7 @@ if !executable("sass")
 endif
 
 function! SyntaxCheckers_sass_GetLocList()
-    let makeprg='sass --check %'
+    let makeprg='sass --check '.shellescape(expand('%'))
     let errorformat = '%Wwarning on line %l:,%Z%m,Syntax %trror on line %l: %m'
     let loclist = SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 

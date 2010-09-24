@@ -24,7 +24,7 @@ if !executable("perl")
 endif
 
 function! SyntaxCheckers_perl_GetLocList()
-    let makeprg = $VIMRUNTIME.'/tools/efm_perl.pl -c %'
+    let makeprg = $VIMRUNTIME.'/tools/efm_perl.pl -c '.shellescape(expand('%'))
     let errorformat =  '%f:%l:%m'
 
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })

@@ -22,7 +22,7 @@ endif
 " As this calls ghc, it can take a few seconds... maybe hlint or something
 " could do a good enough job?
 function! SyntaxCheckers_haskell_GetLocList()
-    let makeprg = 'ghc % -e :q'
+    let makeprg = 'ghc '.shellescape(expand('%')).' -e :q'
     let errorformat = '%-G\\s%#,%f:%l:%c:%m,%E%f:%l:%c:,%Z%m,'
 
 

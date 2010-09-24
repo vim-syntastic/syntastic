@@ -80,12 +80,12 @@ function! s:Init()
 endfunction
 
 function! SyntaxCheckers_c_GetLocList()
-    let makeprg = 'gcc -fsyntax-only %'
+    let makeprg = 'gcc -fsyntax-only '.shellescape(expand('%'))
     let errorformat =  '%-G%f:%s:,%f:%l: %m'
 
     if expand('%') =~? '.h$'
         if exists('g:syntastic_c_check_header')
-            let makeprg = 'gcc -c %'
+            let makeprg = 'gcc -c '.shellescape(expand('%'))
         else
             return []
         endif
