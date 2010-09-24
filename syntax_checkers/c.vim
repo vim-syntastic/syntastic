@@ -81,7 +81,9 @@ endfunction
 
 function! SyntaxCheckers_c_GetLocList()
     let makeprg = 'gcc -fsyntax-only '.shellescape(expand('%'))
-    let errorformat =  '%-G%f:%s:,%f:%l: %m'
+    let errorformat = '%-G%f:%s:,%-G%f:%l: %#error: %#(Each undeclared '
+                \ 'identifier is reported only%.%#,%-G%f:%l: %#error: %#for '
+                \ 'each function it appears%.%#,%f:%l: %trror: %m,%f:%l: %m'
 
     if expand('%') =~? '.h$'
         if exists('g:syntastic_c_check_header')
