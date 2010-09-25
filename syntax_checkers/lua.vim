@@ -1,7 +1,7 @@
 "============================================================================
-"File:        sass.vim
+"File:        lua.vim
 "Description: Syntax checking plugin for syntastic.vim
-"Maintainer:  Martin Grenfell <martin.grenfell at gmail dot com>
+"Maintainer:  Gregor Uhlenheuer <kongo2002 at gmail dot com>
 "License:     This program is free software. It comes without any warranty,
 "             to the extent permitted by applicable law. You can redistribute
 "             it and/or modify it under the terms of the Do What The Fuck You
@@ -9,25 +9,29 @@
 "             See http://sam.zoy.org/wtfpl/COPYING for more details.
 "
 "============================================================================
-if exists("loaded_sass_syntax_checker")
+
+if exists('loaded_lua_syntax_checker')
     finish
 endif
-let loaded_sass_syntax_checker = 1
+let loaded_lua_syntax_checker = 1
 
-"bail if the user doesnt have the sass binary installed
-if !executable("sass")
+" check if the lua compiler is installed
+if !executable('luac')
     finish
 endif
 
-function! SyntaxCheckers_sass_GetLocList()
-    let makeprg='sass --check '.shellescape(expand('%'))
-    let errorformat = '%Wwarning on line %l:,%Z%m,Syntax %trror on line %l: %m'
+function! SyntaxCheckers_lua_GetLocList()
+    let makeprg = 'luac -p ' . shellescape(expand('%'))
+    let errorformat =  'luac: %#%f:%l: %m'
+
     let loclist = SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 
-    let bn = bufnr("")
-    for i in loclist
-        let i['bufnr'] = bn
+    let bn = bufnr('')
+    for loc in loclist
+        let loc['bufnr'] = bn
+        let loc['type'] = 'E'
     endfor
 
     return loclist
 endfunction
+

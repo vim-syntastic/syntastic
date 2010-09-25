@@ -21,7 +21,7 @@ endif
 
 function! SyntaxCheckers_xhtml_GetLocList()
 
-    let makeprg="tidy -xml -e %"
+    let makeprg="tidy -xml -e ".shellescape(expand('%'))
     let errorformat='%Wline %l column %c - Warning: %m,%Eline %l column %c - Error: %m,%-G%.%#,%-G%.%#'
     let loclist = SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 

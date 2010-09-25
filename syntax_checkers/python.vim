@@ -9,7 +9,7 @@ if !executable("pyflakes")
 endif
 
 function! SyntaxCheckers_python_GetLocList()
-    let makeprg = 'pyflakes %'
+    let makeprg = 'pyflakes '.shellescape(expand('%'))
     let errorformat = '%E%f:%l: could not compile,%-Z%p^,%W%f:%l: %m,%-G%.%#'
 
     let errors = SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })

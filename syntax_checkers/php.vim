@@ -20,7 +20,7 @@ if !executable("php")
 endif
 
 function! SyntaxCheckers_php_GetLocList()
-    let makeprg = "php -l %"
+    let makeprg = "php -l ".shellescape(expand('%'))
     let errorformat='%-GNo syntax errors detected in%.%#,PHP Parse error: %#syntax %trror\, %m in %f on line %l,PHP Fatal %trror: %m in %f on line %l,%-GErrors parsing %.%#,%-G\s%#,Parse error: %#syntax %trror\, %m in %f on line %l,Fatal %trror: %m in %f on line %l'
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 endfunction

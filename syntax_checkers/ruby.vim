@@ -21,9 +21,9 @@ endif
 
 function! SyntaxCheckers_ruby_GetLocList()
   if exists('g:ruby_path')
-    let makeprg = 'RUBYOPT= ' . g:ruby_path . ' -W1 -c %'
+    let makeprg = 'RUBYOPT= '.g:ruby_path.' -W1 -c %'.shellescape(expand('%'))
   else
-    let makeprg = 'RUBYOPT= ruby -W1 -c %'
+    let makeprg = 'RUBYOPT= ruby -W1 -c %'.shellescape(expand('%'))
   endif
     let errorformat =  '%-GSyntax OK,%E%f:%l: syntax error\, %m,%Z%p^,%W%f:%l: warning: %m,%Z%p^,%-C%.%#'
 
