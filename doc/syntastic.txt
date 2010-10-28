@@ -224,6 +224,20 @@ The latest dev versions are on github
 ==============================================================================
 7. Changelog                                             *syntastic-changelog*
 
+1.2.0
+    - New syntax checkers from github:kongo2002
+      - c (thanks also to github:jperras)
+      - cpp
+      - lua
+      - sh (thanks also to github:jmcantrell)
+    - add coffee syntax checked by github:lstoll
+    - add tex syntax checker
+    - make html checker play nicer with html5, thanks to github:enaeseth
+    - escape filenames properly when invoking syntax checkers, thanks to
+      github:jmcantrell
+    - adjust the ruby syntax checker to avoid some common annoying warnings,
+      thanks to github:robertwahler
+
 1.1.0 [codenamed: tpimp]
     - Dont load rubygems for ruby/eruby syntax checkers. Thanks tpope.
     - Improve the javascript syntax checker to catch some warnings that were

@@ -2,8 +2,8 @@
 "File:        syntastic.vim
 "Description: vim plugin for on the fly syntax checking
 "Maintainer:  Martin Grenfell <martin.grenfell at gmail dot com>
-"Version:     1.1.0
-"Last Change: 16 Dec, 2009
+"Version:     1.2.0
+"Last Change: 28 Oct, 2010
 "License:     This program is free software. It comes without any warranty,
 "             to the extent permitted by applicable law. You can redistribute
 "             it and/or modify it under the terms of the Do What The Fuck You
