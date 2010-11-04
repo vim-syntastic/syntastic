@@ -45,8 +45,12 @@ Syntastic comes in two parts: the syntax checker plugins, and the core script
 (i.e. syntastic.vim). The syntax checker plugins are defined on a per-filetype
 basis where each one wraps up an external syntax checking program. The core
 script delegates off to these plugins and uses their output to provide the
-syntastic functionality. Currently, syntax checking plugins exist for eruby,
-haml, html, javascript, php, python, ruby and sass.
+syntastic functionality. Currently, syntax checking plugins exist for c,
+coffee, cpp, cucumber, eruby, haml, haskell, html, javascript, lua, perl, php,
+python, ruby, sass, sh, tex and xhtml.
+
+NOTE: This list is subject to change without notice.  Please check the
+syntax_checkers directory for a reliable list of syntax checkers.
 
 If your language is not supported then see |syntastic-syntax-checkers| for
 details on how to implement a syntax checking plugin, and be sure to send me a
