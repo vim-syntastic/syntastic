@@ -23,8 +23,12 @@ if !executable("perl")
     finish
 endif
 
+if !exists("g:syntastic_perl_efm_program")
+    let g:syntastic_perl_efm_program = $VIMRUNTIME.'/tools/efm_perl.pl -c'
+endif
+
 function! SyntaxCheckers_perl_GetLocList()
-    let makeprg = $VIMRUNTIME.'/tools/efm_perl.pl -c '.shellescape(expand('%'))
+    let makeprg = g:syntastic_perl_efm_program . ' ' . shellescape(expand('%'))
     let errorformat =  '%f:%l:%m'
 
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
