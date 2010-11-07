@@ -20,11 +20,19 @@ if !executable("escript")
 endif
 
 function! SyntaxCheckers_erlang_GetLocList()
+    let extension = expand('%:e')
+    if match(extension, 'hrl') >= 0
+        return []
+    endif
     let shebang = getbufline(bufnr('%'), 1)[0]
     if len(shebang) > 0
-        let makeprg = 'escript -s '.shellescape(expand('%'))
+        if match(shebang, 'escript') >= 0
+            let makeprg = 'escript -s '.shellescape(expand('%:p'))
+        else
+            let makeprg = '~/.vim/bundle/syntastic/syntax_checkers/erlang_check_file.erl '.shellescape(expand('%:p'))
+        endif
     else
-        let makeprg = './erlang_check_file.erl '.shellescape(expand('%'))
+        let makeprg = '~/.vim/bundle/syntastic/syntax_checkers/erlang_check_file.erl '.shellescape(expand('%:p'))
     endif
     let errorformat = '%f:%l:\ %tarning:\ %m,%E%f:%l:\ %m'
 
