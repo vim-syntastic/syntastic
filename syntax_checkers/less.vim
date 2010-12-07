@@ -1,7 +1,7 @@
 "============================================================================
 "File:        less.vim
 "Description: Syntax checking plugin for syntastic.vim
-"Maintainer:  Martin Grenfell <martin.grenfell at gmail dot com>
+"Maintainer:  Julien Blanchard <julien at sideburns dot eu>
 "License:     This program is free software. It comes without any warranty,
 "             to the extent permitted by applicable law. You can redistribute
 "             it and/or modify it under the terms of the Do What The Fuck You
@@ -20,11 +20,11 @@ if !executable("lessc")
 endif
 
 function! SyntaxCheckers_less_GetLocList()
-    let output = system("lessc -c " . shellescape(expand("%")))
+    let output = system("lessc " . shellescape(expand("%")))
     if v:shell_error != 0
         "less only outputs the first error, so parse it ourselves
-        let line = substitute(output, '^Syntax error on line \(\d*\):.*', '\1', '')
-        let msg = substitute(output, '^Syntax error on line \d*:\(.*\)', '\1', '')
+        let line = substitute(output, '^! Syntax Error: on line \(\d*\):.*$', '\1', '')
+        let msg = substitute(output, '^! Syntax Error: on line \d*:\(.*\)$', '\1', '')
         return [{'lnum' : line, 'text' : msg, 'bufnr': bufnr(""), 'type': 'E' }]
     endif
     return []
