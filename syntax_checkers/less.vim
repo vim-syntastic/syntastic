@@ -14,7 +14,7 @@ if exists("loaded_less_syntax_checker")
 endif
 let loaded_less_syntax_checker = 1
 
-"bail if the user doesnt have the haml binary installed
+"bail if the user doesnt have the lessc binary installed
 if !executable("lessc")
     finish
 endif
