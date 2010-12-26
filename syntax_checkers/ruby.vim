@@ -26,7 +26,7 @@ function! SyntaxCheckers_ruby_GetLocList()
     else
         let makeprg = 'RUBYOPT= ruby -W1 -c '.shellescape(expand('%'))
     endif
-    let errorformat =  '%-GSyntax OK,%E%f:%l: syntax error\, %m,%Z%p^,%W%f:%l: warning: %m,%Z%p^,%-C%.%#'
+    let errorformat =  '%-GSyntax OK,%E%f:%l: syntax error\, %m,%Z%p^,%W%f:%l: warning: %m,%Z%p^,%W%f:%l: %m,%-C%.%#'
 
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 endfunction
