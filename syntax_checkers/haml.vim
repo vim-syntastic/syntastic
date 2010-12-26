@@ -23,8 +23,8 @@ function! SyntaxCheckers_haml_GetLocList()
     let output = system("haml -c " . shellescape(expand("%")))
     if v:shell_error != 0
         "haml only outputs the first error, so parse it ourselves
-        let line = substitute(output, '^\(Syntax\|Haml\) error on line \(\d*\):.*', '\2', '')
-        let msg = substitute(output, '^\(Syntax\|Haml\) error on line \d*:\(.*\)', '\2', '')
+        let line = substitute(output, '^\%(Syntax\|Haml\) error on line \(\d*\):.*', '\1', '')
+        let msg = substitute(output, '^\%(Syntax\|Haml\) error on line \d*:\(.*\)', '\1', '')
         return [{'lnum' : line, 'text' : msg, 'bufnr': bufnr(""), 'type': 'E' }]
     endif
     return []
