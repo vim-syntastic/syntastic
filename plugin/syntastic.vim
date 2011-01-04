@@ -47,6 +47,10 @@ function! s:UpdateErrors()
         call s:RefreshSigns()
     endif
 
+    if s:BufHasErrorsOrWarningsToDisplay()
+        call setloclist(0, b:syntastic_loclist)
+    endif
+
     if g:syntastic_auto_loc_list
         if s:BufHasErrorsOrWarningsToDisplay()
             call s:ShowLocList()
@@ -154,7 +158,6 @@ endfunction
 "display the cached errors for this buf in the location list
 function! s:ShowLocList()
     if exists("b:syntastic_loclist")
-        call setloclist(0, b:syntastic_loclist)
         let num = winnr()
         lopen
         if num != winnr()
