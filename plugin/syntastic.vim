@@ -27,6 +27,10 @@ if !exists("g:syntastic_auto_loc_list")
     let g:syntastic_auto_loc_list = 0
 endif
 
+if !exists("g:syntastic_auto_jump")
+    let syntastic_auto_jump=0
+endif
+
 if !exists("g:syntastic_quiet_warnings")
     let g:syntastic_quiet_warnings = 0
 endif
@@ -49,6 +53,9 @@ function! s:UpdateErrors()
 
     if s:BufHasErrorsOrWarningsToDisplay()
         call setloclist(0, b:syntastic_loclist)
+        if g:syntastic_auto_jump
+            :ll
+        endif
     endif
 
     if g:syntastic_auto_loc_list
