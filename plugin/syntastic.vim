@@ -54,7 +54,7 @@ function! s:UpdateErrors()
     if s:BufHasErrorsOrWarningsToDisplay()
         call setloclist(0, b:syntastic_loclist)
         if g:syntastic_auto_jump
-            :ll
+            silent!ll
         endif
     endif
 
