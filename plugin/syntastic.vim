@@ -63,12 +63,8 @@ function! s:UpdateErrors()
 
     if g:syntastic_auto_loc_list
         if s:BufHasErrorsOrWarningsToDisplay()
-            echo "OPEN"
-            echo "OPEN"
             call s:ShowLocList()
         else
-            echo "CLOSE"
-            echo "CLOSE"
             ""TODO: this will close the loc list window if one was opened by
             ""something other than syntastic
             lclose
