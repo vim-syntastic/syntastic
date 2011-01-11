@@ -45,6 +45,9 @@ runtime! syntax_checkers/*.vim
 "refresh and redraw all the error info for this buf when saving or reading
 autocmd bufreadpost,bufwritepost * call s:UpdateErrors()
 function! s:UpdateErrors()
+    if &buftype == 'quickfix'
+        return
+    endif
     call s:CacheErrors()
 
     if g:syntastic_enable_signs
