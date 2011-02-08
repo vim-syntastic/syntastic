@@ -27,6 +27,10 @@ if !exists("g:syntastic_auto_loc_list")
     let g:syntastic_auto_loc_list = 0
 endif
 
+if !exists("g:syntastic_auto_jump")
+    let syntastic_auto_jump=0
+endif
+
 if !exists("g:syntastic_quiet_warnings")
     let g:syntastic_quiet_warnings = 0
 endif
@@ -41,10 +45,20 @@ runtime! syntax_checkers/*.vim
 "refresh and redraw all the error info for this buf when saving or reading
 autocmd bufreadpost,bufwritepost * call s:UpdateErrors()
 function! s:UpdateErrors()
+    if &buftype == 'quickfix'
+        return
+    endif
     call s:CacheErrors()
 
     if g:syntastic_enable_signs
         call s:RefreshSigns()
+    endif
+
+    if s:BufHasErrorsOrWarningsToDisplay()
+        call setloclist(0, b:syntastic_loclist)
+        if g:syntastic_auto_jump
+            silent!ll
+        endif
     endif
 
     if g:syntastic_auto_loc_list
@@ -154,7 +168,6 @@ endfunction
 "display the cached errors for this buf in the location list
 function! s:ShowLocList()
     if exists("b:syntastic_loclist")
-        call setloclist(0, b:syntastic_loclist)
         let num = winnr()
         lopen
         if num != winnr()
