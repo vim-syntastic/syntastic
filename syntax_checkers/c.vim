@@ -52,8 +52,10 @@ function! s:Init()
     let s:handlers = []
     let s:cflags = {}
 
-    call s:RegHandler('\%(gtk\|glib\)', 's:CheckPKG',
+    call s:RegHandler('gtk', 's:CheckPKG',
                 \ ['gtk', 'gtk+-2.0', 'gtk+', 'glib-2.0', 'glib'])
+    call s:RegHandler('glib', 's:CheckPKG',
+                \ ['glib', 'glib-2.0', 'glib'])
     call s:RegHandler('glade', 's:CheckPKG',
                 \ ['glade', 'libglade-2.0', 'libglade'])
     call s:RegHandler('libsoup', 's:CheckPKG',
