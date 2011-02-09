@@ -177,7 +177,9 @@ function! s:CheckPKG(name, ...)
         if !has_key(s:cflags, a:name)
             for i in range(a:0)
                 let l:cflags = system('pkg-config --cflags '.a:000[i])
-                if v:shell_error == 0
+                " since we cannot necessarily trust the pkg-config exit code
+                " we have to check for an error output as well
+                if v:shell_error == 0 && l:cflags !~? 'not found'
                     let l:cflags = ' '.substitute(l:cflags, "\n", '', '')
                     let s:cflags[a:name] = l:cflags
                     return l:cflags
