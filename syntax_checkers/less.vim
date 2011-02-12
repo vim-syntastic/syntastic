@@ -20,13 +20,13 @@ if !executable("lessc")
 endif
 
 function! SyntaxCheckers_less_GetLocList()
-    let output = system("lessc " . shellescape(expand("%")))
-    if v:shell_error != 0
-        "less only outputs the first error, so parse it ourselves
-        let line = substitute(output, '^! Syntax Error: on line \(\d*\):.*$', '\1', '')
-        let msg = substitute(output, '^! Syntax Error: on line \d*:\(.*\)$', '\1', '')
-        return [{'lnum' : line, 'text' : msg, 'bufnr': bufnr(""), 'type': 'E' }]
-    endif
-    return []
-endfunction
+    let makeprg = 'lessc '. shellescape(expand('%'))
+    let errorformat = '! Syntax %trror: on line %l: %m,%-G%.%#'
+    let errors = SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 
+    for i in errors
+        let i['bufnr'] = bufnr("")
+    endfor
+
+    return errors
+endfunction
