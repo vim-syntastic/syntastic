@@ -106,7 +106,7 @@ function! s:ErrorsForType(type)
     if !exists("b:syntastic_loclist")
         return []
     endif
-    return filter(copy(b:syntastic_loclist), 'v:val["type"] ==# "' . a:type . '"')
+    return filter(copy(b:syntastic_loclist), 'v:val["type"] ==? "' . a:type . '"')
 endfunction
 
 if g:syntastic_enable_signs
