@@ -21,11 +21,15 @@ endif
 
 function! SyntaxCheckers_less_GetLocList()
     let makeprg = 'lessc '. shellescape(expand('%'))
-    let errorformat = '! Syntax %trror: on line %l: %m,%-G%.%#'
+    let errorformat = 'Syntax %trror on line %l,! Syntax %trror: on line %l: %m,%-G%.%#'
     let errors = SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 
     for i in errors
         let i['bufnr'] = bufnr("")
+
+        if empty(i['text'])
+            let i['text'] = "Syntax error"
+        endif
     endfor
 
     return errors
