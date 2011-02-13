@@ -15,23 +15,18 @@ endif
 let loaded_ruby_syntax_checker = 1
 
 "bail if the user doesnt have ruby installed
-if !exists('g:ruby_path') && !executable("ruby")
+if !executable("ruby")
     finish
 endif
 
 function! SyntaxCheckers_ruby_GetLocList()
-  if has('win32') || has('win64')
-    let rubyopt = 'RUBYOPT= '
-  else
-    let rubyopt = ''
-  endif
+    " we cannot set RUBYOPT on windows like that
+    if has('win32') || has('win64')
+        let makeprg = 'ruby -W1 -T1 -c '.shellescape(expand('%'))
+    else
+        let makeprg = 'RUBYOPT= ruby -W1 -c '.shellescape(expand('%'))
+    endif
+    let errorformat =  '%-GSyntax OK,%E%f:%l: syntax error\, %m,%Z%p^,%W%f:%l: warning: %m,%Z%p^,%W%f:%l: %m,%-C%.%#'
 
-  if exists('g:ruby_path')
-    let makeprg = rubyopt.g:ruby_path.' -W1 -c '.shellescape(expand('%'))
-  else
-    let makeprg = rubyopt.'ruby -W1 -c '.shellescape(expand('%'))
-  endif
-  let errorformat =  '%-GSyntax OK,%E%f:%l: syntax error\, %m,%Z%p^,%W%f:%l: warning: %m,%Z%p^,%W%f:%l: %m,%-C%.%#'
-
-  return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
+    return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 endfunction
