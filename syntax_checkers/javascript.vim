@@ -19,6 +19,10 @@ if !executable("jsl")
     finish
 endif
 
+if !exists("g:syntastic_jsl_conf")
+    let g:syntastic_jsl_conf = ""
+endif
+
 function! SyntaxCheckers_javascript_GetLocList()
     if empty(g:syntastic_jsl_conf)
         let jslconf = ""
