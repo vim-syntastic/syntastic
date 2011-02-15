@@ -39,6 +39,10 @@ if !exists("g:syntastic_disabled_filetypes")
     let g:syntastic_disabled_filetypes = []
 endif
 
+if !exists("g:syntastic_jsl_conf")
+    let g:syntastic_jsl_conf = ""
+endif
+
 "load all the syntax checkers
 runtime! syntax_checkers/*.vim
 
