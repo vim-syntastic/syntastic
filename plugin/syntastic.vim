@@ -59,11 +59,11 @@ function! s:UpdateErrors()
         if g:syntastic_auto_jump
             silent!ll
         endif
-    elseif g:syntastic_auto_loc_list == 2 || g:syntastic_auto_loc_list =~ "semi_auto"
+    elseif g:syntastic_auto_loc_list == 2
         lclose
     endif
 
-    if g:syntastic_auto_loc_list == 1 || g:syntastic_auto_loc_list =~ "fully\\?_auto"
+    if g:syntastic_auto_loc_list == 1
         if s:BufHasErrorsOrWarningsToDisplay()
             call s:ShowLocList()
         else
