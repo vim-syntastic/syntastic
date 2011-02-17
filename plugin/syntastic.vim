@@ -226,12 +226,14 @@ function! SyntasticMake(options)
     let old_loclist = getloclist(0)
     let old_makeprg = &makeprg
     let old_shellpipe = &shellpipe
+    let old_shell = &shell
     let old_errorformat = &errorformat
 
     if !s:running_windows
         "this is a hack to stop the screen needing to be ':redraw'n when
         "when :lmake is run. Otherwise the screen flickers annoyingly
         let &shellpipe='&>'
+        let &shell = '/bin/bash'
     endif
 
     if has_key(a:options, 'makeprg')
@@ -249,6 +251,10 @@ function! SyntasticMake(options)
     let &makeprg = old_makeprg
     let &errorformat = old_errorformat
     let &shellpipe=old_shellpipe
+
+    if !s:running_windows
+        let &shell=old_shell
+    endif
 
     return errors
 endfunction
