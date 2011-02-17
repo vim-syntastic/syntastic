@@ -251,10 +251,7 @@ function! SyntasticMake(options)
     let &makeprg = old_makeprg
     let &errorformat = old_errorformat
     let &shellpipe=old_shellpipe
-
-    if !s:running_windows
-        let &shell=old_shell
-    endif
+    let &shell=old_shell
 
     return errors
 endfunction
