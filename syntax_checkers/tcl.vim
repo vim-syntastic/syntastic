@@ -15,7 +15,7 @@ if exists("loaded_tcl_syntax_checker")
 endif
 let loaded_tcl_syntax_checker = 1
 
-"bail if the user doesnt have perl installed
+"bail if the user doesnt have tclsh installed
 if !executable("tclsh")
     finish
 endif
