@@ -14,19 +14,23 @@ if exists("loaded_less_syntax_checker")
 endif
 let loaded_less_syntax_checker = 1
 
-"bail if the user doesnt have the haml binary installed
+"bail if the user doesnt have the lessc binary installed
 if !executable("lessc")
     finish
 endif
 
 function! SyntaxCheckers_less_GetLocList()
-    let output = system("lessc " . shellescape(expand("%")))
-    if v:shell_error != 0
-        "less only outputs the first error, so parse it ourselves
-        let line = substitute(output, '^! Syntax Error: on line \(\d*\):.*$', '\1', '')
-        let msg = substitute(output, '^! Syntax Error: on line \d*:\(.*\)$', '\1', '')
-        return [{'lnum' : line, 'text' : msg, 'bufnr': bufnr(""), 'type': 'E' }]
-    endif
-    return []
-endfunction
+    let makeprg = 'lessc '. shellescape(expand('%'))
+    let errorformat = 'Syntax %trror on line %l,! Syntax %trror: on line %l: %m,%-G%.%#'
+    let errors = SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 
+    for i in errors
+        let i['bufnr'] = bufnr("")
+
+        if empty(i['text'])
+            let i['text'] = "Syntax error"
+        endif
+    endfor
+
+    return errors
+endfunction

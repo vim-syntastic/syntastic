@@ -20,8 +20,13 @@ if !executable("ruby")
 endif
 
 function! SyntaxCheckers_ruby_GetLocList()
-    let makeprg = 'RUBYOPT= ruby -W1 -c '.shellescape(expand('%'))
-    let errorformat =  '%-GSyntax OK,%E%f:%l: syntax error\, %m,%Z%p^,%W%f:%l: warning: %m,%Z%p^,%-C%.%#'
+    " we cannot set RUBYOPT on windows like that
+    if has('win32') || has('win64')
+        let makeprg = 'ruby -W1 -T1 -c '.shellescape(expand('%'))
+    else
+        let makeprg = 'RUBYOPT= ruby -W1 -c '.shellescape(expand('%'))
+    endif
+    let errorformat =  '%-GSyntax OK,%E%f:%l: syntax error\, %m,%Z%p^,%W%f:%l: warning: %m,%Z%p^,%W%f:%l: %m,%-C%.%#'
 
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 endfunction

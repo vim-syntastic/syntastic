@@ -21,6 +21,6 @@ endif
 
 function! SyntaxCheckers_tex_GetLocList()
     let makeprg = 'lacheck '.shellescape(expand('%'))
-    let errorformat =  '%E"%f"\, line %l: %m'
+    let errorformat =  '%-G** %f:,%E"%f"\, line %l: %m'
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 endfunction

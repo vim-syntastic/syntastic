@@ -52,8 +52,10 @@ function! s:Init()
     let s:handlers = []
     let s:cflags = {}
 
-    call s:RegHandler('\%(gtk\|glib\)', 's:CheckPKG',
+    call s:RegHandler('gtk', 's:CheckPKG',
                 \ ['gtk', 'gtk+-2.0', 'gtk+', 'glib-2.0', 'glib'])
+    call s:RegHandler('glib', 's:CheckPKG',
+                \ ['glib', 'glib-2.0', 'glib'])
     call s:RegHandler('glade', 's:CheckPKG',
                 \ ['glade', 'libglade-2.0', 'libglade'])
     call s:RegHandler('libsoup', 's:CheckPKG',
@@ -83,7 +85,8 @@ function! SyntaxCheckers_c_GetLocList()
     let makeprg = 'gcc -fsyntax-only '.shellescape(expand('%')).' -I. -I..'
     let errorformat = '%-G%f:%s:,%-G%f:%l: %#error: %#(Each undeclared '.
                 \ 'identifier is reported only%.%#,%-G%f:%l: %#error: %#for '.
-                \ 'each function it appears%.%#,%f:%l: %trror: %m,%f:%l: %m'
+                \ 'each function it appears%.%#,%-GIn file included%.%#,'.
+                \ '%-G %#from %f:%l\,,%f:%l: %trror: %m,%f:%l: %m'
 
     if expand('%') =~? '.h$'
         if exists('g:syntastic_c_check_header')
@@ -174,7 +177,9 @@ function! s:CheckPKG(name, ...)
         if !has_key(s:cflags, a:name)
             for i in range(a:0)
                 let l:cflags = system('pkg-config --cflags '.a:000[i])
-                if v:shell_error == 0
+                " since we cannot necessarily trust the pkg-config exit code
+                " we have to check for an error output as well
+                if v:shell_error == 0 && l:cflags !~? 'not found'
                     let l:cflags = ' '.substitute(l:cflags, "\n", '', '')
                     let s:cflags[a:name] = l:cflags
                     return l:cflags

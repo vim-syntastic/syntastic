@@ -27,6 +27,10 @@ if !exists("g:syntastic_auto_loc_list")
     let g:syntastic_auto_loc_list = 0
 endif
 
+if !exists("g:syntastic_auto_jump")
+    let syntastic_auto_jump=0
+endif
+
 if !exists("g:syntastic_quiet_warnings")
     let g:syntastic_quiet_warnings = 0
 endif
@@ -35,19 +39,35 @@ if !exists("g:syntastic_disabled_filetypes")
     let g:syntastic_disabled_filetypes = []
 endif
 
+if !exists("g:syntastic_stl_format")
+    let g:syntastic_stl_format = '[Syntax: line:%F (%t)]'
+endif
+
 "load all the syntax checkers
 runtime! syntax_checkers/*.vim
 
 "refresh and redraw all the error info for this buf when saving or reading
 autocmd bufreadpost,bufwritepost * call s:UpdateErrors()
 function! s:UpdateErrors()
+    if &buftype == 'quickfix'
+        return
+    endif
     call s:CacheErrors()
 
     if g:syntastic_enable_signs
         call s:RefreshSigns()
     endif
 
-    if g:syntastic_auto_loc_list
+    if s:BufHasErrorsOrWarningsToDisplay()
+        call setloclist(0, b:syntastic_loclist)
+        if g:syntastic_auto_jump
+            silent!ll
+        endif
+    elseif g:syntastic_auto_loc_list == 2
+        lclose
+    endif
+
+    if g:syntastic_auto_loc_list == 1
         if s:BufHasErrorsOrWarningsToDisplay()
             call s:ShowLocList()
         else
@@ -92,7 +112,15 @@ function! s:ErrorsForType(type)
     if !exists("b:syntastic_loclist")
         return []
     endif
-    return filter(copy(b:syntastic_loclist), 'v:val["type"] ==# "' . a:type . '"')
+    return filter(copy(b:syntastic_loclist), 'v:val["type"] ==? "' . a:type . '"')
+endfunction
+
+function s:Errors()
+    return extend(s:ErrorsForType("E"), s:ErrorsForType(''))
+endfunction
+
+function s:Warnings()
+    return s:ErrorsForType("W")
 endfunction
 
 if g:syntastic_enable_signs
@@ -154,7 +182,6 @@ endfunction
 "display the cached errors for this buf in the location list
 function! s:ShowLocList()
     if exists("b:syntastic_loclist")
-        call setloclist(0, b:syntastic_loclist)
         let num = winnr()
         lopen
         if num != winnr()
@@ -165,33 +192,41 @@ endfunction
 
 command Errors call s:ShowLocList()
 
-"return [syntax:X(Y)] if syntax errors are detected in the buffer, where X is the
-"line number of the first error and Y is the number of errors detected. (Y) is
-"only displayed if > 1 errors are detected
+"return a string representing the state of buffer according to
+"g:syntastic_stl_format
 "
 "return '' if no errors are cached for the buffer
 function! SyntasticStatuslineFlag()
     if s:BufHasErrorsOrWarningsToDisplay()
+        let errors = s:Errors()
+        let warnings = s:Warnings()
 
-        let first_err_line = b:syntastic_loclist[0]['lnum']
-        if g:syntastic_quiet_warnings
-            let first_err_line = s:ErrorsForType('E')[0]['lnum']
-        endif
+        let output = g:syntastic_stl_format
 
-        let err_count = len(b:syntastic_loclist)
-        if g:syntastic_quiet_warnings
-            let err_count = len(s:ErrorsForType('E'))
-        endif
+        "hide stuff wrapped in %E(...) unless there are errors
+        let output = substitute(output, '\C%E{\([^}]*\)}', len(errors) ? '\1' : '' , 'g')
 
-        let toReturn = '[syntax:' . first_err_line
+        "hide stuff wrapped in %W(...) unless there are warnings
+        let output = substitute(output, '\C%W{\([^}]*\)}', len(warnings) ? '\1' : '' , 'g')
 
-        if err_count > 1
-            let toReturn .= '(' . err_count . ')'
-        endif
+        "hide stuff wrapped in %B(...) unless there are both errors and warnings
+        let output = substitute(output, '\C%B{\([^}]*\)}', (len(warnings) && len(errors)) ? '\1' : '' , 'g')
 
-        let toReturn .= ']'
+        "sub in the total errors/warnings/both
+        let output = substitute(output, '\C%w', len(warnings), 'g')
+        let output = substitute(output, '\C%e', len(errors), 'g')
+        let output = substitute(output, '\C%t', len(b:syntastic_loclist), 'g')
 
-        return toReturn
+        "first error/warning line num
+        let output = substitute(output, '\C%F', b:syntastic_loclist[0]['lnum'], 'g')
+
+        "first error line num
+        let output = substitute(output, '\C%fe', len(errors) ? errors[0]['lnum'] : '', 'g')
+
+        "first warning line num
+        let output = substitute(output, '\C%fw', len(warnings) ? warnings[0]['lnum'] : '', 'g')
+
+        return output
     else
         return ''
     endif
@@ -211,12 +246,14 @@ function! SyntasticMake(options)
     let old_loclist = getloclist(0)
     let old_makeprg = &makeprg
     let old_shellpipe = &shellpipe
+    let old_shell = &shell
     let old_errorformat = &errorformat
 
     if !s:running_windows
         "this is a hack to stop the screen needing to be ':redraw'n when
         "when :lmake is run. Otherwise the screen flickers annoyingly
         let &shellpipe='&>'
+        let &shell = '/bin/bash'
     endif
 
     if has_key(a:options, 'makeprg')
@@ -234,6 +271,7 @@ function! SyntasticMake(options)
     let &makeprg = old_makeprg
     let &errorformat = old_errorformat
     let &shellpipe=old_shellpipe
+    let &shell=old_shell
 
     return errors
 endfunction
