@@ -88,13 +88,8 @@ Something like this could be more useful: >
     set statusline+=%{SyntasticStatuslineFlag()}
     set statusline+=%*
 <
-When syntax errors are detected, the following will be displayed on your
-statusline: >
-    [syntax:X(Y)]
-<
-Where X is the line number of the first error and Y is the total number of
-errors. Note that "(Y)" only appears  if there is more than one error.
-
+When syntax errors are detected a flag will be shown. The content of the flag
+is derived from the |syntastic_stl_format| option
 ------------------------------------------------------------------------------
 2.2. Error signs                                       *syntastic-error-signs*
 
@@ -140,11 +135,17 @@ when saving or opening a file: >
 <
 
                                                    *'syntastic_auto_loc_list'*
-Use this option to tell syntastic to automatically open the |location-list|
-(see |syntastic-error-window|) when a buffer has errors: >
+Use this option to tell syntastic to automatically open and/or close the
+|location-list| (see |syntastic-error-window|).
+
+When set to 1 the error window will be automatically opened when errors are
+detected, and closed when none are detected. >
     let g:syntastic_auto_loc_list=1
 <
-The location list is also closed again when there are no errors.
+When set to 2 the error window will be automatically closed when no errors are
+detected, but not opened automatically. >
+    let g:syntastic_auto_loc_list=2
+<
 
                                                   *'syntastic_quiet_warnings'*
 
@@ -158,6 +159,37 @@ this option has the following effects:
       displayed
 >
     let g:syntastic_quiet_warnings=1
+<
+
+                                                      *'syntastic_stl_format'*
+
+Default: [Syntax: line:%F (%t)]
+Use this option to control what the syntastic statusline text contains. Several
+magic flags are availble to insert information:
+    %e - number of errors
+    %w - number of warnings
+    %t - total number of warnings and errors
+    %fe - line number of first error
+    %fw - line number of first warning
+    %F - line number of first warning or error
+
+Several additional flags are available to hide text under certain conditions:
+    %E{...} - hide the text in the brackets unless there are errors
+    %W{...} - hide the text in the brackets unless there are warnings
+    %B{...} - hide the text in the brackets unless there are both warnings AND
+              errors
+These flags cant be nested.
+
+Example: >
+    let g:syntastic_stl_format = '[%E{Err: %fe #%e}%B{, }%W{Warn: %fw #%w}]'
+<
+If this format is used and the current buffer has 5 errors and 1 warning
+starting on lines 20 and 10 respectively then this would appear on the
+statusline: >
+    [Err: 20 #5, Warn: 10 #1]
+<
+If the buffer had 2 warnings, starting on line 5 then this would appear: >
+    [Warn: 5 #2]
 <
 
                                               *'syntastic_disabled_filetypes'*
