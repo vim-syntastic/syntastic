@@ -19,7 +19,11 @@ function! SyntaxCheckers_python_GetLocList()
         if i['type'] ==# 'E'
             let i['text'] = "Syntax error"
         endif
-        if match(i['text'], 'is assigned to but never used') > -1
+        if i['col']
+            let lastcol = col([i['lnum'], '$'])
+            let lcol = min([lastcol, i['col']])
+            call matchadd('SpellBad', '\%'.i['lnum'].'l\%'.lcol.'c')
+        elseif match(i['text'], 'is assigned to but never used') > -1
                     \ || match(i['text'], 'imported but unused') > -1
                     \ || match(i['text'], 'undefined name') > -1
                     \ || match(i['text'], 'redefinition of unused') > -1
@@ -28,11 +32,6 @@ function! SyntaxCheckers_python_GetLocList()
             "let group = match(i['text'], 'undefined') > -1 ? 'SpellBad' : 'SpellCap'
             let group = i['type'] == 'E' ? 'SpellBad' : 'SpellCap'
             call matchadd(group, '\%' . i['lnum'] . 'l\V' . term)
-
-        elseif exists("i['col']")
-            let lastcol = col([i['lnum'], '$'])
-            let lcol = min([lastcol, i['col']])
-            call matchadd('SpellBad', '\%' . i['lnum'] . 'l\%' . lcol . 'c')
         endif
     endfor
 
