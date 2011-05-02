@@ -26,10 +26,35 @@ function! SyntaxCheckers_lua_GetLocList()
 
     let loclist = SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 
-    let bn = bufnr('')
-    for loc in loclist
-        let loc['bufnr'] = bn
-        let loc['type'] = 'E'
+    let bufn = bufnr('')
+    call clearmatches()
+    for pos in loclist
+        let pos['bufnr'] = bufn
+        let pos['type'] = 'E'
+        if pos['col']
+            let lastcol = col([pos['lnum'], '$'])
+            let lcol = min([lastcol, pos['col']])
+            call matchadd('SpellBad', '\%'.pos['lnum'].'l\%'.lcol.'c')
+        else
+            let near = matchstr(pos['text'], "near '[^']\\+'")
+            if len(near) > 0
+                let near = split(near, "'")[1]
+                if near == '<eof>'
+                    let p = getpos('$')
+                    let pos['lnum'] = p[1]
+                    let pos['col'] = p[2]
+                    call matchadd('SpellBad', '\%'.p[1].'l\%'.p[2].'c')
+                else
+                    call matchadd('SpellBad', '\%'.pos['lnum'].'l\V'.near)
+                endif
+                let open = matchstr(pos['text'], "(to close '[^']\\+' at line [0-9]\\+)")
+                if len(open) > 0
+                    let oline = split(open, "'")[1:2]
+                    let line = 0+strpart(oline[1], 9)
+                    call matchadd('SpellCap', '\%'.line.'l\V'.oline[0])
+                endif
+            endif
+        endif
     endfor
 
     return loclist
