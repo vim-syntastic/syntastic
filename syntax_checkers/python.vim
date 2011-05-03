@@ -8,32 +8,28 @@ if !executable("pyflakes")
     finish
 endif
 
+function! SyntaxCheckers_python_Term(i)
+    if a:i['type'] ==# 'E'
+        let a:i['text'] = "Syntax error"
+    endif
+    if match(a:i['text'], 'is assigned to but never used') > -1
+                \ || match(a:i['text'], 'imported but unused') > -1
+                \ || match(a:i['text'], 'undefined name') > -1
+                \ || match(a:i['text'], 'redefinition of unused') > -1
+
+        let term = split(a:i['text'], "'", 1)[1]
+        return '\V'.term
+    endif
+    return ''
+endfunction
+
 function! SyntaxCheckers_python_GetLocList()
     let makeprg = 'pyflakes '.shellescape(expand('%'))
     let errorformat = '%E%f:%l: could not compile,%-Z%p^,%W%f:%l: %m,%-G%.%#'
 
     let errors = SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 
-    call clearmatches()
-    for i in errors
-        if i['type'] ==# 'E'
-            let i['text'] = "Syntax error"
-        endif
-        if i['col']
-            let lastcol = col([i['lnum'], '$'])
-            let lcol = min([lastcol, i['col']])
-            call matchadd('SpellBad', '\%'.i['lnum'].'l\%'.lcol.'c')
-        elseif match(i['text'], 'is assigned to but never used') > -1
-                    \ || match(i['text'], 'imported but unused') > -1
-                    \ || match(i['text'], 'undefined name') > -1
-                    \ || match(i['text'], 'redefinition of unused') > -1
-
-            let term = split(i['text'], "'", 1)[1]
-            "let group = match(i['text'], 'undefined') > -1 ? 'SpellBad' : 'SpellCap'
-            let group = i['type'] == 'E' ? 'SpellBad' : 'SpellCap'
-            call matchadd(group, '\%' . i['lnum'] . 'l\V' . term)
-        endif
-    endfor
+    call syntastic#HighlightErrors(errors, function('SyntaxCheckers_python_Term'))
 
     return errors
 endfunction
