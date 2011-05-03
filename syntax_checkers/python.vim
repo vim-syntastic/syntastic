@@ -4,7 +4,7 @@ endif
 let loaded_python_syntax_checker = 1
 
 "bail if the user doesnt have pyflakes installed
-if !executable("pyflakes") || !executable("grep")
+if !executable("pyflakes")
     finish
 endif
 
