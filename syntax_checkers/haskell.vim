@@ -28,3 +28,7 @@ function! SyntaxCheckers_haskell_GetLocList()
 
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 endfunction
+
+function! SyntaxCheckers_lhaskell_GetLocList()
+    return SyntaxCheckers_haskell_GetLocList()
+endfunction
