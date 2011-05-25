@@ -11,8 +11,8 @@ function! syntastic#HighlightErrors(errors, termfunc)
     call clearmatches()
     for item in a:errors
         if item['col']
-            let lastcol = col(item['lnum'], '$')
-            let lcol = min([lastcol, item['col'])
+            let lastcol = col([item['lnum'], '$'])
+            let lcol = min([lastcol, item['col']])
             call matchadd('SpellBad', '\%'.item['lnum'].'l\%'.lcol.'c')
         else
             let group = item['type'] == 'E' ? 'SpellBad' : 'SpellCap'
