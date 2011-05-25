@@ -19,11 +19,30 @@ if !executable("tidy") || !executable("grep")
     finish
 endif
 
+" TODO: join this with xhtml.vim for DRY's sake?
+function! s:TidyEncOptByFenc()
+    let tidy_opts = {
+                \'utf-8'       : '-utf8',
+                \'ascii'       : '-ascii',
+                \'latin1'      : '-latin1',
+                \'iso-2022-jp' : '-iso-2022',
+                \'cp1252'      : '-win1252',
+                \'macroman'    : '-mac',
+                \'utf-16le'    : '-utf16le',
+                \'utf-16'      : '-utf16',
+                \'big5'        : '-big5',
+                \'sjis'        : '-shiftjis',
+                \'cp850'       : '-ibm858',
+                \}
+    return get(tidy_opts, &fileencoding, '-utf8')
+endfunction
+
 function! SyntaxCheckers_html_GetLocList()
 
     "grep out the '<table> lacks "summary" attribute' since it is almost
     "always present and almost always useless
-    let makeprg="tidy --new-blocklevel-tags 'section, article, aside, hgroup, header, footer, nav, figure, figcaption' --new-inline-tags 'video, audio, embed, mark, progress, meter, time, ruby, rt, rp, canvas, command, details, datalist' --new-empty-tags 'wbr, keygen' -e ".shellescape(expand('%'))." 2>&1 \\| grep -v '\<table\> lacks \"summary\" attribute' \\| grep -v 'not approved by W3C'"
+    let encopt = s:TidyEncOptByFenc()
+    let makeprg="tidy ".encopt." --new-blocklevel-tags 'section, article, aside, hgroup, header, footer, nav, figure, figcaption' --new-inline-tags 'video, audio, embed, mark, progress, meter, time, ruby, rt, rp, canvas, command, details, datalist' --new-empty-tags 'wbr, keygen' -e ".shellescape(expand('%'))." 2>&1 \\| grep -v '\<table\> lacks \"summary\" attribute' \\| grep -v 'not approved by W3C'"
     let errorformat='%Wline %l column %c - Warning: %m,%Eline %l column %c - Error: %m,%-G%.%#,%-G%.%#'
     let loclist = SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 

@@ -20,17 +20,42 @@ if !executable('luac')
     finish
 endif
 
+function! SyntaxCheckers_lua_Term(pos)
+    let near = matchstr(a:pos['text'], "near '[^']\\+'")
+    let result = ''
+    if len(near) > 0
+        let near = split(near, "'")[1]
+        if near == '<eof>'
+            let p = getpos('$')
+            let a:pos['lnum'] = p[1]
+            let a:pos['col'] = p[2]
+            let result = '\%'.p[2].'c'
+        else
+            let result = '\V'.near
+        endif
+        let open = matchstr(a:pos['text'], "(to close '[^']\\+' at line [0-9]\\+)")
+        if len(open) > 0
+            let oline = split(open, "'")[1:2]
+            let line = 0+strpart(oline[1], 9)
+            call matchadd('SpellCap', '\%'.line.'l\V'.oline[0])
+        endif
+    endif
+    return result
+endfunction
+
 function! SyntaxCheckers_lua_GetLocList()
     let makeprg = 'luac -p ' . shellescape(expand('%'))
     let errorformat =  'luac: %#%f:%l: %m'
 
     let loclist = SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 
-    let bn = bufnr('')
-    for loc in loclist
-        let loc['bufnr'] = bn
-        let loc['type'] = 'E'
+    let bufn = bufnr('')
+    for pos in loclist
+        let pos['bufnr'] = bufn
+        let pos['type'] = 'E'
     endfor
+
+    call syntastic#HighlightErrors(loclist, function("SyntaxCheckers_lua_Term"))
 
     return loclist
 endfunction
