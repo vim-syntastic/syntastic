@@ -19,8 +19,18 @@ if !executable("php")
     finish
 endif
 
+function! SyntaxCheckers_php_Term(item)
+    let unexpected = matchstr(a:item['text'], "unexpected '[^']\\+'")
+    if len(unexpected) < 1 | return '' | end
+    return '\V'.split(unexpected, "'")[1]
+endfunction
+
 function! SyntaxCheckers_php_GetLocList()
     let makeprg = "php -l ".shellescape(expand('%'))
     let errorformat='%-GNo syntax errors detected in%.%#,PHP Parse error: %#syntax %trror\, %m in %f on line %l,PHP Fatal %trror: %m in %f on line %l,%-GErrors parsing %.%#,%-G\s%#,Parse error: %#syntax %trror\, %m in %f on line %l,Fatal %trror: %m in %f on line %l'
-    return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
+    let errors = SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
+
+    call syntastic#HighlightErrors(errors, function('SyntaxCheckers_php_Term'))
+
+    return errors
 endfunction

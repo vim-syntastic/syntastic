@@ -23,6 +23,10 @@ if !exists("g:syntastic_enable_signs") || !has('signs')
     let g:syntastic_enable_signs = 0
 endif
 
+if !exists("g:syntastic_enable_balloons") || !has('balloon_eval')
+    let g:syntastic_enable_balloons = 0
+endif
+
 if !exists("g:syntastic_auto_loc_list")
     let g:syntastic_auto_loc_list = 0
 endif
@@ -53,6 +57,14 @@ function! s:UpdateErrors()
         return
     endif
     call s:CacheErrors()
+
+    if g:syntastic_enable_balloons
+        let b:syntastic_balloons = {}
+        for i in b:syntastic_loclist
+            let b:syntastic_balloons[i['lnum']] = i['text']
+        endfor
+        set beval bexpr=syntastic#ErrorBalloonExpr()
+    endif
 
     if g:syntastic_enable_signs
         call s:RefreshSigns()
