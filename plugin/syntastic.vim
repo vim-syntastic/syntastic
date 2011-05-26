@@ -58,7 +58,7 @@ function! s:UpdateErrors()
     endif
     call s:CacheErrors()
 
-    if g:syntastic_enable_balloons
+    if g:syntastic_enable_balloons && has('balloon_eval')
         let b:syntastic_balloons = {}
         for i in b:syntastic_loclist
             let b:syntastic_balloons[i['lnum']] = i['text']
