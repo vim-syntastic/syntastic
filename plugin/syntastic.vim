@@ -35,6 +35,10 @@ if !exists("g:syntastic_auto_jump")
     let syntastic_auto_jump=0
 endif
 
+if !exists("g:syntastic_highlight")
+    let syntastic_highlight=0
+endif
+
 if !exists("g:syntastic_quiet_warnings")
     let g:syntastic_quiet_warnings = 0
 endif
@@ -52,6 +56,7 @@ runtime! syntax_checkers/*.vim
 
 "refresh and redraw all the error info for this buf when saving or reading
 autocmd bufreadpost,bufwritepost * call s:UpdateErrors()
+
 function! s:UpdateErrors()
     if &buftype == 'quickfix'
         return
@@ -88,7 +93,28 @@ function! s:UpdateErrors()
             lclose
         endif
     endif
+
+    if g:syntastic_highlight
+        if !exists('s:didRegisterAutocommands')
+            autocmd CursorMoved * call s:GetMessage()
+            let s:didRegisterAutocommands = 1
+        endif
+
+        call s:RefreshHighlights()
+    endif
+
 endfunction
+
+command! SyntasticUpdate :call s:UpdateErrors()
+
+" Hook common text manipulation commands to update errors
+"   TODO: is there a more general "text op" autocommand we could register
+"   for here?
+noremap <silent> dd dd:SyntasticUpdate<CR>
+noremap <silent> dw dw:SyntasticUpdate<CR>
+noremap <silent> u u:SyntasticUpdate<CR>
+noremap <silent> <C-R> <C-R>:SyntasticUpdate<CR>
+
 
 "detect and cache all syntax errors in this buffer
 "
@@ -118,6 +144,36 @@ endfunction
 
 function! s:BufHasErrorsOrWarningsToDisplay()
     return s:BufHasErrors() || (!g:syntastic_quiet_warnings && s:BufHasErrorsOrWarnings())
+endfunction
+
+" WideMsg() prints [long] message up to (&columns-1) length
+" guaranteed without "Press Enter" prompt.
+function! s:WideMsg(msg)
+    let x=&ruler | let y=&showcmd
+    set noruler noshowcmd
+    redraw
+    echo strpart(a:msg, 0, &columns-1)
+    let &ruler=x | let &showcmd=y
+endfun
+
+function! s:GetMessage()
+    if !exists('b:syntastic_loclist')
+        return
+    endif
+
+    let s:cursorPos = getpos('.')
+
+    " If we have an error or warning at the current line, show it
+    for i in b:syntastic_loclist
+        if s:cursorPos[1] == i['lnum']
+            call s:WideMsg(i['text'])
+            return
+        endif
+    endfor
+
+    " Otherwise, clear the status line
+    echo
+
 endfunction
 
 function! s:ErrorsForType(type)
@@ -181,6 +237,29 @@ function! s:BufSignIds()
         let b:syntastic_sign_ids = []
     endif
     return b:syntastic_sign_ids
+endfunction
+
+function! s:ClearHighlights()
+    let s:matches = getmatches()
+    for s:matchId in s:matches
+        if s:matchId['group'] == 'syntastic'
+            call matchdelete(s:matchId['id'])
+        endif
+    endfor
+endfunction
+
+
+function! s:RefreshHighlights()
+    highlight link syntastic SpellBad
+    call s:ClearHighlights()
+    if s:BufHasErrorsOrWarningsToDisplay()
+        for i in b:syntastic_loclist
+            if i['bufnr'] != bufnr("")
+                continue
+            endif
+            call matchadd('syntastic', '\%' . i['lnum'] . 'l\n\@!')
+        endfor
+    endif
 endfunction
 
 "update the error signs
