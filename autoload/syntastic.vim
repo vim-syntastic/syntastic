@@ -1,6 +1,3 @@
-if !has('balloon_eval')
-    finish
-endif
 
 function! syntastic#ErrorBalloonExpr()
     if !exists('b:syntastic_balloons') | return '' | endif
