@@ -43,6 +43,13 @@ function! SyntaxCheckers_sass_GetLocList()
 endfunction
 
 function! SyntaxCheckers_scss_GetLocList()
+    "use compass imports if available
+    if g:syntastic_sass_imports == 0 && executable("compass")
+        let g:syntastic_sass_imports = system("compass imports")
+    else
+        let g:syntastic_sass_imports = ""
+    endif
+
     let makeprg='sass '.g:syntastic_sass_imports.' --check '.shellescape(expand('%'))
     let errorformat = '%ESyntax %trror:%m,%C        on line %l of %f,%Z%m'
     let errorformat .= ',%Wwarning on line %l:,%Z%m,Syntax %trror on line %l: %m'
