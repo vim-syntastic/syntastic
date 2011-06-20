@@ -2,6 +2,8 @@
 "File:        cuda.vim
 "Description: Syntax checking plugin for syntastic.vim
 "
+"Author:      Hannes Schulz <schulz at ais dot uni-bonn dot de>
+"
 "============================================================================
 
 " in order to also check header files add this to your .vimrc:
