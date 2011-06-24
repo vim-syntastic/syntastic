@@ -21,8 +21,8 @@ endif
 function! SyntaxCheckers_css_GetLocList()
     let makeprg = 'csslint '.shellescape(expand('%'))
 
-    " Print CSS Lint's 'Welcome' and error messages. Ignores the code line.
-    let errorformat  = '%+Gcsslint:\ There%.%#,%A%f:,%C%n:\ %t%\\w%\\+\ at\ line %l\,\ col\ %c,%Z%m,%-G%.%#'
+    " Print CSS Lint's 'Welcome' and error/warning messages. Ignores the code line.
+    let errorformat  = '%+Gcsslint:\ There%.%#,%A%f:,%C%n:\ %t%\\w%\\+\ at\ line %l\,\ col\ %c,%Z%m\ at\ line%.%#,%A%>%f:,%C%n:\ %t%\\w%\\+\ at\ line %l\,\ col\ %c,%Z%m,%-G%.%#'
 
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 endfunction
