@@ -24,5 +24,11 @@ function! SyntaxCheckers_css_GetLocList()
     " Print CSS Lint's 'Welcome' and error/warning messages. Ignores the code line.
     let errorformat = '%+Gcsslint:\ There%.%#,%A%f:,%C%n:\ %t%\\w%\\+\ at\ line\ %l\,\ col\ %c,%Z%m\ at\ line%.%#,%A%>%f:,%C%n:\ %t%\\w%\\+\ at\ line\ %l\,\ col\ %c,%Z%m,%-G%.%#'
 
-    return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
+    let loclist = SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
+
+    for i in loclist
+        let i['bufnr'] = bufnr("")
+    endfor
+
+    return loclist
 endfunction
