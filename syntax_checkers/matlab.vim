@@ -1,7 +1,7 @@
 "============================================================================
-"File:        coffee.vim
+"File:        matlab.vim
 "Description: Syntax checking plugin for syntastic.vim
-"Maintainer:  Lincoln Stoll <l@lds.li>
+"Maintainer:  Jason Graham <jason at the-graham dot com>
 "License:     This program is free software. It comes without any warranty,
 "             to the extent permitted by applicable law. You can redistribute
 "             it and/or modify it under the terms of the Do What The Fuck You
@@ -9,19 +9,26 @@
 "             See http://sam.zoy.org/wtfpl/COPYING for more details.
 "
 "============================================================================
-if exists("loaded_coffee_syntax_checker")
-    finish
+
+if exists("loaded_matlab_syntax_checker")
+	finish
 endif
-let loaded_coffee_syntax_checker = 1
+let loaded_matlab_syntax_checker = 1
 
-"bail if the user doesnt have coffee installed
-if !executable("coffee")
-    finish
+"bail if the user doesn't have mlint installed
+if !executable("mlint")
+	finish
 endif
 
-function! SyntaxCheckers_coffee_GetLocList()
-    let makeprg = 'coffee -c -l -o /tmp %'
-    let errorformat =  '%EError: In %f\, Parse error on line %l: %m,%EError: In %f\, %m on line %l,%W%f(%l): lint warning: %m,%-Z%p^,%W%f(%l): warning: %m,%-Z%p^,%E%f(%l): SyntaxError: %m,%-Z%p^,%-G'
+function! SyntaxCheckers_matlab_GetLocList()
+	let makeprg = 'mlint -id $* '.shellescape(expand('%'))
+	let errorformat = 'L %l (C %c): %*[a-zA-Z0-9]: %m,L %l (C %c-%*[0-9]): %*[a-zA-Z0-9]: %m'
+	let loclist = SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 
-    return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
+	for i in loclist
+		let i['bufnr'] = bufnr("")
+	endfor
+
+	return loclist
 endfunction
+
