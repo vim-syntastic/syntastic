@@ -47,9 +47,6 @@ if !exists("g:syntastic_stl_format")
     let g:syntastic_stl_format = '[Syntax: line:%F (%t)]'
 endif
 
-"load all the syntax checkers
-runtime! syntax_checkers/*.vim
-
 "refresh and redraw all the error info for this buf when saving or reading
 autocmd bufreadpost,bufwritepost * call s:UpdateErrors()
 function! s:UpdateErrors()
@@ -289,6 +286,10 @@ function! SyntasticMake(options)
 endfunction
 
 function! s:Checkable(ft)
+    if !exists("g:loaded_" . a:ft . "_syntax_checker")
+        exec "runtime syntax_checkers/" . a:ft . ".vim"
+    endif
+
     return exists("*SyntaxCheckers_". a:ft ."_GetLocList") &&
                 \ index(g:syntastic_disabled_filetypes, a:ft) == -1
 endfunction
