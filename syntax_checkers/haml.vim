@@ -20,12 +20,7 @@ if !executable("haml")
 endif
 
 function! SyntaxCheckers_haml_GetLocList()
-    let output = system("haml -c " . shellescape(expand("%")))
-    if v:shell_error != 0
-        "haml only outputs the first error, so parse it ourselves
-        let line = substitute(output, '^\%(Syntax\|Haml\) error on line \(\d*\):.*', '\1', '')
-        let msg = substitute(output, '^\%(Syntax\|Haml\) error on line \d*:\(.*\)', '\1', '')
-        return [{'lnum' : line, 'text' : msg, 'bufnr': bufnr(""), 'type': 'E' }]
-    endif
-    return []
+    let makeprg = "haml -c " . shellescape(expand("%"))
+    let errorformat = 'Haml error on line %l: %m,Syntax error on line %l: %m,%-G%.%#'
+    return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 endfunction
