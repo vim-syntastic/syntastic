@@ -304,6 +304,9 @@ function! s:Disable(...)
     if !empty(ft) && index(g:syntastic_disabled_filetypes, ft) == -1
         call add(g:syntastic_disabled_filetypes, ft)
     endif
+
+    "will cause existing errors to be cleared
+    call s:UpdateErrors()
 endfunction
 
 "enable syntax checking for the given filetype (defaulting to current ft)
@@ -313,6 +316,13 @@ function! s:Enable(...)
     let i = index(g:syntastic_disabled_filetypes, ft)
     if i != -1
         call remove(g:syntastic_disabled_filetypes, i)
+    endif
+
+    if !&modified
+        call s:UpdateErrors()
+        redraw!
+    else
+        echom "Syntasic: enabled for the '" . ft . "' filetype. :write out to update errors"
     endif
 endfunction
 
