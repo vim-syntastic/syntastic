@@ -24,7 +24,7 @@ let g:syntastic_sass_imports = 0
 function! SyntaxCheckers_sass_GetLocList()
     "use compass imports if available
     if g:syntastic_sass_imports == 0 && executable("compass")
-        let g:syntastic_sass_imports = system("compass imports")
+        let g:syntastic_sass_imports = "--compass"
     else
         let g:syntastic_sass_imports = ""
     endif
