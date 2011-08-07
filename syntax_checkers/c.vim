@@ -34,6 +34,13 @@
 " libraries is done. I.e. set the variable like this:
 "
 "   let b:syntastic_c_cflags = ' -I/usr/include/libsoup-2.4'
+"
+" In order to add some custom include directories that should be added to the
+" gcc command line you can add those to the global variable
+" g:syntastic_c_include_dirs. This list can be used like this:
+"
+"   let g:syntastic_c_include_dirs = [ 'includes', 'headers' ]
+
 
 if exists('loaded_c_syntax_checker')
     finish
