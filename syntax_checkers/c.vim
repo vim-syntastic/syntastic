@@ -88,7 +88,8 @@ function! s:Init()
     unlet! s:RegHandler
 endfunction
 
-let s:default_includes = [ '.', '..', 'include', 'includes' ]
+let s:default_includes = [ '.', '..', 'include', 'includes',
+            \ '../include', '../includes' ]
 
 function! s:GetIncludeDirs()
     let include_dirs = s:default_includes
