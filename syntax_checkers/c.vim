@@ -94,6 +94,7 @@ function! s:GetIncludeDirs()
     let include_dirs = s:default_includes
 
     if exists('g:syntastic_c_include_dirs')
+        " TODO: check for duplicates
         call extend(include_dirs, g:syntastic_c_include_dirs)
     endif
 
@@ -103,7 +104,6 @@ endfunction
 function! SyntaxCheckers_c_GetLocList()
     let makeprg = 'gcc -fsyntax-only '.shellescape(expand('%')).
                \ ' '.s:GetIncludeDirs()
-    echom makeprg
     let errorformat = '%-G%f:%s:,%-G%f:%l: %#error: %#(Each undeclared '.
                \ 'identifier is reported only%.%#,%-G%f:%l: %#error: %#for '.
                \ 'each function it appears%.%#,%-GIn file included%.%#,'.
