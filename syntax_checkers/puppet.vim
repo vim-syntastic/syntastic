@@ -20,7 +20,18 @@ if !executable("puppet")
 endif
 
 function! SyntaxCheckers_puppet_GetLocList()
-    let makeprg = 'puppet --color=false --parseonly '.shellescape(expand('%'))
+    let l:puppetVersion = system("puppet --version")
+    let l:digits = split(l:puppetVersion, "\\.")
+    "
+    " If it is on the 2.7 series... use new executable
+    if l:digits[0] == '2' && l:digits[1] == '7'
+      let makeprg = 'puppet parser validate ' . 
+            \ shellescape(expand('%')) .
+            \ ' --color=false'
+    else
+      let makeprg = 'puppet --color=false --parseonly '.shellescape(expand('%'))
+    endif
+
     let errorformat = 'err: Could not parse for environment %*[a-z]: %m at %f:%l'
 
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
