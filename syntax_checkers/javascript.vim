@@ -16,6 +16,26 @@ if exists("loaded_javascript_syntax_checker")
 endif
 let loaded_javascript_syntax_checker = 1
 
+" Use google's gjslint if the user has it installed
+if executable("gjslint")
+    if !exists("g:syntastic_gjslint_conf")
+        let g:syntastic_gjslint_conf = ""
+    endif
+
+    function! SyntaxCheckers_javascript_GetLocList()
+        if empty(g:syntastic_gjslint_conf)
+            let gjslintconf = ""
+        else
+            let gjslintconf = g:syntastic_gjslint_conf
+        endif
+        let makeprg = "gjslint" . gjslintconf . " --nosummary --unix_mode --nodebug_indentation --nobeep " . shellescape(expand('%'))
+        let errorformat="%f:%l:(New Error %n) %m,%f:%l:(%n) %m,%-G1 files checked, no errors found.,%-G%.%#"
+        return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
+    endfunction
+    " We're using google gjslint, finished.
+    finish
+endif
+
 " Use node jslint if the user has it installed
 if executable("jslint")
     if !exists("g:syntastic_jslint_conf")
