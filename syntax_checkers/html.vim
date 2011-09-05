@@ -39,10 +39,24 @@ endfunction
 
 function! SyntaxCheckers_html_GetLocList()
 
-    "grep out the '<table> lacks "summary" attribute' since it is almost
-    "always present and almost always useless
     let encopt = s:TidyEncOptByFenc()
-    let makeprg="tidy ".encopt." --new-blocklevel-tags 'section, article, aside, hgroup, header, footer, nav, figure, figcaption' --new-inline-tags 'video, audio, embed, mark, progress, meter, time, ruby, rt, rp, canvas, command, details, datalist' --new-empty-tags 'wbr, keygen' -e ".shellescape(expand('%'))." 2>&1 \\| grep -v '\<table\> lacks \"summary\" attribute' \\| grep -v 'not approved by W3C' \\| grep -v 'attribute \"placeholder\"'"
+    "grep out not helpful errors and avoid reporting errors for new HTML5
+    "attibutes (like 'data-' attibutes) and optional attributes like 'type' on
+    "script and link tags.
+    let ignore_html_errors = [
+                \ "<table\> lacks \"summary\" attribute",
+                \ "not approved by W3C",
+                \ "attribute \"placeholder\"",
+                \ "<meta\> proprietary attribute \"charset\"",
+                \ "<meta\> lacks \"content\" attribute",
+                \ "<link\> inserting \"type\" attribute",
+                \ "<script\> inserting \"type\" attribute",
+                \ "proprietary attribute \"data-"
+                \]
+    let makeprg = "tidy ". encopt ." --new-blocklevel-tags 'section, article, aside, hgroup, header, footer, nav, figure, figcaption' --new-inline-tags 'video, audio, embed, mark, progress, meter, time, ruby, rt, rp, canvas, command, details, datalist' --new-empty-tags 'wbr, keygen' -e ". shellescape(expand('%')) ." 2>&1"
+    for item in ignore_html_errors
+        let makeprg = makeprg ." \\| grep -v '". item ."'"
+    endfor
     let errorformat='%Wline %l column %c - Warning: %m,%Eline %l column %c - Error: %m,%-G%.%#,%-G%.%#'
     let loclist = SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 
