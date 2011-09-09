@@ -34,6 +34,11 @@
 " libraries is done. I.e. set the variable like this:
 "
 "   let b:syntastic_cpp_cflags = ' -I/usr/include/libsoup-2.4'
+"
+" Moreover it is possible to add additional compiler options to the syntax
+" checking execution via the variable 'g:syntastic_cpp_compiler_options':
+"
+"   let g:syntastic_cpp_compiler_options = ' -std=c++0x'
 
 if exists('loaded_cpp_syntax_checker')
     finish
@@ -57,6 +62,10 @@ function! SyntaxCheckers_cpp_GetLocList()
         else
             return []
         endif
+    endif
+
+    if exists('g:syntastic_cpp_compiler_options')
+        let makeprg .= g:syntastic_cpp_compiler_options
     endif
 
     if !exists('b:syntastic_cpp_cflags')
