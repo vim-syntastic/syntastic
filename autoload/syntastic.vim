@@ -1,3 +1,10 @@
+if exists("g:loaded_syntastic_autoload")
+    finish
+endif
+let g:loaded_syntastic_autoload = 1
+
+let s:save_cpo = &cpo
+set cpo&vim
 
 function! syntastic#ErrorBalloonExpr()
     if !exists('b:syntastic_balloons') | return '' | endif
@@ -27,31 +34,31 @@ function! s:Init()
     let s:handlers = []
     let s:cflags = {}
 
-    call syntastic#RegHandler('gtk', 'syntastic#CheckPKG',
+    call s:RegHandler('gtk', 'syntastic#CheckPKG',
                 \ ['gtk', 'gtk+-2.0', 'gtk+', 'glib-2.0', 'glib'])
-    call syntastic#RegHandler('glib', 'syntastic#CheckPKG',
+    call s:RegHandler('glib', 'syntastic#CheckPKG',
                 \ ['glib', 'glib-2.0', 'glib'])
-    call syntastic#RegHandler('glade', 'syntastic#CheckPKG',
+    call s:RegHandler('glade', 'syntastic#CheckPKG',
                 \ ['glade', 'libglade-2.0', 'libglade'])
-    call syntastic#RegHandler('libsoup', 'syntastic#CheckPKG',
+    call s:RegHandler('libsoup', 'syntastic#CheckPKG',
                 \ ['libsoup', 'libsoup-2.4', 'libsoup-2.2'])
-    call syntastic#RegHandler('webkit', 'syntastic#CheckPKG',
+    call s:RegHandler('webkit', 'syntastic#CheckPKG',
                 \ ['webkit', 'webkit-1.0'])
-    call syntastic#RegHandler('cairo', 'syntastic#CheckPKG',
+    call s:RegHandler('cairo', 'syntastic#CheckPKG',
                 \ ['cairo', 'cairo'])
-    call syntastic#RegHandler('pango', 'syntastic#CheckPKG',
+    call s:RegHandler('pango', 'syntastic#CheckPKG',
                 \ ['pango', 'pango'])
-    call syntastic#RegHandler('libxml', 'syntastic#CheckPKG',
+    call s:RegHandler('libxml', 'syntastic#CheckPKG',
                 \ ['libxml', 'libxml-2.0', 'libxml'])
-    call syntastic#RegHandler('freetype', 'syntastic#CheckPKG',
+    call s:RegHandler('freetype', 'syntastic#CheckPKG',
                 \ ['freetype', 'freetype2', 'freetype'])
-    call syntastic#RegHandler('SDL', 'syntastic#CheckPKG',
+    call s:RegHandler('SDL', 'syntastic#CheckPKG',
                 \ ['sdl', 'sdl'])
-    call syntastic#RegHandler('opengl', 'syntastic#CheckPKG',
+    call s:RegHandler('opengl', 'syntastic#CheckPKG',
                 \ ['opengl', 'gl'])
-    call syntastic#RegHandler('ruby', 'syntastic#CheckRuby', [])
-    call syntastic#RegHandler('Python\.h', 'syntastic#CheckPython', [])
-    call syntastic#RegHandler('php\.h', 'syntastic#CheckPhp', [])
+    call s:RegHandler('ruby', 'syntastic#CheckRuby', [])
+    call s:RegHandler('Python\.h', 'syntastic#CheckPython', [])
+    call s:RegHandler('php\.h', 'syntastic#CheckPhp', [])
 endfunction
 
 " search the first 100 lines for include statements that are
@@ -171,7 +178,7 @@ function! syntastic#CheckPython()
 endfunction
 
 " return a handler dictionary object
-function! syntastic#RegHandler(regex, function, args)
+function! s:RegHandler(regex, function, args)
     let handler = {}
     let handler["regex"] = a:regex
     let handler["func"] = function(a:function)
@@ -180,3 +187,8 @@ function! syntastic#RegHandler(regex, function, args)
 endfunction
 
 call s:Init()
+
+let &cpo = s:save_cpo
+unlet s:save_cpo
+
+" vim: set et sts=4 sw=4:
