@@ -52,12 +52,13 @@ if !exists("g:syntastic_stl_format")
 endif
 
 "refresh and redraw all the error info for this buf when saving or reading
-autocmd bufreadpost,bufwritepost * call s:UpdateErrors()
-function! s:UpdateErrors()
+command SyntasticCheck call s:UpdateErrors(1)
+autocmd bufreadpost,bufwritepost * call s:UpdateErrors(0)
+function! s:UpdateErrors(skip_disabled)
     if &buftype == 'quickfix'
         return
     endif
-    call s:CacheErrors()
+    call s:CacheErrors(a:skip_disabled)
 
     if g:syntastic_enable_balloons && has('balloon_eval')
         let b:syntastic_balloons = {}
@@ -95,12 +96,12 @@ endfunction
 "
 "depends on a function called SyntaxCheckers_{&ft}_GetLocList() existing
 "elsewhere
-function! s:CacheErrors()
+function! s:CacheErrors(skip_disabled)
     let b:syntastic_loclist = []
 
     if filereadable(expand("%"))
         for ft in split(&ft, '\.')
-            if s:Checkable(ft)
+            if s:Checkable(ft, a:skip_disabled)
                 let b:syntastic_loclist = extend(b:syntastic_loclist, SyntaxCheckers_{ft}_GetLocList())
             endif
         endfor
@@ -289,9 +290,13 @@ function! SyntasticMake(options)
     return errors
 endfunction
 
-function! s:Checkable(ft)
+function! s:Checkable(ft, skip_disabled)
     if !exists("g:loaded_" . a:ft . "_syntax_checker")
         exec "runtime syntax_checkers/" . a:ft . ".vim"
+    endif
+
+    if a:skip_disabled
+        return 1
     endif
 
     return exists("*SyntaxCheckers_". a:ft ."_GetLocList") &&
@@ -310,7 +315,7 @@ function! s:Disable(...)
     endif
 
     "will cause existing errors to be cleared
-    call s:UpdateErrors()
+    call s:UpdateErrors(0)
 endfunction
 
 "enable syntax checking for the given filetype (defaulting to current ft)
@@ -323,7 +328,7 @@ function! s:Enable(...)
     endif
 
     if !&modified
-        call s:UpdateErrors()
+        call s:UpdateErrors(0)
         redraw!
     else
         echom "Syntasic: enabled for the '" . ft . "' filetype. :write out to update errors"
