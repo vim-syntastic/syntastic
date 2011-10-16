@@ -73,7 +73,7 @@ function! s:GetIncludeDirs()
 endfunction
 
 function! SyntaxCheckers_c_GetLocList()
-    let makeprg = 'gcc -fsyntax-only '.shellescape(expand('%')).
+    let makeprg = 'gcc -fsyntax-only -std=gnu99 '.shellescape(expand('%')).
                \ ' '.s:GetIncludeDirs()
     let errorformat = '%-G%f:%s:,%-G%f:%l: %#error: %#(Each undeclared '.
                \ 'identifier is reported only%.%#,%-G%f:%l: %#error: %#for '.
