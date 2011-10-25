@@ -41,6 +41,10 @@
 "
 "   let g:syntastic_c_include_dirs = [ 'includes', 'headers' ]
 
+" Moreover it is possible to add additional compiler options to the syntax
+" checking execution via the variable 'g:syntastic_c_compiler_options':
+"
+"   let g:syntastic_c_compiler_options = ' -ansi'
 
 if exists('loaded_c_syntax_checker')
     finish
@@ -119,15 +123,19 @@ function! SyntaxCheckers_c_GetLocList()
         endif
     endif
 
+    if exists('g:syntastic_c_compiler_options')
+        let makeprg .= g:syntastic_c_compiler_options
+    endif
+
     if !exists('b:syntastic_c_cflags')
         if !exists('g:syntastic_c_no_include_search') ||
                     \ g:syntastic_c_no_include_search != 1
             if exists('g:syntastic_c_auto_refresh_includes') &&
                         \ g:syntastic_c_auto_refresh_includes != 0
-                let makeprg .= s:SearchHeaders()
+                let makeprg .= syntastic#SearchHeaders()
             else
                 if !exists('b:syntastic_c_includes')
-                    let b:syntastic_c_includes = s:SearchHeaders()
+                    let b:syntastic_c_includes = syntastic#SearchHeaders()
                 endif
                 let makeprg .= b:syntastic_c_includes
             endif
@@ -139,132 +147,7 @@ function! SyntaxCheckers_c_GetLocList()
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 endfunction
 
-" search the first 100 lines for include statements that are
-" given in the s:handlers dictionary
-function! s:SearchHeaders()
-    let includes = ''
-    let files = []
-    let found = []
-    let lines = filter(getline(1, 100), 'v:val =~# "#\s*include"')
-
-    " search current buffer
-    for line in lines
-        let file = matchstr(line, '"\zs\S\+\ze"')
-        if file != ''
-            call add(files, file)
-            continue
-        endif
-        for handler in s:handlers
-            if line =~# handler["regex"]
-                let includes .= call(handler["func"], handler["args"])
-                call add(found, handler["regex"])
-                break
-            endif
-        endfor
-    endfor
-
-    " search included headers
-    for hfile in files
-        if hfile != ''
-            let filename = expand('%:p:h') . ((has('win32') || has('win64')) ?
-                        \ '\' : '/') . hfile
-            try
-                let lines = readfile(filename, '', 100)
-            catch /E484/
-                continue
-            endtry
-            let lines = filter(lines, 'v:val =~# "#\s*include"')
-            for handler in s:handlers
-                if index(found, handler["regex"]) != -1
-                    continue
-                endif
-                for line in lines
-                    if line =~# handler["regex"]
-                        let includes .= call(handler["func"], handler["args"])
-                        call add(found, handler["regex"])
-                        break
-                    endif
-                endfor
-            endfor
-        endif
-    endfor
-
-    return includes
-endfunction
-
-" try to find library with 'pkg-config'
-" search possible libraries from first to last given
-" argument until one is found
-function! s:CheckPKG(name, ...)
-    if executable('pkg-config')
-        if !has_key(s:cflags, a:name)
-            for i in range(a:0)
-                let l:cflags = system('pkg-config --cflags '.a:000[i])
-                " since we cannot necessarily trust the pkg-config exit code
-                " we have to check for an error output as well
-                if v:shell_error == 0 && l:cflags !~? 'not found'
-                    let l:cflags = ' '.substitute(l:cflags, "\n", '', '')
-                    let s:cflags[a:name] = l:cflags
-                    return l:cflags
-                endif
-            endfor
-        else
-            return s:cflags[a:name]
-        endif
-    endif
-    return ''
-endfunction
-
-" try to find PHP includes with 'php-config'
-function! s:CheckPhp()
-    if executable('php-config')
-        if !exists('s:php_flags')
-            let s:php_flags = system('php-config --includes')
-            let s:php_flags = ' ' . substitute(s:php_flags, "\n", '', '')
-        endif
-        return s:php_flags
-    endif
-    return ''
-endfunction
-
-" try to find the ruby headers with 'rbconfig'
-function! s:CheckRuby()
-    if executable('ruby')
-        if !exists('s:ruby_flags')
-            let s:ruby_flags = system('ruby -r rbconfig -e '
-                        \ . '''puts Config::CONFIG["archdir"]''')
-            let s:ruby_flags = substitute(s:ruby_flags, "\n", '', '')
-            let s:ruby_flags = ' -I' . s:ruby_flags
-        endif
-        return s:ruby_flags
-    endif
-    return ''
-endfunction
-
-" try to find the python headers with distutils
-function! s:CheckPython()
-    if executable('python')
-        if !exists('s:python_flags')
-            let s:python_flags = system('python -c ''from distutils import '
-                        \ . 'sysconfig; print sysconfig.get_python_inc()''')
-            let s:python_flags = substitute(s:python_flags, "\n", '', '')
-            let s:python_flags = ' -I' . s:python_flags
-        endif
-        return s:python_flags
-    endif
-    return ''
-endfunction
-
-" return a handler dictionary object
-function! s:RegHandler(regex, function, args)
-    let handler = {}
-    let handler["regex"] = a:regex
-    let handler["func"] = function(a:function)
-    let handler["args"] = a:args
-    call add(s:handlers, handler)
-endfunction
-
-call s:Init()
-
 let &cpo = s:save_cpo
 unlet s:save_cpo
+
+" vim: set et sts=4 sw=4:
