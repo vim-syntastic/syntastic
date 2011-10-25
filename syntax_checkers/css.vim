@@ -22,7 +22,7 @@ function! SyntaxCheckers_css_GetLocList()
     let makeprg = 'csslint --format=compact '.shellescape(expand('%'))
 
     " Print CSS Lint's error/warning messages from compact format. Ignores blank lines.
-    let errorformat = '%f: line %l\, col %c\, %m,%-G,%-G%f: lint free!'
+    let errorformat = '%-G,%-G%f: lint free!,%f: line %l\, col %c\, %trror - %m,%f: line %l\, col %c\, %tarning - %m,%f: line %l\, col %c\, %m,'
 
     let loclist = SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 
