@@ -58,40 +58,6 @@ endif
 let s:save_cpo = &cpo
 set cpo&vim
 
-" initialize handlers
-function! s:Init()
-    let s:handlers = []
-    let s:cflags = {}
-
-    call s:RegHandler('gtk', 's:CheckPKG',
-                \ ['gtk', 'gtk+-2.0', 'gtk+', 'glib-2.0', 'glib'])
-    call s:RegHandler('glib', 's:CheckPKG',
-                \ ['glib', 'glib-2.0', 'glib'])
-    call s:RegHandler('glade', 's:CheckPKG',
-                \ ['glade', 'libglade-2.0', 'libglade'])
-    call s:RegHandler('libsoup', 's:CheckPKG',
-                \ ['libsoup', 'libsoup-2.4', 'libsoup-2.2'])
-    call s:RegHandler('webkit', 's:CheckPKG',
-                \ ['webkit', 'webkit-1.0'])
-    call s:RegHandler('cairo', 's:CheckPKG',
-                \ ['cairo', 'cairo'])
-    call s:RegHandler('pango', 's:CheckPKG',
-                \ ['pango', 'pango'])
-    call s:RegHandler('libxml', 's:CheckPKG',
-                \ ['libxml', 'libxml-2.0', 'libxml'])
-    call s:RegHandler('freetype', 's:CheckPKG',
-                \ ['freetype', 'freetype2', 'freetype'])
-    call s:RegHandler('SDL', 's:CheckPKG',
-                \ ['sdl', 'sdl'])
-    call s:RegHandler('opengl', 's:CheckPKG',
-                \ ['opengl', 'gl'])
-    call s:RegHandler('ruby', 's:CheckRuby', [])
-    call s:RegHandler('Python\.h', 's:CheckPython', [])
-    call s:RegHandler('php\.h', 's:CheckPhp', [])
-
-    unlet! s:RegHandler
-endfunction
-
 let s:default_includes = [ '.', '..', 'include', 'includes',
             \ '../include', '../includes' ]
 
