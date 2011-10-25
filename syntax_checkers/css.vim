@@ -19,10 +19,10 @@ if !executable("csslint")
 endif
 
 function! SyntaxCheckers_css_GetLocList()
-    let makeprg = 'csslint '.shellescape(expand('%'))
+    let makeprg = 'csslint --format=compact '.shellescape(expand('%'))
 
-    " Print CSS Lint's 'Welcome' and error/warning messages. Ignores the code line.
-    let errorformat = '%+Gcsslint:\ There%.%#,%A%f:,%C%n:\ %t%\\w%\\+\ at\ line\ %l\,\ col\ %c,%Z%m\ at\ line%.%#,%A%>%f:,%C%n:\ %t%\\w%\\+\ at\ line\ %l\,\ col\ %c,%Z%m,%-G%.%#'
+    " Print CSS Lint's error/warning messages from compact format. Ignores blank lines.
+    let errorformat = '%f: line %l\, col %c\, %m,%-G,%-G%f: lint free!'
 
     let loclist = SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 
