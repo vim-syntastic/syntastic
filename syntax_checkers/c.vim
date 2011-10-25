@@ -34,6 +34,13 @@
 " libraries is done. I.e. set the variable like this:
 "
 "   let b:syntastic_c_cflags = ' -I/usr/include/libsoup-2.4'
+"
+" In order to add some custom include directories that should be added to the
+" gcc command line you can add those to the global variable
+" g:syntastic_c_include_dirs. This list can be used like this:
+"
+"   let g:syntastic_c_include_dirs = [ 'includes', 'headers' ]
+
 
 if exists('loaded_c_syntax_checker')
     finish
@@ -81,8 +88,23 @@ function! s:Init()
     unlet! s:RegHandler
 endfunction
 
+let s:default_includes = [ '.', '..', 'include', 'includes',
+            \ '../include', '../includes' ]
+
+function! s:GetIncludeDirs()
+    let include_dirs = s:default_includes
+
+    if exists('g:syntastic_c_include_dirs')
+        " TODO: check for duplicates
+        call extend(include_dirs, g:syntastic_c_include_dirs)
+    endif
+
+    return join(map(copy(include_dirs), '"-I" . v:val'), ' ')
+endfunction
+
 function! SyntaxCheckers_c_GetLocList()
-    let makeprg = 'gcc -fsyntax-only '.shellescape(expand('%')).' -I. -I..'
+    let makeprg = 'gcc -fsyntax-only '.shellescape(expand('%')).
+               \ ' '.s:GetIncludeDirs()
     let errorformat = '%-G%f:%s:,%-G%f:%l: %#error: %#(Each undeclared '.
                \ 'identifier is reported only%.%#,%-G%f:%l: %#error: %#for '.
                \ 'each function it appears%.%#,%-GIn file included%.%#,'.
@@ -90,7 +112,8 @@ function! SyntaxCheckers_c_GetLocList()
 
     if expand('%') =~? '.h$'
         if exists('g:syntastic_c_check_header')
-            let makeprg = 'gcc -c '.shellescape(expand('%')).' -I. -I..'
+            let makeprg = 'gcc -c '.shellescape(expand('%')).
+                        \ ' '.s:GetIncludeDirs()
         else
             return []
         endif
