@@ -26,9 +26,17 @@ function! SyntaxCheckers_php_Term(item)
 endfunction
 
 function! SyntaxCheckers_php_GetLocList()
+
+    let errors = []
+    if executable("phpcs")
+        let makeprg = "phpcs --report=csv ".shellescape(expand('%'))
+        let errorformat = '"%f"\,%l\,%c\,%t%*[a-zA-Z]\,"%m"\,%*[a-zA-Z0-9_.-]\,%*[0-9]'
+        let errors = SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
+    endif
+
     let makeprg = "php -l ".shellescape(expand('%'))
     let errorformat='%-GNo syntax errors detected in%.%#,PHP Parse error: %#syntax %trror\, %m in %f on line %l,PHP Fatal %trror: %m in %f on line %l,%-GErrors parsing %.%#,%-G\s%#,Parse error: %#syntax %trror\, %m in %f on line %l,Fatal %trror: %m in %f on line %l'
-    let errors = SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
+    let errors = errors + SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 
     call syntastic#HighlightErrors(errors, function('SyntaxCheckers_php_Term'))
 
