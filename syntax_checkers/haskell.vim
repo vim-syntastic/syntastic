@@ -21,8 +21,10 @@ endif
 
 function! SyntaxCheckers_haskell_GetLocList()
     let makeprg = 
-          \ 'ghc-mod check '. shellescape(expand('%')) .
-          \ ' && ghc-mod lint ' . shellescape(expand('%'))
+          \ "{ ". 
+          \ "ghc-mod check ". shellescape(expand('%')) . "; " .
+          \ "ghc-mod lint " . shellescape(expand('%')) . ";" .
+          \ " }"
     let errorformat = '%-G\\s%#,%f:%l:%c:%m,%E%f:%l:%c:,%Z%m,'
 
 
