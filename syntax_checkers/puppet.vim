@@ -29,7 +29,7 @@ function! SyntaxCheckers_puppet_GetLocList()
             \ shellescape(expand('%')) .
             \ ' --color=false'
     else
-      let makeprg = 'puppet --color=false --parseonly '.shellescape(expand('%'))
+      let makeprg = 'puppet --color=false --parseonly --ignoreimport '.shellescape(expand('%'))
     endif
 
     let errorformat = 'err: Could not parse for environment %*[a-z]: %m at %f:%l'
