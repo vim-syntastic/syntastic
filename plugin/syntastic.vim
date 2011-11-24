@@ -286,6 +286,10 @@ function! SyntasticMake(options)
     let &shellpipe=old_shellpipe
     let &shell=old_shell
 
+    if s:uname =~ "FreeBSD"
+        redraw!
+    endif
+
     return errors
 endfunction
 
