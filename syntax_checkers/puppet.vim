@@ -27,7 +27,7 @@ function! SyntaxCheckers_puppet_GetLocList()
     if l:digits[0] == '2' && l:digits[1] == '7'
       let makeprg = 'puppet parser validate ' . 
             \ shellescape(expand('%')) .
-            \ ' --color=false'
+            \ ' --color=false --ignoreimport'
     else
       let makeprg = 'puppet --color=false --parseonly --ignoreimport '.shellescape(expand('%'))
     endif
