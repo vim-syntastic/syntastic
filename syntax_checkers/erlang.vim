@@ -14,7 +14,7 @@ if exists("loaded_erlang_syntax_checker")
 endif
 let loaded_erlang_syntax_checker = 1
 
-"bail if the user doesnt have ruby installed
+"bail if the user doesnt have escript installed
 if !executable("escript")
     finish
 endif
