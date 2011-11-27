@@ -91,6 +91,17 @@ function! s:UpdateErrors()
     endif
 endfunction
 
+function! s:ToggleErrors()
+    redir =>buflist
+    silent! ls
+    redir END
+    for bufnum in filter(split(buflist, '\n'), 'v:val =~ "Location List"')
+        lclose
+        return
+    endfor
+    call s:ShowLocList()
+endfunction
+
 "detect and cache all syntax errors in this buffer
 "
 "depends on a function called SyntaxCheckers_{&ft}_GetLocList() existing
@@ -204,6 +215,7 @@ function! s:ShowLocList()
 endfunction
 
 command Errors call s:ShowLocList()
+command ToggleErrors call s:ToggleErrors()
 
 "return a string representing the state of buffer according to
 "g:syntastic_stl_format

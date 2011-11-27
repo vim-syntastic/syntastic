@@ -12,7 +12,9 @@ function! syntastic#ErrorBalloonExpr()
 endfunction
 
 function! syntastic#HighlightErrors(errors, termfunc, ...)
-    call clearmatches()
+	if exists('clearmatches')
+	    call clearmatches()
+	endif
     let forcecb = a:0 && a:1
     for item in a:errors
         let group = item['type'] == 'E' ? 'SpellBad' : 'SpellCap'
