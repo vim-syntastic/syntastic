@@ -51,14 +51,22 @@ if !exists("g:syntastic_stl_format")
     let g:syntastic_stl_format = '[Syntax: line:%F (%t)]'
 endif
 
+if !exists("g:syntastic_mode_map")
+    let g:syntastic_mode_map = { 'mode': 'active', 'active_filetypes': [], 'passive_filetypes': [] }
+endif
+
+
 "refresh and redraw all the error info for this buf when saving or reading
-command SyntasticCheck call s:UpdateErrors(1)
-autocmd bufreadpost,bufwritepost * call s:UpdateErrors(0)
-function! s:UpdateErrors(skip_disabled)
+command SyntasticCheck -nargs=0 call s:UpdateErrors(0) <bar> redraw!
+autocmd bufreadpost,bufwritepost * call s:UpdateErrors(1)
+function! s:UpdateErrors(auto_invoked)
     if &buftype == 'quickfix'
         return
     endif
-    call s:CacheErrors(a:skip_disabled)
+
+    if !a:auto_invoked || s:ModeMapAllowsAutoChecking()
+        call s:CacheErrors()
+    end
 
     if g:syntastic_enable_balloons && has('balloon_eval')
         let b:syntastic_balloons = {}
@@ -96,14 +104,51 @@ endfunction
 "
 "depends on a function called SyntaxCheckers_{&ft}_GetLocList() existing
 "elsewhere
-function! s:CacheErrors(skip_disabled)
+function! s:CacheErrors()
     let b:syntastic_loclist = []
 
     if filereadable(expand("%"))
         for ft in split(&ft, '\.')
-            if s:Checkable(ft, a:skip_disabled)
+            if s:Checkable(ft)
                 let b:syntastic_loclist = extend(b:syntastic_loclist, SyntaxCheckers_{ft}_GetLocList())
             endif
+        endfor
+    endif
+endfunction
+
+command! -nargs=0 SyntasticToggleMode call s:ToggleMode()
+
+"toggle the g:syntastic_mode_map['mode']
+function! s:ToggleMode()
+    if g:syntastic_mode_map['mode'] == "active"
+        let g:syntastic_mode_map['mode'] = "passive"
+    else
+        let g:syntastic_mode_map['mode'] = "active"
+    endif
+
+    echo "Syntastic: " . g:syntastic_mode_map['mode'] . " mode enabled"
+endfunction
+
+"check the current filetypes against g:syntastic_mode_map to determine whether
+"active mode syntax checking should be done
+function! s:ModeMapAllowsAutoChecking()
+    if g:syntastic_mode_map['mode'] == 'passive'
+
+        "check at least one filetype is active
+        for ft in split(&ft, '\.')
+            if index(g:syntastic_mode_map['active_filetypes'], ft) != -1
+                return 1
+            endif
+            return 0
+        endfor
+    else
+
+        "check no filetypes are passive
+        for ft in split(&ft, '\.')
+            if index(g:syntastic_mode_map['passive_filetypes'], ft) != -1
+                return 0
+            endif
+            return 1
         endfor
     endif
 endfunction
@@ -294,13 +339,9 @@ function! SyntasticMake(options)
     return errors
 endfunction
 
-function! s:Checkable(ft, skip_disabled)
+function! s:Checkable(ft)
     if !exists("g:loaded_" . a:ft . "_syntax_checker")
         exec "runtime syntax_checkers/" . a:ft . ".vim"
-    endif
-
-    if a:skip_disabled
-        return 1
     endif
 
     return exists("*SyntaxCheckers_". a:ft ."_GetLocList") &&
