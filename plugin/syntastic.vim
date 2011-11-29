@@ -51,9 +51,11 @@ if !exists("g:syntastic_mode_map")
     let g:syntastic_mode_map = { 'mode': 'active', 'active_filetypes': [], 'passive_filetypes': [] }
 endif
 
+command! -nargs=0 SyntasticToggleMode call s:ToggleMode()
+command SyntasticCheck -nargs=0 call s:UpdateErrors(0) <bar> redraw!
+command Errors call s:ShowLocList()
 
 "refresh and redraw all the error info for this buf when saving or reading
-command SyntasticCheck -nargs=0 call s:UpdateErrors(0) <bar> redraw!
 autocmd bufreadpost,bufwritepost * call s:UpdateErrors(1)
 function! s:UpdateErrors(auto_invoked)
     if &buftype == 'quickfix'
@@ -111,8 +113,6 @@ function! s:CacheErrors()
         endfor
     endif
 endfunction
-
-command! -nargs=0 SyntasticToggleMode call s:ToggleMode()
 
 "toggle the g:syntastic_mode_map['mode']
 function! s:ToggleMode()
@@ -244,8 +244,6 @@ function! s:ShowLocList()
         endif
     endif
 endfunction
-
-command Errors call s:ShowLocList()
 
 "return a string representing the state of buffer according to
 "g:syntastic_stl_format
