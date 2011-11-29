@@ -93,7 +93,7 @@ function! s:UpdateErrors(auto_invoked)
     if s:BufHasErrorsOrWarningsToDisplay()
         call setloclist(0, b:syntastic_loclist)
         if g:syntastic_auto_jump
-            silent!ll
+            silent! ll
         endif
     elseif g:syntastic_auto_loc_list == 2
         lclose
