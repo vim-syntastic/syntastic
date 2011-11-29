@@ -43,10 +43,6 @@ if !exists("g:syntastic_quiet_warnings")
     let g:syntastic_quiet_warnings = 0
 endif
 
-if !exists("g:syntastic_disabled_filetypes")
-    let g:syntastic_disabled_filetypes = []
-endif
-
 if !exists("g:syntastic_stl_format")
     let g:syntastic_stl_format = '[Syntax: line:%F (%t)]'
 endif
@@ -344,40 +340,7 @@ function! s:Checkable(ft)
         exec "runtime syntax_checkers/" . a:ft . ".vim"
     endif
 
-    return exists("*SyntaxCheckers_". a:ft ."_GetLocList") &&
-                \ index(g:syntastic_disabled_filetypes, a:ft) == -1
-endfunction
-
-command! -nargs=? SyntasticEnable call s:Enable(<f-args>)
-command! -nargs=? SyntasticDisable call s:Disable(<f-args>)
-
-"disable syntax checking for the given filetype (defaulting to current ft)
-function! s:Disable(...)
-    let ft = a:0 ? a:1 : &filetype
-
-    if !empty(ft) && index(g:syntastic_disabled_filetypes, ft) == -1
-        call add(g:syntastic_disabled_filetypes, ft)
-    endif
-
-    "will cause existing errors to be cleared
-    call s:UpdateErrors(0)
-endfunction
-
-"enable syntax checking for the given filetype (defaulting to current ft)
-function! s:Enable(...)
-    let ft = a:0 ? a:1 : &filetype
-
-    let i = index(g:syntastic_disabled_filetypes, ft)
-    if i != -1
-        call remove(g:syntastic_disabled_filetypes, i)
-    endif
-
-    if !&modified
-        call s:UpdateErrors(0)
-        redraw!
-    else
-        echom "Syntasic: enabled for the '" . ft . "' filetype. :write out to update errors"
-    endif
+    return exists("*SyntaxCheckers_". a:ft ."_GetLocList")
 endfunction
 
 " vim: set et sts=4 sw=4:
