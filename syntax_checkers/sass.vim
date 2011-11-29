@@ -30,14 +30,9 @@ function! SyntaxCheckers_sass_GetLocList()
     endif
 
     let makeprg='sass '.g:syntastic_sass_imports.' --check '.shellescape(expand('%'))
-    let errorformat = '%ESyntax %trror:%m,%C        on line %l of %f,%Z%m'
+    let errorformat = '%ESyntax %trror:%m,%C        on line %l of %f,%Z%.%#'
     let errorformat .= ',%Wwarning on line %l:,%Z%m,Syntax %trror on line %l: %m'
     let loclist = SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
-
-    let bn = bufnr("")
-    for i in loclist
-        let i['bufnr'] = bn
-    endfor
 
     return loclist
 endfunction
