@@ -55,7 +55,7 @@ function! SyntaxCheckers_lua_GetLocList()
         let pos['type'] = 'E'
     endfor
 
-    call syntastic#HighlightErrors(loclist, function("SyntaxCheckers_lua_Term"))
+    call SyntasticHighlightErrors(loclist, function("SyntaxCheckers_lua_Term"))
 
     return loclist
 endfunction

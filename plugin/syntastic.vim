@@ -83,7 +83,7 @@ function! s:UpdateErrors(auto_invoked)
         for i in b:syntastic_loclist
             let b:syntastic_balloons[i['lnum']] = i['text']
         endfor
-        set beval bexpr=syntastic#ErrorBalloonExpr()
+        set beval bexpr=SyntasticErrorBalloonExpr()
     endif
 
     if g:syntastic_enable_signs
@@ -257,6 +257,24 @@ function! s:ShowLocList()
     endif
 endfunction
 
+function! s:ClearErrorHighlights()
+    for i in s:ErrorHighlightIds()
+        call matchdelete(i)
+    endfor
+    let b:syntastic_error_highlight_ids = []
+endfunction
+
+function! s:HighlightError(group, pattern)
+    call add(s:ErrorHighlightIds(), matchadd(a:group, a:pattern))
+endfunction
+
+function! s:ErrorHighlightIds()
+    if !exists("b:syntastic_error_highlight_ids")
+        let b:syntastic_error_highlight_ids = []
+    endif
+    return b:syntastic_error_highlight_ids
+endfunction
+
 "return a string representing the state of buffer according to
 "g:syntastic_stl_format
 "
@@ -343,6 +361,30 @@ function! SyntasticMake(options)
     endif
 
     return errors
+endfunction
+
+function! SyntasticErrorBalloonExpr()
+    if !exists('b:syntastic_balloons') | return '' | endif
+    return get(b:syntastic_balloons, v:beval_lnum, '')
+endfunction
+
+function! SyntasticHighlightErrors(errors, termfunc, ...)
+    call s:ClearErrorHighlights()
+
+    let forcecb = a:0 && a:1
+    for item in a:errors
+        let group = item['type'] == 'E' ? 'SpellBad' : 'SpellCap'
+        if item['col'] && !forcecb
+            let lastcol = col([item['lnum'], '$'])
+            let lcol = min([lastcol, item['col']])
+            call s:HighlightError(group, '\%'.item['lnum'].'l\%'.lcol.'c')
+        else
+            let term = a:termfunc(item)
+            if len(term) > 0
+                call s:HighlightError(group, '\%' . item['lnum'] . 'l' . term)
+            endif
+        endif
+    endfor
 endfunction
 
 function! s:Checkable(ft)

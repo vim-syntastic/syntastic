@@ -54,7 +54,7 @@ function! SyntaxCheckers_python_GetLocList()
 
     let errors = SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 
-    call syntastic#HighlightErrors(errors, function('SyntaxCheckers_python_Term'))
+    call SyntasticHighlightErrors(errors, function('SyntaxCheckers_python_Term'))
 
     return errors
 endfunction

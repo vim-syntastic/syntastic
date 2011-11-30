@@ -38,7 +38,7 @@ function! SyntaxCheckers_php_GetLocList()
     let errorformat='%-GNo syntax errors detected in%.%#,PHP Parse error: %#syntax %trror\, %m in %f on line %l,PHP Fatal %trror: %m in %f on line %l,%-GErrors parsing %.%#,%-G\s%#,Parse error: %#syntax %trror\, %m in %f on line %l,Fatal %trror: %m in %f on line %l'
     let errors = errors + SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 
-    call syntastic#HighlightErrors(errors, function('SyntaxCheckers_php_Term'))
+    call SyntasticHighlightErrors(errors, function('SyntaxCheckers_php_Term'))
 
     return errors
 endfunction

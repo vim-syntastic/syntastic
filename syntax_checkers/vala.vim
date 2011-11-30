@@ -50,7 +50,7 @@ function! SyntaxCheckers_vala_GetLocList()
     let errorformat = '%A%f:%l.%c-%\d%\+.%\d%\+: %t%[a-z]%\+: %m,%C%m,%Z%m'
 
     let loclist = SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
-    call syntastic#HighlightErrors(loclist, function("SyntaxCheckers_vala_Term"), 1)
+    call SyntasticHighlightErrors(loclist, function("SyntaxCheckers_vala_Term"), 1)
     return loclist
 endfunction
 

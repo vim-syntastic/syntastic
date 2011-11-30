@@ -6,48 +6,6 @@ let g:loaded_syntastic_autoload = 1
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! syntastic#ErrorBalloonExpr()
-    if !exists('b:syntastic_balloons') | return '' | endif
-    return get(b:syntastic_balloons, v:beval_lnum, '')
-endfunction
-
-function! syntastic#HighlightErrors(errors, termfunc, ...)
-    call syntastic#ClearErrorHighlights()
-
-    let forcecb = a:0 && a:1
-    for item in a:errors
-        let group = item['type'] == 'E' ? 'SpellBad' : 'SpellCap'
-        if item['col'] && !forcecb
-            let lastcol = col([item['lnum'], '$'])
-            let lcol = min([lastcol, item['col']])
-            call syntastic#HighlightError(group, '\%'.item['lnum'].'l\%'.lcol.'c')
-        else
-            let term = a:termfunc(item)
-            if len(term) > 0
-                call syntastic#HighlightError(group, '\%' . item['lnum'] . 'l' . term)
-            endif
-        endif
-    endfor
-endfunction
-
-function! syntastic#ClearErrorHighlights()
-    for i in syntastic#ErrorHighlightIds()
-        call matchdelete(i)
-    endfor
-    let b:syntastic_error_highlight_ids = []
-endfunction
-
-function! syntastic#HighlightError(group, pattern)
-    call add(syntastic#ErrorHighlightIds(), matchadd(a:group, a:pattern))
-endfunction
-
-function! syntastic#ErrorHighlightIds()
-    if !exists("b:syntastic_error_highlight_ids")
-        let b:syntastic_error_highlight_ids = []
-    endif
-    return b:syntastic_error_highlight_ids
-endfunction
-
 " initialize c/cpp syntax checker handlers
 function! s:Init()
     let s:handlers = []
