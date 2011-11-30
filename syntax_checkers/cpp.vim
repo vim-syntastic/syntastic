@@ -73,10 +73,10 @@ function! SyntaxCheckers_cpp_GetLocList()
                     \ g:syntastic_cpp_no_include_search != 1
             if exists('g:syntastic_cpp_auto_refresh_includes') &&
                         \ g:syntastic_cpp_auto_refresh_includes != 0
-                let makeprg .= syntastic#SearchHeaders()
+                let makeprg .= syntastic#c#SearchHeaders()
             else
                 if !exists('b:syntastic_cpp_includes')
-                    let b:syntastic_cpp_includes = syntastic#SearchHeaders()
+                    let b:syntastic_cpp_includes = syntastic#c#SearchHeaders()
                 endif
                 let makeprg .= b:syntastic_cpp_includes
             endif

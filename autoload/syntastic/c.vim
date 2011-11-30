@@ -1,7 +1,7 @@
-if exists("g:loaded_syntastic_autoload")
+if exists("g:loaded_syntastic_c_autoload")
     finish
 endif
-let g:loaded_syntastic_autoload = 1
+let g:loaded_syntastic_c_autoload = 1
 
 let s:save_cpo = &cpo
 set cpo&vim
@@ -11,36 +11,36 @@ function! s:Init()
     let s:handlers = []
     let s:cflags = {}
 
-    call s:RegHandler('gtk', 'syntastic#CheckPKG',
+    call s:RegHandler('gtk', 'syntastic#c#CheckPKG',
                 \ ['gtk', 'gtk+-2.0', 'gtk+', 'glib-2.0', 'glib'])
-    call s:RegHandler('glib', 'syntastic#CheckPKG',
+    call s:RegHandler('glib', 'syntastic#c#CheckPKG',
                 \ ['glib', 'glib-2.0', 'glib'])
-    call s:RegHandler('glade', 'syntastic#CheckPKG',
+    call s:RegHandler('glade', 'syntastic#c#CheckPKG',
                 \ ['glade', 'libglade-2.0', 'libglade'])
-    call s:RegHandler('libsoup', 'syntastic#CheckPKG',
+    call s:RegHandler('libsoup', 'syntastic#c#CheckPKG',
                 \ ['libsoup', 'libsoup-2.4', 'libsoup-2.2'])
-    call s:RegHandler('webkit', 'syntastic#CheckPKG',
+    call s:RegHandler('webkit', 'syntastic#c#CheckPKG',
                 \ ['webkit', 'webkit-1.0'])
-    call s:RegHandler('cairo', 'syntastic#CheckPKG',
+    call s:RegHandler('cairo', 'syntastic#c#CheckPKG',
                 \ ['cairo', 'cairo'])
-    call s:RegHandler('pango', 'syntastic#CheckPKG',
+    call s:RegHandler('pango', 'syntastic#c#CheckPKG',
                 \ ['pango', 'pango'])
-    call s:RegHandler('libxml', 'syntastic#CheckPKG',
+    call s:RegHandler('libxml', 'syntastic#c#CheckPKG',
                 \ ['libxml', 'libxml-2.0', 'libxml'])
-    call s:RegHandler('freetype', 'syntastic#CheckPKG',
+    call s:RegHandler('freetype', 'syntastic#c#CheckPKG',
                 \ ['freetype', 'freetype2', 'freetype'])
-    call s:RegHandler('SDL', 'syntastic#CheckPKG',
+    call s:RegHandler('SDL', 'syntastic#c#CheckPKG',
                 \ ['sdl', 'sdl'])
-    call s:RegHandler('opengl', 'syntastic#CheckPKG',
+    call s:RegHandler('opengl', 'syntastic#c#CheckPKG',
                 \ ['opengl', 'gl'])
-    call s:RegHandler('ruby', 'syntastic#CheckRuby', [])
-    call s:RegHandler('Python\.h', 'syntastic#CheckPython', [])
-    call s:RegHandler('php\.h', 'syntastic#CheckPhp', [])
+    call s:RegHandler('ruby', 'syntastic#c#CheckRuby', [])
+    call s:RegHandler('Python\.h', 'syntastic#c#CheckPython', [])
+    call s:RegHandler('php\.h', 'syntastic#c#CheckPhp', [])
 endfunction
 
 " search the first 100 lines for include statements that are
 " given in the handlers dictionary
-function! syntastic#SearchHeaders()
+function! syntastic#c#SearchHeaders()
     let includes = ''
     let files = []
     let found = []
@@ -94,7 +94,7 @@ endfunction
 " try to find library with 'pkg-config'
 " search possible libraries from first to last given
 " argument until one is found
-function! syntastic#CheckPKG(name, ...)
+function! syntastic#c#CheckPKG(name, ...)
     if executable('pkg-config')
         if !has_key(s:cflags, a:name)
             for i in range(a:0)
@@ -115,7 +115,7 @@ function! syntastic#CheckPKG(name, ...)
 endfunction
 
 " try to find PHP includes with 'php-config'
-function! syntastic#CheckPhp()
+function! syntastic#c#CheckPhp()
     if executable('php-config')
         if !exists('s:php_flags')
             let s:php_flags = system('php-config --includes')
@@ -127,7 +127,7 @@ function! syntastic#CheckPhp()
 endfunction
 
 " try to find the ruby headers with 'rbconfig'
-function! syntastic#CheckRuby()
+function! syntastic#c#CheckRuby()
     if executable('ruby')
         if !exists('s:ruby_flags')
             let s:ruby_flags = system('ruby -r rbconfig -e '
@@ -141,7 +141,7 @@ function! syntastic#CheckRuby()
 endfunction
 
 " try to find the python headers with distutils
-function! syntastic#CheckPython()
+function! syntastic#c#CheckPython()
     if executable('python')
         if !exists('s:python_flags')
             let s:python_flags = system('python -c ''from distutils import '
