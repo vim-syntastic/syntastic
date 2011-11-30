@@ -142,27 +142,35 @@ current filetype is set to passive. See |'syntastic_mode_map'| for more info.
 4. Options                                                 *syntastic-options*
 
                                                     *'syntastic_enable_signs'*
-Use this option to tell syntastic to use the |:sign| interface to mark syntax
-errors: >
+Default: 1
+Use this option to tell syntastic whether to use the |:sign| interface to mark
+syntax errors: >
     let g:syntastic_enable_signs=1
 <
 
                                                  *'syntastic_enable_balloons'*
-Use this option to tell syntastic to error messages in balloons when the mouse
-is hovered over erroneous lines: >
+Default: 1
+Use this option to tell syntastic whether to error messages in balloons when
+the mouse is hovered over erroneous lines: >
     let g:syntastic_enable_balloons = 1
 <
 Note that vim must be compiled with |+balloon_eval|.
 
                                                        *'syntastic_auto_jump'*
+Default: 0
 Enable this option if you want the cursor to jump to the first detected error
 when saving or opening a file: >
     let g:syntastic_auto_jump=1
 <
 
                                                    *'syntastic_auto_loc_list'*
+Default: 2
 Use this option to tell syntastic to automatically open and/or close the
 |location-list| (see |syntastic-error-window|).
+
+When set to 0 the error window will not be opened or closed automatically. >
+    let g:syntastic_auto_loc_list=0
+<
 
 When set to 1 the error window will be automatically opened when errors are
 detected, and closed when none are detected. >
@@ -174,6 +182,9 @@ detected, but not opened automatically. >
 <
 
                                                         *'syntastic_mode_map'*
+Default: { "mode": "active",
+           "active_filetypes": [],
+           "passive_filetypes": [] }
 
 Use this option to fine tune when automatic syntax checking is done (or not
 done).
@@ -198,6 +209,9 @@ automatic checks are not done for any filetypes in the
 
 At runtime, the |:SyntasticToggleMode| command can be used to switch between
 active and passive mode.
+
+If any of "mode", "active_filetypes", or "passive_filetypes" are not specified
+then they will default to their default value as above.
 
                                                   *'syntastic_quiet_warnings'*
 
