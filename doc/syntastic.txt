@@ -325,6 +325,53 @@ The latest dev versions are on github
 ==============================================================================
 7. Changelog                                             *syntastic-changelog*
 
+2.0.0
+    - Add support for highlighting the erroneous parts of lines (kstep)
+    - Add support for displaying errors via balloons (kstep)
+    - Add syntastic_mode_map option to give more control over when checking
+      should be done.
+    - Add :SyntasticCheck command to force a syntax check -  useful in passive
+      mode (justone).
+    - Add the option to automatically close the location list, but not
+      automatically open it (milkypostman)
+    - Add syntastic_auto_jump option to automatically jump to the first
+      error (milkypostman)
+    - Only source syntax checkers as needed - instead of loading all of them
+      when vim starts
+
+    - Support for new filetypes:
+        - less (julienXX)
+        - docbook (tpope)
+        - matlab (jasongraham)
+        - go (dtjm)
+        - puppet (uggedal, roman, zsprackett)
+        - haskell (baldo, roman)
+        - tcl (et)
+        - vala (kstep)
+        - cuda (temporaer)
+        - css (oryband, sitedyno)
+        - fortran (Karl Yngve Lervåg)
+        - xml (kusnier)
+        - xslt (kusnier)
+        - erlang (kTT)
+        - zpt (claytron)
+
+    - updates to existing checkers:
+        - javascript (mogren, bryanforbes, cjab, ajduncan)
+        - sass/scss (tmm1, atourino, dlee, epeli)
+        - ruby (changa)
+        - perl (harleypig)
+        - haml (bmihelac)
+        - php (kstep, docteurklein)
+        - python (kstep, soli)
+        - lua (kstep)
+        - html (kstep)
+        - xhtml (kstep)
+        - c (kongo2002, brandonw)
+        - cpp (kongo2002)
+        - coffee (industrial)
+        - eruby (sergevm)
+
 1.2.0
     - New syntax checkers from github:kongo2002
       - c (thanks also to github:jperras)
@@ -351,7 +398,7 @@ The latest dev versions are on github
     - Add an option to specifiy syntax checkers that should be disabled by
       default. See :help syntastic_disabled_filetypes.
     - Dont use :signs if vim wasnt compiled with support for them.
-
+)
 
 ==============================================================================
 8. Credits                                                 *syntastic-credits*
@@ -359,6 +406,48 @@ The latest dev versions are on github
 Thanks to the following people for testing, bug reports, patches etc. They own,
 hard.
 
+
+    Pawel Salata (kTT)
+    Fjölnir Ásgeirsson (aptiva)
+    Clayton Parker (claytron)
+    S. Zachariah Sprackett (zsprackett)
+    Sylvain Soliman (soli)
+    Ricardo Catalinas Jiménez (jimenezrick)
+    kusnier
+    Klein Florian (docteurklein)
+    sitedyno
+    Matthew Batema (mlb-)
+    Nate Jones (justone)
+    sergevm
+    Karl Yngve Lervåg
+    Pavel Argentov (argent-smith)
+    Andy Duncan (ajduncan)
+    Antonio Touriño (atourino)
+    Chad Jablonski (cjab)
+    Roman Gonzalez (roman)
+    Tom Wieland (industrial)
+    Ory Band (oryband)
+    Esa-Matti Suuronen (epeli)
+    Brandon Waskiewicz (brandonw)
+    dlee
+    temporaer
+    Jason Graham (jasongraham)
+    Sam Nguyen (dtjm)
+    Claes Mogren (mogren)
+    Eivind Uggedal (uggedal)
+    kstep
+    Andreas Baldeau (baldo)
+    Eric Thomas (et)
+    Brian Donovan (eventualbuddha)
+    Bryan Forbes (bryanforbes)
+    Aman Gupta (tmm1)
+    Donald Ephraim Curtis (milkypostman)
+    Dominique Rose-Rosette (changa)
+    Harley Pig (harleypig)
+    bmihelac
+    Julien Blanchard (julienXX)
+    Gregor Uhlenheuer (kongo2002)
+    Lincoln Stoll
     Tim Carey-Smith (halorgium)
     Tim Pope (tpope)
     Travis Jeffery
