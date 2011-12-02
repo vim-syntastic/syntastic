@@ -78,12 +78,8 @@ function! s:UpdateErrors(auto_invoked)
         call s:CacheErrors()
     end
 
-    if g:syntastic_enable_balloons && has('balloon_eval')
-        let b:syntastic_balloons = {}
-        for i in b:syntastic_loclist
-            let b:syntastic_balloons[i['lnum']] = i['text']
-        endfor
-        set beval bexpr=SyntasticErrorBalloonExpr()
+    if g:syntastic_enable_balloons
+        call s:RefreshBalloons()
     endif
 
     if g:syntastic_enable_signs
@@ -361,6 +357,16 @@ function! SyntasticMake(options)
     endif
 
     return errors
+endfunction
+
+function! s:RefreshBalloons()
+    if s:BufHasErrorsOrWarningsToDisplay() && has('balloon_eval')
+        let b:syntastic_balloons = {}
+        for i in b:syntastic_loclist
+            let b:syntastic_balloons[i['lnum']] = i['text']
+        endfor
+        set beval bexpr=SyntasticErrorBalloonExpr()
+    endif
 endfunction
 
 function! SyntasticErrorBalloonExpr()
