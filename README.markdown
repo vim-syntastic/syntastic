@@ -44,4 +44,4 @@ Installation
     cd ~/.vim/bundle
     git clone https://github.com/scrooloose/syntastic.git
 
-Then reload vim and check out `:help syntastic.txt`.
+Then reload vim, run `:Helptags`, and check out `:help syntastic.txt`.
