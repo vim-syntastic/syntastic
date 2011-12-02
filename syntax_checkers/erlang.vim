@@ -19,6 +19,8 @@ if !executable("escript")
     finish
 endif
 
+let s:check_file = expand('<sfile>:p:h') . '/erlang_check_file.erl'
+
 function! SyntaxCheckers_erlang_GetLocList()
     let extension = expand('%:e')
     if match(extension, 'hrl') >= 0
@@ -29,10 +31,10 @@ function! SyntaxCheckers_erlang_GetLocList()
         if match(shebang, 'escript') >= 0
             let makeprg = 'escript -s '.shellescape(expand('%:p'))
         else
-            let makeprg = '~/.vim/bundle/syntastic/syntax_checkers/erlang_check_file.erl '.shellescape(expand('%:p'))
+            let makeprg = s:check_file . ' '. shellescape(expand('%:p'))
         endif
     else
-        let makeprg = '~/.vim/bundle/syntastic/syntax_checkers/erlang_check_file.erl '.shellescape(expand('%:p'))
+        let makeprg =  s:check_file . ' ' . shellescape(expand('%:p'))
     endif
     let errorformat = '%f:%l:\ %tarning:\ %m,%E%f:%l:\ %m'
 
