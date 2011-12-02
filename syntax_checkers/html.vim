@@ -37,33 +37,50 @@ function! s:TidyEncOptByFenc()
     return get(tidy_opts, &fileencoding, '-utf8')
 endfunction
 
+let s:ignore_html_errors = [
+                \ "<table> lacks \"summary\" attribute",
+                \ "not approved by W3C",
+                \ "attribute \"placeholder\"",
+                \ "<meta> proprietary attribute \"charset\"",
+                \ "<meta> lacks \"content\" attribute",
+                \ "inserting \"type\" attribute",
+                \ "proprietary attribute \"data-"
+                \]
+
+function! s:ValidateError(text)
+    let valid = 0
+    for i in s:ignore_html_errors
+        if stridx(a:text, i) != -1
+            let valid = 1
+            break
+        endif
+    endfor
+    return valid
+endfunction
+
+
 function! SyntaxCheckers_html_GetLocList()
 
     let encopt = s:TidyEncOptByFenc()
-    "grep out not helpful errors and avoid reporting errors for new HTML5
-    "attibutes (like 'data-' attibutes) and optional attributes like 'type' on
-    "script and link tags.
-    let ignore_html_errors = [
-                \ "<table\> lacks \"summary\" attribute",
-                \ "not approved by W3C",
-                \ "attribute \"placeholder\"",
-                \ "<meta\> proprietary attribute \"charset\"",
-                \ "<meta\> lacks \"content\" attribute",
-                \ "<link\> inserting \"type\" attribute",
-                \ "<script\> inserting \"type\" attribute",
-                \ "proprietary attribute \"data-"
-                \]
-    let makeprg = "tidy ". encopt ." --new-blocklevel-tags 'section, article, aside, hgroup, header, footer, nav, figure, figcaption' --new-inline-tags 'video, audio, embed, mark, progress, meter, time, ruby, rt, rp, canvas, command, details, datalist' --new-empty-tags 'wbr, keygen' -e ". shellescape(expand('%')) ." 2>&1"
-    for item in ignore_html_errors
-        let makeprg = makeprg ." \\| grep -v '". item ."'"
-    endfor
+    let makeprg="tidy ".encopt." --new-blocklevel-tags 'section, article, aside, hgroup, header, footer, nav, figure, figcaption' --new-inline-tags 'video, audio, embed, mark, progress, meter, time, ruby, rt, rp, canvas, command, details, datalist' --new-empty-tags 'wbr, keygen' -e ".shellescape(expand('%'))." 2>&1"
     let errorformat='%Wline %l column %c - Warning: %m,%Eline %l column %c - Error: %m,%-G%.%#,%-G%.%#'
     let loclist = SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 
-    "the file name isnt in the output so stick in the buf num manually
-    for i in loclist
-        let i['bufnr'] = bufnr("")
-    endfor
+    " process loclist since we need to add some info and filter out valid HTML5
+    " from the errors
+    let n = len(loclist) - 1
+    let bufnum = bufnr("")
+    while n >= 0
+        let i = loclist[n]
+        " filter out valid HTML5
+        if s:ValidateError(i['text']) == 1
+            unlet loclist[n]
+        else
+            "the file name isnt in the output so stick in the buf num manually
+            let i['bufnr'] = bufnum
+        endif
+        let n -= 1
+    endwhile
 
     return loclist
 endfunction
