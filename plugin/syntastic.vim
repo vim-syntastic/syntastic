@@ -64,8 +64,8 @@ if !has_key(g:syntastic_mode_map, "passive_filetypes")
 endif
 
 command! -nargs=0 SyntasticToggleMode call s:ToggleMode()
-command SyntasticCheck -nargs=0 call s:UpdateErrors(0) <bar> redraw!
-command Errors call s:ShowLocList()
+command! -nargs=0 SyntasticCheck call s:UpdateErrors(0) <bar> redraw!
+command! Errors call s:ShowLocList()
 
 "refresh and redraw all the error info for this buf when saving or reading
 autocmd bufreadpost,bufwritepost * call s:UpdateErrors(1)
