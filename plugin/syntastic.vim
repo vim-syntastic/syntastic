@@ -257,7 +257,7 @@ function! s:ClearErrorHighlights()
     for i in s:ErrorHighlightIds()
         call matchdelete(i)
     endfor
-    let b:syntastic_error_highlight_ids = []
+    let w:syntastic_error_highlight_ids = []
 endfunction
 
 function! s:HighlightError(group, pattern)
@@ -265,10 +265,10 @@ function! s:HighlightError(group, pattern)
 endfunction
 
 function! s:ErrorHighlightIds()
-    if !exists("b:syntastic_error_highlight_ids")
-        let b:syntastic_error_highlight_ids = []
+    if !exists("w:syntastic_error_highlight_ids")
+        let w:syntastic_error_highlight_ids = []
     endif
-    return b:syntastic_error_highlight_ids
+    return w:syntastic_error_highlight_ids
 endfunction
 
 "return a string representing the state of buffer according to
