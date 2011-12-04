@@ -57,7 +57,7 @@ if s:checker == "gjslint"
             let gjslintconf = g:syntastic_gjslint_conf
         endif
         let makeprg = "gjslint" . gjslintconf . " --nosummary --unix_mode --nodebug_indentation --nobeep " . shellescape(expand('%'))
-        let errorformat="%f:%l:(New Error %n) %m,%f:%l:(%n) %m,%-G1 files checked, no errors found.,%-G%.%#"
+        let errorformat="%f:%l:(New Error -%\\?\%n) %m,%f:%l:(-%\\?%n) %m,%-G1 files checked, no errors found.,%-G%.%#"
         return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
     endfunction
 
