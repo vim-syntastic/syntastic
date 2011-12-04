@@ -360,8 +360,8 @@ function! SyntasticMake(options)
 endfunction
 
 function! s:RefreshBalloons()
+    let b:syntastic_balloons = {}
     if s:BufHasErrorsOrWarningsToDisplay() && has('balloon_eval')
-        let b:syntastic_balloons = {}
         for i in b:syntastic_loclist
             let b:syntastic_balloons[i['lnum']] = i['text']
         endfor
