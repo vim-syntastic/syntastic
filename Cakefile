@@ -1,7 +1,9 @@
 {spawn, exec} = require 'child_process'
 
+
 SOURCE="src/coffee-lint.coffee"
 LIB_DIR="lib"
+
 
 # Run the given command.
 run = (command, args, callback) ->
@@ -10,14 +12,28 @@ run = (command, args, callback) ->
   proc.stderr.on 'data', (buffer) -> console.log buffer.toString()
   proc.on        'exit', (status) ->
     process.exit(1) if status != 0
-    cb() if typeof cb is 'function'
+    callback() if typeof callback is 'function'
 
+notify = (message) ->
+    line = new Array(message.length + 6).join('*')
+    lines = [line, "* #{message}! *", line]
+    (console.log(l) for l in lines)
 
-task 'compile', 'Compile the source.', (cb) ->
-  run('coffee', ['-c', '-o', LIB_DIR, SOURCE], cb)
+coffee = (watch=false, callback) ->
+  args = ['-w', '-c', '-o', LIB_DIR, SOURCE]
+  args.shift() if not watch
+  run('coffee', args, () ->
+    notify('compiled')
+    callback() if typeof callback is 'function'
+  )
 
-task 'watch', 'Watch the source for changes.', (cb) ->
-  run('coffee', ['-w', '-c', '-o', LIB_DIR, SOURCE], cb)
+task 'compile', 'Compile the source.', () ->
+  coffee(watch=false)
 
-task 'test', 'Run the tests.', (cb) ->
-  run('vows', ['test'])
+task 'watch', 'Watch the source for changes.', (callback) ->
+  coffee(watch=true)
+
+task 'test', 'Run the tests.', () ->
+  coffee watch=false, () ->
+    run 'vows', ['test/tests.coffee'], () ->
+        notify('tests passed')
