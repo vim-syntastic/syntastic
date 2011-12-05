@@ -1,0 +1,10 @@
+Coffee Lint
+===========
+
+- rules
+    - ban yes/no/on/off
+    - explict return statement on last line loops
+    - line length
+    - consistent tabs & spaces
+    - clean literals
+    - known global variables
