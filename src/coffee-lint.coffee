@@ -1,9 +1,9 @@
 ###
 CoffeeLint
 
-Copyright (c) 2011 Matthew Perpick
+Copyright (c) 2011 Matthew Perpick.
+CoffeeLint is freely distributable under the MIT license.
 ###
-
 
 
 fs = require('fs')
