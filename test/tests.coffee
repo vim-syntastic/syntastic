@@ -18,8 +18,6 @@ vows.describe('coffee-lint').addBatch({
 
         'isDefined' : () ->
             assert.isString(coffeelint.VERSION)
-    'another' : () ->
-        assert.isString(1)
 
 }).export(module)
 
