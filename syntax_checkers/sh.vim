@@ -16,6 +16,7 @@ let loaded_sh_syntax_checker = 1
 
 function! s:GetShell()
     if !exists('b:shell') || b:shell == ""
+        let b:shell = ''
         let shebang = getbufline(bufnr('%'), 1)[0]
         if len(shebang) > 0
             if match(shebang, 'bash') >= 0
@@ -24,8 +25,6 @@ function! s:GetShell()
                 let b:shell = 'zsh'
             elseif match(shebang, 'sh') >= 0
                 let b:shell = 'sh'
-            else
-                let b:shell = ''
             endif
         endif
     endif
