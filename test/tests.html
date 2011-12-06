@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>CoffeeLint Test</title>
+    <style type="text/css">
+      body {
+        background-color:#2b2b2b;
+        font-family:monospace;
+      }
+      #test {
+        border-radius:10px;
+        border:3px solid #111;
+        width:60%;
+        font-size:60px;
+        background-color:#ccc;
+        margin-left:auto;
+        margin-right:auto;
+        padding:20px;
+        margin-top:30px;
+      }
+
+      #status.failed {
+        color:red;
+      }
+
+      #status.passed {
+        color:green;
+      }
+    </style>
+  </head>
+    </style>
+  </head>
+  <body>
+    <div id="test">coffeelint tests: <span id="status"></span>!</div>
+    <script type="text/javascript" src="../lib/coffeelint.js"></script>
+    <script type>
+      (function () {
+        var statusDiv = document.getElementById("status");
+
+        var setStatus = function (s) {
+            statusDiv.innerHTML = s;
+            statusDiv.className = s;
+        };
+
+        var source = "() ->\n" +
+                     "\treturn 1234";
+
+        var testStatus = 'failed';
+        try {
+          var errs = coffeelint.lint(source, {});
+          console.log(errs);
+          if (errs.length > 0) {
+            testStatus = 'passed';
+          }
+        } finally {
+          setStatus(testStatus);
+        }
+
+      })();
+    </script>
+  </body>
+</html>
