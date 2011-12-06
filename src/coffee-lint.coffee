@@ -26,20 +26,24 @@ coffeelint.VERSION = do ->
 DEFAULT_CONFIG =
     tabs : false        # Allow tabs for indentation.
     trailing : false    # Allow trailing whitespace.
+    lineLength : 80     # The maximum length of each line.
 
-# Messages shown to users.
+#
+# Error messages shown to users
+#
+
 MESSAGES =
     NO_TABS : 'Tabs are forbidden'
     TRAILING_WHITESPACE : 'Contains trailing whitespace'
+    LINE_LENGTH_EXCEEDED : 'Maximum line length exceeded'
+
 
 # Regular expressions
 regexes =
     trailingWhitespace : /\s+$/
 
-#
-# Utility functions.
-#
 
+# Utility functions.
 extend = (destination, sources...) ->
     for source in sources
         (destination[k] = v for k, v of source)
@@ -85,5 +89,13 @@ lineChecks =
         if not config.trailing and regexes.trailingWhitespace.test(line)
             character: line.length
             reason: MESSAGES.TRAILING_WHITESPACE
+        else
+            null
+
+    checkLineLength : (line, config) ->
+        lineLength = config.lineLength
+        if lineLength and lineLength < line.length
+            character: 0
+            reason: MESSAGES.LINE_LENGTH_EXCEEDED
         else
             null
