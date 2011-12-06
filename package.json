@@ -1,19 +1,27 @@
 {
-  "name"        : "coffeelint",
-  "description" : "Lint your CoffeeScript",
-  "homepage"    : "http://clutchski.github.com/coffeelint/",
-  "keywords"    : ["lint", "coffeescript", "coffee-script"],
-  "author"      : "Matt Perpick <clutchski@gmail.com>",
-  "repository"  : {"type": "git", "url": "git://github.com/clutchski/coffeelint.git"},
-  "main"        : "lib/coffeelint.js",
-  "version"     : "0.0.1",
-
+  "name":           "coffeelint",
+  "description":    "Lint your CoffeeScript",
+  "version":        "0.0.1",
+  "homepage" :      "http://clutchski.github.com/coffeelint/",
+  "keywords" :      ["lint", "coffeescript", "coffee-script"],
+  "author" :        "Matthew Perpick <clutchski@gmail.com>",
+  "main" : "lib/coffeelint.js",
+  "repository" :    {
+    "type": "git",
+    "url": "git://github.com/clutchski/coffeelint.git"
+  },
+  "bin" : {
+    "coffeelint": "./bin/coffeelint"
+  },
   "dependencies": {
     "optimist" : ">=0.2.8"
   },
-
   "devDependencies" : {
     "coffee-script" : ">=1.1.3",
     "vows" : ">=0.6.0"
-  }
+  },
+  "licenses":[{
+    "type": "MIT",
+    "url": "http://github.com/clutchski/coffeelint/raw/master/LICENSE"
+  }]
 }
