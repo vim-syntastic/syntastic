@@ -19,15 +19,22 @@ coffeelint.VERSION = do ->
     JSON.parse(fs.readFileSync(package)).version
 
 
-
+#
 # A set of sane default lint rules.
+#
+
 DEFAULT_CONFIG =
-    tabs : false
+    tabs : false        # Allow tabs for indentation.
+    trailing : false    # Allow trailing whitespace.
 
 # Messages shown to users.
 MESSAGES =
     NO_TABS : 'Tabs are forbidden'
+    TRAILING_WHITESPACE : 'Contains trailing whitespace'
 
+# Regular expressions
+regexes =
+    trailingWhitespace : /\s+$/
 
 #
 # Utility functions.
@@ -67,12 +74,16 @@ coffeelint.lint = (source, userConfig) ->
 # A set of checks that should be performed on every line.
 lineChecks =
 
-    # Return an error report if the given line has tabs.
     checkTabs : (line, config) ->
-        error = null
         if line.indexOf("\t") == 0 and not config.tabs
-            error =
-                character: 0
-                reason: MESSAGES.NO_TABS
-        return error
+            character: 0
+            reason: MESSAGES.NO_TABS
+        else
+            null
 
+    checkTrailingWhitespace : (line, config) ->
+        if not config.trailing and regexes.trailingWhitespace.test(line)
+            character: line.length
+            reason: MESSAGES.TRAILING_WHITESPACE
+        else
+            null
