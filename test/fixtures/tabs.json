@@ -1,0 +1,4 @@
+{
+    "tabs" : true,       // Allow tabs for this test
+    "trailing" : false,  // Don't allow trailing whitespace.
+}

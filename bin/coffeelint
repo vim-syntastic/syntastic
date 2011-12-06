@@ -17,16 +17,34 @@ var optimist = require('optimist')
     .describe('v', 'Print current version number.');
 
 
-var argv = optimist.argv;
+var lintFiles = function (relativePaths, configPath) {
+    var paths = [];
+    for (var i=0; i < relativePaths.length; i++) {
+        paths.push(fs.realpathSync(relativePaths[i]));
+    }
+    var path = paths[0]; // HACK for now
+    var source = fs.readFileSync(path).toString();
+    var errors = coffeelint.lint(source);
+    console.log(JSON.stringify(errors, null, 4));
+    if (errors.length > 0) {
+        return 1;
+    } else {
+        console.log('Lint free!');
+        return 0;
+    }
+};
 
-if (argv.v) {
+if (optimist.argv.v) {
     console.log(coffeelint.VERSION);
-    process.exit();
-} else if (argv.h) {
+    process.exit(0);
+} else if (optimist.argv.h) {
     optimist.showHelp();
-    process.exit();
-} else if (argv._.length < 1) {
+    process.exit(0);
+} else if (optimist.argv._.length < 1) {
     optimist.showHelp();
     process.exit(1);
+} else {
+    var paths = optimist.argv._;
+    var configPath = optimist.argv.f;
+    process.exit(lintFiles(paths, configPath));
 }
-

@@ -136,4 +136,16 @@ vows.describe('coffeelint').addBatch({
                 assert.isEmpty(stderr)
                 assert.include(stdout, coffeelint.VERSION)
 
+        'lint' :
+
+            topic : () ->
+                commandline ["test/fixtures/clean.coffee"], this.callback
+                return undefined
+
+            'works' : (error, stdout, stderr) ->
+                assert.isNull(error)
+                assert.include(stdout, 'Lint free!')
+                assert.isEmpty(stderr)
+
+
 }).export(module)
