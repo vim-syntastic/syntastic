@@ -5,7 +5,7 @@
   "homepage" :      "http://clutchski.github.com/coffeelint/",
   "keywords" :      ["lint", "coffeescript", "coffee-script"],
   "author" :        "Matthew Perpick <clutchski@gmail.com>",
-  "main" : "lib/coffeelint.js",
+  "main" : "./lib/coffeelint.js",
   "repository" :    {
     "type": "git",
     "url": "git://github.com/clutchski/coffeelint.git"
