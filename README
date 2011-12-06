@@ -12,3 +12,5 @@ Coffee Lint
     - cyclomatic complexity
     - line endings
     - mixed tabs and spaces
+- features
+    - custom output
