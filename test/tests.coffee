@@ -82,5 +82,3 @@ vows.describe('coffee-lint').addBatch({
 
 
 }).export(module)
-
-
