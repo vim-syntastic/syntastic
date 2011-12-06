@@ -41,6 +41,7 @@ MESSAGES =
 # Regular expressions
 regexes =
     trailingWhitespace : /\s+$/
+    indentation: /\S/
 
 
 # Utility functions.
@@ -79,11 +80,11 @@ coffeelint.lint = (source, userConfig={}) ->
 lineChecks =
 
     checkTabs : (line, config) ->
-        if line.indexOf("\t") == 0 and not config.tabs
+        return null if config.tabs
+        indentation = line.split(regexes.indentation)[0]
+        if ~indentation.indexOf('\t')
             character: 0
             reason: MESSAGES.NO_TABS
-        else
-            null
 
     checkTrailingWhitespace : (line, config) ->
         if not config.trailing and regexes.trailingWhitespace.test(line)

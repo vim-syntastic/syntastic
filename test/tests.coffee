@@ -46,8 +46,17 @@ vows.describe('coffee-lint').addBatch({
 
         'are allowed in strings' : () ->
             source = "x = () -> '\t'"
-            errors = coffeelint.lint(source, {tabs:false})
+            errors = coffeelint.lint(source, {tabs: false})
             assert.equal(errors.length, 0)
+
+        'cannot follow spaces' : () ->
+            source = """
+            x = () ->
+            \ty = () ->
+              \t x = () -> 1234
+            """
+            errors = coffeelint.lint(source, {tabs: false})
+            assert.equal(errors.length, 2)
 
     'trailing whitespace' :
 
