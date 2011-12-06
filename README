@@ -8,3 +8,7 @@ Coffee Lint
     - consistent tabs & spaces
     - clean literals
     - known global variables
+    - allow in-line disabling
+    - cyclomatic complexity
+    - line endings
+    - mixed tabs and spaces
