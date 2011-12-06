@@ -6,17 +6,11 @@ CoffeeLint is freely distributable under the MIT license.
 ###
 
 
-fs = require('fs')
-path = require('path')
-
-
 # Export the CoffeeLint module.
 coffeelint = exports
 
 # The current CoffeeLint version.
-coffeelint.VERSION = do ->
-    package = path.join(__dirname, '..', 'package.json')
-    JSON.parse(fs.readFileSync(package)).version
+coffeelint.VERSION = "0.0.2"
 
 
 #
