@@ -6,12 +6,15 @@ CoffeeLint is freely distributable under the MIT license.
 ###
 
 
-# Export the CoffeeLint module.
-coffeelint = exports
+# The coffeelint namespace.
+coffeelint = if exports?
+  exports
+else
+  this.coffeelint = {}
+
 
 # The current CoffeeLint version.
 coffeelint.VERSION = "0.0.2"
-
 
 #
 # A set of sane default lint rules.
