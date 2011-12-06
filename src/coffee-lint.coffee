@@ -57,7 +57,7 @@ defaults = (userConfig) ->
 
 # Lint the given source text with given user configuration and return a list
 # of any errors encountered.
-coffeelint.lint = (source, userConfig) ->
+coffeelint.lint = (source, userConfig={}) ->
     config = defaults(userConfig)
     errors = []
     lines = source.split('\n')
