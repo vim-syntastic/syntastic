@@ -29,19 +29,25 @@ var report = function (errors) {
     return errors.length;
 };
 
+// Return the contents of the relative file.
+var read = function (path) {
+    var realPath = fs.realpathSync(path);
+    return fs.readFileSync(realPath).toString();
+};
 
 // Lint the given source files with the given configuration. Return 0
 // on success, false otherwise.
-var lint = function (relativePaths, configPath) {
+var lint = function (paths, configPath) {
 
-    var paths = [];
-    for (var i=0; i < relativePaths.length; i++) {
-        paths.push(fs.realpathSync(relativePaths[i]));
+    var config = (configPath) ? JSON.parse(read(configPath)) : {};
+
+    var sources = [];
+    for (var i=0; i < paths.length; i++) {
+        sources.push(read(paths[i]));
     }
 
-    var path = paths[0];
-    var source = fs.readFileSync(path).toString();
-    var errors = coffeelint.lint(source);
+    var source = sources[0];
+    var errors = coffeelint.lint(source, config);
 
     return report(errors);
 };

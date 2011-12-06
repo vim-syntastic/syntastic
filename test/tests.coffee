@@ -158,5 +158,22 @@ vows.describe('coffeelint').addBatch({
                 assert.isEmpty(stdout)
                 assert.include(stderr.toLowerCase(), 'error')
 
+        'with custom configuration' :
+
+            topic : () ->
+                args = [
+                    "-f"
+                    "test/fixtures/tabs.json"
+                    "test/fixtures/tabs.coffee"
+                ]
+
+                commandline args, this.callback
+                return undefined
+
+            'works' : (error, stdout, stderr) ->
+                assert.isNull(error)
+
+
+
 
 }).export(module)
