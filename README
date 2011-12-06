@@ -19,4 +19,5 @@ Coffee Lint
         - mixed tabs and spaces
 
     - features
+        - command line tool
         - custom output
