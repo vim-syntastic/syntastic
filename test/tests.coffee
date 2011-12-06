@@ -7,7 +7,16 @@ path = require 'path'
 fs = require 'fs'
 vows = require 'vows'
 assert = require 'assert'
+{spawn, exec} = require 'child_process'
 coffeelint = require path.join('..', 'lib', 'coffeelint')
+
+
+# Run the coffeelint command line with the given
+# args. Callback will be called with (error, stdout,
+# stderr)
+commandline = (args, callback) ->
+    command = path.join('bin', 'coffeelint')
+    exec("#{command} #{args.join(" ")}", callback)
 
 
 vows.describe('coffeelint').addBatch({
@@ -51,7 +60,6 @@ vows.describe('coffeelint').addBatch({
             assert.equal(errors.length, 0)
 
     'trailing whitespace' :
-
         topic : () ->
             "x = 1234      \ny = 1"
 
@@ -82,7 +90,6 @@ vows.describe('coffeelint').addBatch({
             assert.equal(errors.length, 1)
 
     'maximum line length' :
-
         topic : () ->
             line = (length) ->
                 return new Array(length + 1).join('-')
@@ -104,5 +111,29 @@ vows.describe('coffeelint').addBatch({
             for length in [null, 0, false]
                 errors = coffeelint.lint(source, {lineLength: length})
                 assert.isEmpty(errors)
+
+    'command line' :
+
+        'no args' :
+
+            topic : () ->
+                commandline([], this.callback)
+                return undefined
+
+            'shows usage' : (error, stdout, stderr) ->
+                assert.isNotNull(error)
+                assert.notEqual(error.code, 0)
+                assert.include(stderr, "Usage")
+                assert.isEmpty(stdout)
+
+        'version' :
+            topic : () ->
+                commandline ["--version"], this.callback
+                return undefined
+
+            'exists' : (error, stdout, stderr) ->
+                assert.isNull(error)
+                assert.isEmpty(stderr)
+                assert.include(stdout, coffeelint.VERSION)
 
 }).export(module)

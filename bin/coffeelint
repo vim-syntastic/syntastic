@@ -1,7 +1,32 @@
 #!/usr/bin/env node
 
 var path = require('path');
-var fs   = require('fs');
+var fs  = require('fs');
 var lib  = path.join(path.dirname(fs.realpathSync(__filename)), '../lib');
-
+var optimist = require('optimist');
 var coffeelint = require(lib + '/coffeelint');
+
+
+var optimist = require('optimist')
+    .usage('Usage: coffeelint [options] source [...]')
+    .alias('f', 'file')
+    .alias('h', 'help')
+    .alias('v', 'version')
+    .describe('f', 'Specify a custom configuration file.')
+    .describe('h', 'Print help information.')
+    .describe('v', 'Print current version number.');
+
+
+var argv = optimist.argv;
+
+if (argv.v) {
+    console.log(coffeelint.VERSION);
+    process.exit();
+} else if (argv.h) {
+    optimist.showHelp();
+    process.exit();
+} else {
+    optimist.showHelp();
+    process.exit(1);
+}
+
