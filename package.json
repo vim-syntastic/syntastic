@@ -14,7 +14,8 @@
     "coffeelint": "./bin/coffeelint"
   },
   "dependencies": {
-    "optimist" : ">=0.2.8"
+    "optimist" : ">=0.2.8",
+    "underscore" : ">=1.2.2"
   },
   "devDependencies" : {
     "coffee-script" : ">=1.1.3",
