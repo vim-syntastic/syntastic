@@ -26,6 +26,7 @@ var report = function (errors) {
         ];
         console.warn(fields.join(" | "));
     }
+    return errors.length;
 };
 
 
@@ -38,7 +39,7 @@ var lint = function (relativePaths, configPath) {
         paths.push(fs.realpathSync(relativePaths[i]));
     }
 
-    var path = paths[0]; // HACK for now
+    var path = paths[0];
     var source = fs.readFileSync(path).toString();
     var errors = coffeelint.lint(source);
 
