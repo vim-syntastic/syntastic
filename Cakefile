@@ -35,5 +35,5 @@ task 'watch', 'Watch the source for changes.', (callback) ->
 
 task 'test', 'Run the tests.', () ->
   coffee watch=false, () ->
-    run 'vows', ['test/tests.coffee'], () ->
+    run 'vows', ['test/tests.coffee', '--spec'], () ->
         notify('tests passed')
