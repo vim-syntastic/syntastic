@@ -1,12 +1,52 @@
 #!/usr/bin/env node
 
+// Require dependencies.
 var path = require('path');
-var fs  = require('fs');
-var lib  = path.join(path.dirname(fs.realpathSync(__filename)), '../lib');
-var optimist = require('optimist');
-var coffeelint = require(lib + '/coffeelint');
+var fs = require('fs');
+var optimist = require ('optimist');
+
+// Require our library.
+var thisdir = path.dirname(fs.realpathSync(__filename));
+var coffeelint = require(path.join(thisdir, '../lib', 'coffeelint'));
 
 
+// Print a report on the given errors.
+var report = function (errors) {
+    if (errors.length == 0) {
+        console.log("Lint free!");
+        return 0;
+    }
+    console.warn('Lint Errors:');
+    for (var i=0; i<errors.length; i++) {
+        var error = errors[i];
+        var fields = [
+            "Line #" + error.line,
+            error.reason,
+            error.evidence
+        ];
+        console.warn(fields.join(" | "));
+    }
+};
+
+
+// Lint the given source files with the given configuration. Return 0
+// on success, false otherwise.
+var lint = function (relativePaths, configPath) {
+
+    var paths = [];
+    for (var i=0; i < relativePaths.length; i++) {
+        paths.push(fs.realpathSync(relativePaths[i]));
+    }
+
+    var path = paths[0]; // HACK for now
+    var source = fs.readFileSync(path).toString();
+    var errors = coffeelint.lint(source);
+
+    return report(errors);
+};
+
+
+// Declare command line options.
 var optimist = require('optimist')
     .usage('Usage: coffeelint [options] source [...]')
     .alias('f', 'file')
@@ -16,23 +56,6 @@ var optimist = require('optimist')
     .describe('h', 'Print help information.')
     .describe('v', 'Print current version number.');
 
-
-var lintFiles = function (relativePaths, configPath) {
-    var paths = [];
-    for (var i=0; i < relativePaths.length; i++) {
-        paths.push(fs.realpathSync(relativePaths[i]));
-    }
-    var path = paths[0]; // HACK for now
-    var source = fs.readFileSync(path).toString();
-    var errors = coffeelint.lint(source);
-    console.log(JSON.stringify(errors, null, 4));
-    if (errors.length > 0) {
-        return 1;
-    } else {
-        console.log('Lint free!');
-        return 0;
-    }
-};
 
 if (optimist.argv.v) {
     console.log(coffeelint.VERSION);
@@ -46,5 +69,6 @@ if (optimist.argv.v) {
 } else {
     var paths = optimist.argv._;
     var configPath = optimist.argv.f;
-    process.exit(lintFiles(paths, configPath));
+    var returnCode = lint(paths, configPath);
+    process.exit(returnCode);
 }
