@@ -35,5 +35,7 @@ task 'watch', 'Watch the source for changes.', (callback) ->
 
 task 'test', 'Run the tests.', () ->
   coffee watch=false, () ->
+    # FIXME: vows sucks on coffeescript, because it reports
+    # the wrong line numbers. Compile first, then vows.
     run 'vows', ['test/tests.coffee', '--spec'], () ->
         notify('tests passed')
