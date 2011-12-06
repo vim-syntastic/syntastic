@@ -1,8 +1,8 @@
 {
   "name":           "coffeelint",
   "description":    "Lint your CoffeeScript",
-  "version":        "0.0.1",
-  "homepage" :      "http://clutchski.github.com/coffeelint/",
+  "version":        "0.0.2",
+  "homepage" :      "https://github.com/clutchski/coffeelint",
   "keywords" :      ["lint", "coffeescript", "coffee-script"],
   "author" :        "Matthew Perpick <clutchski@gmail.com>",
   "main" : "./lib/coffeelint.js",
