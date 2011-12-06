@@ -1,7 +1,24 @@
 CoffeeLint
 ==========
 
-CoffeeLint is a linter for CoffeeScript in it's infancy.
+CoffeeLint is a linter for CoffeeScript in it's infancy. The library is it it's
+infancy, so it only checks a few stylistic things. Suggestions for any
+additional checks are more than welcome.
+
+Checks
+------
+
+CoffeeLint supports the following checks:
+
+- Forbid trailing whitespace (default: enabled)
+- Forbid indentation with tabs (default: enabled)
+- Maximum line length (default: 80 characters)
+
+Installation
+------------
+
+- Install node & npm.
+- Run `npm install -g coffeelint`
 
 Usage
 -----
@@ -24,7 +41,7 @@ Get help.
 Configuration
 -------------
 
-Every check in Coffeescript is configurable via a JSON file. Here is an example configuration:
+Every check in Coffeescript is configurable via a JSON file. Here is some example configuration:
 
     {
         trailing: false,    // Forbid trailing whitespace.
@@ -32,9 +49,7 @@ Every check in Coffeescript is configurable via a JSON file. Here is an example 
         lineLength: 80      // Forbid lines longer than 80 characters.
     }
 
-Installation
-------------
+License
+-------
 
-- Install node & npm.
-- Run `npm install -g coffeelint`
-
+See LICENSE for details.
