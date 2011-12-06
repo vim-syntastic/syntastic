@@ -8,17 +8,17 @@ Usage
 
 To lint your scripts, run:
 
-  > coffeelint app.coffee
-  Lint free!
+    $ coffeelint app.coffee
+    Lint free!
 
 You can specify custom configuration as well:
 
-   > coffeelint -f config.json app.coffee
-   Lint free!
+    $ coffeelint -f config.json app.coffee
+    Lint free!
 
 Get help.
 
-   > coffeelint -h
+    $ coffeelint -h
 
 
 Configuration
