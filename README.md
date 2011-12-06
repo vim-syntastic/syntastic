@@ -27,7 +27,7 @@ To lint your scripts, run:
     $ coffeelint app.coffee
     Lint free!
 
-You can specify custom configuration as well:
+To specify custom configuration, run like so:
 
     $ coffeelint -f config.json app.coffee
     Lint free!
