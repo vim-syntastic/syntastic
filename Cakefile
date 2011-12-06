@@ -1,7 +1,7 @@
 {spawn, exec} = require 'child_process'
 
 
-SOURCE="src/coffee-lint.coffee"
+SOURCE="src/coffeelint.coffee"
 LIB_DIR="lib"
 
 

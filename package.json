@@ -1,14 +1,14 @@
 {
-  "name"          : "coffee-lint",
+  "name"          : "coffeelint",
   "description"   : "Lint your CoffeeScript",
-  "homepage"      : "http://clutchski.github.com/coffee-lint/",
+  "homepage"      : "http://clutchski.github.com/coffeelint/",
   "keywords"      : ["lint", "coffeescript", "coffee-script"],
   "author"        : "Matt Perpick <clutchski@gmail.com>",
   "dependencies"  : {
     "coffee-script" : ">=1.1.3",
     "vows" : ">=0.6.0"
   },
-  "repository"    : {"type": "git", "url": "git://github.com/clutchski/coffee-lint.git"},
-  "main"          : "lib/coffee-lint.js",
+  "repository"    : {"type": "git", "url": "git://github.com/clutchski/coffeelint.git"},
+  "main"          : "lib/coffeelint.js",
   "version"       : "0.0.1"
 }

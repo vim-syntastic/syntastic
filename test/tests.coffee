@@ -7,10 +7,10 @@ path = require 'path'
 fs = require 'fs'
 vows = require 'vows'
 assert = require 'assert'
-coffeelint = require path.join('..', 'lib', 'coffee-lint')
+coffeelint = require path.join('..', 'lib', 'coffeelint')
 
 
-vows.describe('coffee-lint').addBatch({
+vows.describe('coffeelint').addBatch({
 
     'has a version' : () ->
         assert.isString(coffeelint.VERSION)
