@@ -20,18 +20,19 @@ vows.describe('coffeelint').addBatch({
         topic : () ->
             """
             x = () ->
-            \treturn 1234
+            \ty = () ->
+              \treturn 1234
             """
 
         'can be forbidden' : (source) ->
             config = {tabs: false}
             errors = coffeelint.lint(source, config)
-            assert.equal(errors.length, 1)
+            assert.equal(errors.length, 2)
             error = errors[0]
             assert.equal(error.line, 1)
             assert.equal(error.character, 0)
             assert.equal("Tabs are forbidden", error.reason)
-            assert.equal("\treturn 1234", error.evidence)
+            assert.equal("\ty = () ->", error.evidence)
 
         'can be permitted' : (source) ->
             config = {tabs: true}
@@ -42,21 +43,12 @@ vows.describe('coffeelint').addBatch({
             config = {}
             errors = coffeelint.lint(source, config)
             assert.isArray(errors)
-            assert.equal(errors.length, 1)
+            assert.equal(errors.length, 2)
 
         'are allowed in strings' : () ->
             source = "x = () -> '\t'"
             errors = coffeelint.lint(source, {tabs: false})
             assert.equal(errors.length, 0)
-
-        'cannot follow spaces' : () ->
-            source = """
-            x = () ->
-            \ty = () ->
-              \t x = () -> 1234
-            """
-            errors = coffeelint.lint(source, {tabs: false})
-            assert.equal(errors.length, 2)
 
     'trailing whitespace' :
 
