@@ -6,61 +6,41 @@ CoffeeLint is freely distributable under the MIT license.
 ###
 
 
-# The coffeelint namespace.
 coffeelint = if exports?
   exports
 else
   this.coffeelint = {}
 
 
-# The current CoffeeLint version.
 coffeelint.VERSION = "0.0.2"
 
-#
-# A set of sane default lint rules.
-#
 
+# A set of sane default lint rules.
 DEFAULT_CONFIG =
     tabs : false        # Allow tabs for indentation.
     trailing : false    # Allow trailing whitespace.
     lineLength : 80     # The maximum length of each line.
-
-#
-# Error messages shown to users
-#
-
-MESSAGES =
-    NO_TABS : 'Tabs are forbidden'
-    TRAILING_WHITESPACE : 'Contains trailing whitespace'
-    LINE_LENGTH_EXCEEDED : 'Maximum line length exceeded'
-
-
-# Regular expressions
+# Regexes that are used repeatedly.
 regexes =
     trailingWhitespace : /\s+$/
     indentation: /\S/
 
 
-# Utility functions.
+# Patch the source properties onto the destination.
 extend = (destination, sources...) ->
     for source in sources
         (destination[k] = v for k, v of source)
     return destination
 
-
+# Return a map of config options with any unspecified options
+# patched with defaults.
 defaults = (userConfig) ->
     extend({}, DEFAULT_CONFIG, userConfig)
 
 
-#
-# Linting code.
-#
-
-
-# Lint the given source text with given user configuration and return a list
-# of any errors encountered.
-coffeelint.lint = (source, userConfig={}) ->
-    config = defaults(userConfig)
+# Return a list of errors found by performing "line"
+# checks on the source.
+checkLines = (source, config) ->
     errors = []
     lines = source.split('\n')
     for line, lineNumber in lines
@@ -72,8 +52,21 @@ coffeelint.lint = (source, userConfig={}) ->
                 errors.push(error)
     return errors
 
+# Return a list of errors found by performing "lex"
+# checks on the source.
+checkTokens = (source, config) ->
+    return []
 
+
+# Lint the given source text with given user configuration and return a list
+# of any errors encountered.
+coffeelint.lint = (source, userConfig={}) ->
+    config = defaults(userConfig)
+    checkLines(source, config).concat(checkTokens(source, config))
+
+#
 # A set of checks that should be performed on every line.
+#
 lineChecks =
 
     checkTabs : (line, config) ->
@@ -97,3 +90,12 @@ lineChecks =
             reason: MESSAGES.LINE_LENGTH_EXCEEDED
         else
             null
+
+#
+# Messages shown to users.
+#
+
+MESSAGES =
+    NO_TABS : 'Tabs are forbidden'
+    TRAILING_WHITESPACE : 'Contains trailing whitespace'
+    LINE_LENGTH_EXCEEDED : 'Maximum line length exceeded'
