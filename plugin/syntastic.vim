@@ -27,8 +27,8 @@ if !exists("g:syntastic_enable_signs")
     let g:syntastic_enable_signs = has('signs')? 1 : 0
 endif
 
-if !exists("g:syntastic_enable_balloons") || !has('balloon_eval')
-    let g:syntastic_enable_balloons = 1
+if !exists("g:syntastic_enable_balloons")
+    let g:syntastic_enable_balloons = has('balloon_eval')? 1 : 0
 endif
 
 if !exists("g:syntastic_auto_loc_list")
