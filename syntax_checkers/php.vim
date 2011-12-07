@@ -24,6 +24,10 @@ if !exists("g:syntastic_phpcs_conf")
     let g:syntastic_phpcs_conf = ""
 endif
 
+if !exists("g:syntastic_phpcs_disable")
+    let g:syntastic_phpcs_disable = 0
+endif
+
 function! SyntaxCheckers_php_Term(item)
     let unexpected = matchstr(a:item['text'], "unexpected '[^']\\+'")
     if len(unexpected) < 1 | return '' | end
@@ -33,7 +37,7 @@ endfunction
 function! SyntaxCheckers_php_GetLocList()
 
     let errors = []
-    if executable("phpcs")
+    if !g:syntastic_phpcs_disable && executable("phpcs")
         let errors = s:GetPHPCSErrors()
     endif
 
