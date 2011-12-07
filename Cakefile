@@ -41,3 +41,6 @@ task 'test', 'Run the tests.', () ->
     paths = (path.join(TEST_DIR, p) for p in fs.readdirSync(TEST_DIR) when re.test(p))
     run 'vows', paths.concat('--spec'), () ->
         notify('tests passed')
+
+task 'lint', 'Lint the linter', () ->
+    run 'bin/coffeelint', [SOURCE]
