@@ -19,6 +19,11 @@ if !executable("php")
     finish
 endif
 
+"Support passing configuration directives to phpcs
+if !exists("g:syntastic_phpcs_conf")
+    let g:syntastic_phpcs_conf = ""
+endif
+
 function! SyntaxCheckers_php_Term(item)
     let unexpected = matchstr(a:item['text'], "unexpected '[^']\\+'")
     if len(unexpected) < 1 | return '' | end
@@ -29,18 +34,7 @@ function! SyntaxCheckers_php_GetLocList()
 
     let errors = []
     if executable("phpcs")
-        " Support passing configuration directives to phpcs through
-        " g:syntastic_phpcs_conf. This matches the method in the javascript.vim
-        " setup.
-        if !exists("g:syntastic_phpcs_conf") || empty(g:syntastic_phpcs_conf)
-          let phpcsconf = ""
-        else
-          let phpcsconf = g:syntastic_phpcs_conf
-        endif
-        let makeprg = "phpcs " . phpcsconf . " --report=csv ".shellescape(expand('%'))
-        let g:mpb_makeprg = makeprg
-        let errorformat = '"%f"\,%l\,%c\,%t%*[a-zA-Z]\,"%m"\,%*[a-zA-Z0-9_.-]\,%*[0-9]'
-        let errors = SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
+        let errors = s:GetPHPCSErrors()
     endif
 
     let makeprg = "php -l ".shellescape(expand('%'))
@@ -50,4 +44,10 @@ function! SyntaxCheckers_php_GetLocList()
     call SyntasticHighlightErrors(errors, function('SyntaxCheckers_php_Term'))
 
     return errors
+endfunction
+
+function! s:GetPHPCSErrors()
+    let makeprg = "phpcs " . g:syntastic_phpcs_conf . " --report=csv ".shellescape(expand('%'))
+    let errorformat = '"%f"\,%l\,%c\,%t%*[a-zA-Z]\,"%m"\,%*[a-zA-Z0-9_.-]\,%*[0-9]'
+    return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 endfunction
