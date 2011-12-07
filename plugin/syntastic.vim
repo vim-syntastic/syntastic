@@ -23,8 +23,8 @@ if !s:running_windows
     let s:uname = system('uname')
 endif
 
-if !exists("g:syntastic_enable_signs") || !has('signs')
-    let g:syntastic_enable_signs = 1
+if !exists("g:syntastic_enable_signs")
+    let g:syntastic_enable_signs = has('signs')? 1 : 0
 endif
 
 if !exists("g:syntastic_enable_balloons") || !has('balloon_eval')
