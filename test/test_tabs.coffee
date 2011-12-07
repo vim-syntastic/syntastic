@@ -1,21 +1,17 @@
 #
-# CoffeeLint tests.
+# Tab tests.
 #
 
 
 path = require 'path'
-fs = require 'fs'
 vows = require 'vows'
 assert = require 'assert'
 coffeelint = require path.join('..', 'lib', 'coffeelint')
 
 
-vows.describe('coffeelint').addBatch({
+vows.describe('tabs').addBatch({
 
-    'has a version' : () ->
-        assert.isString(coffeelint.VERSION)
-
-    'tabs' :
+    'Tabs' :
 
         topic : () ->
             """
@@ -49,4 +45,5 @@ vows.describe('coffeelint').addBatch({
             source = "x = () -> '\t'"
             errors = coffeelint.lint(source, {tabs: false})
             assert.equal(errors.length, 0)
+
 }).export(module)
