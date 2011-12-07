@@ -28,8 +28,20 @@ endfunction
 function! SyntaxCheckers_php_GetLocList()
 
     let errors = []
-    if executable("phpcs")
-        let makeprg = "phpcs --report=csv ".shellescape(expand('%'))
+
+    let no_phpcs = exists("g:syntastic_phpcs_disable") && g:syntastic_phpcs_disable
+
+    " Run phpcs if it is found, and if it is not disabled.
+    if executable("phpcs") && !no_phpcs
+        " Support passing configuration directives to phpcs through
+        " g:syntastic_phpcs_conf. This matches the method in the javascript.vim
+        " setup.
+        if !exists("g:syntastic_phpcs_conf") || empty(g:syntastic_phpcs_conf)
+          let phpcsconf = ""
+        else
+          let phpcsconf = g:syntastic_phpcs_conf
+        endif
+        let makeprg = "phpcs " . phpcsconf . " --report=csv ".shellescape(expand('%'))
         let errorformat = '"%f"\,%l\,%c\,%t%*[a-zA-Z]\,"%m"\,%*[a-zA-Z0-9_.-]\,%*[0-9]'
         let errors = SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
     endif
