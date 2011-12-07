@@ -1,8 +1,10 @@
 {spawn, exec} = require 'child_process'
-
+fs = require('fs')
+path = require('path')
 
 SOURCE="src/coffeelint.coffee"
 LIB_DIR="lib"
+TEST_DIR="test"
 
 
 # Run the given command.
@@ -35,7 +37,7 @@ task 'watch', 'Watch the source for changes.', (callback) ->
 
 task 'test', 'Run the tests.', () ->
   coffee watch=false, () ->
-    # FIXME: vows sucks on coffeescript, because it reports
-    # the wrong line numbers. Compile first, then vows.
-    run 'vows', ['test/tests.coffee', '--spec'], () ->
+    re = /^test.*\.coffee$/
+    paths = (path.join(TEST_DIR, p) for p in fs.readdirSync(TEST_DIR) when re.test(p))
+    run 'vows', paths.concat('--spec'), () ->
         notify('tests passed')
