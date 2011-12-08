@@ -1,9 +1,10 @@
 CoffeeLint
 ==========
 
-CoffeeLint is a linter for CoffeeScript. The library is it it's
-infancy, so it only checks a few stylistic aspects of the code. Stay tuned for
-more.
+CoffeeLint is a linter for CoffeeScript. The library is in it's infancy, so it
+only checks a few aspects of the code, and even then there are kinks. It's not
+quite ready for primetime, but give it a whirl if you'd like. Feedback is more
+than welcome.
 
 Checks
 ------
