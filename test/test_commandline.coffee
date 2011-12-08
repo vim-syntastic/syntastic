@@ -56,7 +56,7 @@ vows.describe('commandline').addBatch({
     'with failing source' :
 
         topic : () ->
-            commandline ["test/fixtures/tabs.coffee"], this.callback
+            commandline ["test/fixtures/fourspaces.coffee"], this.callback
             return undefined
 
         'works' : (error, stdout, stderr) ->
@@ -69,8 +69,8 @@ vows.describe('commandline').addBatch({
         topic : () ->
             args = [
                 "-f"
-                "test/fixtures/tabs.json"
-                "test/fixtures/tabs.coffee"
+                "test/fixtures/fourspaces.json"
+                "test/fixtures/fourspaces.coffee"
             ]
 
             commandline args, this.callback

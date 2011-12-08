@@ -10,7 +10,7 @@ vows.describe('linelength').addBatch({
 
         topic : () ->
             line = (length) ->
-                return new Array(length + 1).join('-')
+                return '"' + new Array(length - 1).join('-') + '"'
             lengths = [50, 79, 80, 81, 100, 200]
             (line(l) for l in lengths).join("\n")
 

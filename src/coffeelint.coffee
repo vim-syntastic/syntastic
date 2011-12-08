@@ -6,6 +6,9 @@ CoffeeLint is freely distributable under the MIT license.
 ###
 
 
+coffeescript = require 'coffee-script'
+
+
 coffeelint = if exports?
   exports
 else
@@ -20,6 +23,9 @@ DEFAULT_CONFIG =
     tabs : false        # Allow tabs for indentation.
     trailing : false    # Allow trailing whitespace.
     lineLength : 80     # The maximum length of each line.
+    indent: 2           # Indentation is two characters.
+
+
 # Regexes that are used repeatedly.
 regexes =
     trailingWhitespace : /\s+$/
@@ -53,20 +59,42 @@ checkLines = (source, config) ->
     return errors
 
 # Return a list of errors found by performing "lex"
-# checks on the source.
+# checks on the source
 checkTokens = (source, config) ->
-    return []
-
+    tokens = coffeescript.tokens(source)
+    errors = []
+    for token in tokens when not token.generated?
+        [type, value, line] = token
+        check = lexChecks[type]
+        error = if check then check(config, token) else null
+        if error
+            error.line = line
+            errors.push(error)
+    return errors
 
 # Lint the given source text with given user configuration and return a list
 # of any errors encountered.
 coffeelint.lint = (source, userConfig={}) ->
     config = defaults(userConfig)
+    config.indent = 1 if config.tabs
     checkLines(source, config).concat(checkTokens(source, config))
+
+
+#
+# A set of checks on lex tokens provided by the CoffeeScript lexer.
+#
+lexChecks =
+
+    INDENT : (config, token) ->
+        [type, value, line] = token
+        if config.indent and value != config.indent
+            info = " Expected: #{config.indent} Got: #{value}"
+            error = {reason: MESSAGES.INDENTATION_ERROR + info}
+        else
+            null
 
 #
 # A set of checks that should be performed on every line.
-#
 lineChecks =
 
     checkTabs : (line, config) ->
@@ -91,6 +119,7 @@ lineChecks =
         else
             null
 
+
 #
 # Messages shown to users.
 #
@@ -99,3 +128,4 @@ MESSAGES =
     NO_TABS : 'Tabs are forbidden'
     TRAILING_WHITESPACE : 'Contains trailing whitespace'
     LINE_LENGTH_EXCEEDED : 'Maximum line length exceeded'
+    INDENTATION_ERROR: 'Indentation error'
