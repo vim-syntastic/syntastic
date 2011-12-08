@@ -29,6 +29,10 @@ coffee = (watch=false, callback) ->
     callback() if typeof callback is 'function'
   )
 
+glob = (dir, re) ->
+    (path.join(dir, p) for p in fs.readdirSync(dir) when re.test(p))
+
+
 task 'compile', 'Compile the source.', () ->
   coffee(watch=false)
 
@@ -38,9 +42,11 @@ task 'watch', 'Watch the source for changes.', (callback) ->
 task 'test', 'Run the tests.', () ->
   coffee watch=false, () ->
     re = /^test.*\.coffee$/
-    paths = (path.join(TEST_DIR, p) for p in fs.readdirSync(TEST_DIR) when re.test(p))
+    paths = glob(TEST_DIR, /^test.*\.coffee$/)
     run 'vows', paths.concat('--spec'), () ->
         notify('tests passed')
 
 task 'lint', 'Lint the linter', () ->
-    run 'bin/coffeelint', [SOURCE]
+    paths = glob(TEST_DIR, /^test.*\.coffee$/)
+    paths.push(SOURCE)
+    (run 'bin/coffeelint', ['-f', 'test/fixtures/fourspaces.json', p] for p in paths)
