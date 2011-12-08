@@ -15,7 +15,7 @@ else
     this.coffeelint = {}
 
 
-coffeelint.VERSION = "0.0.2"
+coffeelint.VERSION = "0.0.3"
 
 
 # A set of sane default lint rules.
