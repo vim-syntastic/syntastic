@@ -150,8 +150,8 @@ syntax errors: >
 
                                                  *'syntastic_enable_balloons'*
 Default: 1
-Use this option to tell syntastic whether to error messages in balloons when
-the mouse is hovered over erroneous lines: >
+Use this option to tell syntastic whether to display error messages in balloons
+when the mouse is hovered over erroneous lines: >
     let g:syntastic_enable_balloons = 1
 <
 Note that vim must be compiled with |+balloon_eval|.
