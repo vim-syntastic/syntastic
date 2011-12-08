@@ -4,7 +4,6 @@
 var path = require('path');
 var fs = require('fs');
 var optimist = require ('optimist');
-var _ = require('underscore');
 
 // Require our library.
 var thisdir = path.dirname(fs.realpathSync(__filename));
@@ -19,7 +18,7 @@ var report = function (errors) {
     }
     console.warn('Lint Errors:');
 
-    var messages = _.map(errors, function (error) {
+    var messages = errors.map(function (error) {
         return [
             "Line #" + error.line,
             error.reason,
@@ -27,7 +26,7 @@ var report = function (errors) {
         ].join(" | ");
     });
 
-    _.each(messages, function (msg) {
+    messages.forEach(function (msg) {
         console.warn(msg);
     });
 
@@ -46,7 +45,7 @@ var lint = function (paths, configPath) {
 
     var config = (configPath) ? JSON.parse(read(configPath)) : {};
 
-    var sources = _.map(paths, function (path) {
+    var sources = paths.map(function (path) {
         return read(path);
     });
 
