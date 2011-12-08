@@ -48,5 +48,5 @@ task 'test', 'Run the tests.', () ->
 
 task 'lint', 'Lint the linter', () ->
     paths = glob(TEST_DIR, /^test.*\.coffee$/)
-    paths.push(SOURCE)
-    (run 'bin/coffeelint', ['-f', 'test/fixtures/fourspaces.json', p] for p in paths)
+    args = ['-f', 'test/fixtures/fourspaces.json'].concat(paths).concat(SOURCE)
+    run 'bin/coffeelint', args
