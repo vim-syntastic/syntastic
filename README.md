@@ -6,6 +6,8 @@ only checks a few aspects of the code, and even then there are kinks. It's not
 quite ready for primetime, but give it a whirl if you'd like. Feedback is more
 than welcome.
 
+[![Build Status](https://secure.travis-ci.org/clutchski/coffeelint.png)](http://travis-ci.org/clutchski/coffeelint)
+
 Checks
 ------
 
