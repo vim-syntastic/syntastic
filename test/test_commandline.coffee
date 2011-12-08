@@ -79,4 +79,21 @@ vows.describe('commandline').addBatch({
         'works' : (error, stdout, stderr) ->
             assert.isNull(error)
 
+    'with multiple sources'  :
+
+        topic : () ->
+            args = [
+                "-f"
+                "test/fixtures/fourspaces.json"
+                "test/fixtures/fourspaces.coffee"
+                "test/fixtures/clean.coffee"
+            ]
+
+            commandline args, this.callback
+            return undefined
+
+        'works' : (error, stdout, stderr) ->
+            assert.isNotNull(error)
+
+
 }).export(module)

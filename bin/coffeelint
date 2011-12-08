@@ -11,15 +11,10 @@ var coffeelint = require(path.join(thisdir, '../lib', 'coffeelint'));
 
 
 // Print a report on the given errors.
-var report = function (errors) {
-    if (errors.length == 0) {
-        console.log("Lint free!");
-        return 0;
-    }
-    console.warn('Lint Errors:');
-
+var report = function (path, errors) {
     var messages = errors.map(function (error) {
         return [
+            path,
             "Line #" + error.line,
             error.reason,
             error.evidence
@@ -45,14 +40,25 @@ var lint = function (paths, configPath) {
 
     var config = (configPath) ? JSON.parse(read(configPath)) : {};
 
-    var sources = paths.map(function (path) {
-        return read(path);
+    var returnCode = 0;
+    paths.map(function (path) {
+        return [path, read(path)];
+    }).forEach(function (script) {
+
+        var path = script[0];
+        var source = script[1];
+
+        var errors = coffeelint.lint(source, config);
+        if (errors.length) {
+            report(path, errors);
+            returnCode = 1;
+        }
     });
 
-    var source = sources[0];
-    var errors = coffeelint.lint(source, config);
-
-    return report(errors);
+    if (returnCode === 0) {
+        console.log('Lint free!');
+    }
+    return returnCode;
 };
 
 
