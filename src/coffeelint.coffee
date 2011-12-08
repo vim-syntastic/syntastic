@@ -6,7 +6,7 @@ CoffeeLint is freely distributable under the MIT license.
 ###
 
 
-coffeescript = require 'coffee-script'
+CoffeeScript = require 'coffee-script'
 
 
 coffeelint = if exports?
@@ -61,7 +61,7 @@ checkLines = (source, config) ->
 # Return a list of errors found by performing "lex"
 # checks on the source
 checkTokens = (source, config) ->
-    tokens = coffeescript.tokens(source)
+    tokens = CoffeeScript.tokens(source)
     errors = []
     for token in tokens when not token.generated?
         [type, value, line] = token
