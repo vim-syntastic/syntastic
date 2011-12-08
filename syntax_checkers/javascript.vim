@@ -66,15 +66,30 @@ elseif s:checker == "jslint"
         let g:syntastic_jslint_conf = ""
     endif
 
+    function! SyntaxCheckers_javascript_HighlightTerm(error)
+        let unexpected = matchstr(a:error['text'], 'Expected.*and instead saw \'\zs.*\ze\'')
+        if len(unexpected) < 1 | return '' | end
+        return '\V'.split(unexpected, "'")[1]
+    endfunction
+
     function! SyntaxCheckers_javascript_GetLocList()
         if empty(g:syntastic_jslint_conf)
             let jslintconf = ""
         else
             let jslintconf = g:syntastic_jslint_conf
         endif
+
         let makeprg = "jslint" . jslintconf . " " . shellescape(expand('%'))
-        let errorformat='%-P%f,%*[ ]%n %l\,%c: %m,%-G%.%#'
-        return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
+        let errorformat=' %#%n %l\,%c: %m,%-G%.%#'
+        let errors = SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
+
+        for i in errors
+            let i['bufnr'] = bufnr('')
+        endfor
+
+        call SyntasticHighlightErrors(errors, function('SyntaxCheckers_javascript_HighlightTerm'))
+
+        return errors
     endfunction
 
 elseif s:checker == "jsl"
