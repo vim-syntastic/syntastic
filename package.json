@@ -23,5 +23,8 @@
   "licenses":[{
     "type": "MIT",
     "url": "http://github.com/clutchski/coffeelint/raw/master/LICENSE"
-  }]
+  }],
+  "scripts": {
+    "test": "node_modules/.bin/vows --spec test/*.coffee",
+  }
 }
