@@ -10,9 +10,9 @@ coffeescript = require 'coffee-script'
 
 
 coffeelint = if exports?
-  exports
+    exports
 else
-  this.coffeelint = {}
+    this.coffeelint = {}
 
 
 coffeelint.VERSION = "0.0.2"
