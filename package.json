@@ -25,6 +25,7 @@
     "url": "http://github.com/clutchski/coffeelint/raw/master/LICENSE"
   }],
   "scripts": {
+    "pretest": "node_modules/.bin/coffee -c -o lib/ src/coffeelint.coffee",
     "test": "node_modules/.bin/vows --spec test/*.coffee"
   }
 }
