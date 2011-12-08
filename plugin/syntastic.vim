@@ -31,6 +31,10 @@ if !exists("g:syntastic_enable_balloons")
     let g:syntastic_enable_balloons = has('balloon_eval')? 1 : 0
 endif
 
+if !exists("g:syntastic_enable_highlighting")
+    let g:syntastic_enable_highlighting = 1
+endif
+
 if !exists("g:syntastic_auto_loc_list")
     let g:syntastic_auto_loc_list = 2
 endif
@@ -400,6 +404,10 @@ endfunction
 "an optional boolean third argument can be provided to force a:termfunc to be
 "used regardless of whether a 'col' key is present for the error
 function! SyntasticHighlightErrors(errors, termfunc, ...)
+    if !g:syntastic_enable_highlighting
+        return
+    endif
+
     call s:ClearErrorHighlights()
 
     let force_callback = a:0 && a:1

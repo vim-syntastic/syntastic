@@ -156,6 +156,13 @@ the mouse is hovered over erroneous lines: >
 <
 Note that vim must be compiled with |+balloon_eval|.
 
+                                            *'syntastic_enable_highlighting'*
+Default: 1
+Use this option to tell syntastic whether to use syntax highlighting to mark
+errors (where possible). Highlighting can be turned off with the following >
+    let g:syntastic_enable_highlighting = 0
+<
+
                                                        *'syntastic_auto_jump'*
 Default: 0
 Enable this option if you want the cursor to jump to the first detected error
