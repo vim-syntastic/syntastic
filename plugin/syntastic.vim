@@ -253,6 +253,7 @@ function! s:ShowLocList()
     endif
 endfunction
 
+"remove all error highlights from the window
 function! s:ClearErrorHighlights()
     for i in s:ErrorHighlightIds()
         call matchdelete(i)
@@ -260,15 +261,38 @@ function! s:ClearErrorHighlights()
     let w:syntastic_error_highlight_ids = []
 endfunction
 
+"add an error highlight to the window
 function! s:HighlightError(group, pattern)
     call add(s:ErrorHighlightIds(), matchadd(a:group, a:pattern))
 endfunction
 
+"get (and/or init) the array of error highlights for the current window
 function! s:ErrorHighlightIds()
     if !exists("w:syntastic_error_highlight_ids")
         let w:syntastic_error_highlight_ids = []
     endif
     return w:syntastic_error_highlight_ids
+endfunction
+
+"check if a syntax checker exists for the given filetype - and attempt to
+"load one
+function! s:Checkable(ft)
+    if !exists("g:loaded_" . a:ft . "_syntax_checker")
+        exec "runtime syntax_checkers/" . a:ft . ".vim"
+    endif
+
+    return exists("*SyntaxCheckers_". a:ft ."_GetLocList")
+endfunction
+
+"set up error ballons for the current set of errors
+function! s:RefreshBalloons()
+    let b:syntastic_balloons = {}
+    if s:BufHasErrorsOrWarningsToDisplay() && has('balloon_eval')
+        for i in b:syntastic_loclist
+            let b:syntastic_balloons[i['lnum']] = i['text']
+        endfor
+        set beval bexpr=SyntasticErrorBalloonExpr()
+    endif
 endfunction
 
 "return a string representing the state of buffer according to
@@ -359,28 +383,29 @@ function! SyntasticMake(options)
     return errors
 endfunction
 
-function! s:RefreshBalloons()
-    let b:syntastic_balloons = {}
-    if s:BufHasErrorsOrWarningsToDisplay() && has('balloon_eval')
-        for i in b:syntastic_loclist
-            let b:syntastic_balloons[i['lnum']] = i['text']
-        endfor
-        set beval bexpr=SyntasticErrorBalloonExpr()
-    endif
-endfunction
-
+"get the error balloon for the current mouse position
 function! SyntasticErrorBalloonExpr()
-    if !exists('b:syntastic_balloons') | return '' | endif
+    if !exists('b:syntastic_balloons')
+        return ''
+    endif
     return get(b:syntastic_balloons, v:beval_lnum, '')
 endfunction
 
+"highlight the list of errors (a:errors) using matchadd()
+"
+"a:termfunc is provided to highlight errors that do not have a 'col' key (and
+"hence cant be done automatically). This function must take one arg (an error
+"item) and return a regex to match that item in the buffer.
+"
+"an optional boolean third argument can be provided to force a:termfunc to be
+"used regardless of whether a 'col' key is present for the error
 function! SyntasticHighlightErrors(errors, termfunc, ...)
     call s:ClearErrorHighlights()
 
-    let forcecb = a:0 && a:1
+    let force_callback = a:0 && a:1
     for item in a:errors
         let group = item['type'] == 'E' ? 'SpellBad' : 'SpellCap'
-        if item['col'] && !forcecb
+        if item['col'] && !force_callback
             let lastcol = col([item['lnum'], '$'])
             let lcol = min([lastcol, item['col']])
             call s:HighlightError(group, '\%'.item['lnum'].'l\%'.lcol.'c')
@@ -391,14 +416,6 @@ function! SyntasticHighlightErrors(errors, termfunc, ...)
             endif
         endif
     endfor
-endfunction
-
-function! s:Checkable(ft)
-    if !exists("g:loaded_" . a:ft . "_syntax_checker")
-        exec "runtime syntax_checkers/" . a:ft . ".vim"
-    endif
-
-    return exists("*SyntaxCheckers_". a:ft ."_GetLocList")
 endfunction
 
 " vim: set et sts=4 sw=4:
