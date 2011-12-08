@@ -11,6 +11,7 @@ Checks
 
 CoffeeLint supports the following checks:
 
+- Indentation is consistent (default: two spaces)
 - Forbid trailing whitespace (default: enabled)
 - Forbid indentation with tabs (default: enabled)
 - Maximum line length (default: 80 characters)
@@ -42,13 +43,17 @@ Get help.
 Configuration
 -------------
 
-Every check in Coffeescript is configurable via a JSON file. Here is some example configuration:
+Every check in Coffeescript is configurable via a JSON file. Here is some
+example configuration:
 
     {
+        indent: 2           // Ensure all indents are two spaces.
         trailing: false,    // Forbid trailing whitespace.
         tabs: false,        // Forbid tabs in indentation.
         lineLength: 80      // Forbid lines longer than 80 characters.
     }
+
+Be sure to strip comments when deploying.
 
 License
 -------
