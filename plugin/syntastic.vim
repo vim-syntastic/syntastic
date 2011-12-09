@@ -297,7 +297,7 @@ endfunction
 "set up error ballons for the current set of errors
 function! s:RefreshBalloons()
     let b:syntastic_balloons = {}
-    if s:BufHasErrorsOrWarningsToDisplay() && has('balloon_eval')
+    if s:BufHasErrorsOrWarningsToDisplay()
         for i in b:syntastic_loclist
             let b:syntastic_balloons[i['lnum']] = i['text']
         endfor
