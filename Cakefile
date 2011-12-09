@@ -44,7 +44,7 @@ test = (callback) ->
     paths = glob(TEST_DIR, /^test.*\.coffee$/)
     run 'vows', paths.concat('--spec'), () ->
         notify('tests passed')
-        callback()
+        callback() if callback
 
 task 'compile', 'Compile the source.', () ->
   coffee(watch=false)
@@ -62,6 +62,4 @@ task 'dist', 'Create a distribution', () ->
     coffee watch=false, () ->
         test () ->
             lint()
-
-
 
