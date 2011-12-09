@@ -46,20 +46,64 @@ defaults = (userConfig) ->
     extend({}, DEFAULT_CONFIG, userConfig)
 
 
-# Return a list of errors found by performing "line"
-# checks on the source.
-checkLines = (source, config) ->
-    errors = []
-    lines = source.split('\n')
-    for line, lineNumber in lines
-        for rule, check of lineChecks
-            error = check(line, config)
-            if error
-                error.line = lineNumber
-                error.evidence = line
-                errors.push(error)
-    return errors
+#
+# A class that performs regex checks on each line of the source.
+#
+class LineLinter
 
+    constructor : (source, config, tokensByLine) ->
+        @source = source
+        @config = config
+        @line = null
+        @lineNumber = 0
+        @tokensByLine = tokensByLine
+
+    lint : () ->
+        errors = []
+        for line, lineNumber in @source.split('\n')
+            @lineNumber = lineNumber
+            @line = line
+            error = @lintLine()
+            if error
+                error.line = @lineNumber
+                error.evidence = @line
+                errors.push(error) if error
+        errors
+
+    lintLine : () ->
+        error = @checkTabs() or
+                @checkTrailingWhitespace() or
+                @checkLineLength()
+        error
+
+    checkTabs : () ->
+        return null if @config.tabs
+        indentation = @line.split(regexes.indentation)[0]
+        # Only check lines that have compiled tokens. This helps
+        # us ignore tabs in the middle of multi line strings, heredocs, etc.
+        # since they are all reduced to a single token whose line number
+        # is the start of the expression.
+        if @lineHasToken() and  ~indentation.indexOf('\t')
+            character: 0
+            reason: MESSAGES.NO_TABS
+        else
+            null
+
+    # Return true if the given line actually has tokens.
+    lineHasToken : () ->
+        return @tokensByLine[@lineNumber]?
+
+
+    checkTrailingWhitespace : () ->
+        if not @config.trailing and regexes.trailingWhitespace.test(@line)
+            character: @line.length
+            reason: MESSAGES.TRAILING_WHITESPACE
+
+    checkLineLength : () ->
+        lineLength = @config.lineLength
+        if lineLength and lineLength < @line.length
+            character: 0
+            reason: MESSAGES.LINE_LENGTH_EXCEEDED
 
 #
 # A class that performs checks on the output of CoffeeScript's
@@ -68,9 +112,11 @@ checkLines = (source, config) ->
 class LexicalLinter
 
     constructor : (source, config) ->
+        @source = source
         @tokens = CoffeeScript.tokens(source)
         @config = config
-        @i = 0
+        @i = 0              # The index of the current token we're linting.
+        @tokensByLine = {}  # A map of tokens by line.
 
     # Return a list of errors encountered in the given source.
     lint : () ->
@@ -85,6 +131,11 @@ class LexicalLinter
     # otherwise.
     lintToken : (token) ->
         [type, value, line] = token
+
+        @tokensByLine[line] ?= []
+        @tokensByLine[line].push(token)
+
+        # Now lint it.
         switch type
             when "INDENT" then @lintIndentation(token)
             when "CLASS"  then @lintClass(token)
@@ -145,33 +196,16 @@ coffeelint.lint = (source, userConfig={}) ->
     config = defaults(userConfig)
     config.indent = 1 if config.tabs
 
+    # Do lexical linting.
     lexicalLinter = new LexicalLinter(source, config)
-    checkLines(source, config).concat(lexicalLinter.lint())
+    lexErrors = lexicalLinter.lint()
 
-# A set of checks that should be performed on every line.
-lineChecks =
+    # Do line linting.
+    tokensByLine = lexicalLinter.tokensByLine
+    lineLinter = new LineLinter(source, config, tokensByLine)
+    lineErrors = lineLinter.lint()
 
-    checkTabs : (line, config) ->
-        return null if config.tabs
-        indentation = line.split(regexes.indentation)[0]
-        if ~indentation.indexOf('\t')
-            character: 0
-            reason: MESSAGES.NO_TABS
-
-    checkTrailingWhitespace : (line, config) ->
-        if not config.trailing and regexes.trailingWhitespace.test(line)
-            character: line.length
-            reason: MESSAGES.TRAILING_WHITESPACE
-        else
-            null
-
-    checkLineLength : (line, config) ->
-        lineLength = config.lineLength
-        if lineLength and lineLength < line.length
-            character: 0
-            reason: MESSAGES.LINE_LENGTH_EXCEEDED
-        else
-            null
+    return lexErrors.concat(lineErrors)
 
 #
 # Messages shown to users.
