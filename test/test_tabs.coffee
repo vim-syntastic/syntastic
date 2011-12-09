@@ -43,7 +43,45 @@ vows.describe('tabs').addBatch({
 
         'are allowed in strings' : () ->
             source = "x = () -> '\t'"
-            errors = coffeelint.lint(source, {tabs: false, indent: false})
+            errors = coffeelint.lint(source)
             assert.equal(errors.length, 0)
+
+    'Tabs in multi-line strings' :
+
+        topic : '''
+            x = 1234
+            y = """
+            \t\tasdf
+            """
+            '''
+
+        'are ignored' : (errors) ->
+            errors = coffeelint.lint(errors)
+            assert.isEmpty(errors)
+
+    'Tabs in Heredocs' :
+
+        topic : '''
+            ###
+            \t\tMy Heredoc
+            ###
+            '''
+
+        'are ignored' : (errors) ->
+            errors = coffeelint.lint(errors)
+            assert.isEmpty(errors)
+
+    'Tabs in multi line regular expressions' :
+
+        topic : '''
+            ///
+            \t\tMy Heredoc
+            ///
+            '''
+
+        'are ignored' : (errors) ->
+            errors = coffeelint.lint(errors)
+            assert.isEmpty(errors)
+
 
 }).export(module)

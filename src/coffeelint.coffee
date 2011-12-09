@@ -51,11 +51,12 @@ defaults = (userConfig) ->
 #
 class LineLinter
 
-    constructor : (source, config) ->
+    constructor : (source, config, tokensByLine) ->
         @source = source
         @config = config
         @line = null
         @lineNumber = 0
+        @tokensByLine = tokensByLine
 
     lint : () ->
         errors = []
@@ -78,11 +79,20 @@ class LineLinter
     checkTabs : () ->
         return null if @config.tabs
         indentation = @line.split(regexes.indentation)[0]
-        if ~indentation.indexOf('\t')
+        # Only check lines that have compiled tokens. This helps
+        # us ignore tabs in the middle of multi line strings, heredocs, etc.
+        # since they are all reduced to a single token whose line number
+        # is the start of the expression.
+        if @lineHasToken() and  ~indentation.indexOf('\t')
             character: 0
             reason: MESSAGES.NO_TABS
         else
             null
+
+    # Return true if the given line actually has tokens.
+    lineHasToken : () ->
+        return @tokensByLine[@lineNumber]?
+
 
     checkTrailingWhitespace : () ->
         if not @config.trailing and regexes.trailingWhitespace.test(@line)
@@ -186,10 +196,13 @@ coffeelint.lint = (source, userConfig={}) ->
     config = defaults(userConfig)
     config.indent = 1 if config.tabs
 
+    # Do lexical linting.
     lexicalLinter = new LexicalLinter(source, config)
     lexErrors = lexicalLinter.lint()
 
-    lineLinter = new LineLinter(source, config)
+    # Do line linting.
+    tokensByLine = lexicalLinter.tokensByLine
+    lineLinter = new LineLinter(source, config, tokensByLine)
     lineErrors = lineLinter.lint()
 
     return lexErrors.concat(lineErrors)
