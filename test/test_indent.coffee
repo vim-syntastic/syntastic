@@ -62,4 +62,26 @@ vows.describe('indent').addBatch({
             errors = coffeelint.lint(source, {indent: 4})
             assert.isEmpty(errors)
 
+    'Indentation inside interpolation' :
+
+        topic : 'a = "#{ 1234 }"'
+
+        'is ignored' : (source) ->
+            errors = coffeelint.lint(source)
+            assert.isEmpty(errors)
+
+    'Indentation in multi-line expressions' :
+
+        topic : """
+        x = '1234' + '1234' + '1234' +
+                '1234' + '1234'
+        """
+
+        'is ignored' : (source) ->
+            errors = coffeelint.lint(source)
+            assert.isEmpty(errors)
+
+
+
+
 }).export(module)

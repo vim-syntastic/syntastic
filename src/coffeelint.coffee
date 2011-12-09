@@ -70,10 +70,14 @@ class LexicalLinter
         @config = config
         @i = 0
 
+        # State about previous state in the tree.
+        @inString = false
+
     # Return a list of errors encountered in the given source.
     lint : () ->
         errors = []
-        for token in @tokens when not token.generated?
+        for token, i in @tokens when not token.generated?
+            @i = i
             error = @lintToken(token)
             errors.push(error) if error
         errors
@@ -84,16 +88,35 @@ class LexicalLinter
         [type, value, line] = token
         switch type
             when "INDENT" then @lintIndentation(token)
+            when "STRING" then @lintString(token)
             else null
 
     # Return an error if the given indentation token is not correct.
     lintIndentation : (token) ->
         [type, numIndents, line] = token
-        if @config.indent and numIndents != @config.indent
+        previousToken = @peekBack(2)
+
+        # HACK: CoffeeScript's lexer insert indentation in string
+        # interpolations that start with spaces e.g. "#{ 123 }"
+        # so ignore such cases. Are there other times an indentation
+        # could possibly follow a '+'?
+        inInterp = previousToken and previousToken[0] == '+'
+        if @config.indent and not inInterp and numIndents != @config.indent
             info = "Expected: #{@config.indent} Got: #{numIndents}"
             error = {reason: MESSAGES.INDENTATION_ERROR + info, line: line}
         else
             null
+
+    lintString : (token) ->
+        null
+
+    # Return the next token in the stream.
+    peek : (n=1) ->
+        @tokens[@i + n] || null
+
+    # Return the previous token in the stream.
+    peekBack : (n=1) ->
+        @tokens[@i - n] || null
 
 # Lint the given source text with given user configuration and return a list
 # of any errors encountered.
