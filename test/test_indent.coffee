@@ -46,7 +46,7 @@ vows.describe('indent').addBatch({
 
         'are caught' : (source) ->
             errors = coffeelint.lint(source)
-            assert.equal(errors.length, 1)
+            assert.lengthOf(errors, 1)
             error = errors[0]
             assert.equal(error.line, 2)
 
@@ -80,8 +80,5 @@ vows.describe('indent').addBatch({
         'is ignored' : (source) ->
             errors = coffeelint.lint(source)
             assert.isEmpty(errors)
-
-
-
 
 }).export(module)
