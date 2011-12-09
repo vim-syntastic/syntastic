@@ -17,6 +17,7 @@ CoffeeLint supports the following checks:
 - Forbid trailing whitespace (default: enabled)
 - Forbid indentation with tabs (default: enabled)
 - Maximum line length (default: 80 characters)
+- Force camel case class names (default: enabled)
 
 Installation
 ------------
@@ -49,10 +50,11 @@ Every check in Coffeescript is configurable via a JSON file. Here is some
 example configuration:
 
     {
-        indent: 2           // Ensure all indents are two spaces.
-        trailing: false,    // Forbid trailing whitespace.
-        tabs: false,        // Forbid tabs in indentation.
-        lineLength: 80      // Forbid lines longer than 80 characters.
+        indent: 2               // Ensure all indents are two spaces.
+        trailing: false,        // Forbid trailing whitespace.
+        tabs: false,            // Forbid tabs in indentation.
+        lineLength: 80          // Forbid lines longer than 80 characters.
+        camelCaseClasses: true  // Force camel case class names.
     }
 
 Be sure to strip comments when deploying.

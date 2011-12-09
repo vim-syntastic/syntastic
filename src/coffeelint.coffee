@@ -20,16 +20,18 @@ coffeelint.VERSION = "0.0.3"
 
 # A set of sane default lint rules.
 DEFAULT_CONFIG =
-    tabs : false        # Allow tabs for indentation.
-    trailing : false    # Allow trailing whitespace.
-    lineLength : 80     # The maximum length of each line.
-    indent: 2           # Indentation is two characters.
+    tabs : false            # Allow tabs for indentation.
+    trailing : false        # Allow trailing whitespace.
+    lineLength : 80         # The maximum length of each line.
+    indent: 2               # Indentation is two characters.
+    camelCaseClasses: true  # Enforce camel case class names.
 
 
 # Regexes that are used repeatedly.
 regexes =
     trailingWhitespace : /\s+$/
     indentation: /\S/
+    camelCase: /^[A-Z][a-zA-Z\d]*$/
 
 
 # Patch the source properties onto the destination.
@@ -85,6 +87,7 @@ class LexicalLinter
         [type, value, line] = token
         switch type
             when "INDENT" then @lintIndentation(token)
+            when "CLASS"  then @lintClass(token)
             else null
 
     # Return an error if the given indentation token is not correct.
@@ -100,6 +103,17 @@ class LexicalLinter
         if @config.indent and not inInterp and numIndents != @config.indent
             info = "Expected: #{@config.indent} Got: #{numIndents}"
             error = {reason: MESSAGES.INDENTATION_ERROR + info, line: line}
+        else
+            null
+
+    lintClass : (token) ->
+        [type, className, line] = @peek()
+        if @config.camelCaseClasses and not regexes.camelCase.test(className)
+            {
+                reason: MESSAGES.INVALID_CLASS_NAME
+                line: line
+                evidence: className
+            }
         else
             null
 
@@ -155,3 +169,4 @@ MESSAGES =
     TRAILING_WHITESPACE : 'Contains trailing whitespace'
     LINE_LENGTH_EXCEEDED : 'Maximum line length exceeded'
     INDENTATION_ERROR: 'Indentation error'
+    INVALID_CLASS_NAME: 'Invalid class name'
