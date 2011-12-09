@@ -24,7 +24,7 @@ vows.describe('tabs').addBatch({
             config = {tabs: false}
             errors = coffeelint.lint(source, config)
             assert.equal(errors.length, 4)
-            error = errors[0]
+            error = errors[2]
             assert.equal(error.line, 1)
             assert.equal(error.character, 0)
             assert.equal("Tabs are forbidden", error.reason)
