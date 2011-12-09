@@ -24,11 +24,17 @@ if !s:running_windows
 endif
 
 if !exists("g:syntastic_enable_signs")
-    let g:syntastic_enable_signs = has('signs')? 1 : 0
+    let g:syntastic_enable_signs = 1
+endif
+if !has('signs')
+    let g:syntastic_enable_signs = 0
 endif
 
 if !exists("g:syntastic_enable_balloons")
-    let g:syntastic_enable_balloons = has('balloon_eval')? 1 : 0
+    let g:syntastic_enable_balloons = 1
+endif
+if !has('balloon_eval')
+    let g:syntastic_enable_balloons = 0
 endif
 
 if !exists("g:syntastic_enable_highlighting")
