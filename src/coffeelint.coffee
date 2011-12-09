@@ -70,9 +70,6 @@ class LexicalLinter
         @config = config
         @i = 0
 
-        # State about previous state in the tree.
-        @inString = false
-
     # Return a list of errors encountered in the given source.
     lint : () ->
         errors = []
@@ -88,7 +85,6 @@ class LexicalLinter
         [type, value, line] = token
         switch type
             when "INDENT" then @lintIndentation(token)
-            when "STRING" then @lintString(token)
             else null
 
     # Return an error if the given indentation token is not correct.
@@ -106,9 +102,6 @@ class LexicalLinter
             error = {reason: MESSAGES.INDENTATION_ERROR + info, line: line}
         else
             null
-
-    lintString : (token) ->
-        null
 
     # Return the next token in the stream.
     peek : (n=1) ->
