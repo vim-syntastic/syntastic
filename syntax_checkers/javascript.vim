@@ -115,7 +115,11 @@ elseif s:checker == 'jshint'
         else
             let makeprg = 'jshint ' . shellescape(expand("%"))
         endif
-        let errorformat = '%f: line %l\, col %c\, %m,%-G%.%#'
-        return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
+        let errorformat = '%ELine %l:%c,%Z\\s%#Reason: %m,%C%.%#,%f: line %l\, col %c\, %m,%-G%.%#'
+        let errors = SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
+        for i in errors
+            let i['bufnr'] = bufnr('')
+        endfor
+        return errors
     endfunction
 endif
