@@ -93,13 +93,15 @@ class LexicalLinter
     # Return an error if the given indentation token is not correct.
     lintIndentation : (token) ->
         [type, numIndents, line] = token
-        previousToken = @peekBack(2)
 
         # HACK: CoffeeScript's lexer insert indentation in string
         # interpolations that start with spaces e.g. "#{ 123 }"
         # so ignore such cases. Are there other times an indentation
         # could possibly follow a '+'?
+        previousToken = @peek(-2)
         inInterp = previousToken and previousToken[0] == '+'
+
+        # Now check the indentation.
         if @config.indent and not inInterp and numIndents != @config.indent
             info = "Expected: #{@config.indent} Got: #{numIndents}"
             error = {reason: MESSAGES.INDENTATION_ERROR + info, line: line}
@@ -134,13 +136,8 @@ class LexicalLinter
         else
             null
 
-    # Return the next token in the stream.
     peek : (n=1) ->
         @tokens[@i + n] || null
-
-    # Return the previous token in the stream.
-    peekBack : (n=1) ->
-        @tokens[@i - n] || null
 
 # Lint the given source text with given user configuration and return a list
 # of any errors encountered.
