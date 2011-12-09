@@ -58,42 +58,52 @@ checkLines = (source, config) ->
                 errors.push(error)
     return errors
 
-# Return a list of errors found by performing "lex"
-# checks on the source
-checkTokens = (source, config) ->
-    tokens = CoffeeScript.tokens(source)
-    errors = []
-    for token in tokens when not token.generated?
+
+#
+# A class that performs checks on the output of CoffeeScript's
+# lexer.
+#
+class LexicalLinter
+
+    constructor : (source, config) ->
+        @tokens = CoffeeScript.tokens(source)
+        @config = config
+        @i = 0
+
+    # Return a list of errors encountered in the given source.
+    lint : () ->
+        errors = []
+        for token in @tokens when not token.generated?
+            error = @lintToken(token)
+            errors.push(error) if error
+        errors
+
+    # Return an error if the given token fails a lint check, false
+    # otherwise.
+    lintToken : (token) ->
         [type, value, line] = token
-        check = lexChecks[type]
-        error = if check then check(config, token) else null
-        if error
-            error.line = line
-            errors.push(error)
-    return errors
+        switch type
+            when "INDENT" then @lintIndentation(token)
+            else null
+
+    # Return an error if the given indentation token is not correct.
+    lintIndentation : (token) ->
+        [type, numIndents, line] = token
+        if @config.indent and numIndents != @config.indent
+            info = "Expected: #{@config.indent} Got: #{numIndents}"
+            error = {reason: MESSAGES.INDENTATION_ERROR + info, line: line}
+        else
+            null
 
 # Lint the given source text with given user configuration and return a list
 # of any errors encountered.
 coffeelint.lint = (source, userConfig={}) ->
     config = defaults(userConfig)
     config.indent = 1 if config.tabs
-    checkLines(source, config).concat(checkTokens(source, config))
 
+    lexicalLinter = new LexicalLinter(source, config)
+    checkLines(source, config).concat(lexicalLinter.lint())
 
-#
-# A set of checks on lex tokens provided by the CoffeeScript lexer.
-#
-lexChecks =
-
-    INDENT : (config, token) ->
-        [type, value, line] = token
-        if config.indent and value != config.indent
-            info = " Expected: #{config.indent} Got: #{value}"
-            error = {reason: MESSAGES.INDENTATION_ERROR + info}
-        else
-            null
-
-#
 # A set of checks that should be performed on every line.
 lineChecks =
 
