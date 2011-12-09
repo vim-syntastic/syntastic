@@ -32,6 +32,19 @@ coffee = (watch=false, callback) ->
 glob = (dir, re) ->
     (path.join(dir, p) for p in fs.readdirSync(dir) when re.test(p))
 
+# Lint our code.
+lint = () ->
+    paths = glob(TEST_DIR, /^test.*\.coffee$/)
+    args = ['-f', 'test/fixtures/fourspaces.json'].concat(paths).concat(SOURCE)
+    run 'bin/coffeelint', args
+
+# Test our code
+test = (callback) ->
+    re = /^test.*\.coffee$/
+    paths = glob(TEST_DIR, /^test.*\.coffee$/)
+    run 'vows', paths.concat('--spec'), () ->
+        notify('tests passed')
+        callback()
 
 task 'compile', 'Compile the source.', () ->
   coffee(watch=false)
@@ -40,13 +53,15 @@ task 'watch', 'Watch the source for changes.', (callback) ->
   coffee(watch=true)
 
 task 'test', 'Run the tests.', () ->
-  coffee watch=false, () ->
-    re = /^test.*\.coffee$/
-    paths = glob(TEST_DIR, /^test.*\.coffee$/)
-    run 'vows', paths.concat('--spec'), () ->
-        notify('tests passed')
+  coffee watch=false, test
 
 task 'lint', 'Lint the linter', () ->
-    paths = glob(TEST_DIR, /^test.*\.coffee$/)
-    args = ['-f', 'test/fixtures/fourspaces.json'].concat(paths).concat(SOURCE)
-    run 'bin/coffeelint', args
+    lint()
+
+task 'dist', 'Create a distribution', () ->
+    coffee watch=false, () ->
+        test () ->
+            lint()
+
+
+
