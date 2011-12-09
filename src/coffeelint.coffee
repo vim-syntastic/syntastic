@@ -107,7 +107,24 @@ class LexicalLinter
             null
 
     lintClass : (token) ->
-        [type, className, line] = @peek()
+        # TODO: you can do some crazy shit in CoffeeScript, like
+        # class func().ClassName. Don't allow that.
+
+        [type, value, line] = @peek()
+        className = null
+
+        # It's common to assign a class to a global namespace, e.g.
+        # exports.MyClassName, so loop through the next tokens until
+        # we find the real identifier.
+        #
+        offset = 1
+        until className
+            if @peek(offset + 1)?[0] == '.'
+                offset += 2
+            else
+                className = @peek(offset)[1]
+
+        # Now check for the error.
         if @config.camelCaseClasses and not regexes.camelCase.test(className)
             {
                 reason: MESSAGES.INVALID_CLASS_NAME
@@ -158,7 +175,6 @@ lineChecks =
             reason: MESSAGES.LINE_LENGTH_EXCEEDED
         else
             null
-
 
 #
 # Messages shown to users.
