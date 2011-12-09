@@ -355,6 +355,9 @@ endfunction
 "
 "The corresponding options are set for the duration of the function call. They
 "are set with :let, so dont escape spaces.
+"
+"a:options may also contain:
+"   'defaults' - a dict containing default values for the returned errors
 function! SyntasticMake(options)
     let old_loclist = getloclist(0)
     let old_makeprg = &makeprg
@@ -388,6 +391,10 @@ function! SyntasticMake(options)
 
     if !s:running_windows && s:uname =~ "FreeBSD"
         redraw!
+    endif
+
+    if has_key(a:options, 'defaults')
+        call SyntasticAddToErrors(errors, a:options['defaults'])
     endif
 
     return errors
@@ -430,6 +437,18 @@ function! SyntasticHighlightErrors(errors, termfunc, ...)
             endif
         endif
     endfor
+endfunction
+
+"take a list of errors and add default values to them from a:options
+function! SyntasticAddToErrors(errors, options)
+    for i in range(0, len(a:errors)-1)
+        for key in keys(a:options)
+            if empty(a:errors[i][key])
+                let a:errors[i][key] = a:options[key]
+            endif
+        endfor
+    endfor
+    return a:errors
 endfunction
 
 " vim: set et sts=4 sw=4:

@@ -81,11 +81,7 @@ elseif s:checker == "jslint"
 
         let makeprg = "jslint" . jslintconf . " " . shellescape(expand('%'))
         let errorformat=' %#%n %l\,%c: %m,%-G%.%#'
-        let errors = SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
-
-        for i in errors
-            let i['bufnr'] = bufnr('')
-        endfor
+        let errors = SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat, 'defaults': {'bufnr': bufnr("")} })
 
         call SyntasticHighlightErrors(errors, function('SyntaxCheckers_javascript_HighlightTerm'))
 
@@ -116,10 +112,6 @@ elseif s:checker == 'jshint'
             let makeprg = 'jshint ' . shellescape(expand("%"))
         endif
         let errorformat = '%ELine %l:%c,%Z\\s%#Reason: %m,%C%.%#,%f: line %l\, col %c\, %m,%-G%.%#'
-        let errors = SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
-        for i in errors
-            let i['bufnr'] = bufnr('')
-        endfor
-        return errors
+        return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat, 'defaults': {'bufnr': bufnr('')} })
     endfunction
 endif
