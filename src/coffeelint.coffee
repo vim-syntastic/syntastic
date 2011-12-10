@@ -20,11 +20,12 @@ coffeelint.VERSION = "0.0.3"
 
 # A set of sane default lint rules.
 DEFAULT_CONFIG =
-    tabs : false            # Allow tabs for indentation.
-    trailing : false        # Allow trailing whitespace.
-    lineLength : 80         # The maximum length of each line.
-    indent: 2               # Indentation is two characters.
-    camelCaseClasses: true  # Enforce camel case class names.
+    tabs : false              # Allow tabs for indentation.
+    trailing : false          # Allow trailing whitespace.
+    lineLength : 80           # The maximum length of each line.
+    indent: 2                 # Indentation is two characters.
+    camelCaseClasses: true    # Enforce camel case class names.
+    trailingSemicolons: false # Allow trailing semicolons.
 
 
 # Regexes that are used repeatedly.
@@ -32,6 +33,7 @@ regexes =
     trailingWhitespace : /\s+$/
     indentation: /\S/
     camelCase: /^[A-Z][a-zA-Z\d]*$/
+    trailingSemicolon: /;$/
 
 
 # Patch the source properties onto the destination.
@@ -73,7 +75,8 @@ class LineLinter
     lintLine : () ->
         error = @checkTabs() or
                 @checkTrailingWhitespace() or
-                @checkLineLength()
+                @checkLineLength() or
+                @checkTrailingSemicolon()
         error
 
     checkTabs : () ->
@@ -93,6 +96,9 @@ class LineLinter
     lineHasToken : () ->
         return @tokensByLine[@lineNumber]?
 
+    # Return tokens for the given line number.
+    getLineTokens : () ->
+        @tokensByLine[@lineNumber] || []
 
     checkTrailingWhitespace : () ->
         if not @config.trailing and regexes.trailingWhitespace.test(@line)
@@ -104,6 +110,18 @@ class LineLinter
         if lineLength and lineLength < @line.length
             character: 0
             reason: MESSAGES.LINE_LENGTH_EXCEEDED
+
+    checkTrailingSemicolon : () ->
+        return null if @config.trailingSemiColons
+        hasSemicolon = regexes.trailingSemicolon.test(@line)
+        [first..., last] = @getLineTokens()
+        hasNewLine = last and last.newLine?
+        # Don't throw errors when the contents of  multiline strings,
+        # regexes and the like end in ";"
+        if hasSemicolon and not hasNewLine and @lineHasToken()
+            reason: "Unnecessary semicolon"
+        else
+            return null
 
 #
 # A class that performs checks on the output of CoffeeScript's
