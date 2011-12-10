@@ -88,11 +88,12 @@ augroup syntastic
     if g:syntastic_echo_current_error
         autocmd cursormoved * call s:EchoCurrentError()
     endif
+
+    autocmd bufreadpost,bufwritepost * call s:UpdateErrors(1)
 augroup END
 
 
 "refresh and redraw all the error info for this buf when saving or reading
-autocmd bufreadpost,bufwritepost * call s:UpdateErrors(1)
 function! s:UpdateErrors(auto_invoked)
     if &buftype == 'quickfix'
         return
