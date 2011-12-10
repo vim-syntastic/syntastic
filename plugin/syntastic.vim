@@ -41,6 +41,10 @@ if !exists("g:syntastic_enable_highlighting")
     let g:syntastic_enable_highlighting = 1
 endif
 
+if !exists("g:syntastic_echo_current_error")
+    let g:syntastic_echo_current_error = 1
+endif
+
 if !exists("g:syntastic_auto_loc_list")
     let g:syntastic_auto_loc_list = 2
 endif
@@ -79,6 +83,13 @@ command! Errors call s:ShowLocList()
 
 highlight link SyntasticError SpellBad
 highlight link SyntasticWarning SpellCap
+
+augroup syntastic
+    if g:syntastic_echo_current_error
+        autocmd cursormoved * call s:EchoCurrentError()
+    endif
+augroup END
+
 
 "refresh and redraw all the error info for this buf when saving or reading
 autocmd bufreadpost,bufwritepost * call s:UpdateErrors(1)
@@ -294,6 +305,37 @@ function! s:RefreshBalloons()
         endfor
         set beval bexpr=SyntasticErrorBalloonExpr()
     endif
+endfunction
+
+"print as much of a:msg as possible without "Press Enter" prompt appearing
+function! s:WideMsg(msg)
+    let old_ruler = &ruler
+    let old_showcmd = &showcmd
+
+    set noruler noshowcmd
+    redraw
+    echo strpart(a:msg, 0, winwidth(0)-1)
+
+    let &ruler=old_ruler
+    let &showcmd=old_showcmd
+endfunction
+
+"echo out the first error we find for the current line in the cmd window
+function! s:EchoCurrentError()
+    if !exists('b:syntastic_loclist')
+        return
+    endif
+
+    "If we have an error or warning at the current line, show it
+    let lnum = line(".")
+    for i in b:syntastic_loclist
+        if lnum == i['lnum']
+            return s:WideMsg(i['text'])
+        endif
+    endfor
+
+    "Otherwise, clear the status line
+    echo
 endfunction
 
 "return a string representing the state of buffer according to

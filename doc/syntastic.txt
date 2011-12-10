@@ -141,6 +141,14 @@ current filetype is set to passive. See |'syntastic_mode_map'| for more info.
 ==============================================================================
 4. Options                                                 *syntastic-options*
 
+
+                                              *'syntastic_echo_current_error'*
+Default: 1
+If enabled, syntastic will error message associated with the current line to
+the command window. If multiple errors are found, the first will be used. >
+    let g:syntastic_echo_current_error=1
+<
+
                                                     *'syntastic_enable_signs'*
 Default: 1
 Use this option to tell syntastic whether to use the |:sign| interface to mark
