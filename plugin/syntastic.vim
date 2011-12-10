@@ -77,6 +77,9 @@ command! SyntasticToggleMode call s:ToggleMode()
 command! SyntasticCheck call s:UpdateErrors(0) <bar> redraw!
 command! Errors call s:ShowLocList()
 
+highlight link SyntasticError SpellBad
+highlight link SyntasticWarning SpellCap
+
 "refresh and redraw all the error info for this buf when saving or reading
 autocmd bufreadpost,bufwritepost * call s:UpdateErrors(1)
 function! s:UpdateErrors(auto_invoked)
@@ -265,23 +268,11 @@ endfunction
 
 "remove all error highlights from the window
 function! s:ClearErrorHighlights()
-    for i in s:ErrorHighlightIds()
-        call matchdelete(i)
+    for match in getmatches()
+        if stridx(match['group'], 'Syntastic') == 0
+            call matchdelete(match['id'])
+        endif
     endfor
-    let w:syntastic_error_highlight_ids = []
-endfunction
-
-"add an error highlight to the window
-function! s:HighlightError(group, pattern)
-    call add(s:ErrorHighlightIds(), matchadd(a:group, a:pattern))
-endfunction
-
-"get (and/or init) the array of error highlights for the current window
-function! s:ErrorHighlightIds()
-    if !exists("w:syntastic_error_highlight_ids")
-        let w:syntastic_error_highlight_ids = []
-    endif
-    return w:syntastic_error_highlight_ids
 endfunction
 
 "check if a syntax checker exists for the given filetype - and attempt to
@@ -425,15 +416,15 @@ function! SyntasticHighlightErrors(errors, termfunc, ...)
 
     let force_callback = a:0 && a:1
     for item in a:errors
-        let group = item['type'] == 'E' ? 'SpellBad' : 'SpellCap'
+        let group = item['type'] == 'E' ? 'SyntasticError' : 'SyntasticWarning'
         if item['col'] && !force_callback
             let lastcol = col([item['lnum'], '$'])
             let lcol = min([lastcol, item['col']])
-            call s:HighlightError(group, '\%'.item['lnum'].'l\%'.lcol.'c')
+            call matchadd(group, '\%'.item['lnum'].'l\%'.lcol.'c')
         else
             let term = a:termfunc(item)
             if len(term) > 0
-                call s:HighlightError(group, '\%' . item['lnum'] . 'l' . term)
+                call matchadd(group, '\%' . item['lnum'] . 'l' . term)
             endif
         endif
     endfor
