@@ -340,12 +340,16 @@ function! s:EchoCurrentError()
     let lnum = line(".")
     for i in b:syntastic_loclist
         if lnum == i['lnum']
+            let b:syntastic_echoing_error = 1
             return s:WideMsg(i['text'])
         endif
     endfor
 
     "Otherwise, clear the status line
-    echo
+    if exists("b:syntastic_echoing_error")
+        echo
+        unlet b:syntastic_echoing_error
+    endif
 endfunction
 
 "return a string representing the state of buffer according to
