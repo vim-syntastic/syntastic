@@ -20,7 +20,8 @@ if exports?
     CoffeeScript = require 'coffee-script'
 else
     # If we're in the browser, export out module to
-    # global scope.
+    # global scope. Assume CoffeeScript is already
+    # loaded.
     this.coffeelint = coffeelint
     CoffeeScript = this.CoffeeScript
 
