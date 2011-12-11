@@ -9,10 +9,6 @@ CoffeeLint is freely distributable under the MIT license.
 # Coffeelint's namespace.
 coffeelint = {}
 
-# The current version of Coffeelint.
-coffeelint.VERSION = "0.0.3"
-
-
 if exports?
     # If we're running in node, export our module and
     # load dependencies.
@@ -24,6 +20,10 @@ else
     # loaded.
     this.coffeelint = coffeelint
     CoffeeScript = this.CoffeeScript
+
+
+# The current version of Coffeelint.
+coffeelint.VERSION = "0.0.3"
 
 
 # A set of sane default lint rules.

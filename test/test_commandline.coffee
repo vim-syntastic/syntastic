@@ -40,6 +40,7 @@ vows.describe('commandline').addBatch({
         'exists' : (error, stdout, stderr) ->
             assert.isNull(error)
             assert.isEmpty(stderr)
+            assert.isString(stdout)
             assert.include(stdout, coffeelint.VERSION)
 
     'with clean source' :
