@@ -36,7 +36,4 @@ task :watch do
   sh("coffee -wc -o #{LIB_DIR} #{SOURCE}")
 end
 
-desc "Create a distribution."
-task :dist => [:compile, :test, :lint]
-
-task :default => :test
+task :default => [:compile, :test, :lint]
