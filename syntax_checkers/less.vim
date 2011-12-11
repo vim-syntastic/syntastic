@@ -24,6 +24,6 @@ function! SyntaxCheckers_less_GetLocList()
     let errorformat = 'Syntax %trror on line %l,! Syntax %trror: on line %l: %m,%-G%.%#'
     return SyntasticMake({ 'makeprg': makeprg,
                          \ 'errorformat': errorformat,
-                         \ 'defaults' {'bufnr': bufnr(""), 'text': "Syntax error"} })
+                         \ 'defaults': {'bufnr': bufnr(""), 'text': "Syntax error"} })
 endfunction
 
