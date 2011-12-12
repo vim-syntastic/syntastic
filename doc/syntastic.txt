@@ -340,6 +340,19 @@ The latest dev versions are on github
 ==============================================================================
 7. Changelog                                             *syntastic-changelog*
 
+Next version
+    - when the cursor is on a line containing an error, echo the
+      error msg (kevinw)
+    - various bug fixes and refactoring
+    - updates/fixes to existing checkers:
+        - html (millermedeiros)
+        - erlang
+        - coffeescript
+        - javascript
+        - sh
+        - php (add support for phpcs - technosophos)
+    - add an applescript checker (Zhai Cai)
+
 2.0.0
     - Add support for highlighting the erroneous parts of lines (kstep)
     - Add support for displaying errors via balloons (kstep)
@@ -421,7 +434,10 @@ The latest dev versions are on github
 Thanks to the following people for testing, bug reports, patches etc. They own,
 hard.
 
-
+    Zhai Cai
+    Matt Butcher (technosophos)
+    Kevin Watters (kevinw)
+    Miller Medeiros (millermedeiros)
     Pawel Salata (kTT)
     Fjölnir Ásgeirsson (aptiva)
     Clayton Parker (claytron)
