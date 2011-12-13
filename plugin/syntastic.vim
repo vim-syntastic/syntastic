@@ -139,7 +139,7 @@ function! s:CacheErrors()
     let b:syntastic_loclist = []
 
     if filereadable(expand("%"))
-        for ft in split(&ft, '\.')
+        for ft in split(substitute(&ft, '-', '_', 'g'), '\.')
             if s:Checkable(ft)
                 let b:syntastic_loclist = extend(b:syntastic_loclist, SyntaxCheckers_{ft}_GetLocList())
             endif
