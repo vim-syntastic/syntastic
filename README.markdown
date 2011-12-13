@@ -45,3 +45,9 @@ Installation
     git clone https://github.com/scrooloose/syntastic.git
 
 Then reload vim, run `:Helptags`, and check out `:help syntastic.txt`.
+
+
+Google group
+------------
+
+To get information or make suggestions check out the [google group](https://groups.google.com/group/vim-syntastic).
