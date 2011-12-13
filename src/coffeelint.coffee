@@ -99,14 +99,6 @@ class LineLinter
         else
             null
 
-    # Return true if the given line actually has tokens.
-    lineHasToken : () ->
-        return @tokensByLine[@lineNumber]?
-
-    # Return tokens for the given line number.
-    getLineTokens : () ->
-        @tokensByLine[@lineNumber] || []
-
     checkTrailingWhitespace : () ->
         if not @config.trailing and regexes.trailingWhitespace.test(@line)
             character: @line.length
@@ -129,6 +121,16 @@ class LineLinter
             reason: "Unnecessary semicolon"
         else
             return null
+
+    # Return true if the given line actually has tokens.
+    lineHasToken : () ->
+        return @tokensByLine[@lineNumber]?
+
+    # Return tokens for the given line number.
+    getLineTokens : () ->
+        @tokensByLine[@lineNumber] || []
+
+
 
 #
 # A class that performs checks on the output of CoffeeScript's
