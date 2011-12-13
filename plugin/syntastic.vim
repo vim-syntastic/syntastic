@@ -139,7 +139,12 @@ function! s:CacheErrors()
     let b:syntastic_loclist = []
 
     if filereadable(expand("%"))
-        for ft in split(substitute(&ft, '-', '_', 'g'), '\.')
+
+        "sub - for _ in filetypes otherwise we cant name syntax checker
+        "functions legally for filetypes like "gentoo-metadata"
+        let fts = substitute(&ft, '-', '_', 'g')
+
+        for ft in split(fts, '\.')
             if s:Checkable(ft)
                 let b:syntastic_loclist = extend(b:syntastic_loclist, SyntaxCheckers_{ft}_GetLocList())
             endif
