@@ -50,10 +50,9 @@ extend = (destination, sources...) ->
         (destination[k] = v for k, v of source)
     return destination
 
-# Return a map of config options with any unspecified options
-# patched with defaults.
-defaults = (userConfig) ->
-    extend({}, DEFAULT_CONFIG, userConfig)
+# Patch any missing attributes from defaults to source.
+defaults = (source, defaults) ->
+    extend({}, defaults, source)
 
 
 #
@@ -219,7 +218,7 @@ class LexicalLinter
 # Lint the given source text with given user configuration and return a list
 # of any errors encountered.
 coffeelint.lint = (source, userConfig={}) ->
-    config = defaults(userConfig)
+    config = defaults(userConfig, DEFAULT_CONFIG)
     config.indent = 1 if config.tabs
 
     # Do lexical linting.
