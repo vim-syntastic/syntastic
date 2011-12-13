@@ -51,3 +51,64 @@ Google group
 ------------
 
 To get information or make suggestions check out the [google group](https://groups.google.com/group/vim-syntastic).
+
+
+Changelog
+---------
+
+Next version:
+
+  * when the cursor is on a line containing an error, echo the
+  * error msg (kevinw)
+  * various bug fixes and refactoring
+  * updates/fixes to existing checkers:
+    * html (millermedeiros)
+    * erlang
+    * coffeescript
+    * javascript
+    * sh
+    * php (add support for phpcs - technosophos)
+  * add an applescript checker (Zhai Cai)
+
+2.0.0 (2-dec-2011):
+
+  * Add support for highlighting the erroneous parts of lines (kstep)
+  * Add support for displaying errors via balloons (kstep)
+  * Add syntastic_mode_map option to give more control over when checking should be done.
+  * Add :SyntasticCheck command to force a syntax check -  useful in passive mode (justone).
+  * Add the option to automatically close the location list, but not automatically open it (milkypostman)
+  * Add syntastic_auto_jump option to automatically jump to the first error (milkypostman)
+  * Only source syntax checkers as needed - instead of loading all of them when vim starts
+
+  * Support for new filetypes:
+    * less (julienXX)
+    * docbook (tpope)
+    * matlab (jasongraham)
+    * go (dtjm)
+    * puppet (uggedal, roman, zsprackett)
+    * haskell (baldo, roman)
+    * tcl (et)
+    * vala (kstep)
+    * cuda (temporaer)
+    * css (oryband, sitedyno)
+    * fortran (Karl Yngve Lervåg)
+    * xml (kusnier)
+    * xslt (kusnier)
+    * erlang (kTT)
+    * zpt (claytron)
+
+  * updates to existing checkers:
+    * javascript (mogren, bryanforbes, cjab, ajduncan)
+    * sass/scss (tmm1, atourino, dlee, epeli)
+    * ruby (changa)
+    * perl (harleypig)
+    * haml (bmihelac)
+    * php (kstep, docteurklein)
+    * python (kstep, soli)
+    * lua (kstep)
+    * html (kstep)
+    * xhtml (kstep)
+    * c (kongo2002, brandonw)
+    * cpp (kongo2002)
+    * coffee (industrial)
+    * eruby (sergevm)
