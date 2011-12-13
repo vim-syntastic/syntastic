@@ -231,7 +231,10 @@ coffeelint.lint = (source, userConfig={}) ->
     lineLinter = new LineLinter(source, config, tokensByLine)
     lineErrors = lineLinter.lint()
 
-    return lexErrors.concat(lineErrors)
+    # Sort by line number and return.
+    errors = lexErrors.concat(lineErrors)
+    errors.sort((a, b) -> a.line - b.line)
+    errors
 
 #
 # Messages shown to users.
