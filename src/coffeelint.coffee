@@ -180,7 +180,7 @@ class LexicalLinter
 
         # Now check the indentation.
         if @config.indent and not inInterp and numIndents != @config.indent
-            info = "Expected: #{@config.indent} Got: #{numIndents}"
+            info = " Expected: #{@config.indent} Got: #{numIndents}"
             error = {reason: MESSAGES.INDENTATION_ERROR + info, line: line}
         else
             null
@@ -244,5 +244,5 @@ MESSAGES =
     NO_TABS : 'Tabs are forbidden'
     TRAILING_WHITESPACE : 'Contains trailing whitespace'
     LINE_LENGTH_EXCEEDED : 'Maximum line length exceeded'
-    INDENTATION_ERROR: 'Indentation error'
+    INDENTATION_ERROR: 'Indentation error.'
     INVALID_CLASS_NAME: 'Invalid class name'
