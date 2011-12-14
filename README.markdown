@@ -56,7 +56,7 @@ To get information or make suggestions check out the [google group](https://grou
 Changelog
 ---------
 
-Next version:
+2.1.0 (14-dec-2011)
 
   * when the cursor is on a line containing an error, echo the
   * error msg (kevinw)

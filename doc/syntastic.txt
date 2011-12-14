@@ -340,7 +340,7 @@ The latest dev versions are on github
 ==============================================================================
 7. Changelog                                             *syntastic-changelog*
 
-Next version
+2.1.0
     - when the cursor is on a line containing an error, echo the
       error msg (kevinw)
     - various bug fixes and refactoring
