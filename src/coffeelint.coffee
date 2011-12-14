@@ -34,6 +34,7 @@ DEFAULT_CONFIG =
     indent: 2                 # Indentation is two characters.
     camelCaseClasses: true    # Enforce camel case class names.
     trailingSemicolons: false # Allow trailing semicolons.
+    implicitBraces: false     # Forbid implicit braces.
 
 
 # Regexes that are used repeatedly.
@@ -166,7 +167,15 @@ class LexicalLinter
         switch type
             when "INDENT" then @lintIndentation(token)
             when "CLASS"  then @lintClass(token)
+            when "{"      then @lintBrace(token)
             else null
+
+    lintBrace : (token) ->
+        [type, numIndents, line] = token
+        if @config.implicitBraces and token.generated
+            return {reason: 'Implicit braces are forbidden', line: line}
+        else
+            null
 
     # Return an error if the given indentation token is not correct.
     lintIndentation : (token) ->
