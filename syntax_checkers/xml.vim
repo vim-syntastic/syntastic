@@ -9,6 +9,11 @@
 "             See http://sam.zoy.org/wtfpl/COPYING for more details.
 "
 "============================================================================
+
+" You can use a local installation of DTDs to significantly speed up validation
+" and allow you to validate XML data without network access, see xmlcatalog(1)
+" and http://www.xmlsoft.org/catalog.html for more information.
+
 if exists("loaded_xml_syntax_checker")
     finish
 endif
