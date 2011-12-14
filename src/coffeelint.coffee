@@ -148,7 +148,7 @@ class LexicalLinter
     # Return a list of errors encountered in the given source.
     lint : () ->
         errors = []
-        for token, i in @tokens when not token.generated?
+        for token, i in @tokens
             @i = i
             error = @lintToken(token)
             errors.push(error) if error
@@ -172,6 +172,8 @@ class LexicalLinter
     lintIndentation : (token) ->
         [type, numIndents, line] = token
 
+        return null if not @config.indent or token.generated?
+
         # HACK: CoffeeScript's lexer insert indentation in string
         # interpolations that start with spaces e.g. "#{ 123 }"
         # so ignore such cases. Are there other times an indentation
@@ -180,7 +182,7 @@ class LexicalLinter
         inInterp = previousToken and previousToken[0] == '+'
 
         # Now check the indentation.
-        if @config.indent and not inInterp and numIndents != @config.indent
+        if not inInterp and numIndents != @config.indent
             info = " Expected: #{@config.indent} Got: #{numIndents}"
             error = {reason: MESSAGES.INDENTATION_ERROR + info, line: line}
         else
