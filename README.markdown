@@ -69,6 +69,7 @@ Next version:
     * sh
     * php (add support for phpcs - technosophos)
   * add an applescript checker (Zhai Cai)
+  * add support for hyphenated filetypes (JNRowe)
 
 2.0.0 (2-dec-2011):
 

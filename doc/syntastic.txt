@@ -352,6 +352,7 @@ Next version
         - sh
         - php (add support for phpcs - technosophos)
     - add an applescript checker (Zhai Cai)
+    - add support for hyphenated filetypes (JNRowe)
 
 2.0.0
     - Add support for highlighting the erroneous parts of lines (kstep)
@@ -434,6 +435,7 @@ Next version
 Thanks to the following people for testing, bug reports, patches etc. They own,
 hard.
 
+    James Rowe (JNRowe)
     Zhai Cai
     Matt Butcher (technosophos)
     Kevin Watters (kevinw)
