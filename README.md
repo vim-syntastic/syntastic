@@ -18,6 +18,7 @@ CoffeeLint supports the following checks:
 - Forbid indentation with tabs (default: enabled)
 - Maximum line length (default: 80 characters)
 - Force camel case class names (default: enabled)
+- Forbid implicit braces in object literals (default: disabled)
 
 Installation
 ------------
@@ -55,6 +56,7 @@ example configuration:
         tabs: false,            // Forbid tabs in indentation.
         lineLength: 80          // Forbid lines longer than 80 characters.
         camelCaseClasses: true  // Force camel case class names.
+        implicitBraces: false   // Forbid implicit braces in object literals.
     }
 
 Be sure to strip comments when deploying.
