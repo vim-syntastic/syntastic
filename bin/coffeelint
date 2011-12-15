@@ -10,7 +10,9 @@ var thisdir = path.dirname(fs.realpathSync(__filename));
 var coffeelint = require(path.join(thisdir, '../lib', 'coffeelint'));
 
 
-// Print a report on the given errors.
+/**
+ * Print a report on the given script's errors to stderr.
+ */
 var report = function (path, errors) {
     var messages = errors.map(function (error) {
         var fields = [
@@ -31,26 +33,29 @@ var report = function (path, errors) {
     return errors.length;
 };
 
-// Return the contents of the relative file.
+/**
+ * Return the contents of the given file.
+ */
 var read = function (path) {
     var realPath = fs.realpathSync(path);
     return fs.readFileSync(realPath).toString();
 };
 
-// Lint the given source files with the given configuration. Return 0
-// on success, false otherwise.
-var lint = function (paths, configPath) {
 
+/**
+ * Lint the given files with the given configuration and print a report
+ * on the outcome. Return an exit code indicating the success of the
+ * operation.
+ */
+var lint = function (paths, configPath) {
+    var returnCode = 0;
+
+    // Load the users configuration, if they've passed one.
     var config = (configPath) ? JSON.parse(read(configPath)) : {};
 
-    var returnCode = 0;
-    paths.map(function (path) {
-        return [path, read(path)];
-    }).forEach(function (script) {
-
-        var path = script[0];
-        var source = script[1];
-
+    // Lint and report on each script.
+    paths.forEach(function (path) {
+        var source = read(path);
         var errors = coffeelint.lint(source, config);
         if (errors.length) {
             report(path, errors);
@@ -58,6 +63,7 @@ var lint = function (paths, configPath) {
         }
     });
 
+    // If we're good, print a success report.
     if (returnCode === 0) {
         console.log('Lint free!');
     }
