@@ -28,6 +28,7 @@ vows.describe('tabs').addBatch({
             assert.equal(error.line, 1, "line number is correct")
             assert.equal("Line contains tab indentation", error.reason)
             assert.equal("\ty = () ->", error.evidence)
+            assert.equal(error.rule, 'no_tabs')
 
         'can be permitted' : (source) ->
             config = {tabs: true}

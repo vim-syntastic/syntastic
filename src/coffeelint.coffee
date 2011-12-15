@@ -40,7 +40,7 @@ RULES =
         reason : 'Line contains inconsistent indentation'
     no_implicit_braces :
         reason : 'Implicit braces are forbidden'
-    no_trailing_semicolon:
+    no_trailing_semicolons:
         reason : 'Line contains a trailing semicolon'
 
 # A set of sane default lint rules.
@@ -75,7 +75,8 @@ defaults = (source, defaults) ->
 
 # Create an error object for the given rule with the given
 # attributes.
-createError = (rule, attrs) ->
+createError = (rule, attrs={}) ->
+    attrs.rule = rule
     return defaults(attrs, RULES[rule])
 
 
@@ -140,7 +141,7 @@ class LineLinter
         # Don't throw errors when the contents of  multiline strings,
         # regexes and the like end in ";"
         if hasSemicolon and not hasNewLine and @lineHasToken()
-            @createLineError('no_trailing_semicolon')
+            @createLineError('no_trailing_semicolons')
         else
             return null
 

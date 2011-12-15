@@ -20,6 +20,7 @@ vows.describe('linelength').addBatch({
             error = errors[0]
             assert.equal(error.line, 3)
             assert.equal(error.reason, "Line exceeds maximum allowed length")
+            assert.equal(error.rule, 'max_line_length')
 
         'is configurable' : (source) ->
             errors = coffeelint.lint(source, {lineLength: 99})

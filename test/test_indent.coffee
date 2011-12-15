@@ -23,6 +23,7 @@ vows.describe('indent').addBatch({
             error = errors[0]
             assert.equal(error.reason, 'Line contains inconsistent indentation')
             assert.include(error.evidence, 'four spaces')
+            assert.equal(error.rule, 'indentation')
             assert.equal(error.line, 4)
 
         'can be overridden' : (source) ->

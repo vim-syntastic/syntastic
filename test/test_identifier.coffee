@@ -49,6 +49,7 @@ vows.describe('identifiers').addBatch({
             assert.equal(error.line, 0)
             assert.equal(error.reason,  'Class names should be camel cased')
             assert.equal(error.evidence,  'animal')
+            assert.equal(error.rule,  'camel_case_classes')
 
         'can be permitted' : (source) ->
             errors = coffeelint.lint(source, {camelCaseClasses: false})
