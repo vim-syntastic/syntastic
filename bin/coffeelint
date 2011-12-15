@@ -13,12 +13,15 @@ var coffeelint = require(path.join(thisdir, '../lib', 'coffeelint'));
 // Print a report on the given errors.
 var report = function (path, errors) {
     var messages = errors.map(function (error) {
-        return [
+        var fields = [
             path,
             "Line #" + error.line,
-            error.reason,
-            error.evidence
-        ].join(" | ");
+            error.reason
+        ];
+        if (error.evidence) {
+            fields.push(error.evidence)
+        }
+        return fields.join(" | ");
     });
 
     messages.forEach(function (msg) {
