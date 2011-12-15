@@ -23,7 +23,7 @@ vows.describe('coffelint').addBatch({
         'are sorted by line number' : (errors) ->
             assert.isArray(errors)
             assert.lengthOf(errors, 2)
-            assert.equal(errors[1].line, 1)
-            assert.equal(errors[0].line, 0)
+            assert.equal(errors[1].lineNumber, 1)
+            assert.equal(errors[0].lineNumber, 0)
 
 }).export(module)

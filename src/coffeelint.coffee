@@ -146,7 +146,7 @@ class LineLinter
             return null
 
     createLineError : (rule) ->
-        createError(rule, {line: @lineNumber, evidence: @line})
+        createError(rule, {lineNumber: @lineNumber, evidence: @line})
 
     # Return true if the given line actually has tokens.
     lineHasToken : () ->
@@ -182,11 +182,11 @@ class LexicalLinter
     # Return an error if the given token fails a lint check, false
     # otherwise.
     lintToken : (token) ->
-        [type, value, line] = token
+        [type, value, lineNumber] = token
 
-        @tokensByLine[line] ?= []
-        @tokensByLine[line].push(token)
-        @line = line
+        @tokensByLine[lineNumber] ?= []
+        @tokensByLine[lineNumber].push(token)
+        @lineNumber = lineNumber
 
         # Now lint it.
         switch type
@@ -204,7 +204,7 @@ class LexicalLinter
 
     # Return an error if the given indentation token is not correct.
     lintIndentation : (token) ->
-        [type, numIndents, line] = token
+        [type, numIndents, lineNumber] = token
 
         return null if not @config.indent or token.generated?
 
@@ -226,7 +226,7 @@ class LexicalLinter
         # TODO: you can do some crazy shit in CoffeeScript, like
         # class func().ClassName. Don't allow that.
 
-        [type, value, line] = @peek()
+        [type, value, lineNumber] = @peek()
         className = null
 
         # It's common to assign a class to a global namespace, e.g.
@@ -247,7 +247,7 @@ class LexicalLinter
             null
 
     createError : (rule, attrs={}) ->
-        attrs.line = @line
+        attrs.lineNumber = @lineNumber
         createError(rule, attrs)
 
     peek : (n=1) ->
@@ -270,6 +270,6 @@ coffeelint.lint = (source, userConfig={}) ->
 
     # Sort by line number and return.
     errors = lexErrors.concat(lineErrors)
-    errors.sort((a, b) -> a.line - b.line)
+    errors.sort((a, b) -> a.lineNumber - b.lineNumber)
     errors
 
