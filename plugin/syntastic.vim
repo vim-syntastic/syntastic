@@ -211,11 +211,11 @@ function! s:ErrorsForType(type)
     return filter(copy(b:syntastic_loclist), 'v:val["type"] ==? "' . a:type . '"')
 endfunction
 
-function s:Errors()
+function! s:Errors()
     return extend(s:ErrorsForType("E"), s:ErrorsForType(''))
 endfunction
 
-function s:Warnings()
+function! s:Warnings()
     return s:ErrorsForType("W")
 endfunction
 
@@ -232,7 +232,7 @@ let s:first_sign_id = 5000
 let s:next_sign_id = s:first_sign_id
 
 "place signs by all syntax errs in the buffer
-function s:SignErrors()
+function! s:SignErrors()
     if s:BufHasErrorsOrWarningsToDisplay()
         for i in b:syntastic_loclist
             if i['bufnr'] != bufnr("")
