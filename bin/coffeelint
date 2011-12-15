@@ -20,8 +20,8 @@ var report = function (path, errors) {
             "Line #" + error.lineNumber,
             error.message
         ];
-        if (error.evidence) {
-            fields.push(error.evidence)
+        if (error.context) {
+            fields.push(error.context)
         }
         return fields.join(" | ");
     });

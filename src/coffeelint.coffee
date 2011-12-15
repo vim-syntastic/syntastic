@@ -217,7 +217,8 @@ class LexicalLinter
 
         # Now check the indentation.
         if not inInterp and numIndents != @config.indent
-            context = "Expected: #{@config.indent} Got: #{numIndents}"
+            context = "Expected #{@config.indent} spaces " +
+                      "and got #{numIndents}"
             @createError('indentation', {context})
         else
             null
