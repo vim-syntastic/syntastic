@@ -219,6 +219,28 @@ function! s:Warnings()
     return s:ErrorsForType("W")
 endfunction
 
+"Filter a:llist by a:filters
+"e.g.
+"  s:FilterLocList(list, {'bufnr': 10, 'type': 'e'})
+"
+"would return all errors for buffer 10.
+"
+"Note that all comparisons are done with ==?
+function! s:FilterLocList(llist, filters)
+    let rv = deepcopy(a:llist)
+    for error in a:llist
+        for key in keys(a:filters)
+            let rhs = a:filters[key]
+            if type(rhs) == 1 "string
+                let rhs = '"' . rhs . '"'
+            endif
+
+            call filter(rv, "v:val['".key."'] ==? " . rhs)
+        endfor
+    endfor
+    return rv
+endfunction
+
 if g:syntastic_enable_signs
     "use >> to display syntax errors in the sign column
     sign define SyntasticError text=>> texthl=error
@@ -234,21 +256,31 @@ let s:next_sign_id = s:first_sign_id
 "place signs by all syntax errs in the buffer
 function! s:SignErrors()
     if s:BufHasErrorsOrWarningsToDisplay()
-        for i in b:syntastic_loclist
-            if i['bufnr'] != bufnr("")
-                continue
-            endif
 
+        let errors = s:FilterLocList(b:syntastic_loclist, {'bufnr': bufnr('') })
+        for i in errors
             let sign_type = 'SyntasticError'
-            if i['type'] == 'W'
+            if i['type'] ==? 'W'
                 let sign_type = 'SyntasticWarning'
             endif
 
-            exec "sign place ". s:next_sign_id ." line=". i['lnum'] ." name=". sign_type ." file=". expand("%:p")
-            call add(s:BufSignIds(), s:next_sign_id)
-            let s:next_sign_id += 1
+            if !s:WarningMasksError(i, errors)
+                exec "sign place ". s:next_sign_id ." line=". i['lnum'] ." name=". sign_type ." file=". expand("%:p")
+                call add(s:BufSignIds(), s:next_sign_id)
+                let s:next_sign_id += 1
+            endif
         endfor
     endif
+endfunction
+
+"return true if the given error item is a warning that, if signed, would
+"potentially mask an error if displayed at the same time
+function! s:WarningMasksError(error, llist)
+    if a:error['type'] !=? 'w'
+        return 0
+    endif
+
+    return len(s:FilterLocList(a:llist, { 'type': "E", 'lnum': a:error['lnum'] })) > 0
 endfunction
 
 "remove the signs with the given ids from this buffer
