@@ -29,19 +29,19 @@ coffeelint.VERSION = "0.0.4"
 # A mapping of CoffeeLint's rule names to associated metadata.
 RULES =
     no_tabs :
-        reason : 'Line contains tab indentation'
+        message : 'Line contains tab indentation'
     no_trailing_whitespace :
-        reason : 'Line ends with trailing whitespace'
+        message : 'Line ends with trailing whitespace'
     max_line_length :
-        reason : 'Line exceeds maximum allowed length'
+        message : 'Line exceeds maximum allowed length'
     camel_case_classes :
-        reason : 'Class names should be camel cased'
+        message : 'Class names should be camel cased'
     indentation :
-        reason : 'Line contains inconsistent indentation'
+        message : 'Line contains inconsistent indentation'
     no_implicit_braces :
-        reason : 'Implicit braces are forbidden'
+        message : 'Implicit braces are forbidden'
     no_trailing_semicolons:
-        reason : 'Line contains a trailing semicolon'
+        message : 'Line contains a trailing semicolon'
 
 # A set of sane default lint rules.
 DEFAULT_CONFIG =

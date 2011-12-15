@@ -18,7 +18,7 @@ var report = function (path, errors) {
         var fields = [
             path,
             "Line #" + error.lineNumber,
-            error.reason
+            error.message
         ];
         if (error.evidence) {
             fields.push(error.evidence)

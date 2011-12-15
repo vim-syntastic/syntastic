@@ -26,7 +26,7 @@ vows.describe('braces').addBatch({
             assert.lengthOf(errors, 2)
             error = errors[0]
             assert.equal(error.lineNumber, 0)
-            assert.equal(error.reason, 'Implicit braces are forbidden')
+            assert.equal(error.message, 'Implicit braces are forbidden')
             assert.equal(error.rule, 'no_implicit_braces')
 
 
