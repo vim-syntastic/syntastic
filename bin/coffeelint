@@ -97,3 +97,5 @@ if (optimist.argv.v) {
     var returnCode = lint(paths, configPath);
     process.exit(returnCode);
 }
+
+// vim: filetype=javascript
