@@ -198,7 +198,7 @@ class LexicalLinter
     lintBrace : (token) ->
         [type, numIndents, line] = token
         if @config.implicitBraces and token.generated
-            @createError('no_implicit_braces')
+            @createLexError('no_implicit_braces')
         else
             null
 
@@ -219,7 +219,7 @@ class LexicalLinter
         if not inInterp and numIndents != @config.indent
             context = "Expected #{@config.indent} spaces " +
                       "and got #{numIndents}"
-            @createError('indentation', {context})
+            @createLexError('indentation', {context})
         else
             null
 
@@ -244,11 +244,11 @@ class LexicalLinter
         # Now check for the error.
         if @config.camelCaseClasses and not regexes.camelCase.test(className)
             attrs = {context: "class name: #{className}"}
-            @createError('camel_case_classes', attrs)
+            @createLexError('camel_case_classes', attrs)
         else
             null
 
-    createError : (rule, attrs={}) ->
+    createLexError : (rule, attrs={}) ->
         attrs.lineNumber = @lineNumber
         createError(rule, attrs)
 
