@@ -17,9 +17,7 @@ vows.describe('trailing').addBatch({
             error = errors[0]
             assert.isObject(error)
             assert.equal(error.line, 0)
-            assert.equal(error.character, 14)
-            assert.equal(error.reason, "Contains trailing whitespace")
-            assert.equal(error.evidence, "x = 1234      ")
+            assert.equal(error.reason, "Line ends with trailing whitespace")
 
         'can be permitted' : (source) ->
             config = {trailing: true}

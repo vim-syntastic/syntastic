@@ -63,7 +63,7 @@ vows.describe('commandline').addBatch({
         'works' : (error, stdout, stderr) ->
             assert.isNotNull(error)
             assert.isEmpty(stdout)
-            assert.include(stderr.toLowerCase(), 'error')
+            assert.include(stderr.toLowerCase(), 'line')
 
     'with custom configuration' :
 

@@ -47,7 +47,7 @@ vows.describe('identifiers').addBatch({
             assert.lengthOf(errors, 4)
             error = errors[0]
             assert.equal(error.line, 0)
-            assert.equal(error.reason,  'Invalid class name')
+            assert.equal(error.reason,  'Class names should be camel cased')
             assert.equal(error.evidence,  'animal')
 
         'can be permitted' : (source) ->

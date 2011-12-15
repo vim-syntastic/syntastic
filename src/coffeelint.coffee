@@ -26,6 +26,23 @@ else
 coffeelint.VERSION = "0.0.4"
 
 
+# A mapping of CoffeeLint's rule names to associated metadata.
+RULES =
+    no_tabs :
+        reason : 'Line contains tab indentation'
+    no_trailing_whitespace :
+        reason : 'Line ends with trailing whitespace'
+    max_line_length :
+        reason : 'Line exceeds maximum allowed length'
+    camel_case_classes :
+        reason : 'Class names should be camel cased'
+    indentation :
+        reason : 'Line contains inconsistent indentation'
+    no_implicit_braces :
+        reason : 'Implicit braces are forbidden'
+    no_trailing_semicolon:
+        reason : 'Line contains a trailing semicolon'
+
 # A set of sane default lint rules.
 DEFAULT_CONFIG =
     tabs : false              # Allow tabs for indentation.
@@ -56,6 +73,12 @@ defaults = (source, defaults) ->
     extend({}, defaults, source)
 
 
+# Create an error object for the given rule with the given
+# attributes.
+createError = (rule, attrs) ->
+    return defaults(attrs, RULES[rule])
+
+
 #
 # A class that performs regex checks on each line of the source.
 #
@@ -74,42 +97,40 @@ class LineLinter
             @lineNumber = lineNumber
             @line = line
             error = @lintLine()
-            if error
-                error.line = @lineNumber
-                error.evidence = @line
-                errors.push(error) if error
+            errors.push(error) if error
         errors
 
+    # Return an error if the line contained failed a rule, null otherwise.
     lintLine : () ->
-        error = @checkTabs() or
-                @checkTrailingWhitespace() or
-                @checkLineLength() or
-                @checkTrailingSemicolon()
-        error
+        return @checkTabs() or
+               @checkTrailingWhitespace() or
+               @checkLineLength() or
+               @checkTrailingSemicolon()
 
     checkTabs : () ->
         return null if @config.tabs
-        indentation = @line.split(regexes.indentation)[0]
         # Only check lines that have compiled tokens. This helps
         # us ignore tabs in the middle of multi line strings, heredocs, etc.
         # since they are all reduced to a single token whose line number
         # is the start of the expression.
-        if @lineHasToken() and  ~indentation.indexOf('\t')
-            character: 0
-            reason: MESSAGES.NO_TABS
+        indent = @line.split(regexes.indentation)[0]
+        if @lineHasToken() and  ~indent.indexOf('\t')
+            @createLineError('no_tabs')
         else
             null
 
     checkTrailingWhitespace : () ->
         if not @config.trailing and regexes.trailingWhitespace.test(@line)
-            character: @line.length
-            reason: MESSAGES.TRAILING_WHITESPACE
+            @createLineError('no_trailing_whitespace')
+        else
+            null
 
     checkLineLength : () ->
-        lineLength = @config.lineLength
-        if lineLength and lineLength < @line.length
-            character: 0
-            reason: MESSAGES.LINE_LENGTH_EXCEEDED
+        max = @config.lineLength
+        if max and max < @line.length
+            @createLineError('max_line_length')
+        else
+            null
 
     checkTrailingSemicolon : () ->
         return null if @config.trailingSemiColons
@@ -119,9 +140,12 @@ class LineLinter
         # Don't throw errors when the contents of  multiline strings,
         # regexes and the like end in ";"
         if hasSemicolon and not hasNewLine and @lineHasToken()
-            reason: "Unnecessary semicolon"
+            @createLineError('no_trailing_semicolon')
         else
             return null
+
+    createLineError : (rule) ->
+        createError(rule, {line: @lineNumber, evidence: @line})
 
     # Return true if the given line actually has tokens.
     lineHasToken : () ->
@@ -130,7 +154,6 @@ class LineLinter
     # Return tokens for the given line number.
     getLineTokens : () ->
         @tokensByLine[@lineNumber] || []
-
 
 
 #
@@ -162,6 +185,7 @@ class LexicalLinter
 
         @tokensByLine[line] ?= []
         @tokensByLine[line].push(token)
+        @line = line
 
         # Now lint it.
         switch type
@@ -173,7 +197,7 @@ class LexicalLinter
     lintBrace : (token) ->
         [type, numIndents, line] = token
         if @config.implicitBraces and token.generated
-            return {reason: 'Implicit braces are forbidden', line: line}
+            @createError('no_implicit_braces')
         else
             null
 
@@ -192,8 +216,8 @@ class LexicalLinter
 
         # Now check the indentation.
         if not inInterp and numIndents != @config.indent
-            info = " Expected: #{@config.indent} Got: #{numIndents}"
-            error = {reason: MESSAGES.INDENTATION_ERROR + info, line: line}
+            context = "Expected: #{@config.indent} Got: #{numIndents}"
+            @createError('indentation', {context})
         else
             null
 
@@ -217,13 +241,13 @@ class LexicalLinter
 
         # Now check for the error.
         if @config.camelCaseClasses and not regexes.camelCase.test(className)
-            {
-                reason: MESSAGES.INVALID_CLASS_NAME
-                line: line
-                evidence: className
-            }
+            @createError('camel_case_classes', {evidence: className})
         else
             null
+
+    createError : (rule, attrs={}) ->
+        attrs.line = @line
+        createError(rule, attrs)
 
     peek : (n=1) ->
         @tokens[@i + n] || null
@@ -248,13 +272,3 @@ coffeelint.lint = (source, userConfig={}) ->
     errors.sort((a, b) -> a.line - b.line)
     errors
 
-#
-# Messages shown to users.
-#
-
-MESSAGES =
-    NO_TABS : 'Tabs are forbidden'
-    TRAILING_WHITESPACE : 'Contains trailing whitespace'
-    LINE_LENGTH_EXCEEDED : 'Maximum line length exceeded'
-    INDENTATION_ERROR: 'Indentation error.'
-    INVALID_CLASS_NAME: 'Invalid class name'

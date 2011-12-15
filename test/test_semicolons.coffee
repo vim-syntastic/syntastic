@@ -19,7 +19,7 @@ vows.describe('semicolons').addBatch({
             assert.lengthOf(errors, 1)
             error = errors[0]
             assert.equal(error.line, 0)
-            assert.equal(error.reason, "Unnecessary semicolon")
+            assert.equal(error.reason, "Line contains a trailing semicolon")
             assert.equal(error.evidence, "x = 1234;")
 
         'can be ignored' : (source) ->
