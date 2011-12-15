@@ -243,7 +243,8 @@ class LexicalLinter
 
         # Now check for the error.
         if @config.camelCaseClasses and not regexes.camelCase.test(className)
-            @createError('camel_case_classes', {evidence: className})
+            attrs = {context: "class name: #{className}"}
+            @createError('camel_case_classes', attrs)
         else
             null
 
