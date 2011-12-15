@@ -255,6 +255,7 @@ class LexicalLinter
     peek : (n=1) ->
         @tokens[@i + n] || null
 
+
 # Lint the given source text with given user configuration and return a list
 # of any errors encountered.
 coffeelint.lint = (source, userConfig={}) ->
