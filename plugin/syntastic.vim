@@ -377,13 +377,16 @@ function! s:EchoCurrentError()
     endif
 
     "If we have an error or warning at the current line, show it
-    let lnum = line(".")
-    for i in b:syntastic_loclist
-        if lnum == i['lnum']
-            let b:syntastic_echoing_error = 1
-            return s:WideMsg(i['text'])
-        endif
-    endfor
+    let errors = s:FilterLocList(b:syntastic_loclist, {'lnum': line("."), "type": 'e'})
+    let warnings = s:FilterLocList(b:syntastic_loclist, {'lnum': line("."), "type": 'w'})
+
+    let b:syntastic_echoing_error = len(errors) || len(warnings)
+    if len(errors)
+        return s:WideMsg(errors[0]['text'])
+    endif
+    if len(warnings)
+        return s:WideMsg(warnings[0]['text'])
+    endif
 
     "Otherwise, clear the status line
     if exists("b:syntastic_echoing_error")
