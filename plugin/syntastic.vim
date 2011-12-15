@@ -160,6 +160,9 @@ function! s:ToggleMode()
         let g:syntastic_mode_map['mode'] = "active"
     endif
 
+    let b:syntastic_loclist = []
+    call s:UpdateErrors(1)
+
     echo "Syntastic: " . g:syntastic_mode_map['mode'] . " mode enabled"
 endfunction
 
