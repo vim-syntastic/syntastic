@@ -247,7 +247,7 @@ function! s:BufHasErrorsOrWarningsToDisplay()
 endfunction
 
 function! s:ErrorsForType(type)
-    return s:FilterLocList(s:LocList(), {'type': a:type})
+    return s:FilterLocList({'type': a:type})
 endfunction
 
 function! s:Errors()
@@ -258,16 +258,18 @@ function! s:Warnings()
     return s:ErrorsForType("W")
 endfunction
 
-"Filter a:llist by a:filters
+"Filter a loc list (defaults to s:LocList()) by a:filters
 "e.g.
-"  s:FilterLocList(list, {'bufnr': 10, 'type': 'e'})
+"  s:FilterLocList({'bufnr': 10, 'type': 'e'})
 "
-"would return all errors for buffer 10.
+"would return all errors in s:LocList() for buffer 10.
 "
 "Note that all comparisons are done with ==?
-function! s:FilterLocList(llist, filters)
-    let rv = deepcopy(a:llist)
-    for error in a:llist
+function! s:FilterLocList(filters, ...)
+    let llist = a:0 ? a:1 : s:LocList()
+
+    let rv = deepcopy(llist)
+    for error in llist
         for key in keys(a:filters)
             let rhs = a:filters[key]
             if type(rhs) == 1 "string
@@ -296,7 +298,7 @@ let s:next_sign_id = s:first_sign_id
 function! s:SignErrors()
     if s:BufHasErrorsOrWarningsToDisplay()
 
-        let errors = s:FilterLocList(s:LocList(), {'bufnr': bufnr('') })
+        let errors = s:FilterLocList({'bufnr': bufnr('')})
         for i in errors
             let sign_type = 'SyntasticError'
             if i['type'] ==? 'W'
@@ -319,7 +321,7 @@ function! s:WarningMasksError(error, llist)
         return 0
     endif
 
-    return len(s:FilterLocList(a:llist, { 'type': "E", 'lnum': a:error['lnum'] })) > 0
+    return len(s:FilterLocList({ 'type': "E", 'lnum': a:error['lnum'] }, a:llist)) > 0
 endfunction
 
 "remove the signs with the given ids from this buffer
@@ -412,8 +414,8 @@ endfunction
 "echo out the first error we find for the current line in the cmd window
 function! s:EchoCurrentError()
     "If we have an error or warning at the current line, show it
-    let errors = s:FilterLocList(s:LocList(), {'lnum': line("."), "type": 'e'})
-    let warnings = s:FilterLocList(s:LocList(), {'lnum': line("."), "type": 'w'})
+    let errors = s:FilterLocList({'lnum': line("."), "type": 'e'})
+    let warnings = s:FilterLocList({'lnum': line("."), "type": 'w'})
 
     let b:syntastic_echoing_error = len(errors) || len(warnings)
     if len(errors)
