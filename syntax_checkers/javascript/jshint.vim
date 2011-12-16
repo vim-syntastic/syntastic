@@ -13,7 +13,9 @@ if !exists("g:syntastic_javascript_jshint_conf")
 endif
 
 function! SyntaxCheckers_javascript_GetLocList()
-    let makeprg = 'jshint ' . shellescape(expand("%")) . ' --config ' . g:syntastic_javascript_jshint_conf
+    " node-jshint uses .jshintrc as config unless --config arg is present
+    let args = g:syntastic_javascript_jshint_conf? ' --config ' . g:syntastic_javascript_jshint_conf : ''
+    let makeprg = 'jshint ' . shellescape(expand("%")) . args
     let errorformat = '%ELine %l:%c,%Z\\s%#Reason: %m,%C%.%#,%f: line %l\, col %c\, %m,%-G%.%#'
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat, 'defaults': {'bufnr': bufnr('')} })
 endfunction
