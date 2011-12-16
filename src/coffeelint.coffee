@@ -35,8 +35,8 @@ IGNORE = 'ignore'
 #
 # CoffeeLint's default rule configuration.
 #
-
 RULES =
+
     no_tabs :
         level : ERROR
         message : 'Line contains tab indentation'
@@ -66,7 +66,6 @@ RULES =
     no_trailing_semicolons:
         level : ERROR
         message : 'Line contains a trailing semicolon'
-
 
 
 # Some repeatedly used regular expressions.
