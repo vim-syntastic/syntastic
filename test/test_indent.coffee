@@ -26,7 +26,7 @@ vows.describe('indent').addBatch({
             assert.include(error.evidence, 'four spaces')
             assert.equal(error.rule, 'indentation')
             assert.equal(error.lineNumber, 4)
-            assert.equal(error.context, "Expected 2 spaces and got 4")
+            assert.equal(error.context, "Expected 2 got 4")
 
         'can be overridden' : (source) ->
             config =

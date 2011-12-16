@@ -234,8 +234,8 @@ class LexicalLinter
         # Now check the indentation.
         expected = @config['indentation'].value
         if not inInterp and numIndents != expected
-            context = "Expected #{expected} spaces " +
-                      "and got #{numIndents}"
+            context = "Expected #{expected} " +
+                      "got #{numIndents}"
             @createLexError('indentation', {context})
         else
             null
