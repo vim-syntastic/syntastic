@@ -16,14 +16,14 @@ var coffeelint = require(path.join(thisdir, '../lib', 'coffeelint'));
 var report = function (path, errors) {
     var messages = errors.map(function (error) {
         var fields = [
-            path,
-            "Line #" + error.lineNumber,
+            path + "#" + error.lineNumber,
+            error.level,
             error.message
         ];
         if (error.context) {
             fields.push(error.context)
         }
-        return fields.join(" | ");
+        return fields.join(" : ");
     });
 
     messages.forEach(function (msg) {
