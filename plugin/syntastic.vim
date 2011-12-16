@@ -97,7 +97,7 @@ augroup END
 
 "refresh and redraw all the error info for this buf when saving or reading
 function! s:UpdateErrors(auto_invoked)
-    if &buftype == 'quickfix'
+    if !empty(&buftype)
         return
     endif
 
