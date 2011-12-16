@@ -342,6 +342,8 @@ The latest dev versions are on github
 
 Next
     - auto close location list when leaving buffer. (millermedeiros)
+    - updates/fixes to existing checkers:
+        - javascript (millermedeiros)
 
 2.1.0
     - when the cursor is on a line containing an error, echo the
