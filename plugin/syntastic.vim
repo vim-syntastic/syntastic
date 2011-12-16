@@ -89,7 +89,8 @@ augroup syntastic
         autocmd cursormoved * call s:EchoCurrentError()
     endif
 
-    autocmd bufreadpost,bufwritepost * call s:UpdateErrors(1)
+    autocmd BufReadPost,BufWritePost,BufEnter * call s:UpdateErrors(1)
+    autocmd BufUnload,BufLeave * lclose
 augroup END
 
 
