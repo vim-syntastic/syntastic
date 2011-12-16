@@ -23,7 +23,7 @@ else
 
 
 # The current version of Coffeelint.
-coffeelint.VERSION = "0.0.4"
+coffeelint.VERSION = "0.0.5"
 
 
 
