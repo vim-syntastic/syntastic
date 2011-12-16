@@ -26,35 +26,50 @@ else
 coffeelint.VERSION = "0.0.4"
 
 
-# A mapping of CoffeeLint's rule names to associated metadata.
+
+# CoffeeLint error levels.
+ERROR = 'error'
+IGNORE = 'ignore'
+
+
+#
+# CoffeeLint's default rule configuration.
+#
+
 RULES =
     no_tabs :
+        level : ERROR
         message : 'Line contains tab indentation'
+
     no_trailing_whitespace :
+        level : ERROR
         message : 'Line ends with trailing whitespace'
+
     max_line_length :
+        value: 80
+        level : ERROR
         message : 'Line exceeds maximum allowed length'
+
     camel_case_classes :
+        level : ERROR
         message : 'Class names should be camel cased'
+
     indentation :
+        value : 2
+        level : ERROR
         message : 'Line contains inconsistent indentation'
+
     no_implicit_braces :
+        level : IGNORE
         message : 'Implicit braces are forbidden'
+
     no_trailing_semicolons:
+        level : ERROR
         message : 'Line contains a trailing semicolon'
 
-# A set of sane default lint rules.
-DEFAULT_CONFIG =
-    tabs : false              # Allow tabs for indentation.
-    trailing : false          # Allow trailing whitespace.
-    lineLength : 80           # The maximum length of each line.
-    indent: 2                 # Indentation is two characters.
-    camelCaseClasses: true    # Enforce camel case class names.
-    trailingSemicolons: false # Allow trailing semicolons.
-    implicitBraces: false     # Forbid implicit braces.
 
 
-# Regexes that are used repeatedly.
+# Some repeatedly used regular expressions.
 regexes =
     trailingWhitespace : /\s+$/
     indentation: /\S/
@@ -109,7 +124,6 @@ class LineLinter
                @checkTrailingSemicolon()
 
     checkTabs : () ->
-        return null if @config.tabs
         # Only check lines that have compiled tokens. This helps
         # us ignore tabs in the middle of multi line strings, heredocs, etc.
         # since they are all reduced to a single token whose line number
@@ -121,20 +135,20 @@ class LineLinter
             null
 
     checkTrailingWhitespace : () ->
-        if not @config.trailing and regexes.trailingWhitespace.test(@line)
+        if regexes.trailingWhitespace.test(@line)
             @createLineError('no_trailing_whitespace')
         else
             null
 
     checkLineLength : () ->
-        max = @config.lineLength
+        rule = 'max_line_length'
+        max = @config[rule]?.value
         if max and max < @line.length
-            @createLineError('max_line_length')
+            @createLineError(rule)
         else
             null
 
     checkTrailingSemicolon : () ->
-        return null if @config.trailingSemiColons
         hasSemicolon = regexes.trailingSemicolon.test(@line)
         [first..., last] = @getLineTokens()
         hasNewLine = last and last.newLine?
@@ -146,7 +160,15 @@ class LineLinter
             return null
 
     createLineError : (rule) ->
-        createError(rule, {lineNumber: @lineNumber, evidence: @line})
+        level = @config[rule]?.level
+        if level == ERROR
+            attrs =
+                lineNumber: @lineNumber
+                evidence: @line
+                leve: level
+            createError(rule, attrs)
+        else
+            null
 
     # Return true if the given line actually has tokens.
     lineHasToken : () ->
@@ -155,7 +177,6 @@ class LineLinter
     # Return tokens for the given line number.
     getLineTokens : () ->
         @tokensByLine[@lineNumber] || []
-
 
 #
 # A class that performs checks on the output of CoffeeScript's
@@ -196,17 +217,13 @@ class LexicalLinter
             else null
 
     lintBrace : (token) ->
-        [type, numIndents, line] = token
-        if @config.implicitBraces and token.generated
-            @createLexError('no_implicit_braces')
-        else
-            null
+        if token.generated then @createLexError('no_implicit_braces') else null
 
     # Return an error if the given indentation token is not correct.
     lintIndentation : (token) ->
         [type, numIndents, lineNumber] = token
 
-        return null if not @config.indent or token.generated?
+        return null if token.generated?
 
         # HACK: CoffeeScript's lexer insert indentation in string
         # interpolations that start with spaces e.g. "#{ 123 }"
@@ -216,8 +233,9 @@ class LexicalLinter
         inInterp = previousToken and previousToken[0] == '+'
 
         # Now check the indentation.
-        if not inInterp and numIndents != @config.indent
-            context = "Expected #{@config.indent} spaces " +
+        expected = @config['indentation'].value
+        if not inInterp and numIndents != expected
+            context = "Expected #{expected} spaces " +
                       "and got #{numIndents}"
             @createLexError('indentation', {context})
         else
@@ -242,25 +260,37 @@ class LexicalLinter
                 className = @peek(offset)[1]
 
         # Now check for the error.
-        if @config.camelCaseClasses and not regexes.camelCase.test(className)
+        if not regexes.camelCase.test(className)
             attrs = {context: "class name: #{className}"}
             @createLexError('camel_case_classes', attrs)
         else
             null
 
     createLexError : (rule, attrs={}) ->
-        attrs.lineNumber = @lineNumber
-        createError(rule, attrs)
+        level = @config[rule]?.level
+        if level == ERROR
+            attrs.lineNumber = @lineNumber
+            attrs.level = level
+            createError(rule, attrs)
+        else
+            null
 
     peek : (n=1) ->
         @tokens[@i + n] || null
 
 
+# Merge default and user configuration.
+mergeDefaultConfig = (userConfig) ->
+    config = {}
+    for rule, ruleConfig of RULES
+        config[rule] = defaults(userConfig[rule], ruleConfig)
+    return config
+
+
 # Lint the given source text with given user configuration and return a list
 # of any errors encountered.
 coffeelint.lint = (source, userConfig={}) ->
-    config = defaults(userConfig, DEFAULT_CONFIG)
-    config.indent = 1 if config.tabs
+    config = mergeDefaultConfig(userConfig)
 
     # Do lexical linting.
     lexicalLinter = new LexicalLinter(source, config)

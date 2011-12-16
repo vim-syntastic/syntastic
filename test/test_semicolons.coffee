@@ -24,7 +24,9 @@ vows.describe('semicolons').addBatch({
             assert.equal(error.evidence, "x = 1234;")
 
         'can be ignored' : (source) ->
-            errors = coffeelint.lint(source, {trailingSemiColons:true})
+            config =
+                no_trailing_semicolons : {level: 'ignore'}
+            errors = coffeelint.lint(source, config)
             assert.isEmpty(errors)
 
     'Semicolons in multiline expressions' :

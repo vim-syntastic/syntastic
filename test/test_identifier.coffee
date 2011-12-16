@@ -52,7 +52,9 @@ vows.describe('identifiers').addBatch({
             assert.equal(error.rule,  'camel_case_classes')
 
         'can be permitted' : (source) ->
-            errors = coffeelint.lint(source, {camelCaseClasses: false})
+            config =
+                camel_case_classes : {level : 'ignore'}
+            errors = coffeelint.lint(source, config)
             assert.isEmpty(errors)
 
 }).export(module)

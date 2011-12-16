@@ -23,12 +23,20 @@ vows.describe('linelength').addBatch({
             assert.equal(error.rule, 'max_line_length')
 
         'is configurable' : (source) ->
-            errors = coffeelint.lint(source, {lineLength: 99})
+            config =
+                max_line_length :
+                    value: 99
+                    level: 'error'
+            errors = coffeelint.lint(source, config)
             assert.equal(errors.length, 2)
 
         'is optional' : (source) ->
             for length in [null, 0, false]
-                errors = coffeelint.lint(source, {lineLength: length})
+                config =
+                    max_line_length :
+                        value: length
+                        level: 'ignore'
+                errors = coffeelint.lint(source, config)
                 assert.isEmpty(errors)
 
 }).export(module)

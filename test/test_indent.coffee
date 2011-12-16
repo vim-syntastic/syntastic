@@ -29,14 +29,22 @@ vows.describe('indent').addBatch({
             assert.equal(error.context, "Expected 2 spaces and got 4")
 
         'can be overridden' : (source) ->
-            errors = coffeelint.lint(source, {indent:4})
+            config =
+                indentation:
+                    level: 'error'
+                    value: 4
+            errors = coffeelint.lint(source, config)
             assert.equal(errors.length, 1)
             error = errors[0]
             assert.include(error.evidence, 'two spaces')
             assert.equal(error.lineNumber, 1)
 
         'is optional' : (source) ->
-            errors = coffeelint.lint(source, {indent:false})
+            config =
+                indentation:
+                    level: 'ignore'
+                    value: 4
+            errors = coffeelint.lint(source, config)
             assert.equal(errors.length, 0)
 
     'Nested indentation errors' :
@@ -63,7 +71,10 @@ vows.describe('indent').addBatch({
             """
 
         'is ignored when not using two spaces' : (source) ->
-            errors = coffeelint.lint(source, {indent: 4})
+            config =
+                indentation:
+                    value: 4
+            errors = coffeelint.lint(source, config)
             assert.isEmpty(errors)
 
     'Indentation inside interpolation' :

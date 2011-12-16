@@ -1,3 +1,6 @@
 {
-    "indent" : 4
+    "indentation" : {
+        "level" : "error",
+        "value" : 4
+    }
 }

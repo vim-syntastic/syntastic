@@ -10,9 +10,8 @@ vows.describe('trailing').addBatch({
         topic : () ->
             "x = 1234      \ny = 1"
 
-        'can be forbidden' : (source) ->
-            config = {trailing: false}
-            errors = coffeelint.lint(source, config)
+        'is forbidden by default' : (source) ->
+            errors = coffeelint.lint(source)
             assert.equal(errors.length, 1)
             error = errors[0]
             assert.isObject(error)
@@ -21,14 +20,9 @@ vows.describe('trailing').addBatch({
             assert.equal(error.rule, 'no_trailing_whitespace')
 
         'can be permitted' : (source) ->
-            config = {trailing: true}
+            config = {no_trailing_whitespace: {level: 'IGNORE'}}
             errors = coffeelint.lint(source, config)
             assert.equal(errors.length, 0)
-
-        'is forbidden by default' : (source) ->
-            config = {}
-            errors = coffeelint.lint(source, config)
-            assert.equal(errors.length, 1)
 
     'Trailing tabs' :
 

@@ -21,7 +21,7 @@ vows.describe('tabs').addBatch({
             """
 
         'can be forbidden' : (source) ->
-            config = {tabs: false}
+            config = {}
             errors = coffeelint.lint(source, config)
             assert.equal(errors.length, 4)
             error = errors[1]
@@ -31,12 +31,15 @@ vows.describe('tabs').addBatch({
             assert.equal(error.rule, 'no_tabs')
 
         'can be permitted' : (source) ->
-            config = {tabs: true}
+            config =
+                no_tabs : {level: 'ignore'}
+                indentation : {level: 'error', value: 1}
             errors = coffeelint.lint(source, config)
             assert.equal(errors.length, 0)
 
         'are forbidden by default' : (source) ->
-            config = {indent: false}
+            config =
+                indentation : {level: 'error', value: 1}
             errors = coffeelint.lint(source, config)
             assert.isArray(errors)
             assert.equal(errors.length, 2)

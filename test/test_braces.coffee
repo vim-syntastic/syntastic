@@ -21,7 +21,8 @@ vows.describe('braces').addBatch({
             assert.isEmpty(errors)
 
         'can be forbidden' : (source) ->
-            errors = coffeelint.lint(source, {implicitBraces:true})
+            config = {no_implicit_braces : {level:'error'}}
+            errors = coffeelint.lint(source, config)
             assert.isArray(errors)
             assert.lengthOf(errors, 2)
             error = errors[0]
