@@ -91,7 +91,7 @@ augroup syntastic
 
     autocmd BufReadPost,BufWritePost * call s:UpdateErrors(1)
     autocmd BufWinEnter * if empty(&bt) | call s:AutoToggleLocList() | endif
-    autocmd BufWinLeave * if empty(&bt) | lclose | endif
+    autocmd BufWinLeave * if empty(&bt) | call s:Lclose() | endif
 augroup END
 
 
@@ -123,19 +123,43 @@ function s:AutoToggleLocList()
             silent! ll
         endif
     elseif g:syntastic_auto_loc_list == 2
-        lclose
+        call s:Lclose()
     endif
 
     if g:syntastic_auto_loc_list == 1
         if s:BufHasErrorsOrWarningsToDisplay()
             call s:ShowLocList()
         else
-            "TODO: this will close the loc list window if one was opened by
-            "something other than syntastic
-            lclose
+            call s:Lclose()
         endif
     endif
 endfunction
+
+"close the current loc list if it contains only syntastic data
+"
+"Note that we cant just compare the 2 lists since calling setloclist() adds
+"some extra default data to the loclist
+function! s:Lclose()
+    if !exists("b:syntastic_loclist")
+        return
+    endif
+
+    let llist = getloclist(0)
+
+    if len(llist) != len(b:syntastic_loclist)
+        return
+    endif
+
+    "make sure the line number and message is the same for all elements"
+    for i in range(0,len(llist)-1)
+        if llist[i]['lnum'] != b:syntastic_loclist[i]['lnum'] || llist[i]['text'] != b:syntastic_loclist[i]['text']
+            return
+        endif
+    endfor
+
+    lclose
+endfunction
+
 
 "detect and cache all syntax errors in this buffer
 "
