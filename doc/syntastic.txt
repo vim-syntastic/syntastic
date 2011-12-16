@@ -340,6 +340,9 @@ The latest dev versions are on github
 ==============================================================================
 7. Changelog                                             *syntastic-changelog*
 
+Next
+    - auto close location list when closing buffer or moving to a new buffer.
+
 2.1.0
     - when the cursor is on a line containing an error, echo the
       error msg (kevinw)
