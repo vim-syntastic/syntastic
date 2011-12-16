@@ -91,7 +91,7 @@ augroup syntastic
 
     autocmd BufReadPost,BufWritePost * call s:UpdateErrors(1)
     autocmd BufWinEnter * if empty(&bt) | call s:AutoToggleLocList() | endif
-    autocmd BufUnload,BufWinLeave * if empty(&bt) | lclose | endif
+    autocmd BufWinLeave * if empty(&bt) | lclose | endif
 augroup END
 
 
