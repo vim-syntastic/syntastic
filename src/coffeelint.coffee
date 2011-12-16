@@ -162,7 +162,7 @@ class LineLinter
         level = @config[rule]?.level
         if level == ERROR
             attrs =
-                lineNumber: @lineNumber
+                lineNumber: @lineNumber + 1 # Lines are indexed by zero.
                 evidence: @line
                 leve: level
             createError(rule, attrs)
@@ -268,7 +268,7 @@ class LexicalLinter
     createLexError : (rule, attrs={}) ->
         level = @config[rule]?.level
         if level == ERROR
-            attrs.lineNumber = @lineNumber
+            attrs.lineNumber = @lineNumber + 1
             attrs.level = level
             createError(rule, attrs)
         else

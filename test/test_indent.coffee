@@ -25,7 +25,7 @@ vows.describe('indent').addBatch({
             assert.equal(error.message, msg)
             assert.include(error.evidence, 'four spaces')
             assert.equal(error.rule, 'indentation')
-            assert.equal(error.lineNumber, 4)
+            assert.equal(error.lineNumber, 5)
             assert.equal(error.context, "Expected 2 got 4")
 
         'can be overridden' : (source) ->
@@ -37,7 +37,7 @@ vows.describe('indent').addBatch({
             assert.equal(errors.length, 1)
             error = errors[0]
             assert.include(error.evidence, 'two spaces')
-            assert.equal(error.lineNumber, 1)
+            assert.equal(error.lineNumber, 2)
 
         'is optional' : (source) ->
             config =
@@ -60,7 +60,7 @@ vows.describe('indent').addBatch({
             errors = coffeelint.lint(source)
             assert.lengthOf(errors, 1)
             error = errors[0]
-            assert.equal(error.lineNumber, 2)
+            assert.equal(error.lineNumber, 3)
 
     'Compiler generated indentation' :
 

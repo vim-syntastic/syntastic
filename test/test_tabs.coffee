@@ -25,7 +25,7 @@ vows.describe('tabs').addBatch({
             errors = coffeelint.lint(source, config)
             assert.equal(errors.length, 4)
             error = errors[1]
-            assert.equal(error.lineNumber, 1)
+            assert.equal(error.lineNumber, 2)
             assert.equal("Line contains tab indentation", error.message)
             assert.equal("\ty = () ->", error.evidence)
             assert.equal(error.rule, 'no_tabs')

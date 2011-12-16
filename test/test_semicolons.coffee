@@ -18,7 +18,7 @@ vows.describe('semicolons').addBatch({
             errors = coffeelint.lint(source)
             assert.lengthOf(errors, 1)
             error = errors[0]
-            assert.equal(error.lineNumber, 0)
+            assert.equal(error.lineNumber, 1)
             assert.equal(error.message, "Line contains a trailing semicolon")
             assert.equal(error.rule, 'no_trailing_semicolons')
             assert.equal(error.evidence, "x = 1234;")

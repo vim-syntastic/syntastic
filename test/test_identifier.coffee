@@ -46,7 +46,7 @@ vows.describe('identifiers').addBatch({
             errors = coffeelint.lint(source)
             assert.lengthOf(errors, 4)
             error = errors[0]
-            assert.equal(error.lineNumber, 0)
+            assert.equal(error.lineNumber, 1)
             assert.equal(error.message,  'Class names should be camel cased')
             assert.equal(error.context,  'class name: animal')
             assert.equal(error.rule,  'camel_case_classes')
