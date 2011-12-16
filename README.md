@@ -47,19 +47,8 @@ Get help.
 Configuration
 -------------
 
-Every check in Coffeescript is configurable via a JSON file. Here is some
-example configuration:
-
-    {
-        indent: 2               // Ensure all indents are two spaces.
-        trailing: false,        // Forbid trailing whitespace.
-        tabs: false,            // Forbid tabs in indentation.
-        lineLength: 80          // Forbid lines longer than 80 characters.
-        camelCaseClasses: true  // Force camel case class names.
-        implicitBraces: false   // Forbid implicit braces in object literals.
-    }
-
-Be sure to strip comments when deploying.
+Every check in Coffeescript is configurable via a JSON file. You can read an
+example [here](http://github.com/clutchski/coffeelint/blob/master/examples/coffeelint.json).
 
 License
 -------
