@@ -89,7 +89,9 @@ augroup syntastic
         autocmd cursormoved * call s:EchoCurrentError()
     endif
 
-    autocmd bufreadpost,bufwritepost * call s:UpdateErrors(1)
+    autocmd BufReadPost,BufWritePost * call s:UpdateErrors(1)
+    autocmd BufWinEnter * if empty(&bt) | call s:AutoToggleLocList() | endif
+    autocmd BufWinLeave * if empty(&bt) | lclose | endif
 augroup END
 
 
@@ -111,6 +113,10 @@ function! s:UpdateErrors(auto_invoked)
         call s:RefreshSigns()
     endif
 
+    call s:AutoToggleLocList()
+endfunction
+
+function s:AutoToggleLocList()
     if s:BufHasErrorsOrWarningsToDisplay()
         call setloclist(0, b:syntastic_loclist)
         if g:syntastic_auto_jump
