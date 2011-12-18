@@ -6,7 +6,7 @@ coffeelint = require path.join('..', 'lib', 'coffeelint')
 
 vows.describe('plusplus').addBatch({
 
-    'Unary addition operators' :
+    'The increment and decrement operators' :
 
         topic : '''
             y++

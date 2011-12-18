@@ -68,7 +68,7 @@ RULES =
 
     plusplus:
         level : IGNORE
-        message : 'Unary addition operators are forbidden'
+        message : 'The increment and decrement operators are forbidden'
 
 
 # Some repeatedly used regular expressions.
