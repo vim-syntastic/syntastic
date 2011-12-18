@@ -65,7 +65,8 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 " default include directories
-let s:default_includes = [ '.', '..' ]
+let s:default_includes = [ '.', '..', 'include', 'includes',
+            \ '../include', '../includes' ]
 
 " uniquify the input list
 function! s:Unique(list)
