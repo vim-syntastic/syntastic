@@ -61,15 +61,24 @@ set cpo&vim
 let s:default_includes = [ '.', '..', 'include', 'includes',
             \ '../include', '../includes' ]
 
+function! s:Unique(list)
+    let l = []
+    for elem in a:list
+        if index(l, elem) == -1
+            let l = add(l, elem)
+        endif
+    endfor
+    return l
+endfunction
+
 function! s:GetIncludeDirs()
     let include_dirs = s:default_includes
 
     if exists('g:syntastic_c_include_dirs')
-        " TODO: check for duplicates
         call extend(include_dirs, g:syntastic_c_include_dirs)
     endif
 
-    return join(map(copy(include_dirs), '"-I" . v:val'), ' ')
+    return join(map(s:Unique(include_dirs), '"-I" . v:val'), ' ')
 endfunction
 
 function! SyntaxCheckers_c_GetLocList()
