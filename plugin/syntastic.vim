@@ -214,7 +214,7 @@ function! s:ErrorsForType(type)
 endfunction
 
 function! s:Errors()
-    return extend(s:ErrorsForType("E"))
+    return s:ErrorsForType("E")
 endfunction
 
 function! s:Warnings()
