@@ -26,7 +26,6 @@ else
 coffeelint.VERSION = "0.0.5"
 
 
-
 # CoffeeLint error levels.
 ERROR = 'error'
 IGNORE = 'ignore'
@@ -66,6 +65,10 @@ RULES =
     no_trailing_semicolons:
         level : ERROR
         message : 'Line contains a trailing semicolon'
+
+    plusplus:
+        level : IGNORE
+        message : 'Unary addition operators are forbidden'
 
 
 # Some repeatedly used regular expressions.
@@ -213,10 +216,16 @@ class LexicalLinter
             when "INDENT" then @lintIndentation(token)
             when "CLASS"  then @lintClass(token)
             when "{"      then @lintBrace(token)
+            when "++"     then @lintUnaryAddition(token)
+            when "--"     then @lintUnaryAddition(token)
             else null
 
     lintBrace : (token) ->
         if token.generated then @createLexError('no_implicit_braces') else null
+
+    lintUnaryAddition : (token) ->
+        attrs = {context : "found '#{token[0]}'"}
+        @createLexError('plusplus', attrs)
 
     # Return an error if the given indentation token is not correct.
     lintIndentation : (token) ->
