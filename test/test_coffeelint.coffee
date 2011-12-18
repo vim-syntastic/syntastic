@@ -4,7 +4,7 @@ assert = require 'assert'
 coffeelint = require path.join('..', 'lib', 'coffeelint')
 
 
-vows.describe('coffelint').addBatch({
+vows.describe('coffeelint').addBatch({
 
     "CoffeeLint's version number" :
 
