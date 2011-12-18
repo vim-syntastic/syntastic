@@ -31,5 +31,10 @@
 
   "no_plusplus" : {
     "level" : "ignore"
+  },
+
+  "no_throwing_strings" : {
+    "level" : "error"
   }
+
 }
