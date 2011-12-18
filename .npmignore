@@ -1,4 +1,5 @@
 src/
 test/
 .git*
-Cakefile
+Rakefile
+utils/
