@@ -161,13 +161,10 @@ function! s:CacheErrors()
 
         "sub - for _ in filetypes otherwise we cant name syntax checker
         "functions legally for filetypes like "gentoo-metadata"
-        let fts = substitute(&ft, '-', '_', 'g')
-
-        for ft in split(fts, '\.')
-            if s:Checkable(ft)
-                call extend(s:LocList(), SyntaxCheckers_{ft}_GetLocList())
-            endif
-        endfor
+        let ft = substitute(&ft, '-', '_', 'g')
+        if s:Checkable(ft)
+            call extend(s:LocList(), SyntaxCheckers_{ft}_GetLocList())
+        endif
     endif
 endfunction
 
@@ -185,27 +182,13 @@ function! s:ToggleMode()
     echo "Syntastic: " . g:syntastic_mode_map['mode'] . " mode enabled"
 endfunction
 
-"check the current filetypes against g:syntastic_mode_map to determine whether
+"check the current filetype against g:syntastic_mode_map to determine whether
 "active mode syntax checking should be done
 function! s:ModeMapAllowsAutoChecking()
     if g:syntastic_mode_map['mode'] == 'passive'
-
-        "check at least one filetype is active
-        for ft in split(&ft, '\.')
-            if index(g:syntastic_mode_map['active_filetypes'], ft) != -1
-                return 1
-            endif
-            return 0
-        endfor
+        return index(g:syntastic_mode_map['active_filetypes'], &ft) != -1
     else
-
-        "check no filetypes are passive
-        for ft in split(&ft, '\.')
-            if index(g:syntastic_mode_map['passive_filetypes'], ft) != -1
-                return 0
-            endif
-            return 1
-        endfor
+        return index(g:syntastic_mode_map['passive_filetypes'], &ft) == -1
     endif
 endfunction
 
