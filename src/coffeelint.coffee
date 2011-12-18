@@ -70,6 +70,10 @@ RULES =
         level : IGNORE
         message : 'The increment and decrement operators are forbidden'
 
+    no_throwing_strings:
+        level : ERROR
+        message : 'Throwing strings is forbidden'
+
 
 # Some repeatedly used regular expressions.
 regexes =
@@ -218,10 +222,18 @@ class LexicalLinter
             when "{"      then @lintBrace(token)
             when "++"     then @lintUnaryAddition(token)
             when "--"     then @lintUnaryAddition(token)
+            when "THROW"  then @lintThrow(token)
             else null
 
     lintBrace : (token) ->
         if token.generated then @createLexError('no_implicit_braces') else null
+
+    lintThrow : (token) ->
+        [n1, n2] = [@peek(), @peek(2)]
+        # Catch literals and string interpolations, which are wrapped in
+        # parens.
+        nextIsString = n1[0] == 'STRING' or (n1[0] == '(' and n2[0] == 'STRING')
+        @createLexError('no_throwing_strings') if nextIsString
 
     lintUnaryAddition : (token) ->
         attrs = {context : "found '#{token[0]}'"}
