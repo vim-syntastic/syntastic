@@ -344,6 +344,8 @@ Next
     - auto close location list when leaving buffer. (millermedeiros)
     - updates/fixes to existing checkers:
         - javascript (millermedeiros)
+    - Support for new filetypes:
+        - JSON (millermedeiros, tocer)
 
 2.1.0
     - when the cursor is on a line containing an error, echo the
@@ -440,6 +442,7 @@ Next
 Thanks to the following people for testing, bug reports, patches etc. They own,
 hard.
 
+    tocer
     James Rowe (JNRowe)
     Zhai Cai
     Matt Butcher (technosophos)
