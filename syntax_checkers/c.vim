@@ -58,8 +58,8 @@ endif
 let s:save_cpo = &cpo
 set cpo&vim
 
-let s:default_includes = [ '.', '..', 'include', 'includes',
-            \ '../include', '../includes' ]
+" default include directories
+let s:default_includes = [ '.', '..' ]
 
 function! s:Unique(list)
     let l = []
