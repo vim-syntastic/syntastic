@@ -163,7 +163,10 @@ function! s:CacheErrors()
         "functions legally for filetypes like "gentoo-metadata"
         let ft = substitute(&ft, '-', '_', 'g')
         if s:Checkable(ft)
-            call extend(s:LocList(), SyntaxCheckers_{ft}_GetLocList())
+            let errors = SyntaxCheckers_{ft}_GetLocList()
+            "make errors have type "E" by default
+            call SyntasticAddToErrors(errors, {'type': 'E'})
+            call extend(s:LocList(), errors)
         endif
     endif
 endfunction
@@ -211,7 +214,7 @@ function! s:ErrorsForType(type)
 endfunction
 
 function! s:Errors()
-    return extend(s:ErrorsForType("E"), s:ErrorsForType(''))
+    return extend(s:ErrorsForType("E"))
 endfunction
 
 function! s:Warnings()
