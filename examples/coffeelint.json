@@ -29,7 +29,7 @@
     "level" : "error"
   },
 
-  "plusplus" : {
+  "no_plusplus" : {
     "level" : "ignore"
   }
 }

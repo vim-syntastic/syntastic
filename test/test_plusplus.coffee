@@ -21,11 +21,11 @@ vows.describe('plusplus').addBatch({
             assert.isEmpty(errors)
 
         'can be forbidden' : (source) ->
-            errors = coffeelint.lint(source, {plusplus: {'level':'error'}})
+            errors = coffeelint.lint(source, {no_plusplus: {'level':'error'}})
             assert.isArray(errors)
             assert.lengthOf(errors, 4)
             error = errors[0]
             assert.equal(error.lineNumber, 1)
-            assert.equal(error.rule, 'plusplus')
+            assert.equal(error.rule, 'no_plusplus')
 
 }).export(module)

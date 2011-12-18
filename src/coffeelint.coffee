@@ -66,7 +66,7 @@ RULES =
         level : ERROR
         message : 'Line contains a trailing semicolon'
 
-    plusplus:
+    no_plusplus:
         level : IGNORE
         message : 'The increment and decrement operators are forbidden'
 
@@ -225,7 +225,7 @@ class LexicalLinter
 
     lintUnaryAddition : (token) ->
         attrs = {context : "found '#{token[0]}'"}
-        @createLexError('plusplus', attrs)
+        @createLexError('no_plusplus', attrs)
 
     # Return an error if the given indentation token is not correct.
     lintIndentation : (token) ->
