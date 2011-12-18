@@ -61,6 +61,7 @@ set cpo&vim
 " default include directories
 let s:default_includes = [ '.', '..' ]
 
+" uniquify the input list
 function! s:Unique(list)
     let l = []
     for elem in a:list
@@ -71,6 +72,8 @@ function! s:Unique(list)
     return l
 endfunction
 
+" get the gcc include directory argument depending on the default
+" includes and the optional user-defined 'g:syntastic_c_include_dirs'
 function! s:GetIncludeDirs()
     let include_dirs = s:default_includes
 
@@ -89,6 +92,7 @@ function! SyntaxCheckers_c_GetLocList()
                \ 'each function it appears%.%#,%-GIn file included%.%#,'.
                \ '%-G %#from %f:%l\,,%f:%l:%c: %m,%f:%l: %trror: %m,%f:%l: %m'
 
+    " determine whether to parse header files as well
     if expand('%') =~? '.h$'
         if exists('g:syntastic_c_check_header')
             let makeprg = 'gcc -c '.shellescape(expand('%')).
@@ -98,6 +102,7 @@ function! SyntaxCheckers_c_GetLocList()
         endif
     endif
 
+    " add optional user-defined compiler options
     if exists('g:syntastic_c_compiler_options')
         let makeprg .= g:syntastic_c_compiler_options
     endif
