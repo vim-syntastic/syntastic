@@ -27,5 +27,9 @@
 
   "no_trailing_semicolons" : {
     "level" : "error"
+  },
+
+  "plusplus" : {
+    "level" : "ignore"
   }
 }
