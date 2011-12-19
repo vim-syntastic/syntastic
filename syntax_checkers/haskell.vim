@@ -20,13 +20,14 @@ if !executable("ghc-mod")
 endif
 
 function! SyntaxCheckers_haskell_GetLocList()
-    let makeprg = 
-          \ "{ ". 
+    let makeprg =
+          \ "{ ".
           \ "ghc-mod check ". shellescape(expand('%')) . "; " .
           \ "ghc-mod lint " . shellescape(expand('%')) . ";" .
           \ " }"
-    let errorformat = '%-G\\s%#,%f:%l:%c:%m,%E%f:%l:%c:,%Z%m,'
-
+    let errorformat = '%-G\\s%#,%f:%l:%c:%trror: %m,%f:%l:%c:%tarning: %m,'.
+                \ '%f:%l:%c: %trror: %m,%f:%l:%c: %tarning: %m,%f:%l:%c:%m,'.
+                \ '%E%f:%l:%c:,%Z%m,'
 
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 endfunction
