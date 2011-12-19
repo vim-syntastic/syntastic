@@ -389,9 +389,9 @@ function! s:EchoCurrentError()
     endif
 
     "Otherwise, clear the status line
-    if exists("b:syntastic_echoing_error")
+    if b:syntastic_echoing_error
         echo
-        unlet b:syntastic_echoing_error
+        let b:syntastic_echoing_error = 0
     endif
 endfunction
 
