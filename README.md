@@ -5,7 +5,7 @@ CoffeeLint is a linter for CoffeeScript that can help keep your code base
 clean and consistent.
 
 For guides on installing, using and configuring CoffeeLint, head over
-[here](http://clutchski.github.com/coffeelint).
+[here](http://www.coffeelint.org).
 
 To suggest a feature, report a bug, or general discussion, head over
 [here](http://github.com/clutchski/coffeelint/issues/).
