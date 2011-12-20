@@ -341,11 +341,17 @@ The latest dev versions are on github
 7. Changelog                                             *syntastic-changelog*
 
 Next
+    - bug fix with echoing error messages; fixes incompatability with cmd-t (datanoise)
+    - dont allow warnings to mask errors when signing/echoing errors (ashikase)
     - auto close location list when leaving buffer. (millermedeiros)
     - updates/fixes to existing checkers:
         - javascript (millermedeiros)
+        - c (kongo2002)
     - Support for new filetypes:
         - JSON (millermedeiros, tocer)
+        - rst (reStructuredText files) (JNRowe)
+        - gentoo-metadata (JNRowe)
+
 
 2.1.0
     - when the cursor is on a line containing an error, echo the
@@ -442,6 +448,9 @@ Next
 Thanks to the following people for testing, bug reports, patches etc. They own,
 hard.
 
+    Lance Fetters (ashikase)
+    datanoise
+    Giuseppe Rota (grota)
     tocer
     James Rowe (JNRowe)
     Zhai Cai
