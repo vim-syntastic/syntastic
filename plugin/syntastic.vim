@@ -3,7 +3,7 @@
 "Description: vim plugin for on the fly syntax checking
 "Maintainer:  Martin Grenfell <martin.grenfell at gmail dot com>
 "Version:     2.1.0
-"Last Change: 14 Dec, 2011
+"Last Change: Wed Dec 21 11:00 AM 2011 EST
 "License:     This program is free software. It comes without any warranty,
 "             to the extent permitted by applicable law. You can redistribute
 "             it and/or modify it under the terms of the Do What The Fuck You
@@ -101,7 +101,7 @@ function! s:UpdateErrors(auto_invoked)
         return
     endif
 
-    if !a:auto_invoked || s:ModeMapAllowsAutoChecking()
+    if !a:auto_invoked || g:syntastic_mode_map.AllowAutoChecking()
         call s:CacheErrors()
     end
 
@@ -116,7 +116,7 @@ function! s:UpdateErrors(auto_invoked)
     call s:AutoToggleLocList()
 endfunction
 
-function s:AutoToggleLocList()
+function! s:AutoToggleLocList()
     if s:BufHasErrorsOrWarningsToDisplay()
         call setloclist(0, s:LocList())
         if g:syntastic_auto_jump
@@ -161,13 +161,15 @@ function! s:CacheErrors()
 
         "sub - for _ in filetypes otherwise we cant name syntax checker
         "functions legally for filetypes like "gentoo-metadata"
-        let ft = substitute(&ft, '-', '_', 'g')
-        if s:Checkable(ft)
-            let errors = SyntaxCheckers_{ft}_GetLocList()
-            "make errors have type "E" by default
-            call SyntasticAddToErrors(errors, {'type': 'E'})
-            call extend(s:LocList(), errors)
-        endif
+        let fts = substitute(&ft, '-', '_', 'g')
+        for ft in split(fts, '\.')
+            if s:Checkable(ft)
+                let errors = SyntaxCheckers_{ft}_GetLocList()
+                "make errors have type "E" by default
+                call SyntasticAddToErrors(errors, {'type': 'E'})
+                call extend(s:LocList(), errors)
+            endif
+        endfor
     endif
 endfunction
 
@@ -187,12 +189,16 @@ endfunction
 
 "check the current filetype against g:syntastic_mode_map to determine whether
 "active mode syntax checking should be done
-function! s:ModeMapAllowsAutoChecking()
-    if g:syntastic_mode_map['mode'] == 'passive'
-        return index(g:syntastic_mode_map['active_filetypes'], &ft) != -1
-    else
-        return index(g:syntastic_mode_map['passive_filetypes'], &ft) == -1
-    endif
+function! g:syntastic_mode_map.AllowAutoChecking() dict
+    let fts = split(&ft, '\.')
+    let passive_mode = self.mode == 'passive'
+    let check_ft = self[passive_mode ? 'active_filetypes' : 'passive_filetypes']
+    for ft in fts
+        if index(check_ft, ft) != -1
+            return passive_mode
+        endif
+    endfor
+    return !passive_mode
 endfunction
 
 "return true if there are cached errors/warnings for this buf
