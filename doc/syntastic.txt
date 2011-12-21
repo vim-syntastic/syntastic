@@ -199,7 +199,8 @@ detected, but not opened automatically. >
                                                         *'syntastic_mode_map'*
 Default: { "mode": "active",
            "active_filetypes": [],
-           "passive_filetypes": [] }
+           "passive_filetypes": [],
+           "AllowAutoChecking":|Funcref|}
 
 Use this option to fine tune when automatic syntax checking is done (or not
 done).
@@ -227,6 +228,9 @@ active and passive mode.
 
 If any of "mode", "active_filetypes", or "passive_filetypes" are not specified
 then they will default to their default value as above.
+
+The script defines the function AllowAutoChecking(), which returns 1 or 0
+depending on the current 'filetype'.
 
                                                   *'syntastic_quiet_warnings'*
 
