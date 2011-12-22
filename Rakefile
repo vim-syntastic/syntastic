@@ -27,13 +27,13 @@ end
 
 desc "Compile the source."
 task :compile do
-  sh("coffee -c -o #{LIB_DIR} #{SOURCE}")
+  sh("node_modules/.bin/coffee -c -o #{LIB_DIR} #{SOURCE}")
   notify("compiled!")
 end
 
 desc "Compile the source when it changes."
 task :watch do
-  sh("coffee -wc -o #{LIB_DIR} #{SOURCE}")
+  sh("node_modules/.bin/coffee -wc -o #{LIB_DIR} #{SOURCE}")
 end
 
 task :default => [:compile, :test, :lint]
