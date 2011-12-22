@@ -448,6 +448,7 @@ Next
 Thanks to the following people for testing, bug reports, patches etc. They own,
 hard.
 
+    Benji Fisher (benjifisher)
     Lance Fetters (ashikase)
     datanoise
     Giuseppe Rota (grota)
