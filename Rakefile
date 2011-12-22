@@ -15,7 +15,7 @@ end
 
 desc "Run unit tests."
 task :test => [:compile] do
-  sh("vows --spec test/*.coffee")
+  sh("node_modules/.bin/vows --spec test/*.coffee")
   notify("tested!")
 end
 
