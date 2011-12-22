@@ -190,24 +190,16 @@ endfunction
 "check the current filetypes against g:syntastic_mode_map to determine whether
 "active mode syntax checking should be done
 function! s:ModeMapAllowsAutoChecking()
+    let fts = split(&ft, '\.')
+
     if g:syntastic_mode_map['mode'] == 'passive'
-
         "check at least one filetype is active
-        for ft in split(&ft, '\.')
-            if index(g:syntastic_mode_map['active_filetypes'], ft) != -1
-                return 1
-            endif
-            return 0
-        endfor
+        let actives = g:syntastic_mode_map["active_filetypes"]
+        return !empty(filter(fts, 'index(actives, v:val) != -1'))
     else
-
         "check no filetypes are passive
-        for ft in split(&ft, '\.')
-            if index(g:syntastic_mode_map['passive_filetypes'], ft) != -1
-                return 0
-            endif
-            return 1
-        endfor
+        let passives = g:syntastic_mode_map["passive_filetypes"]
+        return empty(filter(fts, 'index(passives, v:val) != -1'))
     endif
 endfunction
 
