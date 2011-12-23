@@ -105,6 +105,10 @@ function! s:UpdateErrors(auto_invoked)
         call s:CacheErrors()
     end
 
+    if s:BufHasErrorsOrWarningsToDisplay()
+        call setloclist(0, s:LocList())
+    endif
+
     if g:syntastic_enable_balloons
         call s:RefreshBalloons()
     endif
@@ -113,23 +117,23 @@ function! s:UpdateErrors(auto_invoked)
         call s:RefreshSigns()
     endif
 
+    if g:syntastic_auto_jump && s:BufHasErrorsOrWarningsToDisplay()
+        silent! ll
+    endif
+
     call s:AutoToggleLocList()
 endfunction
 
+"automatically open/close the location list window depending on the users
+"config and buffer error state
 function s:AutoToggleLocList()
     if s:BufHasErrorsOrWarningsToDisplay()
-        call setloclist(0, s:LocList())
-        if g:syntastic_auto_jump
-            silent! ll
-        endif
-    elseif g:syntastic_auto_loc_list == 2
-        lclose
-    endif
-
-    if g:syntastic_auto_loc_list == 1
-        if s:BufHasErrorsOrWarningsToDisplay()
+        if g:syntastic_auto_loc_list == 1
             call s:ShowLocList()
-        else
+        endif
+    else
+        if g:syntastic_auto_loc_list > 0
+
             "TODO: this will close the loc list window if one was opened by
             "something other than syntastic
             lclose
