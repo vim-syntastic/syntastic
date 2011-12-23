@@ -9,7 +9,7 @@
 "             See http://sam.zoy.org/wtfpl/COPYING for more details.
 "============================================================================
 if !exists("g:syntastic_javascript_jslint_conf")
-    let g:syntastic_javascript_jslint_conf = ""
+    let g:syntastic_javascript_jslint_conf = "--good"
 endif
 
 function! SyntaxCheckers_javascript_HighlightTerm(error)
@@ -19,9 +19,10 @@ function! SyntaxCheckers_javascript_HighlightTerm(error)
 endfunction
 
 function! SyntaxCheckers_javascript_GetLocList()
-    let makeprg = "jslint" . g:syntastic_javascript_jslint_conf . " " . shellescape(expand('%'))
-    let errorformat=' %#%n %l\,%c: %m,%-G%.%#'
+    let makeprg = "jslint " . g:syntastic_javascript_jslint_conf . " " . shellescape(expand('%'))
+    let errorformat='%E %##%n %m,%-Z%.%#Line %l\, Pos %c,%-G%.%#'
     let errors = SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat, 'defaults': {'bufnr': bufnr("")} })
+    call filter(errors, "v:val['text'] != \"Missing 'use strict' statement.\"")
 
     call SyntasticHighlightErrors(errors, function('SyntaxCheckers_javascript_HighlightTerm'))
 
