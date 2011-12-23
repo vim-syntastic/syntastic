@@ -142,6 +142,13 @@ current filetype is set to passive. See |'syntastic_mode_map'| for more info.
 4. Options                                                 *syntastic-options*
 
 
+                                                   *'syntastic_check_on_open'*
+Default: 0
+If enabled, syntastic will do syntax checks when buffers are first loaded as
+well as on saving >
+    let g:syntastic_check_on_open=1
+<
+
                                               *'syntastic_echo_current_error'*
 Default: 1
 If enabled, syntastic will error message associated with the current line to
@@ -341,11 +348,14 @@ The latest dev versions are on github
 7. Changelog                                             *syntastic-changelog*
 
 Next
+    - only do syntax checks when files are saved (not when first opened) - add
+      g:syntastic_check_on_open option to get the old behavior back
     - bug fix with echoing error messages; fixes incompatability with cmd-t (datanoise)
     - dont allow warnings to mask errors when signing/echoing errors (ashikase)
     - auto close location list when leaving buffer. (millermedeiros)
     - updates/fixes to existing checkers:
-        - javascript (millermedeiros)
+        - javascript/jshint (millermedeiros)
+        - javascript/jslint
         - c (kongo2002)
     - Support for new filetypes:
         - JSON (millermedeiros, tocer)

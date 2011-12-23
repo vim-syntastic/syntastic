@@ -77,6 +77,10 @@ if !has_key(g:syntastic_mode_map, "passive_filetypes")
     let g:syntastic_mode_map['passive_filetypes'] = []
 endif
 
+if !exists("g:syntastic_check_on_open")
+    let g:syntastic_check_on_open = 0
+endif
+
 command! SyntasticToggleMode call s:ToggleMode()
 command! SyntasticCheck call s:UpdateErrors(0) <bar> redraw!
 command! Errors call s:ShowLocList()
@@ -89,7 +93,9 @@ augroup syntastic
         autocmd cursormoved * call s:EchoCurrentError()
     endif
 
-    autocmd BufReadPost,BufWritePost * call s:UpdateErrors(1)
+    let events = g:syntastic_check_on_open ? "BufReadPost,BufWritePost" : "BufWritePost"
+    exec "autocmd " . events . " * call s:UpdateErrors(1)"
+
     autocmd BufWinEnter * if empty(&bt) | call s:AutoToggleLocList() | endif
     autocmd BufWinLeave * if empty(&bt) | lclose | endif
 augroup END
