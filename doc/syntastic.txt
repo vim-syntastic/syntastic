@@ -347,12 +347,13 @@ The latest dev versions are on github
 ==============================================================================
 7. Changelog                                             *syntastic-changelog*
 
-Next
+2.2.0
     - only do syntax checks when files are saved (not when first opened) - add
       g:syntastic_check_on_open option to get the old behavior back
     - bug fix with echoing error messages; fixes incompatability with cmd-t (datanoise)
     - dont allow warnings to mask errors when signing/echoing errors (ashikase)
     - auto close location list when leaving buffer. (millermedeiros)
+    - update errors appropriately when :SyntasticToggleMode is called
     - updates/fixes to existing checkers:
         - javascript/jshint (millermedeiros)
         - javascript/jslint

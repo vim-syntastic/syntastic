@@ -56,6 +56,22 @@ To get information or make suggestions check out the [google group](https://grou
 Changelog
 ---------
 
+2.2.0 (24-dec-2011)
+
+  * only do syntax checks when files are saved (not when first opened) - add g:syntastic_check_on_open option to get the old behavior back
+  * bug fix with echoing error messages; fixes incompatability with cmd-t (datanoise)
+  * dont allow warnings to mask errors when signing/echoing errors (ashikase)
+  * auto close location list when leaving buffer. (millermedeiros)
+  * update errors appropriately when :SyntasticToggleMode is called
+  * updates/fixes to existing checkers:
+    * javascript/jshint (millermedeiros)
+    * javascript/jslint
+    * c (kongo2002)
+  * Support for new filetypes:
+    * JSON (millermedeiros, tocer)
+    * rst (reStructuredText files) (JNRowe)
+    * gentoo-metadata (JNRowe)
+
 2.1.0 (14-dec-2011)
 
   * when the cursor is on a line containing an error, echo the
