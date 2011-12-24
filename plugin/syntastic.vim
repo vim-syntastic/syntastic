@@ -132,7 +132,7 @@ endfunction
 
 "automatically open/close the location list window depending on the users
 "config and buffer error state
-function s:AutoToggleLocList()
+function! s:AutoToggleLocList()
     if s:BufHasErrorsOrWarningsToDisplay()
         if g:syntastic_auto_loc_list == 1
             call s:ShowLocList()
