@@ -347,6 +347,10 @@ The latest dev versions are on github
 ==============================================================================
 7. Changelog                                             *syntastic-changelog*
 
+next
+    - Support for new filetypes:
+        - yaml
+
 2.2.0
     - only do syntax checks when files are saved (not when first opened) - add
       g:syntastic_check_on_open option to get the old behavior back
