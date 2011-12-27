@@ -1,40 +1,52 @@
-Syntastic
-=========
+                   ,
+                  / \,,_  .'|
+               ,{{| /}}}}/_.'        j   _____________________________________________
+              }}}}` '{{'  '.            /                                             \
+            {{{{{    _   ;, \          /                Gentlemen,                     '
+         ,}}}}}}    /o`\  ` ;)        |                                                |
+        {{{{{{   /           (        |                 this is ...                    |
+        }}}}}}   |            \       |                                                |
+       {{{{{{{{   \            \      |                                                |
+       }}}}}}}}}   '.__      _  |     |    _____             __             __  _      |
+       {{{{{{{{       /`._  (_\ /     |   / ___/__  ______  / /_____ ______/ /_(_)____ |
+        }}}}}}'      |    //___/   --=:   \__ \/ / / / __ \/ __/ __ `/ ___/ __/ / ___/ |
+    jgs `{{{{`       |     '--'       |  ___/ / /_/ / / / / /_/ /_/ (__  ) /_/ / /__   |
+         }}}`                         | /____/\__, /_/ /_/\__/\__,_/____/\__/_/\___/   |
+                                      |      /____/                                    |
+                                      |                                                ,
+                                      '                                               /
+                                       \_____________________________________________,
 
-Run for the sink and fetch a glass of water, and snatch your padded
-bike shorts off the clothes horse on the way back cos syntastic is gonna kick
-you in the ass hard enough to cause the oral ejection of your spleen.
-
-Tired of waiting for your rails environment to load only to find you failed @ syntax??
-
-SCREW THAT!
-
-Did you just reload that web page only to be told you can't balance brackets to save your own testicles?
-
-F#%K THAT!!
-
-Have you just wasted precious seconds of your life only to see gcc whinging about a missing semi colon?
-
-RAPING DAMN IT!!!1
 
 
-Syntastic can save you time by running your code through external syntax
-checkers to detect errors. It provides the following features:
 
-* Errors can be loaded and displayed in a location list.
-* A configurable statusline flag is available to display a summary of errors.
-* Signs can be placed next to lines with errors or warnings.
-* Offending parts of lines can be highlighted.
-* Balloons are can be used to display error messages.
+Syntastic is a syntax checking plugin that runs files through external syntax
+checkers and displays any resulting errors to the user. This can be done on
+demand, or automatically as files are saved. If syntax errors are detected, the
+user is notified and is happy because they didn't have to compile their code or
+execute their script to find them.
 
-Syntastic can be configured to be as intrusive or as passive as you want it to
-be - to the point where you invoke it manually.
+At the time of this writing, syntax checking plugins exist for applescript, c,
+coffee, cpp, css, cucumber, cuda, docbk, erlang, eruby, fortran,
+gentoo_metadata, go, haml, haskell, html, javascript, json, less, lua, matlab,
+perl, php, puppet, python, rst, ruby, sass/scss, sh, tcl, tex, vala, xhtml,
+xml, xslt, yaml, zpt
 
-At the time of this writing, syntax checking plugins exist for c, coffee, cpp,
-css, cucumber, cuda, docbk, erlang, eruby, fortran, go, haml, haskell, html,
-javascript, less, lua, matlab, perl, php, puppet, python, ruby, sass/scss, sh,
-tcl, tex, vala, xhtml, xml, xslt, zpt.
+Screenshot
+----------
 
+Below is a screenshot showing the methods that Syntastic uses to display syntax
+errors.  Note that, in practise, you will only have a subset of these methods
+enabled.
+
+![Screenshot 1](https://github.com/scrooloose/syntastic/raw/master/_assets/screenshot_1.png)
+
+1. Location list. Errors are loaded into the location list for the corresponding window.
+2. Command window. When the cursor is on a line containing an error, the error message is echoed in the command window.
+3. Signs. Signs are placed beside lines with errors - note that warnings are displayed in a different color.
+4. Statusline flag. There is a configurable statusline flag you can include in your statusline config.
+5. Error balloons. Hover the mouse over a line containing an error and the error message is displayed as a balloon.
+6. (not shown) Highlighting errors with syntax highlighting. Erronious parts of lines can be highlighted.
 
 Installation
 ------------
@@ -44,7 +56,7 @@ Installation
     cd ~/.vim/bundle
     git clone https://github.com/scrooloose/syntastic.git
 
-Then reload vim, run `:Helptags`, and check out `:help syntastic.txt`.
+Then reload vim, run `:helptags`, and check out `:help syntastic.txt`.
 
 
 Google group
