@@ -40,12 +40,12 @@ enabled.
 
 ![Screenshot 1](https://github.com/scrooloose/syntastic/raw/master/_assets/screenshot_1.png)
 
-1. Location list. Errors are loaded into the location list for the corresponding window.
-2. Command window. When the cursor is on a line containing an error, the error message is echoed in the command window.
-3. Signs. Signs are placed beside lines with errors - note that warnings are displayed in a different color.
-4. Statusline flag. There is a configurable statusline flag you can include in your statusline config.
-5. Error balloons. Hover the mouse over a line containing an error and the error message is displayed as a balloon.
-6. (not shown) Highlighting errors with syntax highlighting. Erronious parts of lines can be highlighted.
+1. Errors are loaded into the location list for the corresponding window.
+2. When the cursor is on a line containing an error, the error message is echoed in the command window.
+3. Signs are placed beside lines with errors - note that warnings are displayed in a different color.
+4. There is a configurable statusline flag you can include in your statusline config.
+5. Hover the mouse over a line containing an error and the error message is displayed as a balloon.
+6. (not shown) Highlighting errors with syntax highlighting. Erroneous parts of lines can be highlighted.
 
 Installation
 ------------
