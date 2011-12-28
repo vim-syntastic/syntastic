@@ -1,7 +1,7 @@
 "============================================================================
 "File:        haxe.vim
 "Description: Syntax checking plugin for syntastic.vim
-"Maintainer:  Lincoln Stoll <l@lds.li>
+"Maintainer:  David Bernard <david.bernard.31 at gmail dot com>
 "License:     This program is free software. It comes without any warranty,
 "             to the extent permitted by applicable law. You can redistribute
 "             it and/or modify it under the terms of the Do What The Fuck You
