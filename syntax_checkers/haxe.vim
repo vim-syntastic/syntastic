@@ -16,16 +16,15 @@ let loaded_haxe_syntax_checker = 1
 
 "bail if the user doesn't have haxe installed
 if !executable("haxe")
-    echo "haxe not found"
     finish
 endif
 
-" Find_in_parent
+" s:FindInParent
 " find the file argument and returns the path to it.
 " Starting with the current working dir, it walks up the parent folders
 " until it finds the file, or it hits the stop dir.
 " If it doesn't find it, it returns "Nothing"
-function! Find_in_parent(fln,flsrt,flstp)
+function! s:FindInParent(fln,flsrt,flstp)
     let here = a:flsrt
     while ( strlen( here) > 0 )
         let p = split(globpath(here, a:fln), '\n')
@@ -45,7 +44,7 @@ function! Find_in_parent(fln,flsrt,flstp)
 endfunction
 
 function! SyntaxCheckers_haxe_GetLocList()
-    let [success, hxmldir, hxmlname] = Find_in_parent('*.hxml', expand('%:p:h'), '/')
+    let [success, hxmldir, hxmlname] = s:FindInParent('*.hxml', expand('%:p:h'), '/')
     if success == 'ok'
         let makeprg = 'cd ' . hxmldir . '; haxe ' . hxmlname
         let errorformat = '%E%f:%l: characters %c-%*[0-9] : %m'
