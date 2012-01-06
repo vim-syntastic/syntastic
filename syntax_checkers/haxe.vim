@@ -16,8 +16,8 @@ let loaded_haxe_syntax_checker = 1
 
 "bail if the user doesn't have haxe installed
 if !executable("haxe")
-  echo "haxe not found"
-  finish
+    echo "haxe not found"
+    finish
 endif
 
 " Find_in_parent
@@ -26,31 +26,31 @@ endif
 " until it finds the file, or it hits the stop dir.
 " If it doesn't find it, it returns "Nothing"
 function! Find_in_parent(fln,flsrt,flstp)
-  let here = a:flsrt
-  while ( strlen( here) > 0 )
-    let p = split(globpath(here, a:fln), '\n')
-    if len(p) > 0
-      return ['ok', here, fnamemodify(p[0], ':p:t')]
-    endif
-    let fr = match(here, '/[^/]*$')
-    if fr == -1
-      break
-    endif
-    let here = strpart(here, 0, fr)
-    if here == a:flstp
-      break
-    endif
-  endwhile
-  return ['fail', '', '']
+    let here = a:flsrt
+    while ( strlen( here) > 0 )
+        let p = split(globpath(here, a:fln), '\n')
+        if len(p) > 0
+            return ['ok', here, fnamemodify(p[0], ':p:t')]
+        endif
+        let fr = match(here, '/[^/]*$')
+        if fr == -1
+            break
+        endif
+        let here = strpart(here, 0, fr)
+        if here == a:flstp
+            break
+        endif
+    endwhile
+    return ['fail', '', '']
 endfunction
 
 function! SyntaxCheckers_haxe_GetLocList()
     let [success, hxmldir, hxmlname] = Find_in_parent('*.hxml', expand('%:p:h'), '/')
     if success == 'ok'
-      let makeprg = 'cd ' . hxmldir . '; haxe ' . hxmlname
-      let errorformat = '%E%f:%l: characters %c-%*[0-9] : %m'
-      return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
+        let makeprg = 'cd ' . hxmldir . '; haxe ' . hxmlname
+        let errorformat = '%E%f:%l: characters %c-%*[0-9] : %m'
+        return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
     else
-      return SyntasticMake({})
+        return SyntasticMake({})
     endif
 endfunction
