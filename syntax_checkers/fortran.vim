@@ -29,7 +29,7 @@ if !executable("gfortran")
 endif
 
 if !exists('g:syntastic_fortran_flags')
-    g:syntastic_fortran_flags = ''
+    let g:syntastic_fortran_flags = ''
 endif
 
 function! SyntaxCheckers_fortran_GetLocList()
