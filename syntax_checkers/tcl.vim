@@ -20,7 +20,7 @@ endif
 let loaded_tcl_syntax_checker = 1
 
 
-let s:supported_checkers = ["tclsh", "nagelfar.tcl"]
+let s:supported_checkers = ["tclsh", "nagelfar"]
 
 function! s:load_checker(checker)
     exec "runtime syntax_checkers/tcl/" . a:checker . ".vim"
