@@ -2,7 +2,7 @@
 "File:        tcl.vim
 "Description: Figures out which tcl syntax checker (if any) to load
 "             from the tcl directory.
-"Maintainer:  James Pickard <james.pickard at gmail. got com>
+"Maintainer:  James Pickard <james.pickard at gmail. dot com>
 "License:     This program is free software. It comes without any warranty,
 "             to the extent permitted by applicable law. You can redistribute
 "             it and/or modify it under the terms of the Do What The Fuck You
