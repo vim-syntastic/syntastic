@@ -62,7 +62,11 @@ endfunction
 function! SyntaxCheckers_html_GetLocList()
 
     let encopt = s:TidyEncOptByFenc()
-    let makeprg="tidy ".encopt." --new-blocklevel-tags 'section, article, aside, hgroup, header, footer, nav, figure, figcaption' --new-inline-tags 'video, audio, embed, mark, progress, meter, time, ruby, rt, rp, canvas, command, details, datalist' --new-empty-tags 'wbr, keygen' -e ".shellescape(expand('%'))." 2>&1"
+    if has('win32') || has('win64')
+      let makeprg='tidy '.encopt.' --new-blocklevel-tags "section, article, aside, hgroup, header, footer, nav, figure, figcaption" --new-inline-tags "video, audio, embed, mark, progress, meter, time, ruby, rt, rp, canvas, command, details, datalist" --new-empty-tags "wbr, keygen" -e '.shellescape(expand("%"))
+    else
+      let makeprg="tidy ".encopt." --new-blocklevel-tags 'section, article, aside, hgroup, header, footer, nav, figure, figcaption' --new-inline-tags 'video, audio, embed, mark, progress, meter, time, ruby, rt, rp, canvas, command, details, datalist' --new-empty-tags 'wbr, keygen' -e ".shellescape(expand('%'))." 2>&1"
+    endif
     let errorformat='%Wline %l column %c - Warning: %m,%Eline %l column %c - Error: %m,%-G%.%#,%-G%.%#'
     let loclist = SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 
