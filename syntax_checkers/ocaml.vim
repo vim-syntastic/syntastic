@@ -43,7 +43,3 @@ function! SyntaxCheckers_ocaml_GetLocList()
 
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 endfunction
-
-function! SyntaxCheckers_locaml_GetLocList()
-    return SyntaxCheckers_ocaml_GetLocList()
-endfunction
