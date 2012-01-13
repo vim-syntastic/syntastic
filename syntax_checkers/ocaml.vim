@@ -22,24 +22,24 @@ endif
 function! SyntaxCheckers_ocaml_GetLocList()
     let extension = expand('%:e')
     if match(extension, 'mly') >= 0
-      " ocamlyacc output can't be redirected, so use menhir
-      if !executable("menhir")
-        return []
-      endif
-      let makeprg = "menhir --only-preprocess ".shellescape(expand('%')) . " >/dev/null"
+        " ocamlyacc output can't be redirected, so use menhir
+        if !executable("menhir")
+            return []
+        endif
+        let makeprg = "menhir --only-preprocess ".shellescape(expand('%')) . " >/dev/null"
     elseif match(extension,'mll') >= 0
-	if !executable("ocamllex")
-	    return []
-	endif
-	let makeprg = "ocamllex -q -o /dev/null ".shellescape(expand('%'))
+        if !executable("ocamllex")
+            return []
+        endif
+        let makeprg = "ocamllex -q -o /dev/null ".shellescape(expand('%'))
     else
-      let makeprg = "camlp4o -o /dev/null ".shellescape(expand('%'))
+        let makeprg = "camlp4o -o /dev/null ".shellescape(expand('%'))
     endif
     let errorformat = '%EFile "%f"\, line %l\, characters %c-%*\d:,'.
-		\ '%EFile "%f"\, line %l\, characters %c-%*\d (end at line %*\d\, character %*\d):,'.
-		\ '%EFile "%f"\, line %l\, character %c:,'.
-		\ '%EFile "%f"\, line %l\, character %c:%m,'.
-		\ '%C%m'
+                \ '%EFile "%f"\, line %l\, characters %c-%*\d (end at line %*\d\, character %*\d):,'.
+                \ '%EFile "%f"\, line %l\, character %c:,'.
+                \ '%EFile "%f"\, line %l\, character %c:%m,'.
+                \ '%C%m'
 
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 endfunction
