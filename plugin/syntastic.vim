@@ -104,16 +104,16 @@ augroup syntastic
     autocmd BufWinLeave * if empty(&bt) | lclose | endif
 augroup END
 
-
-"refresh and redraw all the error info for this buf when saving or reading
-function! s:UpdateErrors(auto_invoked)
+"refresh and redraw all the error info for this buf when error file ready
+function! s:ShowErrors(auto_invoked)
     if !empty(&buftype)
         return
     endif
 
-    if !a:auto_invoked || s:ModeMapAllowsAutoChecking()
-        call s:CacheErrors()
-    end
+    "make errors have type "E" by default
+    let errors = getloclist(0)
+    call SyntasticAddToErrors(errors, {'type': 'E'})
+    call extend(s:LocList(), errors)
 
     if s:BufHasErrorsOrWarningsToDisplay()
         call setloclist(0, s:LocList())
@@ -132,6 +132,17 @@ function! s:UpdateErrors(auto_invoked)
     endif
 
     call s:AutoToggleLocList()
+endfunction
+
+"run update for buf when saving or reading
+function! s:UpdateErrors(auto_invoked)
+    if !empty(&buftype)
+        return
+    endif
+
+    if !a:auto_invoked || s:ModeMapAllowsAutoChecking()
+        call s:CacheErrors()
+    end
 endfunction
 
 "automatically open/close the location list window depending on the users
@@ -178,10 +189,7 @@ function! s:CacheErrors()
         let fts = substitute(&ft, '-', '_', 'g')
         for ft in split(fts, '\.')
             if s:Checkable(ft)
-                let errors = SyntaxCheckers_{ft}_GetLocList()
-                "make errors have type "E" by default
-                call SyntasticAddToErrors(errors, {'type': 'E'})
-                call extend(s:LocList(), errors)
+                call SyntaxCheckers_{ft}_GetLocList()
             endif
         endfor
     endif
@@ -485,50 +493,33 @@ endfunction
 "   'defaults' - a dict containing default values for the returned errors
 "   'subtype' - all errors will be assigned the given subtype
 function! SyntasticMake(options)
-    let old_loclist = getloclist(0)
-    let old_makeprg = &makeprg
-    let old_shellpipe = &shellpipe
-    let old_shell = &shell
-    let old_errorformat = &errorformat
-
-    if !s:running_windows && (s:uname !~ "FreeBSD")
-        "this is a hack to stop the screen needing to be ':redraw'n when
-        "when :lmake is run. Otherwise the screen flickers annoyingly
-        let &shellpipe='&>'
-        let &shell = '/bin/bash'
-    endif
-
     if has_key(a:options, 'makeprg')
-        let &makeprg = a:options['makeprg']
+        let makeprg = a:options['makeprg']
+    else
+        let makeprg = &makeprg
     endif
 
     if has_key(a:options, 'errorformat')
-        let &errorformat = a:options['errorformat']
+        let efm = a:options['errorformat']
+    else
+        let efm = &errorformat
     endif
 
-    silent lmake!
-    let errors = getloclist(0)
+    let async_cmd   = makeprg
+    let async_env   = { 'efm' : &errorformat }
+    function async_env.get(temp_file) dict
+        " lget error file
+        let old_errorformat = &errorformat
+        let &errorformat = self.efm
+        let cmd = 'lgetfile ' . a:temp_file
+        exe cmd
+        let &errorformat = old_errorformat
+        call s:ShowErrors(1)
+    endfunction
 
-    call setloclist(0, old_loclist)
-    let &makeprg = old_makeprg
-    let &errorformat = old_errorformat
-    let &shellpipe=old_shellpipe
-    let &shell=old_shell
-
-    if !s:running_windows && s:uname =~ "FreeBSD"
-        redraw!
-    endif
-
-    if has_key(a:options, 'defaults')
-        call SyntasticAddToErrors(errors, a:options['defaults'])
-    endif
-
-    " Add subtype info if present.
-    if has_key(a:options, 'subtype')
-        call SyntasticAddToErrors(errors, {'subtype': a:options['subtype']})
-    endif
-
-    return errors
+    " tab_restore prevents interruption when the task completes.
+    " All provided asynchandlers already use tab_restore.
+    call asynccommand#run(async_cmd, asynccommand#tab_restore(async_env))
 endfunction
 
 "get the error balloon for the current mouse position
