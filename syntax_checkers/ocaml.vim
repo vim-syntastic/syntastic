@@ -54,7 +54,8 @@ endif
 function! SyntaxCheckers_ocaml_GetLocList()
     if exists('g:syntastic_ocaml_use_ocamlbuild') &&
                 \ g:syntastic_ocaml_use_ocamlbuild != 0 &&
-                \ executable("ocamlbuild")
+                \ executable("ocamlbuild") &&
+                \ isdirectory('_build')
         let makeprg = "ocamlbuild -quiet -no-log -tag annot,". s:ocamlpp. " -no-links -no-hygiene -no-sanitize ".
                     \ shellescape(expand('%:r')).".cmi"
     else
