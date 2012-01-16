@@ -74,10 +74,13 @@ function! SyntaxCheckers_ocaml_GetLocList()
             let makeprg = "camlp4o -o /dev/null ".shellescape(expand('%'))
         endif
     endif
-    let errorformat = '%EFile "%f"\, line %l\, characters %c-%*\d:,'.
-                \ '%EFile "%f"\, line %l\, characters %c-%*\d (end at line %*\d\, character %*\d):,'.
-                \ '%EFile "%f"\, line %l\, character %c:,'.
-                \ '%EFile "%f"\, line %l\, character %c:%m,'.
+    let errorformat = '%AFile "%f"\, line %l\, characters %c-%*\d:,'.
+                \ '%AFile "%f"\, line %l\, characters %c-%*\d (end at line %*\d\, character %*\d):,'.
+                \ '%AFile "%f"\, line %l\, character %c:,'.
+                \ '%AFile "%f"\, line %l\, character %c:%m,'.
+                \ '%-GPreprocessing error %.%#,'.
+                \ '%-GCommand exited %.%#,'.
+                \ '%C%tarning %n: %m,'.
                 \ '%C%m,'.
                 \ '%-G+%.%#'
 
