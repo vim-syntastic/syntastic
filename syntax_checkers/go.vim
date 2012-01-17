@@ -1,7 +1,7 @@
 "============================================================================
 "File:        go.vim
 "Description: Syntax checking plugin for syntastic.vim
-"Maintainer:  Sam Nguyen <samxnguyen@gmail.com>
+"Maintainer:  Martin Grenfell <martin.grenfell at gmail dot com>
 "License:     This program is free software. It comes without any warranty,
 "             to the extent permitted by applicable law. You can redistribute
 "             it and/or modify it under the terms of the Do What The Fuck You
@@ -14,14 +14,23 @@ if exists("loaded_go_syntax_checker")
 endif
 let loaded_go_syntax_checker = 1
 
-"bail if the user doesnt have 6g installed
-if !executable("6g")
-    finish
-endif
+let s:supported_checkers = ["gofmt", "6g"]
 
-function! SyntaxCheckers_go_GetLocList()
-    let makeprg = '6g -o /dev/null %'
-    let errorformat = '%E%f:%l: %m'
-
-    return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
+function! s:load_checker(checker)
+    exec "runtime syntax_checkers/go/" . a:checker . ".vim"
 endfunction
+
+if exists("g:syntastic_go_checker")
+    if index(s:supported_checkers, g:syntastic_go_checker) != -1 && executable(g:syntastic_go_checker)
+        call s:load_checker(g:syntastic_go_checker)
+    else
+        echoerr "GO syntax not supported or not installed."
+    endif
+else
+    for checker in s:supported_checkers
+        if executable(checker)
+            call s:load_checker(checker)
+            break
+        endif
+    endfor
+endif
