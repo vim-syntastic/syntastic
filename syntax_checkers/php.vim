@@ -21,7 +21,7 @@ endif
 
 "Support passing configuration directives to phpcs
 if !exists("g:syntastic_phpcs_conf")
-    let g:syntastic_phpcs_conf = "--standard=Zend"
+    let g:syntastic_phpcs_conf = ""
 endif
 
 if !exists("g:syntastic_phpcs_disable")
