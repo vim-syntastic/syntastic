@@ -36,4 +36,9 @@ task :watch do
   sh("node_modules/.bin/coffee -wc -o #{LIB_DIR} #{SOURCE}")
 end
 
+desc "Publish the package."
+task :publish => [:default] do
+  sh("npm publish")
+end
+
 task :default => [:compile, :test, :lint]
