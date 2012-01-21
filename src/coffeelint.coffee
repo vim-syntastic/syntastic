@@ -196,6 +196,7 @@ class LexicalLinter
         @config = config
         @i = 0              # The index of the current token we're linting.
         @tokensByLine = {}  # A map of tokens by line.
+        @arrayTokens = []   # A stack tracking the array token pairs.
 
     # Return a list of errors encountered in the given source.
     lint : () ->
@@ -223,7 +224,19 @@ class LexicalLinter
             when "++", "--"  then @lintUnaryAddition(token)
             when "--"        then @lintUnaryAddition(token)
             when "THROW"     then @lintThrow(token)
+            when "[", "]"    then @lintArray(token)
             else null
+
+    # Lint the given array token.
+    lintArray : (token) ->
+        # Track the array token pairs
+        if token[0] == '['
+            @arrayTokens.push(token)
+        else if token[0] == ']'
+            @arrayTokens.pop()
+        # Return null, since we're not really linting
+        # anything here.
+        null
 
     lintBrace : (token) ->
         if token.generated then @createLexError('no_implicit_braces') else null
@@ -249,12 +262,32 @@ class LexicalLinter
         # interpolations that start with spaces e.g. "#{ 123 }"
         # so ignore such cases. Are there other times an indentation
         # could possibly follow a '+'?
-        previousToken = @peek(-2)
-        inInterp = previousToken and previousToken[0] == '+'
+        previous = @peek(-2)
+        isInterpIndent = previous and previous[0] == '+'
+
+        # Ignore the indentation inside of an array, so that
+        # we can allow things like:
+        #   x = ["foo",
+        #             "bar"]
+        previous = @peek(-1)
+        isArrayIndent = @inArray() and previous?.newLine
+
+        # Ignore indents used to for formatting on multi-line expressions, so
+        # we can allow things like:
+        #   a = b =
+        #     c = d
+        # and:
+        #   test(1234,
+        #             456)
+        previousSymbol = @peek(-1)?[0]
+        isMultiline = previousSymbol in ['=', ',']
+
+        # Summarize the indentation conditions we'd like to ignore
+        ignoreIndent = isInterpIndent or isArrayIndent or isMultiline
 
         # Now check the indentation.
         expected = @config['indentation'].value
-        if not inInterp and numIndents != expected
+        if not ignoreIndent and numIndents != expected
             context = "Expected #{expected} " +
                       "got #{numIndents}"
             @createLexError('indentation', {context})
@@ -295,8 +328,13 @@ class LexicalLinter
         else
             null
 
+    # Return the token n places away from the current token.
     peek : (n=1) ->
         @tokens[@i + n] || null
+
+    # Return true if the current token is inside of an array.
+    inArray : () ->
+        return @arrayTokens.length > 0
 
 
 # Merge default and user configuration.

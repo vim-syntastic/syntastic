@@ -96,4 +96,28 @@ vows.describe('indent').addBatch({
             errors = coffeelint.lint(source)
             assert.isEmpty(errors)
 
+    'Indentation across line breaks' :
+
+        topic : () ->
+            """
+            myReallyLongFunctionName = (withReallyLongArguments,
+                                        andManyOfThem) ->
+              1234
+
+            days = ["mon", "tues", "wed",
+                       "thurs", "fri"
+                                "sat", "sun"]
+
+            x = myReallyLongFunctionName =
+                    1234
+
+            arr = [() ->
+                    1234
+            ]
+            """
+
+        'is ignored' : (source) ->
+            errors = coffeelint.lint(source)
+            assert.isEmpty(errors)
+
 }).export(module)
