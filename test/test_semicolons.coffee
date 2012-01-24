@@ -21,7 +21,6 @@ vows.describe('semicolons').addBatch({
             assert.equal(error.lineNumber, 1)
             assert.equal(error.message, "Line contains a trailing semicolon")
             assert.equal(error.rule, 'no_trailing_semicolons')
-            assert.equal(error.evidence, "x = 1234;")
 
         'can be ignored' : (source) ->
             config =

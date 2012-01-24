@@ -170,7 +170,6 @@ class LineLinter
         if level == ERROR
             attrs =
                 lineNumber: @lineNumber + 1 # Lines are indexed by zero.
-                evidence: @line
                 leve: level
             createError(rule, attrs)
         else
