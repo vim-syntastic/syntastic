@@ -344,9 +344,18 @@ mergeDefaultConfig = (userConfig) ->
         config[rule] = defaults(userConfig[rule], ruleConfig)
     return config
 
-
-# Lint the given source text with given user configuration and return a list
-# of any errors encountered.
+# Check the source against the given configuration and return an array
+# of any errors found. An error is an object with the following
+# properties:
+#
+#   {
+#       rule :      'Name of the violated rule',
+#       lineNumber: 'Number of the line that caused the violation',
+#       level:      'The error level of the violated rule',
+#       message:    'Information about the violated rule',
+#       context:    'Optional details about why the rule was violated'
+#   }
+#
 coffeelint.lint = (source, userConfig={}) ->
     config = mergeDefaultConfig(userConfig)
 
