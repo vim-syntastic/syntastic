@@ -10,27 +10,20 @@ var thisdir = path.dirname(fs.realpathSync(__filename));
 var coffeelint = require(path.join(thisdir, '../lib', 'coffeelint'));
 
 
-/**
- * Print a report on the given script's errors to stderr.
- */
-var report = function (path, errors) {
-    var messages = errors.map(function (error) {
-        var fields = [
-            path + "#" + error.lineNumber,
-            error.level,
-            error.message
-        ];
-        if (error.context) {
-            fields.push(error.context)
-        }
-        return fields.join(" : ");
-    });
+// Print an error to the console.
+var report = function (path, error) {
 
-    messages.forEach(function (msg) {
-        console.warn(msg);
-    });
+    var fields = [
+        path + "#" + error.lineNumber,
+        error.level,
+        error.message
+    ];
 
-    return errors.length;
+    if (error.context) {
+        fields.push(error.context)
+    }
+
+    console.warn(fields.join(" : "));
 };
 
 /**
@@ -48,26 +41,31 @@ var read = function (path) {
  * operation.
  */
 var lint = function (paths, configPath) {
-    var returnCode = 0;
 
     // Load the users configuration, if they've passed one.
     var config = (configPath) ? JSON.parse(read(configPath)) : {};
+
+    var foundError = false;
+    var foundWarning = false;
 
     // Lint and report on each script.
     paths.forEach(function (path) {
         var source = read(path);
         var errors = coffeelint.lint(source, config);
-        if (errors.length) {
-            report(path, errors);
-            returnCode = 1;
-        }
+        errors.forEach(function (error) {
+            report(path, error);
+            foundError = foundError || error.level === 'error';
+            foundWarning = foundWarning || error.level === 'warn';
+        });
     });
 
     // If we're good, print a success report.
-    if (returnCode === 0) {
+    if (!foundError && !foundWarning) {
         console.log('Lint free!');
     }
-    return returnCode;
+
+    // Return a non-zero return code if we've found an error.
+    return (foundError) ? 1 : 0;
 };
 
 

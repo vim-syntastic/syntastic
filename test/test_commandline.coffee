@@ -111,4 +111,21 @@ vows.describe('commandline').addBatch({
         'works' : (error, stdout, stderr) ->
             assert.isNull(error)
 
+    'does not fail on warnings' :
+
+        topic : () ->
+            args = [
+                "-f"
+                "test/fixtures/twospaces.warning.json"
+                "test/fixtures/fourspaces.coffee"
+            ]
+
+            commandline args, this.callback
+            return undefined
+
+        'works' : (error, stdout, stderr) ->
+            assert.isNull(error)
+            #assert.include(stdout, 'warn')
+            #assert.include(stderr, 'warn')
+
 }).export(module)
