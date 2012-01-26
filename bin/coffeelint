@@ -26,20 +26,16 @@ var report = function (path, error) {
     console.warn(fields.join(" : "));
 };
 
-/**
- * Return the contents of the given file.
- */
+// Return the file's contents.
 var read = function (path) {
     var realPath = fs.realpathSync(path);
     return fs.readFileSync(realPath).toString();
 };
 
 
-/**
- * Lint the given files with the given configuration and print a report
- * on the outcome. Return an exit code indicating the success of the
- * operation.
- */
+// Lint the given files with the given configuration and print a report
+// on the outcome. Return an exit code indicating the success of the
+// operation.
 var lint = function (paths, configPath) {
 
     // Load the users configuration, if they've passed one.
