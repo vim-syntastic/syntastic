@@ -27,13 +27,12 @@ coffeelint.VERSION = "0.1.0"
 
 
 # CoffeeLint error levels.
-ERROR = 'error'
-IGNORE = 'ignore'
+ERROR   = 'error'
+WARN    = 'warn'
+IGNORE  = 'ignore'
 
 
-#
 # CoffeeLint's default rule configuration.
-#
 RULES =
 
     no_tabs :
@@ -167,10 +166,10 @@ class LineLinter
 
     createLineError : (rule) ->
         level = @config[rule]?.level
-        if level == ERROR
+        if level != IGNORE
             attrs =
                 lineNumber: @lineNumber + 1 # Lines are indexed by zero.
-                leve: level
+                level: level
             createError(rule, attrs)
         else
             null
@@ -320,7 +319,7 @@ class LexicalLinter
 
     createLexError : (rule, attrs={}) ->
         level = @config[rule]?.level
-        if level == ERROR
+        if level != IGNORE
             attrs.lineNumber = @lineNumber + 1
             attrs.level = level
             createError(rule, attrs)

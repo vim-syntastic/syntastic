@@ -20,7 +20,7 @@ vows.describe('trailing').addBatch({
             assert.equal(error.rule, 'no_trailing_whitespace')
 
         'can be permitted' : (source) ->
-            config = {no_trailing_whitespace: {level: 'IGNORE'}}
+            config = {no_trailing_whitespace: {level: 'ignore'}}
             errors = coffeelint.lint(source, config)
             assert.equal(errors.length, 0)
 
