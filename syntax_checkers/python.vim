@@ -20,7 +20,7 @@ endif
 let loaded_python_syntax_checker = 1
 
 "bail if the user doesnt have his favorite checker or flake8 or pyflakes installed
-if !exists('g:syntastic_python_checker') || !executable('g:syntastic_python_checker')
+if !exists('g:syntastic_python_checker') || !executable(g:syntastic_python_checker)
     if executable("flake8")
         let g:syntastic_python_checker = 'flake8'
     elseif executable("pyflakes")
