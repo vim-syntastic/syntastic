@@ -96,7 +96,7 @@ vows.describe('commandline').addBatch({
         'works' : (error, stdout, stderr) ->
             assert.isNotNull(error)
 
-    'with example configuratin' :
+    'with example configuration' :
 
         topic : () ->
             args = [
