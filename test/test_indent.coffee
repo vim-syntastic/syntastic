@@ -100,10 +100,6 @@ vows.describe('indent').addBatch({
 
         topic : () ->
             """
-            myReallyLongFunctionName = (withReallyLongArguments,
-                                        andManyOfThem) ->
-              1234
-
             days = ["mon", "tues", "wed",
                        "thurs", "fri"
                                 "sat", "sun"]
