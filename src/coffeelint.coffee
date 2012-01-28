@@ -73,6 +73,11 @@ RULES =
         level : ERROR
         message : 'Throwing strings is forbidden'
 
+    cyclomatic_complexity:
+        value : 10
+        level : IGNORE
+        message : 'The cyclomatic complexity is too damn high'
+
 
 # Some repeatedly used regular expressions.
 regexes =
@@ -342,13 +347,48 @@ class ASTLinter
     constructor : (source, config) ->
         @source = source
         @config = config
-        @nodes = CoffeeScript.nodes(source)
+        @node = CoffeeScript.nodes(source)
+        @errors = []
+        @stack = []
+        @blocks = 0
 
     lint : () ->
-        return []
+        @lintNode(@node)
+        @errors
 
+    # Lint the AST node and return it's cyclomatic complexity.
+    lintNode : (node, indent='') ->
+        name = node.constructor.name
+        complexity = 0
 
+        solo = complexity # DELETE ME!
 
+        # Bump up the complexity, if necessary.
+        switch name
+            when 'If' then complexity += 1
+
+        # Add the complexity of all child's nodes to this one.
+        node.eachChild (childNode) =>
+            return false unless childNode
+            complexity += @lintNode childNode, indent + '  '
+            return true
+
+        # Debug some shit.
+        console.log "#{indent} #{node.constructor.name} - #{solo} #{complexity}"
+
+        # If this is a function, log the error.
+        if name == 'Code' and complexity > 1
+            attrs = {
+                context: complexity
+                level: @config['cyclomatic_complexity'].level
+                line: 0
+            }
+            @errors.push createError 'cyclomatic_complexity', attrs
+
+        # Return the complexity for parent nodes
+        return complexity
+
+    create
 
 # Merge default and user configuration.
 mergeDefaultConfig = (userConfig) ->
