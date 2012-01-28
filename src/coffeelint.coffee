@@ -335,12 +335,28 @@ class LexicalLinter
         return @arrayTokens.length > 0
 
 
+# A class that performs static analysis of the abstract
+# syntax tree.
+class ASTLinter
+
+    constructor : (source, config) ->
+        @source = source
+        @config = config
+        @nodes = CoffeeScript.nodes(source)
+
+    lint : () ->
+        return []
+
+
+
+
 # Merge default and user configuration.
 mergeDefaultConfig = (userConfig) ->
     config = {}
     for rule, ruleConfig of RULES
         config[rule] = defaults(userConfig[rule], ruleConfig)
     return config
+
 
 # Check the source against the given configuration and return an array
 # of any errors found. An error is an object with the following
@@ -366,8 +382,11 @@ coffeelint.lint = (source, userConfig={}) ->
     lineLinter = new LineLinter(source, config, tokensByLine)
     lineErrors = lineLinter.lint()
 
+    # Do AST linting.
+    astErrors = new ASTLinter(source, config).lint()
+
     # Sort by line number and return.
-    errors = lexErrors.concat(lineErrors)
+    errors = lexErrors.concat(lineErrors, astErrors)
     errors.sort((a, b) -> a.lineNumber - b.lineNumber)
     errors
 
