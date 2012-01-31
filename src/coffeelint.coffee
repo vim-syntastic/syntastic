@@ -134,7 +134,7 @@ class LineLinter
         # since they are all reduced to a single token whose line number
         # is the start of the expression.
         indent = @line.split(regexes.indentation)[0]
-        if @lineHasToken() and  ~indent.indexOf('\t')
+        if @lineHasToken() and ~indent.indexOf('\t')
             @createLineError('no_tabs')
         else
             null
