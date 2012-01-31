@@ -388,8 +388,6 @@ class ASTLinter
         # Return the complexity for parent nodes
         return complexity
 
-    create
-
 # Merge default and user configuration.
 mergeDefaultConfig = (userConfig) ->
     config = {}
