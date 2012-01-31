@@ -139,7 +139,7 @@ class LineLinter
         # since they are all reduced to a single token whose line number
         # is the start of the expression.
         indent = @line.split(regexes.indentation)[0]
-        if @lineHasToken() and  ~indent.indexOf('\t')
+        if @lineHasToken() and ~indent.indexOf('\t')
             @createLineError('no_tabs')
         else
             null
@@ -224,8 +224,7 @@ class LexicalLinter
             when "INDENT"    then @lintIndentation(token)
             when "CLASS"     then @lintClass(token)
             when "{"         then @lintBrace(token)
-            when "++", "--"  then @lintUnaryAddition(token)
-            when "--"        then @lintUnaryAddition(token)
+            when "++", "--"  then @lintIncrement(token)
             when "THROW"     then @lintThrow(token)
             when "[", "]"    then @lintArray(token)
             else null
@@ -251,7 +250,7 @@ class LexicalLinter
         nextIsString = n1[0] == 'STRING' or (n1[0] == '(' and n2[0] == 'STRING')
         @createLexError('no_throwing_strings') if nextIsString
 
-    lintUnaryAddition : (token) ->
+    lintIncrement : (token) ->
         attrs = {context : "found '#{token[0]}'"}
         @createLexError('no_plusplus', attrs)
 
