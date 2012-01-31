@@ -220,7 +220,6 @@ class LexicalLinter
             when "CLASS"     then @lintClass(token)
             when "{"         then @lintBrace(token)
             when "++", "--"  then @lintUnaryAddition(token)
-            when "--"        then @lintUnaryAddition(token)
             when "THROW"     then @lintThrow(token)
             when "[", "]"    then @lintArray(token)
             else null
