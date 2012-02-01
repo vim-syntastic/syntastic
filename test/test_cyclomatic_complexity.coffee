@@ -20,28 +20,32 @@ vows.describe('cyclomatic complexity').addBatch({
 
     'An empty function' :
 
-        topic : getComplexity "x = () -> 1234"
+        topic : "x = () -> 1234"
 
-        'has a complexity of one' : (complexity) ->
+        'has a complexity of one' : (source) ->
+            complexity = getComplexity(source)
             assert.equal(complexity, 1)
 
     'If statement' :
 
-        topic : getComplexity "x = () -> 2 if $ == true"
+        topic : "x = () -> 2 if $ == true"
 
-        'has a complexity of two' : (complexity) ->
+        'has a complexity of two' : (source) ->
+            complexity = getComplexity(source)
             assert.equal(complexity, 2)
+
 
     'If Else statement' :
 
-        topic : getComplexity 'y = -> if $ then 1 else 3'
+        topic : 'y = -> if $ then 1 else 3'
 
-        'has a complexity of two' : (complexity) ->
+        'has a complexity of two' : (source) ->
+            complexity = getComplexity(source)
             assert.equal(complexity, 2)
 
     'If ElseIf statement' :
 
-        topic : getComplexity """
+        topic : """
             x = ->
               if 1233
                 'abc'
@@ -49,13 +53,13 @@ vows.describe('cyclomatic complexity').addBatch({
                 'xyz'
             """
 
-        'has a complexity of three' : (complexity) ->
+        'has a complexity of three' : (source) ->
+            complexity = getComplexity(source)
             assert.equal(complexity, 3)
 
     'If If-Else Else statement' :
 
-        topic : getComplexity(
-            """
+        topic : """
             z = () ->
               if x
                 1
@@ -63,41 +67,44 @@ vows.describe('cyclomatic complexity').addBatch({
                 2
               else
                 3
-            """)
+            """
 
-        'has a complexity of three' : (complexity) ->
+        'has a complexity of three' : (source) ->
+            complexity = getComplexity(source)
             assert.equal(complexity, 3)
 
     'Nested if statements' :
 
-        topic : getComplexity(
-            """
+        topic : """
             z = () ->
               if abc?
                 if other?
                   123
-            """)
+            """
 
-        'has a complexity of three' : (complexity) ->
+        'has a complexity of three' : (source) ->
+            complexity = getComplexity(source)
             assert.equal(complexity, 3)
+
 
     'A while loop' :
 
-        topic : getComplexity(
-            """
+        topic : """
             x = () ->
               while 1
                 'asdf'
-            """)
+            """
 
-        'increments complexity' : (complexity) ->
+        'increments complexity' : (source) ->
+            complexity = getComplexity(source)
             assert.equal(complexity, 2)
 
     'An until loop' :
 
-        topic : getComplexity "x = () -> log 'a' until $?"
+        topic : "x = () -> log 'a' until $?"
 
-        'increments complexity' : (complexity) ->
+        'increments complexity' : (source) ->
+            complexity = getComplexity(source)
             assert.equal(complexity, 2)
 
 }).export(module)
