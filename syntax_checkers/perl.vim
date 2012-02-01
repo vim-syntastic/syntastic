@@ -23,8 +23,9 @@ if !executable("perl")
     finish
 endif
 
+
 if !exists("g:syntastic_perl_efm_program")
-    let g:syntastic_perl_efm_program = 'perl '.$VIMRUNTIME.'/tools/efm_perl.pl -c'
+    let g:syntastic_perl_efm_program = 'perl '. shellescape($VIMRUNTIME.'/tools/efm_perl.pl').' -c'
 endif
 
 function! SyntaxCheckers_perl_GetLocList()
