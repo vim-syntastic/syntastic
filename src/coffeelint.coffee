@@ -366,7 +366,7 @@ class ASTLinter
         name = node.constructor.name
 
         # Bump up the complexity, if necessary.
-        complexity += 1 if name in ['If', 'While', 'For']
+        complexity += 1 if name in ['If', 'While', 'For', 'Try']
 
         # Add the complexity of all child's nodes to this one.
         node.eachChild (childNode) =>

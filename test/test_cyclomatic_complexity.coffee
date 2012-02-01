@@ -127,4 +127,32 @@ vows.describe('cyclomatic complexity').addBatch({
             complexity = getComplexity(source)
             assert.equal(complexity, 2)
 
+    'Try / Catch blocks' :
+
+        topic : """
+            x = () ->
+              try
+                divide("byZero")
+              catch error
+                log("uh oh")
+            """
+
+        'increments complexity' : (source) ->
+            assert.equal(getComplexity(source), 2)
+
+    'Try / Catch / Finally blocks' :
+
+        topic : """
+            x = () ->
+              try
+                divide("byZero")
+              catch error
+                log("uh oh")
+              finally
+                clean()
+            """
+
+        'increments complexity' : (source) ->
+            assert.equal(getComplexity(source), 2)
+
 }).export(module)
