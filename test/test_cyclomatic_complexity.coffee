@@ -8,8 +8,6 @@ coffeelint = require path.join('..', 'lib', 'coffeelint')
 getComplexity = (source) ->
     config = {cyclomatic_complexity : {level: 'error', value: 0}}
     errors = coffeelint.lint(source, config)
-    console.log source
-    console.log errors
     assert.isNotEmpty(errors)
     assert.lengthOf(errors, 1)
     error = errors[0]
@@ -83,5 +81,23 @@ vows.describe('cyclomatic complexity').addBatch({
         'has a complexity of three' : (complexity) ->
             assert.equal(complexity, 3)
 
+    'A while loop' :
+
+        topic : getComplexity(
+            """
+            x = () ->
+              while 1
+                'asdf'
+            """)
+
+        'increments complexity' : (complexity) ->
+            assert.equal(complexity, 2)
+
+    'An until loop' :
+
+        topic : getComplexity "x = () -> log 'a' until $?"
+
+        'increments complexity' : (complexity) ->
+            assert.equal(complexity, 2)
 
 }).export(module)

@@ -361,13 +361,12 @@ class ASTLinter
         rule = @config.cyclomatic_complexity
         complexity = 0
 
-        # The name of the CoffeeScript node. I believe this will not work
+        # The name of the CoffeeScript node. I suspect this will not work
         # if it's minified.
         name = node.constructor.name
 
         # Bump up the complexity, if necessary.
-        switch name
-            when 'If' then complexity += 1
+        complexity += 1 if name in ['If', 'While']
 
         # Add the complexity of all child's nodes to this one.
         node.eachChild (childNode) =>
