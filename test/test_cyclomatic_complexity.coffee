@@ -107,4 +107,24 @@ vows.describe('cyclomatic complexity').addBatch({
             complexity = getComplexity(source)
             assert.equal(complexity, 2)
 
+    'A for loop' :
+
+        topic : """
+            x = () ->
+              for i in window
+                log i
+            """
+
+        'increments complexity' : (source) ->
+            complexity = getComplexity(source)
+            assert.equal(complexity, 2)
+
+    'A list comprehension' :
+
+        topic : "x = -> [a for a in window]"
+
+        'increments complexity' : (source) ->
+            complexity = getComplexity(source)
+            assert.equal(complexity, 2)
+
 }).export(module)
