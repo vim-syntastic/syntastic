@@ -358,15 +358,8 @@ class ASTLinter
     # Lint the AST node and return it's cyclomatic complexity.
     lintNode : (node) ->
 
-        rule = @config.cyclomatic_complexity
-        complexity = 0
-
-        # The name of the CoffeeScript node. I suspect this will not work
-        # if it's minified.
-        name = node.constructor.name
-
-        # Bump up the complexity, if necessary.
-        complexity += switch name
+        # Get the complexity of the current node.
+        complexity = switch node.constructor.name
             when 'If', 'While', 'For', 'Try' then 1
             when "Switch"                    then node.cases.length
             else 0
@@ -377,8 +370,10 @@ class ASTLinter
             complexity += @lintNode(childNode)
             return true
 
-        # If this is a function, log the error.
-        if name == 'Code' and complexity >= rule.value
+        # If the current node is a function, and it's over our limit, add an
+        # error to the list.
+        rule = @config.cyclomatic_complexity
+        if node.constructor.name == 'Code' and complexity >= rule.value
             attrs = {
                 context: complexity + 1
                 level: rule.level
@@ -386,7 +381,7 @@ class ASTLinter
             }
             @errors.push createError 'cyclomatic_complexity', attrs
 
-        # Return the complexity for parent nodes
+        # Return the complexity for the benefit of parent nodes.
         return complexity
 
 # Merge default and user configuration.
