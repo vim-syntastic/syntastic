@@ -2,7 +2,7 @@
 TEST_DIR = "test"
 SOURCE = "src/coffeelint.coffee"
 LIB_DIR = "lib"
-LINT_CONFIG = "test/fixtures/fourspaces.json"
+LINT_CONFIG = "test/fixtures/coffeelint.json"
 
 # Print a notification.
 def notify(message)

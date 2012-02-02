@@ -1,0 +1,12 @@
+{
+    "indentation" : {
+        "level" : "error",
+        "value" : 4
+    },
+
+    "cyclomatic_complexity" : {
+        "level" : "error",
+        "value" : 4
+    }
+
+}
