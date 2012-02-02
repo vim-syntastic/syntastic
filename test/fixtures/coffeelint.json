@@ -6,7 +6,7 @@
 
     "cyclomatic_complexity" : {
         "level" : "error",
-        "value" : 4
+        "value" : 11
     }
 
 }
