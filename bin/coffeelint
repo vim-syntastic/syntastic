@@ -4,25 +4,20 @@
 var path = require('path');
 var fs = require('fs');
 var optimist = require ('optimist');
-
-// Require our library.
 var thisdir = path.dirname(fs.realpathSync(__filename));
 var coffeelint = require(path.join(thisdir, '../lib', 'coffeelint'));
 
 
 // Print an error to the console.
-var report = function (path, error) {
-
+var reportError = function (path, error) {
     var fields = [
         path + "#" + error.lineNumber,
         error.level,
         error.message
     ];
-
     if (error.context) {
         fields.push(error.context)
     }
-
     console.warn(fields.join(" : "));
 };
 
@@ -47,9 +42,8 @@ var lint = function (paths, configPath) {
     // Lint and report on each script.
     paths.forEach(function (path) {
         var source = read(path);
-        var errors = coffeelint.lint(source, config);
-        errors.forEach(function (error) {
-            report(path, error);
+        coffeelint.lint(source, config).forEach(function (error) {
+            reportError(path, error);
             foundError = foundError || error.level === 'error';
             foundWarning = foundWarning || error.level === 'warn';
         });
