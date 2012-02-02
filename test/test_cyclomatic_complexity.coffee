@@ -30,7 +30,7 @@ vows.describe('cyclomatic complexity').addBatch({
 
         topic : "x = () -> 2 if $ == true"
 
-        'has a complexity of two' : (source) ->
+        'increments the complexity' : (source) ->
             complexity = getComplexity(source)
             assert.equal(complexity, 2)
 
@@ -39,7 +39,7 @@ vows.describe('cyclomatic complexity').addBatch({
 
         topic : 'y = -> if $ then 1 else 3'
 
-        'has a complexity of two' : (source) ->
+        'increments the complexity' : (source) ->
             complexity = getComplexity(source)
             assert.equal(complexity, 2)
 
