@@ -356,7 +356,7 @@ class ASTLinter
         @errors
 
     # Lint the AST node and return it's cyclomatic complexity.
-    lintNode : (node, indent='') ->
+    lintNode : (node) ->
 
         rule = @config.cyclomatic_complexity
         complexity = 0
@@ -366,12 +366,15 @@ class ASTLinter
         name = node.constructor.name
 
         # Bump up the complexity, if necessary.
-        complexity += 1 if name in ['If', 'While', 'For', 'Try']
+        complexity += switch name
+            when 'If', 'While', 'For', 'Try' then 1
+            when "Switch"                    then node.cases.length
+            else 0
 
         # Add the complexity of all child's nodes to this one.
         node.eachChild (childNode) =>
             return false unless childNode
-            complexity += @lintNode childNode, indent + '  '
+            complexity += @lintNode(childNode)
             return true
 
         # If this is a function, log the error.

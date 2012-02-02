@@ -155,4 +155,33 @@ vows.describe('cyclomatic complexity').addBatch({
         'increments complexity' : (source) ->
             assert.equal(getComplexity(source), 2)
 
+    'Switch statements without an else' :
+
+        topic : '''
+            x = () ->
+              switch a
+                when "b" then "b"
+                when "c" then "c"
+                when "d" then "d"
+            '''
+
+        'increase complexity by the number of cases' : (source) ->
+            complexity = getComplexity(source)
+            assert.equal(complexity, 4)
+
+    'Switch statements with an else' :
+
+        topic : '''
+            x = () ->
+              switch a
+                when "b" then "b"
+                when "c" then "c"
+                when "d" then "d"
+                else "e"
+            '''
+
+        'increase complexity by the number of cases' : (source) ->
+            complexity = getComplexity(source)
+            assert.equal(complexity, 4)
+
 }).export(module)
