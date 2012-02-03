@@ -306,6 +306,8 @@ class LexicalLinter
         until className
             if @peek(offset + 1)?[0] == '.'
                 offset += 2
+            else if @peek(offset)?[0] == '@'
+                offset += 1
             else
                 className = @peek(offset)[1]
 

@@ -71,5 +71,18 @@ vows.describe('identifiers').addBatch({
             errors = coffeelint.lint(source)
             assert.lengthOf(errors, 0)
 
+    'Inner classes are permitted' :
+
+        topic : '''
+            class X
+              class @Y
+                f : 123
+              class @constructor.Z
+                f : 456
+            '''
+
+        'are permitted' : (source) ->
+            errors = coffeelint.lint(source)
+            assert.lengthOf(errors, 0)
 
 }).export(module)
