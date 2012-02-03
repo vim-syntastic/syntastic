@@ -101,9 +101,11 @@ defaults = (source, defaults) ->
 # Create an error object for the given rule with the given
 # attributes.
 createError = (rule, attrs={}) ->
-    attrs.rule = rule
-    return defaults(attrs, RULES[rule])
-
+    if attrs.level in [ERROR, WARN]
+        attrs.rule = rule
+        return defaults(attrs, RULES[rule])
+    else
+        null
 
 #
 # A class that performs regex checks on each line of the source.
@@ -171,13 +173,10 @@ class LineLinter
 
     createLineError : (rule) ->
         level = @config[rule]?.level
-        if level != IGNORE
-            attrs =
-                lineNumber: @lineNumber + 1 # Lines are indexed by zero.
-                level: level
-            createError(rule, attrs)
-        else
-            null
+        attrs =
+            lineNumber: @lineNumber + 1 # Lines are indexed by zero.
+            level: level
+        createError(rule, attrs)
 
     # Return true if the given line actually has tokens.
     lineHasToken : () ->
@@ -322,13 +321,9 @@ class LexicalLinter
             null
 
     createLexError : (rule, attrs={}) ->
-        level = @config[rule]?.level
-        if level != IGNORE
-            attrs.lineNumber = @lineNumber + 1
-            attrs.level = level
-            createError(rule, attrs)
-        else
-            null
+        attrs.lineNumber = @lineNumber + 1
+        attrs.level = @config[rule].level
+        return createError(rule, attrs)
 
     # Return the token n places away from the current token.
     peek : (n=1) ->
@@ -378,13 +373,14 @@ class ASTLinter
         # If the current node is a function, and it's over our limit, add an
         # error to the list.
         rule = @config.cyclomatic_complexity
-        if node.constructor.name == 'Code' and complexity >= rule.value
+        if name == 'Code' and complexity >= rule.value
             attrs = {
                 context: complexity + 1
                 level: rule.level
                 line: 0
             }
-            @errors.push createError 'cyclomatic_complexity', attrs
+            error = createError 'cyclomatic_complexity', attrs
+            @errors.push error if error
 
         # Return the complexity for the benefit of parent nodes.
         return complexity

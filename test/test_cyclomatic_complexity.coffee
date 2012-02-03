@@ -17,6 +17,34 @@ getComplexity = (source) ->
 
 vows.describe('cyclomatic complexity').addBatch({
 
+    'Cyclomatic complexity' :
+
+        topic : """
+            x = ->
+              1 and 2 and 3 and
+              4 and 5 and 6 and
+              7 and 8 and 9 and
+              10 and 11
+            """
+
+        'defaults to ignore' : (source) ->
+            errors = coffeelint.lint(source)
+            assert.isArray(errors)
+            assert.isEmpty(errors)
+
+        'can be enabled' : (source) ->
+            config = {cyclomatic_complexity : {level: 'error'}}
+            errors = coffeelint.lint(source, config)
+            assert.isArray(errors)
+            assert.lengthOf(errors, 1)
+            error = errors[0]
+            assert.equal(error.rule, 'cyclomatic_complexity')
+
+        'can be enabled with configurable complexity' : (source) ->
+            config = {cyclomatic_complexity : {level: 'error', value: 12}}
+            errors = coffeelint.lint(source)
+            assert.isArray(errors)
+            assert.isEmpty(errors)
 
     'An empty function' :
 
