@@ -145,7 +145,7 @@ function! syntastic#c#CheckPython()
     if executable('python')
         if !exists('s:python_flags')
             let s:python_flags = system('python -c ''from distutils import '
-                        \ . 'sysconfig; print sysconfig.get_python_inc()''')
+                        \ . 'sysconfig; import sys; sys.stdout.write(sysconfig.get_python_inc())''')
             let s:python_flags = substitute(s:python_flags, "\n", '', '')
             let s:python_flags = ' -I' . s:python_flags
         endif
