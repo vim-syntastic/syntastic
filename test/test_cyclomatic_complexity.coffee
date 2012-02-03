@@ -184,4 +184,20 @@ vows.describe('cyclomatic complexity').addBatch({
             complexity = getComplexity(source)
             assert.equal(complexity, 4)
 
+    'And operators' :
+
+        topic : 'x = () -> $ and window'
+
+        'increments the complexity' : (source) ->
+            complexity = getComplexity(source)
+            assert.equal(complexity, 2)
+
+    'Or operators' :
+
+        topic : 'x = () -> $ or window'
+
+        'increments the complexity' : (source) ->
+            complexity = getComplexity(source)
+            assert.equal(complexity, 2)
+
 }).export(module)

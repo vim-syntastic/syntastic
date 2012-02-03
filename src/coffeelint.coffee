@@ -359,10 +359,15 @@ class ASTLinter
     lintNode : (node) ->
 
         # Get the complexity of the current node.
-        complexity = switch node.constructor.name
-            when 'If', 'While', 'For', 'Try' then 1
-            when "Switch"                    then node.cases.length
-            else 0
+        name = node.constructor.name
+        complexity = if name in ['If', 'While', 'For', 'Try']
+            1
+        else if name == 'Op' and node.operator in ['&&', '||']
+            1
+        else if name == 'Switch'
+            node.cases.length
+        else
+            0
 
         # Add the complexity of all child's nodes to this one.
         node.eachChild (childNode) =>
