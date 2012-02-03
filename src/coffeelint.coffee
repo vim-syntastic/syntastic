@@ -295,10 +295,12 @@ class LexicalLinter
         # TODO: you can do some crazy shit in CoffeeScript, like
         # class func().ClassName. Don't allow that.
 
+        # Don't try to lint the names of anonymous classes.
+        return null if token.newLine? or @peek()[0] is 'EXTENDS'
+
         # It's common to assign a class to a global namespace, e.g.
         # exports.MyClassName, so loop through the next tokens until
         # we find the real identifier.
-        #
         className = null
         offset = 1
         until className

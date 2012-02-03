@@ -57,4 +57,19 @@ vows.describe('identifiers').addBatch({
             errors = coffeelint.lint(source, config)
             assert.isEmpty(errors)
 
+    'Anonymous class names' :
+
+        topic : """
+            x = class
+              m : -> 123
+
+            y = class extends x
+              m : -> 456
+            """
+
+        'are permitted' : (source) ->
+            errors = coffeelint.lint(source)
+            assert.lengthOf(errors, 0)
+
+
 }).export(module)
