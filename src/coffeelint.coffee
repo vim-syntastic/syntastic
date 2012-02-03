@@ -101,7 +101,11 @@ defaults = (source, defaults) ->
 # Create an error object for the given rule with the given
 # attributes.
 createError = (rule, attrs={}) ->
-    if attrs.level in [ERROR, WARN]
+    level = attrs.level
+    if level not in [IGNORE, WARN, ERROR]
+        throw new Error("unknown level #{level}")
+
+    if level in [ERROR, WARN]
         attrs.rule = rule
         return defaults(attrs, RULES[rule])
     else
@@ -172,10 +176,9 @@ class LineLinter
             return null
 
     createLineError : (rule) ->
-        level = @config[rule]?.level
         attrs =
             lineNumber: @lineNumber + 1 # Lines are indexed by zero.
-            level: level
+            level: @config[rule]?.level
         createError(rule, attrs)
 
     # Return true if the given line actually has tokens.
@@ -323,7 +326,7 @@ class LexicalLinter
     createLexError : (rule, attrs={}) ->
         attrs.lineNumber = @lineNumber + 1
         attrs.level = @config[rule].level
-        return createError(rule, attrs)
+        createError(rule, attrs)
 
     # Return the token n places away from the current token.
     peek : (n=1) ->

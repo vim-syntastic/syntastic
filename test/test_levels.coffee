@@ -33,4 +33,12 @@ vows.describe('levels').addBatch({
             error = errors[0]
             assert.equal(error.level, 'error')
 
+        'catches unknown levels' : (source) ->
+
+            config =
+                no_trailing_semicolons : {level: 'foobar'}
+            assert.throws () ->
+                coffeelint.lint(source, config)
+
+
 }).export(module)
