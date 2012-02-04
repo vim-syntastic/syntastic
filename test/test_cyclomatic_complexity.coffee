@@ -228,4 +228,27 @@ vows.describe('cyclomatic complexity').addBatch({
             complexity = getComplexity(source)
             assert.equal(complexity, 2)
 
+    'A complicated example' :
+
+        topic : """
+            x = () ->
+              if a and b and c or d and c or e
+                if x or d or e of f
+                  1
+              else if window
+                while 1 and 3
+                  2
+              while false
+                y
+              return false
+            """
+
+        'works' : (source) ->
+            config = {cyclomatic_complexity : {level: 'error'}}
+            errors = coffeelint.lint(source, config)
+            assert.isArray(errors)
+            assert.lengthOf(errors, 1)
+            error = errors[0]
+            assert.equal(error.rule, 'cyclomatic_complexity')
+
 }).export(module)
