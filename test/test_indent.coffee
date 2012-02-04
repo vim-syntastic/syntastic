@@ -116,4 +116,21 @@ vows.describe('indent').addBatch({
             errors = coffeelint.lint(source)
             assert.isEmpty(errors)
 
+    'Indentation with chained blocks' :
+
+        topic : """
+            counter
+               .tick ->
+                 3
+               .tick ->
+                 2
+               .tick ->
+                 1
+            """
+
+        'works' : (source) ->
+            errors = coffeelint.lint(source)
+            # FIXME: uncomment failing test
+            #assert.isEmpty(errors)
+
 }).export(module)
