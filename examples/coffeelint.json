@@ -35,6 +35,11 @@
 
   "no_throwing_strings" : {
     "level" : "error"
+  },
+
+  "cyclomatic_complexity" : {
+    "value" : 11,
+    "level" : "ignore"
   }
 
 }

@@ -73,6 +73,11 @@ RULES =
         level : ERROR
         message : 'Throwing strings is forbidden'
 
+    cyclomatic_complexity:
+        value : 10
+        level : IGNORE
+        message : 'The cyclomatic complexity is too damn high'
+
 
 # Some repeatedly used regular expressions.
 regexes =
@@ -96,9 +101,15 @@ defaults = (source, defaults) ->
 # Create an error object for the given rule with the given
 # attributes.
 createError = (rule, attrs={}) ->
-    attrs.rule = rule
-    return defaults(attrs, RULES[rule])
+    level = attrs.level
+    if level not in [IGNORE, WARN, ERROR]
+        throw new Error("unknown level #{level}")
 
+    if level in [ERROR, WARN]
+        attrs.rule = rule
+        return defaults(attrs, RULES[rule])
+    else
+        null
 
 #
 # A class that performs regex checks on each line of the source.
@@ -165,14 +176,10 @@ class LineLinter
             return null
 
     createLineError : (rule) ->
-        level = @config[rule]?.level
-        if level != IGNORE
-            attrs =
-                lineNumber: @lineNumber + 1 # Lines are indexed by zero.
-                level: level
-            createError(rule, attrs)
-        else
-            null
+        attrs =
+            lineNumber: @lineNumber + 1 # Lines are indexed by zero.
+            level: @config[rule]?.level
+        createError(rule, attrs)
 
     # Return true if the given line actually has tokens.
     lineHasToken : () ->
@@ -319,13 +326,9 @@ class LexicalLinter
             null
 
     createLexError : (rule, attrs={}) ->
-        level = @config[rule]?.level
-        if level != IGNORE
-            attrs.lineNumber = @lineNumber + 1
-            attrs.level = level
-            createError(rule, attrs)
-        else
-            null
+        attrs.lineNumber = @lineNumber + 1
+        attrs.level = @config[rule].level
+        createError(rule, attrs)
 
     # Return the token n places away from the current token.
     peek : (n=1) ->
@@ -336,12 +339,64 @@ class LexicalLinter
         return @arrayTokens.length > 0
 
 
+# A class that performs static analysis of the abstract
+# syntax tree.
+class ASTLinter
+
+    constructor : (source, config) ->
+        @source = source
+        @config = config
+        @node = CoffeeScript.nodes(source)
+        @errors = []
+        @stack = []
+        @blocks = 0
+
+    lint : () ->
+        @lintNode(@node)
+        @errors
+
+    # Lint the AST node and return it's cyclomatic complexity.
+    lintNode : (node) ->
+
+        # Get the complexity of the current node.
+        name = node.constructor.name
+        complexity = if name in ['If', 'While', 'For', 'Try']
+            1
+        else if name == 'Op' and node.operator in ['&&', '||']
+            1
+        else if name == 'Switch'
+            node.cases.length
+        else
+            0
+
+        # Add the complexity of all child's nodes to this one.
+        node.eachChild (childNode) =>
+            return false unless childNode
+            complexity += @lintNode(childNode)
+            return true
+
+        # If the current node is a function, and it's over our limit, add an
+        # error to the list.
+        rule = @config.cyclomatic_complexity
+        if name == 'Code' and complexity >= rule.value
+            attrs = {
+                context: complexity + 1
+                level: rule.level
+                line: 0
+            }
+            error = createError 'cyclomatic_complexity', attrs
+            @errors.push error if error
+
+        # Return the complexity for the benefit of parent nodes.
+        return complexity
+
 # Merge default and user configuration.
 mergeDefaultConfig = (userConfig) ->
     config = {}
     for rule, ruleConfig of RULES
         config[rule] = defaults(userConfig[rule], ruleConfig)
     return config
+
 
 # Check the source against the given configuration and return an array
 # of any errors found. An error is an object with the following
@@ -367,8 +422,11 @@ coffeelint.lint = (source, userConfig={}) ->
     lineLinter = new LineLinter(source, config, tokensByLine)
     lineErrors = lineLinter.lint()
 
+    # Do AST linting.
+    astErrors = new ASTLinter(source, config).lint()
+
     # Sort by line number and return.
-    errors = lexErrors.concat(lineErrors)
+    errors = lexErrors.concat(lineErrors, astErrors)
     errors.sort((a, b) -> a.lineNumber - b.lineNumber)
     errors
 

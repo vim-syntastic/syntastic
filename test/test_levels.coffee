@@ -17,12 +17,12 @@ vows.describe('levels').addBatch({
 
         'can return warnings' : (source) ->
             config =
-                no_trailing_semicolons : {level: 'warning'}
+                no_trailing_semicolons : {level: 'warn'}
             errors = coffeelint.lint(source, config)
             assert.isArray(errors)
             assert.lengthOf(errors, 1)
             error = errors[0]
-            assert.equal(error.level, 'warning')
+            assert.equal(error.level, 'warn')
 
         'can return errors' : (source) ->
             config =
@@ -32,5 +32,13 @@ vows.describe('levels').addBatch({
             assert.lengthOf(errors, 1)
             error = errors[0]
             assert.equal(error.level, 'error')
+
+        'catches unknown levels' : (source) ->
+
+            config =
+                no_trailing_semicolons : {level: 'foobar'}
+            assert.throws () ->
+                coffeelint.lint(source, config)
+
 
 }).export(module)
