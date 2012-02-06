@@ -348,8 +348,6 @@ class ASTLinter
         @config = config
         @node = CoffeeScript.nodes(source)
         @errors = []
-        @stack = []
-        @blocks = 0
 
     lint : () ->
         @lintNode(@node)
