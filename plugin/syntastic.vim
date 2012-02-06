@@ -413,6 +413,12 @@ function! s:EchoCurrentError()
     endif
 endfunction
 
+"load the chosen checker for the current filetype - useful for filetypes like
+"javascript that have more than one syntax checker
+function! s:LoadChecker(checker)
+    exec "runtime syntax_checkers/" . &ft . "/" . a:checker . ".vim"
+endfunction
+
 "return a string representing the state of buffer according to
 "g:syntastic_stl_format
 "
@@ -557,6 +563,35 @@ function! SyntasticAddToErrors(errors, options)
         endfor
     endfor
     return a:errors
+endfunction
+
+"take a list of syntax checkers for the current filetype and load the right
+"one based on the global settings and checker executable availabity
+"
+"a:checkers should be a list of syntax checker names. These names are assumed
+"to be the names of the vim syntax checker files that should be sourced, as
+"well as the names of the actual syntax checker executables. The checkers
+"should be listed in order of default preference.
+"
+"if a option called 'g:syntastic_[filetype]_checker' exists then attempt to
+"load the checker that it points to
+function! SyntasticLoadChecker(checkers)
+    let opt_name = "g:syntastic_" . &ft . "_checker"
+
+    if exists(opt_name)
+        let opt_val = {opt_name}
+        if index(a:checkers, opt_val) != -1 && executable(opt_val)
+            call s:LoadChecker(opt_val)
+        else
+            echoerr &ft . " syntax not supported or not installed."
+        endif
+    else
+        for checker in a:checkers
+            if executable(checker)
+                return s:LoadChecker(checker)
+            endif
+        endfor
+    endif
 endfunction
 
 " vim: set et sts=4 sw=4:

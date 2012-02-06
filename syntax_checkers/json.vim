@@ -20,22 +20,4 @@ endif
 let loaded_json_syntax_checker = 1
 
 let s:supported_checkers = ["jsonlint", "jsonval"]
-
-function! s:load_checker(checker)
-    exec "runtime syntax_checkers/json/" . a:checker . ".vim"
-endfunction
-
-if exists("g:syntastic_json_checker")
-    if index(s:supported_checkers, g:syntastic_json_checker) != -1 && executable(g:syntastic_json_checker)
-        call s:load_checker(g:syntastic_json_checker)
-    else
-        echoerr "JSON syntax not supported or not installed."
-    endif
-else
-    for checker in s:supported_checkers
-        if executable(checker)
-            call s:load_checker(checker)
-            break
-        endif
-    endfor
-endif
+call SyntasticLoadChecker(s:supported_checkers)
