@@ -78,6 +78,9 @@ RULES =
         level : IGNORE
         message : 'The cyclomatic complexity is too damn high'
 
+    no_backticks:
+        level : ERROR
+        message : 'Backticks are forbidden'
 
 # Some repeatedly used regular expressions.
 regexes =
@@ -229,6 +232,7 @@ class LexicalLinter
             when "++", "--"  then @lintIncrement(token)
             when "THROW"     then @lintThrow(token)
             when "[", "]"    then @lintArray(token)
+            when "JS"        then @lintJavascript(token)
             else null
 
     # Lint the given array token.
@@ -244,6 +248,9 @@ class LexicalLinter
 
     lintBrace : (token) ->
         if token.generated then @createLexError('no_implicit_braces') else null
+
+    lintJavascript :(token) ->
+        @createLexError('no_backticks')
 
     lintThrow : (token) ->
         [n1, n2] = [@peek(), @peek(2)]
