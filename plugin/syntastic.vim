@@ -267,6 +267,8 @@ if g:syntastic_enable_signs
     "use >> to display syntax errors in the sign column
     sign define SyntasticError text=>> texthl=error
     sign define SyntasticWarning text=>> texthl=todo
+    sign define SyntasticStyleError text=S> texthl=error
+    sign define SyntasticStyleWarning text=S> texthl=todo
 endif
 
 "start counting sign ids at 5000, start here to hopefully avoid conflicting
@@ -281,10 +283,15 @@ function! s:SignErrors()
 
         let errors = s:FilterLocList({'bufnr': bufnr('')})
         for i in errors
-            let sign_type = 'SyntasticError'
-            if i['type'] ==? 'W'
-                let sign_type = 'SyntasticWarning'
+            let sign_severity = 'Error'
+            let sign_subtype = ''
+            if has_key(i,'subtype')
+                let sign_subtype = i['subtype']
             endif
+            if i['type'] ==? 'w'
+                let sign_severity = 'Warning'
+            endif
+            let sign_type = 'Syntastic' . sign_subtype . sign_severity
 
             if !s:WarningMasksError(i, errors)
                 exec "sign place ". s:next_sign_id ." line=". i['lnum'] ." name=". sign_type ." file=". expand("%:p")
@@ -507,6 +514,14 @@ function! SyntasticMake(options)
         redraw!
     endif
 
+    " Add subtype info if present.
+    if has_key(a:options, 'subtype')
+        if !has_key(a:options, 'defaults')
+            let a:options['defaults'] = {}
+        endif
+        let a:options['defaults']['subtype'] = a:options['subtype']
+    endif
+
     if has_key(a:options, 'defaults')
         call SyntasticAddToErrors(errors, a:options['defaults'])
     endif
@@ -557,7 +572,7 @@ endfunction
 function! SyntasticAddToErrors(errors, options)
     for i in range(0, len(a:errors)-1)
         for key in keys(a:options)
-            if empty(a:errors[i][key])
+            if !has_key(a:errors[i], key) || empty(a:errors[i][key])
                 let a:errors[i][key] = a:options[key]
             endif
         endfor

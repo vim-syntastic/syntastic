@@ -54,5 +54,5 @@ endfunction
 function! s:GetPHPCSErrors()
     let makeprg = "phpcs " . g:syntastic_phpcs_conf . " --report=csv ".shellescape(expand('%'))
     let errorformat = '%-GFile\,Line\,Column\,Type\,Message\,Source\,Severity,"%f"\,%l\,%c\,%t%*[a-zA-Z]\,"%m"\,%*[a-zA-Z0-9_.-]\,%*[0-9]'
-    return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
+    return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat, 'subtype': 'Style' })
 endfunction
