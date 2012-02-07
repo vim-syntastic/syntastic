@@ -293,7 +293,7 @@ function! s:SignErrors()
             endif
             let sign_type = 'Syntastic' . sign_subtype . sign_severity
 
-            if !s:WarningMasksError(i, errors) && !s:SubtypeMasksType(i, errors)
+            if !s:WarningMasksError(i, errors)
                 exec "sign place ". s:next_sign_id ." line=". i['lnum'] ." name=". sign_type ." file=". expand("%:p")
                 call add(s:BufSignIds(), s:next_sign_id)
                 let s:next_sign_id += 1
@@ -310,21 +310,6 @@ function! s:WarningMasksError(error, llist)
     endif
 
     return len(s:FilterLocList({ 'type': "E", 'lnum': a:error['lnum'] }, a:llist)) > 0
-endfunction
-
-" Return 1 if this subtype error is masking a non-subtyped error.
-" We give primacy to non-subtyped errors, assuming they are true syntax
-" errors.
-function! s:SubtypeMasksType(error, llist)
-    if !has_key(a:error, 'subtype')
-        return 0
-    endif
-
-    for item in a:llist
-        if !has_key(item, 'subtype') && item['lnum'] == a:error['lnum']
-            return 1
-        endif
-    endfor
 endfunction
 
 "remove the signs with the given ids from this buffer
