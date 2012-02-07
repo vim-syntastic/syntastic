@@ -24,7 +24,7 @@ function! SyntaxCheckers_puppet_GetLocList()
     let l:digits = split(l:puppetVersion, "\\.")
     "
     " If it is on the 2.7 series... use new executable
-    if l:digits[0] == '2' && l:digits[1] == '7'
+    if l:digits[0] >= '2' && l:digits[1] >= '7'
       let makeprg = 'puppet parser validate ' . 
             \ shellescape(expand('%')) .
             \ ' --color=false --ignoreimport'
