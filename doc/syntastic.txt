@@ -348,8 +348,31 @@ The latest dev versions are on github
 7. Changelog                                             *syntastic-changelog*
 
 next
-    - Support for new filetypes:
+    - Allow errors to have a "subtype" that is signed differently to standard
+      errors. Currently geared towards differentiating style errors from
+      syntax errors. Currently implemented for phpcs (technosophos).
+    - New checkers for:
         - yaml
+        - haxe (davidB)
+        - ocaml (edwintorok)
+        - pylint (parantapa)
+
+    - Updates to existing checkers:
+        - jslint
+        - fortran (bmattern)
+        - sass
+        - html (darcyparker)
+        - coffee (darcyparker)
+        - docbk (darcyparker)
+        - xml
+        - xslt
+        - less (irrationalfab)
+        - php (AD7six, technosophos)
+        - cuda
+        - python (mitchellh)
+        - perl (Anthony Carapetis)
+        - c (naoina, zsprackett)
+        - puppet
 
 2.2.0
     - only do syntax checks when files are saved (not when first opened) - add
@@ -463,6 +486,16 @@ next
 Thanks to the following people for testing, bug reports, patches etc. They own,
 hard.
 
+    Naoya INADA (naoina)
+    Mitchell Hashimoto (mitchellh)
+    irrationalfab
+    Andy Dawson (AD7six)
+    Parantapa Bhattacharya (parantapa)
+    edwintorok
+    Darcy Parker (darcyparker)
+    bmattern
+    David Bernard (davidB)
+    Aleksey V. Zapparov (ixti)
     Benji Fisher (benjifisher)
     Lance Fetters (ashikase)
     datanoise
