@@ -24,11 +24,11 @@ let s:puppetVersion = split(system("puppet --version"), "\\.")
 function! SyntaxCheckers_puppet_GetLocList()
     "If puppet is >= version 2.7 then use the new executable
     if s:puppetVersion[0] >= '2' && s:puppetVersion[1] >= '7'
-      let makeprg = 'puppet parser validate ' . 
-            \ shellescape(expand('%')) .
-            \ ' --color=false --ignoreimport'
+        let makeprg = 'puppet parser validate ' .
+                    \ shellescape(expand('%')) .
+                    \ ' --color=false --ignoreimport'
     else
-      let makeprg = 'puppet --color=false --parseonly --ignoreimport '.shellescape(expand('%'))
+        let makeprg = 'puppet --color=false --parseonly --ignoreimport '.shellescape(expand('%'))
     endif
 
     let errorformat = 'err: Could not parse for environment %*[a-z]: %m at %f:%l'
