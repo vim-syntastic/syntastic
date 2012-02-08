@@ -19,12 +19,11 @@ if !executable("puppet")
     finish
 endif
 
+let s:puppetVersion = split(system("puppet --version"), "\\.")
+
 function! SyntaxCheckers_puppet_GetLocList()
-    let l:puppetVersion = system("puppet --version")
-    let l:digits = split(l:puppetVersion, "\\.")
-    "
-    " If it is on the 2.7 series... use new executable
-    if l:digits[0] >= '2' && l:digits[1] >= '7'
+    "If puppet is >= version 2.7 then use the new executable
+    if s:puppetVersion[0] >= '2' && s:puppetVersion[1] >= '7'
       let makeprg = 'puppet parser validate ' . 
             \ shellescape(expand('%')) .
             \ ' --color=false --ignoreimport'
