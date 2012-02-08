@@ -19,7 +19,13 @@ if !executable("puppet")
     finish
 endif
 
-let s:puppetVersion = split(system("puppet --version"), "\\.")
+function! s:ExtractVersion()
+    let output = system("puppet --version")
+    let output = substitute(output, '\n$', '', '')
+    return split(output, '\.')
+endfunction
+
+let s:puppetVersion = s:ExtractVersion()
 
 function! SyntaxCheckers_puppet_GetLocList()
     "If puppet is >= version 2.7 then use the new executable
