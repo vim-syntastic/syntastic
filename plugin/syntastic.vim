@@ -514,16 +514,13 @@ function! SyntasticMake(options)
         redraw!
     endif
 
-    " Add subtype info if present.
-    if has_key(a:options, 'subtype')
-        if !has_key(a:options, 'defaults')
-            let a:options['defaults'] = {}
-        endif
-        let a:options['defaults']['subtype'] = a:options['subtype']
-    endif
-
     if has_key(a:options, 'defaults')
         call SyntasticAddToErrors(errors, a:options['defaults'])
+    endif
+
+    " Add subtype info if present.
+    if has_key(a:options, 'subtype')
+        call SyntasticAddToErrors(errors, {'subtype': a:options['subtype']})
     endif
 
     return errors
