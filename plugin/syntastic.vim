@@ -264,7 +264,7 @@ function! s:FilterLocList(filters, ...)
 endfunction
 
 if g:syntastic_enable_signs
-    "use >> to display syntax errors in the sign column
+    "define the signs used to display syntax and style errors/warns
     sign define SyntasticError text=>> texthl=error
     sign define SyntasticWarning text=>> texthl=todo
     sign define SyntasticStyleError text=S> texthl=error
@@ -479,6 +479,7 @@ endfunction
 "
 "a:options may also contain:
 "   'defaults' - a dict containing default values for the returned errors
+"   'subtype' - all errors will be assigned the given subtype
 function! SyntasticMake(options)
     let old_loclist = getloclist(0)
     let old_makeprg = &makeprg
