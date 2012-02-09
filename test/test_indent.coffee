@@ -133,4 +133,16 @@ vows.describe('indent').addBatch({
             # FIXME: uncomment failing test
             #assert.isEmpty(errors)
 
+    'Arbitrarily indented arguments' :
+
+        topic : """
+            myReallyLongFunction withLots,
+                                 ofArguments,
+                                 everywhere
+            """
+
+        'are permitted' : (source) ->
+            errors = coffeelint.lint(source)
+            assert.isEmpty(errors)
+
 }).export(module)
