@@ -19,7 +19,7 @@ if !executable("perl")
     finish
 endif
 
-let s:checker = expand('<sfile>:p:h') . '/efm_perl.pl'
+let s:checker = 'perl ' . shellescape(expand('<sfile>:p:h') . '/efm_perl.pl') . ' -c'
 
 function! SyntaxCheckers_perl_GetLocList()
     let makeprg = s:checker . ' ' . shellescape(expand('%'))
