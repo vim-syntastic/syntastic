@@ -81,6 +81,10 @@ if !exists("g:syntastic_check_on_open")
     let g:syntastic_check_on_open = 0
 endif
 
+if !exists("g:syntastic_loc_list_height")
+    let g:syntastic_loc_list_height = 10
+endif
+
 command! SyntasticToggleMode call s:ToggleMode()
 command! SyntasticCheck call s:UpdateErrors(0) <bar> redraw!
 command! Errors call s:ShowLocList()
@@ -340,7 +344,7 @@ endfunction
 function! s:ShowLocList()
     if !empty(s:LocList())
         let num = winnr()
-        lopen
+        exec "lopen " . g:syntastic_loc_list_height
         if num != winnr()
             wincmd p
         endif

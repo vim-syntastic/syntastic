@@ -203,6 +203,14 @@ detected, but not opened automatically. >
     let g:syntastic_auto_loc_list=2
 <
 
+                                                 *'syntastic_loc_list_height'*
+Default: 10
+Use this option to specify the height of the location lists that syntastic
+opens. >
+    let g:syntastic_loc_list_height=5
+<
+
+
                                                         *'syntastic_mode_map'*
 Default: { "mode": "active",
            "active_filetypes": [],
