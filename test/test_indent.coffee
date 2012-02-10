@@ -132,6 +132,19 @@ vows.describe('indent').addBatch({
             errors = coffeelint.lint(source)
             assert.isEmpty(errors)
 
+    'Indented chained invocations' :
+
+        topic : """
+            $('body')
+                .addClass('k')
+                .removeClass 'k'
+                .animate()
+                .hide()
+            """
+
+        'is permitted' : (source) ->
+            assert.isEmpty(coffeelint.lint(source))
+
     'Arbitrarily indented arguments' :
 
         topic : """
