@@ -356,6 +356,7 @@ The latest dev versions are on github
 7. Changelog                                             *syntastic-changelog*
 
 next
+    - Add syntastic_loc_list_height option
     - Allow errors to have a "subtype" that is signed differently to standard
       errors. Currently geared towards differentiating style errors from
       syntax errors. Currently implemented for phpcs (technosophos).
