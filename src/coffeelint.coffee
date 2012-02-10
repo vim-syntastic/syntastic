@@ -205,6 +205,7 @@ class LexicalLinter
         @i = 0              # The index of the current token we're linting.
         @tokensByLine = {}  # A map of tokens by line.
         @arrayTokens = []   # A stack tracking the array token pairs.
+        @lines = source.split('\n')
 
     # Return a list of errors encountered in the given source.
     lint : () ->
@@ -287,14 +288,18 @@ class LexicalLinter
         # we can allow things like:
         #   a = b =
         #     c = d
-        # and:
-        #   test(1234,
-        #             456)
         previousSymbol = @peek(-1)?[0]
         isMultiline = previousSymbol in ['=', ',']
 
         # Summarize the indentation conditions we'd like to ignore
         ignoreIndent = isInterpIndent or isArrayIndent or isMultiline
+
+        # Compensate for indentation in function invocations that span multiple
+        # lines, which can be ignored.
+        if @isChainedCall()
+            previousLine = @lines[@lineNumber-1]
+            previousIndentation = previousLine.match(/^(\s*)/)[1].length
+            numIndents -= previousIndentation
 
         # Now check the indentation.
         expected = @config['indentation'].value
@@ -345,6 +350,28 @@ class LexicalLinter
     inArray : () ->
         return @arrayTokens.length > 0
 
+    # Return true if the current token is part of a property access
+    # that is split across lines, for example:
+    #   $('body')
+    #       .addClass('foo')
+    #       .removeClass('bar')
+    isChainedCall : () ->
+        # Get the index of the second most recent new line.
+        lines = (i for token, i in @tokens[..@i] when token.newLine?)
+
+        lastNewLineIndex = if lines then lines[lines.length - 2] else null
+
+        # Bail out if there is no such token.
+        return false if not lastNewLineIndex?
+
+        # Otherwise, figure out if that token or the next is an attribute
+        # look-up.
+        tokens = [@tokens[lastNewLineIndex], @tokens[lastNewLineIndex + 1]]
+
+        return !!(t for t in tokens when t and t[0] == '.').length
+
+
+
 
 # A class that performs static analysis of the abstract
 # syntax tree.
@@ -394,6 +421,7 @@ class ASTLinter
 
         # Return the complexity for the benefit of parent nodes.
         return complexity
+
 
 # Merge default and user configuration.
 mergeDefaultConfig = (userConfig) ->

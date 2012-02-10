@@ -116,22 +116,21 @@ vows.describe('indent').addBatch({
             errors = coffeelint.lint(source)
             assert.isEmpty(errors)
 
-    'Indentation with chained blocks' :
+    'Indentation on seperate line invocation' :
 
         topic : """
-            counter
-               .tick ->
-                 3
-               .tick ->
-                 2
-               .tick ->
-                 1
+            rockinRockin
+                    .around ->
+                      3
+
+            rockrockrock.
+                    around ->
+                      1234
             """
 
-        'works' : (source) ->
+        'is ignored. Issue #4' : (source) ->
             errors = coffeelint.lint(source)
-            # FIXME: uncomment failing test
-            #assert.isEmpty(errors)
+            assert.isEmpty(errors)
 
     'Arbitrarily indented arguments' :
 
