@@ -477,6 +477,7 @@ endfunction
 "a:options can contain the following keys:
 "    'makeprg'
 "    'errorformat'
+"    'shellpipe'
 "
 "The corresponding options are set for the duration of the function call. They
 "are set with :let, so dont escape spaces.
@@ -500,6 +501,10 @@ function! SyntasticMake(options)
 
     if has_key(a:options, 'makeprg')
         let &makeprg = a:options['makeprg']
+    endif
+
+    if has_key(a:options, 'shellpipe')
+        let &shellpipe = a:options['shellpipe']
     endif
 
     if has_key(a:options, 'errorformat')
