@@ -22,8 +22,8 @@ endif
 function! SyntaxCheckers_rust_GetLocList()
     let makeprg = 'rustc --parse-only '.shellescape(expand('%'))
 
-    let errorformat  = '%E%f:%l:%c: \\d%#:\\d%# [1;31merror:[0m %m,'   .
-                     \ '%W%f:%l:%c: \\d%#:\\d%# [1;33mwarning:[0m %m,' .
+    let errorformat  = '%E%f:%l:%c: \\d%#:\\d%# %.%\{-}error:%.%\{-} %m,'   .
+                     \ '%W%f:%l:%c: \\d%#:\\d%# %.%\{-}warning:%.%\{-} %m,' .
                      \ '%C%f:%l %m,' .
                      \ '%-Z%.%#'
 
