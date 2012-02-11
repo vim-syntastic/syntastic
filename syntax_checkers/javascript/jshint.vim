@@ -14,7 +14,7 @@ endif
 
 function! SyntaxCheckers_javascript_GetLocList()
     " node-jshint uses .jshintrc as config unless --config arg is present
-    let args = g:syntastic_javascript_jshint_conf? ' --config ' . g:syntastic_javascript_jshint_conf : ''
+    let args = !empty(g:syntastic_javascript_jshint_conf) ? ' --config ' . g:syntastic_javascript_jshint_conf : ''
     let makeprg = 'jshint ' . shellescape(expand("%")) . args
     let errorformat = '%ELine %l:%c,%Z\\s%#Reason: %m,%C%.%#,%f: line %l\, col %c\, %m,%-G%.%#'
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat, 'defaults': {'bufnr': bufnr('')} })
