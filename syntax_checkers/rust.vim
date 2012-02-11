@@ -1,5 +1,5 @@
 "============================================================================
-"File:        ruby.vim
+"File:        rust.vim
 "Description: Syntax checking plugin for syntastic.vim
 "Maintainer:  Chad Jablonski <chad.jablonski at gmail dot com>
 "License:     This program is free software. It comes without any warranty,
@@ -14,7 +14,7 @@ if exists("loaded_rust_syntax_checker")
 endif
 let loaded_rust_syntax_checker = 1
 
-"bail if the user doesnt have ruby installed
+"bail if the user doesnt have rustc installed
 if !executable("rustc")
     finish
 endif
