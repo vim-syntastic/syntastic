@@ -43,7 +43,11 @@ function! SyntaxCheckers_puppet_GetLocList()
         let makeprg = 'puppet --color=false --parseonly --ignoreimport '.shellescape(expand('%'))
     endif
 
-    let errorformat = 'err: Could not parse for environment %*[a-z]: %m at %f:%l'
+    "some versions of puppet (e.g. 2.7.10) output the message below if there
+    "are any syntax errors
+    let errorformat = '%-Gerr: Try ''puppet help parser validate'' for usage,'
+
+    let errorformat .= 'err: Could not parse for environment %*[a-z]: %m at %f:%l'
 
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 endfunction
