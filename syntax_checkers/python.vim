@@ -31,6 +31,9 @@ if !exists('g:syntastic_python_checker') || !executable(g:syntastic_python_check
         finish
     endif
 endif
+if !exists('g:syntastic_python_checker_args')
+    let g:syntastic_python_checker_args = ''
+endif
 
 function! SyntaxCheckers_python_Term(i)
     if a:i['type'] ==# 'E'
@@ -64,7 +67,7 @@ if g:syntastic_python_checker == 'pylint'
     endfunction
 else
     function! SyntaxCheckers_python_GetLocList()
-        let makeprg = g:syntastic_python_checker.' '.shellescape(expand('%'))
+        let makeprg = g:syntastic_python_checker.' '.g:syntastic_python_checker_args.' '.shellescape(expand('%'))
         let errorformat =
             \ '%E%f:%l: could not compile,%-Z%p^,%W%f:%l:%c: %m,%W%f:%l: %m,%-G%.%#'
 
