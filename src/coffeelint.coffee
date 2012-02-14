@@ -147,8 +147,8 @@ class LineLinter
         # us ignore tabs in the middle of multi line strings, heredocs, etc.
         # since they are all reduced to a single token whose line number
         # is the start of the expression.
-        indent = @line.split(regexes.indentation)[0]
-        if @lineHasToken() and ~indent.indexOf('\t')
+        indentation = @line.split(regexes.indentation)[0]
+        if @lineHasToken() and '\t' in indentation
             @createLineError('no_tabs')
         else
             null
