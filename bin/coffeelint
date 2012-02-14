@@ -17,14 +17,13 @@ var stylize = function (message, styles) {
         'yellow'    : [33, 39],
         'green'     : [32, 39],
         'red'       : [31, 39],
-    }
+    };
 
     return styles.reduce(function (m, style) {
         return '\033[' + map[style][0] + 'm' + m +
                '\033[' + map[style][1] + 'm';
     }, message);
 };
-
 
 // Print an error to the console.
 var reportError = function (path, error, colorize) {
