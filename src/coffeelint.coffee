@@ -371,8 +371,6 @@ class LexicalLinter
         return !!(t for t in tokens when t and t[0] == '.').length
 
 
-
-
 # A class that performs static analysis of the abstract
 # syntax tree.
 class ASTLinter
