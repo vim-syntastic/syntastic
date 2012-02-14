@@ -32,7 +32,8 @@ function! SyntaxCheckers_puppet_GetLocList()
     if s:puppetVersion[0] >= '2' && s:puppetVersion[1] >= '7'
         let makeprg = 'puppet parser validate ' .
                     \ shellescape(expand('%')) .
-                    \ ' --color=false'
+                    \ ' --color=false' .
+                    \ ' --storeconfigs'
 
         "add --ignoreimport for versions < 2.7.10
         if s:puppetVersion[2] < '10'
