@@ -5,7 +5,7 @@ var path = require('path');
 var fs = require('fs');
 var optimist = require ('optimist');
 var thisdir = path.dirname(fs.realpathSync(__filename));
-var coffeelint = require(path.join(thisdir, '../lib', 'coffeelint'));
+var coffeelint = require(path.join(thisdir, '..', 'lib', 'coffeelint'));
 
 
 // Stylize the given message
