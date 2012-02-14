@@ -125,7 +125,15 @@ vows.describe('commandline').addBatch({
 
         'works' : (error, stdout, stderr) ->
             assert.isNull(error)
-            #assert.include(stdout, 'warn')
-            #assert.include(stderr, 'warn')
+
+    'with broken source' :
+
+        topic : () ->
+            args = ["test/fixtures/syntax_error.coffee"]
+            commandline args, this.callback
+            return undefined
+
+        'fails' : (error, stdout, stderr) ->
+            assert.isNotNull(error)
 
 }).export(module)
