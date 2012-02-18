@@ -160,8 +160,10 @@ function! s:LocList()
 endfunction
 
 "clear the loc list for the buffer
-function! s:ClearLocList()
+function! s:ClearCache()
     let b:syntastic_loclist = []
+    unlet! b:syntastic_errors
+    unlet! b:syntastic_warnings
 endfunction
 
 "detect and cache all syntax errors in this buffer
@@ -169,7 +171,7 @@ endfunction
 "depends on a function called SyntaxCheckers_{&ft}_GetLocList() existing
 "elsewhere
 function! s:CacheErrors()
-    call s:ClearLocList()
+    call s:ClearCache()
 
     if filereadable(expand("%"))
 
@@ -195,7 +197,7 @@ function! s:ToggleMode()
         let g:syntastic_mode_map['mode'] = "active"
     endif
 
-    call s:ClearLocList()
+    call s:ClearCache()
     call s:UpdateErrors(1)
 
     echo "Syntastic: " . g:syntastic_mode_map['mode'] . " mode enabled"
@@ -217,30 +219,22 @@ function! s:ModeMapAllowsAutoChecking()
     endif
 endfunction
 
-"return true if there are cached errors/warnings for this buf
-function! s:BufHasErrorsOrWarnings()
-    return !empty(s:LocList())
-endfunction
-
-"return true if there are cached errors for this buf
-function! s:BufHasErrors()
-    return len(s:ErrorsForType('E')) > 0
-endfunction
-
 function! s:BufHasErrorsOrWarningsToDisplay()
-    return s:BufHasErrors() || (!g:syntastic_quiet_warnings && s:BufHasErrorsOrWarnings())
-endfunction
-
-function! s:ErrorsForType(type)
-    return s:FilterLocList({'type': a:type})
+    return len(s:Errors()) || (!g:syntastic_quiet_warnings && !empty(s:LocList()))
 endfunction
 
 function! s:Errors()
-    return s:ErrorsForType("E")
+    if !exists("b:syntastic_errors")
+        let b:syntastic_errors = s:FilterLocList({'type': "E"})
+    endif
+    return b:syntastic_errors
 endfunction
 
 function! s:Warnings()
-    return s:ErrorsForType("W")
+    if !exists("b:syntastic_warnings")
+        let b:syntastic_warnings = s:FilterLocList({'type': "W"})
+    endif
+    return b:syntastic_warnings
 endfunction
 
 "Filter a loc list (defaults to s:LocList()) by a:filters
