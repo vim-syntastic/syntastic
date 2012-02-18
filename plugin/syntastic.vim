@@ -444,30 +444,33 @@ function! SyntasticStatuslineFlag()
         let errors = s:Errors()
         let warnings = s:Warnings()
 
+        let num_errors = len(errors)
+        let num_warnings = len(warnings)
+
         let output = g:syntastic_stl_format
 
         "hide stuff wrapped in %E(...) unless there are errors
-        let output = substitute(output, '\C%E{\([^}]*\)}', len(errors) ? '\1' : '' , 'g')
+        let output = substitute(output, '\C%E{\([^}]*\)}', num_errors ? '\1' : '' , 'g')
 
         "hide stuff wrapped in %W(...) unless there are warnings
-        let output = substitute(output, '\C%W{\([^}]*\)}', len(warnings) ? '\1' : '' , 'g')
+        let output = substitute(output, '\C%W{\([^}]*\)}', num_warnings ? '\1' : '' , 'g')
 
         "hide stuff wrapped in %B(...) unless there are both errors and warnings
-        let output = substitute(output, '\C%B{\([^}]*\)}', (len(warnings) && len(errors)) ? '\1' : '' , 'g')
+        let output = substitute(output, '\C%B{\([^}]*\)}', (num_warnings && num_errors) ? '\1' : '' , 'g')
 
         "sub in the total errors/warnings/both
-        let output = substitute(output, '\C%w', len(warnings), 'g')
-        let output = substitute(output, '\C%e', len(errors), 'g')
+        let output = substitute(output, '\C%w', num_warnings, 'g')
+        let output = substitute(output, '\C%e', num_errors, 'g')
         let output = substitute(output, '\C%t', len(s:LocList()), 'g')
 
         "first error/warning line num
         let output = substitute(output, '\C%F', s:LocList()[0]['lnum'], 'g')
 
         "first error line num
-        let output = substitute(output, '\C%fe', len(errors) ? errors[0]['lnum'] : '', 'g')
+        let output = substitute(output, '\C%fe', num_errors ? errors[0]['lnum'] : '', 'g')
 
         "first warning line num
-        let output = substitute(output, '\C%fw', len(warnings) ? warnings[0]['lnum'] : '', 'g')
+        let output = substitute(output, '\C%fw', num_warnings ? warnings[0]['lnum'] : '', 'g')
 
         return output
     else
