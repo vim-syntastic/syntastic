@@ -253,16 +253,21 @@ endfunction
 function! s:FilterLocList(filters, ...)
     let llist = a:0 ? a:1 : s:LocList()
 
-    let rv = deepcopy(llist)
-    for error in llist
-        for key in keys(a:filters)
-            let rhs = a:filters[key]
-            if type(rhs) == 1 "string
-                let rhs = '"' . rhs . '"'
-            endif
+    let rv = []
 
-            call filter(rv, "v:val['".key."'] ==? " . rhs)
+    for error in llist
+
+        let passes_filters = 1
+        for key in keys(a:filters)
+            if error[key] !=? a:filters[key]
+                let passes_filters = 0
+                break
+            endif
         endfor
+
+        if passes_filters
+            call add(rv, error)
+        endif
     endfor
     return rv
 endfunction
