@@ -66,6 +66,35 @@ To get information or make suggestions check out the [google group](https://grou
 
 Changelog
 ---------
+2.3.0 (16-feb-2012)
+
+  * Add syntastic_loc_list_height option
+  * Allow errors to have a "subtype" that is signed differently to standard
+    errors. Currently geared towards differentiating style errors from
+    syntax errors. Currently implemented for phpcs (technosophos).
+  * New checkers for:
+    * yaml
+    * haxe (davidB)
+    * ocaml (edwintorok)
+    * pylint (parantapa)
+    * rust (cjab)
+  * Updates to existing checkers:
+    * jslint
+    * jshint (gillesruppert)
+    * fortran (bmattern)
+    * sass
+    * html (darcyparker)
+    * coffee (darcyparker)
+    * docbk (darcyparker)
+    * xml
+    * xslt
+    * less (irrationalfab)
+    * php (AD7six, technosophos)
+    * cuda
+    * python (mitchellh, pneff)
+    * perl (Anthony Carapetis)
+    * c (naoina, zsprackett)
+    * puppet (frimik)
 
 2.2.0 (24-dec-2011)
 
@@ -82,61 +111,3 @@ Changelog
     * JSON (millermedeiros, tocer)
     * rst (reStructuredText files) (JNRowe)
     * gentoo-metadata (JNRowe)
-
-2.1.0 (14-dec-2011)
-
-  * when the cursor is on a line containing an error, echo the
-  * error msg (kevinw)
-  * various bug fixes and refactoring
-  * updates/fixes to existing checkers:
-    * html (millermedeiros)
-    * erlang
-    * coffeescript
-    * javascript
-    * sh
-    * php (add support for phpcs - technosophos)
-  * add an applescript checker (Zhai Cai)
-  * add support for hyphenated filetypes (JNRowe)
-
-2.0.0 (2-dec-2011):
-
-  * Add support for highlighting the erroneous parts of lines (kstep)
-  * Add support for displaying errors via balloons (kstep)
-  * Add syntastic_mode_map option to give more control over when checking should be done.
-  * Add :SyntasticCheck command to force a syntax check -  useful in passive mode (justone).
-  * Add the option to automatically close the location list, but not automatically open it (milkypostman)
-  * Add syntastic_auto_jump option to automatically jump to the first error (milkypostman)
-  * Only source syntax checkers as needed - instead of loading all of them when vim starts
-
-  * Support for new filetypes:
-    * less (julienXX)
-    * docbook (tpope)
-    * matlab (jasongraham)
-    * go (dtjm)
-    * puppet (uggedal, roman, zsprackett)
-    * haskell (baldo, roman)
-    * tcl (et)
-    * vala (kstep)
-    * cuda (temporaer)
-    * css (oryband, sitedyno)
-    * fortran (Karl Yngve Lervåg)
-    * xml (kusnier)
-    * xslt (kusnier)
-    * erlang (kTT)
-    * zpt (claytron)
-
-  * updates to existing checkers:
-    * javascript (mogren, bryanforbes, cjab, ajduncan)
-    * sass/scss (tmm1, atourino, dlee, epeli)
-    * ruby (changa)
-    * perl (harleypig)
-    * haml (bmihelac)
-    * php (kstep, docteurklein)
-    * python (kstep, soli)
-    * lua (kstep)
-    * html (kstep)
-    * xhtml (kstep)
-    * c (kongo2002, brandonw)
-    * cpp (kongo2002)
-    * coffee (industrial)
-    * eruby (sergevm)

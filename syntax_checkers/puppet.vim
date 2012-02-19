@@ -32,12 +32,23 @@ function! SyntaxCheckers_puppet_GetLocList()
     if s:puppetVersion[0] >= '2' && s:puppetVersion[1] >= '7'
         let makeprg = 'puppet parser validate ' .
                     \ shellescape(expand('%')) .
-                    \ ' --color=false --ignoreimport'
+                    \ ' --color=false' .
+                    \ ' --storeconfigs'
+
+        "add --ignoreimport for versions < 2.7.10
+        if s:puppetVersion[2] < '10'
+            let makeprg .= ' --ignoreimport'
+        endif
+
     else
         let makeprg = 'puppet --color=false --parseonly --ignoreimport '.shellescape(expand('%'))
     endif
 
-    let errorformat = 'err: Could not parse for environment %*[a-z]: %m at %f:%l'
+    "some versions of puppet (e.g. 2.7.10) output the message below if there
+    "are any syntax errors
+    let errorformat = '%-Gerr: Try ''puppet help parser validate'' for usage,'
+
+    let errorformat .= 'err: Could not parse for environment %*[a-z]: %m at %f:%l'
 
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 endfunction

@@ -2,8 +2,8 @@
 "File:        syntastic.vim
 "Description: vim plugin for on the fly syntax checking
 "Maintainer:  Martin Grenfell <martin.grenfell at gmail dot com>
-"Version:     2.2.0
-"Last Change: 24 Dec, 2011
+"Version:     2.3.0
+"Last Change: 16 Feb, 2012
 "License:     This program is free software. It comes without any warranty,
 "             to the extent permitted by applicable law. You can redistribute
 "             it and/or modify it under the terms of the Do What The Fuck You
@@ -160,8 +160,10 @@ function! s:LocList()
 endfunction
 
 "clear the loc list for the buffer
-function! s:ClearLocList()
+function! s:ClearCache()
     let b:syntastic_loclist = []
+    unlet! b:syntastic_errors
+    unlet! b:syntastic_warnings
 endfunction
 
 "detect and cache all syntax errors in this buffer
@@ -169,7 +171,7 @@ endfunction
 "depends on a function called SyntaxCheckers_{&ft}_GetLocList() existing
 "elsewhere
 function! s:CacheErrors()
-    call s:ClearLocList()
+    call s:ClearCache()
 
     if filereadable(expand("%"))
 
@@ -195,7 +197,7 @@ function! s:ToggleMode()
         let g:syntastic_mode_map['mode'] = "active"
     endif
 
-    call s:ClearLocList()
+    call s:ClearCache()
     call s:UpdateErrors(1)
 
     echo "Syntastic: " . g:syntastic_mode_map['mode'] . " mode enabled"
@@ -217,30 +219,22 @@ function! s:ModeMapAllowsAutoChecking()
     endif
 endfunction
 
-"return true if there are cached errors/warnings for this buf
-function! s:BufHasErrorsOrWarnings()
-    return !empty(s:LocList())
-endfunction
-
-"return true if there are cached errors for this buf
-function! s:BufHasErrors()
-    return len(s:ErrorsForType('E')) > 0
-endfunction
-
 function! s:BufHasErrorsOrWarningsToDisplay()
-    return s:BufHasErrors() || (!g:syntastic_quiet_warnings && s:BufHasErrorsOrWarnings())
-endfunction
-
-function! s:ErrorsForType(type)
-    return s:FilterLocList({'type': a:type})
+    return len(s:Errors()) || (!g:syntastic_quiet_warnings && !empty(s:LocList()))
 endfunction
 
 function! s:Errors()
-    return s:ErrorsForType("E")
+    if !exists("b:syntastic_errors")
+        let b:syntastic_errors = s:FilterLocList({'type': "E"})
+    endif
+    return b:syntastic_errors
 endfunction
 
 function! s:Warnings()
-    return s:ErrorsForType("W")
+    if !exists("b:syntastic_warnings")
+        let b:syntastic_warnings = s:FilterLocList({'type': "W"})
+    endif
+    return b:syntastic_warnings
 endfunction
 
 "Filter a loc list (defaults to s:LocList()) by a:filters
@@ -253,16 +247,21 @@ endfunction
 function! s:FilterLocList(filters, ...)
     let llist = a:0 ? a:1 : s:LocList()
 
-    let rv = deepcopy(llist)
-    for error in llist
-        for key in keys(a:filters)
-            let rhs = a:filters[key]
-            if type(rhs) == 1 "string
-                let rhs = '"' . rhs . '"'
-            endif
+    let rv = []
 
-            call filter(rv, "v:val['".key."'] ==? " . rhs)
+    for error in llist
+
+        let passes_filters = 1
+        for key in keys(a:filters)
+            if error[key] !=? a:filters[key]
+                let passes_filters = 0
+                break
+            endif
         endfor
+
+        if passes_filters
+            call add(rv, error)
+        endif
     endfor
     return rv
 endfunction
@@ -439,30 +438,33 @@ function! SyntasticStatuslineFlag()
         let errors = s:Errors()
         let warnings = s:Warnings()
 
+        let num_errors = len(errors)
+        let num_warnings = len(warnings)
+
         let output = g:syntastic_stl_format
 
         "hide stuff wrapped in %E(...) unless there are errors
-        let output = substitute(output, '\C%E{\([^}]*\)}', len(errors) ? '\1' : '' , 'g')
+        let output = substitute(output, '\C%E{\([^}]*\)}', num_errors ? '\1' : '' , 'g')
 
         "hide stuff wrapped in %W(...) unless there are warnings
-        let output = substitute(output, '\C%W{\([^}]*\)}', len(warnings) ? '\1' : '' , 'g')
+        let output = substitute(output, '\C%W{\([^}]*\)}', num_warnings ? '\1' : '' , 'g')
 
         "hide stuff wrapped in %B(...) unless there are both errors and warnings
-        let output = substitute(output, '\C%B{\([^}]*\)}', (len(warnings) && len(errors)) ? '\1' : '' , 'g')
+        let output = substitute(output, '\C%B{\([^}]*\)}', (num_warnings && num_errors) ? '\1' : '' , 'g')
 
         "sub in the total errors/warnings/both
-        let output = substitute(output, '\C%w', len(warnings), 'g')
-        let output = substitute(output, '\C%e', len(errors), 'g')
+        let output = substitute(output, '\C%w', num_warnings, 'g')
+        let output = substitute(output, '\C%e', num_errors, 'g')
         let output = substitute(output, '\C%t', len(s:LocList()), 'g')
 
         "first error/warning line num
         let output = substitute(output, '\C%F', s:LocList()[0]['lnum'], 'g')
 
         "first error line num
-        let output = substitute(output, '\C%fe', len(errors) ? errors[0]['lnum'] : '', 'g')
+        let output = substitute(output, '\C%fe', num_errors ? errors[0]['lnum'] : '', 'g')
 
         "first warning line num
-        let output = substitute(output, '\C%fw', len(warnings) ? warnings[0]['lnum'] : '', 'g')
+        let output = substitute(output, '\C%fw', num_warnings ? warnings[0]['lnum'] : '', 'g')
 
         return output
     else
