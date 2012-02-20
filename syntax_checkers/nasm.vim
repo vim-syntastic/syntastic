@@ -20,7 +20,12 @@ if !executable("nasm")
 endif
 
 function! SyntaxCheckers_nasm_GetLocList()
-    let makeprg = "nasm " . shellescape(expand("%"))
+    if has("win32")
+        let outfile="NUL"
+    else
+        let outfile="/dev/null"
+    endif
+    let makeprg = "nasm -X gnu -f elf -o " . outfile . " " . shellescape(expand("%"))
     let errorformat = '%f:%l: %t%*[^:]: %m'
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 endfunction
