@@ -84,7 +84,7 @@ RULES =
 
 # Some repeatedly used regular expressions.
 regexes =
-    trailingWhitespace : /\s+$/
+    trailingWhitespace : /[^\s]+[\t ]+\r?$/
     indentation: /\S/
     camelCase: /^[A-Z][a-zA-Z\d]*$/
     trailingSemicolon: /;$/
