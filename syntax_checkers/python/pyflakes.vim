@@ -26,7 +26,7 @@ function! SyntaxCheckers_python_Term(i)
 endfunction
 
 function! SyntaxCheckers_python_GetLocList()
-    let makeprg = g:syntastic_python_checker.' '.g:syntastic_python_checker_args.' '.shellescape(expand('%'))
+    let makeprg = 'pyflakes '.g:syntastic_python_checker_args.' '.shellescape(expand('%'))
     let errorformat = '%E%f:%l: could not compile,%-Z%p^,%W%f:%l:%c: %m,%W%f:%l: %m,%-G%.%#'
 
     let errors = SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
