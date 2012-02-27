@@ -24,7 +24,7 @@ if !executable("rst2pseudoxml.py")
 endif
 
 function! SyntaxCheckers_rst_GetLocList()
-    let makeprg = 'rst2pseudoxml.py --report=1 --exit-status=1 ' .
+    let makeprg = 'rst2pseudoxml.py --report=2 --exit-status=1 ' .
       \ shellescape(expand('%')) . ' /dev/null'
 
     let errorformat = '%f:%l:\ (%tNFO/1)\ %m,
