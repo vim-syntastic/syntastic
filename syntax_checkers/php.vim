@@ -38,7 +38,7 @@ function! SyntaxCheckers_php_GetLocList()
 
     let errors = []
 
-    let makeprg = "php -l ".shellescape(expand('%'))
+    let makeprg = "php -l -d error_reporting=E_PARSE -d display_errors=1 ".shellescape(expand('%'))
     let errorformat='%-GNo syntax errors detected in%.%#,PHP Parse error: %#syntax %trror\, %m in %f on line %l,PHP Fatal %trror: %m in %f on line %l,%-GErrors parsing %.%#,%-G\s%#,Parse error: %#syntax %trror\, %m in %f on line %l,Fatal %trror: %m in %f on line %l'
     let errors = SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 
