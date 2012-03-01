@@ -64,6 +64,16 @@ Google group
 To get information or make suggestions check out the [google group](https://groups.google.com/group/vim-syntastic).
 
 
+FAQ
+---
+
+__Q. I installed syntastic but it isn't reporting any errors ...__
+
+A. The most likely reason is that the syntax checker that it requires isn't installed. For example: python requires either `flake8`, `pyflakes` or `pylint` to be installed and in `$PATH`. To see which executable is required, just look in `syntax_checkers/<filetype>.vim`.
+
+Another reason it could fail is that the error output for the syntax checker may have changed. In this case, make sure you have the latest version of the syntax checker installed. If it still fails then create an issue - or better yet, create a pull request.
+
+
 Changelog
 ---------
 2.3.0 (16-feb-2012)
