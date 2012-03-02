@@ -32,7 +32,7 @@ if exists('g:syntastic_vala_check_disabled') && g:syntastic_vala_check_disabled
     finish
 endif
 
-function! SyntaxCheckers_vala_Term(pos)
+function! SyntaxCheckers_vala_GetHighlightRegex(pos)
     let strlength = strlen(matchstr(a:pos['text'], '\^\+$'))
     return '\%>'.(a:pos.col-1).'c.*\%<'.(a:pos.col+strlength+1).'c'
 endfunction
@@ -49,8 +49,8 @@ function! SyntaxCheckers_vala_GetLocList()
     let makeprg = 'valac -C ' . vala_pkg_args . ' ' .shellescape(expand('%'))
     let errorformat = '%A%f:%l.%c-%\d%\+.%\d%\+: %t%[a-z]%\+: %m,%C%m,%Z%m'
 
-    let loclist = SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
-    call SyntasticHighlightErrors(loclist, function("SyntaxCheckers_vala_Term"), 1)
-    return loclist
+    return SyntasticMake({ 'makeprg': makeprg,
+                         \ 'errorformat': errorformat,
+                         \ 'defaults': {'force_highlight_callback': 1} })
 endfunction
 

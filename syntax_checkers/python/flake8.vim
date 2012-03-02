@@ -5,7 +5,7 @@
 "             kstep <me@kstep.me>
 "
 "============================================================================
-function! SyntaxCheckers_python_Term(i)
+function! SyntaxCheckers_python_GetHighlightRegex(i)
     if a:i['type'] ==# 'E'
         let a:i['text'] = "Syntax error"
     endif
@@ -27,10 +27,5 @@ endfunction
 function! SyntaxCheckers_python_GetLocList()
     let makeprg = 'flake8 '.g:syntastic_python_checker_args.' '.shellescape(expand('%'))
     let errorformat = '%E%f:%l: could not compile,%-Z%p^,%W%f:%l:%c: %m,%W%f:%l: %m,%-G%.%#'
-
-    let errors = SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
-
-    call SyntasticHighlightErrors(errors, function('SyntaxCheckers_python_Term'))
-
-    return errors
+    return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 endfunction

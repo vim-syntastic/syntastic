@@ -127,6 +127,10 @@ function! s:UpdateErrors(auto_invoked)
         call s:RefreshSigns()
     endif
 
+    if g:syntastic_enable_highlighting
+        call s:HightlightErrors()
+    endif
+
     if g:syntastic_auto_jump && s:BufHasErrorsOrWarningsToDisplay()
         silent! ll
     endif
@@ -350,6 +354,43 @@ function! s:ShowLocList()
     endif
 endfunction
 
+"highlight the current errors using matchadd()
+"
+"The function `Syntastic_{&ft}_GetHighlightRegex` is used to get the regex to
+"highlight errors that do not have a 'col' key (and hence cant be done
+"automatically). This function must take one arg (an error item) and return a
+"regex to match that item in the buffer.
+"
+"If the 'force_highlight_callback' key is set for an error item, then invoke
+"the callback even if it can be highlighted automatically.
+function! s:HightlightErrors()
+    call s:ClearErrorHighlights()
+
+    let fts = substitute(&ft, '-', '_', 'g')
+    for ft in split(fts, '\.')
+
+        for item in s:LocList()
+
+            let force_callback = has_key(item, 'force_highlight_callback') && item['force_highlight_callback']
+
+            let group = item['type'] == 'E' ? 'SyntasticError' : 'SyntasticWarning'
+            if item['col'] && !force_callback
+                let lastcol = col([item['lnum'], '$'])
+                let lcol = min([lastcol, item['col']])
+                call matchadd(group, '\%'.item['lnum'].'l\%'.lcol.'c')
+            else
+
+                if exists("*SyntaxCheckers_". ft ."_GetHighlightRegex")
+                    let term = SyntaxCheckers_{ft}_GetHighlightRegex(item)
+                    if len(term) > 0
+                        call matchadd(group, '\%' . item['lnum'] . 'l' . term)
+                    endif
+                endif
+            endif
+        endfor
+    endfor
+endfunction
+
 "remove all error highlights from the window
 function! s:ClearErrorHighlights()
     for match in getmatches()
@@ -539,37 +580,6 @@ function! SyntasticErrorBalloonExpr()
         return ''
     endif
     return get(b:syntastic_balloons, v:beval_lnum, '')
-endfunction
-
-"highlight the list of errors (a:errors) using matchadd()
-"
-"a:termfunc is provided to highlight errors that do not have a 'col' key (and
-"hence cant be done automatically). This function must take one arg (an error
-"item) and return a regex to match that item in the buffer.
-"
-"an optional boolean third argument can be provided to force a:termfunc to be
-"used regardless of whether a 'col' key is present for the error
-function! SyntasticHighlightErrors(errors, termfunc, ...)
-    if !g:syntastic_enable_highlighting
-        return
-    endif
-
-    call s:ClearErrorHighlights()
-
-    let force_callback = a:0 && a:1
-    for item in a:errors
-        let group = item['type'] == 'E' ? 'SyntasticError' : 'SyntasticWarning'
-        if item['col'] && !force_callback
-            let lastcol = col([item['lnum'], '$'])
-            let lcol = min([lastcol, item['col']])
-            call matchadd(group, '\%'.item['lnum'].'l\%'.lcol.'c')
-        else
-            let term = a:termfunc(item)
-            if len(term) > 0
-                call matchadd(group, '\%' . item['lnum'] . 'l' . term)
-            endif
-        endif
-    endfor
 endfunction
 
 "take a list of errors and add default values to them from a:options

@@ -28,9 +28,11 @@ if !exists("g:syntastic_phpcs_disable")
     let g:syntastic_phpcs_disable = 0
 endif
 
-function! SyntaxCheckers_php_Term(item)
+function! SyntaxCheckers_php_GetHighlightRegex(item)
     let unexpected = matchstr(a:item['text'], "unexpected '[^']\\+'")
-    if len(unexpected) < 1 | return '' | end
+    if len(unexpected) < 1
+        return ''
+    endif
     return '\V'.split(unexpected, "'")[1]
 endfunction
 
@@ -45,8 +47,6 @@ function! SyntaxCheckers_php_GetLocList()
     if empty(errors) && !g:syntastic_phpcs_disable && executable("phpcs")
         let errors = errors + s:GetPHPCSErrors()
     endif
-
-    call SyntasticHighlightErrors(errors, function('SyntaxCheckers_php_Term'))
 
     return errors
 endfunction

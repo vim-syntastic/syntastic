@@ -6,7 +6,7 @@
 "             Parantapa Bhattacharya <parantapa@gmail.com>
 "
 "============================================================================
-function! SyntaxCheckers_python_Term(i)
+function! SyntaxCheckers_python_GetHighlightRegex(i)
     if match(a:i['text'], 'is assigned to but never used') > -1
                 \ || match(a:i['text'], 'imported but unused') > -1
                 \ || match(a:i['text'], 'undefined name') > -1
@@ -29,8 +29,6 @@ function! SyntaxCheckers_python_GetLocList()
     let errors = SyntasticMake({ 'makeprg': makeprg,
                                \ 'errorformat': errorformat,
                                \ 'defaults': {'text': "Syntax error"} })
-
-    call SyntasticHighlightErrors(errors, function('SyntaxCheckers_python_Term'))
 
     return errors
 endfunction
