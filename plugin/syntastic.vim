@@ -88,6 +88,8 @@ endif
 command! SyntasticToggleMode call s:ToggleMode()
 command! SyntasticCheck call s:UpdateErrors(0) <bar> redraw!
 command! Errors call s:ShowLocList()
+command! NextError call s:JumpToError(0)
+command! PreviousError call s:JumpToError(1)
 
 highlight link SyntasticError SpellBad
 highlight link SyntasticWarning SpellCap
@@ -351,6 +353,21 @@ function! s:ShowLocList()
         if num != winnr()
             wincmd p
         endif
+    endif
+endfunction
+
+"jump to next/previous error depending on reverse argument
+"doesn't loop back over the buffer after reaching the end.
+function! s:JumpToError(reverse)
+    if s:BufHasErrorsOrWarningsToDisplay()
+        let current_line = line(".")
+        let loc_list = a:reverse ? reverse(s:LocList()) : s:LocList()
+        for i in loc_list
+            if (current_line < i['lnum'] && !a:reverse) || (current_line > i['lnum'] && a:reverse)
+                exec ":" . i['lnum']
+                break
+            endif
+        endfor
     endif
 endfunction
 
