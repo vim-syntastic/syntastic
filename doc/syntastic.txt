@@ -125,6 +125,16 @@ Syntastic's own location list.
 When errors have been detected, use this command to pop up the |location-list|
 and display the error messages.
 
+:NextError                                                  *:SyntasticErrors*
+
+Go to the next error in the file relative to current position in the file.
+Does not loop to the beginning once the end of the file has been reached.
+
+:PreviousError                                              *:SyntasticErrors*
+
+Go to the previous error in the file relative to current position in the file.
+Does not loop to the end once the beginning of the file has been reached.
+
 
 :SyntasticToggleMode                                    *:SyntasticToggleMode*
 
