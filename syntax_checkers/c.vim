@@ -64,36 +64,9 @@ endif
 let s:save_cpo = &cpo
 set cpo&vim
 
-" default include directories
-let s:default_includes = [ '.', '..', 'include', 'includes',
-            \ '../include', '../includes' ]
-
-" uniquify the input list
-function! s:Unique(list)
-    let l = []
-    for elem in a:list
-        if index(l, elem) == -1
-            let l = add(l, elem)
-        endif
-    endfor
-    return l
-endfunction
-
-" get the gcc include directory argument depending on the default
-" includes and the optional user-defined 'g:syntastic_c_include_dirs'
-function! s:GetIncludeDirs()
-    let include_dirs = s:default_includes
-
-    if exists('g:syntastic_c_include_dirs')
-        call extend(include_dirs, g:syntastic_c_include_dirs)
-    endif
-
-    return join(map(s:Unique(include_dirs), '"-I" . v:val'), ' ')
-endfunction
-
 function! SyntaxCheckers_c_GetLocList()
     let makeprg = 'gcc -fsyntax-only -std=gnu99 '.shellescape(expand('%')).
-               \ ' '.s:GetIncludeDirs()
+               \ ' '.syntastic#c#GetIncludeDirs(0)
     let errorformat = '%-G%f:%s:,%-G%f:%l: %#error: %#(Each undeclared '.
                \ 'identifier is reported only%.%#,%-G%f:%l: %#error: %#for '.
                \ 'each function it appears%.%#,%-GIn file included%.%#,'.
@@ -103,7 +76,7 @@ function! SyntaxCheckers_c_GetLocList()
     if expand('%') =~? '.h$'
         if exists('g:syntastic_c_check_header')
             let makeprg = 'gcc -c '.shellescape(expand('%')).
-                        \ ' '.s:GetIncludeDirs()
+                        \ ' '.syntastic#c#GetIncludeDirs(0)
         else
             return []
         endif
