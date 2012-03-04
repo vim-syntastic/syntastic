@@ -5,7 +5,7 @@
 "
 "============================================================================
 function! SyntaxCheckers_python_GetLocList()
-    let makeprg = 'pylint -f parseable -r n -i y ' .
+    let makeprg = 'pylint '.g:syntastic_python_checker_args.' -f parseable -r n -i y ' .
                 \ shellescape(expand('%')) .
                 \ ' \| sed ''s_: \[[RC]_: \[W_''' .
                 \ ' \| sed ''s_: \[[F]_:\ \[E_'''
