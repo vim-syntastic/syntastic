@@ -45,6 +45,12 @@
 " checking execution via the variable 'g:syntastic_cpp_compiler_options':
 "
 "   let g:syntastic_cpp_compiler_options = ' -std=c++0x'
+"
+" Using the global variable 'g:syntastic_cpp_remove_include_errors' you can
+" specify whether errors of files included via the
+" g:syntastic_cpp_include_dirs' setting are removed from the result set:
+"
+"   let g:syntastic_cpp_remove_include_errors = 1
 
 if exists('loaded_cpp_syntax_checker')
     finish
@@ -93,7 +99,18 @@ function! SyntaxCheckers_cpp_GetLocList()
         let makeprg .= b:syntastic_cpp_cflags
     endif
 
-    return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
+    " process makeprg
+    let errors = SyntasticMake({ 'makeprg': makeprg,
+                \ 'errorformat': errorformat })
+
+    " filter the processed errors if desired
+    if exists('g:syntastic_cpp_remove_include_errors') &&
+                \ g:syntastic_cpp_remove_include_errors != 0
+        return filter(errors,
+                    \ 'has_key(v:val, "bufnr") && v:val["bufnr"]=='.bufnr(''))
+    else
+        return errors
+    endif
 endfunction
 
 let &cpo = s:save_cpo
