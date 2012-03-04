@@ -20,6 +20,12 @@
 "
 "   let g:syntastic_cpp_no_include_search = 1
 "
+" In order to add some custom include directories that should be added to the
+" gcc command line you can add those to the global variable
+" g:syntastic_cpp_include_dirs. This list can be used like this:
+"
+"   let g:syntastic_cpp_include_dirs = [ 'includes', 'headers' ]
+"
 " To enable header files being re-checked on every file write add the
 " following line to your .vimrc. Otherwise the header files are checked only
 " one time on initially loading the file.
