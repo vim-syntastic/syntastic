@@ -65,21 +65,23 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 function! SyntaxCheckers_cpp_GetLocList()
-    let makeprg = 'g++ -fsyntax-only '.shellescape(expand('%')).
-                \ ' ' . syntastic#c#GetIncludeDirs(1)
+    let makeprg = 'g++ -fsyntax-only '
     let errorformat =  '%-G%f:%s:,%f:%l:%c: %m,%f:%l: %m'
+
+    if exists('g:syntastic_cpp_compiler_options')
+        let makeprg .= g:syntastic_cpp_compiler_options
+    endif
+
+    let makeprg .= ' ' . shellescape(expand('%')) .
+                \ ' ' . syntastic#c#GetIncludeDirs('cpp')
 
     if expand('%') =~? '\%(.h\|.hpp\|.hh\)$'
         if exists('g:syntastic_cpp_check_header')
             let makeprg = 'g++ -c '.shellescape(expand('%')).
-                        \ ' ' . syntastic#c#GetIncludeDirs(1)
+                        \ ' ' . syntastic#c#GetIncludeDirs('cpp')
         else
             return []
         endif
-    endif
-
-    if exists('g:syntastic_cpp_compiler_options')
-        let makeprg .= g:syntastic_cpp_compiler_options
     endif
 
     if !exists('b:syntastic_cpp_cflags')

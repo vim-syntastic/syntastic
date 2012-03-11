@@ -55,17 +55,11 @@ endfunction
 
 " get the gcc include directory argument depending on the default
 " includes and the optional user-defined 'g:syntastic_c_include_dirs'
-function! syntastic#c#GetIncludeDirs(cpp)
+function! syntastic#c#GetIncludeDirs(filetype)
     let include_dirs = copy(s:default_includes)
 
-    if a:cpp == 1
-        if exists('g:syntastic_cpp_include_dirs')
-            call extend(include_dirs, g:syntastic_cpp_include_dirs)
-        endif
-    else
-        if exists('g:syntastic_c_include_dirs')
-            call extend(include_dirs, g:syntastic_c_include_dirs)
-        endif
+    if exists('g:syntastic_'.a:filetype.'_include_dirs')
+        call extend(include_dirs, g:syntastic_{a:filetype}_include_dirs)
     endif
 
     return join(map(s:Unique(include_dirs), '"-I" . v:val'), ' ')
