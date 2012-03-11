@@ -65,12 +65,19 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 function! SyntaxCheckers_c_GetLocList()
-    let makeprg = 'gcc -fsyntax-only -std=gnu99 '.shellescape(expand('%')).
-               \ ' '.syntastic#c#GetIncludeDirs(0)
+    let makeprg = 'gcc -fsyntax-only -std=gnu99 '
     let errorformat = '%-G%f:%s:,%-G%f:%l: %#error: %#(Each undeclared '.
                \ 'identifier is reported only%.%#,%-G%f:%l: %#error: %#for '.
                \ 'each function it appears%.%#,%-GIn file included%.%#,'.
                \ '%-G %#from %f:%l\,,%f:%l:%c: %m,%f:%l: %trror: %m,%f:%l: %m'
+
+    " add optional user-defined compiler options
+    if exists('g:syntastic_c_compiler_options')
+        let makeprg .= g:syntastic_c_compiler_options
+    endif
+
+    let makeprg .= ' '.shellescape(expand('%')).
+               \ ' '.syntastic#c#GetIncludeDirs(0)
 
     " determine whether to parse header files as well
     if expand('%') =~? '.h$'
@@ -80,11 +87,6 @@ function! SyntaxCheckers_c_GetLocList()
         else
             return []
         endif
-    endif
-
-    " add optional user-defined compiler options
-    if exists('g:syntastic_c_compiler_options')
-        let makeprg .= g:syntastic_c_compiler_options
     endif
 
     " check if the user manually set some cflags
