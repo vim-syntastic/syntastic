@@ -73,12 +73,12 @@ function! SyntaxCheckers_cpp_GetLocList()
     endif
 
     let makeprg .= ' ' . shellescape(expand('%')) .
-                \ ' ' . syntastic#c#GetIncludeDirs(1)
+                \ ' ' . syntastic#c#GetIncludeDirs('cpp')
 
     if expand('%') =~? '\%(.h\|.hpp\|.hh\)$'
         if exists('g:syntastic_cpp_check_header')
             let makeprg = 'g++ -c '.shellescape(expand('%')).
-                        \ ' ' . syntastic#c#GetIncludeDirs(1)
+                        \ ' ' . syntastic#c#GetIncludeDirs('cpp')
         else
             return []
         endif

@@ -79,13 +79,13 @@ function! SyntaxCheckers_c_GetLocList()
     let makeprg .= g:syntastic_c_compiler_options
 
     let makeprg .= ' '.shellescape(expand('%')).
-               \ ' '.syntastic#c#GetIncludeDirs(0)
+               \ ' '.syntastic#c#GetIncludeDirs('c')
 
     " determine whether to parse header files as well
     if expand('%') =~? '.h$'
         if exists('g:syntastic_c_check_header')
             let makeprg = 'gcc -c '.shellescape(expand('%')).
-                        \ ' '.syntastic#c#GetIncludeDirs(0)
+                        \ ' '.syntastic#c#GetIncludeDirs('c')
         else
             return []
         endif
