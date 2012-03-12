@@ -9,6 +9,6 @@ function! SyntaxCheckers_python_GetLocList()
                 \ shellescape(expand('%')) .
                 \ ' \| sed ''s_: \[[RC]_: \[W_''' .
                 \ ' \| sed ''s_: \[[F]_:\ \[E_'''
-    let errorformat = '%f:%l: [%t%n] %m,%-GNo config%m'
+    let errorformat = '%f:%l: [%t%n%.%#] %m,%-GNo config%m'
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 endfunction
