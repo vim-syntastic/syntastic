@@ -33,5 +33,12 @@ vows.describe('trailing').addBatch({
             errors = coffeelint.lint(source, {})
             assert.equal(errors.length, 1)
 
+    'Windows line endings' :
+
+        topic : 'x = 1234\r\ny = 5678'
+
+        'are permitted' : (source) ->
+            assert.isEmpty(coffeelint.lint(source))
+
 }).export(module)
 
