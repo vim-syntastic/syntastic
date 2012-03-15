@@ -65,11 +65,15 @@ vows.describe('identifiers').addBatch({
 
             y = class extends x
               m : -> 456
+
+            z = class
+
+            r = class then 1:2
             """
 
         'are permitted' : (source) ->
             errors = coffeelint.lint(source)
-            assert.lengthOf(errors, 0)
+            assert.isEmpty(errors)
 
     'Inner classes are permitted' :
 

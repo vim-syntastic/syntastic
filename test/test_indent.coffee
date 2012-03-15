@@ -23,7 +23,6 @@ vows.describe('indent').addBatch({
             error = errors[0]
             msg = 'Line contains inconsistent indentation'
             assert.equal(error.message, msg)
-            assert.include(error.evidence, 'four spaces')
             assert.equal(error.rule, 'indentation')
             assert.equal(error.lineNumber, 5)
             assert.equal(error.context, "Expected 2 got 4")
@@ -36,7 +35,6 @@ vows.describe('indent').addBatch({
             errors = coffeelint.lint(source, config)
             assert.equal(errors.length, 1)
             error = errors[0]
-            assert.include(error.evidence, 'two spaces')
             assert.equal(error.lineNumber, 2)
 
         'is optional' : (source) ->

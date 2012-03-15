@@ -23,7 +23,7 @@ else
 
 
 # The current version of Coffeelint.
-coffeelint.VERSION = "0.2.0"
+coffeelint.VERSION = "0.3.0"
 
 
 # CoffeeLint error levels.
@@ -315,7 +315,7 @@ class LexicalLinter
         # class func().ClassName. Don't allow that.
 
         # Don't try to lint the names of anonymous classes.
-        return null if token.newLine? or @peek()[0] is 'EXTENDS'
+        return null if token.newLine? or @peek()[0] in ['INDENT', 'EXTENDS']
 
         # It's common to assign a class to a global namespace, e.g.
         # exports.MyClassName, so loop through the next tokens until
