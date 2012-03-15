@@ -90,6 +90,8 @@ var optimist = require('optimist')
     .describe('f', 'Specify a custom configuration file.')
     .describe('h', 'Print help information.')
     .describe('v', 'Print current version number.')
+    .describe('stdin', 'Use stdin instead of a file')
+    .boolean('stdin')
     .describe('nocolor', "Don't colorize output.")
     .boolean('nocolor');
 
@@ -99,6 +101,23 @@ if (optimist.argv.v) {
 } else if (optimist.argv.h) {
     optimist.showHelp();
     process.exit(0);
+} else if (optimist.argv.stdin) {
+    data = '';
+    stdin = process.openStdin();
+    stdin
+        .on('data', function(buffer){
+            if(buffer)
+                data += buffer.toString();
+        }).on('end', function(){
+            var config = (configPath) ? JSON.parse(read(configPath)) : {};
+            var foundError = false;
+            var foundWarning = false;
+            coffeelint.lint(data, config).forEach(function (error) {
+                reportError('', error);
+                foundError = foundError || error.level === 'error';
+                foundWarning = foundWarning || error.level === 'warn';
+            });
+        });
 } else if (optimist.argv._.length < 1) {
     optimist.showHelp();
     process.exit(1);
