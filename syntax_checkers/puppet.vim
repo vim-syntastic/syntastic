@@ -53,7 +53,7 @@ function! s:getPuppetLintErrors()
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat, 'subtype': 'Style' })
 endfunction
 
-function! SyntaxCheckers_puppet_GetLocList()
+function! s:getPuppetMakeprg() 
     "If puppet is >= version 2.7 then use the new executable
     if s:puppetVersion[0] >= '2' && s:puppetVersion[1] >= '7'
         let makeprg = 'puppet parser validate ' .
@@ -68,11 +68,16 @@ function! SyntaxCheckers_puppet_GetLocList()
     else
         let makeprg = 'puppet --color=false --parseonly --ignoreimport '.shellescape(expand('%'))
     endif
+    return makeprg
+endfunction
+
+function! SyntaxCheckers_puppet_GetLocList()
+
+    let makeprg = s:getPuppetMakeprg()
 
     "some versions of puppet (e.g. 2.7.10) output the message below if there
     "are any syntax errors
     let errorformat = '%-Gerr: Try ''puppet help parser validate'' for usage,'
-
     let errorformat .= 'err: Could not parse for environment %*[a-z]: %m at %f:%l'
 
     let errors = SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
@@ -80,6 +85,7 @@ function! SyntaxCheckers_puppet_GetLocList()
     if !g:syntastic_puppet_lint_disable
         let errors = errors + s:getPuppetLintErrors()
     endif
+
     return errors
 endfunction
 
