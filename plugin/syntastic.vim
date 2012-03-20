@@ -374,7 +374,7 @@ function! s:HightlightErrors()
             let force_callback = has_key(item, 'force_highlight_callback') && item['force_highlight_callback']
 
             let group = item['type'] == 'E' ? 'SyntasticError' : 'SyntasticWarning'
-            if item['col'] && !force_callback
+            if get( item, 'col' ) && !force_callback
                 let lastcol = col([item['lnum'], '$'])
                 let lcol = min([lastcol, item['col']])
                 call matchadd(group, '\%'.item['lnum'].'l\%'.lcol.'c')
