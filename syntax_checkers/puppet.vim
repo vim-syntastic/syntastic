@@ -19,21 +19,46 @@ if !executable("puppet")
     finish
 endif
 
-function! s:ExtractVersion()
+if !exists("g:syntastic_puppet_lint_disable")
+    let g:syntastic_puppet_lint_disable = 0
+endif
+
+if !executable("puppet-lint")
+    let g:syntastic_puppet_lint_disable = 0
+endif
+
+function! s:PuppetExtractVersion()
     let output = system("puppet --version")
     let output = substitute(output, '\n$', '', '')
     return split(output, '\.')
 endfunction
 
-let s:puppetVersion = s:ExtractVersion()
+function! s:PuppetLintExtractVersion()
+    let output = system("puppet-lint --version")
+    let output = substitute(output, '\n$', '', '')
+    let output = substitute(output, '^puppet-lint ', '', 'i')
+    return split(output, '\.')
+endfunction
 
-function! SyntaxCheckers_puppet_GetLocList()
+let s:puppetVersion = s:PuppetExtractVersion()
+let s:lintVersion = s:PuppetLintExtractVersion()
+
+if !(s:lintVersion[0] >= '0' && s:lintVersion[1] >= '1' && s:lintVersion[2] >= '10')
+    let g:syntastic_puppet_lint_disable = 0
+endif
+
+function! s:getPuppetLintErrors()
+    let makeprg = 'puppet-lint --log-format "\%{KIND} [\%{check}] \%{message} at \%{fullpath}:\%{linenumber}" '.shellescape(expand('%'))
+    let errorformat = '%t%*[a-zA-Z] %m at %f:%l'
+    return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat, 'subtype': 'Style' })
+endfunction
+
+function! s:getPuppetMakeprg() 
     "If puppet is >= version 2.7 then use the new executable
     if s:puppetVersion[0] >= '2' && s:puppetVersion[1] >= '7'
         let makeprg = 'puppet parser validate ' .
                     \ shellescape(expand('%')) .
-                    \ ' --color=false' .
-                    \ ' --storeconfigs'
+                    \ ' --color=false'
 
         "add --ignoreimport for versions < 2.7.10
         if s:puppetVersion[2] < '10'
@@ -43,12 +68,24 @@ function! SyntaxCheckers_puppet_GetLocList()
     else
         let makeprg = 'puppet --color=false --parseonly --ignoreimport '.shellescape(expand('%'))
     endif
+    return makeprg
+endfunction
+
+function! SyntaxCheckers_puppet_GetLocList()
+
+    let makeprg = s:getPuppetMakeprg()
 
     "some versions of puppet (e.g. 2.7.10) output the message below if there
     "are any syntax errors
     let errorformat = '%-Gerr: Try ''puppet help parser validate'' for usage,'
-
     let errorformat .= 'err: Could not parse for environment %*[a-z]: %m at %f:%l'
 
-    return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
+    let errors = SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
+ 
+    if !g:syntastic_puppet_lint_disable
+        let errors = errors + s:getPuppetLintErrors()
+    endif
+
+    return errors
 endfunction
+
