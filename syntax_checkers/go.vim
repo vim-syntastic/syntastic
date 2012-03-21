@@ -19,4 +19,4 @@ endif
 let loaded_go_syntax_checker = 1
 
 let s:supported_checkers = ["6g", "gofmt"]
-call SyntasticLoadChecker(s:supported_checkers)
+call SyntasticLoadChecker(s:supported_checkers, 'go')
