@@ -1,113 +1,87 @@
 #!/usr/bin/env node
+(function() {
+  var coffeelint, colorize, configPath, fs, lint, optimist, path, paths, read, reportError, reportSuccess, returnCode, stylize, thisdir;
 
-// Require dependencies.
-var path = require('path');
-var fs = require('fs');
-var optimist = require ('optimist');
-var thisdir = path.dirname(fs.realpathSync(__filename));
-var coffeelint = require(path.join(thisdir, '..', 'lib', 'coffeelint'));
+  path = require("path");
 
+  fs = require("fs");
 
-// Stylize the given message
-var stylize = function (message, styles) {
+  optimist = require("optimist");
 
-    // Borrowed this style map from vowsjs.org
-    var map = {
-        'bold'      : [1,  22],
-        'yellow'    : [33, 39],
-        'green'     : [32, 39],
-        'red'       : [31, 39],
+  thisdir = path.dirname(fs.realpathSync(__filename));
+
+  coffeelint = require(path.join(thisdir, "..", "lib", "coffeelint"));
+
+  stylize = function(message, styles) {
+    var map;
+    map = {
+      bold: [1, 22],
+      yellow: [33, 39],
+      green: [32, 39],
+      red: [31, 39]
     };
-
-    return styles.reduce(function (m, style) {
-        return '\033[' + map[style][0] + 'm' + m +
-               '\033[' + map[style][1] + 'm';
+    return styles.reduce(function(m, style) {
+      return "\u001b[" + map[style][0] + "m" + m + "\u001b[" + map[style][1] + "m";
     }, message);
-};
+  };
 
-// Print an error to the console.
-var reportError = function (path, error, colorize) {
-    var fields = [
-        path + "#" + error.lineNumber,
-        error.level,
-        error.message
-    ];
-    if (error.context) {
-        fields.push(error.context)
-    }
-    console.warn(fields.join(" : "));
-};
+  reportError = function(path, error, colorize) {
+    var fields;
+    fields = [path + "#" + error.lineNumber, error.level, error.message];
+    if (error.context) fields.push(error.context);
+    return console.warn(fields.join(" : "));
+  };
 
-var reportSuccess = function (message, colorize) {
-    var output = colorize ? stylize(message, ['bold', 'green']) : message;
-    console.log(output);
-};
+  reportSuccess = function(message, colorize) {
+    if (colorize) message = stylize(message, ["bold", "green"]);
+    return console.log(message);
+  };
 
-// Return the file's contents.
-var read = function (path) {
-    var realPath = fs.realpathSync(path);
+  read = function(path) {
+    var realPath;
+    realPath = fs.realpathSync(path);
     return fs.readFileSync(realPath).toString();
-};
+  };
 
-
-// Lint the given files with the given configuration and print a report
-// on the outcome. Return an exit code indicating the success of the
-// operation.
-var lint = function (paths, configPath, colorize) {
-
-    // Load the users configuration, if they've passed one.
-    var config = (configPath) ? JSON.parse(read(configPath)) : {};
-
-    var foundError = false;
-    var foundWarning = false;
-
-    // Lint and report on each script.
-    paths.forEach(function (path) {
-        var source = read(path);
-        coffeelint.lint(source, config).forEach(function (error) {
-            reportError(path, error);
-            foundError = foundError || error.level === 'error';
-            foundWarning = foundWarning || error.level === 'warn';
-        });
+  lint = function(paths, configPath, colorize) {
+    var config, foundError, foundWarning;
+    config = (configPath ? JSON.parse(read(configPath)) : {});
+    foundError = false;
+    foundWarning = false;
+    paths.forEach(function(path) {
+      var source;
+      source = read(path);
+      return coffeelint.lint(source, config).forEach(function(error) {
+        reportError(path, error);
+        foundError = foundError || error.level === "error";
+        return foundWarning = foundWarning || error.level === "warn";
+      });
     });
+    if (!foundError && !foundWarning) reportSuccess("Lint free!", colorize);
+    if (foundError) {
+      return 1;
+    } else {
 
-    // If we're good, print a success report.
-    if (!foundError && !foundWarning) {
-        reportSuccess('Lint free!', colorize);
     }
+  };
 
-    // Return a non-zero return code if we've found an error.
-    return (foundError) ? 1 : 0;
-};
+  optimist = require("optimist").usage("Usage: coffeelint [options] source [...]").alias("f", "file").alias("h", "help").alias("v", "version").describe("f", "Specify a custom configuration file.").describe("h", "Print help information.").describe("v", "Print current version number.").describe("nocolor", "Don't colorize output.").boolean("nocolor");
 
-
-// Declare command line options.
-var optimist = require('optimist')
-    .usage('Usage: coffeelint [options] source [...]')
-    .alias('f', 'file')
-    .alias('h', 'help')
-    .alias('v', 'version')
-    .describe('f', 'Specify a custom configuration file.')
-    .describe('h', 'Print help information.')
-    .describe('v', 'Print current version number.')
-    .describe('nocolor', "Don't colorize output.")
-    .boolean('nocolor');
-
-if (optimist.argv.v) {
+  if (optimist.argv.v) {
     console.log(coffeelint.VERSION);
     process.exit(0);
-} else if (optimist.argv.h) {
+  } else if (optimist.argv.h) {
     optimist.showHelp();
     process.exit(0);
-} else if (optimist.argv._.length < 1) {
+  } else if (optimist.argv._.length < 1) {
     optimist.showHelp();
     process.exit(1);
-} else {
-    var paths = optimist.argv._;
-    var configPath = optimist.argv.f;
-    var colorize = !optimist.argv.nocolor;
-    var returnCode = lint(paths, configPath, colorize);
+  } else {
+    paths = optimist.argv._;
+    configPath = optimist.argv.f;
+    colorize = !optimist.argv.nocolor;
+    returnCode = lint(paths, configPath, colorize);
     process.exit(returnCode);
-}
+  }
 
-// vim: filetype=javascript
+}).call(this);
