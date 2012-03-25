@@ -82,6 +82,12 @@ RULES =
         level : ERROR
         message : 'Backticks are forbidden'
 
+    line_endings:
+        level : IGNORE
+        value : 'unix' # or 'windows'
+        message : 'Line contains incorrect line endings'
+
+
 # Some repeatedly used regular expressions.
 regexes =
     trailingWhitespace : /[^\s]+[\t ]+\r?$/
@@ -125,10 +131,12 @@ class LineLinter
         @line = null
         @lineNumber = 0
         @tokensByLine = tokensByLine
+        @lines = @source.split('\n')
+        @lineCount = @lines.length
 
     lint : () ->
         errors = []
-        for line, lineNumber in @source.split('\n')
+        for line, lineNumber in @lines
             @lineNumber = lineNumber
             @line = line
             error = @lintLine()
@@ -140,7 +148,8 @@ class LineLinter
         return @checkTabs() or
                @checkTrailingWhitespace() or
                @checkLineLength() or
-               @checkTrailingSemicolon()
+               @checkTrailingSemicolon() or
+               @checkLineEndings()
 
     checkTabs : () ->
         # Only check lines that have compiled tokens. This helps
@@ -178,11 +187,32 @@ class LineLinter
         else
             return null
 
-    createLineError : (rule) ->
-        attrs =
-            lineNumber: @lineNumber + 1 # Lines are indexed by zero.
-            level: @config[rule]?.level
+    checkLineEndings : () ->
+        rule = 'line_endings'
+        ending = @config[rule]?.value
+
+        return null if not ending or @isLastLine() or not @line
+
+        lastChar = @line[@line.length-1]
+        valid = if ending == 'windows'
+            lastChar == '\r'
+        else if ending == 'unix'
+            lastChar != '\r'
+        else
+            throw new Error("unknown line ending type: #{ending}")
+        if not valid
+            return @createLineError(rule, {context:"Expected #{ending}"})
+        else
+            return null
+
+
+    createLineError : (rule, attrs={}) ->
+        attrs.lineNumber = @lineNumber + 1 # Lines are indexed by zero.
+        attrs.level = @config[rule]?.level
         createError(rule, attrs)
+
+    isLastLine : () ->
+        return @lineNumber == @lineCount - 1
 
     # Return true if the given line actually has tokens.
     lineHasToken : () ->
