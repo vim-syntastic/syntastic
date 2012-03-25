@@ -1,4 +1,12 @@
 #!/usr/bin/env node
+
+/*
+CoffeeLint
+
+Copyright (c) 2011 Matthew Perpick.
+CoffeeLint is freely distributable under the MIT license.
+*/
+
 (function() {
   var coffeelint, colorize, configPath, fs, lint, optimist, path, paths, read, reportError, reportSuccess, returnCode, stylize, thisdir;
 

@@ -1,3 +1,10 @@
+###
+CoffeeLint
+
+Copyright (c) 2011 Matthew Perpick.
+CoffeeLint is freely distributable under the MIT license.
+###
+
 
 # Load dependencies.
 path = require("path")
