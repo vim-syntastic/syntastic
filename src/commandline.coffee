@@ -54,8 +54,10 @@ lint = (paths, configPath, colorize) ->
             foundError = foundError or error.level is "error"
             foundWarning = foundWarning or error.level is "warn"
 
-    reportSuccess "Lint free!", colorize  if not foundError and not foundWarning
-    return if foundError then 1 else
+    if not foundError and not foundWarning
+        reportSuccess("Lint free!", colorize)
+
+    return if foundError then 1 else 0
 
 # Declare command line options.
 options = optimist

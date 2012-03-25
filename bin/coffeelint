@@ -69,7 +69,7 @@ CoffeeLint is freely distributable under the MIT license.
     if (foundError) {
       return 1;
     } else {
-
+      return 0;
     }
   };
 
