@@ -40,6 +40,11 @@
   "cyclomatic_complexity" : {
     "value" : 11,
     "level" : "ignore"
+  },
+
+  "line_endings" : {
+    "value" : "unix",
+    "level" : "ignore"
   }
 
 }
