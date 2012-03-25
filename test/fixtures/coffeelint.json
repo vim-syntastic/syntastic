@@ -7,6 +7,11 @@
     "cyclomatic_complexity" : {
         "level" : "error",
         "value" : 11
+    },
+
+    "line_endings" : {
+        "value" : "unix",
+        "level" : "error"
     }
 
 }
