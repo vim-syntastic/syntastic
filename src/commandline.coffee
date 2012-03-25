@@ -13,6 +13,7 @@ optimist = require("optimist")
 thisdir = path.dirname(fs.realpathSync(__filename))
 coffeelint = require(path.join(thisdir, "..", "lib", "coffeelint"))
 
+
 # Colorize the given message.
 stylize = (message, styles) ->
     map =
@@ -24,7 +25,6 @@ stylize = (message, styles) ->
     return styles.reduce((m, style) ->
         "\u001b[" + map[style][0] + "m" + m + "\u001b[" + map[style][1] + "m"
     , message)
-
 
 # Report and error on the console.
 reportError = (path, error, colorize) ->
@@ -58,30 +58,30 @@ lint = (paths, configPath, colorize) ->
     return if foundError then 1 else
 
 # Declare command line options.
-optimist = require("optimist")
-        .usage("Usage: coffeelint [options] source [...]")
-        .alias("f", "file")
-        .alias("h", "help")
-        .alias("v", "version")
-        .describe("f", "Specify a custom configuration file.")
-        .describe("h", "Print help information.")
-        .describe("v", "Print current version number.")
-        .describe("nocolor", "Don't colorize output.")
-        .boolean("nocolor")
+options = optimist
+            .usage("Usage: coffeelint [options] source [...]")
+            .alias("f", "file")
+            .alias("h", "help")
+            .alias("v", "version")
+            .describe("f", "Specify a custom configuration file.")
+            .describe("h", "Print help information.")
+            .describe("v", "Print current version number.")
+            .describe("nocolor", "Don't colorize output.")
+            .boolean("nocolor")
 
-if optimist.argv.v
+if options.argv.v
     console.log coffeelint.VERSION
     process.exit(0)
-else if optimist.argv.h
-    optimist.showHelp()
+else if options.argv.h
+    options.showHelp()
     process.exit(0)
-else if optimist.argv._.length < 1
-    optimist.showHelp()
+else if options.argv._.length < 1
+    options.showHelp()
     process.exit(1)
 else
-    paths = optimist.argv._
-    configPath = optimist.argv.f
-    colorize = not optimist.argv.nocolor
+    paths = options.argv._
+    configPath = options.argv.f
+    colorize = not options.argv.nocolor
     returnCode = lint(paths, configPath, colorize)
     process.exit returnCode
 

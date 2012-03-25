@@ -8,7 +8,7 @@ CoffeeLint is freely distributable under the MIT license.
 */
 
 (function() {
-  var coffeelint, colorize, configPath, fs, lint, optimist, path, paths, read, reportError, reportSuccess, returnCode, stylize, thisdir;
+  var coffeelint, colorize, configPath, fs, lint, optimist, options, path, paths, read, reportError, reportSuccess, returnCode, stylize, thisdir;
 
   path = require("path");
 
@@ -73,21 +73,21 @@ CoffeeLint is freely distributable under the MIT license.
     }
   };
 
-  optimist = require("optimist").usage("Usage: coffeelint [options] source [...]").alias("f", "file").alias("h", "help").alias("v", "version").describe("f", "Specify a custom configuration file.").describe("h", "Print help information.").describe("v", "Print current version number.").describe("nocolor", "Don't colorize output.").boolean("nocolor");
+  options = optimist.usage("Usage: coffeelint [options] source [...]").alias("f", "file").alias("h", "help").alias("v", "version").describe("f", "Specify a custom configuration file.").describe("h", "Print help information.").describe("v", "Print current version number.").describe("nocolor", "Don't colorize output.").boolean("nocolor");
 
-  if (optimist.argv.v) {
+  if (options.argv.v) {
     console.log(coffeelint.VERSION);
     process.exit(0);
-  } else if (optimist.argv.h) {
-    optimist.showHelp();
+  } else if (options.argv.h) {
+    options.showHelp();
     process.exit(0);
-  } else if (optimist.argv._.length < 1) {
-    optimist.showHelp();
+  } else if (options.argv._.length < 1) {
+    options.showHelp();
     process.exit(1);
   } else {
-    paths = optimist.argv._;
-    configPath = optimist.argv.f;
-    colorize = !optimist.argv.nocolor;
+    paths = options.argv._;
+    configPath = options.argv.f;
+    colorize = !options.argv.nocolor;
     returnCode = lint(paths, configPath, colorize);
     process.exit(returnCode);
   }
