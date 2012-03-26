@@ -99,7 +99,7 @@ class Reporter
             overall = '✓'
             color = 'green'
         @print stylize(overall, ['bold', color]) +
-                " Found #{s.errorCount} errors and #{s.warningCount} warnings in #{s.pathCount} files"
+                " CoffeeLint found #{s.errorCount} errors and #{s.warningCount} warnings in #{s.pathCount} files"
 
     reportPath : (path, errors) ->
         if @errorReport.pathHasError(path)
@@ -113,12 +113,12 @@ class Reporter
             overall = '✓'
         @print("#{overall} #{path}", [pathColor, 'bold'])
         for e in errors
-            color = if e.level == 'error' then 'red' else 'yellow'
             level = if e.level == 'error' then 'error' else 'warning'
-            msg = "  - #{e.rule} #{level} @ line #{e.lineNumber}: #{e.message}."
+            overall = if e.level == 'error' then stylize('✗', ['bold', 'red']) else stylize('⚡', ['yellow', 'bold'])
+            msg = "  #{overall} line #{e.lineNumber}: #{e.message}."
             if e.context
                 msg += " #{e.context}."
-            @print(msg, [color])
+            @print(msg)
 
     print : (message, styles=[]) ->
         console.log stylize(message, styles)

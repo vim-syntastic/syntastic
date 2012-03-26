@@ -151,11 +151,11 @@ CoffeeLint is freely distributable under the MIT license.
         overall = '✓';
         color = 'green';
       }
-      return this.print(stylize(overall, ['bold', color]) + (" Found " + s.errorCount + " errors and " + s.warningCount + " warnings in " + s.pathCount + " files"));
+      return this.print(stylize(overall, ['bold', color]) + (" CoffeeLint found " + s.errorCount + " errors and " + s.warningCount + " warnings in " + s.pathCount + " files"));
     };
 
     Reporter.prototype.reportPath = function(path, errors) {
-      var color, e, level, msg, overall, pathColor, _i, _len, _results;
+      var e, level, msg, overall, pathColor, _i, _len, _results;
       if (this.errorReport.pathHasError(path)) {
         pathColor = 'red';
         overall = '✗';
@@ -170,11 +170,11 @@ CoffeeLint is freely distributable under the MIT license.
       _results = [];
       for (_i = 0, _len = errors.length; _i < _len; _i++) {
         e = errors[_i];
-        color = e.level === 'error' ? 'red' : 'yellow';
         level = e.level === 'error' ? 'error' : 'warning';
-        msg = "  - " + e.rule + " " + level + " @ line " + e.lineNumber + ": " + e.message + ".";
+        overall = e.level === 'error' ? stylize('✗', ['bold', 'red']) : stylize('⚡', ['yellow', 'bold']);
+        msg = "  " + overall + " line " + e.lineNumber + ": " + e.message + ".";
         if (e.context) msg += " " + e.context + ".";
-        _results.push(this.print(msg, [color]));
+        _results.push(this.print(msg));
       }
       return _results;
     };
