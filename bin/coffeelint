@@ -8,71 +8,26 @@ CoffeeLint is freely distributable under the MIT license.
 */
 
 (function() {
-  var coffeelint, colorize, configPath, findCoffeeScripts, fs, glob, lint, optimist, options, path, paths, read, reportError, reportSuccess, returnCode, scripts, stylize, thisdir;
+  var ErrorReport, NullReporter, Reporter, coffeelint, colorize, config, configPath, errorReport, findCoffeeScripts, fs, glob, lint, optimist, options, path, paths, read, reporter, scripts, stylize, thisdir,
+    __hasProp = Object.prototype.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; };
 
   path = require("path");
 
   fs = require("fs");
 
-  optimist = require("optimist");
-
   glob = require("glob");
+
+  optimist = require("optimist");
 
   thisdir = path.dirname(fs.realpathSync(__filename));
 
   coffeelint = require(path.join(thisdir, "..", "lib", "coffeelint"));
 
-  stylize = function(message, styles) {
-    var map;
-    map = {
-      bold: [1, 22],
-      yellow: [33, 39],
-      green: [32, 39],
-      red: [31, 39]
-    };
-    return styles.reduce(function(m, style) {
-      return "\u001b[" + map[style][0] + "m" + m + "\u001b[" + map[style][1] + "m";
-    }, message);
-  };
-
-  reportError = function(path, error, colorize) {
-    var fields;
-    fields = [path + "#" + error.lineNumber, error.level, error.message];
-    if (error.context) fields.push(error.context);
-    return console.warn(fields.join(" : "));
-  };
-
-  reportSuccess = function(message, colorize) {
-    if (colorize) message = stylize(message, ["bold", "green"]);
-    return console.log(message);
-  };
-
   read = function(path) {
     var realPath;
     realPath = fs.realpathSync(path);
     return fs.readFileSync(realPath).toString();
-  };
-
-  lint = function(paths, configPath, colorize) {
-    var config, foundError, foundWarning;
-    config = (configPath ? JSON.parse(read(configPath)) : {});
-    foundError = false;
-    foundWarning = false;
-    paths.forEach(function(path) {
-      var source;
-      source = read(path);
-      return coffeelint.lint(source, config).forEach(function(error) {
-        reportError(path, error);
-        foundError = foundError || error.level === "error";
-        return foundWarning = foundWarning || error.level === "warn";
-      });
-    });
-    if (!foundError && !foundWarning) reportSuccess("Lint free!", colorize);
-    if (foundError) {
-      return 1;
-    } else {
-      return 0;
-    }
   };
 
   findCoffeeScripts = function(paths) {
@@ -87,6 +42,178 @@ CoffeeLint is freely distributable under the MIT license.
       }
     }
     return files;
+  };
+
+  stylize = function(message, styles) {
+    var map;
+    map = {
+      bold: [1, 22],
+      yellow: [33, 39],
+      green: [32, 39],
+      red: [31, 39]
+    };
+    return styles.reduce(function(m, style) {
+      return "\u001b[" + map[style][0] + "m" + m + "\u001b[" + map[style][1] + "m";
+    }, message);
+  };
+
+  ErrorReport = (function() {
+
+    function ErrorReport() {
+      this.paths = {};
+    }
+
+    ErrorReport.prototype.getExitCode = function() {
+      var path, _i, _len, _ref;
+      _ref = this.paths;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        path = _ref[_i];
+        if (this.pathHasError(path)) return 1;
+      }
+      return 0;
+    };
+
+    ErrorReport.prototype.getSummary = function() {
+      var error, errorCount, errors, path, pathCount, warningCount, _i, _len, _ref;
+      pathCount = errorCount = warningCount = 0;
+      _ref = this.paths;
+      for (path in _ref) {
+        errors = _ref[path];
+        pathCount++;
+        for (_i = 0, _len = errors.length; _i < _len; _i++) {
+          error = errors[_i];
+          if (error.level === 'error') errorCount++;
+          if (error.level === 'warn') warningCount++;
+        }
+      }
+      return {
+        errorCount: errorCount,
+        warningCount: warningCount,
+        pathCount: pathCount
+      };
+    };
+
+    ErrorReport.prototype.getErrors = function(path) {
+      return this.paths[path];
+    };
+
+    ErrorReport.prototype.pathHasWarning = function(path) {
+      return this._hasLevel(path, 'warn');
+    };
+
+    ErrorReport.prototype.pathHasError = function(path) {
+      return this._hasLevel(path, 'error');
+    };
+
+    ErrorReport.prototype._hasLevel = function(path, level) {
+      var error, _i, _len, _ref;
+      _ref = this.paths[path];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        error = _ref[_i];
+        if (error.level === level) return true;
+      }
+      return false;
+    };
+
+    return ErrorReport;
+
+  })();
+
+  Reporter = (function() {
+
+    function Reporter(errorReport, colorize) {
+      if (colorize == null) colorize = true;
+      this.errorReport = errorReport;
+      this.colorize = colorize;
+    }
+
+    Reporter.prototype.publish = function() {
+      var errors, path, summary, _ref;
+      _ref = this.errorReport.paths;
+      for (path in _ref) {
+        errors = _ref[path];
+        this.reportPath(path, errors);
+      }
+      summary = this.errorReport.getSummary();
+      this.reportSummary(summary);
+      return this;
+    };
+
+    Reporter.prototype.reportSummary = function(s) {
+      var color, overall;
+      if (s.errorCount > 0) {
+        overall = '✗';
+        color = 'red';
+      } else if (s.warningCount > 0) {
+        overall = '⚡';
+        color = 'yellow';
+      } else {
+        overall = '✓';
+        color = 'green';
+      }
+      return this.print(stylize(overall, ['bold', color]) + (" Found " + s.errorCount + " errors and " + s.warningCount + " warnings in " + s.pathCount + " files"));
+    };
+
+    Reporter.prototype.reportPath = function(path, errors) {
+      var color, e, level, msg, overall, pathColor, _i, _len, _results;
+      if (this.errorReport.pathHasError(path)) {
+        pathColor = 'red';
+        overall = '✗';
+      } else if (this.errorReport.pathHasWarning(path)) {
+        pathColor = 'yellow';
+        overall = '✗';
+      } else {
+        pathColor = 'green';
+        overall = '✓';
+      }
+      this.print("" + overall + " " + path, [pathColor, 'bold']);
+      _results = [];
+      for (_i = 0, _len = errors.length; _i < _len; _i++) {
+        e = errors[_i];
+        color = e.level === 'error' ? 'red' : 'yellow';
+        level = e.level === 'error' ? 'error' : 'warning';
+        msg = "  - " + e.rule + " " + level + " @ line " + e.lineNumber + ": " + e.message + ".";
+        if (e.context) msg += " " + e.context + ".";
+        _results.push(this.print(msg, [color]));
+      }
+      return _results;
+    };
+
+    Reporter.prototype.print = function(message, styles) {
+      if (styles == null) styles = [];
+      return console.log(stylize(message, styles));
+    };
+
+    return Reporter;
+
+  })();
+
+  NullReporter = (function(_super) {
+
+    __extends(NullReporter, _super);
+
+    function NullReporter() {
+      NullReporter.__super__.constructor.apply(this, arguments);
+    }
+
+    NullReporter.prototype.publish = function(errorReport) {
+      return null;
+    };
+
+    return NullReporter;
+
+  })(Reporter);
+
+  lint = function(paths, config) {
+    var errorReport;
+    errorReport = new ErrorReport();
+    paths.forEach(function(path) {
+      var errors, source;
+      source = read(path);
+      errors = coffeelint.lint(source, config);
+      return errorReport.paths[path] = errors;
+    });
+    return errorReport;
   };
 
   options = optimist.usage("Usage: coffeelint [options] source [...]").alias("f", "file").alias("h", "help").alias("v", "version").describe("f", "Specify a custom configuration file.").describe("h", "Print help information.").describe("v", "Print current version number.").describe("r", "Recursively lint .coffee files in subdirectories.").describe("nocolor", "Don't colorize output.").boolean("nocolor").boolean("r");
@@ -104,9 +231,12 @@ CoffeeLint is freely distributable under the MIT license.
     paths = options.argv._;
     scripts = options.argv.r ? findCoffeeScripts(paths) : paths;
     configPath = options.argv.f;
+    config = configPath ? JSON.parse(read(configPath)) : {};
+    errorReport = lint(scripts, config);
     colorize = !options.argv.nocolor;
-    returnCode = lint(scripts, configPath, colorize);
-    process.exit(returnCode);
+    reporter = new Reporter(errorReport, colorize);
+    reporter.publish();
+    process.exit(errorReport.getExitCode());
   }
 
 }).call(this);
