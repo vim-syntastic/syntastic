@@ -43,7 +43,7 @@ read = (path) ->
     realPath = fs.realpathSync(path)
     return fs.readFileSync(realPath).toString()
 
-# Lint the given
+# Lint the given CoffeeScripts.
 lint = (paths, configPath, colorize) ->
     config = (if (configPath) then JSON.parse(read(configPath)) else {})
     foundError = false
@@ -60,13 +60,15 @@ lint = (paths, configPath, colorize) ->
 
     return if foundError then 1 else 0
 
-findScripts = (paths) ->
+
+# Recursively find all CoffeeScript's in the given paths.
+findCoffeeScripts = (paths) ->
     files = []
-    for path in paths
-        if fs.statSync(path).isDirectory()
-            files = files.concat(glob.sync("#{path}/**/*.coffee"))
+    for p in paths
+        if fs.statSync(p).isDirectory()
+            files = files.concat(glob.sync(path.join(p, "**", "*.coffee")))
         else
-            files.push(path)
+            files.push(p)
     return files
 
 
@@ -95,7 +97,7 @@ else if options.argv._.length < 1
     process.exit(1)
 else
     paths = options.argv._
-    scripts = if options.argv.r then findScripts(paths) else paths
+    scripts = if options.argv.r then findCoffeeScripts(paths) else paths
     configPath = options.argv.f
     colorize = not options.argv.nocolor
     returnCode = lint(scripts, configPath, colorize)

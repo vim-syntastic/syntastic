@@ -8,7 +8,7 @@ CoffeeLint is freely distributable under the MIT license.
 */
 
 (function() {
-  var coffeelint, colorize, configPath, findScripts, fs, glob, lint, optimist, options, path, paths, read, reportError, reportSuccess, returnCode, scripts, stylize, thisdir;
+  var coffeelint, colorize, configPath, findCoffeeScripts, fs, glob, lint, optimist, options, path, paths, read, reportError, reportSuccess, returnCode, scripts, stylize, thisdir;
 
   path = require("path");
 
@@ -75,15 +75,15 @@ CoffeeLint is freely distributable under the MIT license.
     }
   };
 
-  findScripts = function(paths) {
-    var files, path, _i, _len;
+  findCoffeeScripts = function(paths) {
+    var files, p, _i, _len;
     files = [];
     for (_i = 0, _len = paths.length; _i < _len; _i++) {
-      path = paths[_i];
-      if (fs.statSync(path).isDirectory()) {
-        files = files.concat(glob.sync("" + path + "/**/*.coffee"));
+      p = paths[_i];
+      if (fs.statSync(p).isDirectory()) {
+        files = files.concat(glob.sync(path.join(p, "**", "*.coffee")));
       } else {
-        files.push(path);
+        files.push(p);
       }
     }
     return files;
@@ -102,7 +102,7 @@ CoffeeLint is freely distributable under the MIT license.
     process.exit(1);
   } else {
     paths = options.argv._;
-    scripts = options.argv.r ? findScripts(paths) : paths;
+    scripts = options.argv.r ? findCoffeeScripts(paths) : paths;
     configPath = options.argv.f;
     colorize = !options.argv.nocolor;
     returnCode = lint(scripts, configPath, colorize);
