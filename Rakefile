@@ -17,7 +17,7 @@ end
 
 desc "Lint the linter."
 task :lint => [:compile] do
-  sh("./bin/coffeelint -f #{LINT_CONFIG} src/*.coffee test/*.coffee")
+  sh("./bin/coffeelint -r -f #{LINT_CONFIG} src/ test/*.coffee")
   notify("linted!")
 end
 

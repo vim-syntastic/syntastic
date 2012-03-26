@@ -136,4 +136,21 @@ vows.describe('commandline').addBatch({
         'fails' : (error, stdout, stderr) ->
             assert.isNotNull(error)
 
+    'recurses subdirectories' :
+
+        topic : () ->
+            args = [
+                '-r',
+                'test/fixtures/clean.coffee',
+                'test/fixtures/subdir'
+            ]
+            commandline args, this.callback
+            return undefined
+
+        'and reports errors' : (error, stdout, stderr) ->
+            console.log(stdout + stderr)
+            assert.isNotNull(error, "returned err")
+            assert.isEmpty(stdout, "no stdout")
+            assert.include(stderr.toLowerCase(), 'line')
+
 }).export(module)

@@ -8,13 +8,15 @@ CoffeeLint is freely distributable under the MIT license.
 */
 
 (function() {
-  var coffeelint, colorize, configPath, fs, lint, optimist, options, path, paths, read, reportError, reportSuccess, returnCode, stylize, thisdir;
+  var coffeelint, colorize, configPath, findScripts, fs, glob, lint, optimist, options, path, paths, read, reportError, reportSuccess, returnCode, scripts, stylize, thisdir;
 
   path = require("path");
 
   fs = require("fs");
 
   optimist = require("optimist");
+
+  glob = require("glob");
 
   thisdir = path.dirname(fs.realpathSync(__filename));
 
@@ -73,7 +75,21 @@ CoffeeLint is freely distributable under the MIT license.
     }
   };
 
-  options = optimist.usage("Usage: coffeelint [options] source [...]").alias("f", "file").alias("h", "help").alias("v", "version").describe("f", "Specify a custom configuration file.").describe("h", "Print help information.").describe("v", "Print current version number.").describe("nocolor", "Don't colorize output.").boolean("nocolor");
+  findScripts = function(paths) {
+    var files, path, _i, _len;
+    files = [];
+    for (_i = 0, _len = paths.length; _i < _len; _i++) {
+      path = paths[_i];
+      if (fs.statSync(path).isDirectory()) {
+        files = files.concat(glob.sync("" + path + "/**/*.coffee"));
+      } else {
+        files.push(path);
+      }
+    }
+    return files;
+  };
+
+  options = optimist.usage("Usage: coffeelint [options] source [...]").alias("f", "file").alias("h", "help").alias("v", "version").describe("f", "Specify a custom configuration file.").describe("h", "Print help information.").describe("v", "Print current version number.").describe("r", "Recursively lint .coffee files in subdirectories.").describe("nocolor", "Don't colorize output.").boolean("nocolor").boolean("r");
 
   if (options.argv.v) {
     console.log(coffeelint.VERSION);
@@ -86,9 +102,10 @@ CoffeeLint is freely distributable under the MIT license.
     process.exit(1);
   } else {
     paths = options.argv._;
+    scripts = options.argv.r ? findScripts(paths) : paths;
     configPath = options.argv.f;
     colorize = !options.argv.nocolor;
-    returnCode = lint(paths, configPath, colorize);
+    returnCode = lint(scripts, configPath, colorize);
     process.exit(returnCode);
   }
 

@@ -10,6 +10,7 @@ CoffeeLint is freely distributable under the MIT license.
 path = require("path")
 fs = require("fs")
 optimist = require("optimist")
+glob = require("glob")
 thisdir = path.dirname(fs.realpathSync(__filename))
 coffeelint = require(path.join(thisdir, "..", "lib", "coffeelint"))
 
@@ -59,6 +60,16 @@ lint = (paths, configPath, colorize) ->
 
     return if foundError then 1 else 0
 
+findScripts = (paths) ->
+    files = []
+    for path in paths
+        if fs.statSync(path).isDirectory()
+            files = files.concat(glob.sync("#{path}/**/*.coffee"))
+        else
+            files.push(path)
+    return files
+
+
 # Declare command line options.
 options = optimist
             .usage("Usage: coffeelint [options] source [...]")
@@ -68,8 +79,10 @@ options = optimist
             .describe("f", "Specify a custom configuration file.")
             .describe("h", "Print help information.")
             .describe("v", "Print current version number.")
+            .describe("r", "Recursively lint .coffee files in subdirectories.")
             .describe("nocolor", "Don't colorize output.")
             .boolean("nocolor")
+            .boolean("r")
 
 if options.argv.v
     console.log coffeelint.VERSION
@@ -82,8 +95,9 @@ else if options.argv._.length < 1
     process.exit(1)
 else
     paths = options.argv._
+    scripts = if options.argv.r then findScripts(paths) else paths
     configPath = options.argv.f
     colorize = not options.argv.nocolor
-    returnCode = lint(paths, configPath, colorize)
+    returnCode = lint(scripts, configPath, colorize)
     process.exit returnCode
 
