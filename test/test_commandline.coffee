@@ -51,7 +51,7 @@ vows.describe('commandline').addBatch({
 
         'passes' : (error, stdout, stderr) ->
             assert.isNull(error)
-            assert.include(stdout, 'Lint free!')
+            assert.include(stdout, '0 errors and 0 warnings')
             assert.isEmpty(stderr)
 
     'with failing source' :
@@ -62,8 +62,7 @@ vows.describe('commandline').addBatch({
 
         'works' : (error, stdout, stderr) ->
             assert.isNotNull(error)
-            assert.isEmpty(stdout)
-            assert.include(stderr.toLowerCase(), 'line')
+            assert.include(stdout.toLowerCase(), 'line')
 
     'with custom configuration' :
 
@@ -148,9 +147,7 @@ vows.describe('commandline').addBatch({
             return undefined
 
         'and reports errors' : (error, stdout, stderr) ->
-            console.log(stdout + stderr)
             assert.isNotNull(error, "returned err")
-            assert.isEmpty(stdout, "no stdout")
-            assert.include(stderr.toLowerCase(), 'line')
+            assert.include(stdout.toLowerCase(), 'line')
 
 }).export(module)

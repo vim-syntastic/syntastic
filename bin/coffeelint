@@ -8,7 +8,8 @@ CoffeeLint is freely distributable under the MIT license.
 */
 
 (function() {
-  var ErrorReport, NullReporter, Reporter, coffeelint, colorize, config, configPath, errorReport, findCoffeeScripts, fs, glob, lint, optimist, options, path, paths, read, reporter, scripts, stylize, thisdir,
+  var ErrorReport, NullReporter, Reporter, coffeelint, colorize, config, configPath, errorReport, findCoffeeScripts, fs, glob, lint, optimist, options, path, paths, read, reporter, scripts, thisdir,
+    __slice = Array.prototype.slice,
     __hasProp = Object.prototype.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; };
 
@@ -44,19 +45,6 @@ CoffeeLint is freely distributable under the MIT license.
     return files;
   };
 
-  stylize = function(message, styles) {
-    var map;
-    map = {
-      bold: [1, 22],
-      yellow: [33, 39],
-      green: [32, 39],
-      red: [31, 39]
-    };
-    return styles.reduce(function(m, style) {
-      return "\u001b[" + map[style][0] + "m" + m + "\u001b[" + map[style][1] + "m";
-    }, message);
-  };
-
   ErrorReport = (function() {
 
     function ErrorReport() {
@@ -64,10 +52,8 @@ CoffeeLint is freely distributable under the MIT license.
     }
 
     ErrorReport.prototype.getExitCode = function() {
-      var path, _i, _len, _ref;
-      _ref = this.paths;
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        path = _ref[_i];
+      var path;
+      for (path in this.paths) {
         if (this.pathHasError(path)) return 1;
       }
       return 0;
@@ -125,7 +111,24 @@ CoffeeLint is freely distributable under the MIT license.
       if (colorize == null) colorize = true;
       this.errorReport = errorReport;
       this.colorize = colorize;
+      this.ok = '✓';
+      this.warn = '⚡';
+      this.err = '✗';
     }
+
+    Reporter.prototype.stylize = function() {
+      var map, message, styles;
+      message = arguments[0], styles = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
+      if (!this.colorize) return message;
+      map = {
+        yellow: [33, 39],
+        green: [32, 39],
+        red: [31, 39]
+      };
+      return styles.reduce(function(m, s) {
+        return "\u001b[" + map[s][0] + "m" + m + "\u001b[" + map[s][1] + "m";
+      }, message);
+    };
 
     Reporter.prototype.publish = function() {
       var errors, path, summary, _ref;
@@ -140,48 +143,32 @@ CoffeeLint is freely distributable under the MIT license.
     };
 
     Reporter.prototype.reportSummary = function(s) {
-      var color, overall;
-      if (s.errorCount > 0) {
-        overall = '✗';
-        color = 'red';
-      } else if (s.warningCount > 0) {
-        overall = '⚡';
-        color = 'yellow';
-      } else {
-        overall = '✓';
-        color = 'green';
-      }
-      return this.print(stylize(overall, ['bold', color]) + (" CoffeeLint found " + s.errorCount + " errors and " + s.warningCount + " warnings in " + s.pathCount + " files"));
+      var e, msg, p, start, w;
+      start = s.errorCount > 0 ? this.stylize(this.err, 'red') : s.warningCount > 0 ? this.stylize(this.warn, 'yellow') : this.stylize(this.ok, 'green');
+      e = s.errorCount;
+      w = s.warningCount;
+      p = s.pathCount;
+      msg = "" + start + " " + e + " errors and " + w + " warnings in " + p + " files";
+      return this.print(this.stylize(msg));
     };
 
     Reporter.prototype.reportPath = function(path, errors) {
-      var e, level, msg, overall, pathColor, _i, _len, _results;
-      if (this.errorReport.pathHasError(path)) {
-        pathColor = 'red';
-        overall = '✗';
-      } else if (this.errorReport.pathHasWarning(path)) {
-        pathColor = 'yellow';
-        overall = '✗';
-      } else {
-        pathColor = 'green';
-        overall = '✓';
-      }
-      this.print("" + overall + " " + path, [pathColor, 'bold']);
+      var color, e, msg, o, overall, _i, _len, _ref, _results;
+      _ref = this.errorReport.pathHasError(path) ? [this.err, 'red'] : this.errorReport.pathHasWarning(path) ? [this.warn, 'yellow'] : [this.ok, 'green'], overall = _ref[0], color = _ref[1];
+      this.print(this.stylize("" + overall + " " + path, color));
       _results = [];
       for (_i = 0, _len = errors.length; _i < _len; _i++) {
         e = errors[_i];
-        level = e.level === 'error' ? 'error' : 'warning';
-        overall = e.level === 'error' ? stylize('✗', ['bold', 'red']) : stylize('⚡', ['yellow', 'bold']);
-        msg = "  " + overall + " line " + e.lineNumber + ": " + e.message + ".";
+        o = this.stylize((e.level === 'error' ? this.err : this.warn), color);
+        msg = "  " + o + " line " + e.lineNumber + " - " + e.message + ".";
         if (e.context) msg += " " + e.context + ".";
         _results.push(this.print(msg));
       }
       return _results;
     };
 
-    Reporter.prototype.print = function(message, styles) {
-      if (styles == null) styles = [];
-      return console.log(stylize(message, styles));
+    Reporter.prototype.print = function(message) {
+      return console.log(message);
     };
 
     return Reporter;

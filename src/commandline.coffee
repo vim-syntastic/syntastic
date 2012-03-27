@@ -29,17 +29,6 @@ findCoffeeScripts = (paths) ->
             files.push(p)
     return files
 
-stylize = (message, styles) ->
-    map = {
-      bold: [1, 22],
-      yellow: [33, 39],
-      green: [32, 39],
-      red: [31, 39]
-    }
-    return styles.reduce (m, style)  ->
-        return "\u001b[" + map[style][0] + "m" + m + "\u001b[" + map[style][1] + "m"
-    , message
-
 # A summary of errors in a CoffeeLint run.
 class ErrorReport
 
@@ -47,7 +36,7 @@ class ErrorReport
         @paths = {}
 
     getExitCode : () ->
-        for path in @paths
+        for path of @paths
             return 1 if @pathHasError(path)
         return 0
 
@@ -81,6 +70,20 @@ class Reporter
     constructor : (errorReport, colorize=true) ->
         @errorReport = errorReport
         @colorize = colorize
+        @ok = '✓'
+        @warn = '⚡'
+        @err = '✗'
+
+    stylize : (message, styles...) ->
+        return message if not @colorize
+        map = {
+            yellow: [33, 39],
+            green: [32, 39],
+            red: [31, 39]
+        }
+        return styles.reduce (m, s)  ->
+            return "\u001b[" + map[s][0] + "m" + m + "\u001b[" + map[s][1] + "m"
+        , message
 
     publish : () ->
         @reportPath(path, errors) for path, errors of @errorReport.paths
@@ -89,39 +92,35 @@ class Reporter
         return this
 
     reportSummary : (s) ->
-        if s.errorCount > 0
-            overall = '✗'
-            color = 'red'
+        start = if s.errorCount > 0
+            @stylize(@err, 'red')
         else if s.warningCount > 0
-            overall = '⚡'
-            color = 'yellow'
+            @stylize @warn, 'yellow'
         else
-            overall = '✓'
-            color = 'green'
-        @print stylize(overall, ['bold', color]) +
-                " CoffeeLint found #{s.errorCount} errors and #{s.warningCount} warnings in #{s.pathCount} files"
+            @stylize @ok, 'green'
+        e = s.errorCount
+        w = s.warningCount
+        p = s.pathCount
+        msg = "#{start} #{e} errors and #{w} warnings in #{p} files"
+        @print @stylize(msg)
 
     reportPath : (path, errors) ->
-        if @errorReport.pathHasError(path)
-            pathColor = 'red'
-            overall = '✗'
+        [overall, color] = if @errorReport.pathHasError(path)
+            [@err, 'red']
         else if @errorReport.pathHasWarning(path)
-            pathColor = 'yellow'
-            overall = '✗'
+            [@warn, 'yellow']
         else
-            pathColor = 'green'
-            overall = '✓'
-        @print("#{overall} #{path}", [pathColor, 'bold'])
+            [@ok, 'green']
+        @print(@stylize("#{overall} #{path}", color))
         for e in errors
-            level = if e.level == 'error' then 'error' else 'warning'
-            overall = if e.level == 'error' then stylize('✗', ['bold', 'red']) else stylize('⚡', ['yellow', 'bold'])
-            msg = "  #{overall} line #{e.lineNumber}: #{e.message}."
+            o = @stylize((if e.level == 'error' then @err else @warn), color)
+            msg = "  #{o} line #{e.lineNumber} - #{e.message}."
             if e.context
                 msg += " #{e.context}."
             @print(msg)
 
-    print : (message, styles=[]) ->
-        console.log stylize(message, styles)
+    print : (message) ->
+        console.log message
 
 # A reporter which reports nothing at all.
 class NullReporter extends Reporter
