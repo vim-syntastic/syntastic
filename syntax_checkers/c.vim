@@ -51,6 +51,11 @@
 " setting are removed from the result set:
 "
 "   let g:syntastic_c_remove_include_errors = 1
+"
+" With the global variable 'g:syntastic_c_cflags_file' you can specify a file
+" that contains additional CFLAGS for the C compiler:
+"
+"    let g:syntastic_c_cflags_file = '.cflags'
 
 if exists('loaded_c_syntax_checker')
     finish
@@ -67,6 +72,38 @@ set cpo&vim
 if !exists('g:syntastic_c_compiler_options')
     let g:syntastic_c_compiler_options = '-std=gnu99'
 endif
+
+" This function was stolen from clang_complete
+function! s:parseConfig(file)
+    let l:local_conf = findfile(a:file, getcwd() . ',.;')
+    if l:local_conf == '' || !filereadable(l:local_conf)
+        return
+    endif
+
+    let l:root = substitute(fnamemodify(l:local_conf, ':p:h'), '\', '/', 'g')
+
+    let l:opts = readfile(l:local_conf)
+    let l:opts_rv = ''
+    for l:opt in l:opts
+        " Use forward slashes only
+        let l:opt = substitute(l:opt, '\', '/', 'g')
+        " Handling of absolute path
+        if matchstr(l:opt, '\C-I\s*/') != ''
+            let l:opt = substitute(l:opt, '\C-I\s*\(/\%(\w\|\\\s\)*\)',
+                        \ '-I' . '\1', 'g')
+            " Check for win32 is enough since it's true on win64
+        elseif has('win32') && matchstr(l:opt, '\C-I\s*[a-zA-Z]:/') != ''
+            let l:opt = substitute(l:opt, '\C-I\s*\([a-zA-Z:]/\%(\w\|\\\s\)*\)',
+                        \ '-I' . '\1', 'g')
+        else
+            let l:opt = substitute(l:opt, '\C-I\s*\(\%(\w\|\.\|/\|\\\s\)*\)',
+                        \ '-I' . l:root . '/\1', 'g')
+        endif
+        let l:opts_rv .= ' ' . l:opt
+    endfor
+
+    return l:opts_rv
+endfunction
 
 function! SyntaxCheckers_c_GetLocList()
     let makeprg = 'gcc -fsyntax-only '
@@ -111,6 +148,11 @@ function! SyntaxCheckers_c_GetLocList()
     else
         " use the user-defined cflags
         let makeprg .= b:syntastic_c_cflags
+    endif
+
+    " file with cflags
+    if exists('g:syntastic_c_cflags_file')
+        let makeprg .= s:parseConfig(g:syntastic_c_cflags_file)
     endif
 
     " process makeprg
