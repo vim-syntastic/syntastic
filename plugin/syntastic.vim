@@ -229,14 +229,14 @@ endfunction
 
 function! s:Errors()
     if !exists("b:syntastic_errors")
-        let b:syntastic_errors = s:FilterLocList({'type': "E"})
+        let b:syntastic_errors = s:FilterLocList({'type': "E", 'valid': 1})
     endif
     return b:syntastic_errors
 endfunction
 
 function! s:Warnings()
     if !exists("b:syntastic_warnings")
-        let b:syntastic_warnings = s:FilterLocList({'type': "W"})
+        let b:syntastic_warnings = s:FilterLocList({'type': "W", 'valid': 1})
     endif
     return b:syntastic_warnings
 endfunction
