@@ -125,7 +125,7 @@ function! SyntaxCheckers_c_GetLocList()
     endif
 
     " add optional config file parameters
-    let makeprg .= syntastic#c#ReadConfig(g:syntastic_c_config_file)
+    let makeprg .= ' '.syntastic#c#ReadConfig(g:syntastic_c_config_file)
 
     " process makeprg
     let errors = SyntasticMake({ 'makeprg': makeprg,
