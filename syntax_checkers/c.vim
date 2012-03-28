@@ -46,6 +46,13 @@
 "
 "   let g:syntastic_c_compiler_options = ' -ansi'
 "
+" Additionally the setting 'g:syntastic_c_config_file' allows you to define a
+" file that contains additional compiler arguments like include directories or
+" CFLAGS. The file is expected to contain one option per line. If none is
+" given the filename defaults to '.syntastic_c_config':
+"
+"   let g:syntastic_c_config_file = '.config'
+"
 " Using the global variable 'g:syntastic_c_remove_include_errors' you can
 " specify whether errors of files included via the g:syntastic_c_include_dirs'
 " setting are removed from the result set:
@@ -66,6 +73,10 @@ set cpo&vim
 
 if !exists('g:syntastic_c_compiler_options')
     let g:syntastic_c_compiler_options = '-std=gnu99'
+endif
+
+if !exists('g:syntastic_c_config_file')
+    let g:syntastic_c_config_file = '.syntastic_c_config'
 endif
 
 function! SyntaxCheckers_c_GetLocList()
@@ -112,6 +123,9 @@ function! SyntaxCheckers_c_GetLocList()
         " use the user-defined cflags
         let makeprg .= b:syntastic_c_cflags
     endif
+
+    " add optional config file parameters
+    let makeprg .= syntastic#c#ReadConfig(g:syntastic_c_config_file)
 
     " process makeprg
     let errors = SyntasticMake({ 'makeprg': makeprg,
