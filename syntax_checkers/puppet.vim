@@ -23,8 +23,10 @@ if !exists("g:syntastic_puppet_lint_disable")
     let g:syntastic_puppet_lint_disable = 0
 endif
 
-if !executable("puppet-lint")
-    let g:syntastic_puppet_lint_disable = 0
+if !g:syntastic_puppet_lint_disable
+    if !executable("puppet-lint")
+        let g:syntastic_puppet_lint_disable = 0
+    endif
 endif
 
 function! s:PuppetExtractVersion()
@@ -41,10 +43,14 @@ function! s:PuppetLintExtractVersion()
 endfunction
 
 let s:puppetVersion = s:PuppetExtractVersion()
-let s:lintVersion = s:PuppetLintExtractVersion()
+if !g:syntastic_puppet_lint_disable
+    let s:lintVersion = s:PuppetLintExtractVersion()
+endif
 
-if !(s:lintVersion[0] >= '0' && s:lintVersion[1] >= '1' && s:lintVersion[2] >= '10')
-    let g:syntastic_puppet_lint_disable = 0
+if !g:syntastic_puppet_lint_disable
+    if !(s:lintVersion[0] >= '0' && s:lintVersion[1] >= '1' && s:lintVersion[2] >= '10')
+        let g:syntastic_puppet_lint_disable = 0
+    endif
 endif
 
 function! s:getPuppetLintErrors()
@@ -53,7 +59,7 @@ function! s:getPuppetLintErrors()
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat, 'subtype': 'Style' })
 endfunction
 
-function! s:getPuppetMakeprg() 
+function! s:getPuppetMakeprg()
     "If puppet is >= version 2.7 then use the new executable
     if s:puppetVersion[0] >= '2' && s:puppetVersion[1] >= '7'
         let makeprg = 'puppet parser validate ' .
