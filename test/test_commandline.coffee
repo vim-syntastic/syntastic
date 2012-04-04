@@ -8,13 +8,13 @@ vows = require 'vows'
 assert = require 'assert'
 {spawn, exec} = require 'child_process'
 coffeelint = require path.join('..', 'lib', 'coffeelint')
-coffeelint_path = path.join('bin', 'coffeelint')
+
 
 # Run the coffeelint command line with the given
 # args. Callback will be called with (error, stdout,
 # stderr)
 commandline = (args, callback) ->
-    command = coffeelint_path
+    command = path.join('bin', 'coffeelint')
     exec("#{command} #{args.join(" ")}", callback)
 
 
@@ -51,7 +51,7 @@ vows.describe('commandline').addBatch({
 
         'passes' : (error, stdout, stderr) ->
             assert.isNull(error)
-            assert.include(stdout, 'Lint free!')
+            assert.include(stdout, '0 errors and 0 warnings')
             assert.isEmpty(stderr)
 
     'with failing source' :
@@ -62,8 +62,7 @@ vows.describe('commandline').addBatch({
 
         'works' : (error, stdout, stderr) ->
             assert.isNotNull(error)
-            assert.isEmpty(stdout)
-            assert.include(stderr.toLowerCase(), 'line')
+            assert.include(stdout.toLowerCase(), 'line')
 
     'with custom configuration' :
 
@@ -136,30 +135,19 @@ vows.describe('commandline').addBatch({
         'fails' : (error, stdout, stderr) ->
             assert.isNotNull(error)
 
+    'recurses subdirectories' :
 
-    'using stdin':
+        topic : () ->
+            args = [
+                '-r',
+                'test/fixtures/clean.coffee',
+                'test/fixtures/subdir'
+            ]
+            commandline args, this.callback
+            return undefined
 
-        'with working string':
-            topic: () ->
-                exec("echo somevariable = 1| #{coffeelint_path} --stdin", this.callback)
-                return undefined
-
-            'passes': (error, stdout, stderr) ->
-                assert.isNull(error)
-                assert.isEmpty(stderr)
-                assert.isString(stdout)
-                assert.include(stdout, 'Lint free!')
-
-        'with failing string due to whitespace':
-            topic: () ->
-                exec("echo somevariable = 1 | #{coffeelint_path} --stdin", this.callback)
-                return undefined
-
-            'fails': (error, stdout, stderr) ->
-                assert.isNotNull(error)
-                assert.isEmpty(stdout)
-                assert.isString(stderr)
-                assert.isNotEmpty(stderr)
-                assert.include(stderr, 'Line ends with trailing whitespace')
+        'and reports errors' : (error, stdout, stderr) ->
+            assert.isNotNull(error, "returned err")
+            assert.include(stdout.toLowerCase(), 'line')
 
 }).export(module)

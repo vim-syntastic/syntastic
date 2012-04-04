@@ -3,6 +3,6 @@ node_js:
   - 0.6
 
 branches:
-  -only:
+  only:
     - master
     - next

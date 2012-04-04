@@ -1,137 +1,229 @@
 #!/usr/bin/env node
 
-// Require dependencies.
-var path = require('path');
-var fs = require('fs');
-var optimist = require ('optimist');
-var thisdir = path.dirname(fs.realpathSync(__filename));
-var coffeelint = require(path.join(thisdir, '..', 'lib', 'coffeelint'));
+/*
+CoffeeLint
 
+Copyright (c) 2011 Matthew Perpick.
+CoffeeLint is freely distributable under the MIT license.
+*/
 
-// Stylize the given message.
-var stylize = function (message, styles) {
+(function() {
+  var ErrorReport, NullReporter, Reporter, coffeelint, colorize, config, configPath, errorReport, findCoffeeScripts, fs, glob, lint, optimist, options, path, paths, read, reporter, scripts, thisdir,
+    __slice = Array.prototype.slice,
+    __hasProp = Object.prototype.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; };
 
-    // Borrowed this style map from vowsjs.org
-    var map = {
-        'bold'      : [1,  22],
-        'yellow'    : [33, 39],
-        'green'     : [32, 39],
-        'red'       : [31, 39],
+  path = require("path");
+
+  fs = require("fs");
+
+  glob = require("glob");
+
+  optimist = require("optimist");
+
+  thisdir = path.dirname(fs.realpathSync(__filename));
+
+  coffeelint = require(path.join(thisdir, "..", "lib", "coffeelint"));
+
+  read = function(path) {
+    var realPath;
+    realPath = fs.realpathSync(path);
+    return fs.readFileSync(realPath).toString();
+  };
+
+  findCoffeeScripts = function(paths) {
+    var files, p, _i, _len;
+    files = [];
+    for (_i = 0, _len = paths.length; _i < _len; _i++) {
+      p = paths[_i];
+      if (fs.statSync(p).isDirectory()) {
+        files = files.concat(glob.sync(path.join(p, "**", "*.coffee")));
+      } else {
+        files.push(p);
+      }
+    }
+    return files;
+  };
+
+  ErrorReport = (function() {
+
+    function ErrorReport() {
+      this.paths = {};
+    }
+
+    ErrorReport.prototype.getExitCode = function() {
+      var path;
+      for (path in this.paths) {
+        if (this.pathHasError(path)) return 1;
+      }
+      return 0;
     };
 
-    return styles.reduce(function (m, style) {
-        return '\033[' + map[style][0] + 'm' + m +
-               '\033[' + map[style][1] + 'm';
-    }, message);
-};
+    ErrorReport.prototype.getSummary = function() {
+      var error, errorCount, errors, path, pathCount, warningCount, _i, _len, _ref;
+      pathCount = errorCount = warningCount = 0;
+      _ref = this.paths;
+      for (path in _ref) {
+        errors = _ref[path];
+        pathCount++;
+        for (_i = 0, _len = errors.length; _i < _len; _i++) {
+          error = errors[_i];
+          if (error.level === 'error') errorCount++;
+          if (error.level === 'warn') warningCount++;
+        }
+      }
+      return {
+        errorCount: errorCount,
+        warningCount: warningCount,
+        pathCount: pathCount
+      };
+    };
 
-// Print an error to the console.
-var reportError = function (path, error, colorize) {
-    var fields = [
-        path + "#" + error.lineNumber,
-        error.level,
-        error.message
-    ];
-    if (error.context) {
-        fields.push(error.context);
+    ErrorReport.prototype.getErrors = function(path) {
+      return this.paths[path];
+    };
+
+    ErrorReport.prototype.pathHasWarning = function(path) {
+      return this._hasLevel(path, 'warn');
+    };
+
+    ErrorReport.prototype.pathHasError = function(path) {
+      return this._hasLevel(path, 'error');
+    };
+
+    ErrorReport.prototype._hasLevel = function(path, level) {
+      var error, _i, _len, _ref;
+      _ref = this.paths[path];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        error = _ref[_i];
+        if (error.level === level) return true;
+      }
+      return false;
+    };
+
+    return ErrorReport;
+
+  })();
+
+  Reporter = (function() {
+
+    function Reporter(errorReport, colorize) {
+      if (colorize == null) colorize = true;
+      this.errorReport = errorReport;
+      this.colorize = colorize;
+      this.ok = '✓';
+      this.warn = '⚡';
+      this.err = '✗';
     }
-    console.warn(fields.join(" : "));
-};
 
-var reportSuccess = function (message, colorize) {
-    var output = colorize ? stylize(message, ['bold', 'green']) : message;
-    console.log(output);
-};
+    Reporter.prototype.stylize = function() {
+      var map, message, styles;
+      message = arguments[0], styles = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
+      if (!this.colorize) return message;
+      map = {
+        yellow: [33, 39],
+        green: [32, 39],
+        red: [31, 39]
+      };
+      return styles.reduce(function(m, s) {
+        return "\u001b[" + map[s][0] + "m" + m + "\u001b[" + map[s][1] + "m";
+      }, message);
+    };
 
-// Return the file's contents.
-var read = function (path) {
-    var realPath = fs.realpathSync(path);
-    return fs.readFileSync(realPath).toString();
-};
+    Reporter.prototype.publish = function() {
+      var errors, path, summary, _ref;
+      _ref = this.errorReport.paths;
+      for (path in _ref) {
+        errors = _ref[path];
+        this.reportPath(path, errors);
+      }
+      summary = this.errorReport.getSummary();
+      this.reportSummary(summary);
+      return this;
+    };
 
-//Lint source, reporting any errors and adjusting messages as necessary
-var lintSource = function(source, path, config, colorize){
-    var messages = {foundError: false, foundWarning: false};
-    coffeelint.lint(source, config).forEach(function(error){
-        reportError(path, error);
-        messages.foundError = messages.foundError || error.level === 'error';
-        messages.foundWarning = messages.foundWarning || error.level === 'warn';
-    });
-    return messages;
-};
+    Reporter.prototype.reportSummary = function(s) {
+      var e, msg, p, start, w;
+      start = s.errorCount > 0 ? this.stylize(this.err, 'red') : s.warningCount > 0 ? this.stylize(this.warn, 'yellow') : this.stylize(this.ok, 'green');
+      e = s.errorCount;
+      w = s.warningCount;
+      p = s.pathCount;
+      msg = "" + start + " " + e + " errors and " + w + " warnings in " + p + " files";
+      return this.print(this.stylize(msg));
+    };
 
-//Lint the source of each given path.
-var lintPaths = function(paths, config, colorize){
-    var messages = {foundError: false, foundWarning: false};
-    paths.forEach(function(path){
-        var source = read(path);
-        result_messages = lintSource(source, path, config, colorize);
-        messages.foundError = messages.foundError || result_messages.foundError;
-        messages.foundWarning = messages.foundWarning || result_messages.foundWarning;
-    });
-    return messages;
-};
+    Reporter.prototype.reportPath = function(path, errors) {
+      var color, e, msg, o, overall, _i, _len, _ref, _results;
+      _ref = this.errorReport.pathHasError(path) ? [this.err, 'red'] : this.errorReport.pathHasWarning(path) ? [this.warn, 'yellow'] : [this.ok, 'green'], overall = _ref[0], color = _ref[1];
+      this.print(this.stylize("" + overall + " " + path, color));
+      _results = [];
+      for (_i = 0, _len = errors.length; _i < _len; _i++) {
+        e = errors[_i];
+        o = this.stylize((e.level === 'error' ? this.err : this.warn), color);
+        msg = "  " + o + " line " + e.lineNumber + " - " + e.message + ".";
+        if (e.context) msg += " " + e.context + ".";
+        _results.push(this.print(msg));
+      }
+      return _results;
+    };
 
-// Returns an exit code indicating the success of the operation.
-var exitLint = function(messages){
-    // If we're good, print a success report.
-    if (!messages.foundError && !messages.foundWarning) {
-        reportSuccess('Lint free!', colorize);
+    Reporter.prototype.print = function(message) {
+      return console.log(message);
+    };
+
+    return Reporter;
+
+  })();
+
+  NullReporter = (function(_super) {
+
+    __extends(NullReporter, _super);
+
+    function NullReporter() {
+      NullReporter.__super__.constructor.apply(this, arguments);
     }
-    process.exit(messages.foundError ? 1 : 0);
-};
 
-// Declare command line options.
-var optimist = require('optimist')
-    .usage('Usage: coffeelint [options] source [...]')
-    .alias('f', 'file')
-    .alias('h', 'help')
-    .alias('v', 'version')
-    .describe('f', 'Specify a custom configuration file.')
-    .describe('h', 'Print help information.')
-    .describe('v', 'Print current version number.')
-    .describe('s', 'Use stdin instead of a file')
-    .boolean('s')
-    .alias('s','stdin')
-    .describe('nocolor', "Don't colorize output.")
-    .boolean('nocolor');
+    NullReporter.prototype.publish = function(errorReport) {
+      return null;
+    };
 
-if (optimist.argv.v) {
+    return NullReporter;
+
+  })(Reporter);
+
+  lint = function(paths, config) {
+    var errorReport;
+    errorReport = new ErrorReport();
+    paths.forEach(function(path) {
+      var errors, source;
+      source = read(path);
+      errors = coffeelint.lint(source, config);
+      return errorReport.paths[path] = errors;
+    });
+    return errorReport;
+  };
+
+  options = optimist.usage("Usage: coffeelint [options] source [...]").alias("f", "file").alias("h", "help").alias("v", "version").describe("f", "Specify a custom configuration file.").describe("h", "Print help information.").describe("v", "Print current version number.").describe("r", "Recursively lint .coffee files in subdirectories.").describe("nocolor", "Don't colorize output.").boolean("nocolor").boolean("r");
+
+  if (options.argv.v) {
     console.log(coffeelint.VERSION);
     process.exit(0);
-} else if (optimist.argv.h) {
-    optimist.showHelp();
+  } else if (options.argv.h) {
+    options.showHelp();
     process.exit(0);
-} else if (optimist.argv._.length < 1 && !optimist.argv.stdin) {
-    optimist.showHelp();
+  } else if (options.argv._.length < 1) {
+    options.showHelp();
     process.exit(1);
-} else {
-    // Lint the given files with the given configuration and print a report.
-    data = '';
-    // Load the users configuration, if they've passed one.
-    var config = (optimist.argv.f) ? JSON.parse(read(optimist.argv.f)) : {};
-    var colorize = !optimist.argv.nocolor;
-    var configPath = optimist.argv.f;
-    
-    if (optimist.argv.stdin){
-       process.openStdin()
-            .on('data', function(buffer){
-                if(buffer){
-                    data += buffer.toString();
-                }
-            })
-            .on('end', function(){
-                // Lint and report on the source.
-                var messages = lintSource(data, '', config, colorize);
-                exitLint(messages);
-            });
+  } else {
+    paths = options.argv._;
+    scripts = options.argv.r ? findCoffeeScripts(paths) : paths;
+    configPath = options.argv.f;
+    config = configPath ? JSON.parse(read(configPath)) : {};
+    errorReport = lint(scripts, config);
+    colorize = !options.argv.nocolor;
+    reporter = new Reporter(errorReport, colorize);
+    reporter.publish();
+    process.exit(errorReport.getExitCode());
+  }
 
-    }else{
-        // Lint and report on each script.
-        var messages = lintPaths(optimist.argv._, config, colorize);
-        exitLint(messages);
-    }
-
-}
-
-// vim: filetype=javascript
+}).call(this);

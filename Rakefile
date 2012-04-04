@@ -1,7 +1,3 @@
-
-TEST_DIR = "test"
-SOURCE = "src/coffeelint.coffee"
-LIB_DIR = "lib"
 LINT_CONFIG = "test/fixtures/coffeelint.json"
 
 # Print a notification.
@@ -21,19 +17,18 @@ end
 
 desc "Lint the linter."
 task :lint => [:compile] do
-  sh("./bin/coffeelint -f #{LINT_CONFIG} src/*.coffee test/*.coffee")
+  sh("./bin/coffeelint -r -f #{LINT_CONFIG} src/ test/*.coffee")
   notify("linted!")
 end
 
 desc "Compile the source."
 task :compile do
-  sh("node_modules/.bin/coffee -c -o #{LIB_DIR} #{SOURCE}")
+  sh("node_modules/.bin/coffee -c -o lib src")
+  # Add a hack for adding node shebang.
+  node='#!/usr/bin/env node'
+  sh("echo '#{node}' | cat - lib/commandline.js > bin/coffeelint")
+  sh("rm lib/commandline.js")
   notify("compiled!")
-end
-
-desc "Compile the source when it changes."
-task :watch do
-  sh("node_modules/.bin/coffee -wc -o #{LIB_DIR} #{SOURCE}")
 end
 
 desc "Publish the package."
