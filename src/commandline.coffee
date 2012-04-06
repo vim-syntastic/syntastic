@@ -67,15 +67,13 @@ class ErrorReport
 # Reports errors to the command line.
 class Reporter
 
-    constructor : (errorReport, colorize=true) ->
+    constructor : (errorReport) ->
         @errorReport = errorReport
-        @colorize = colorize
         @ok = '✓'
         @warn = '⚡'
         @err = '✗'
 
     stylize : (message, styles...) ->
-        return message if not @colorize
         map = {
             yellow: [33, 39],
             green: [32, 39],
@@ -122,11 +120,14 @@ class Reporter
     print : (message) ->
         console.log message
 
-# A reporter which reports nothing at all.
-class NullReporter extends Reporter
 
-    publish : (errorReport) ->
-        null
+class CSVReporter extends Reporter
+
+    publish : () ->
+        for path, errors of @errorReport.paths
+            for e in errors
+                f = [path, e.lineNumber, e.level, e.message]
+                @print f.join(",")
 
 
 # Return an error report from linting the given paths
@@ -149,8 +150,8 @@ options = optimist
             .describe("h", "Print help information.")
             .describe("v", "Print current version number.")
             .describe("r", "Recursively lint .coffee files in subdirectories.")
-            .describe("nocolor", "Don't colorize output.")
-            .boolean("nocolor")
+            .describe("csv", "Use the csv reporter.")
+            .boolean("csv")
             .boolean("r")
 
 if options.argv.v
@@ -175,8 +176,8 @@ else
     errorReport = lint(scripts, config)
 
     # Report on it
-    colorize = not options.argv.nocolor
-    reporter = new Reporter(errorReport, colorize)
+    ReporterClass = if options.argv.csv then CSVReporter else Reporter
+    reporter = new ReporterClass(errorReport)
     reporter.publish()
     process.exit(errorReport.getExitCode())
 

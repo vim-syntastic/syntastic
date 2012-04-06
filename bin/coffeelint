@@ -8,7 +8,7 @@ CoffeeLint is freely distributable under the MIT license.
 */
 
 (function() {
-  var ErrorReport, NullReporter, Reporter, coffeelint, colorize, config, configPath, errorReport, findCoffeeScripts, fs, glob, lint, optimist, options, path, paths, read, reporter, scripts, thisdir,
+  var CSVReporter, ErrorReport, Reporter, ReporterClass, coffeelint, config, configPath, errorReport, findCoffeeScripts, fs, glob, lint, optimist, options, path, paths, read, reporter, scripts, thisdir,
     __slice = Array.prototype.slice,
     __hasProp = Object.prototype.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; };
@@ -107,10 +107,8 @@ CoffeeLint is freely distributable under the MIT license.
 
   Reporter = (function() {
 
-    function Reporter(errorReport, colorize) {
-      if (colorize == null) colorize = true;
+    function Reporter(errorReport) {
       this.errorReport = errorReport;
-      this.colorize = colorize;
       this.ok = '✓';
       this.warn = '⚡';
       this.err = '✗';
@@ -119,7 +117,6 @@ CoffeeLint is freely distributable under the MIT license.
     Reporter.prototype.stylize = function() {
       var map, message, styles;
       message = arguments[0], styles = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
-      if (!this.colorize) return message;
       map = {
         yellow: [33, 39],
         green: [32, 39],
@@ -175,19 +172,35 @@ CoffeeLint is freely distributable under the MIT license.
 
   })();
 
-  NullReporter = (function(_super) {
+  CSVReporter = (function(_super) {
 
-    __extends(NullReporter, _super);
+    __extends(CSVReporter, _super);
 
-    function NullReporter() {
-      NullReporter.__super__.constructor.apply(this, arguments);
+    function CSVReporter() {
+      CSVReporter.__super__.constructor.apply(this, arguments);
     }
 
-    NullReporter.prototype.publish = function(errorReport) {
-      return null;
+    CSVReporter.prototype.publish = function() {
+      var e, errors, f, path, _ref, _results;
+      _ref = this.errorReport.paths;
+      _results = [];
+      for (path in _ref) {
+        errors = _ref[path];
+        _results.push((function() {
+          var _i, _len, _results2;
+          _results2 = [];
+          for (_i = 0, _len = errors.length; _i < _len; _i++) {
+            e = errors[_i];
+            f = [path, e.lineNumber, e.level, e.message];
+            _results2.push(this.print(f.join(",")));
+          }
+          return _results2;
+        }).call(this));
+      }
+      return _results;
     };
 
-    return NullReporter;
+    return CSVReporter;
 
   })(Reporter);
 
@@ -203,7 +216,7 @@ CoffeeLint is freely distributable under the MIT license.
     return errorReport;
   };
 
-  options = optimist.usage("Usage: coffeelint [options] source [...]").alias("f", "file").alias("h", "help").alias("v", "version").describe("f", "Specify a custom configuration file.").describe("h", "Print help information.").describe("v", "Print current version number.").describe("r", "Recursively lint .coffee files in subdirectories.").describe("nocolor", "Don't colorize output.").boolean("nocolor").boolean("r");
+  options = optimist.usage("Usage: coffeelint [options] source [...]").alias("f", "file").alias("h", "help").alias("v", "version").describe("f", "Specify a custom configuration file.").describe("h", "Print help information.").describe("v", "Print current version number.").describe("r", "Recursively lint .coffee files in subdirectories.").describe("csv", "Use the csv reporter.").boolean("csv").boolean("r");
 
   if (options.argv.v) {
     console.log(coffeelint.VERSION);
@@ -220,8 +233,8 @@ CoffeeLint is freely distributable under the MIT license.
     configPath = options.argv.f;
     config = configPath ? JSON.parse(read(configPath)) : {};
     errorReport = lint(scripts, config);
-    colorize = !options.argv.nocolor;
-    reporter = new Reporter(errorReport, colorize);
+    ReporterClass = options.argv.csv ? CSVReporter : Reporter;
+    reporter = new ReporterClass(errorReport);
     reporter.publish();
     process.exit(errorReport.getExitCode());
   }
