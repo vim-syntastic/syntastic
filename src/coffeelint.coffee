@@ -23,7 +23,7 @@ else
 
 
 # The current version of Coffeelint.
-coffeelint.VERSION = "0.3.0"
+coffeelint.VERSION = "0.4.0"
 
 
 # CoffeeLint error levels.
