@@ -118,6 +118,7 @@ CoffeeLint is freely distributable under the MIT license.
       var map, message, styles;
       message = arguments[0], styles = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
       map = {
+        bold: [1, 22],
         yellow: [33, 39],
         green: [32, 39],
         red: [31, 39]
@@ -129,6 +130,7 @@ CoffeeLint is freely distributable under the MIT license.
 
     Reporter.prototype.publish = function() {
       var errors, path, summary, _ref;
+      this.print("");
       _ref = this.errorReport.paths;
       for (path in _ref) {
         errors = _ref[path];
@@ -136,28 +138,32 @@ CoffeeLint is freely distributable under the MIT license.
       }
       summary = this.errorReport.getSummary();
       this.reportSummary(summary);
+      this.print("");
       return this;
     };
 
     Reporter.prototype.reportSummary = function(s) {
-      var e, msg, p, start, w;
-      start = s.errorCount > 0 ? this.stylize(this.err, 'red') : s.warningCount > 0 ? this.stylize(this.warn, 'yellow') : this.stylize(this.ok, 'green');
+      var e, err, file, msg, p, start, w, warn;
+      start = s.errorCount > 0 ? "" + this.err + " " + (this.stylize("Lint!", 'red', 'bold')) : s.warningCount > 0 ? "" + this.warn + " " + (this.stylize("Warning!", 'yellow', 'bold')) : "" + this.ok + " " + (this.stylize("Ok!", 'green', 'bold'));
       e = s.errorCount;
       w = s.warningCount;
       p = s.pathCount;
-      msg = "" + start + " " + e + " errors and " + w + " warnings in " + p + " files";
-      return this.print(this.stylize(msg));
+      err = this.plural('error', e);
+      warn = this.plural('warning', w);
+      file = this.plural('file', p);
+      msg = "" + start + " » " + e + " " + err + " and " + w + " " + warn + " in " + p + " " + file;
+      return this.print("\n" + this.stylize(msg));
     };
 
     Reporter.prototype.reportPath = function(path, errors) {
       var color, e, msg, o, overall, _i, _len, _ref, _results;
       _ref = this.errorReport.pathHasError(path) ? [this.err, 'red'] : this.errorReport.pathHasWarning(path) ? [this.warn, 'yellow'] : [this.ok, 'green'], overall = _ref[0], color = _ref[1];
-      this.print(this.stylize("" + overall + " " + path, color));
+      this.print("  " + overall + " " + (this.stylize(path, color, 'bold')));
       _results = [];
       for (_i = 0, _len = errors.length; _i < _len; _i++) {
         e = errors[_i];
-        o = this.stylize((e.level === 'error' ? this.err : this.warn), color);
-        msg = "  " + o + " line " + e.lineNumber + " - " + e.message + ".";
+        o = e.level === 'error' ? this.err : this.warn;
+        msg = "     " + ("" + o + " " + (this.stylize("#" + e.lineNumber, color)) + ": " + e.message + ".");
         if (e.context) msg += " " + e.context + ".";
         _results.push(this.print(msg));
       }
@@ -166,6 +172,14 @@ CoffeeLint is freely distributable under the MIT license.
 
     Reporter.prototype.print = function(message) {
       return console.log(message);
+    };
+
+    Reporter.prototype.plural = function(str, count) {
+      if (count === 1) {
+        return str;
+      } else {
+        return "" + str + "s";
+      }
     };
 
     return Reporter;
