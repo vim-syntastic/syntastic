@@ -529,10 +529,10 @@ endfunction
 "   'subtype' - all errors will be assigned the given subtype
 function! SyntasticMake(options)
     let old_loclist = getloclist(0)
-    let old_makeprg = &makeprg
+    let old_makeprg = &l:makeprg
     let old_shellpipe = &shellpipe
     let old_shell = &shell
-    let old_errorformat = &errorformat
+    let old_errorformat = &l:errorformat
 
     if !s:running_windows && (s:uname !~ "FreeBSD")
         "this is a hack to stop the screen needing to be ':redraw'n when
@@ -542,19 +542,19 @@ function! SyntasticMake(options)
     endif
 
     if has_key(a:options, 'makeprg')
-        let &makeprg = a:options['makeprg']
+        let &l:makeprg = a:options['makeprg']
     endif
 
     if has_key(a:options, 'errorformat')
-        let &errorformat = a:options['errorformat']
+        let &l:errorformat = a:options['errorformat']
     endif
 
     silent lmake!
     let errors = getloclist(0)
 
     call setloclist(0, old_loclist)
-    let &makeprg = old_makeprg
-    let &errorformat = old_errorformat
+    let &l:makeprg = old_makeprg
+    let &l:errorformat = old_errorformat
     let &shellpipe=old_shellpipe
     let &shell=old_shell
 
