@@ -87,6 +87,10 @@ RULES =
         value : 'unix' # or 'windows'
         message : 'Line contains incorrect line endings'
 
+    no_implicit_parens :
+        level : IGNORE
+        message : 'Implicit parens are forbidden'
+
 
 # Some repeatedly used regular expressions.
 regexes =
@@ -257,13 +261,14 @@ class LexicalLinter
 
         # Now lint it.
         switch type
-            when "INDENT"    then @lintIndentation(token)
-            when "CLASS"     then @lintClass(token)
-            when "{"         then @lintBrace(token)
-            when "++", "--"  then @lintIncrement(token)
-            when "THROW"     then @lintThrow(token)
-            when "[", "]"    then @lintArray(token)
-            when "JS"        then @lintJavascript(token)
+            when "INDENT"     then @lintIndentation(token)
+            when "CLASS"      then @lintClass(token)
+            when "{"          then @lintBrace(token)
+            when "++", "--"   then @lintIncrement(token)
+            when "THROW"      then @lintThrow(token)
+            when "[", "]"     then @lintArray(token)
+            when "JS"         then @lintJavascript(token)
+            when "CALL_START" then @lintCall(token)
             else null
 
     # Lint the given array token.
@@ -276,6 +281,9 @@ class LexicalLinter
         # Return null, since we're not really linting
         # anything here.
         null
+
+    lintCall : (token) ->
+        if token.generated then @createLexError('no_implicit_parens') else null
 
     lintBrace : (token) ->
         if token.generated then @createLexError('no_implicit_braces') else null
