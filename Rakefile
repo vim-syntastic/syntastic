@@ -44,4 +44,8 @@ task :publish => [:default] do
   sh("npm publish")
 end
 
+task :tokenize do
+  sh "./utils/tokenize ./utils/test.coffee"
+end
+
 task :default => [:compile, :test, :lint]
