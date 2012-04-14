@@ -45,6 +45,10 @@
   "line_endings" : {
     "value" : "unix",
     "level" : "ignore"
+  },
+
+  "no_implicit_parens" : {
+    "level" : "ignore"
   }
 
 }
