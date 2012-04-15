@@ -5,13 +5,18 @@
     },
 
     "cyclomatic_complexity" : {
-        "level" : "error",
+        "level" : "warn",
         "value" : 11
     },
 
     "line_endings" : {
         "value" : "unix",
         "level" : "error"
+    },
+
+    "space_operators" : {
+        "level" : "error"
     }
+
 
 }
