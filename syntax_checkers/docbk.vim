@@ -21,7 +21,7 @@ endif
 
 function! SyntaxCheckers_docbk_GetLocList()
 
-    let makeprg="xmllint --xinclude --noout --postvalid %"
+    let makeprg="xmllint --xinclude --noout --postvalid ".shellescape(expand(%:p))
     let errorformat='%E%f:%l: parser error : %m,%W%f:%l: parser warning : %m,%E%f:%l:%.%# validity error : %m,%W%f:%l:%.%# validity warning : %m,%-Z%p^,%-C%.%#,%-G%.%#'
     let loclist = SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 

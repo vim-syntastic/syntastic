@@ -14,28 +14,28 @@ if exists('loaded_sh_syntax_checker')
 endif
 let loaded_sh_syntax_checker = 1
 
-function! GetShell()
-    let shebang = getbufline(bufnr('%'), 1)[0]
-    if len(shebang) > 0
-        if match(shebang, 'bash') >= 0
-            return 'bash'
-        elseif match(shebang, 'zsh') >= 0
-            return 'zsh'
-        elseif match(shebang, 'sh') >= 0
-            return 'sh'
+function! s:GetShell()
+    if !exists('b:shell') || b:shell == ""
+        let b:shell = ''
+        let shebang = getbufline(bufnr('%'), 1)[0]
+        if len(shebang) > 0
+            if match(shebang, 'bash') >= 0
+                let b:shell = 'bash'
+            elseif match(shebang, 'zsh') >= 0
+                let b:shell = 'zsh'
+            elseif match(shebang, 'sh') >= 0
+                let b:shell = 'sh'
+            endif
         endif
     endif
-    return ''
+    return b:shell
 endfunction
 
 function! SyntaxCheckers_sh_GetLocList()
-    if !exists('b:shell')
-        let b:shell = GetShell()
-    endif
-    if len(b:shell) == 0 || !executable(b:shell)
+    if len(s:GetShell()) == 0 || !executable(s:GetShell())
         return []
     endif
-    let output = split(system(b:shell.' -n '.shellescape(expand('%'))), '\n')
+    let output = split(system(s:GetShell().' -n '.shellescape(expand('%'))), '\n')
     if v:shell_error != 0
         let result = []
         for err_line in output

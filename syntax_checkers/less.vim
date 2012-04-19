@@ -19,19 +19,20 @@ if !executable("lessc")
     finish
 endif
 
+if !exists("g:syntastic_less_options")
+    let g:syntastic_less_options = "--no-color"
+endif
+
 function! SyntaxCheckers_less_GetLocList()
-    let makeprg = 'lessc '. shellescape(expand('%')) . ' /dev/null'
-    let errorformat = 'Syntax %trror on line %l,! Syntax %trror: on line %l: %m,%-G%.%#'
-    let errors = SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
+    let makeprg = 'lessc '. g:syntastic_less_options .' '.  shellescape(expand('%')) . ' /dev/null'
 
-    for i in errors
-        let i['bufnr'] = bufnr("")
+    "lessc >= 1.2
+    let errorformat = '%m in %f:%l:%c'
+    "lessc < 1.2
+    let errorformat .= ', Syntax %trror on line %l in %f,Syntax %trror on line %l,! Syntax %trror: on line %l: %m,%-G%.%#'
 
-        if empty(i['text'])
-            let i['text'] = "Syntax error"
-        endif
-    endfor
-
-    return errors
+    return SyntasticMake({ 'makeprg': makeprg,
+                         \ 'errorformat': errorformat,
+                         \ 'defaults': {'bufnr': bufnr(""), 'text': "Syntax error"} })
 endfunction
 

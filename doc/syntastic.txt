@@ -36,21 +36,22 @@ CONTENTS                                                  *syntastic-contents*
 ==============================================================================
 1. Intro                                                     *syntastic-intro*
 
-Syntastic is a syntax checking plugin that runs buffers through external syntax
-checkers as they are saved and opened. If syntax errors are detected, the user
-is notified and is happy because they didn't have to compile their code or
-execute their script to find them.
+Syntastic is a syntax checking plugin that runs files through external syntax
+checkers. This can be done on demand, or automatically as files are saved and
+opened.  If syntax errors are detected, the user is notified and is happy
+because they didn't have to compile their code or execute their script to find
+them.
 
 Syntastic comes in two parts: the syntax checker plugins, and the core script
 (i.e. syntastic.vim). The syntax checker plugins are defined on a per-filetype
 basis where each one wraps up an external syntax checking program. The core
 script delegates off to these plugins and uses their output to provide the
-syntastic functionality. Currently, syntax checking plugins exist for c,
-coffee, cpp, cucumber, eruby, haml, haskell, html, javascript, lua, perl, php,
-python, ruby, sass, sh, tex and xhtml.
+syntastic functionality. At the time of this writing, syntax checking plugins
+exist for c, coffee, cpp, css, cucumber, cuda, docbk, erlang, eruby, fortran,
+go, haml, haskell, html, javascript, less, lua, matlab, perl, php, puppet,
+python, ruby, sass/scss, sh, tcl, tex, vala, xhtml, xml, xslt, zpt
 
-NOTE: This list is subject to change without notice.  Please check the
-syntax_checkers directory for a reliable list of syntax checkers.
+Take a look in the syntax_checkers directory for the most up to date list.
 
 If your language is not supported then see |syntastic-syntax-checkers| for
 details on how to implement a syntax checking plugin, and be sure to send me a
@@ -64,14 +65,23 @@ briefly appears whenever one is executed.
 ==============================================================================
 2. Functionality provided                            *syntastic-functionality*
 
-By default, the script does nothing. The following functionality is provided
-and must be enabled/activated as indicated (see the sections below for more
-in-depth descriptions):
-    * A statusline flag appears when syntax errors are detected
-    * |signs| are placed beside lines with syntax errors, where a different
+Syntax checking can be done automatically or on demand (see
+|'syntastic_mode_map'| for configuring this).
+
+When syntax checking is done, the features below can be used to notify the
+user of errors. See |syntastic-options| for how to configure and
+activate/deactivate these features.
+
+    * A configurable statusline flag
+    * Lines with errors can have |signs| placed beside them - where a different
       sign is used for errors and warnings.
-    * The :Errors command is provided to open a |location-list| for
-      the syntax errors in the current buffer
+    * A |location-list| can be displayed with error messages for erroneous
+      buffers.
+    * Offending parts of lines can be highlighted (this functionality is only
+      provided by some syntax checkers).
+    * Balloons (if compiled in) can be used to display error messages for
+      erroneous lines when hovering the mouse over them.
+
 
 Note: This functionality is only available if a syntax checker plugin is
 present for the filetype of the buffer in question. See
@@ -110,33 +120,79 @@ Syntastic's own location list.
 ==============================================================================
 3. Commands                                               *syntastic-commands*
 
-:SyntasticDisable [filetype]                               *:SyntasticDisable*
-    Disables syntax checking for the the given filetype (if specified), or the
-    current filetype.
+:Errors                                                     *:SyntasticErrors*
 
-:SyntasticEnable [filetype]                                *:SyntasticEnable*
-    Enables syntax checking for the the given filetype (if specified), or the
-    current filetype.
+When errors have been detected, use this command to pop up the |location-list|
+and display the error messages.
+
+
+:SyntasticToggleMode                                    *:SyntasticToggleMode*
+
+Toggles syntastic between active and passive mode. See |'syntastic_mode_map'|
+for more info.
+
+
+:SyntasticCheck                                              *:SyntasticCheck*
+
+Manually cause a syntax check to be done. Useful in passive mode, or if the
+current filetype is set to passive. See |'syntastic_mode_map'| for more info.
 
 
 ==============================================================================
 4. Options                                                 *syntastic-options*
 
+
+                                                   *'syntastic_check_on_open'*
+Default: 0
+If enabled, syntastic will do syntax checks when buffers are first loaded as
+well as on saving >
+    let g:syntastic_check_on_open=1
+<
+
+                                              *'syntastic_echo_current_error'*
+Default: 1
+If enabled, syntastic will error message associated with the current line to
+the command window. If multiple errors are found, the first will be used. >
+    let g:syntastic_echo_current_error=1
+<
+
                                                     *'syntastic_enable_signs'*
-Use this option to tell syntastic to use the |:sign| interface to mark syntax
-errors: >
+Default: 1
+Use this option to tell syntastic whether to use the |:sign| interface to mark
+syntax errors: >
     let g:syntastic_enable_signs=1
 <
 
+                                                 *'syntastic_enable_balloons'*
+Default: 1
+Use this option to tell syntastic whether to display error messages in balloons
+when the mouse is hovered over erroneous lines: >
+    let g:syntastic_enable_balloons = 1
+<
+Note that vim must be compiled with |+balloon_eval|.
+
+                                            *'syntastic_enable_highlighting'*
+Default: 1
+Use this option to tell syntastic whether to use syntax highlighting to mark
+errors (where possible). Highlighting can be turned off with the following >
+    let g:syntastic_enable_highlighting = 0
+<
+
                                                        *'syntastic_auto_jump'*
+Default: 0
 Enable this option if you want the cursor to jump to the first detected error
 when saving or opening a file: >
     let g:syntastic_auto_jump=1
 <
 
                                                    *'syntastic_auto_loc_list'*
+Default: 2
 Use this option to tell syntastic to automatically open and/or close the
 |location-list| (see |syntastic-error-window|).
+
+When set to 0 the error window will not be opened or closed automatically. >
+    let g:syntastic_auto_loc_list=0
+<
 
 When set to 1 the error window will be automatically opened when errors are
 detected, and closed when none are detected. >
@@ -147,11 +203,50 @@ detected, but not opened automatically. >
     let g:syntastic_auto_loc_list=2
 <
 
+                                                 *'syntastic_loc_list_height'*
+Default: 10
+Use this option to specify the height of the location lists that syntastic
+opens. >
+    let g:syntastic_loc_list_height=5
+<
+
+
+                                                        *'syntastic_mode_map'*
+Default: { "mode": "active",
+           "active_filetypes": [],
+           "passive_filetypes": [] }
+
+Use this option to fine tune when automatic syntax checking is done (or not
+done).
+
+The option should be set to something like: >
+
+    let g:syntastic_mode_map = { 'mode': 'active',
+                               \ 'active_filetypes': ['ruby', 'php'],
+                               \ 'passive_filetypes': ['puppet'] }
+<
+
+"mode" can be mapped to one of two values - "active" or "passive". When set to
+active, syntastic does automatic checking whenever a buffer is saved or
+initially opened.  When set to "passive" syntastic only checks when the user
+calls :SyntasticCheck.
+
+The exceptions to these rules are defined with "active_filetypes" and
+"passive_filetypes". In passive mode, automatic checks are still done
+for all filetypes in the "active_filetypes" array. In active mode,
+automatic checks are not done for any filetypes in the
+"passive_filetypes" array.
+
+At runtime, the |:SyntasticToggleMode| command can be used to switch between
+active and passive mode.
+
+If any of "mode", "active_filetypes", or "passive_filetypes" are not specified
+then they will default to their default value as above.
+
                                                   *'syntastic_quiet_warnings'*
 
 Use this option if you only care about syntax errors, not warnings. When set,
 this option has the following effects:
-    * the statusline flag only counts syntax errors
     * no |signs| appear unless there is at least one error, whereupon both
       errors and warnings are displayed
     * the |'syntastic_auto_loc_list'| option only pops up the error window if
@@ -192,12 +287,6 @@ If the buffer had 2 warnings, starting on line 5 then this would appear: >
     [Warn: 5 #2]
 <
 
-                                              *'syntastic_disabled_filetypes'*
-Use this option to disable syntax checking on selected filetypes by default.
-Should be set to a list of filetypes, e.g. >
-    let g:syntastic_disabled_filetypes = ['ruby', 'php']
-<
-Syntax checking can be enabled again via |:SyntasticEnable|.
 
 ==============================================================================
 5. Writing syntax checkers                         *syntastic-syntax-checkers*
@@ -266,6 +355,114 @@ The latest dev versions are on github
 ==============================================================================
 7. Changelog                                             *syntastic-changelog*
 
+2.3.0
+    - Add syntastic_loc_list_height option
+    - Allow errors to have a "subtype" that is signed differently to standard
+      errors. Currently geared towards differentiating style errors from
+      syntax errors. Currently implemented for phpcs (technosophos).
+    - New checkers for:
+        - yaml
+        - haxe (davidB)
+        - ocaml (edwintorok)
+        - pylint (parantapa)
+        - rust (cjab)
+
+    - Updates to existing checkers:
+        - jslint
+        - jshint (gillesruppert)
+        - fortran (bmattern)
+        - sass
+        - html (darcyparker)
+        - coffee (darcyparker)
+        - docbk (darcyparker)
+        - xml
+        - xslt
+        - less (irrationalfab)
+        - php (AD7six, technosophos)
+        - cuda
+        - python (mitchellh, pneff)
+        - perl (Anthony Carapetis)
+        - c (naoina, zsprackett)
+        - puppet (frimik)
+
+2.2.0
+    - only do syntax checks when files are saved (not when first opened) - add
+      g:syntastic_check_on_open option to get the old behavior back
+    - bug fix with echoing error messages; fixes incompatability with cmd-t (datanoise)
+    - dont allow warnings to mask errors when signing/echoing errors (ashikase)
+    - auto close location list when leaving buffer. (millermedeiros)
+    - update errors appropriately when :SyntasticToggleMode is called
+    - updates/fixes to existing checkers:
+        - javascript/jshint (millermedeiros)
+        - javascript/jslint
+        - c (kongo2002)
+    - Support for new filetypes:
+        - JSON (millermedeiros, tocer)
+        - rst (reStructuredText files) (JNRowe)
+        - gentoo-metadata (JNRowe)
+
+
+2.1.0
+    - when the cursor is on a line containing an error, echo the
+      error msg (kevinw)
+    - various bug fixes and refactoring
+    - updates/fixes to existing checkers:
+        - html (millermedeiros)
+        - erlang
+        - coffeescript
+        - javascript
+        - sh
+        - php (add support for phpcs - technosophos)
+    - add an applescript checker (Zhai Cai)
+    - add support for hyphenated filetypes (JNRowe)
+
+2.0.0
+    - Add support for highlighting the erroneous parts of lines (kstep)
+    - Add support for displaying errors via balloons (kstep)
+    - Add syntastic_mode_map option to give more control over when checking
+      should be done.
+    - Add :SyntasticCheck command to force a syntax check -  useful in passive
+      mode (justone).
+    - Add the option to automatically close the location list, but not
+      automatically open it (milkypostman)
+    - Add syntastic_auto_jump option to automatically jump to the first
+      error (milkypostman)
+    - Only source syntax checkers as needed - instead of loading all of them
+      when vim starts
+
+    - Support for new filetypes:
+        - less (julienXX)
+        - docbook (tpope)
+        - matlab (jasongraham)
+        - go (dtjm)
+        - puppet (uggedal, roman, zsprackett)
+        - haskell (baldo, roman)
+        - tcl (et)
+        - vala (kstep)
+        - cuda (temporaer)
+        - css (oryband, sitedyno)
+        - fortran (Karl Yngve Lervåg)
+        - xml (kusnier)
+        - xslt (kusnier)
+        - erlang (kTT)
+        - zpt (claytron)
+
+    - updates to existing checkers:
+        - javascript (mogren, bryanforbes, cjab, ajduncan)
+        - sass/scss (tmm1, atourino, dlee, epeli)
+        - ruby (changa)
+        - perl (harleypig)
+        - haml (bmihelac)
+        - php (kstep, docteurklein)
+        - python (kstep, soli)
+        - lua (kstep)
+        - html (kstep)
+        - xhtml (kstep)
+        - c (kongo2002, brandonw)
+        - cpp (kongo2002)
+        - coffee (industrial)
+        - eruby (sergevm)
+
 1.2.0
     - New syntax checkers from github:kongo2002
       - c (thanks also to github:jperras)
@@ -292,7 +489,7 @@ The latest dev versions are on github
     - Add an option to specifiy syntax checkers that should be disabled by
       default. See :help syntastic_disabled_filetypes.
     - Dont use :signs if vim wasnt compiled with support for them.
-
+)
 
 ==============================================================================
 8. Credits                                                 *syntastic-credits*
@@ -300,6 +497,70 @@ The latest dev versions are on github
 Thanks to the following people for testing, bug reports, patches etc. They own,
 hard.
 
+    Mikael Fridh (frimik)
+    Patrice Neff (pneff )
+    Gilles Ruppert (gillesruppert)
+    Naoya INADA (naoina)
+    Mitchell Hashimoto (mitchellh)
+    irrationalfab
+    Andy Dawson (AD7six)
+    Parantapa Bhattacharya (parantapa)
+    edwintorok
+    Darcy Parker (darcyparker)
+    bmattern
+    David Bernard (davidB)
+    Aleksey V. Zapparov (ixti)
+    Benji Fisher (benjifisher)
+    Lance Fetters (ashikase)
+    datanoise
+    Giuseppe Rota (grota)
+    tocer
+    James Rowe (JNRowe)
+    Zhai Cai
+    Matt Butcher (technosophos)
+    Kevin Watters (kevinw)
+    Miller Medeiros (millermedeiros)
+    Pawel Salata (kTT)
+    Fjölnir Ásgeirsson (aptiva)
+    Clayton Parker (claytron)
+    S. Zachariah Sprackett (zsprackett)
+    Sylvain Soliman (soli)
+    Ricardo Catalinas Jiménez (jimenezrick)
+    kusnier
+    Klein Florian (docteurklein)
+    sitedyno
+    Matthew Batema (mlb-)
+    Nate Jones (justone)
+    sergevm
+    Karl Yngve Lervåg
+    Pavel Argentov (argent-smith)
+    Andy Duncan (ajduncan)
+    Antonio Touriño (atourino)
+    Chad Jablonski (cjab)
+    Roman Gonzalez (roman)
+    Tom Wieland (industrial)
+    Ory Band (oryband)
+    Esa-Matti Suuronen (epeli)
+    Brandon Waskiewicz (brandonw)
+    dlee
+    temporaer
+    Jason Graham (jasongraham)
+    Sam Nguyen (dtjm)
+    Claes Mogren (mogren)
+    Eivind Uggedal (uggedal)
+    kstep
+    Andreas Baldeau (baldo)
+    Eric Thomas (et)
+    Brian Donovan (eventualbuddha)
+    Bryan Forbes (bryanforbes)
+    Aman Gupta (tmm1)
+    Donald Ephraim Curtis (milkypostman)
+    Dominique Rose-Rosette (changa)
+    Harley Pig (harleypig)
+    bmihelac
+    Julien Blanchard (julienXX)
+    Gregor Uhlenheuer (kongo2002)
+    Lincoln Stoll
     Tim Carey-Smith (halorgium)
     Tim Pope (tpope)
     Travis Jeffery

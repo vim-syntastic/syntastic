@@ -19,12 +19,20 @@ if !executable("ghc-mod")
     finish
 endif
 
-function! SyntaxCheckers_haskell_GetLocList()
-    let makeprg = 
-          \ 'ghc-mod check '. shellescape(expand('%')) .
-          \ ' && ghc-mod lint ' . shellescape(expand('%'))
-    let errorformat = '%-G\\s%#,%f:%l:%c:%m,%E%f:%l:%c:,%Z%m,'
+if !exists('g:syntastic_haskell_checker_args')
+    let g:syntastic_haskell_checker_args = '--hlintOpt="--language=XmlSyntax"'
+endif
 
+function! SyntaxCheckers_haskell_GetLocList()
+    let ghcmod = 'ghc-mod ' . g:syntastic_haskell_checker_args
+    let makeprg =
+          \ "{ ".
+          \ ghcmod . " check ". shellescape(expand('%')) . "; " .
+          \ ghcmod . " lint " . shellescape(expand('%')) . ";" .
+          \ " }"
+    let errorformat = '%-G\\s%#,%f:%l:%c:%trror: %m,%f:%l:%c:%tarning: %m,'.
+                \ '%f:%l:%c: %trror: %m,%f:%l:%c: %tarning: %m,%f:%l:%c:%m,'.
+                \ '%E%f:%l:%c:,%Z%m,'
 
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 endfunction
