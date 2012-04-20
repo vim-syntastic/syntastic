@@ -185,6 +185,8 @@ function! s:CacheErrors()
         for ft in split(fts, '\.')
             if s:Checkable(ft)
                 let errors = SyntaxCheckers_{ft}_GetLocList()
+                "keep only lines that effectively match an error/warning
+                let errors = s:FilterLocList({'valid': 1}, errors)
                 "make errors have type "E" by default
                 call SyntasticAddToErrors(errors, {'type': 'E'})
                 call extend(s:LocList(), errors)
