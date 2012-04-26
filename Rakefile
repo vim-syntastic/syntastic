@@ -21,6 +21,14 @@ task :lint => [:compile] do
   notify("linted!")
 end
 
+desc "Lint the linter."
+task :'lint:csv' => [:compile] do
+  sh("./bin/coffeelint --csv -r -f #{LINT_CONFIG} src/ test/*.coffee")
+  notify("linted!")
+end
+
+
+
 desc "Compile the source."
 task :compile do
   sh("node_modules/.bin/coffee -c -o lib src")
@@ -34,6 +42,10 @@ end
 desc "Publish the package."
 task :publish => [:default] do
   sh("npm publish")
+end
+
+task :tokenize do
+  sh "./utils/tokenize ./utils/test.coffee"
 end
 
 task :default => [:compile, :test, :lint]

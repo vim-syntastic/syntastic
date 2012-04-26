@@ -23,7 +23,7 @@ else
 
 
 # The current version of Coffeelint.
-coffeelint.VERSION = "0.3.0"
+coffeelint.VERSION = "0.4.0"
 
 
 # CoffeeLint error levels.
@@ -87,6 +87,14 @@ RULES =
         value : 'unix' # or 'windows'
         message : 'Line contains incorrect line endings'
 
+    no_implicit_parens :
+        level : IGNORE
+        message : 'Implicit parens are forbidden'
+
+    space_operators :
+        level : IGNORE
+        message : 'Operators must be spaced properly'
+
 
 # Some repeatedly used regular expressions.
 regexes =
@@ -109,7 +117,7 @@ defaults = (source, defaults) ->
 
 # Create an error object for the given rule with the given
 # attributes.
-createError = (rule, attrs={}) ->
+createError = (rule, attrs = {}) ->
     level = attrs.level
     if level not in [IGNORE, WARN, ERROR]
         throw new Error("unknown level #{level}")
@@ -193,7 +201,7 @@ class LineLinter
 
         return null if not ending or @isLastLine() or not @line
 
-        lastChar = @line[@line.length-1]
+        lastChar = @line[@line.length - 1]
         valid = if ending == 'windows'
             lastChar == '\r'
         else if ending == 'unix'
@@ -206,7 +214,7 @@ class LineLinter
             return null
 
 
-    createLineError : (rule, attrs={}) ->
+    createLineError : (rule, attrs = {}) ->
         attrs.lineNumber = @lineNumber + 1 # Lines are indexed by zero.
         attrs.level = @config[rule]?.level
         createError(rule, attrs)
@@ -235,6 +243,8 @@ class LexicalLinter
         @i = 0              # The index of the current token we're linting.
         @tokensByLine = {}  # A map of tokens by line.
         @arrayTokens = []   # A stack tracking the array token pairs.
+        @parenTokens = []   # A stack tracking the parens token pairs.
+        @callTokens = []   # A stack tracking the call token pairs.
         @lines = source.split('\n')
 
     # Return a list of errors encountered in the given source.
@@ -253,17 +263,24 @@ class LexicalLinter
 
         @tokensByLine[lineNumber] ?= []
         @tokensByLine[lineNumber].push(token)
-        @lineNumber = lineNumber
+        # CoffeeScript loses line numbers of interpolations and multi-line
+        # regexes, so fake it by using the last line number we know.
+        @lineNumber = lineNumber or @lineNumber or 0
 
         # Now lint it.
         switch type
-            when "INDENT"    then @lintIndentation(token)
-            when "CLASS"     then @lintClass(token)
-            when "{"         then @lintBrace(token)
-            when "++", "--"  then @lintIncrement(token)
-            when "THROW"     then @lintThrow(token)
-            when "[", "]"    then @lintArray(token)
-            when "JS"        then @lintJavascript(token)
+            when "INDENT"                 then @lintIndentation(token)
+            when "CLASS"                  then @lintClass(token)
+            when "{"                      then @lintBrace(token)
+            when "++", "--"               then @lintIncrement(token)
+            when "THROW"                  then @lintThrow(token)
+            when "[", "]"                 then @lintArray(token)
+            when "(", ")"                 then @lintParens(token)
+            when "JS"                     then @lintJavascript(token)
+            when "CALL_START", "CALL_END" then @lintCall(token)
+            when "+", "-"                 then @lintPlus(token)
+            when "=", "MATH", "COMPARE", "LOGIC"
+                @lintMath(token)
             else null
 
     # Lint the given array token.
@@ -276,6 +293,69 @@ class LexicalLinter
         # Return null, since we're not really linting
         # anything here.
         null
+
+    lintParens : (token) ->
+        if token[0] == '('
+            p1 = @peek(-1)
+            n1 = @peek(1)
+            n2 = @peek(2)
+            # String interpolations start with '' + so start the type co-ercion,
+            # so track if we're inside of one. This is most definitely not
+            # 100% true but what else can we do?
+            i = n1 and n2 and n1[0] == 'STRING' and n2[0] == '+'
+            token.isInterpolation = i
+            @parenTokens.push(token)
+        else
+            @parenTokens.pop()
+        # We're not linting, just tracking interpolations.
+        null
+
+    isInInterpolation : () ->
+        for t in @parenTokens
+            return true if t.isInterpolation
+        return false
+
+    isInExtendedRegex : () ->
+        for t in @callTokens
+            return true if t.isRegex
+        return false
+
+    lintPlus : (token) ->
+        # We can't check this inside of interpolations right now, because the
+        # plusses used for the string type co-ercion are marked not spaced.
+        return null if @isInInterpolation() or @isInExtendedRegex()
+
+        p = @peek(-1)
+        unaries = ['TERMINATOR', '(', '=', '-', '+', ',', 'CALL_START',
+                    'INDEX_START', '..', '...', 'COMPARE', 'IF',
+                    'THROW', 'LOGIC', 'POST_IF', ':', '[', 'INDENT']
+        isUnary = if not p then false else p[0] in unaries
+        if (isUnary and token.spaced) or
+                    (not isUnary and not token.spaced and not token.newLine)
+            @createLexError('space_operators', {context: token[1]})
+        else
+            null
+
+    lintMath: (token) ->
+        if not token.spaced and not token.newLine
+            @createLexError('space_operators', {context: token[1]})
+        else
+            null
+
+    lintCall : (token) ->
+        if token[0] == 'CALL_START'
+            p = @peek(-1)
+            # Track regex calls, to know (approximately) if we're in an
+            # extended regex.
+            token.isRegex = p and p[0] == 'IDENTIFIER' and p[1] == 'RegExp'
+            @callTokens.push(token)
+            if token.generated
+                return @createLexError('no_implicit_parens')
+            else
+                return null
+        else
+            @callTokens.pop()
+            return null
 
     lintBrace : (token) ->
         if token.generated then @createLexError('no_implicit_braces') else null
@@ -327,7 +407,7 @@ class LexicalLinter
         # Compensate for indentation in function invocations that span multiple
         # lines, which can be ignored.
         if @isChainedCall()
-            previousLine = @lines[@lineNumber-1]
+            previousLine = @lines[@lineNumber - 1]
             previousIndentation = previousLine.match(/^(\s*)/)[1].length
             numIndents -= previousIndentation
 
@@ -367,13 +447,14 @@ class LexicalLinter
         else
             null
 
-    createLexError : (rule, attrs={}) ->
+    createLexError : (rule, attrs = {}) ->
         attrs.lineNumber = @lineNumber + 1
         attrs.level = @config[rule].level
+        attrs.line = @lines[@lineNumber]
         createError(rule, attrs)
 
     # Return the token n places away from the current token.
-    peek : (n=1) ->
+    peek : (n = 1) ->
         @tokens[@i + n] || null
 
     # Return true if the current token is inside of an array.
@@ -471,7 +552,7 @@ mergeDefaultConfig = (userConfig) ->
 #       context:    'Optional details about why the rule was violated'
 #   }
 #
-coffeelint.lint = (source, userConfig={}) ->
+coffeelint.lint = (source, userConfig = {}) ->
     config = mergeDefaultConfig(userConfig)
 
     # Do lexical linting.

@@ -67,16 +67,15 @@ class ErrorReport
 # Reports errors to the command line.
 class Reporter
 
-    constructor : (errorReport, colorize=true) ->
+    constructor : (errorReport) ->
         @errorReport = errorReport
-        @colorize = colorize
         @ok = '✓'
         @warn = '⚡'
         @err = '✗'
 
     stylize : (message, styles...) ->
-        return message if not @colorize
         map = {
+            bold  : [1,  22],
             yellow: [33, 39],
             green: [32, 39],
             red: [31, 39]
@@ -86,23 +85,28 @@ class Reporter
         , message
 
     publish : () ->
+        @print ""
         @reportPath(path, errors) for path, errors of @errorReport.paths
         summary = @errorReport.getSummary()
         @reportSummary(summary)
+        @print ""
         return this
 
     reportSummary : (s) ->
         start = if s.errorCount > 0
-            @stylize(@err, 'red')
+            "#{@err} #{@stylize("Lint!", 'red', 'bold')}"
         else if s.warningCount > 0
-            @stylize @warn, 'yellow'
+            "#{@warn} #{@stylize("Warning!", 'yellow', 'bold')}"
         else
-            @stylize @ok, 'green'
+            "#{@ok} #{@stylize("Ok!", 'green', 'bold')}"
         e = s.errorCount
         w = s.warningCount
         p = s.pathCount
-        msg = "#{start} #{e} errors and #{w} warnings in #{p} files"
-        @print @stylize(msg)
+        err = @plural('error', e)
+        warn = @plural('warning', w)
+        file = @plural('file', p)
+        msg = "#{start} » #{e} #{err} and #{w} #{warn} in #{p} #{file}"
+        @print "\n" + @stylize(msg)
 
     reportPath : (path, errors) ->
         [overall, color] = if @errorReport.pathHasError(path)
@@ -111,22 +115,27 @@ class Reporter
             [@warn, 'yellow']
         else
             [@ok, 'green']
-        @print(@stylize("#{overall} #{path}", color))
+        @print "  #{overall} #{@stylize(path, color, 'bold')}"
         for e in errors
-            o = @stylize((if e.level == 'error' then @err else @warn), color)
-            msg = "  #{o} line #{e.lineNumber} - #{e.message}."
-            if e.context
-                msg += " #{e.context}."
+            o = if e.level == 'error' then @err else @warn
+            msg = "     " +
+                    "#{o} #{@stylize("#" + e.lineNumber, color)}: #{e.message}."
+            msg += " #{e.context}." if e.context
             @print(msg)
 
     print : (message) ->
         console.log message
 
-# A reporter which reports nothing at all.
-class NullReporter extends Reporter
+    plural : (str, count) ->
+        if count == 1 then str else "#{str}s"
 
-    publish : (errorReport) ->
-        null
+class CSVReporter extends Reporter
+
+    publish : () ->
+        for path, errors of @errorReport.paths
+            for e in errors
+                f = [path, e.lineNumber, e.level, e.message]
+                @print f.join(",")
 
 
 # Return an error report from linting the given paths
@@ -149,8 +158,8 @@ options = optimist
             .describe("h", "Print help information.")
             .describe("v", "Print current version number.")
             .describe("r", "Recursively lint .coffee files in subdirectories.")
-            .describe("nocolor", "Don't colorize output.")
-            .boolean("nocolor")
+            .describe("csv", "Use the csv reporter.")
+            .boolean("csv")
             .boolean("r")
 
 if options.argv.v
@@ -175,8 +184,8 @@ else
     errorReport = lint(scripts, config)
 
     # Report on it
-    colorize = not options.argv.nocolor
-    reporter = new Reporter(errorReport, colorize)
+    ReporterClass = if options.argv.csv then CSVReporter else Reporter
+    reporter = new ReporterClass(errorReport)
     reporter.publish()
     process.exit(errorReport.getExitCode())
 
