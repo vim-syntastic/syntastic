@@ -100,21 +100,16 @@ augroup syntastic
     autocmd BufReadPost * if g:syntastic_check_on_open | call s:UpdateErrors(1) | endif
     autocmd BufWritePost * call s:UpdateErrors(1)
 
-    autocmd BufWinEnter * if empty(&bt) | call s:AutoToggleLocList() | endif
+    autocmd BufWinEnter * if empty(&bt) | call s:AutoToggleLocList() | call s:LoadStaticCheckers() | endif
     autocmd BufWinLeave * if empty(&bt) | lclose | endif
 augroup END
 
+function! s:LoadStaticCheckers()
+	" Load all the static checkers since they can be used whenever.
+	runtime! static_checkers/*.vim
+endfunction
 
-"refresh and redraw all the error info for this buf when saving or reading
-function! s:UpdateErrors(auto_invoked)
-    if !empty(&buftype)
-        return
-    endif
-
-    if !a:auto_invoked || s:ModeMapAllowsAutoChecking()
-        call s:CacheErrors()
-    end
-
+function! s:RedrawErrors()
     if s:BufHasErrorsOrWarningsToDisplay()
         call setloclist(0, s:LocList())
     endif
@@ -136,6 +131,19 @@ function! s:UpdateErrors(auto_invoked)
     endif
 
     call s:AutoToggleLocList()
+endfunction
+
+"refresh and redraw all the error info for this buf when saving or reading
+function! s:UpdateErrors(auto_invoked)
+    if !empty(&buftype)
+        return
+    endif
+
+    if !a:auto_invoked || s:ModeMapAllowsAutoChecking()
+        call s:CacheErrors()
+    end
+
+    call s:RedrawErrors()
 endfunction
 
 "automatically open/close the location list window depending on the users
@@ -168,6 +176,28 @@ function! s:ClearCache()
     let b:syntastic_loclist = []
     unlet! b:syntastic_errors
     unlet! b:syntastic_warnings
+endfunction
+
+"detect and cache all syntax errors in this buffer, only for static checkers.
+"
+"depends on a function called SyntaxCheckers_{&ft}_GetLocList() existing
+"elsewhere
+function! g:CacheStaticErrors(checker)
+    call s:ClearCache()
+
+    if filereadable(expand("%"))
+
+    if s:Checkable(a:checker)
+	let errors = SyntaxCheckers_{a:checker}_GetLocList()
+	"make errors have type "E" by default
+	call SyntasticAddToErrors(errors, {'type': 'E'})
+	call extend(s:LocList(), errors)
+
+	call s:RedrawErrors()
+
+	redraw!
+    endif
+    endif
 endfunction
 
 "detect and cache all syntax errors in this buffer
