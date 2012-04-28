@@ -118,15 +118,7 @@ augroup syntastic
 augroup END
 
 
-"refresh and redraw all the error info for this buf when saving or reading
-function! s:UpdateErrors(auto_invoked)
-    if !empty(&buftype)
-        return
-    endif
-
-    if !a:auto_invoked || s:ModeMapAllowsAutoChecking()
-        call s:CacheErrors()
-    end
+function! s:RedrawErrors(bufnr)
 
     call setloclist(0, s:LocList())
 
@@ -135,7 +127,7 @@ function! s:UpdateErrors(auto_invoked)
     endif
 
     if g:syntastic_enable_signs
-        call s:RefreshSigns()
+        call s:RefreshSigns(a:bufnr)
     endif
 
     if g:syntastic_enable_highlighting
@@ -147,6 +139,19 @@ function! s:UpdateErrors(auto_invoked)
     endif
 
     call s:AutoToggleLocList()
+endfunction
+
+"refresh and redraw all the error info for this buf when saving or reading
+function! s:UpdateErrors(auto_invoked)
+    if !empty(&buftype)
+        return
+    endif
+
+    if !a:auto_invoked || s:ModeMapAllowsAutoChecking()
+        call s:CacheErrors()
+    end
+
+    call s:RedrawErrors(bufnr(''))
 endfunction
 
 "automatically open/close the location list window depending on the users
@@ -301,10 +306,10 @@ let s:first_sign_id = 5000
 let s:next_sign_id = s:first_sign_id
 
 "place signs by all syntax errs in the buffer
-function! s:SignErrors()
+function! s:SignErrors(bufnr)
     if s:BufHasErrorsOrWarningsToDisplay()
 
-        let errors = s:FilterLocList({'bufnr': bufnr('')})
+        let errors = s:FilterLocList({'bufnr': a:bufnr})
         for i in errors
             let sign_severity = 'Error'
             let sign_subtype = ''
@@ -317,8 +322,8 @@ function! s:SignErrors()
             let sign_type = 'Syntastic' . sign_subtype . sign_severity
 
             if !s:WarningMasksError(i, errors)
-                exec "sign place ". s:next_sign_id ." line=". i['lnum'] ." name=". sign_type ." file=". expand("%:p")
-                call add(s:BufSignIds(), s:next_sign_id)
+                exec "sign place ". s:next_sign_id ." line=". i['lnum'] ." name=". sign_type ." buffer=".a:bufnr
+                call add(s:BufSignIds(a:bufnr), s:next_sign_id)
                 let s:next_sign_id += 1
             endif
         endfor
@@ -336,26 +341,29 @@ function! s:WarningMasksError(error, llist)
 endfunction
 
 "remove the signs with the given ids from this buffer
-function! s:RemoveSigns(ids)
+function! s:RemoveSigns(ids, bufnr)
     for i in a:ids
-        exec "sign unplace " . i
-        call remove(s:BufSignIds(), index(s:BufSignIds(), i))
+        exec "sign unplace " . i." buffer=".a:bufnr
+        call remove(s:BufSignIds(a:bufnr), index(s:BufSignIds(a:bufnr), i))
     endfor
 endfunction
 
 "get all the ids of the SyntaxError signs in the buffer
-function! s:BufSignIds()
-    if !exists("b:syntastic_sign_ids")
-        let b:syntastic_sign_ids = []
+function! s:BufSignIds(bufnr)
+    if !exists("t:syntastic_sign_ids")
+        let t:syntastic_sign_ids = { }
     endif
-    return b:syntastic_sign_ids
+    if !exists("t:syntastic_sign_ids['".bufname(a:bufnr)."']")
+       let t:syntastic_sign_ids[bufname(a:bufnr)] = []
+    endif
+    return t:syntastic_sign_ids[bufname(a:bufnr)]
 endfunction
 
 "update the error signs
-function! s:RefreshSigns()
-    let old_signs = copy(s:BufSignIds())
-    call s:SignErrors()
-    call s:RemoveSigns(old_signs)
+function! s:RefreshSigns(bufnr)
+    let old_signs = copy(s:BufSignIds(a:bufnr))
+    call s:SignErrors(a:bufnr)
+    call s:RemoveSigns(old_signs, a:bufnr)
     let s:first_sign_id = s:next_sign_id
 endfunction
 
