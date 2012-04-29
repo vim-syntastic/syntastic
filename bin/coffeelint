@@ -10,7 +10,7 @@ CoffeeLint is freely distributable under the MIT license.
 
 
 (function() {
-  var CSVReporter, ErrorReport, Reporter, ReporterClass, coffeelint, config, configPath, errorReport, findCoffeeScripts, fs, glob, lint, optimist, options, path, paths, read, reporter, scripts, thisdir,
+  var CSVReporter, ErrorReport, Reporter, coffeelint, config, configPath, data, errorReport, findCoffeeScripts, fs, glob, lintFiles, lintSource, optimist, options, path, paths, read, reportAndExit, scripts, thisdir,
     __slice = [].slice,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; };
@@ -236,19 +236,32 @@ CoffeeLint is freely distributable under the MIT license.
 
   })(Reporter);
 
-  lint = function(paths, config) {
-    var errorReport;
+  lintFiles = function(paths, config) {
+    var errorReport, path, _i, _len;
     errorReport = new ErrorReport();
-    paths.forEach(function(path) {
-      var errors, source;
-      source = read(path);
-      errors = coffeelint.lint(source, config);
-      return errorReport.paths[path] = errors;
-    });
+    for (_i = 0, _len = paths.length; _i < _len; _i++) {
+      path = paths[_i];
+      errorReport.paths[path] = lintSource(read(path), config).paths["src"];
+    }
     return errorReport;
   };
 
-  options = optimist.usage("Usage: coffeelint [options] source [...]").alias("f", "file").alias("h", "help").alias("v", "version").describe("f", "Specify a custom configuration file.").describe("h", "Print help information.").describe("v", "Print current version number.").describe("r", "Recursively lint .coffee files in subdirectories.").describe("csv", "Use the csv reporter.").boolean("csv").boolean("r");
+  lintSource = function(source, config) {
+    var errorReport;
+    errorReport = new ErrorReport();
+    errorReport.paths["src"] = coffeelint.lint(source, config);
+    return errorReport;
+  };
+
+  reportAndExit = function(errorReport, options) {
+    var ReporterClass, reporter;
+    ReporterClass = options.argv.csv ? CSVReporter : Reporter;
+    reporter = new ReporterClass(errorReport);
+    reporter.publish();
+    return process.exit(errorReport.getExitCode());
+  };
+
+  options = optimist.usage("Usage: coffeelint [options] source [...]").alias("f", "file").alias("h", "help").alias("v", "version").alias("s", "stdin").describe("f", "Specify a custom configuration file.").describe("h", "Print help information.").describe("v", "Print current version number.").describe("r", "Recursively lint .coffee files in subdirectories.").describe("csv", "Use the csv reporter.").describe("s", "Use stdin instead of a filepath").boolean("csv").boolean("r").boolean("s");
 
   if (options.argv.v) {
     console.log(coffeelint.VERSION);
@@ -256,19 +269,29 @@ CoffeeLint is freely distributable under the MIT license.
   } else if (options.argv.h) {
     options.showHelp();
     process.exit(0);
-  } else if (options.argv._.length < 1) {
+  } else if (options.argv._.length < 1 && !options.argv.s) {
     options.showHelp();
     process.exit(1);
   } else {
-    paths = options.argv._;
-    scripts = options.argv.r ? findCoffeeScripts(paths) : paths;
     configPath = options.argv.f;
     config = configPath ? JSON.parse(read(configPath)) : {};
-    errorReport = lint(scripts, config);
-    ReporterClass = options.argv.csv ? CSVReporter : Reporter;
-    reporter = new ReporterClass(errorReport);
-    reporter.publish();
-    process.exit(errorReport.getExitCode());
+    if (options.argv.s) {
+      data = '';
+      process.openStdin().on('data', function(buffer) {
+        if (buffer) {
+          return data += buffer.toString();
+        }
+      }).on('end', function() {
+        var errorReport;
+        errorReport = lintSource(data, config);
+        return reportAndExit(errorReport, options);
+      });
+    } else {
+      paths = options.argv._;
+      scripts = options.argv.r ? findCoffeeScripts(paths) : paths;
+      errorReport = lintFiles(scripts, config);
+      reportAndExit(errorReport, options);
+    }
   }
 
 }).call(this);

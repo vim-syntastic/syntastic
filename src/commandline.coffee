@@ -137,16 +137,25 @@ class CSVReporter extends Reporter
                 f = [path, e.lineNumber, e.level, e.message]
                 @print f.join(",")
 
-
-# Return an error report from linting the given paths
-lint = (paths, config) ->
+# Return an error report from linting the given paths.
+lintFiles = (paths, config) ->
     errorReport = new ErrorReport()
-    paths.forEach (path) ->
-        source = read(path)
-        errors = coffeelint.lint(source, config)
-        errorReport.paths[path] = errors
+    for path in paths
+        errorReport.paths[path] = lintSource(read(path), config).paths["src"]
     return errorReport
 
+# Return an error report from linting the given coffeescript source.
+lintSource = (source, config) ->
+    errorReport = new ErrorReport()
+    errorReport.paths["src"] = coffeelint.lint(source, config)
+    return errorReport
+
+# Publish the error report and exit with the appropriate status.
+reportAndExit = (errorReport, options) ->
+    ReporterClass = if options.argv.csv then CSVReporter else Reporter
+    reporter = new ReporterClass(errorReport)
+    reporter.publish()
+    process.exit(errorReport.getExitCode())
 
 # Declare command line options.
 options = optimist
@@ -154,13 +163,16 @@ options = optimist
             .alias("f", "file")
             .alias("h", "help")
             .alias("v", "version")
+            .alias("s", "stdin")
             .describe("f", "Specify a custom configuration file.")
             .describe("h", "Print help information.")
             .describe("v", "Print current version number.")
             .describe("r", "Recursively lint .coffee files in subdirectories.")
             .describe("csv", "Use the csv reporter.")
+            .describe("s", "Use stdin instead of a filepath")
             .boolean("csv")
             .boolean("r")
+            .boolean("s")
 
 if options.argv.v
     console.log coffeelint.VERSION
@@ -168,24 +180,30 @@ if options.argv.v
 else if options.argv.h
     options.showHelp()
     process.exit(0)
-else if options.argv._.length < 1
+else if options.argv._.length < 1 and not options.argv.s
     options.showHelp()
     process.exit(1)
 else
-    # Find scripts to lint
-    paths = options.argv._
-    scripts = if options.argv.r then findCoffeeScripts(paths) else paths
-
     # Load configuration.
     configPath = options.argv.f
     config = if configPath then JSON.parse(read(configPath)) else {}
 
-    # Lint the code.
-    errorReport = lint(scripts, config)
+    if options.argv.s
+        # Lint from stdin
+        data = ''
+        process.openStdin()
+            .on 'data', (buffer) ->
+                data += buffer.toString() if buffer
+            .on 'end', ->
+                errorReport = lintSource(data, config)
+                reportAndExit errorReport, options
+    else
+        # Find scripts to lint.
+        paths = options.argv._
+        scripts = if options.argv.r then findCoffeeScripts(paths) else paths
 
-    # Report on it
-    ReporterClass = if options.argv.csv then CSVReporter else Reporter
-    reporter = new ReporterClass(errorReport)
-    reporter.publish()
-    process.exit(errorReport.getExitCode())
+        # Lint the code.
+        errorReport = lintFiles(scripts, config)
+        reportAndExit errorReport, options
+        
 
