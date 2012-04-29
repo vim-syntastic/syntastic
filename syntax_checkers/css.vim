@@ -12,6 +12,7 @@ if exists("loaded_css_syntax_checker")
     finish
 endif
 let loaded_css_syntax_checker = 1
+let async_css_syntax_checker = 1
 
 " Bail if the user doesn't have `csslint` installed.
 if !executable("csslint")
@@ -24,7 +25,7 @@ function! SyntaxCheckers_css_GetLocList()
     " Print CSS Lint's error/warning messages from compact format. Ignores blank lines.
     let errorformat = '%-G,%-G%f: lint free!,%f: line %l\, col %c\, %trror - %m,%f: line %l\, col %c\, %tarning - %m,%f: line %l\, col %c\, %m,'
 
-    return SyntasticMake({ 'makeprg': makeprg,
+    return SyntasticMake({ 'checker': 'css', 'makeprg': makeprg,
                                 \ 'errorformat': errorformat,
                                 \ 'defaults': {'bufnr': bufnr("")} })
 
