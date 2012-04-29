@@ -8,13 +8,13 @@ vows = require 'vows'
 assert = require 'assert'
 {spawn, exec} = require 'child_process'
 coffeelint = require path.join('..', 'lib', 'coffeelint')
-coffeelintCmd = path.join('bin', 'coffeelint')
+coffeelintPath = path.join('bin', 'coffeelint')
 
 # Run the coffeelint command line with the given
 # args. Callback will be called with (error, stdout,
 # stderr)
 commandline = (args, callback) -> 
-    exec("#{coffeelintCmd} #{args.join(" ")}", callback)
+    exec("#{coffeelintPath} #{args.join(" ")}", callback)
 
 
 vows.describe('commandline').addBatch({
@@ -153,7 +153,7 @@ vows.describe('commandline').addBatch({
 
         'with working string':
             topic: () ->
-                exec("echo somevariable = 1| #{coffeelintCmd} --stdin", this.callback)
+                exec("echo somevariable = 1| #{coffeelintPath} --stdin", this.callback)
                 return undefined
 
             'passes': (error, stdout, stderr) ->
@@ -164,7 +164,7 @@ vows.describe('commandline').addBatch({
 
         'with failing string due to whitespace':
             topic: () ->
-                exec("echo 'somevariable = 1 '| #{coffeelintCmd} --stdin", this.callback)
+                exec("echo 'somevariable = 1 '| #{coffeelintPath} --stdin", this.callback)
                 return undefined
 
             'fails': (error, stdout, stderr) ->
