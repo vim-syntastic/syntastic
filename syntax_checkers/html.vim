@@ -13,6 +13,7 @@ if exists("loaded_html_syntax_checker")
     finish
 endif
 let loaded_html_syntax_checker = 1
+let async_html_syntax_checker = 1
 
 "bail if the user doesnt have tidy or grep installed
 if !executable("tidy") || !executable("grep")
@@ -64,23 +65,25 @@ function! SyntaxCheckers_html_GetLocList()
     let encopt = s:TidyEncOptByFenc()
     let makeprg="tidy ".encopt." --new-blocklevel-tags ".shellescape('section, article, aside, hgroup, header, footer, nav, figure, figcaption')." --new-inline-tags ".shellescape('video, audio, embed, mark, progress, meter, time, ruby, rt, rp, canvas, command, details, datalist')." --new-empty-tags ".shellescape('wbr, keygen')." -e ".shellescape(expand('%'))." 2>&1"
     let errorformat='%Wline %l column %c - Warning: %m,%Eline %l column %c - Error: %m,%-G%.%#,%-G%.%#'
-    let loclist = SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 
-    " process loclist since we need to add some info and filter out valid HTML5
+    return SyntasticMake({ 'makeprg': makeprg,
+                         \ 'errorformat': errorformat,
+                         \ 'checker': 'html',
+                         \ 'defaults': {'bufnr': bufnr("")} })
+endfunction
+
+function! SyntaxCheckers_html_PostProcess(loclist)
+    " process a:loclist since we need to add some info and filter out valid HTML5
     " from the errors
-    let n = len(loclist) - 1
-    let bufnum = bufnr("")
+    let n = len(a:loclist) - 1
     while n >= 0
-        let i = loclist[n]
+        let i = a:loclist[n]
         " filter out valid HTML5
         if s:ValidateError(i['text']) == 1
-            unlet loclist[n]
-        else
-            "the file name isnt in the output so stick in the buf num manually
-            let i['bufnr'] = bufnum
+            unlet a:loclist[n]
         endif
         let n -= 1
     endwhile
 
-    return loclist
+    return a:loclist
 endfunction
