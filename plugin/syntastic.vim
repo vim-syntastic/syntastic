@@ -85,6 +85,10 @@ if !exists("g:syntastic_loc_list_height")
     let g:syntastic_loc_list_height = 10
 endif
 
+if has("clientserver") && exists("g:loaded_asynccommand") && exists("g:syntastic_async")
+   let g:syntastic_do_async = 1
+endif
+
 command! SyntasticToggleMode call s:ToggleMode()
 command! SyntasticCheck call s:UpdateErrors(0) <bar> redraw!
 command! Errors call s:ShowLocList()
@@ -189,12 +193,19 @@ function! s:CacheErrors()
         let fts = substitute(&ft, '-', '_', 'g')
         for ft in split(fts, '\.')
             if s:Checkable(ft)
-                let errors = SyntaxCheckers_{ft}_GetLocList()
-                "keep only lines that effectively match an error/warning
-                let errors = s:FilterLocList({'valid': 1}, errors)
-                "make errors have type "E" by default
-                call SyntasticAddToErrors(errors, {'type': 'E'})
-                call extend(s:LocList(), errors)
+                if exists("g:syntastic_do_async") && exists("g:async_".ft."_syntax_checker")
+                    call SyntaxCheckers_{ft}_GetLocList()
+		else
+                    let errors = SyntaxCheckers_{ft}_GetLocList()
+		    if exists("*SyntaxCheckers_".ft."_PostProcess")
+                        let errors = SyntaxCheckers_{ft}_PostProcess(errors)
+		    endif
+                    "keep only lines that effectively match an error/warning
+                    let errors = s:FilterLocList({'valid': 1}, errors)
+                    "make errors have type "E" by default
+                    call SyntasticAddToErrors(errors, {'type': 'E'})
+                    call extend(s:LocList(), errors)
+		endif
             endif
         endfor
     endif
@@ -537,7 +548,7 @@ endfunction
 "a:options may also contain:
 "   'defaults' - a dict containing default values for the returned errors
 "   'subtype' - all errors will be assigned the given subtype
-function! SyntasticMake(options)
+function! SyntasticLocalMake(options)
     let old_loclist = getloclist(0)
     let old_makeprg = &l:makeprg
     let old_shellpipe = &shellpipe
@@ -582,6 +593,95 @@ function! SyntasticMake(options)
     endif
 
     return errors
+endfunction
+
+function! SyntasticRemoteMake(options)
+    if has_key(a:options, 'makeprg')
+        let makeprg = a:options['makeprg']
+    else
+        let makeprg = &makeprg
+    endif
+
+    if has_key(a:options, 'errorformat')
+        let efm = a:options['errorformat']
+    else
+        let efm = &errorformat
+    endif
+
+    let async_cmd   = substitute(makeprg, '\\|', '\|', "g")
+    let async_env   = { 'efm' : efm , 'checker': a:options['checker'] , 'bufnr': bufnr('')}
+
+    if has_key(a:options, 'defaults')
+        let async_env['defaults'] = a:options['defaults']
+    endif
+
+    " Add subtype info if present.
+    if has_key(a:options, 'subtype')
+        let async_env['subtype'] = a:options['subtype']
+    endif
+
+    function async_env.get(temp_file) dict
+        let old_loclist = getloclist(0)
+        let old_makeprg = &l:makeprg
+        let old_shellpipe = &shellpipe
+        let old_shell = &shell
+        let old_errorformat = &l:errorformat
+
+        if !s:running_windows && (s:uname !~ "FreeBSD")
+            "this is a hack to stop the screen needing to be ':redraw'n when
+            "when :lmake is run. Otherwise the screen flickers annoyingly
+            let &shellpipe='&>'
+            let &shell = '/bin/bash'
+        endif
+
+        " lget error file
+        let &errorformat = self.efm
+        let cmd = 'lgetfile ' . a:temp_file
+        exe cmd
+        let errors = getloclist(0)
+
+        call setloclist(0, old_loclist)
+        let &l:makeprg = old_makeprg
+        let &l:errorformat = old_errorformat
+        let &shellpipe=old_shellpipe
+        let &shell=old_shell
+
+        if !s:running_windows && s:uname =~ "FreeBSD"
+            redraw!
+        endif
+
+        if has_key(self, 'defaults')
+            call SyntasticAddToErrors(errors, self['defaults'])
+        endif
+
+        " Add subtype info if present.
+        if has_key(self, 'subtype')
+            call SyntasticAddToErrors(errors, {'subtype': self['subtype']})
+        endif
+
+        if exists('*SyntaxCheckers_'.self.checker.'_PostProcess')
+            let errors = SyntaxCheckers_{self.checker}_PostProcess(errors)
+        endif
+        "keep only lines that effectively match an error/warning
+        let errors = s:FilterLocList({'valid': 1}, errors)
+        "make errors have type "E" by default
+        call SyntasticAddToErrors(errors, {'type': 'E'})
+        call extend(s:LocList(), errors)
+
+        call s:RedrawErrors(self.bufnr)
+    endfunction
+    " tab_restore prevents interruption when the task completes.
+    " All provided asynchandlers already use tab_restore.
+    call asynccommand#run(async_cmd, asynccommand#tab_restore(async_env))
+endfunction
+
+function! SyntasticMake(options)
+    if exists("g:syntastic_do_async") && exists("a:options['checker']") && 
+	\ exists("g:async_".a:options['checker']."_syntax_checker")
+       call SyntasticRemoteMake(a:options)
+    else
+       return SyntasticLocalMake(a:options)
+    endif
 endfunction
 
 "get the error balloon for the current mouse position
