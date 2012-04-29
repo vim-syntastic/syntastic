@@ -142,6 +142,14 @@ current filetype is set to passive. See |'syntastic_mode_map'| for more info.
 4. Options                                                 *syntastic-options*
 
 
+                                                           *'syntastic_async'*
+Default: 0
+If enabled, syntastic will run the checker as a background process, allowing
+the user to continue editing while the checker is running. This option depends
+on the AsyncCommand package, and vim must be run with the --servername option.>
+    let g:syntastic_async=1
+<
+
                                                    *'syntastic_check_on_open'*
 Default: 0
 If enabled, syntastic will do syntax checks when buffers are first loaded as
