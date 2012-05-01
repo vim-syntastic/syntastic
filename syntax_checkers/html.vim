@@ -84,9 +84,9 @@ function! SyntaxCheckers_html_w3_GetLocList()
         let i['bufnr'] = bufnum
 
         if i['lnum'] == 0
-	   let i['type'] = 'w'
-	else
-           let i['type'] = 'e'
+            let i['type'] = 'w'
+        else
+            let i['type'] = 'e'
         endif
         let n -= 1
     endwhile
