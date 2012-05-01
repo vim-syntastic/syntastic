@@ -14,9 +14,15 @@ if exists("loaded_html_syntax_checker")
 endif
 let loaded_html_syntax_checker = 1
 
+if !exists('g:syntastic_html_use_w3_validator')
 "bail if the user doesnt have tidy or grep installed
-if !executable("tidy") || !executable("grep")
-    finish
+    if !executable("tidy") || !executable("grep")
+        finish
+    endif
+else
+    if !executable("curl") || !executable("sed")
+        finish
+    endif
 endif
 
 " TODO: join this with xhtml.vim for DRY's sake?
@@ -58,8 +64,37 @@ function! s:ValidateError(text)
     return valid
 endfunction
 
-
 function! SyntaxCheckers_html_GetLocList()
+if exists('g:syntastic_html_use_w3_validator')
+   return SyntaxCheckers_html_w3_GetLocList()
+else
+   return SyntaxCheckers_html_tidy_GetLocList()
+endif
+endfunction
+
+function! SyntaxCheckers_html_w3_GetLocList()
+    let makeprg2="curl -s -F output=text -F \"uploaded_file=@".expand('%:p').";type=text/html\" http://validator.w3.org/check \\| sed -n -e '/\<em\>Line\.\*/ \{ N; s/\\n//; N; s/\\n//; /msg/p; \}' -e ''/msg_warn/p'' -e ''/msg_info/p'' \\| sed -e 's/[ ]\\+/ /g' -e 's/\<[\^\>]\*\>//g' -e 's/\^[ ]//g'"
+    let errorformat2='Line %l\, Column %c: %m'
+    let loclist = SyntasticMake({ 'makeprg': makeprg2, 'errorformat': errorformat2 })
+
+    let n = len(loclist) - 1
+    let bufnum = bufnr("")
+    while n >= 0
+        let i = loclist[n]
+        let i['bufnr'] = bufnum
+
+        if i['lnum'] == 0
+	   let i['type'] = 'w'
+	else
+           let i['type'] = 'e'
+        endif
+        let n -= 1
+    endwhile
+
+    return loclist
+endfunction
+
+function! SyntaxCheckers_html_tidy_GetLocList()
 
     let encopt = s:TidyEncOptByFenc()
     let makeprg="tidy ".encopt." --new-blocklevel-tags ".shellescape('section, article, aside, hgroup, header, footer, nav, figure, figcaption')." --new-inline-tags ".shellescape('video, audio, embed, mark, progress, meter, time, ruby, rt, rp, canvas, command, details, datalist')." --new-empty-tags ".shellescape('wbr, keygen')." -e ".shellescape(expand('%'))." 2>&1"
