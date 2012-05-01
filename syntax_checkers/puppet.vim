@@ -24,7 +24,7 @@ if !exists("g:syntastic_puppet_lint_disable")
 endif
 
 if !executable("puppet-lint")
-    let g:syntastic_puppet_lint_disable = 0
+    let g:syntastic_puppet_lint_disable = 1
 endif
 
 function! s:PuppetExtractVersion()
@@ -44,7 +44,7 @@ let s:puppetVersion = s:PuppetExtractVersion()
 let s:lintVersion = s:PuppetLintExtractVersion()
 
 if !(s:lintVersion[0] >= '0' && s:lintVersion[1] >= '1' && s:lintVersion[2] >= '10')
-    let g:syntastic_puppet_lint_disable = 0
+    let g:syntastic_puppet_lint_disable = 1
 endif
 
 function! s:getPuppetLintErrors()
