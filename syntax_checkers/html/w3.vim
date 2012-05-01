@@ -1,5 +1,5 @@
 "============================================================================
-"File:        html.vim
+"File:        w3.vim
 "Description: Syntax checking plugin for syntastic.vim
 "Maintainer:  Martin Grenfell <martin.grenfell at gmail dot com>
 "License:     This program is free software. It comes without any warranty,

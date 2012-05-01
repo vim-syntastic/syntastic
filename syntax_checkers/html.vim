@@ -22,8 +22,8 @@ if g:syntastic_html_checker == "tidy"
     if executable("tidy") && executable("grep")
         runtime! syntax_checkers/html/tidy.vim
     endif
-elseif g:syntastic_html_checker == "w3c"
+elseif g:syntastic_html_checker == "w3"
     if executable("curl") && executable("sed")
-        runtime! syntax_checkers/html/w3c.vim
+        runtime! syntax_checkers/html/w3.vim
     endif
 endif
