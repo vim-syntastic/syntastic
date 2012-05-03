@@ -7,7 +7,7 @@ CoffeeLint is freely distributable under the MIT license.
 
 
 path = require("path")
-fs   = require("fs")
+fs     = require("fs")
 glob = require("glob")
 optimist = require("optimist")
 thisdir = path.dirname(fs.realpathSync(__filename))
@@ -75,12 +75,12 @@ class Reporter
 
     stylize : (message, styles...) ->
         map = {
-            bold  : [1,  22],
+            bold    : [1,    22],
             yellow: [33, 39],
             green: [32, 39],
             red: [31, 39]
         }
-        return styles.reduce (m, s)  ->
+        return styles.reduce (m, s)    ->
             return "\u001b[" + map[s][0] + "m" + m + "\u001b[" + map[s][1] + "m"
         , message
 
@@ -115,7 +115,7 @@ class Reporter
             [@warn, 'yellow']
         else
             [@ok, 'green']
-        @print "  #{overall} #{@stylize(path, color, 'bold')}"
+        @print "    #{overall} #{@stylize(path, color, 'bold')}"
         for e in errors
             o = if e.level == 'error' then @err else @warn
             msg = "     " +
@@ -137,6 +137,27 @@ class CSVReporter extends Reporter
                 f = [path, e.lineNumber, e.level, e.message]
                 @print f.join(",")
 
+# Outputs a JSLint-like XML Report
+class JSLintReporter extends Reporter
+
+    publish : () ->
+        @print "<?xml version=\"1.0\" encoding=\"utf-8\"?><jslint>"
+
+        for path, errors of @errorReport.paths
+            if errors.length
+                @print "<file name=\"#{path}\">"
+                
+                for e in errors
+                    @print """
+                    <issue line="#{e.lineNumber}"
+                            reason="[#{e.level}] #{e.message}"
+                            evidence=""/>
+                    """
+                @print "</file>"
+
+        @print "</jslint>"
+
+
 # Return an error report from linting the given paths.
 lintFiles = (paths, config) ->
     errorReport = new ErrorReport()
@@ -152,7 +173,12 @@ lintSource = (source, config) ->
 
 # Publish the error report and exit with the appropriate status.
 reportAndExit = (errorReport, options) ->
-    ReporterClass = if options.argv.csv then CSVReporter else Reporter
+    if options.argv.jslint
+        ReporterClass = JSLintReporter
+    else if options.argv.csv
+        ReporterClass = CSVReporter
+    else
+        ReporterClass = Reporter
     reporter = new ReporterClass(errorReport)
     reporter.publish()
     process.exit(errorReport.getExitCode())
@@ -169,8 +195,10 @@ options = optimist
             .describe("v", "Print current version number.")
             .describe("r", "Recursively lint .coffee files in subdirectories.")
             .describe("csv", "Use the csv reporter.")
+            .describe("jslint", "Use the JSLint XML reporter.")
             .describe("s", "Lint the source from stdin")
             .boolean("csv")
+            .boolean("jslint")
             .boolean("r")
             .boolean("s")
 
@@ -205,4 +233,3 @@ else
         # Lint the code.
         errorReport = lintFiles(scripts, config)
         reportAndExit errorReport, options
-
