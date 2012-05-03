@@ -169,7 +169,7 @@ options = optimist
             .describe("v", "Print current version number.")
             .describe("r", "Recursively lint .coffee files in subdirectories.")
             .describe("csv", "Use the csv reporter.")
-            .describe("s", "Use stdin instead of a filepath")
+            .describe("s", "Lint the source from stdin")
             .boolean("csv")
             .boolean("r")
             .boolean("s")
@@ -191,12 +191,12 @@ else
     if options.argv.s
         # Lint from stdin
         data = ''
-        process.openStdin()
-            .on 'data', (buffer) ->
-                data += buffer.toString() if buffer
-            .on 'end', ->
-                errorReport = lintSource(data, config)
-                reportAndExit errorReport, options
+        stdin = process.openStdin()
+        stdin.on 'data', (buffer) ->
+            data += buffer.toString() if buffer
+        stdin.on 'end', ->
+            errorReport = lintSource(data, config)
+            reportAndExit errorReport, options
     else
         # Find scripts to lint.
         paths = options.argv._
@@ -205,5 +205,4 @@ else
         # Lint the code.
         errorReport = lintFiles(scripts, config)
         reportAndExit errorReport, options
-        
 

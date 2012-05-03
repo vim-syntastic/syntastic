@@ -13,7 +13,7 @@ coffeelintPath = path.join('bin', 'coffeelint')
 # Run the coffeelint command line with the given
 # args. Callback will be called with (error, stdout,
 # stderr)
-commandline = (args, callback) -> 
+commandline = (args, callback) ->
     exec("#{coffeelintPath} #{args.join(" ")}", callback)
 
 
@@ -153,7 +153,7 @@ vows.describe('commandline').addBatch({
 
         'with working string':
             topic: () ->
-                exec("echo somevariable = 1| #{coffeelintPath} --stdin", this.callback)
+                exec("echo y = 1| #{coffeelintPath} --stdin", this.callback)
                 return undefined
 
             'passes': (error, stdout, stderr) ->
@@ -164,7 +164,7 @@ vows.describe('commandline').addBatch({
 
         'with failing string due to whitespace':
             topic: () ->
-                exec("echo 'somevariable = 1 '| #{coffeelintPath} --stdin", this.callback)
+                exec("echo 'x = 1 '| #{coffeelintPath} --stdin", this.callback)
                 return undefined
 
             'fails': (error, stdout, stderr) ->
