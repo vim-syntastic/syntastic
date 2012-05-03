@@ -8,6 +8,9 @@ vows = require 'vows'
 assert = require 'assert'
 {spawn, exec} = require 'child_process'
 coffeelint = require path.join('..', 'lib', 'coffeelint')
+
+
+# The path to the command line tool.
 coffeelintPath = path.join('bin', 'coffeelint')
 
 # Run the coffeelint command line with the given
@@ -15,6 +18,7 @@ coffeelintPath = path.join('bin', 'coffeelint')
 # stderr)
 commandline = (args, callback) ->
     exec("#{coffeelintPath} #{args.join(" ")}", callback)
+
 
 
 vows.describe('commandline').addBatch({
@@ -153,7 +157,7 @@ vows.describe('commandline').addBatch({
 
         'with working string':
             topic: () ->
-                exec("echo y = 1| #{coffeelintPath} --stdin", this.callback)
+                exec("echo y = 1 | #{coffeelintPath} --stdin", this.callback)
                 return undefined
 
             'passes': (error, stdout, stderr) ->

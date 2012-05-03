@@ -237,11 +237,12 @@ CoffeeLint is freely distributable under the MIT license.
   })(Reporter);
 
   lintFiles = function(paths, config) {
-    var errorReport, path, _i, _len;
+    var errorReport, path, source, _i, _len;
     errorReport = new ErrorReport();
     for (_i = 0, _len = paths.length; _i < _len; _i++) {
       path = paths[_i];
-      errorReport.paths[path] = lintSource(read(path), config).paths["src"];
+      source = read(path);
+      errorReport.paths[path] = coffeelint.lint(source, config);
     }
     return errorReport;
   };
@@ -249,7 +250,7 @@ CoffeeLint is freely distributable under the MIT license.
   lintSource = function(source, config) {
     var errorReport;
     errorReport = new ErrorReport();
-    errorReport.paths["src"] = coffeelint.lint(source, config);
+    errorReport.paths["stdin"] = coffeelint.lint(source, config);
     return errorReport;
   };
 
