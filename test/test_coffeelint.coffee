@@ -26,4 +26,16 @@ vows.describe('coffeelint').addBatch({
             assert.equal(errors[1].lineNumber, 2)
             assert.equal(errors[0].lineNumber, 1)
 
+    "Errors in the source" :
+
+        topic : '''
+            fruits = [orange, apple, banana]
+            switch 'a'
+             when in fruits
+               something
+        '''
+
+        'are reported' : (source) ->
+            assert.throws -> coffeelint.lint(source)
+
 }).export(module)
