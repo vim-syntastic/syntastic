@@ -141,13 +141,14 @@ class CSVReporter extends Reporter
 lintFiles = (paths, config) ->
     errorReport = new ErrorReport()
     for path in paths
-        errorReport.paths[path] = lintSource(read(path), config).paths["src"]
+        source = read(path)
+        errorReport.paths[path] = coffeelint.lint(source, config)
     return errorReport
 
 # Return an error report from linting the given coffeescript source.
 lintSource = (source, config) ->
     errorReport = new ErrorReport()
-    errorReport.paths["src"] = coffeelint.lint(source, config)
+    errorReport.paths["stdin"] = coffeelint.lint(source, config)
     return errorReport
 
 # Publish the error report and exit with the appropriate status.
