@@ -10,7 +10,7 @@ CoffeeLint is freely distributable under the MIT license.
 
 
 (function() {
-  var CSVReporter, ErrorReport, Reporter, coffeelint, config, configPath, data, errorReport, findCoffeeScripts, fs, glob, lintFiles, lintSource, optimist, options, path, paths, read, reportAndExit, scripts, stdin, thisdir,
+  var CSVReporter, ErrorReport, JSLintReporter, Reporter, coffeelint, config, configPath, data, errorReport, findCoffeeScripts, fs, glob, lintFiles, lintSource, optimist, options, path, paths, read, reportAndExit, scripts, stdin, thisdir,
     __slice = [].slice,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; };
@@ -236,6 +236,51 @@ CoffeeLint is freely distributable under the MIT license.
 
   })(Reporter);
 
+  JSLintReporter = (function(_super) {
+
+    __extends(JSLintReporter, _super);
+
+    JSLintReporter.name = 'JSLintReporter';
+
+    function JSLintReporter() {
+      return JSLintReporter.__super__.constructor.apply(this, arguments);
+    }
+
+    JSLintReporter.prototype.publish = function() {
+      var e, errors, path, _i, _len, _ref;
+      this.print("<?xml version=\"1.0\" encoding=\"utf-8\"?><jslint>");
+      _ref = this.errorReport.paths;
+      for (path in _ref) {
+        errors = _ref[path];
+        if (errors.length) {
+          this.print("<file name=\"" + path + "\">");
+          for (_i = 0, _len = errors.length; _i < _len; _i++) {
+            e = errors[_i];
+            this.print("<issue line=\"" + e.lineNumber + "\" char=\"0\"\n        reason=\"[" + (this.escape(e.level)) + "] " + (this.escape(e.message)) + "\"\n        evidence=\"" + (this.escape(e.context)) + "\"/>");
+          }
+          this.print("</file>");
+        }
+      }
+      return this.print("</jslint>");
+    };
+
+    JSLintReporter.prototype.escape = function(msg) {
+      var r, replacements, _i, _len;
+      if (!msg) {
+        return;
+      }
+      replacements = [[/&/g, "&amp;"], [/"/g, "&quot;"], [/</g, "&lt;"], [/>/g, "&gt;"], [/'/g, "&apos;"]];
+      for (_i = 0, _len = replacements.length; _i < _len; _i++) {
+        r = replacements[_i];
+        msg = msg.replace(r[0], r[1]);
+      }
+      return msg;
+    };
+
+    return JSLintReporter;
+
+  })(Reporter);
+
   lintFiles = function(paths, config) {
     var errorReport, path, source, _i, _len;
     errorReport = new ErrorReport();
@@ -256,13 +301,19 @@ CoffeeLint is freely distributable under the MIT license.
 
   reportAndExit = function(errorReport, options) {
     var ReporterClass, reporter;
-    ReporterClass = options.argv.csv ? CSVReporter : Reporter;
+    if (options.argv.jslint) {
+      ReporterClass = JSLintReporter;
+    } else if (options.argv.csv) {
+      ReporterClass = CSVReporter;
+    } else {
+      ReporterClass = Reporter;
+    }
     reporter = new ReporterClass(errorReport);
     reporter.publish();
     return process.exit(errorReport.getExitCode());
   };
 
-  options = optimist.usage("Usage: coffeelint [options] source [...]").alias("f", "file").alias("h", "help").alias("v", "version").alias("s", "stdin").describe("f", "Specify a custom configuration file.").describe("h", "Print help information.").describe("v", "Print current version number.").describe("r", "Recursively lint .coffee files in subdirectories.").describe("csv", "Use the csv reporter.").describe("s", "Lint the source from stdin").boolean("csv").boolean("r").boolean("s");
+  options = optimist.usage("Usage: coffeelint [options] source [...]").alias("f", "file").alias("h", "help").alias("v", "version").alias("s", "stdin").describe("f", "Specify a custom configuration file.").describe("h", "Print help information.").describe("v", "Print current version number.").describe("r", "Recursively lint .coffee files in subdirectories.").describe("csv", "Use the csv reporter.").describe("jslint", "Use the JSLint XML reporter.").describe("s", "Lint the source from stdin").boolean("csv").boolean("jshint").boolean("r").boolean("s");
 
   if (options.argv.v) {
     console.log(coffeelint.VERSION);

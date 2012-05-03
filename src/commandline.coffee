@@ -149,14 +149,16 @@ class JSLintReporter extends Reporter
                 for e in errors                    
                     @print """
                     <issue line="#{e.lineNumber}"
-                            reason="[#{escape(e.level)}] #{escape(e.message)}"
-                            evidence=""/>
+                            reason="[#{@escape(e.level)}] #{@escape(e.message)}"
+                            evidence="#{@escape(e.context)}"/>
                     """
                 @print "</file>"
 
         @print "</jslint>"
 
     escape : (msg) ->
+        unless msg
+            return
         # Perhaps some other HTML Special Chars should be added here
         # But this are the XML Special Chars listed in Wikipedia
         replacements = [
@@ -167,8 +169,8 @@ class JSLintReporter extends Reporter
             [/'/g, "&apos;"]
             ]
         
-        for replace in replacements
-            msg = msg.replace replace[0], replace[1]
+        for r in replacements
+            msg = msg.replace r[0], r[1]
 
         msg
 
