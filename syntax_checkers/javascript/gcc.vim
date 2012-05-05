@@ -9,7 +9,7 @@
 "             See http://sam.zoy.org/wtfpl/COPYING for more details.
 "============================================================================
 "
-" To enable this plugin, edit the .vimc like this;
+" To enable this plugin, edit the .vimc like this:
 "
 "   let g:syntastic_javascript_checker = "gcc"
 "
