@@ -1,5 +1,5 @@
 "============================================================================
-"File:        gcc.vim
+"File:        closurecompiler.vim
 "Description: Javascript syntax checker - using Google Closure Compiler
 "Maintainer:  Motohiro Takayama <mootoh at gmail dot com>
 "License:     This program is free software. It comes without any warranty,
@@ -9,9 +9,9 @@
 "             See http://sam.zoy.org/wtfpl/COPYING for more details.
 "============================================================================
 "
-" To enable this plugin, edit the .vimc like this:
+" To enable this plugin, edit the .vimrc like this:
 "
-"   let g:syntastic_javascript_checker = "gcc"
+"   let g:syntastic_javascript_checker = "closurecompiler"
 "
 " and set the path to the Google Closure Compiler:
 "
