@@ -6,9 +6,6 @@
 "
 "============================================================================
 function! SyntaxCheckers_python_GetHighlightRegex(i)
-    if a:i['type'] ==# 'E'
-        let a:i['text'] = "Syntax error"
-    endif
     if match(a:i['text'], 'is assigned to but never used') > -1
                 \ || match(a:i['text'], 'imported but unused') > -1
                 \ || match(a:i['text'], 'undefined name') > -1
