@@ -20,4 +20,4 @@ endif
 let loaded_json_syntax_checker = 1
 
 let s:supported_checkers = ["jsonlint", "jsonval"]
-call SyntasticLoadChecker(s:supported_checkers)
+call SyntasticLoadChecker(s:supported_checkers, 'json')

@@ -6,6 +6,9 @@
 "             "// modules: " and containing space delimited list of vala
 "             modules, used by the file, so this script can build correct
 "             --pkg arguments.
+"             Alternatively you can set g:syntastic_vala_modules array
+"             in your .vimrc or .lvimrc with localvimrc plugin
+"             (http://www.vim.org/scripts/script.php?script_id=441).
 "             Valac compiler is not the fastest thing in the world, so you
 "             may want to disable this plugin with
 "             let g:syntastic_vala_check_disabled = 1 command in your .vimrc or
@@ -38,10 +41,19 @@ function! SyntaxCheckers_vala_GetHighlightRegex(pos)
 endfunction
 
 function! s:GetValaModules()
+    if exists('g:syntastic_vala_modules')
+        if type(g:syntastic_vala_modules) == type('')
+            return split(g:syntastic_vala_modules, '\s\+')
+        elseif type(g:syntastic_vala_modules) == type([])
+            return g:syntastic_vala_modules
+        else
+            echoerr 'g:syntastic_vala_modules must be either list or string: fallback to in file modules string'
+        endif
+    endif
+
     let modules_line = search('^// modules: ', 'n')
     let modules_str = getline(modules_line)
-    let modules = split(strpart(modules_str, 12), '\s\+')
-    return modules
+    return split(strpart(modules_str, 12), '\s\+')
 endfunction
 
 function! SyntaxCheckers_vala_GetLocList()
