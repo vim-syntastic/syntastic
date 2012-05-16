@@ -426,7 +426,9 @@ endfunction
 "load the chosen checker for the current filetype - useful for filetypes like
 "javascript that have more than one syntax checker
 function! s:LoadChecker(checker)
-    exec "runtime syntax_checkers/" . &ft . "/" . a:checker . ".vim"
+    for aft in split(&ft, '\.')
+        exec "runtime syntax_checkers/" . aft . "/" . a:checker . ".vim"
+    endfor
 endfunction
 
 "return a string representing the state of buffer according to
