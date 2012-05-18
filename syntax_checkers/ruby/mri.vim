@@ -10,8 +10,7 @@
 "
 "============================================================================
 function! SyntaxCheckers_ruby_GetLocList()
-
-    let makeprg = 'ruby -w -T1 -c '.shellescape(expand('%'))
+    let makeprg = expand(g:syntastic_ruby_exec).' -w -T1 -c '.shellescape(expand('%'))
     if !has('win32')
         let makeprg = 'RUBYOPT= ' . makeprg
     endif

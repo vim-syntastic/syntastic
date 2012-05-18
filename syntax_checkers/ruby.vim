@@ -18,8 +18,12 @@ if exists("loaded_ruby_syntax_checker")
 endif
 let loaded_ruby_syntax_checker = 1
 
-"bail if the user doesnt have ruby installed
-if !executable("ruby")
+if !exists("g:syntastic_ruby_exec")
+  let g:syntastic_ruby_exec = "ruby"
+endif
+
+"bail if the user doesnt have ruby installed where they said it is
+if !executable(expand(g:syntastic_ruby_exec))
     finish
 endif
 
