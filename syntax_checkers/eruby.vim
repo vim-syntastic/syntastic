@@ -20,7 +20,7 @@ if !executable("ruby") || !executable("cat")
 endif
 
 function! SyntaxCheckers_eruby_GetLocList()
-    if has('win32') || has('win64')
+    if has('win32')
         let makeprg='sed "s/<\%=/<\%/g" '. shellescape(expand("%")) . ' \| ruby -e "require \"erb\"; puts ERB.new(ARGF.read, nil, \"-\").src" \| ruby -c'
     else
         let makeprg='sed "s/<\%=/<\%/g" '. shellescape(expand("%")) . ' \| RUBYOPT= ruby -e "require \"erb\"; puts ERB.new(ARGF.read, nil, \"-\").src" \| RUBYOPT= ruby -c'
