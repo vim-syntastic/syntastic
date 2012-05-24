@@ -100,14 +100,21 @@ augroup syntastic
     autocmd BufReadPost * if g:syntastic_check_on_open | call s:UpdateErrors(1) | endif
     autocmd BufWritePost * call s:UpdateErrors(1)
 
-    autocmd BufWinEnter * if empty(&bt) | call s:AutoToggleLocList() | endif
-    autocmd BufWinLeave * if empty(&bt) | lclose | endif
+    autocmd BufWinEnter * if empty(getbufvar(0+expand('<abuf>'), '&bt')) | call s:AutoToggleLocList() | endif
+    autocmd BufEnter *
+	\ if !empty(getbufvar(0+expand('<abuf>'), '&bt')) && bufloaded(getloclist(0)[0].bufnr)==0 |
+ 	\	if len(filter( range(1,bufnr('$')), 'buflisted(v:val) && bufloaded(v:val)' )) == 1 |
+	\		quit |
+	\	else |
+	\		lclose |
+	\	endif |
+	\ endif
 augroup END
 
 
 "refresh and redraw all the error info for this buf when saving or reading
 function! s:UpdateErrors(auto_invoked)
-    if !empty(&buftype)
+    if !empty(getbufvar(0+expand('<abuf>'), '&bt'))
         return
     endif
 
