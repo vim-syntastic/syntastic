@@ -100,14 +100,21 @@ augroup syntastic
     autocmd BufReadPost * if g:syntastic_check_on_open | call s:UpdateErrors(1) | endif
     autocmd BufWritePost * call s:UpdateErrors(1)
 
-    autocmd BufWinEnter * if empty(&bt) | call s:AutoToggleLocList() | endif
-    autocmd BufWinLeave * if empty(&bt) | lclose | endif
+    autocmd BufWinEnter * if empty(getbufvar(0+expand('<abuf>'), '&bt')) | call s:AutoToggleLocList() | endif
+    autocmd BufEnter *
+	\ if getbufvar(0+expand('<abuf>'), '&bt')=='quickfix' && len(getloclist(0)) > 0 && bufloaded(getloclist(0)[0].bufnr)==0 |
+	\	if len(filter( range(1,bufnr('$')), 'buflisted(v:val) && bufloaded(v:val)' )) == 1 |
+	\		quit |
+	\	else |
+	\		lclose |
+	\	endif |
+	\ endif
 augroup END
 
 
 "refresh and redraw all the error info for this buf when saving or reading
 function! s:UpdateErrors(auto_invoked)
-    if !empty(&buftype)
+    if !empty(getbufvar(0+expand('<abuf>'), '&bt'))
         return
     endif
 
@@ -347,7 +354,7 @@ endfunction
 
 "display the cached errors for this buf in the location list
 function! s:ShowLocList()
-    if !empty(s:LocList())
+    if !empty(getloclist(0))
         let num = winnr()
         exec "lopen " . g:syntastic_loc_list_height
         if num != winnr()
