@@ -102,8 +102,8 @@ augroup syntastic
 
     autocmd BufWinEnter * if empty(getbufvar(0+expand('<abuf>'), '&bt')) | call s:AutoToggleLocList() | endif
     autocmd BufEnter *
-	\ if !empty(getbufvar(0+expand('<abuf>'), '&bt')) && bufloaded(getloclist(0)[0].bufnr)==0 |
- 	\	if len(filter( range(1,bufnr('$')), 'buflisted(v:val) && bufloaded(v:val)' )) == 1 |
+	\ if getbufvar(0+expand('<abuf>'), '&bt')=='quickfix' && len(getloclist(0)) > 0 && bufloaded(getloclist(0)[0].bufnr)==0 |
+	\	if len(filter( range(1,bufnr('$')), 'buflisted(v:val) && bufloaded(v:val)' )) == 1 |
 	\		quit |
 	\	else |
 	\		lclose |
