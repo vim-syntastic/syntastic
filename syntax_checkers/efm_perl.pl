@@ -94,7 +94,7 @@ foreach my $line (@lines) {
     chomp($line);
     my ($file, $lineno, $message, $rest);
 
-    if ($line =~ /^(.*)\sat\s(.*)\sline\s(\d+)(\.|,\snear\s\".*\")$/) {
+    if ($line =~ /^(.*)\sat\s(.*)\sline\s(\d+)(.*)$/) {
 
 	($message, $file, $lineno, $rest) = ($1, $2, $3, $4);
 	$errors++;
