@@ -347,7 +347,7 @@ endfunction
 
 "display the cached errors for this buf in the location list
 function! s:ShowLocList()
-    if !empty(s:LocList())
+    if !empty(getloclist(0))
         let num = winnr()
         exec "lopen " . g:syntastic_loc_list_height
         if num != winnr()
