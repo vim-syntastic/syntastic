@@ -62,6 +62,22 @@ function! syntastic#c#GetIncludeDirs(filetype)
         call extend(include_dirs, g:syntastic_{a:filetype}_include_dirs)
     endif
 
+    let directory = fnamemodify(bufname("%"), ":p:h")
+    if filereadable(directory.'/.syntastic_'.a:filetype.'_include_dirs')
+        let local_include_dirs = readfile(directory.'/.syntastic_'.a:filetype.'_include_dirs')
+        let relative_dirs = []
+
+        for dir in local_include_dirs
+            if dir =~ "^\\..*$"
+                let dir = directory.'/'.dir
+            endif
+
+            call add(relative_dirs, dir)
+        endfor
+
+        call extend(include_dirs, relative_dirs)
+    endif
+
     return join(map(s:Unique(include_dirs), '"-I" . v:val'), ' ')
 endfunction
 
