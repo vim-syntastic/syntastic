@@ -19,11 +19,12 @@ if !executable("perl")
     finish
 endif
 
-let s:checker = 'perl ' . shellescape(expand('<sfile>:p:h') . '/efm_perl.pl') . ' -c'
+"remove '-w' switch to change all warnings to errors
+let s:checker = 'perl ' . shellescape(expand('<sfile>:p:h') . '/efm_perl.pl') . ' -c -w'
 
 function! SyntaxCheckers_perl_GetLocList()
     let makeprg = s:checker . ' ' . shellescape(expand('%'))
-    let errorformat =  '%f:%l:%m'
+    let errorformat =  '%t:%f:%l:%m'
 
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 endfunction
