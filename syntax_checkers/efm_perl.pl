@@ -4,7 +4,7 @@
 # with the quickfix mode of Vim
 #
 # Copyright (©) 2001 by Jörg Ziefle <joerg.ziefle@gmx.de>
-# Copyright (c) 2012 Eric Harmon
+# Copyright (c) 2012 Eric Harmon <http://eharmon.net>
 # You may use and distribute this software under the same terms as Perl itself.
 #
 # Usage: put one of the two configurations below in your ~/.vimrc (without the
