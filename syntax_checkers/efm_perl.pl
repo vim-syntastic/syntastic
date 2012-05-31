@@ -108,9 +108,6 @@ foreach my $line (@warn_lines) {
 	}
 }
 
-# Clever trick, doesn't work due to scoping of $_
-#@lines = (@lines, map { "W:$_" if !grep( $_, @error_lines) } @warn_lines);
-
 my $errors = 0;
 foreach my $line (@lines) {
 
