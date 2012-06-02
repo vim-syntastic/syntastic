@@ -2,11 +2,16 @@
 "File:        d.vim
 "Description: Syntax checking plugin for syntastic.vim
 "Maintainer:  Alfredo Di Napoli <alfredo dot dinapoli at gmail dot com>
-"License:     This program is free software. It comes without any warranty,
-"             to the extent permitted by applicable law. You can redistribute
-"             it and/or modify it under the terms of the Do What The Fuck You
-"             Want To Public License, Version 2, as published by Sam Hocevar.
-"             See http://sam.zoy.org/wtfpl/COPYING for more details.
+"License:     Based on the original work of Gregor Uhlenheuer and his
+"             cpp.vim checker so credits are dued.
+"             THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+"             EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+"             OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+"             NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+"             HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+"             WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+"             FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+"             OTHER DEALINGS IN THE SOFTWARE.
 "
 "============================================================================
 
