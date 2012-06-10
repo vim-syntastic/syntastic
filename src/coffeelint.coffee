@@ -358,7 +358,19 @@ class LexicalLinter
             return null
 
     lintBrace : (token) ->
-        if token.generated then @createLexError('no_implicit_braces') else null
+        if token.generated
+            # Peek back to the last line break. If there is a class
+            # definition, ignore the generated brace.
+            i = -1
+            loop
+                t = @peek(i)
+                if not t? or t[0] == 'TERMINATOR'
+                    return @createLexError('no_implicit_braces')
+                if t[0] == 'CLASS'
+                    return null
+                i -= 1
+        else
+            return null
 
     lintJavascript :(token) ->
         @createLexError('no_backticks')

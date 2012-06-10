@@ -13,6 +13,9 @@ vows.describe('braces').addBatch({
             y =
               'a':'b'
               3:4
+
+            class Test
+              constructor: (@options) ->
             '''
 
         'are allowed by default' : (source) ->
