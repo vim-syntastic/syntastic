@@ -48,7 +48,11 @@ if !(s:lintVersion[0] >= '0' && s:lintVersion[1] >= '1' && s:lintVersion[2] >= '
 endif
 
 function! s:getPuppetLintErrors()
-    let makeprg = 'puppet-lint --log-format "\%{KIND} [\%{check}] \%{message} at \%{fullpath}:\%{linenumber}" '.shellescape(expand('%'))
+    if !exists("g:syntastic_puppet_lint_arguments")
+        let g:syntastic_puppet_lint_arguments = ''
+    endif
+
+    let makeprg = 'puppet-lint --log-format "\%{KIND} [\%{check}] \%{message} at \%{fullpath}:\%{linenumber}" '.g:syntastic_puppet_lint_arguments.shellescape(expand('%'))
     let errorformat = '%t%*[a-zA-Z] %m at %f:%l'
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat, 'subtype': 'Style' })
 endfunction
