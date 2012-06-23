@@ -27,7 +27,11 @@ task :'lint:csv' => [:compile] do
   notify("linted!")
 end
 
-
+desc "Lint the linter."
+task :'lint:csv' => [:compile] do
+  sh("./bin/coffeelint --jslint -r -f #{LINT_CONFIG} src/ test/*.coffee")
+  notify("linted!")
+end
 
 desc "Compile the source."
 task :compile do

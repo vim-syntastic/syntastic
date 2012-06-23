@@ -137,6 +137,43 @@ class CSVReporter extends Reporter
                 f = [path, e.lineNumber, e.level, e.message]
                 @print f.join(",")
 
+class JSLintReporter extends Reporter
+
+    publish : () ->
+        @print "<?xml version=\"1.0\" encoding=\"utf-8\"?><jslint>"
+
+        for path, errors of @errorReport.paths
+            if errors.length
+                @print "<file name=\"#{path}\">"
+
+                for e in errors
+                    @print """
+                    <issue line="#{e.lineNumber}"
+                            reason="[#{@escape(e.level)}] #{@escape(e.message)}"
+                            evidence="#{@escape(e.context)}"/>
+                    """
+                @print "</file>"
+
+        @print "</jslint>"
+
+    escape : (msg) ->
+        unless msg
+            return
+        # Perhaps some other HTML Special Chars should be added here
+        # But this are the XML Special Chars listed in Wikipedia
+        replacements = [
+            [/&/g, "&amp;"]
+            [/"/g, "&quot;"]
+            [/</g, "&lt;"]
+            [/>/g, "&gt;"]
+            [/'/g, "&apos;"]
+            ]
+
+        for r in replacements
+            msg = msg.replace r[0], r[1]
+
+        msg
+
 # Return an error report from linting the given paths.
 lintFiles = (paths, config) ->
     errorReport = new ErrorReport()
@@ -153,7 +190,12 @@ lintSource = (source, config) ->
 
 # Publish the error report and exit with the appropriate status.
 reportAndExit = (errorReport, options) ->
-    ReporterClass = if options.argv.csv then CSVReporter else Reporter
+    if options.argv.jslint
+        ReporterClass = JSLintReporter
+    else if options.argv.csv
+        ReporterClass = CSVReporter
+    else
+        ReporterClass = Reporter
     reporter = new ReporterClass(errorReport)
     reporter.publish()
     process.exit(errorReport.getExitCode())
@@ -170,8 +212,10 @@ options = optimist
             .describe("v", "Print current version number.")
             .describe("r", "Recursively lint .coffee files in subdirectories.")
             .describe("csv", "Use the csv reporter.")
+            .describe("jslint", "Use the JSLint XML reporter.")
             .describe("s", "Lint the source from stdin")
             .boolean("csv")
+            .boolean("jshint")
             .boolean("r")
             .boolean("s")
 
