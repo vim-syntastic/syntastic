@@ -127,6 +127,9 @@ createError = (rule, attrs = {}) ->
         return defaults(attrs, RULES[rule])
     else
         null
+        
+# Store suppressions in the form of { line #: type }
+suppressions = {}
 
 #
 # A class that performs regex checks on each line of the source.
@@ -157,7 +160,8 @@ class LineLinter
                @checkTrailingWhitespace() or
                @checkLineLength() or
                @checkTrailingSemicolon() or
-               @checkLineEndings()
+               @checkLineEndings() or
+               @checkComments()
 
     checkTabs : () ->
         # Only check lines that have compiled tokens. This helps
@@ -213,6 +217,12 @@ class LineLinter
         else
             return null
 
+    checkComments : () ->
+        # Check for suppressions
+        rules = /#!SUPPRESS(.*)/.exec(@line)?[1]?.trim().split(' ')
+        if rules
+            suppressions[@lineNumber] = rules
+        return null
 
     createLineError : (rule, attrs = {}) ->
         attrs.lineNumber = @lineNumber + 1 # Lines are indexed by zero.
@@ -570,5 +580,16 @@ coffeelint.lint = (source, userConfig = {}) ->
     # Sort by line number and return.
     errors = lexErrors.concat(lineErrors, astErrors)
     errors.sort((a, b) -> a.lineNumber - b.lineNumber)
+    
+    # Filter out suppressed errors
+    all_errors = errors
+    errors = []
+    for error in all_errors
+        if (error.lineNumber - 1) of suppressions
+            unless error.rule in suppressions[error.lineNumber - 1]
+                errors.push error
+        else
+            errors.push error
+    
     errors
 
