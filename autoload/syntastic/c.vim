@@ -128,7 +128,7 @@ function! syntastic#c#SearchHeaders()
     " search included headers
     for hfile in files
         if hfile != ''
-            let filename = expand('%:p:h') . ((has('win32') || has('win64')) ?
+            let filename = expand('%:p:h') . (has('win32') ?
                         \ '\' : '/') . hfile
             try
                 let lines = readfile(filename, '', 100)

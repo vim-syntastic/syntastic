@@ -17,7 +17,7 @@ if exists("g:loaded_syntastic_plugin")
 endif
 let g:loaded_syntastic_plugin = 1
 
-let s:running_windows = has("win16") || has("win32") || has("win64")
+let s:running_windows = has("win16") || has("win32")
 
 if !s:running_windows
     let s:uname = system('uname')

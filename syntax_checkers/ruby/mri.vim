@@ -11,7 +11,7 @@
 "============================================================================
 function! SyntaxCheckers_ruby_GetLocList()
     " we cannot set RUBYOPT on windows like that
-    if has('win32') || has('win64')
+    if has('win32')
         let makeprg = 'ruby -W1 -T1 -c '.shellescape(expand('%'))
     else
         let makeprg = 'RUBYOPT= ruby -W1 -c '.shellescape(expand('%'))
