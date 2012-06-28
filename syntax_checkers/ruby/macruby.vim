@@ -1,8 +1,6 @@
 "============================================================================
-"File:        perl.vim
+"File:        macruby.vim
 "Description: Syntax checking plugin for syntastic.vim
-"Maintainer:  Anthony Carapetis <anthony.carapetis at gmail dot com>,
-"             Eric Harmon <http://eharmon.net>
 "License:     This program is free software. It comes without any warranty,
 "             to the extent permitted by applicable law. You can redistribute
 "             it and/or modify it under the terms of the Do What The Fuck You
@@ -10,22 +8,8 @@
 "             See http://sam.zoy.org/wtfpl/COPYING for more details.
 "
 "============================================================================
-if exists("loaded_perl_syntax_checker")
-    finish
-endif
-let loaded_perl_syntax_checker = 1
-
-"bail if the user doesnt have perl installed
-if !executable("perl")
-    finish
-endif
-
-"remove '-w' switch to change all warnings to errors
-let s:checker = 'perl ' . shellescape(expand('<sfile>:p:h') . '/efm_perl.pl') . ' -c -w'
-
-function! SyntaxCheckers_perl_GetLocList()
-    let makeprg = s:checker . ' ' . shellescape(expand('%'))
-    let errorformat =  '%t:%f:%l:%m'
-
+function! SyntaxCheckers_ruby_GetLocList()
+    let makeprg = 'RUBYOPT= macruby -W1 -c '.shellescape(expand('%'))
+    let errorformat =  '%-GSyntax OK,%E%f:%l: syntax error\, %m,%Z%p^,%W%f:%l: warning: %m,%Z%p^,%W%f:%l: %m,%-C%.%#'
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 endfunction
