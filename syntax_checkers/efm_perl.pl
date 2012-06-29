@@ -70,11 +70,11 @@
 use strict;
 use Getopt::Std;
 
-use vars qw/$opt_c $opt_w $opt_f $opt_h/; # needed for Getopt in combination with use strict 'vars'
+use vars qw/$opt_I $opt_c $opt_w $opt_f $opt_h/; # needed for Getopt in combination with use strict 'vars'
 
 use constant VERSION => 0.2;
 
-getopts('cwf:h');
+getopts('cwf:hI:');
 
 &usage if $opt_h; # not necessarily needed, but good for further extension
 
@@ -92,13 +92,13 @@ my $handle = (defined $opt_f ? \*FILE : \*STDOUT);
 (my $file = shift) or &usage; # display usage if no filename is supplied
 my $args = (@ARGV ? ' ' . join ' ', @ARGV : '');
 
-my @error_lines = `perl @{[defined $opt_c ? '-c ' : '' ]} @{[defined $opt_w ? '-X ' : '-w ']} "$file$args" 2>&1`;
+my @error_lines = `perl @{[defined $opt_I ? "-I$opt_I" : '']} @{[defined $opt_c ? '-c ' : '' ]} @{[defined $opt_w ? '-X ' : '-w ']} "$file$args" 2>&1`;
 
 my @lines = map { "E:$_" } @error_lines;
 
 my @warn_lines;
 if(defined($opt_w)) {
-	@warn_lines = `perl @{[defined $opt_c ? '-c ' : '' ]} -w "$file$args" 2>&1`;
+    @warn_lines = `perl @{[defined $opt_I ? $opt_I : '']} @{[defined $opt_c ? '-c ' : '' ]} -w "$file$args" 2>&1`;
 }
 
 # Any new errors must be warnings
@@ -153,6 +153,7 @@ Usage:
 		-c	compile only, don't run (executes 'perl -c')
 		-w	output warnings as warnings instead of errors (slightly slower)
 		-f	write errors to <errorfile>
+		-I	specify \@INC/#include directory <perl_lib_path>
 
 Examples:
 	* At the command line:
