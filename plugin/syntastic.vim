@@ -536,7 +536,7 @@ function! SyntasticMake(options)
     let old_shell = &shell
     let old_errorformat = &l:errorformat
 
-    if !s:running_windows && (s:uname !~ "FreeBSD")
+    if !s:running_windows && (s:uname !~ "FreeBSD") && (s:uname !~ "OpenBSD")
         "this is a hack to stop the screen needing to be ':redraw'n when
         "when :lmake is run. Otherwise the screen flickers annoyingly
         let &shellpipe='&>'
@@ -560,7 +560,7 @@ function! SyntasticMake(options)
     let &shellpipe=old_shellpipe
     let &shell=old_shell
 
-    if !s:running_windows && s:uname =~ "FreeBSD"
+    if !s:running_windows && (s:uname =~ "FreeBSD" || s:uname =~ "OpenBSD")
         redraw!
     endif
 
