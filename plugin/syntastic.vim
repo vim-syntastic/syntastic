@@ -472,6 +472,15 @@ function! s:LoadChecker(checker, ft)
     exec "runtime syntax_checkers/" . a:ft . "/" . a:checker . ".vim"
 endfunction
 
+"the script changes &shellpipe and &shell to stop the screen flicking when
+"shelling out to syntax checkers. Not all OSs support the hacks though
+function! s:OSSupportsShellpipeHack()
+    if !exists("s:os_supports_shellpipe_hack")
+        let s:os_supports_shellpipe_hack = !s:running_windows && (s:uname !~ "FreeBSD") && (s:uname !~ "OpenBSD")
+    endif
+    return s:os_supports_shellpipe_hack
+endfunction
+
 "return a string representing the state of buffer according to
 "g:syntastic_stl_format
 "
@@ -536,7 +545,7 @@ function! SyntasticMake(options)
     let old_shell = &shell
     let old_errorformat = &l:errorformat
 
-    if !s:running_windows && (s:uname !~ "FreeBSD") && (s:uname !~ "OpenBSD")
+    if s:OSSupportsShellpipeHack()
         "this is a hack to stop the screen needing to be ':redraw'n when
         "when :lmake is run. Otherwise the screen flickers annoyingly
         let &shellpipe='&>'
@@ -560,7 +569,7 @@ function! SyntasticMake(options)
     let &shellpipe=old_shellpipe
     let &shell=old_shell
 
-    if !s:running_windows && (s:uname =~ "FreeBSD" || s:uname =~ "OpenBSD")
+    if s:OSSupportsShellpipeHack()
         redraw!
     endif
 
