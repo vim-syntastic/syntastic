@@ -102,6 +102,7 @@ regexes =
     indentation: /\S/
     camelCase: /^[A-Z][a-zA-Z\d]*$/
     trailingSemicolon: /;$/
+    configStatement: /coffeelint:\s*(disable|enable)=(\w+)(,\s*\w+)*/
 
 
 # Patch the source properties onto the destination.
@@ -129,7 +130,9 @@ createError = (rule, attrs = {}) ->
         null
         
 # Store suppressions in the form of { line #: type }
-suppressions = {}
+block_config =
+    enable: {}
+    disable: {}
 
 #
 # A class that performs regex checks on each line of the source.
@@ -218,10 +221,12 @@ class LineLinter
             return null
 
     checkComments : () ->
-        # Check for suppressions
-        rules = /#!SUPPRESS(.*)/.exec(@line)?[1]?.trim().split(' ')
+        # Check for block config statements enable and disable
+        r = regexes.configStatement.exec(@line)
+        cmd = r?[1]
+        rules = r?[2..]
         if rules
-            suppressions[@lineNumber] = rules
+            block_config[cmd][@lineNumber] = rules
         return null
 
     createLineError : (rule, attrs = {}) ->
@@ -568,6 +573,16 @@ coffeelint.lint = (source, userConfig = {}) ->
     # Do lexical linting.
     lexicalLinter = new LexicalLinter(source, config)
     lexErrors = lexicalLinter.lint()
+    
+    # Check that we didn't miss a rule that was inline
+    lconfig = config
+    disabled_initially = []
+    for rule in block_config['enable']
+        unless rule of config
+            disabled.push rule
+            lconfig[rule] = defaults(level: 'warn')
+    unless lconfig is config
+        lexErrors = lexicalLinter.lint()
 
     # Do line linting.
     tokensByLine = lexicalLinter.tokensByLine
@@ -584,11 +599,22 @@ coffeelint.lint = (source, userConfig = {}) ->
     # Filter out suppressed errors
     all_errors = errors
     errors = []
+    disabled = disabled_initially
     for error in all_errors
-        if (error.lineNumber - 1) of suppressions
-            unless error.rule in suppressions[error.lineNumber - 1]
-                errors.push error
-        else
+        # note that we started a block
+        if (error.lineNumber - 1) of block_config['disable']
+            disabled.concat(block_config['disable'][error.lineNumber - 1])
+        # note that we ended a block
+        if (error.lineNumber - 1) of block_config['enable']
+            if block_config['enable'][error.lineNumber - 1].length is 0
+                disabled = disabled_initially
+            else
+                tmp = []
+                for r in disabled
+                    unless r in block_config['enable'][error.lineNumber - 1]
+                        tmp.push r
+                disabled = r
+        unless error.rule in disabled
             errors.push error
     
     errors
