@@ -39,7 +39,7 @@ function! SyntaxCheckers_cuda_GetLocList()
 
     if expand('%') =~? '\%(.h\|.hpp\|.cuh\)$'
         if exists('g:syntastic_cuda_check_header')
-            let makeprg = 'echo > .syntastic_dummy.cu ; nvcc --cuda -O0 -I . .syntastic_dummy.cu -Xcompiler -fsyntax-only -include '.shellescape(expand('%')).' -o /dev/null'
+            let makeprg = 'echo > .syntastic_dummy.cu ; nvcc '.arch_flag.' --cuda -O0 -I . .syntastic_dummy.cu -Xcompiler -fsyntax-only -include '.shellescape(expand('%')).' -o /dev/null'
         else
             return []
         endif
