@@ -114,6 +114,7 @@ function! SyntaxCheckers_cpp_GetLocList()
 
     " add optional config file parameters
     let makeprg .= ' ' . syntastic#c#ReadConfig(g:syntastic_cpp_config_file)
+    let makeprg .= ' ' . syntastic#c#ReadEditorConfigIncludePath()
 
     " process makeprg
     let errors = SyntasticMake({ 'makeprg': makeprg,

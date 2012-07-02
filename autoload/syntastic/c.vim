@@ -101,6 +101,58 @@ function! syntastic#c#ReadConfig(file)
     return join(parameters, ' ')
 endfunction
 
+let s:include_path = ''
+
+function! syntastic#c#EditorConfigHook(config)
+    if has_key(a:config, 'c_include_path')
+        let s:include_path = a:config['c_include_path']
+    else
+        let s:include_path = ''
+    endif
+endfunction
+
+function! syntastic#c#ReadEditorConfigIncludePath()
+    " Load the include path from EditorConfig
+
+    " If this is the first time to run this function, add the hook
+    if !exists('s:EditorConfig_hook')
+        silent! call editorconfig#AddNewHook(function('syntastic#c#EditorConfigHook'))
+        let s:EditorConfig_hook = 1
+    endif
+
+    silent! EditorConfigReload  " Force reload to trigger the Hook
+
+    let l:include_args = ''
+    if !empty(s:include_path)
+
+        let l:pos0 = 0
+        let l:pos1 = -1
+
+        " s:include_path is a string of include paths separated by ':'
+        while 1
+            if l:pos0 >= strlen(s:include_path)
+                break
+            endif
+
+            let l:pos1 = match(s:include_path, ':', l:pos0)
+
+            if l:pos1 < 0
+                break
+            endif
+
+            let l:include_args .= ' -I ' . "'" . strpart(s:include_path, l:pos0, l:pos1 - l:pos0) . "'"
+
+            let l:pos0 = l:pos1 + 1
+        endwhile
+
+        if l:pos0 < strlen(s:include_path)
+            let l:include_args .= ' -I ' . "'" . strpart(s:include_path, l:pos0) . "'"
+        endif
+    endif
+
+    return l:include_args
+endfunction
+
 " search the first 100 lines for include statements that are
 " given in the handlers dictionary
 function! syntastic#c#SearchHeaders()
