@@ -11,6 +11,13 @@
 "
 "   let g:syntastic_cuda_check_header = 1
 
+" By default, nvcc and thus syntastic, defaults to the most basic architecture.
+" This can produce false errors if the developer intends to compile for newer
+" hardware and use newer features, eg. double precision numbers. To pass a
+" specific target arch to nvcc, e.g. add the following to your .vimrc:
+"
+"   let g:syntastic_cuda_arch = "sm_20"
+
 if exists('loaded_cuda_syntax_checker')
     finish
 endif
