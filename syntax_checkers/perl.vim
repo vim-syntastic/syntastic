@@ -10,6 +10,13 @@
 "             See http://sam.zoy.org/wtfpl/COPYING for more details.
 "
 "============================================================================
+"
+" In order to add some custom lib directories that should be added to the
+" perl command line you can add those to the global variable
+" g:perl_lib_path.
+"
+"   let g:perl_lib_path = './lib'
+"
 if exists("loaded_perl_syntax_checker")
     finish
 endif
@@ -24,7 +31,11 @@ endif
 let s:checker = 'perl ' . shellescape(expand('<sfile>:p:h') . '/efm_perl.pl') . ' -c -w'
 
 function! SyntaxCheckers_perl_GetLocList()
-    let makeprg = s:checker . ' ' . shellescape(expand('%'))
+    if exists("g:perl_lib_path")
+        let makeprg = s:checker . ' -I' . g:perl_lib_path . ' ' . shellescape(expand('%'))
+    else
+        let makeprg = s:checker . ' ' . shellescape(expand('%'))
+    endif
     let errorformat =  '%t:%f:%l:%m'
 
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
