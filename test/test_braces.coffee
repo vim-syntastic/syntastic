@@ -30,5 +30,37 @@ vows.describe('braces').addBatch({
             assert.equal(error.message, 'Implicit braces are forbidden')
             assert.equal(error.rule, 'no_implicit_braces')
 
+    'Implicit braces in class definitions' :
+
+        topic : () ->
+            '''
+            class Animal
+              walk: ->
+
+            class Wolf extends Animal
+              howl: ->
+
+            class nested.Name
+              constructor: (@options) ->
+
+            class deeply.nested.Name
+              constructor: (@options) ->
+
+            x = class
+              m : -> 123
+
+            y = class extends x
+              m : -> 456
+
+            z = class
+
+            r = class then 1:2
+            '''
+
+        'are always ignored' : (source) ->
+            config = {no_implicit_braces : {level:'error'}}
+            errors = coffeelint.lint(source)
+            assert.isArray(errors)
+            assert.isEmpty(errors)
 
 }).export(module)
