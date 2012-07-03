@@ -621,25 +621,26 @@ coffeelint.lint = (source, userConfig = {}) ->
             else
                 j++
     
-    # Filter out suppressed errors
+    # Disable/enable rules for inline blocks
     all_errors = errors
     errors = []
     disabled = disabled_initially
     next_line = 0
     for i in [0...source.split('\n').length]
-        # note that we started a block
-        if i of block_config['disable']
-            disabled = disabled.concat(block_config['disable'][i])
-        # note that we ended a block
-        if i of block_config['enable']
-            difference(disabled, block_config['enable'][i])
-            if block_config['enable'][i].length is 0
-                disabled = disabled_initially
+        for cmd of block_config
+            rules = block_config[cmd][i]
+            {
+                'disable': ->
+                    disabled = disabled.concat(rules)
+                'enable': ->
+                    difference(disabled, rules)
+                    disabled = disabled_initially if rules.length is 0
+            }[cmd]() if rules?
         # advance line and append relevent messages
         while next_line is i and all_errors.length > 0
-            next_line = all_errors[0].lineNumber-1
+            next_line = all_errors[0].lineNumber - 1
             e = all_errors[0]
-            if e.lineNumber is i+1
+            if e.lineNumber is i + 1 or not e.lineNumber?
                 e = all_errors.shift()
                 errors.push e unless e.rule in disabled
             

@@ -233,14 +233,12 @@ CoffeeLint is freely distributable under the MIT license.
 
     __extends(JSLintReporter, _super);
 
-    JSLintReporter.name = 'JSLintReporter';
-
     function JSLintReporter() {
       return JSLintReporter.__super__.constructor.apply(this, arguments);
     }
 
     JSLintReporter.prototype.publish = function() {
-      var e, errors, path, _i, _len, _ref;
+      var e, errors, _i, _len, _ref;
       this.print("<?xml version=\"1.0\" encoding=\"utf-8\"?><jslint>");
       _ref = this.errorReport.paths;
       for (path in _ref) {
