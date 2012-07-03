@@ -102,7 +102,7 @@ regexes =
     indentation: /\S/
     camelCase: /^[A-Z][a-zA-Z\d]*$/
     trailingSemicolon: /;$/
-    configStatement: /coffeelint:\s*(disable|enable)=(\w+)(,\s*\w+)*/
+    configStatement: /coffeelint:\s*(disable|enable)(?:=([\w\s,]*))?/
 
 
 # Patch the source properties onto the destination.
@@ -222,10 +222,13 @@ class LineLinter
 
     checkComments : () ->
         # Check for block config statements enable and disable
-        r = regexes.configStatement.exec(@line)
-        cmd = r?[1]
-        rules = r?[2..]
-        if rules
+        result = regexes.configStatement.exec(@line)
+        if result?
+            cmd = result[1]
+            rules = []
+            if result[2]?
+                for r in result[2].split(',')
+                    rules.push r.replace(/^\s+|\s+$/g, "")
             block_config[cmd][@lineNumber] = rules
         return null
 
@@ -569,20 +572,21 @@ mergeDefaultConfig = (userConfig) ->
 #
 coffeelint.lint = (source, userConfig = {}) ->
     config = mergeDefaultConfig(userConfig)
+    
+    # Check ahead for inline enabled rules
+    disabled_initially = []
+    for l in source.split('\n')
+        s = regexes.configStatement.exec(l)
+        if s? and s.length > 2 and 'enable' in s
+            for r in s[1..]
+                unless r in ['enable','disable']
+                    unless r of config and config[r].level in ['warn','error']
+                        disabled_initially.push r
+                        config[r] = { level: 'error' }
 
     # Do lexical linting.
     lexicalLinter = new LexicalLinter(source, config)
     lexErrors = lexicalLinter.lint()
-    
-    # Check that we didn't miss a rule that was inline
-    lconfig = config
-    disabled_initially = []
-    for rule in block_config['enable']
-        unless rule of config
-            disabled.push rule
-            lconfig[rule] = defaults(level: 'warn')
-    unless lconfig is config
-        lexErrors = lexicalLinter.lint()
 
     # Do line linting.
     tokensByLine = lexicalLinter.tokensByLine
@@ -596,26 +600,40 @@ coffeelint.lint = (source, userConfig = {}) ->
     errors = lexErrors.concat(lineErrors, astErrors)
     errors.sort((a, b) -> a.lineNumber - b.lineNumber)
     
+    # Helper to remove rules from disabled list
+    difference = (a, b) ->
+        j = 0
+        while j < a.length
+            if a[j] in b
+                a.splice(j, 1)
+            else
+                j++
+    
     # Filter out suppressed errors
     all_errors = errors
     errors = []
     disabled = disabled_initially
-    for error in all_errors
+    next_line = 0
+    for i in [0...source.split('\n').length]
         # note that we started a block
-        if (error.lineNumber - 1) of block_config['disable']
-            disabled.concat(block_config['disable'][error.lineNumber - 1])
+        if i of block_config['disable']
+            disabled = disabled.concat(block_config['disable'][i])
         # note that we ended a block
-        if (error.lineNumber - 1) of block_config['enable']
-            if block_config['enable'][error.lineNumber - 1].length is 0
+        if i of block_config['enable']
+            difference(disabled, block_config['enable'][i])
+            if block_config['enable'][i].length is 0
                 disabled = disabled_initially
-            else
-                tmp = []
-                for r in disabled
-                    unless r in block_config['enable'][error.lineNumber - 1]
-                        tmp.push r
-                disabled = r
-        unless error.rule in disabled
-            errors.push error
+        # advance line and append relevent messages
+        while next_line is i and all_errors.length > 0
+            next_line = all_errors[0].lineNumber-1
+            e = all_errors[0]
+            if e.lineNumber is i+1
+                e = all_errors.shift()
+                errors.push e unless e.rule in disabled
+            
+    block_config =
+      'enable': {}
+      'disable': {}
     
     errors
 
