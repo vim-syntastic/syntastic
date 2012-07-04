@@ -12,9 +12,9 @@
 function! SyntaxCheckers_ruby_GetLocList()
     " we cannot set RUBYOPT on windows like that
     if has('win32')
-        let makeprg = 'ruby -W1 -T1 -c '.shellescape(expand('%'))
+        let makeprg = 'ruby -W1 -T1 -w -c '.shellescape(expand('%'))
     else
-        let makeprg = 'RUBYOPT= ruby -W1 -c '.shellescape(expand('%'))
+        let makeprg = 'RUBYOPT= ruby -W1 -w -c '.shellescape(expand('%'))
     endif
     let errorformat =  '%-GSyntax OK,%E%f:%l: syntax error\, %m,%Z%p^,%W%f:%l: warning: %m,%Z%p^,%W%f:%l: %m,%-C%.%#'
 
