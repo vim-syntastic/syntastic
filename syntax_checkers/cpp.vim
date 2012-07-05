@@ -58,6 +58,11 @@
 " g:syntastic_cpp_include_dirs' setting are removed from the result set:
 "
 "   let g:syntastic_cpp_remove_include_errors = 1
+"
+" Use the variable 'g:syntastic_cpp_errorformat' to override the default error
+" format:
+"
+"   let g:syntastic_cpp_errorformat = '%f:%l:%c: %trror: %m'
 
 if exists('loaded_cpp_syntax_checker')
     finish
@@ -77,7 +82,13 @@ endif
 
 function! SyntaxCheckers_cpp_GetLocList()
     let makeprg = 'g++ -fsyntax-only '
-    let errorformat =  '%-G%f:%s:,%f:%l:%c: %m,%f:%l: %m'
+    let errorformat =  '%-G%f:%s:,%f:%l:%c: %trror: %m,%f:%l:%c: %tarning: '.
+                \ '%m,%f:%l:%c: %m,%f:%l: %trror: %m,%f:%l: %tarning: %m,'.
+                \ '%f:%l: %m'
+
+    if exists('g:syntastic_cpp_errorformat')
+        let errorformat = g:syntastic_cpp_errorformat
+    endif
 
     if exists('g:syntastic_cpp_compiler_options')
         let makeprg .= g:syntastic_cpp_compiler_options
