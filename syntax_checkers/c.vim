@@ -59,7 +59,9 @@
 "
 "   let g:syntastic_c_remove_include_errors = 1
 "
-" Use variable 'g:syntastic_c_errorformat' to set custom error format string:
+" Use the variable 'g:syntastic_c_errorformat' to override the default error
+" format:
+"
 "   let g:syntastic_c_errorformat = '%f:%l:%c: %trror: %m'
 
 if exists('loaded_c_syntax_checker')
@@ -87,7 +89,9 @@ function! SyntaxCheckers_c_GetLocList()
     let errorformat = '%-G%f:%s:,%-G%f:%l: %#error: %#(Each undeclared '.
                \ 'identifier is reported only%.%#,%-G%f:%l: %#error: %#for '.
                \ 'each function it appears%.%#,%-GIn file included%.%#,'.
-               \ '%-G %#from %f:%l\,,%f:%l:%c: %m,%f:%l: %trror: %m,%f:%l: %m'
+               \ '%-G %#from %f:%l\,,%f:%l:%c: %trror: %m,%f:%l:%c: '.
+               \ '%tarning: %m,%f:%l:%c: %m,%f:%l: %trror: %m,'.
+               \ '%f:%l: %tarning: %m,%f:%l: %m'
 
     if exists('g:syntastic_c_errorformat')
         let errorformat = g:syntastic_c_errorformat
