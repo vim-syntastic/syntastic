@@ -153,6 +153,21 @@ vows.describe('commandline').addBatch({
             assert.isNotNull(error, "returned err")
             assert.include(stdout.toLowerCase(), 'line')
 
+    'allows JSLint XML reporting' :
+
+        # FIXME: Not sure how to unit test escaping w/o major refactoring
+        topic : () ->
+            args = [
+                '-f'
+                'test/fixtures/coffeelint.json'
+                'test/fixtures/cyclo_fail.coffee'
+                '--jslint'
+            ]
+            commandline args, this.callback
+            return undefined
+
+        'Handles cyclomatic complexity check' : (error, stdout, stderr) ->
+            assert.include(stdout.toLowerCase(), 'cyclomatic complexity')
     'using stdin':
 
         'with working string':
