@@ -9,8 +9,15 @@
 "             See http://sam.zoy.org/wtfpl/COPYING for more details.
 "
 "============================================================================
+"bail if the user doesnt have go installed
+if !executable("go")
+    finish
+endif
+
+let s:check_file = expand('<sfile>:p:h') . '/go_check_file.sh'
+
 function! SyntaxCheckers_go_GetLocList()
-    let makeprg = 'go build -o /dev/null'
+    let makeprg = s:check_file . ' '. shellescape(expand('%:p'))
     let errorformat = '%f:%l:%c:%m,%f:%l%m,%-G#%.%#'
 
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })

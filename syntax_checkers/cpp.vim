@@ -69,7 +69,7 @@ if exists('loaded_cpp_syntax_checker')
 endif
 let loaded_cpp_syntax_checker = 1
 
-if !executable('g++')
+if !executable('c++')
     finish
 endif
 
@@ -81,7 +81,7 @@ if !exists('g:syntastic_cpp_config_file')
 endif
 
 function! SyntaxCheckers_cpp_GetLocList()
-    let makeprg = 'g++ -fsyntax-only '
+    let makeprg = 'c++ -fsyntax-only '
     let errorformat =  '%-G%f:%s:,%f:%l:%c: %trror: %m,%f:%l:%c: %tarning: '.
                 \ '%m,%f:%l:%c: %m,%f:%l: %trror: %m,%f:%l: %tarning: %m,'.
                 \ '%f:%l: %m'
@@ -99,7 +99,7 @@ function! SyntaxCheckers_cpp_GetLocList()
 
     if expand('%') =~? '\%(.h\|.hpp\|.hh\)$'
         if exists('g:syntastic_cpp_check_header')
-            let makeprg = 'g++ -c '.shellescape(expand('%')).
+            let makeprg = 'c++ -c '.shellescape(expand('%')).
                         \ ' ' . syntastic#c#GetIncludeDirs('cpp')
         else
             return []
