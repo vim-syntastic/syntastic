@@ -26,6 +26,23 @@ endif
 if !exists("g:syntastic_enable_signs")
     let g:syntastic_enable_signs = 1
 endif
+
+if !exists("g:syntastic_error_symbol")
+    let g:syntastic_error_symbol = '>>'
+endif
+
+if !exists("g:syntastic_warning_symbol")
+    let g:syntastic_warning_symbol = '>>'
+endif
+
+if !exists("g:syntastic_style_error_symbol")
+    let g:syntastic_style_error_symbol = 'S>'
+endif
+
+if !exists("g:syntastic_style_warning_symbol")
+    let g:syntastic_style_warning_symbol = 'S>'
+endif
+
 if !has('signs')
     let g:syntastic_enable_signs = 0
 endif
@@ -274,10 +291,10 @@ endfunction
 
 if g:syntastic_enable_signs
     "define the signs used to display syntax and style errors/warns
-    sign define SyntasticError text=>> texthl=error
-    sign define SyntasticWarning text=>> texthl=todo
-    sign define SyntasticStyleError text=S> texthl=error
-    sign define SyntasticStyleWarning text=S> texthl=todo
+    exe 'sign define SyntasticError text='.g:syntastic_error_symbol.' texthl=error'
+    exe 'sign define SyntasticWarning text='.g:syntastic_warning_symbol.' texthl=todo'
+    exe 'sign define SyntasticStyleError text='.g:syntastic_style_error_symbol.' texthl=error'
+    exe 'sign define SyntasticStyleWarning text='.g:syntastic_style_warning_symbol.' texthl=todo'
 endif
 
 "start counting sign ids at 5000, start here to hopefully avoid conflicting

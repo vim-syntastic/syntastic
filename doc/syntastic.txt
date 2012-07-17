@@ -163,6 +163,20 @@ syntax errors: >
     let g:syntastic_enable_signs=1
 <
 
+                                                    *'syntastic_error_symbol'*
+Default: '>>'
+Use this option to control what the syntastic |:sign| text contains. Several
+error symobls can be customized:
+    syntastic_error_symbol - For syntax errors, defaults to '>>'
+    syntastic_style_error_symbol - For style errors, defaults to 'S>'
+    syntastic_warning_symbol - For syntax warnings, defaults to '>>'
+    syntastic_style_warning_symbol - For style warnings, defaults to 'S>'
+
+Example: >
+    let g:syntastic_error_symbol='✗'
+    let g:syntastic_warning_symbol='⚠'
+<
+
                                                  *'syntastic_enable_balloons'*
 Default: 1
 Use this option to tell syntastic whether to display error messages in balloons
