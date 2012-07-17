@@ -10,13 +10,20 @@
 "
 "============================================================================
 function! SyntaxCheckers_ruby_GetLocList()
-    " we cannot set RUBYOPT on windows like that
-    if has('win32')
-        let makeprg = 'ruby -W1 -T1 -c '.shellescape(expand('%'))
-    else
-        let makeprg = 'RUBYOPT= ruby -W1 -c '.shellescape(expand('%'))
-    endif
-    let errorformat =  '%-GSyntax OK,%E%f:%l: syntax error\, %m,%Z%p^,%W%f:%l: warning: %m,%Z%p^,%W%f:%l: %m,%-C%.%#'
 
+    let makeprg = 'ruby -w -T1 -c '.shellescape(expand('%'))
+    if !has('win32')
+        let makeprg = 'RUBYOPT= ' . makeprg
+    endif
+
+    "this is a hack to filter out a repeated useless warning in rspec files
+    "containing lines like
+    "
+    "  foo.should == 'bar'
+    "
+    "which always generate the warning below
+    let errorformat = '%-G%.%#warning: useless use of == in void context'
+
+    let errorformat .=  ',%-GSyntax OK,%E%f:%l: syntax error\, %m,%Z%p^,%W%f:%l: warning: %m,%Z%p^,%W%f:%l: %m,%-C%.%#'
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 endfunction
