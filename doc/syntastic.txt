@@ -163,8 +163,8 @@ syntax errors: >
     let g:syntastic_enable_signs=1
 <
 
-                                                    *'syntastic_error_symbol'*
-Default: '>>'
+                   *'syntastic_error_symbol'* *'syntastic_style_error_symbol'*
+               *'syntastic_warning_symbol'* *'syntastic_style_warning_symbol'*
 Use this option to control what the syntastic |:sign| text contains. Several
 error symobls can be customized:
     syntastic_error_symbol - For syntax errors, defaults to '>>'
