@@ -21,8 +21,9 @@ function! SyntaxCheckers_ruby_GetLocList()
     "
     "  foo.should == 'bar'
     "
-    "which always generate the warning below
-    let errorformat = '%-G%.%#warning: possibly useless use of == in void context'
+    "Which always generate the warning below. Note that ruby >= 1.9.3 includes
+    "the word "possibly" in the warning
+    let errorformat = '%-G%.%#warning: %\(possibly %\)%\?useless use of == in void context'
 
     let errorformat .=  ',%-GSyntax OK,%E%f:%l: syntax error\, %m,%Z%p^,%W%f:%l: warning: %m,%Z%p^,%W%f:%l: %m,%-C%.%#'
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
