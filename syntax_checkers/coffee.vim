@@ -25,23 +25,23 @@ function! SyntaxCheckers_coffee_GetLocList()
     let errorformat =  'Syntax%trror: In %f\, %m on line %l,%EError: In %f\, Parse error on line %l: %m,%EError: In %f\, %m on line %l,%W%f(%l): lint warning: %m,%-Z%p^,%W%f(%l): warning: %m,%-Z%p^,%E%f(%l): SyntaxError: %m,%-Z%p^,%-G%.%#'
 
     let coffee_results = SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
-	
-	if !empty(coffee_results)
-		return coffee_results
-	endif
-	
 
-    if executable("coffeelint")
-      let lint_options = ''
-      if(exists('g:coffee_lint_options'))
-        let lint_options = g:coffee_lint_options
-      endif
-      
-      let coffeelint = 'coffeelint --csv '.lint_options.' '.shellescape(expand('%'))
-      let lint_results = SyntasticMake({ 'makeprg': coffeelint, 'errorformat': '%f\,%l\,%trror\,%m', 'subtype': 'Style' })
-
-      return lint_results
+    if !empty(coffee_results)
+        return coffee_results
     endif
 
-	return []
+
+    if executable("coffeelint")
+        let lint_options = ''
+        if(exists('g:coffee_lint_options'))
+            let lint_options = g:coffee_lint_options
+        endif
+
+        let coffeelint = 'coffeelint --csv '.lint_options.' '.shellescape(expand('%'))
+        let lint_results = SyntasticMake({ 'makeprg': coffeelint, 'errorformat': '%f\,%l\,%trror\,%m', 'subtype': 'Style' })
+
+        return lint_results
+    endif
+
+    return []
 endfunction
