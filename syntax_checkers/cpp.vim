@@ -10,6 +10,13 @@
 "
 "============================================================================
 
+" NOTE: IF you are using the YouCompleteMe plugin
+" (https://github.com/Valloric/YouCompleteMe), everything will 'just work'
+" (if you configured YouCompleteMe properly that is).
+" Ignore all the below g:syntastic_cpp* options, YCM does not use them. If you
+" are NOT using YCM, then continue reading.
+"
+"
 " in order to also check header files add this to your .vimrc:
 "
 "   let g:syntastic_cpp_check_header = 1
@@ -80,7 +87,7 @@ if !exists('g:syntastic_cpp_compiler_options')
     let g:syntastic_cpp_compiler_options = ''
 endif
 
-if !executable(g:syntastic_cpp_compiler)
+if !executable(g:syntastic_cpp_compiler) && !exists('g:loaded_youcompleteme')
     finish
 endif
 
@@ -92,6 +99,10 @@ if !exists('g:syntastic_cpp_config_file')
 endif
 
 function! SyntaxCheckers_cpp_GetLocList()
+    if exists('g:loaded_youcompleteme')
+        return youcompleteme#CurrentFileDiagnostics()
+    endif
+
     let makeprg = g:syntastic_cpp_compiler . ' -x c++ -fsyntax-only ' .
                 \ g:syntastic_cpp_compiler_options
     let errorformat =  '%-G%f:%s:,%f:%l:%c: %trror: %m,%f:%l:%c: %tarning: '.
