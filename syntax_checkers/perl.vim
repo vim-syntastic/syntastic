@@ -17,6 +17,13 @@
 "
 "   let g:perl_lib_path = './lib'
 "
+" To use your own perl error output munger script, use the
+" g:syntastic_perl_efm_program option. Any command line parameters should be
+" included in the variable declaration. The program should expect a single
+" parameter; the fully qualified filename of the file to be checked.
+"
+"   let g:syntastic_perl_efm_program = "foo.pl -o -m -g"
+"
 if exists("loaded_perl_syntax_checker")
     finish
 endif
@@ -27,21 +34,15 @@ if !executable("perl")
     finish
 endif
 
-" Any command line parameters needed for this program should be included in
-" the variable declaration. This program should expect a single parameter;
-" the fully qualified filename of the file to be checked.
-
-if exists("g:syntastic_perl_efm_program")
-    let s:checker = g:syntastic_perl_efm_program
-else
-    let s:checker = 'perl ' . shellescape(expand('<sfile>:p:h') . '/efm_perl.pl') . ' -c -w'
+if !exists("g:syntastic_perl_efm_program")
+    let g:syntastic_perl_efm_program = 'perl ' . shellescape(expand('<sfile>:p:h') . '/efm_perl.pl') . ' -c -w'
 endif
 
 function! SyntaxCheckers_perl_GetLocList()
     if exists("g:perl_lib_path")
-        let makeprg = s:checker . ' -I' . g:perl_lib_path . ' ' . shellescape(expand('%'))
+        let makeprg = g:syntastic_perl_efm_program . ' -I' . g:perl_lib_path . ' ' . shellescape(expand('%'))
     else
-        let makeprg = s:checker . ' ' . shellescape(expand('%'))
+        let makeprg = g:syntastic_perl_efm_program . ' ' . shellescape(expand('%'))
     endif
     let errorformat =  '%t:%f:%l:%m'
 
