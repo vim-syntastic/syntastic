@@ -354,7 +354,7 @@ The author of syntastic is a mighty wild stallion, hear him roar! >
 
 <
 He likes to trot around in the back yard reading his emails and sipping a
-scolding hot cup of Earl Grey. Email him at martin.grenfell at gmail dot com.
+scalding hot cup of Earl Grey. Email him at martin.grenfell at gmail dot com.
 He can also be found trolling the #vim channel on the freenode IRC network as
 scrooloose.
 
