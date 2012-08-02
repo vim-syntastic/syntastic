@@ -13,9 +13,9 @@
 "
 " In order to add some custom lib directories that should be added to the
 " perl command line you can add those to the global variable
-" g:perl_lib_path.
+" g:syntastic_perl_lib_path.
 "
-"   let g:perl_lib_path = './lib'
+"   let g:syntastic_perl_lib_path = './lib'
 "
 " To use your own perl error output munger script, use the
 " g:syntastic_perl_efm_program option. Any command line parameters should be
@@ -39,8 +39,8 @@ if !exists("g:syntastic_perl_efm_program")
 endif
 
 function! SyntaxCheckers_perl_GetLocList()
-    if exists("g:perl_lib_path")
-        let makeprg = g:syntastic_perl_efm_program . ' -I' . g:perl_lib_path . ' ' . shellescape(expand('%'))
+    if exists("g:syntastic_perl_lib_path")
+        let makeprg = g:syntastic_perl_efm_program . ' -I' . g:syntastic_perl_lib_path . ' ' . shellescape(expand('%'))
     else
         let makeprg = g:syntastic_perl_efm_program . ' ' . shellescape(expand('%'))
     endif
