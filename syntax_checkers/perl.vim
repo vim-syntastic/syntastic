@@ -27,8 +27,15 @@ if !executable("perl")
     finish
 endif
 
-"remove '-w' switch to change all warnings to errors
-let s:checker = 'perl ' . shellescape(expand('<sfile>:p:h') . '/efm_perl.pl') . ' -c -w'
+" Any command line parameters needed for this program should be included in
+" the variable declaration. This program should expect a single parameter;
+" the fully qualified filename of the file to be checked.
+
+if exists("g:syntastic_perl_efm_program")
+    let s:checker = g:syntastic_perl_efm_program
+else
+    let s:checker = 'perl ' . shellescape(expand('<sfile>:p:h') . '/efm_perl.pl') . ' -c -w'
+endif
 
 function! SyntaxCheckers_perl_GetLocList()
     if exists("g:perl_lib_path")
