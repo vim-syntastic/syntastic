@@ -403,7 +403,7 @@ function! s:HightlightErrors()
                 if exists("*SyntaxCheckers_". ft ."_GetHighlightRegex")
                     let term = SyntaxCheckers_{ft}_GetHighlightRegex(item)
                     if len(term) > 0
-                        call matchadd(group, '\%' . item['lnum'] . 'l' . term)
+                        call matchadd(group, '^.\{-}\zs\%' . item['lnum'] . 'l' . term)
                     endif
                 endif
             endif
