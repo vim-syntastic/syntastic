@@ -13,8 +13,6 @@
 function! SyntaxCheckers_java_GetLocList()
 
     if exists('g:syntastic_mvn_target')
-        let errorformat = '[ERROR] %f:[%l\,%c]\ %m'
-
         let getrightdir =  'while [[ ! -e pom.xml && $PWD != "/" ]]; do cd ..; done;'
                         \. '[[ $PWD == "/" ]] && exit 1;'
 
