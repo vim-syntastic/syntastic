@@ -14,21 +14,36 @@ function! SyntaxCheckers_java_GetLocList()
 
     if exists('g:syntastic_mvn_target')
         let errorformat = '[ERROR] %f:[%l\,%c]\ %m'
+
+
+        " See if this is a web project or something odd.
+        let target = (match(expand('%:p'),'.*src.test.*') ? 'classes' : 'test-classes')
+        let findtarget = '`find ' . g:syntastic_mvn_target 
+                        \. ' -name ' . target . ' 2>/dev/null \| grep ' .target
+                        \. ' \|\| echo ' . g:syntastic_mvn_target . '/' . target
+                        \. '`'
+
+        " This oculd be refactored.
+        let othertarget = (match(expand('%:p'),'.*src.test.*') ? 'test-classes' : 'classes')
+        let findothertarget = '`find ' . g:syntastic_mvn_target 
+                        \. ' -name ' . othertarget . ' 2>/dev/null \| grep ' . othertarget
+                        \. ' \|\| echo ' . g:syntastic_mvn_target . '/' . othertarget
+                        \. '`'
+
         " Step 1: generate classpath, if needed
-        " Step 2: compile
-        " Step 3: kick off new build to update class files.
-        let target = g:syntastic_mvn_target . ( match( expand ( '%:p' ) , '.*src.test.*' ) ? '/classes' : '/test-classes' )
-        let makeprg = '[[ .javacpath -nt pom.xml ]] '
+        " NOTE: Maven will take at least 4 seconds to run.
+        let makedeps = '[[ .javacpath -nt pom.xml ]] '
                     \. ' \|\| (mvn dependency:build-classpath 2>/dev/null '
                     \. ' \| grep -v "^\[INFO\]" \| xargs echo -n '
-                    \. '&& echo -n :' 
-                    \. g:syntastic_mvn_target . '/classes'
-                    \. '&& echo -n :' 
-                    \. g:syntastic_mvn_target . '/test-classes'
-                    \. ') > .javacpath; '
-                    \. ' [[ -e pom.xml ]] && mkdir -p '. target . '; '
-                    \. ' [[ -e ' . target . ' ]] && '
-                    \. 'javac -Xlint -d ' . target
+                    \. ' && echo -n :' . findtarget
+                    \. ' && echo -n :' . findothertarget
+                    \. ' ) > .javacpath; '
+
+        let maketarget = ' [[ -e pom.xml ]] && mkdir -p '. findtarget  . '; '
+
+        " Step 2: compile
+        let javacall = ' [[ -e ' . findtarget . ' ]] && '
+                    \. 'javac -Xlint -d ' . findtarget
                     \. ' -cp `cat .javacpath` '
                     \. expand ( '%:p' )
                     \. ' 2>&1 '
@@ -37,6 +52,8 @@ function! SyntaxCheckers_java_GetLocList()
                     \. '\|'
                     \. expand ( '%:p' )
                     \. '\|"'
+
+        let makeprg = makedeps . maketarget . javacall
 
     else
         let makeprg = 'javac -Xlint '
