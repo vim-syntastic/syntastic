@@ -14,7 +14,7 @@ function! SyntaxCheckers_java_GetLocList()
     let makeprg = 'javac -Xlint '
                \. expand ( '%:p:h' ) . '/' . expand ( '%:t' )
                \. ' 2>&1 \| '
-               \. 'sed -e "s\|'
+               \. 'sed -e "s\|^\s*'
                \. expand ( '%:t' )
                \. '\|'
                \. expand ( '%:p:h' ) . '/' . expand ( '%:t' )
