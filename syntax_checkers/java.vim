@@ -15,6 +15,8 @@ function! SyntaxCheckers_java_GetLocList()
     if exists('g:syntastic_mvn_target')
         let errorformat = '[ERROR] %f:[%l\,%c]\ %m'
 
+        let getrightdir =  'while [[ ! -e pom.xml && $PWD != "/" ]]; do cd ..; done;'
+                        \. '[[ $PWD == "/" ]] && exit 1;'
 
         " See if this is a web project or something odd.
         let target = (match(expand('%:p'),'.*src.test.*') ? 'classes' : 'test-classes')
@@ -53,7 +55,7 @@ function! SyntaxCheckers_java_GetLocList()
                     \. expand ( '%:p' )
                     \. '\|"'
 
-        let makeprg = makedeps . maketarget . javacall
+        let makeprg = getrightdir . makedeps . maketarget . javacall
 
     else
         let makeprg = 'javac -Xlint '
