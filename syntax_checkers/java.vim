@@ -12,16 +12,30 @@
 "============================================================================
 function! SyntaxCheckers_java_GetLocList()
 
-    if exists('g:syntastic_mvn_pom')
+    if exists('g:syntastic_mvn_target')
         let errorformat = '[ERROR] %f:[%l\,%c]\ %m'
-        let makeprg = 'mvn test -o '
-                    \. ' -Dcompile.fork=true '
-                    \. ' -Dmaven.junit.fork=true '
-                    \. ' 2>&1 ' 
-                    \. '\| sed -e "s\|[a-zA-Z0-9_./-]*'
+        " Step 1: generate classpath, if needed
+        " Step 2: compile
+        " Step 3: kick off new build to update class files.
+        let target = g:syntastic_mvn_target . ( match( expand ( '%:p' ) , '.*src.test.*' ) ? '/classes' : '/test-classes' )
+        let makeprg = '[[ .javacpath -nt pom.xml ]] '
+                    \. ' \|\| (mvn dependency:build-classpath 2>/dev/null '
+                    \. ' \| grep -v "^\[INFO\]" \| xargs echo -n '
+                    \. '&& echo -n :' 
+                    \. g:syntastic_mvn_target . '/classes'
+                    \. '&& echo -n :' 
+                    \. g:syntastic_mvn_target . '/test-classes'
+                    \. ') > .javacpath; '
+                    \. ' [[ -e pom.xml ]] && mkdir -p '. target . '; '
+                    \. ' [[ -e ' . target . ' ]] && '
+                    \. 'javac -Xlint -d ' . target
+                    \. ' -cp `cat .javacpath` '
+                    \. expand ( '%:p' )
+                    \. ' 2>&1 '
+                    \. ' \| sed -e "s\|'
                     \. expand ( '%:t' )
                     \. '\|'
-                    \. expand ( '%:p:h' ) . '/' . expand ( '%:t' )
+                    \. expand ( '%:p' )
                     \. '\|"'
 
     else
@@ -31,12 +45,12 @@ function! SyntaxCheckers_java_GetLocList()
                     \. '\| sed -e "s\|[a-zA-Z0-9_./-]*'
                     \. expand ( '%:t' )
                     \. '\|'
-                    \. expand ( '%:p:h' ) . '/' . expand ( '%:t' )
+                    \. expand ( '%:p' )
                     \. '\|"'
 
-        " unashamedly stolen from *errorformat-javac* (quickfix.txt)
-        let errorformat = '%A%f:%l:\ %m,%+Z%p^,%+C%.%#,%-G%.%#'
     endif
+    " unashamedly stolen from *errorformat-javac* (quickfix.txt)
+    let errorformat = '%A%f:%l:\ %m,%+Z%p^,%+C%.%#,%-G%.%#'
 
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 
