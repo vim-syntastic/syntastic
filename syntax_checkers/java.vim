@@ -10,60 +10,56 @@
 "             See http://sam.zoy.org/wtfpl/COPYING for more details.
 "
 "============================================================================
+
+" gets back either classes or testclasses
+function! SyntaxCheckers_java_getTargetDir(basePom, dir)
+    let baseDir = fnamemodify(a:basePom, ':p:h') 
+    let targetDir = finddir ( a:dir , baseDir . '/' . g:syntastic_mvn_target . '**6')
+
+    if filewritable ( targetDir ) != 2
+        let targetDir = baseDir . '/' . g:syntastic_mvn_target . '/'. a:dir
+        call mkdir(targetDir, 'p')
+    endif
+    
+    let targetDir = fnamemodify(targetDir, '%:p')
+
+    return targetDir
+endfunction
+
 function! SyntaxCheckers_java_GetLocList()
 
-    if exists('g:syntastic_mvn_target')
-        let getrightdir =  'while [[ ! -e pom.xml && $PWD != "/" ]]; do cd ..; done;'
-                        \. '[[ $PWD == "/" ]] && exit 1;'
+    let basepom = findfile('pom.xml', expand('%:p:h') . ';')
+
+    echo basepom
+
+    if ! empty( basepom )
 
         " See if this is a web project or something odd.
-        let target = (match(expand('%:p'),'.*src.test.*') ? 'classes' : 'test-classes')
-        let findtarget = '`find ' . g:syntastic_mvn_target 
-                        \. ' -name ' . target . ' 2>/dev/null \| grep ' .target
-                        \. ' \|\| echo ' . g:syntastic_mvn_target . '/' . target
-                        \. '`'
+        let classdir = (match(expand('%:p'),'.*src.test.*') ? 'classes' : 'test-classes')
+        let otherclassdir = (match(expand('%:p'),'.*src.test.*') ? 'test-classes' : 'classes')
 
-        " This oculd be refactored.
-        let othertarget = (match(expand('%:p'),'.*src.test.*') ? 'test-classes' : 'classes')
-        let findothertarget = '`find ' . g:syntastic_mvn_target 
-                        \. ' -name ' . othertarget . ' 2>/dev/null \| grep ' . othertarget
-                        \. ' \|\| echo ' . g:syntastic_mvn_target . '/' . othertarget
-                        \. '`'
+        let target = SyntaxCheckers_java_getTargetDir(basepom, classdir)
+        let othertarget = SyntaxCheckers_java_getTargetDir(basepom, otherclassdir)
 
         " Step 1: generate classpath, if needed
         " NOTE: Maven will take at least 4 seconds to run.
         let makedeps = '[[ .javacpath -nt pom.xml ]] '
-                    \. ' \|\| (mvn dependency:build-classpath 2>/dev/null '
+                    \. ' \|\| (mvn -f '. basepom . ' dependency:build-classpath 2>/dev/null '
                     \. ' \| grep -v "^\[INFO\]" \| xargs echo -n '
-                    \. ' && echo -n :' . findtarget
-                    \. ' && echo -n :' . findothertarget
+                    \. ' && echo -n :' . target
+                    \. ' && echo -n :' . othertarget
                     \. ' ) > .javacpath; '
 
-        let maketarget = ' [[ -e pom.xml ]] && mkdir -p '. findtarget  . '; '
-
-        " Step 2: compile
-        let javacall = ' [[ -e ' . findtarget . ' ]] && '
-                    \. 'javac -Xlint -d ' . findtarget
+        " compile
+        let javacall = 'javac -Xlint -d ' . target
                     \. ' -cp `cat .javacpath` '
                     \. expand ( '%:p' )
                     \. ' 2>&1 '
-                    \. ' \| sed -e "s\|'
-                    \. expand ( '%:t' )
-                    \. '\|'
-                    \. expand ( '%:p' )
-                    \. '\|"'
 
-        let makeprg = getrightdir . makedeps . maketarget . javacall
+        let makeprg = makedeps . javacall
 
     else
-        let makeprg = 'javac -Xlint '
-                    \. expand ( '%:p:h' ) . '/' . expand ( '%:t' )
-                    \. ' 2>&1 '
-                    \. '\| sed -e "s\|[a-zA-Z0-9_./-]*'
-                    \. expand ( '%:t' )
-                    \. '\|'
-                    \. expand ( '%:p' )
-                    \. '\|"'
+        let makeprg = 'javac -Xlint ' . expand('%:p') . ' 2>&1 '
 
     endif
     " unashamedly stolen from *errorformat-javac* (quickfix.txt)
