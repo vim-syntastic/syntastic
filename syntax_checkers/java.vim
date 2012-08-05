@@ -27,40 +27,48 @@ endfunction
 
 function! SyntaxCheckers_java_GetLocList()
 
+    " like 95% of the time, the target directory is just target.
+    if !exists("g:syntastic_mvn_target")
+        let g:syntastic_mvn_target = 'target'
+    endif
+
     let basepom = findfile('pom.xml', expand('%:p:h') . ';')
 
     if ! empty( basepom )
 
-        " See if this is a web project or something odd.
+        " We'll need to do this for both directories.
         let classdir = (match(expand('%:p'),'.*src.test.*') ? 'classes' : 'test-classes')
         let otherclassdir = (match(expand('%:p'),'.*src.test.*') ? 'test-classes' : 'classes')
 
+        " generate all the relevant maven directories.
         let baseDir = fnamemodify(basepom, ':p:h') 
         let target = SyntaxCheckers_java_getTargetDir(baseDir, classdir)
         let othertarget = SyntaxCheckers_java_getTargetDir(baseDir, otherclassdir)
 
+        " We cache the classpath in a file in the base directory.
         let classpathFile = baseDir . '/.syntastic_classpath'
 
-        " Step 1: generate classpath, if needed
-        " NOTE: Maven will take at least 4 seconds to run.
+        " Generate classpath if needed
+        " NOTE: Maven will take at least 4 seconds to run. TRY TO AVOID THAT
         if (getftime(classpathFile) < getftime(basepom))
             call system('mvn -o -f '. shellescape(basepom)
                 \. ' -Dmdep.outputFile=' . shellescape(classpathFile)
                 \. ' dependency:build-classpath' )
         endif
 
+        " Classpath = all the related jars + the different classpath
         let classpath = readfile(classpathFile)[0] 
                 \. ':' . target 
                 \. ':' . othertarget
 
-        " compile
+        " Compile.
         let makeprg = 'javac -Xlint -d ' . target
                     \. ' -cp ' . classpath . ' '
-                    \. expand ( '%:p' )
-                    \. ' 2>&1 '
+                    \. expand('%:p') . ' 2>&1 '
 
 
     else
+        " It's not maven. just go back to the old way.
         let makeprg = 'javac -Xlint ' . expand('%:p') . ' 2>&1 '
 
     endif
