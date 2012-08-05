@@ -20,7 +20,7 @@ function! SyntaxCheckers_java_getTargetDir(baseDir, dir)
         call mkdir(targetDir, 'p')
     endif
     
-    let targetDir = fnamemodify(targetDir, '%:p')
+    let targetDir = fnamemodify(targetDir, ':p')
 
     return targetDir
 endfunction
