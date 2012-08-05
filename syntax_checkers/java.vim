@@ -13,26 +13,27 @@
 
 " gets back either classes or testclasses
 function! SyntaxCheckers_java_getTargetDir(baseDir, dir)
-    let targetDir = finddir ( a:dir , a:baseDir . '/' . g:syntastic_mvn_target . '**6')
-
-    if filewritable ( targetDir ) != 2
-        let targetDir = a:baseDir . '/' . g:syntastic_mvn_target . '/'. a:dir
-        call mkdir(targetDir, 'p')
-    endif
-    
-    let targetDir = fnamemodify(targetDir, ':p')
-
-    return targetDir
-endfunction
-
-function! SyntaxCheckers_java_GetLocList()
-
-    " like 95% of the time, the target directory is just target.
+    " like 95% of the time, the target directory is just 'target'.
     if !exists("g:syntastic_mvn_target")
         let g:syntastic_mvn_target = 'target'
     endif
 
-    let basepom = findfile('pom.xml', expand('%:p:h') . ';')
+    " This braks on paths with a space in them... :(
+    " let targetDir = finddir (a:dir , a:baseDir . '/' . g:syntastic_mvn_target . '**6')
+
+    let targetDir = a:baseDir . '/' . g:syntastic_mvn_target . '/'. a:dir
+
+    if filewritable(targetDir) != 2
+        call mkdir(shellescape(targetDir), 'p')
+    endif
+
+    return targetDir
+
+endfunction
+
+function! SyntaxCheckers_java_GetLocList()
+
+    let basepom = findfile('pom.xml', '.;')
 
     if ! empty( basepom )
 
@@ -41,30 +42,40 @@ function! SyntaxCheckers_java_GetLocList()
         let otherclassdir = (match(expand('%:p'),'.*src.test.*') ? 'test-classes' : 'classes')
 
         " generate all the relevant maven directories.
-        let baseDir = fnamemodify(basepom, ':p:h') 
+        " We're switching to relative paths since it seems that maven doesn't talk to
+        " cygwin about where to write a file
+        let baseDir = fnamemodify(basepom, ':h') 
         let target = SyntaxCheckers_java_getTargetDir(baseDir, classdir)
         let othertarget = SyntaxCheckers_java_getTargetDir(baseDir, otherclassdir)
 
         " We cache the classpath in a file in the base directory.
-        let classpathFile = baseDir . '/.syntastic_classpath'
+        let classpathFile = '.syntastic_classpath'
+        let classpathPathFile = baseDir . '/' . classpathFile
 
         " Generate classpath if needed
         " NOTE: Maven will take at least 4 seconds to run. TRY TO AVOID THAT
-        if (getftime(classpathFile) < getftime(basepom))
-            call system('mvn -o -f '. shellescape(basepom)
-                \. ' -Dmdep.outputFile=' . shellescape(classpathFile)
-                \. ' dependency:build-classpath' )
+        if (getftime(classpathPathFile) < getftime(basepom))
+             echo "Generating classpath for " . basepom
+
+             echo 'mvn -o -f ' . shellescape(basepom) . ' '
+                \. shellescape('-Dmdep.outputFile=' . classpathFile)
+                \. ' dependency:build-classpath'
+
+             call system('mvn -o -f ' . shellescape(basepom) . ' '
+                \. shellescape('-Dmdep.outputFile=' . classpathFile)
+                \. ' dependency:build-classpath')
         endif
 
         " Classpath = all the related jars + the different classpath
-        let classpath = readfile(classpathFile)[0] 
+        let classpath = readfile(classpathPathFile)[0] 
                 \. ':' . target 
                 \. ':' . othertarget
 
+
         " Compile.
-        let makeprg = 'javac -Xlint -d ' . target
-                    \. ' -cp ' . classpath . ' '
-                    \. expand('%:p') . ' 2>&1 '
+        let makeprg = 'javac -Xlint -d ' . shellescape(target)
+                    \. ' -cp ' . shellescape(classpath) . ' '
+                    \. shellescape(expand('%:p')) . ' 2>&1 '
 
 
     else
