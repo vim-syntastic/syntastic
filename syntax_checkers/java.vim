@@ -68,16 +68,15 @@ function! SyntaxCheckers_java_GetLocList()
                 \. ':' . target 
                 \. ':' . othertarget
 
-
         " Compile.
         let makeprg = 'javac -Xlint -d ' . shellescape(target)
                     \. ' -cp ' . shellescape(classpath) . ' '
-                    \. shellescape(expand('%:p')) . ' 2>&1 '
+                    \. shellescape(expand('%')) . ' 2>&1 '
 
 
     else
         " It's not maven. just go back to the old way.
-        let makeprg = 'javac -Xlint ' . expand('%:p') . ' 2>&1 '
+        let makeprg = 'javac -Xlint ' . expand('%') . ' 2>&1 '
 
     endif
     " unashamedly stolen from *errorformat-javac* (quickfix.txt)
