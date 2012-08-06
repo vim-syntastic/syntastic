@@ -55,14 +55,11 @@ function! SyntaxCheckers_java_GetLocList()
         " Generate classpath if needed
         " NOTE: Maven will take at least 4 seconds to run. TRY TO AVOID THAT
         if (getftime(classpathPathFile) < getftime(basepom))
-             echo "Generating classpath for " . basepom
-
-             echo 'mvn -o -f ' . shellescape(basepom) . ' '
-                \. shellescape('-Dmdep.outputFile=' . classpathFile)
-                \. ' dependency:build-classpath'
+             echo 'Generating classpath for ' . basepom . '...'
 
              call system('mvn -o -f ' . shellescape(basepom) . ' '
-                \. shellescape('-Dmdep.outputFile=' . classpathFile)
+                \. shellescape('-Dmdep.outputFile=' . classpathFile) . ' '
+                \. ' -Dmdep.regenerateFile=true '
                 \. ' dependency:build-classpath')
         endif
 
