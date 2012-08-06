@@ -80,8 +80,6 @@ function! SyntaxCheckers_java_GetLocList()
                     \. ' -cp ' . shellescape(classpath) . ' '
                     \. shellescape(expand('%')) . ' 2>&1 '
 
-        let g:makeprg = makeprg
-
     else
         " It's not maven. just go back to the old way.
         let makeprg = 'javac -Xlint ' . shellescape(expand('%')) . ' 2>&1 '
