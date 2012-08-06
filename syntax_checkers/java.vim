@@ -24,7 +24,7 @@ function! SyntaxCheckers_java_getTargetDir(baseDir, dir)
     let targetDir = a:baseDir . '/' . g:syntastic_mvn_target . '/'. a:dir
 
     if filewritable(targetDir) != 2
-        call mkdir(shellescape(targetDir), 'p')
+        call mkdir(targetDir, 'p')
     endif
 
     return targetDir
@@ -63,20 +63,28 @@ function! SyntaxCheckers_java_GetLocList()
                 \. ' dependency:build-classpath')
         endif
 
+        " Path separators are different between windows and unix
+        if has('win32') || has ('win64') || has('win32unix')
+            let pathSeparator = ';'
+        else
+            let pathSeparator = ':'
+        endif
+
         " Classpath = all the related jars + the different classpath
         let classpath = readfile(classpathPathFile)[0] 
-                \. ':' . target 
-                \. ':' . othertarget
+                \. pathSeparator . target
+                \. pathSeparator . othertarget
 
         " Compile.
         let makeprg = 'javac -Xlint -d ' . shellescape(target)
                     \. ' -cp ' . shellescape(classpath) . ' '
                     \. shellescape(expand('%')) . ' 2>&1 '
 
+        let g:makeprg = makeprg
 
     else
         " It's not maven. just go back to the old way.
-        let makeprg = 'javac -Xlint ' . expand('%') . ' 2>&1 '
+        let makeprg = 'javac -Xlint ' . shellescape(expand('%')) . ' 2>&1 '
 
     endif
     " unashamedly stolen from *errorformat-javac* (quickfix.txt)
