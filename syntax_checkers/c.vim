@@ -9,7 +9,11 @@
 "             See http://sam.zoy.org/wtfpl/COPYING for more details.
 "
 "============================================================================
-
+"
+" Set your compiler executable with (defaults to gcc):
+"
+"   let g:syntastic_c_compiler = 'clang'
+"
 " In order to also check header files add this to your .vimrc:
 " (this usually creates a .gch file in your source directory)
 "
@@ -36,7 +40,7 @@
 "   let b:syntastic_c_cflags = ' -I/usr/include/libsoup-2.4'
 "
 " In order to add some custom include directories that should be added to the
-" gcc command line you can add those to the global variable
+" compiler command line you can add those to the global variable
 " g:syntastic_c_include_dirs. This list can be used like this:
 "
 "   let g:syntastic_c_include_dirs = [ 'includes', 'headers' ]
@@ -69,7 +73,11 @@ if exists('loaded_c_syntax_checker')
 endif
 let loaded_c_syntax_checker = 1
 
-if !executable('gcc')
+if !exists('g:syntastic_c_compiler')
+    let g:syntastic_c_compiler = 'gcc'
+endif
+
+if !executable(g:syntastic_c_compiler)
     finish
 endif
 
@@ -85,7 +93,7 @@ if !exists('g:syntastic_c_config_file')
 endif
 
 function! SyntaxCheckers_c_GetLocList()
-    let makeprg = 'gcc -fsyntax-only '
+    let makeprg = g:syntastic_c_compiler . ' -fsyntax-only '
     let errorformat = '%-G%f:%s:,%-G%f:%l: %#error: %#(Each undeclared '.
                \ 'identifier is reported only%.%#,%-G%f:%l: %#error: %#for '.
                \ 'each function it appears%.%#,%-GIn file included%.%#,'.
@@ -106,7 +114,7 @@ function! SyntaxCheckers_c_GetLocList()
     " determine whether to parse header files as well
     if expand('%') =~? '.h$'
         if exists('g:syntastic_c_check_header')
-            let makeprg = 'gcc -c '.shellescape(expand('%')).
+            let makeprg = g:syntastic_c_compiler . '-c '.shellescape(expand('%')).
                         \ ' '.syntastic#c#GetIncludeDirs('c')
         else
             return []
