@@ -62,29 +62,36 @@ function! SyntaxCheckers_java_GetLocList()
                 \. ' -Dmdep.regenerateFile=true '
                 \. ' dependency:build-classpath')
 
-        endif
+             " Path separators are different between windows and unix
+             if has('win32') || has ('win64') || has('win32unix')
+                 let pathSeparator = ';'
+             else
+                 let pathSeparator = ':'
+             endif
 
-        " Path separators are different between windows and unix
-        if has('win32') || has ('win64') || has('win32unix')
-            let pathSeparator = ';'
-        else
-            let pathSeparator = ':'
-        endif
-
-        " Classpath = all the related jars + the different classpath
-        let classpath = readfile(classpathPathFile)[0] 
+             " tack on target directories
+             let newpaths = readfile(classpathPathFile)[0]
                 \. pathSeparator . target
                 \. pathSeparator . othertarget
+             call writefile([ newpaths ], classpathPathFile, 'b')
+
+        endif
+        " Classpath = all the related jars + the different classpath
+        let mvnClasspath = readfile(classpathPathFile)[0] 
 
         " Compile.
-
         let fname = expand('%')
 
+        " Cygwin hack. This is too common... Need to pull this out into a
+        " helper func.
+        if has('win32unix')
+            let fname = split(system('cygpath -w '.shellescape(fname)), '\n')[0]
+        endif
+
         let makeprg = 'javac -Xlint -d ' . shellescape(target)
-                    \. ' -cp ' . shellescape(classpath) . ' '
+                    \. ' -cp ' . shellescape(mvnClasspath) . ' '
                     \. shellescape(fname)
 
-        let g:makeprg = makeprg
     else
         " It's not maven. just go back to the old way.
         let makeprg = 'javac -Xlint ' . shellescape(expand('%'))
