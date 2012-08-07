@@ -61,6 +61,7 @@ function! SyntaxCheckers_java_GetLocList()
                 \. shellescape('-Dmdep.outputFile=' . classpathFile) . ' '
                 \. ' -Dmdep.regenerateFile=true '
                 \. ' dependency:build-classpath')
+
         endif
 
         " Path separators are different between windows and unix
@@ -76,17 +77,22 @@ function! SyntaxCheckers_java_GetLocList()
                 \. pathSeparator . othertarget
 
         " Compile.
+
+        let fname = expand('%')
+
         let makeprg = 'javac -Xlint -d ' . shellescape(target)
                     \. ' -cp ' . shellescape(classpath) . ' '
-                    \. shellescape(expand('%')) . ' 2>&1 '
+                    \. shellescape(fname)
 
+        let g:makeprg = makeprg
     else
         " It's not maven. just go back to the old way.
-        let makeprg = 'javac -Xlint ' . shellescape(expand('%')) . ' 2>&1 '
+        let makeprg = 'javac -Xlint ' . shellescape(expand('%'))
 
     endif
-    " unashamedly stolen from *errorformat-javac* (quickfix.txt)
-    let errorformat = '%A%f:%l:\ %m,%+Z%p^,%+C%.%#,%-G%.%#'
+    " Column classifier was giving issues on windows. The error message is
+    " more useful than the error column IMO.
+    let errorformat = '%E%f:%l:\ %m'
 
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 
