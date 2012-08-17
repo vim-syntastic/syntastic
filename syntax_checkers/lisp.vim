@@ -29,3 +29,5 @@ function! SyntaxCheckers_lisp_GetLocList()
   let efm .= '%-G%.%#'
   return SyntasticMake({ 'makeprg': makeprg, 'errorformat': efm })
 endfunction
+
+call SyntasticResgisterChecker("lisp",function("SyntaxCheckers_lisp_GetLocList"))

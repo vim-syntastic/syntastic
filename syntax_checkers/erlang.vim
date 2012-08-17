@@ -40,3 +40,5 @@ function! SyntaxCheckers_erlang_GetLocList()
 
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 endfunction
+
+call SyntasticResgisterChecker("erlang",function("SyntaxCheckers_erlang_GetLocList"))

@@ -219,7 +219,7 @@ function! s:CacheErrors()
     endif
 endfunction
 
-function! Syntastic_register_checker(fileType,checker)
+function! SyntasticRegisterChecker(fileType,checker)
     "if exists(g:Syntastic_checkers)
         "let g:Syntastic_checkers = {}
     "endif

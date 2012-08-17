@@ -21,8 +21,10 @@ function! SyntaxCheckers_python_GetHighlightRegex(i)
     return ''
 endfunction
 
-function! SyntaxCheckers_python_GetLocList()
+function! SyntaxCheckers_python_flake8_GetLocList()
     let makeprg = 'flake8 '.g:syntastic_python_checker_args.' '.shellescape(expand('%'))
     let errorformat = '%E%f:%l: could not compile,%-Z%p^,%E%f:%l:%c: %m,%E%f:%l: %m,%-G%.%#'
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 endfunction
+
+call SyntasticResgisterChecker("python",function("SyntaxCheckers_python_flake8_GetLocList"))

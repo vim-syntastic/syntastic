@@ -24,3 +24,5 @@ function! SyntaxCheckers_haml_GetLocList()
     let errorformat = 'Haml error on line %l: %m,Syntax error on line %l: %m,%-G%.%#'
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 endfunction
+
+call SyntasticResgisterChecker("haml",function("SyntaxCheckers_haml_GetLocList"))

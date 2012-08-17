@@ -32,3 +32,5 @@ function! SyntaxCheckers_eruby_GetLocList()
                          \ 'defaults': {'bufnr': bufnr("")} })
 
 endfunction
+
+call SyntasticResgisterChecker("eruby",function("SyntaxCheckers_eruby_GetLocList"))

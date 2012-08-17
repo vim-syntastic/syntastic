@@ -9,7 +9,7 @@
 "             See http://sam.zoy.org/wtfpl/COPYING for more details.
 "
 "============================================================================
-function! SyntaxCheckers_ruby_GetLocList()
+function! SyntaxCheckers_ruby_jruby_GetLocList()
     if has('win32')
         let makeprg = 'jruby -W1 -T1 -c '.shellescape(expand('%'))
     else
@@ -19,3 +19,5 @@ function! SyntaxCheckers_ruby_GetLocList()
 
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 endfunction
+
+call SyntasticResgisterChecker("ruby",function("SyntaxCheckers_ruby_jruby_GetLocList"))

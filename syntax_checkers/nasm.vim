@@ -30,3 +30,5 @@ function! SyntaxCheckers_nasm_GetLocList()
     let errorformat = '%f:%l: %t%*[^:]: %m'
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 endfunction
+
+call SyntasticResgisterChecker("nasm",function("SyntaxCheckers_nasm_GetLocList"))

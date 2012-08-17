@@ -42,3 +42,5 @@ function! SyntaxCheckers_fortran_GetLocList()
     let errorformat = '%-C %#,%-C  %#%.%#,%A%f:%l.%c:,%Z%m,%G%.%#'
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 endfunction
+
+call SyntasticResgisterChecker("fortran",function("SyntaxCheckers_fortran_GetLocList"))

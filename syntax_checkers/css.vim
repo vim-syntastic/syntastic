@@ -40,3 +40,5 @@ function! SyntaxCheckers_css_GetLocList()
                                 \ 'defaults': {'bufnr': bufnr("")} })
 
 endfunction
+
+call SyntasticResgisterChecker("css",function("SyntaxCheckers_css_GetLocList"))

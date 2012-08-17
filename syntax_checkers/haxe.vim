@@ -53,3 +53,5 @@ function! SyntaxCheckers_haxe_GetLocList()
         return SyntasticMake({})
     endif
 endfunction
+
+call SyntasticResgisterChecker("haxe",function("SyntaxCheckers_haxe_GetLocList"))

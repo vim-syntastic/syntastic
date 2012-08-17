@@ -28,3 +28,5 @@ function! SyntaxCheckers_yaml_GetLocList()
                          \ 'errorformat': errorformat,
                          \ 'defaults': {'bufnr': bufnr("")} })
 endfunction
+
+call SyntasticResgisterChecker("yaml",function("SyntaxCheckers_yaml_GetLocList"))

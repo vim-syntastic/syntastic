@@ -27,3 +27,5 @@ function! SyntaxCheckers_docbk_GetLocList()
 
     return loclist
 endfunction
+
+call SyntasticResgisterChecker("docbk",function("SyntaxCheckers_docbk_GetLocList"))

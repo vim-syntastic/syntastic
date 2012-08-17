@@ -26,3 +26,4 @@ function! SyntaxCheckers_matlab_GetLocList()
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat, 'defaults': {'bufnr': bufnr("")} })
 endfunction
 
+call SyntasticResgisterChecker("matlab",function("SyntaxCheckers_matlab_GetLocList"))

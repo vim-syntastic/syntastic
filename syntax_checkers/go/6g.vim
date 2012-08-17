@@ -9,9 +9,11 @@
 "             See http://sam.zoy.org/wtfpl/COPYING for more details.
 "
 "============================================================================
-function! SyntaxCheckers_go_GetLocList()
+function! SyntaxCheckers_go_6g_GetLocList()
     let makeprg = '6g -o /dev/null %'
     let errorformat = '%E%f:%l: %m'
 
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 endfunction
+
+call SyntasticResgisterChecker("go",function("SyntaxCheckers_go_6g_GetLocList"))

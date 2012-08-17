@@ -26,3 +26,5 @@ function! SyntaxCheckers_tcl_GetLocList()
 
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 endfunction
+
+call SyntasticResgisterChecker("tcl",function("SyntaxCheckers_tcl_GetLocList"))

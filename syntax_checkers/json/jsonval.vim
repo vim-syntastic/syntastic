@@ -9,9 +9,10 @@
 "             See http://sam.zoy.org/wtfpl/COPYING for more details.
 "============================================================================
 
-function! SyntaxCheckers_json_GetLocList()
+function! SyntaxCheckers_json_jsonval_GetLocList()
     " based on https://gist.github.com/1196345
     let makeprg = 'jsonval '. shellescape(expand('%'))
     let errorformat = '%E%f:\ %m\ at\ line\ %l,%-G%.%#'
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat, 'defaults': {'bufnr': bufnr('')} })
 endfunction
+call SyntasticResgisterChecker("json",function("SyntaxCheckers_json_jsonval_GetLocList"))

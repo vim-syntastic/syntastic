@@ -31,3 +31,4 @@ function! SyntaxCheckers_rust_GetLocList()
 endfunction
 
 
+call SyntasticResgisterChecker("rust",function("SyntaxCheckers_rust_GetLocList"))

@@ -66,3 +66,4 @@ function! SyntaxCheckers_vala_GetLocList()
                          \ 'defaults': {'force_highlight_callback': 1} })
 endfunction
 
+call SyntasticResgisterChecker("vala",function("SyntaxCheckers_vala_GetLocList"))

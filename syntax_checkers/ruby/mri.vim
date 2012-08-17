@@ -9,7 +9,7 @@
 "             See http://sam.zoy.org/wtfpl/COPYING for more details.
 "
 "============================================================================
-function! SyntaxCheckers_ruby_GetLocList()
+function! SyntaxCheckers_ruby_mri_GetLocList()
     let makeprg = expand(g:syntastic_ruby_exec).' -w -T1 -c '.shellescape(expand('%'))
     if !has('win32')
         let makeprg = 'RUBYOPT= ' . makeprg
@@ -27,3 +27,5 @@ function! SyntaxCheckers_ruby_GetLocList()
     let errorformat .=  ',%-GSyntax OK,%E%f:%l: syntax error\, %m,%Z%p^,%W%f:%l: warning: %m,%Z%p^,%W%f:%l: %m,%-C%.%#'
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 endfunction
+
+call SyntasticResgisterChecker("ruby",function("SyntaxCheckers_ruby_mri_GetLocList"))

@@ -20,9 +20,10 @@ function! SyntaxCheckers_javascript_HighlightTerm(error)
     return '\V'.split(unexpected, "'")[1]
 endfunction
 
-function! SyntaxCheckers_javascript_GetLocList()
+function! SyntaxCheckers_javascript_jslint_GetLocList()
     let makeprg = "jslint " . g:syntastic_javascript_jslint_conf . " " . shellescape(expand('%'))
     let errorformat='%E %##%n %m,%-Z%.%#Line %l\, Pos %c,%-G%.%#'
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat, 'defaults': {'bufnr': bufnr("")} })
 endfunction
 
+call SyntasticResgisterChecker("javascript",function("SyntaxCheckers_javascript_jslint_GetLocList"))

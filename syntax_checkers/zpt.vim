@@ -34,3 +34,5 @@ function! SyntaxCheckers_zpt_GetLocList()
     let errorformat='%-P*** Error in: %f,%Z%*\s\, at line %l\, column %c,%E%*\s%m,%-Q'
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 endfunction
+
+call SyntasticResgisterChecker("zpt",function("SyntaxCheckers_zpt_GetLocList"))

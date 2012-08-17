@@ -44,3 +44,5 @@ function! SyntaxCheckers_xhtml_GetLocList()
     let errorformat='%Wline %l column %c - Warning: %m,%Eline %l column %c - Error: %m,%-G%.%#,%-G%.%#'
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat, 'defaults': {'bufnr': bufnr("")} })
 endfunction
+
+call SyntasticResgisterChecker("xhtml",function("SyntaxCheckers_xhtml_GetLocList"))

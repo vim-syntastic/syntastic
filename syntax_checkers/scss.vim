@@ -25,3 +25,5 @@ runtime syntax_checkers/sass.vim
 function! SyntaxCheckers_scss_GetLocList()
     return SyntaxCheckers_sass_GetLocList()
 endfunction
+
+call SyntasticResgisterChecker("scss",function("SyntaxCheckers_scss_GetLocList"))

@@ -12,9 +12,10 @@ if !exists("g:syntastic_javascript_jsl_conf")
     let g:syntastic_javascript_jsl_conf = ""
 endif
 
-function! SyntaxCheckers_javascript_GetLocList()
+function! SyntaxCheckers_javascript_jsl_GetLocList()
     let makeprg = "jsl " . g:syntastic_javascript_jsl_conf . " -nologo -nofilelisting -nosummary -nocontext -process ".shellescape(expand('%'))
     let errorformat='%W%f(%l): lint warning: %m,%-Z%p^,%W%f(%l): warning: %m,%-Z%p^,%E%f(%l): SyntaxError: %m,%-Z%p^,%-G'
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 endfunction
 
+call SyntasticResgisterChecker("javascript",function("SyntaxCheckers_javascript_jsl_GetLocList"))

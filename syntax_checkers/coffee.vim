@@ -47,3 +47,5 @@ function s:GetCoffeeLintErrors()
 
     return lint_results
 endfunction
+
+call SyntasticResgisterChecker("coffee",function("SyntaxCheckers_coffee_GetLocList"))

@@ -40,3 +40,5 @@ function! SyntaxCheckers_xml_GetLocList()
 
     return loclist
 endfunction
+
+call SyntasticResgisterChecker("xml",function("SyntaxCheckers_xml_GetLocList"))

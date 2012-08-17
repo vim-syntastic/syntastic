@@ -29,3 +29,4 @@ function! SyntaxCheckers_z80_GetLocList()
     return loclist
 endfunction
 
+call SyntasticResgisterChecker("z80",function("SyntaxCheckers_z80_GetLocList"))

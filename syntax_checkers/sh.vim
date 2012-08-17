@@ -50,3 +50,5 @@ function! SyntaxCheckers_sh_GetLocList()
     endif
     return []
 endfunction
+
+call SyntasticResgisterChecker("sh",function("SyntaxCheckers_sh_GetLocList"))

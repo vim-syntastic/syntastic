@@ -56,3 +56,5 @@ function! s:GetPHPCSErrors()
     let errorformat = '%-GFile\,Line\,Column\,Type\,Message\,Source\,Severity,"%f"\,%l\,%c\,%t%*[a-zA-Z]\,"%m"\,%*[a-zA-Z0-9_.-]\,%*[0-9]'
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat, 'subtype': 'Style' })
 endfunction
+
+call SyntasticResgisterChecker("php",function("SyntaxCheckers_php_GetLocList"))

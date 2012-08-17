@@ -24,3 +24,5 @@ function! SyntaxCheckers_tex_GetLocList()
     let errorformat =  '%-G** %f:,%E"%f"\, line %l: %m'
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 endfunction
+
+call SyntasticResgisterChecker("tex",function("SyntaxCheckers_tex_GetLocList"))

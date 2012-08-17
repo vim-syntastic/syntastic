@@ -130,3 +130,4 @@ let &cpo = s:save_cpo
 unlet s:save_cpo
 
 " vim: set et sts=4 sw=4:
+call SyntasticResgisterChecker("ada",function("SyntaxCheckers_ada_GetLocList"))

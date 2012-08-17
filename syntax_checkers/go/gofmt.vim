@@ -9,8 +9,10 @@
 "             See http://sam.zoy.org/wtfpl/COPYING for more details.
 "
 "============================================================================
-function! SyntaxCheckers_go_GetLocList()
+function! SyntaxCheckers_go_fmt_GetLocList()
     let makeprg = 'gofmt %'
     let errorformat = '%f:%l:%c: %m,%-G%.%#'
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat, 'defaults': {'type': 'e'} })
 endfunction
+
+call SyntasticResgisterChecker("go",function("SyntaxCheckers_go_fmt_GetLocList"))

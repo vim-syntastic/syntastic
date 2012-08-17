@@ -36,3 +36,4 @@ function! SyntaxCheckers_less_GetLocList()
                          \ 'defaults': {'bufnr': bufnr(""), 'text': "Syntax error"} })
 endfunction
 
+call SyntasticResgisterChecker("less",function("SyntaxCheckers_less_GetLocList"))
