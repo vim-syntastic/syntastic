@@ -36,4 +36,4 @@ function! SyntaxCheckers_gentoo_metadata_GetLocList()
     return SyntaxCheckers_xml_GetLocList()
 endfunction
 
-call SyntasticResgisterChecker("gentoo_metadata",function("SyntaxCheckers_gentoo_metadata_GetLocList"))
+call SyntasticRegisterChecker("gentoo_metadata",function("SyntaxCheckers_gentoo_metadata_GetLocList"))

@@ -28,4 +28,4 @@ function! SyntaxCheckers_ruby_mri_GetLocList()
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 endfunction
 
-call SyntasticResgisterChecker("ruby",function("SyntaxCheckers_ruby_mri_GetLocList"))
+call SyntasticRegisterChecker("ruby",function("SyntaxCheckers_ruby_mri_GetLocList"))

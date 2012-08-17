@@ -156,4 +156,4 @@ let &cpo = s:save_cpo
 unlet s:save_cpo
 
 " vim: set et sts=4 sw=4:
-call SyntasticResgisterChecker("c",function("SyntaxCheckers_c_GetLocList"))
+call SyntasticRegisterChecker("c",function("SyntaxCheckers_c_GetLocList"))

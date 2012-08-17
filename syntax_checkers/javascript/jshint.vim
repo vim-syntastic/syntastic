@@ -19,4 +19,4 @@ function! SyntaxCheckers_javascript_jshint_GetLocList()
     let errorformat = '%ELine %l:%c,%Z\\s%#Reason: %m,%C%.%#,%f: line %l\, col %c\, %m,%-G%.%#'
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat, 'defaults': {'bufnr': bufnr('')} })
 endfunction
-call SyntasticResgisterChecker("javascript",function("SyntaxCheckers_javascript_jshint_GetLocList"))
+call SyntasticRegisterChecker("javascript",function("SyntaxCheckers_javascript_jshint_GetLocList"))

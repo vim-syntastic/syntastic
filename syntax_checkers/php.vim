@@ -57,4 +57,4 @@ function! s:GetPHPCSErrors()
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat, 'subtype': 'Style' })
 endfunction
 
-call SyntasticResgisterChecker("php",function("SyntaxCheckers_php_GetLocList"))
+call SyntasticRegisterChecker("php",function("SyntaxCheckers_php_GetLocList"))

@@ -26,4 +26,4 @@ function! SyntaxCheckers_javascript_jslint_GetLocList()
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat, 'defaults': {'bufnr': bufnr("")} })
 endfunction
 
-call SyntasticResgisterChecker("javascript",function("SyntaxCheckers_javascript_jslint_GetLocList"))
+call SyntasticRegisterChecker("javascript",function("SyntaxCheckers_javascript_jslint_GetLocList"))

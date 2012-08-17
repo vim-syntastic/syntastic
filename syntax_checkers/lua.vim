@@ -53,4 +53,4 @@ function! SyntaxCheckers_lua_GetLocList()
 
 endfunction
 
-call SyntasticResgisterChecker("lua",function("SyntaxCheckers_lua_GetLocList"))
+call SyntasticRegisterChecker("lua",function("SyntaxCheckers_lua_GetLocList"))

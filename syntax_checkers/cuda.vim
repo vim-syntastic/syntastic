@@ -48,4 +48,4 @@ function! SyntaxCheckers_cuda_GetLocList()
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 endfunction
 
-call SyntasticResgisterChecker("cuda",function("SyntaxCheckers_cuda_GetLocList"))
+call SyntasticRegisterChecker("cuda",function("SyntaxCheckers_cuda_GetLocList"))

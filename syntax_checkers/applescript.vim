@@ -42,4 +42,4 @@ function! SyntaxCheckers_applescript_GetLocList()
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 endfunction
 
-call SyntasticResgisterChecker("applescript",function("SyntaxCheckers_applescript_GetLocList"))
+call SyntasticRegisterChecker("applescript",function("SyntaxCheckers_applescript_GetLocList"))

@@ -31,4 +31,4 @@ function! SyntaxCheckers_scala_GetLocList()
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 endfunction
 
-call SyntasticResgisterChecker("scala",function("SyntaxCheckers_scala_GetLocList"))
+call SyntasticRegisterChecker("scala",function("SyntaxCheckers_scala_GetLocList"))

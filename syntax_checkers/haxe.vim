@@ -54,4 +54,4 @@ function! SyntaxCheckers_haxe_GetLocList()
     endif
 endfunction
 
-call SyntasticResgisterChecker("haxe",function("SyntaxCheckers_haxe_GetLocList"))
+call SyntasticRegisterChecker("haxe",function("SyntaxCheckers_haxe_GetLocList"))

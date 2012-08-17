@@ -29,4 +29,4 @@ function! SyntaxCheckers_yaml_GetLocList()
                          \ 'defaults': {'bufnr': bufnr("")} })
 endfunction
 
-call SyntasticResgisterChecker("yaml",function("SyntaxCheckers_yaml_GetLocList"))
+call SyntasticRegisterChecker("yaml",function("SyntaxCheckers_yaml_GetLocList"))

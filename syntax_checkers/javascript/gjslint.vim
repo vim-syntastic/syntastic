@@ -18,4 +18,4 @@ function! SyntaxCheckers_javascript_gjslint_GetLocList()
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 endfunction
 
-call SyntasticResgisterChecker("javascript",function("SyntaxCheckers_javascript_gjslint_GetLocList"))
+call SyntasticRegisterChecker("javascript",function("SyntaxCheckers_javascript_gjslint_GetLocList"))

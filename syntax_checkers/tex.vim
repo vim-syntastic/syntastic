@@ -25,4 +25,4 @@ function! SyntaxCheckers_tex_GetLocList()
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 endfunction
 
-call SyntasticResgisterChecker("tex",function("SyntaxCheckers_tex_GetLocList"))
+call SyntasticRegisterChecker("tex",function("SyntaxCheckers_tex_GetLocList"))

@@ -15,4 +15,4 @@ function! SyntaxCheckers_json_jsonval_GetLocList()
     let errorformat = '%E%f:\ %m\ at\ line\ %l,%-G%.%#'
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat, 'defaults': {'bufnr': bufnr('')} })
 endfunction
-call SyntasticResgisterChecker("json",function("SyntaxCheckers_json_jsonval_GetLocList"))
+call SyntasticRegisterChecker("json",function("SyntaxCheckers_json_jsonval_GetLocList"))

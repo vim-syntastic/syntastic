@@ -41,4 +41,4 @@ function! SyntaxCheckers_css_GetLocList()
 
 endfunction
 
-call SyntasticResgisterChecker("css",function("SyntaxCheckers_css_GetLocList"))
+call SyntasticRegisterChecker("css",function("SyntaxCheckers_css_GetLocList"))

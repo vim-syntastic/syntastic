@@ -26,4 +26,4 @@ function! SyntaxCheckers_cucumber_GetLocList()
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 endfunction
 
-call SyntasticResgisterChecker("cucumber",function("SyntaxCheckers_cucumber_GetLocList"))
+call SyntasticRegisterChecker("cucumber",function("SyntaxCheckers_cucumber_GetLocList"))

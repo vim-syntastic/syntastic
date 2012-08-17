@@ -34,4 +34,4 @@ function! SyntaxCheckers_sass_GetLocList()
     return loclist
 endfunction
 
-call SyntasticResgisterChecker("sass",function("SyntaxCheckers_sass_GetLocList"))
+call SyntasticRegisterChecker("sass",function("SyntaxCheckers_sass_GetLocList"))

@@ -73,4 +73,4 @@ function! SyntaxCheckers_html_tidy_GetLocList()
     return loclist
 endfunction
 
-call SyntasticResgisterChecker("html",function("SyntaxCheckers_html_tidy_GetLocList"))
+call SyntasticRegisterChecker("html",function("SyntaxCheckers_html_tidy_GetLocList"))

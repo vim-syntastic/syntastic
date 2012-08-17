@@ -15,4 +15,4 @@ function! SyntaxCheckers_go_fmt_GetLocList()
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat, 'defaults': {'type': 'e'} })
 endfunction
 
-call SyntasticResgisterChecker("go",function("SyntaxCheckers_go_fmt_GetLocList"))
+call SyntasticRegisterChecker("go",function("SyntaxCheckers_go_fmt_GetLocList"))

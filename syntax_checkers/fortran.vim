@@ -43,4 +43,4 @@ function! SyntaxCheckers_fortran_GetLocList()
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 endfunction
 
-call SyntasticResgisterChecker("fortran",function("SyntaxCheckers_fortran_GetLocList"))
+call SyntasticRegisterChecker("fortran",function("SyntaxCheckers_fortran_GetLocList"))

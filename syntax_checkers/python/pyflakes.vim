@@ -33,4 +33,4 @@ function! SyntaxCheckers_python_pyflakes_GetLocList()
     return errors
 endfunction
 
-call SyntasticResgisterChecker("python",function("SyntaxCheckers_python_pyflakes_GetLocList"))
+call SyntasticRegisterChecker("python",function("SyntaxCheckers_python_pyflakes_GetLocList"))

@@ -15,4 +15,4 @@ function! SyntaxCheckers_json_jsonlint_GetLocList()
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat, 'defaults': {'bufnr': bufnr('')} })
 endfunction
 
-call SyntasticResgisterChecker("json",function("SyntaxCheckers_json_jsonlint_GetLocList"))
+call SyntasticRegisterChecker("json",function("SyntaxCheckers_json_jsonlint_GetLocList"))

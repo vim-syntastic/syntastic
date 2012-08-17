@@ -33,4 +33,4 @@ function! SyntaxCheckers_eruby_GetLocList()
 
 endfunction
 
-call SyntasticResgisterChecker("eruby",function("SyntaxCheckers_eruby_GetLocList"))
+call SyntasticRegisterChecker("eruby",function("SyntaxCheckers_eruby_GetLocList"))

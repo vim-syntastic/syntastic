@@ -30,4 +30,4 @@ function! SyntaxCheckers_lisp_GetLocList()
   return SyntasticMake({ 'makeprg': makeprg, 'errorformat': efm })
 endfunction
 
-call SyntasticResgisterChecker("lisp",function("SyntaxCheckers_lisp_GetLocList"))
+call SyntasticRegisterChecker("lisp",function("SyntaxCheckers_lisp_GetLocList"))

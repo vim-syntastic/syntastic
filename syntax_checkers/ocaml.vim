@@ -88,4 +88,4 @@ function! SyntaxCheckers_ocaml_GetLocList()
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 endfunction
 
-call SyntasticResgisterChecker("ocaml",function("SyntaxCheckers_ocaml_GetLocList"))
+call SyntasticRegisterChecker("ocaml",function("SyntaxCheckers_ocaml_GetLocList"))

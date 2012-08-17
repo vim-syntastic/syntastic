@@ -35,4 +35,4 @@ function! SyntaxCheckers_zpt_GetLocList()
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 endfunction
 
-call SyntasticResgisterChecker("zpt",function("SyntaxCheckers_zpt_GetLocList"))
+call SyntasticRegisterChecker("zpt",function("SyntaxCheckers_zpt_GetLocList"))

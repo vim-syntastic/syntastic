@@ -13,4 +13,4 @@ function! SyntaxCheckers_python_pylint_GetLocList()
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 endfunction
 
-call SyntasticResgisterChecker("python",function("SyntaxCheckers_python_pylint_GetLocList"))
+call SyntasticRegisterChecker("python",function("SyntaxCheckers_python_pylint_GetLocList"))

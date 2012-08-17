@@ -41,4 +41,4 @@ function! SyntaxCheckers_lhaskell_GetLocList()
     return SyntaxCheckers_haskell_GetLocList()
 endfunction
 
-call SyntasticResgisterChecker("haskell",function("SyntaxCheckers_haskell_GetLocList"))
+call SyntasticRegisterChecker("haskell",function("SyntaxCheckers_haskell_GetLocList"))

@@ -49,4 +49,4 @@ function! SyntaxCheckers_perl_GetLocList()
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 endfunction
 
-call SyntasticResgisterChecker("perl",function("SyntaxCheckers_perl_GetLocList"))
+call SyntasticRegisterChecker("perl",function("SyntaxCheckers_perl_GetLocList"))

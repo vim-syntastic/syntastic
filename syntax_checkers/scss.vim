@@ -26,4 +26,4 @@ function! SyntaxCheckers_scss_GetLocList()
     return SyntaxCheckers_sass_GetLocList()
 endfunction
 
-call SyntasticResgisterChecker("scss",function("SyntaxCheckers_scss_GetLocList"))
+call SyntasticRegisterChecker("scss",function("SyntaxCheckers_scss_GetLocList"))

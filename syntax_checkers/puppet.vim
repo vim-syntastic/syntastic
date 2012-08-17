@@ -93,4 +93,4 @@ function! SyntaxCheckers_puppet_GetLocList()
     return errors
 endfunction
 
-call SyntasticResgisterChecker("puppet",function("SyntaxCheckers_puppet_GetLocList"))
+call SyntasticRegisterChecker("puppet",function("SyntaxCheckers_puppet_GetLocList"))

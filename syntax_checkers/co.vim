@@ -26,4 +26,4 @@ function! SyntaxCheckers_co_GetLocList()
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 endfunction
 
-call SyntasticResgisterChecker("co",function("SyntaxCheckers_co_GetLocList"))
+call SyntasticRegisterChecker("co",function("SyntaxCheckers_co_GetLocList"))

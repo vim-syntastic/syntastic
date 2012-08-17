@@ -31,4 +31,4 @@ function! SyntaxCheckers_nasm_GetLocList()
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 endfunction
 
-call SyntasticResgisterChecker("nasm",function("SyntaxCheckers_nasm_GetLocList"))
+call SyntasticRegisterChecker("nasm",function("SyntaxCheckers_nasm_GetLocList"))

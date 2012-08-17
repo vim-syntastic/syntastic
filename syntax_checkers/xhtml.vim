@@ -45,4 +45,4 @@ function! SyntaxCheckers_xhtml_GetLocList()
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat, 'defaults': {'bufnr': bufnr("")} })
 endfunction
 
-call SyntasticResgisterChecker("xhtml",function("SyntaxCheckers_xhtml_GetLocList"))
+call SyntasticRegisterChecker("xhtml",function("SyntaxCheckers_xhtml_GetLocList"))

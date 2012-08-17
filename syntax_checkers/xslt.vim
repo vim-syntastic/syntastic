@@ -37,4 +37,4 @@ function! SyntaxCheckers_xslt_GetLocList()
     return loclist
 endfunction
 
-call SyntasticResgisterChecker("xslt",function("SyntaxCheckers_xslt_GetLocList"))
+call SyntasticRegisterChecker("xslt",function("SyntaxCheckers_xslt_GetLocList"))

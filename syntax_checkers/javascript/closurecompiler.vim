@@ -42,4 +42,4 @@ function! SyntaxCheckers_javascript_closure_compiler_GetLocList()
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 endfunction
 
-call SyntasticResgisterChecker("javascript",function("SyntaxCheckers_javascript_closure_compiler_GetLocList"))
+call SyntasticRegisterChecker("javascript",function("SyntaxCheckers_javascript_closure_compiler_GetLocList"))

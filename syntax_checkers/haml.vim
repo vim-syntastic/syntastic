@@ -25,4 +25,4 @@ function! SyntaxCheckers_haml_GetLocList()
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 endfunction
 
-call SyntasticResgisterChecker("haml",function("SyntaxCheckers_haml_GetLocList"))
+call SyntasticRegisterChecker("haml",function("SyntaxCheckers_haml_GetLocList"))

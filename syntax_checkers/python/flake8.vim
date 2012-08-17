@@ -27,4 +27,4 @@ function! SyntaxCheckers_python_flake8_GetLocList()
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 endfunction
 
-call SyntasticResgisterChecker("python",function("SyntaxCheckers_python_flake8_GetLocList"))
+call SyntasticRegisterChecker("python",function("SyntaxCheckers_python_flake8_GetLocList"))
