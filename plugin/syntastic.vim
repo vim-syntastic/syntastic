@@ -187,6 +187,8 @@ function! s:ClearCache()
     unlet! b:syntastic_warnings
 endfunction
 
+let g:Syntastic_checkers = {}
+
 "detect and cache all syntax errors in this buffer
 "
 "depends on a function called SyntaxCheckers_{&ft}_GetLocList() existing
@@ -201,7 +203,12 @@ function! s:CacheErrors()
         let fts = substitute(&ft, '-', '_', 'g')
         for ft in split(fts, '\.')
             if s:Checkable(ft)
-                let errors = SyntaxCheckers_{ft}_GetLocList()
+                let checkers = get(g:Syntastic_checkers, ft, [])
+                let errors = []
+                for Checker in checkers
+                    let errors = errors + Checker() 
+                endfor
+                "let errors = SyntaxCheckers_{ft}_GetLocList()
                 "keep only lines that effectively match an error/warning
                 let errors = s:FilterLocList({'valid': 1}, errors)
                 "make errors have type "E" by default
@@ -210,6 +217,16 @@ function! s:CacheErrors()
             endif
         endfor
     endif
+endfunction
+
+function! Syntastic_register_checker(fileType,checker)
+    "if exists(g:Syntastic_checkers)
+        "let g:Syntastic_checkers = {}
+    "endif
+
+    let checkers = get(g:Syntastic_checkers, a:fileType, [])
+    call add(checkers,a:checker)
+    let g:Syntastic_checkers[a:fileType]=checkers
 endfunction
 
 "toggle the g:syntastic_mode_map['mode']
