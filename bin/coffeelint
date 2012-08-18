@@ -39,7 +39,7 @@ CoffeeLint is freely distributable under the MIT license.
     for (_i = 0, _len = paths.length; _i < _len; _i++) {
       p = paths[_i];
       if (fs.statSync(p).isDirectory()) {
-        files = files.concat(glob.sync(path.join(p, "**", "*.coffee")));
+        files = files.concat(glob.sync("" + p + "/**/*.coffee"));
       } else {
         files.push(p);
       }
