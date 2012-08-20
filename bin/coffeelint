@@ -257,6 +257,7 @@ CoffeeLint is freely distributable under the MIT license.
 
     JSLintReporter.prototype.escape = function(msg) {
       var r, replacements, _i, _len;
+      msg = "" + msg;
       if (!msg) {
         return;
       }

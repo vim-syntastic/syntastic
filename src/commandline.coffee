@@ -158,6 +158,8 @@ class JSLintReporter extends Reporter
         @print "</jslint>"
 
     escape : (msg) ->
+        # Force msg to be a String
+        msg = "" + msg
         unless msg
             return
         # Perhaps some other HTML Special Chars should be added here
