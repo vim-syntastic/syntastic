@@ -95,6 +95,11 @@ RULES =
         level : IGNORE
         message : 'Operators must be spaced properly'
 
+    newlines_after_classes :
+        value : 3
+        level : IGNORE
+        message : 'Wrong count of newlines between a class and other code'
+
 
 # Some repeatedly used regular expressions.
 regexes =
@@ -147,12 +152,26 @@ class LineLinter
         @tokensByLine = tokensByLine
         @lines = @source.split('\n')
         @lineCount = @lines.length
+        
+        # maintains some contextual information
+        #   inClass: bool; in class or not
+        #   lastUnemptyLineInClass: null or lineNumber, if the last not-empty
+        #                     line was in a class it holds its number
+        #   classIndents: the number of indents within a class
+        @context = {
+            class: {
+                inClass: false
+                lastUnemptyLineInClass: null
+                classIndents: null
+            }
+        }
 
     lint : () ->
         errors = []
         for line, lineNumber in @lines
             @lineNumber = lineNumber
             @line = line
+            @maintainClassContext()
             error = @lintLine()
             errors.push(error) if error
         errors
@@ -164,7 +183,8 @@ class LineLinter
                @checkLineLength() or
                @checkTrailingSemicolon() or
                @checkLineEndings() or
-               @checkComments()
+               @checkComments() or
+               @checkNewlinesAfterClasses()
 
     checkTabs : () ->
         # Only check lines that have compiled tokens. This helps
@@ -232,6 +252,23 @@ class LineLinter
             block_config[cmd][@lineNumber] = rules
         return null
 
+    checkNewlinesAfterClasses : () ->
+        rule = 'newlines_after_classes'
+        ending = @config[rule].value
+
+        return null if not ending or @isLastLine()
+        
+        if not @context.class.inClass and
+                @context.class.lastUnemptyLineInClass? and
+                ((@lineNumber - 1) - @context.class.lastUnemptyLineInClass) isnt
+                ending
+            got = (@lineNumber - 1) - @context.class.lastUnemptyLineInClass
+            return @createLineError( rule, {
+                context: "Expected #{ending} got #{got}"
+            } )
+        
+        null
+    
     createLineError : (rule, attrs = {}) ->
         attrs.lineNumber = @lineNumber + 1 # Lines are indexed by zero.
         attrs.level = @config[rule]?.level
@@ -247,6 +284,34 @@ class LineLinter
     # Return tokens for the given line number.
     getLineTokens : () ->
         @tokensByLine[@lineNumber] || []
+    
+    # maintain the contextual information for class-related stuff
+    maintainClassContext: () ->
+        if @context.class.inClass
+            if @lineHasToken()
+                for token in @tokensByLine[@lineNumber]
+                    if token[0] is "INDENT"
+                        @context.class.classIndents++
+                    else if token[0] is "OUTDENT"
+                        @context.class.classIndents--
+                        if @context.class.classIndents is 0
+                            @context.class.inClass = false
+                            @context.class.classIndents = null
+            
+            if @context.class.inClass and not @line.match( /^\s*$/ )
+                @context.class.lastUnemptyLineInClass = @lineNumber
+        else
+            unless @line.match(/\\s*/)
+                @context.class.lastUnemptyLineInClass = null
+
+            if @lineHasToken()
+                for token in @tokensByLine[@lineNumber]
+                    if token[0] is 'CLASS'
+                        @context.class.inClass = true
+                        @context.class.lastUnemptyLineInClass = @lineNumber
+                        @context.class.classIndents = 0
+
+        null
 
 #
 # A class that performs checks on the output of CoffeeScript's
