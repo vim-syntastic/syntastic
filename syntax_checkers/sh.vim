@@ -44,7 +44,8 @@ function! SyntaxCheckers_sh_GetLocList()
             call add(result, {'lnum' : line,
                             \ 'text' : msg,
                             \ 'bufnr': bufnr(''),
-                            \ 'type': 'E' })
+                            \ 'type': 'E',
+                            \ 'valid': 1})
         endfor
         return result
     endif
