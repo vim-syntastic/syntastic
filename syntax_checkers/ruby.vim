@@ -23,7 +23,8 @@ if !exists("g:syntastic_ruby_exec")
 endif
 
 "bail if the user doesnt have ruby installed where they said it is
-if !executable(expand(g:syntastic_ruby_exec))
+silent! system(shellescape(expand(g:syntastic_ruby_exec) . ' -v'))
+if v:shell_error != 0
     finish
 endif
 
