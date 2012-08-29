@@ -41,11 +41,13 @@ function! s:PuppetLintExtractVersion()
 endfunction
 
 let s:puppetVersion = s:PuppetExtractVersion()
-let s:lintVersion = s:PuppetLintExtractVersion()
+if !g:syntastic_puppet_lint_disable
+    let s:lintVersion = s:PuppetLintExtractVersion()
 
-if !(s:lintVersion[0] >= '0' && s:lintVersion[1] >= '1' && s:lintVersion[2] >= '10')
-    let g:syntastic_puppet_lint_disable = 1
-endif
+    if !(s:lintVersion[0] >= '0' && s:lintVersion[1] >= '1' && s:lintVersion[2] >= '10')
+        let g:syntastic_puppet_lint_disable = 1
+    endif
+end
 
 function! s:getPuppetLintErrors()
     if !exists("g:syntastic_puppet_lint_arguments")
