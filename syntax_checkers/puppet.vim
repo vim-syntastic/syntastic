@@ -42,9 +42,16 @@ endfunction
 
 let s:puppetVersion = s:PuppetExtractVersion()
 if !g:syntastic_puppet_lint_disable
-    let s:lintVersion = s:PuppetLintExtractVersion()
+    let [s:lint_major, s:lint_minor, s:lint_micro] = s:PuppetLintExtractVersion()
 
-    if !(s:lintVersion[0] >= '0' && s:lintVersion[1] >= '1' && s:lintVersion[2] >= '10')
+    " Check that puppet-lint version >= 0.1.10
+    if !(s:lint_major > 0 ||
+        \    (s:lint_major == 0 &&
+        \        (s:lint_minor > 1 ||
+        \            (s:lint_minor == 1 && s:lint_micro >= 10)
+        \        )
+        \    )
+        \)
         let g:syntastic_puppet_lint_disable = 1
     endif
 end
