@@ -28,13 +28,13 @@ if !executable("puppet-lint")
 endif
 
 function! s:PuppetExtractVersion()
-    let output = system("puppet --version")
+    let output = system("puppet --version 2>/dev/null")
     let output = substitute(output, '\n$', '', '')
     return split(output, '\.')
 endfunction
 
 function! s:PuppetLintExtractVersion()
-    let output = system("puppet-lint --version")
+    let output = system("puppet-lint --version 2>/dev/null")
     let output = substitute(output, '\n$', '', '')
     let output = substitute(output, '^puppet-lint ', '', 'i')
     return split(output, '\.')
