@@ -27,17 +27,23 @@ if !executable("puppet-lint")
     let g:syntastic_puppet_lint_disable = 1
 endif
 
-function! s:PuppetExtractVersion()
-    let output = system("puppet --version 2>/dev/null")
-    let output = substitute(output, '\n$', '', '')
-    return split(output, '\.')
+function! s:PuppetVersion()
+    if !exists("s:puppet_version")
+        let output = system("puppet --version 2>/dev/null")
+        let output = substitute(output, '\n$', '', '')
+        let s:puppet_version = split(output, '\.')
+    endif
+    return s:puppet_version
 endfunction
 
-function! s:PuppetLintExtractVersion()
-    let output = system("puppet-lint --version 2>/dev/null")
-    let output = substitute(output, '\n$', '', '')
-    let output = substitute(output, '^puppet-lint ', '', 'i')
-    return split(output, '\.')
+function! s:PuppetLintVersion()
+    if !exists("s:puppet_lint_version")
+        let output = system("puppet-lint --version 2>/dev/null")
+        let output = substitute(output, '\n$', '', '')
+        let output = substitute(output, '^puppet-lint ', '', 'i')
+        let s:puppet_lint_version = split(output, '\.')
+    endif
+    return s:puppet_lint_version
 endfunction
 
 "the args must be arrays of the form [major, minor, macro]
@@ -53,9 +59,8 @@ function s:IsVersionAtLeast(installed, required)
     return a:installed[2] >= a:required[2]
 endfunction
 
-let s:puppetVersion = s:PuppetExtractVersion()
 if !g:syntastic_puppet_lint_disable
-    if !s:IsVersionAtLeast(s:PuppetLintExtractVersion(), [0,1,10])
+    if !s:IsVersionAtLeast(s:PuppetLintVersion(), [0,1,10])
         let g:syntastic_puppet_lint_disable = 1
     endif
 end
@@ -72,13 +77,13 @@ endfunction
 
 function! s:getPuppetMakeprg()
     "If puppet is >= version 2.7 then use the new executable
-    if s:IsVersionAtLeast(s:puppetVersion, [2,7,0])
+    if s:IsVersionAtLeast(s:PuppetVersion(), [2,7,0])
         let makeprg = 'puppet parser validate ' .
                     \ shellescape(expand('%')) .
                     \ ' --color=false'
 
         "add --ignoreimport for versions < 2.7.10
-        if s:puppetVersion[2] < '10'
+        if s:PuppetVersion()[2] < '10'
             let makeprg .= ' --ignoreimport'
         endif
 
