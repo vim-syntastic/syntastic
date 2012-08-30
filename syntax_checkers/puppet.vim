@@ -28,24 +28,33 @@ if !executable("puppet-lint")
 endif
 
 function! s:PuppetExtractVersion()
-    let output = system("puppet --version")
+    let output = system("puppet --version 2>/dev/null")
     let output = substitute(output, '\n$', '', '')
     return split(output, '\.')
 endfunction
 
 function! s:PuppetLintExtractVersion()
-    let output = system("puppet-lint --version")
+    let output = system("puppet-lint --version 2>/dev/null")
     let output = substitute(output, '\n$', '', '')
     let output = substitute(output, '^puppet-lint ', '', 'i')
     return split(output, '\.')
 endfunction
 
 let s:puppetVersion = s:PuppetExtractVersion()
-let s:lintVersion = s:PuppetLintExtractVersion()
+if !g:syntastic_puppet_lint_disable
+    let [s:lint_major, s:lint_minor, s:lint_micro] = s:PuppetLintExtractVersion()
 
-if !(s:lintVersion[0] >= '0' && s:lintVersion[1] >= '1' && s:lintVersion[2] >= '10')
-    let g:syntastic_puppet_lint_disable = 1
-endif
+    " Check that puppet-lint version >= 0.1.10
+    if !(s:lint_major > 0 ||
+        \    (s:lint_major == 0 &&
+        \        (s:lint_minor > 1 ||
+        \            (s:lint_minor == 1 && s:lint_micro >= 10)
+        \        )
+        \    )
+        \)
+        let g:syntastic_puppet_lint_disable = 1
+    endif
+end
 
 function! s:getPuppetLintErrors()
     if !exists("g:syntastic_puppet_lint_arguments")
