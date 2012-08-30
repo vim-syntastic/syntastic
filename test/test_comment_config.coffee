@@ -3,7 +3,7 @@ vows = require 'vows'
 assert = require 'assert'
 coffeelint = require path.join('..', 'lib', 'coffeelint')
 
-vows.describe('blockconfig').addBatch({
+vows.describe('comment config').addBatch({
 
     'Disable statements' :
 
