@@ -132,9 +132,7 @@ function! s:UpdateErrors(auto_invoked)
         call s:CacheErrors()
     end
 
-    if s:BufHasErrorsOrWarningsToDisplay()
-        call setloclist(0, s:LocList())
-    endif
+    call setloclist(0, s:LocList())
 
     if g:syntastic_enable_balloons
         call s:RefreshBalloons()
