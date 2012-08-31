@@ -65,41 +65,24 @@ if !executable(s:ocamlpp)
     finish
 endif
 
+if !exists('g:syntastic_ocaml_use_ocamlc') || !executable('ocamlc')
+    let g:syntastic_ocaml_use_ocamlc = 0
+endif
+
+if !exists(':syntastic_ocaml_use_janestreet_core')
+    let g:syntastic_ocaml_use_ocamlc = 0
+endif
+
+if !exists('g:syntastic_ocaml_use_ocamlbuild') || !executable("ocamlbuild")
+    let g:syntastic_ocaml_use_ocamlbuild = 0
+endif
+
 function! SyntaxCheckers_ocaml_GetLocList()
-    if exists('g:syntastic_ocaml_use_ocamlc') &&
-                \ g:syntastic_ocaml_use_ocamlc != 0 &&
-                \ executable("ocamlc")
-        if exists('g:syntastic_ocaml_use_janestreet_core') &&
-                    \ g:syntastic_ocaml_use_janestreet_core != 0
-            let makeprg = "ocamlc -I ". shellescape(expand(g:syntastic_ocaml_janestreet_core_dir)) ." -c ".shellescape(expand('%'))
-        else
-            let makeprg = "ocamlc -c ".shellescape(expand('%'))
-        endif
-    else
-        if exists('g:syntastic_ocaml_use_ocamlbuild') &&
-                    \ g:syntastic_ocaml_use_ocamlbuild != 0 &&
-                    \ executable("ocamlbuild") &&
-                    \ isdirectory('_build')
-            let makeprg = "ocamlbuild -quiet -no-log -tag annot,". s:ocamlpp. " -no-links -no-hygiene -no-sanitize ".
-                        \ shellescape(expand('%:r')).".cmi"
-        else
-            let extension = expand('%:e')
-            if match(extension, 'mly') >= 0
-                " ocamlyacc output can't be redirected, so use menhir
-                if !executable("menhir")
-                    return []
-                endif
-                let makeprg = "menhir --only-preprocess ".shellescape(expand('%')) . " >/dev/null"
-            elseif match(extension,'mll') >= 0
-                if !executable("ocamllex")
-                    return []
-                endif
-                let makeprg = "ocamllex -q -o /dev/null ".shellescape(expand('%'))
-            else
-                let makeprg = "camlp4o -o /dev/null ".shellescape(expand('%'))
-            endif
-        endif
+    let makeprg = s:GetMakeprg()
+    if makeprg == ""
+        return []
     endif
+
     let errorformat = '%AFile "%f"\, line %l\, characters %c-%*\d:,'.
                 \ '%AFile "%f"\, line %l\, characters %c-%*\d (end at line %*\d\, character %*\d):,'.
                 \ '%AFile "%f"\, line %l\, character %c:,'.
@@ -111,4 +94,49 @@ function! SyntaxCheckers_ocaml_GetLocList()
                 \ '%-G+%.%#'
 
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
+endfunction
+
+function s:GetMakeprg()
+    if g:syntastic_ocaml_use_ocamlc
+        return s:GetOcamlcMakeprg()
+    endif
+
+    if g:syntastic_ocaml_use_ocamlbuild && isdirectory('_build')
+        return s:GetOcamlBuildMakeprg()
+    endif
+
+    return s:GetOtherMakeprg()
+endfunction
+
+function s:GetOcamlcMakeprg()
+    if g:syntastic_ocaml_use_janestreet_core
+        return "ocamlc -I ". shellescape(expand(g:syntastic_ocaml_janestreet_core_dir)) ." -c ".shellescape(expand('%'))
+    else
+        return "ocamlc -c ".shellescape(expand('%'))
+    endif
+endfunction
+
+function s:GetOcamlBuildMakeprg()
+    return "ocamlbuild -quiet -no-log -tag annot,". s:ocamlpp. " -no-links -no-hygiene -no-sanitize ".
+                \ shellescape(expand('%:r')).".cmi"
+endfunction
+
+function s:GetOtherMakeprg()
+    "TODO: give this function a better name?
+    "
+    "TODO: should use throw/catch instead of returning an empty makeprg
+
+    let extension = expand('%:e')
+    let makeprg = ""
+
+    if match(extension, 'mly') >= 0 && executable("menhir")
+        " ocamlyacc output can't be redirected, so use menhir
+        let makeprg = "menhir --only-preprocess ".shellescape(expand('%')) . " >/dev/null"
+    elseif match(extension,'mll') >= 0 && executable("ocamllex")
+        let makeprg = "ocamllex -q -o /dev/null ".shellescape(expand('%'))
+    else
+        let makeprg = "camlp4o -o /dev/null ".shellescape(expand('%'))
+    endif
+
+    return makeprg
 endfunction
