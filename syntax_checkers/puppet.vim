@@ -19,6 +19,10 @@ if !executable("puppet")
     finish
 endif
 
+if !exists("g:syntastic_puppet_validate_disable")
+    let g:syntastic_puppet_validate_disable = 0
+endif
+
 if !exists("g:syntastic_puppet_lint_disable")
     let g:syntastic_puppet_lint_disable = 0
 endif
@@ -94,15 +98,18 @@ function! s:getPuppetMakeprg()
 endfunction
 
 function! SyntaxCheckers_puppet_GetLocList()
+    let errors = []
 
-    let makeprg = s:getPuppetMakeprg()
+    if !g:syntastic_puppet_validate_disable
+        let makeprg = s:getPuppetMakeprg()
 
-    "some versions of puppet (e.g. 2.7.10) output the message below if there
-    "are any syntax errors
-    let errorformat = '%-Gerr: Try ''puppet help parser validate'' for usage,'
-    let errorformat .= 'err: Could not parse for environment %*[a-z]: %m at %f:%l'
+        "some versions of puppet (e.g. 2.7.10) output the message below if there
+        "are any syntax errors
+        let errorformat = '%-Gerr: Try ''puppet help parser validate'' for usage,'
+        let errorformat .= 'err: Could not parse for environment %*[a-z]: %m at %f:%l'
 
-    let errors = SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
+        let errors = errors + SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
+    endif
 
     if !g:syntastic_puppet_lint_disable
         let errors = errors + s:getPuppetLintErrors()
