@@ -69,7 +69,7 @@ if !exists('g:syntastic_ocaml_use_ocamlc') || !executable('ocamlc')
     let g:syntastic_ocaml_use_ocamlc = 0
 endif
 
-if !exists(':syntastic_ocaml_use_janestreet_core')
+if !exists('g:syntastic_ocaml_use_janestreet_core')
     let g:syntastic_ocaml_use_ocamlc = 0
 endif
 
@@ -110,9 +110,12 @@ endfunction
 
 function s:GetOcamlcMakeprg()
     if g:syntastic_ocaml_use_janestreet_core
-        return "ocamlc -I ". shellescape(expand(g:syntastic_ocaml_janestreet_core_dir)) ." -c ".shellescape(expand('%'))
+        let a:build_cmd = "ocamlc -I "
+        let a:build_cmd .= expand(g:syntastic_ocaml_janestreet_core_dir)
+        let a:build_cmd .= " -c ".expand('%')
+        return a:build_cmd
     else
-        return "ocamlc -c ".shellescape(expand('%'))
+        return "ocamlc -c ". expand('%')
     endif
 endfunction
 
