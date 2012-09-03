@@ -10,7 +10,11 @@
 "
 "============================================================================
 function! SyntaxCheckers_go_GetLocList()
-    let makeprg = 'go build -o /dev/null'
+    if match(expand("%"), "test.go") == -1
+        let makeprg = 'go build -o /dev/null'
+    else
+        let makeprg = 'go test -c -o /dev/null'
+    endif
     let errorformat = '%f:%l:%c:%m,%f:%l%m,%-G#%.%#'
 
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
