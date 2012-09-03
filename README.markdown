@@ -50,11 +50,11 @@ enabled.
 Installation
 ------------
 
-Installing syntastic is easy but first you need to have something call pathogen.  If you already
+Installing syntastic is easy but first you need to have the pathogen plugin installed.  If you already
 have pathogen working then skip Step 1 and go to Step 2.
 
 Step 1: Install pathogen.vim
-============================
+----------------------------
 
 First I'll show you how to install tpope's [pathogen.vim](https://github.com/tpope/vim-pathogen) so that 
 it's easy to install syntastic.  Do this in your Terminal so that you get the pathogen.vim file 
@@ -69,7 +69,7 @@ Next you *need to add this* to your ~/.vimrc:
         call pathogen#infect()
 
 Step 2: Install syntastic as a pathogen bundle
-==============================================
+----------------------------------------------
 
 You now have pathogen installed and can put syntastic into ~/.vim/bundle like this:
     
