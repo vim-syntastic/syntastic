@@ -67,6 +67,7 @@ and the directories it needs:
 Next you *need to add this* to your ~/.vimrc:
 
         call pathogen#infect()
+        call pathogen#helptags()
 
 Step 2: Install syntastic as a pathogen bundle
 ----------------------------------------------
@@ -76,10 +77,6 @@ You now have pathogen installed and can put syntastic into ~/.vim/bundle like th
 
     cd ~/.vim/bundle
     git clone https://github.com/scrooloose/syntastic.git
-
-Quit vim and start it back up to reload it, then type:
-
-    :Helptags
 
 If you get an error when you do this, then you probably didn't install pathogen right.  Go back to
 step 1 and make sure you did the following:
