@@ -105,6 +105,11 @@ A. The most likely reason is that the syntax checker that it requires isn't inst
 
 Another reason it could fail is that the error output for the syntax checker may have changed. In this case, make sure you have the latest version of the syntax checker installed. If it still fails then create an issue - or better yet, create a pull request.
 
+__Q. How can I jump between the different errors without using the location list at the bottom of the window?__
+
+A. Vim provides serveral built in commands for this. See `:help :lnext` and `:help :lprev`.
+
+If you use these commands a lot then you may want to add shortcut mappings to your vimrc, or install something like [unimpared](https://github.com/tpope/vim-unimpaired) - which provides such mappings (among other things).
 
 Changelog
 ---------
