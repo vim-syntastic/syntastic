@@ -34,7 +34,7 @@ function! SyntaxCheckers_go_GetLocList()
     let errorformat = '%f:%l:%c:%m,%f:%l%m,%-G#%.%#'
 
     let oldcd = getcwd()
-    exec 'lcd ' . fnameescape(expand("%:p:h"))
+    exec 'lcd ' . fnameescape(expand('%:p:h'))
     let errors = SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
     exec 'lcd ' . fnameescape(oldcd)
     return errors
