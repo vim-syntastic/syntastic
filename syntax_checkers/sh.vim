@@ -35,18 +35,11 @@ function! SyntaxCheckers_sh_GetLocList()
     if len(s:GetShell()) == 0 || !executable(s:GetShell())
         return []
     endif
-    let output = split(system(s:GetShell().' -n '.shellescape(expand('%'))), '\n')
-    if v:shell_error != 0
-        let result = []
-        for err_line in output
-            let line = substitute(err_line, '^[^:]*:\D\{-}\(\d\+\):.*', '\1', '')
-            let msg = substitute(err_line, '^[^:]*:\D\{-}\d\+: \(.*\)', '\1', '')
-            call add(result, {'lnum' : line,
-                            \ 'text' : msg,
-                            \ 'bufnr': bufnr(''),
-                            \ 'type': 'E' })
-        endfor
-        return result
+    let makeprg = s:GetShell() . ' -n ' . shellescape(expand('%'))
+    if s:GetShell() == 'bash' || s:GetShell() == 'sh'
+        let errorformat = '%f: line %l: syntax %trror: %m'
+    elseif s:GetShell() == 'zsh'
+        let errorformat = '%f:%l: %m'
     endif
-    return []
+    return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat})
 endfunction
