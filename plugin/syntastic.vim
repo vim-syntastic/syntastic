@@ -198,7 +198,7 @@ function! s:CacheErrors()
         "functions legally for filetypes like "gentoo-metadata"
         let fts = substitute(&ft, '-', '_', 'g')
         for ft in split(fts, '\.')
-            if s:Checkable(ft)
+            if SyntasticCheckable(ft)
                 let errors = SyntaxCheckers_{ft}_GetLocList()
                 "keep only lines that effectively match an error/warning
                 let errors = s:FilterLocList({'valid': 1}, errors)
@@ -420,7 +420,7 @@ endfunction
 
 "check if a syntax checker exists for the given filetype - and attempt to
 "load one
-function! s:Checkable(ft)
+function! SyntasticCheckable(ft)
     if !exists("g:loaded_" . a:ft . "_syntax_checker")
         exec "runtime syntax_checkers/" . a:ft . ".vim"
     endif

@@ -32,14 +32,17 @@ function! s:GetShell()
 endfunction
 
 function! SyntaxCheckers_sh_GetLocList()
+    if s:GetShell() == 'zsh'
+        if SyntasticCheckable('zsh')
+            return SyntaxCheckers_zsh_GetLocList()
+        else
+            return []
+        endif
+    endif
     if len(s:GetShell()) == 0 || !executable(s:GetShell())
         return []
     endif
     let makeprg = s:GetShell() . ' -n ' . shellescape(expand('%'))
-    if s:GetShell() == 'bash' || s:GetShell() == 'sh'
-        let errorformat = '%f: line %l: syntax %trror: %m'
-    elseif s:GetShell() == 'zsh'
-        let errorformat = '%f:%l: %m'
-    endif
+    let errorformat = '%f: line %l: syntax %trror: %m'
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat})
 endfunction
