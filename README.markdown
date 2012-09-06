@@ -107,9 +107,9 @@ Another reason it could fail is that the error output for the syntax checker may
 
 __Q. How can I jump between the different errors without using the location list at the bottom of the window?__
 
-A. Vim provides serveral built in commands for this. See `:help :lnext` and `:help :lprev`.
+A. Vim provides several built in commands for this. See `:help :lnext` and `:help :lprev`.
 
-If you use these commands a lot then you may want to add shortcut mappings to your vimrc, or install something like [unimpared](https://github.com/tpope/vim-unimpaired) - which provides such mappings (among other things).
+If you use these commands a lot then you may want to add shortcut mappings to your vimrc, or install something like [unimpaired](https://github.com/tpope/vim-unimpaired) - which provides such mappings (among other things).
 
 Changelog
 ---------
