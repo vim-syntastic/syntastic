@@ -241,7 +241,10 @@ function! s:ModeMapAllowsAutoChecking()
 endfunction
 
 function! s:BufHasErrorsOrWarningsToDisplay()
-    return len(s:Errors()) || (!g:syntastic_quiet_warnings && !empty(s:LocList()))
+    if empty(s:LocList())
+        return 0
+    endif
+    return len(s:Errors()) || !g:syntastic_quiet_warnings
 endfunction
 
 function! s:Errors()
