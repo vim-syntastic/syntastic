@@ -19,8 +19,6 @@ if !executable("zsh")
     finish
 endif
 
-exec "runtime! syntax_checkers/sh.vim"
-
 function! SyntaxCheckers_zsh_GetLocList()
     let makeprg = 'zsh -n ' . shellescape(expand('%'))
     let errorformat = '%f:%l: %m'
