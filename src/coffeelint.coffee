@@ -95,6 +95,10 @@ RULES =
         level : IGNORE
         message : 'Operators must be spaced properly'
 
+    coffeescript_error :
+        level : ERROR
+        message : '' # The default coffeescript error is fine.
+
 
 # Some repeatedly used regular expressions.
 regexes =
@@ -519,10 +523,14 @@ class ASTLinter
     constructor : (source, config) ->
         @source = source
         @config = config
-        @node = CoffeeScript.nodes(source)
         @errors = []
 
     lint : () ->
+        try
+            @node = CoffeeScript.nodes(@source)
+        catch coffeeError
+            @errors.push @_parseCoffeeScriptError(coffeeError)
+            return @errors
         @lintNode(@node)
         @errors
 
@@ -561,6 +569,23 @@ class ASTLinter
         # Return the complexity for the benefit of parent nodes.
         return complexity
 
+    _parseCoffeeScriptError : (coffeeError) ->
+        rule = RULES['coffeescript_error']
+
+        message = coffeeError.toString()
+
+        # Parse the line number
+        lineNumber = -1
+        match = /line (\d)/.exec message
+        lineNumber = parseInt match[1], 10 if match?.length > 1
+        attrs = {
+            message: message
+            level: rule.level
+            lineNumber: lineNumber
+        }
+        return  createError 'coffeescript_error', attrs
+
+
 
 # Merge default and user configuration.
 mergeDefaultConfig = (userConfig) ->
@@ -596,6 +621,9 @@ coffeelint.lint = (source, userConfig = {}) ->
                         disabled_initially.push r
                         config[r] = { level: 'error' }
 
+   # Do AST linting first so all compile errors are caught.
+    astErrors = new ASTLinter(source, config).lint()
+
     # Do lexical linting.
     lexicalLinter = new LexicalLinter(source, config)
     lexErrors = lexicalLinter.lint()
@@ -604,9 +632,6 @@ coffeelint.lint = (source, userConfig = {}) ->
     tokensByLine = lexicalLinter.tokensByLine
     lineLinter = new LineLinter(source, config, tokensByLine)
     lineErrors = lineLinter.lint()
-
-    # Do AST linting.
-    astErrors = new ASTLinter(source, config).lint()
 
     # Sort by line number and return.
     errors = lexErrors.concat(lineErrors, astErrors)

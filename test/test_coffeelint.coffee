@@ -31,11 +31,18 @@ vows.describe('coffeelint').addBatch({
         topic : '''
             fruits = [orange, apple, banana]
             switch 'a'
-             when in fruits
-               something
+              when in fruits
+                something
         '''
 
         'are reported' : (source) ->
-            assert.throws -> coffeelint.lint(source)
+            errors = coffeelint.lint(source)
+            assert.isArray(errors)
+            assert.lengthOf(errors, 1)
+            error = errors[0]
+            assert.equal(error.rule, 'coffeescript_error')
+            m = "Error: Parse error on line 3: Unexpected 'RELATION'"
+            assert.equal(error.message, m)
+            assert.equal(error.lineNumber, 3)
 
 }).export(module)
