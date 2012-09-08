@@ -23,7 +23,7 @@ else
 
 
 # The current version of Coffeelint.
-coffeelint.VERSION = "0.4.0"
+coffeelint.VERSION = "0.5.0"
 
 
 # CoffeeLint error levels.
@@ -128,7 +128,7 @@ createError = (rule, attrs = {}) ->
         return defaults(attrs, RULES[rule])
     else
         null
-        
+
 # Store suppressions in the form of { line #: type }
 block_config =
     enable: {}
@@ -584,7 +584,7 @@ mergeDefaultConfig = (userConfig) ->
 #
 coffeelint.lint = (source, userConfig = {}) ->
     config = mergeDefaultConfig(userConfig)
-    
+
     # Check ahead for inline enabled rules
     disabled_initially = []
     for l in source.split('\n')
@@ -611,7 +611,7 @@ coffeelint.lint = (source, userConfig = {}) ->
     # Sort by line number and return.
     errors = lexErrors.concat(lineErrors, astErrors)
     errors.sort((a, b) -> a.lineNumber - b.lineNumber)
-    
+
     # Helper to remove rules from disabled list
     difference = (a, b) ->
         j = 0
@@ -620,7 +620,7 @@ coffeelint.lint = (source, userConfig = {}) ->
                 a.splice(j, 1)
             else
                 j++
-    
+
     # Disable/enable rules for inline blocks
     all_errors = errors
     errors = []
@@ -643,10 +643,10 @@ coffeelint.lint = (source, userConfig = {}) ->
             if e.lineNumber is i + 1 or not e.lineNumber?
                 e = all_errors.shift()
                 errors.push e unless e.rule in disabled
-            
+
     block_config =
       'enable': {}
       'disable': {}
-    
+
     errors
 
