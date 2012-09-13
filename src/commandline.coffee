@@ -110,14 +110,16 @@ class Reporter
         @print "\n" + @stylize(msg)
 
     reportPath : (path, errors) ->
-        [overall, color] = if @errorReport.pathHasError(path)
+        [overall, color] = if hasError = @errorReport.pathHasError(path)
             [@err, 'red']
-        else if @errorReport.pathHasWarning(path)
+        else if hasWarning = @errorReport.pathHasWarning(path)
             [@warn, 'yellow']
         else
             [@ok, 'green']
-        @print "  #{overall} #{@stylize(path, color, 'bold')}"
+        unless options.argv.q or hasError
+            @print "  #{overall} #{@stylize(path, color, 'bold')}"
         for e in errors
+            continue if options.argv.q and e.level != 'error'
             o = if e.level == 'error' then @err else @warn
             msg = "     " +
                     "#{o} #{@stylize("#" + e.lineNumber, color)}: #{e.message}."
@@ -221,6 +223,7 @@ options = optimist
             .boolean("jshint")
             .boolean("r")
             .boolean("s")
+            .boolean("q", "Print errors only.")
 
 if options.argv.v
     console.log coffeelint.VERSION
