@@ -165,12 +165,17 @@ CoffeeLint is freely distributable under the MIT license.
     };
 
     Reporter.prototype.reportPath = function(path, errors) {
-      var color, e, msg, o, overall, _i, _len, _ref, _results;
-      _ref = this.errorReport.pathHasError(path) ? [this.err, 'red'] : this.errorReport.pathHasWarning(path) ? [this.warn, 'yellow'] : [this.ok, 'green'], overall = _ref[0], color = _ref[1];
-      this.print("  " + overall + " " + (this.stylize(path, color, 'bold')));
+      var color, e, hasError, hasWarning, msg, o, overall, _i, _len, _ref, _results;
+      _ref = (hasError = this.errorReport.pathHasError(path)) ? [this.err, 'red'] : (hasWarning = this.errorReport.pathHasWarning(path)) ? [this.warn, 'yellow'] : [this.ok, 'green'], overall = _ref[0], color = _ref[1];
+      if (!(options.argv.q || hasError)) {
+        this.print("  " + overall + " " + (this.stylize(path, color, 'bold')));
+      }
       _results = [];
       for (_i = 0, _len = errors.length; _i < _len; _i++) {
         e = errors[_i];
+        if (options.argv.q && e.level !== 'error') {
+          continue;
+        }
         o = e.level === 'error' ? this.err : this.warn;
         msg = "     " + ("" + o + " " + (this.stylize("#" + e.lineNumber, color)) + ": " + e.message + ".");
         if (e.context) {
@@ -305,7 +310,7 @@ CoffeeLint is freely distributable under the MIT license.
     return process.exit(errorReport.getExitCode());
   };
 
-  options = optimist.usage("Usage: coffeelint [options] source [...]").alias("f", "file").alias("h", "help").alias("v", "version").alias("s", "stdin").describe("f", "Specify a custom configuration file.").describe("h", "Print help information.").describe("v", "Print current version number.").describe("r", "Recursively lint .coffee files in subdirectories.").describe("csv", "Use the csv reporter.").describe("jslint", "Use the JSLint XML reporter.").describe("s", "Lint the source from stdin").boolean("csv").boolean("jshint").boolean("r").boolean("s");
+  options = optimist.usage("Usage: coffeelint [options] source [...]").alias("f", "file").alias("h", "help").alias("v", "version").alias("s", "stdin").describe("f", "Specify a custom configuration file.").describe("h", "Print help information.").describe("v", "Print current version number.").describe("r", "Recursively lint .coffee files in subdirectories.").describe("csv", "Use the csv reporter.").describe("jslint", "Use the JSLint XML reporter.").describe("s", "Lint the source from stdin").boolean("csv").boolean("jshint").boolean("r").boolean("s").boolean("q", "Print errors only.");
 
   if (options.argv.v) {
     console.log(coffeelint.VERSION);
