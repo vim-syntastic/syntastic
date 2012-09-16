@@ -102,6 +102,9 @@ if !exists("g:syntastic_loc_list_height")
     let g:syntastic_loc_list_height = 10
 endif
 
+if !exists("g:syntastic_check_on_save")
+    let g:syntastic_check_on_save = 1
+endif
 command! SyntasticToggleMode call s:ToggleMode()
 command! SyntasticCheck call s:UpdateErrors(0) <bar> redraw!
 command! Errors call s:ShowLocList()
@@ -115,7 +118,7 @@ augroup syntastic
     endif
 
     autocmd BufReadPost * if g:syntastic_check_on_open | call s:UpdateErrors(1) | endif
-    autocmd BufWritePost * call s:UpdateErrors(1)
+    autocmd BufWritePost * if g:syntastic_check_on_save | call s:UpdateErrors(1) | endif
 
     autocmd BufWinEnter * if empty(&bt) | call s:AutoToggleLocList() | endif
     autocmd BufWinLeave * if empty(&bt) | lclose | endif
