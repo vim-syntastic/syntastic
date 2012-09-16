@@ -11,7 +11,7 @@
 "============================================================================
 function! SyntaxCheckers_go_GetLocList()
     let makeprg = 'go build -o /dev/null'
-    let errorformat = '%f:%l:%c:%m,%f:%l%m,%-G#%.%#'
+    let errorformat = '%f:%l:%c:%m,%E%f:%l:%m,%C%m,%-G#%.%#'
 
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 endfunction
