@@ -54,6 +54,6 @@ function! SyntaxCheckers_sh_GetLocList()
     endif
 
     let makeprg = s:GetShell() . ' -n ' . shellescape(expand('%'))
-    let errorformat = '%f: line %l: syntax %trror: %m'
+    let errorformat = '%f: line %l: %m'
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat})
 endfunction
