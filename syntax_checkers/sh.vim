@@ -31,17 +31,28 @@ function! s:GetShell()
     return b:shell
 endfunction
 
-function! SyntaxCheckers_sh_GetLocList()
-    if s:GetShell() == 'zsh'
-        if SyntasticCheckable('zsh')
-            return SyntaxCheckers_zsh_GetLocList()
-        else
-            return []
-        endif
-    endif
-    if len(s:GetShell()) == 0 || !executable(s:GetShell())
+function! s:ForwardToZshChecker()
+    if SyntasticCheckable('zsh')
+        return SyntaxCheckers_zsh_GetLocList()
+    else
         return []
     endif
+
+endfunction
+
+function! s:IsShellValid()
+    return len(s:GetShell()) > 0 && executable(s:GetShell())
+endfunction
+
+function! SyntaxCheckers_sh_GetLocList()
+    if s:GetShell() == 'zsh'
+        return s:ForwardToZshChecker()
+    endif
+
+    if !s:IsShellValid()
+        return []
+    endif
+
     let makeprg = s:GetShell() . ' -n ' . shellescape(expand('%'))
     let errorformat = '%f: line %l: syntax %trror: %m'
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat})
