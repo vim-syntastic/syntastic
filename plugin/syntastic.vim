@@ -421,16 +421,6 @@ function! s:ClearErrorHighlights()
     endfor
 endfunction
 
-"check if a syntax checker exists for the given filetype - and attempt to
-"load one
-function! SyntasticCheckable(ft)
-    if !exists("g:loaded_" . a:ft . "_syntax_checker")
-        exec "runtime syntax_checkers/" . a:ft . ".vim"
-    endif
-
-    return exists("*SyntaxCheckers_". a:ft ."_GetLocList")
-endfunction
-
 "set up error ballons for the current set of errors
 function! s:RefreshBalloons()
     let b:syntastic_balloons = {}
@@ -498,6 +488,16 @@ function! s:OSSupportsShellpipeHack()
         let s:os_supports_shellpipe_hack = !s:running_windows && (s:uname !~ "FreeBSD") && (s:uname !~ "OpenBSD")
     endif
     return s:os_supports_shellpipe_hack
+endfunction
+
+"check if a syntax checker exists for the given filetype - and attempt to
+"load one
+function! SyntasticCheckable(ft)
+    if !exists("g:loaded_" . a:ft . "_syntax_checker")
+        exec "runtime syntax_checkers/" . a:ft . ".vim"
+    endif
+
+    return exists("*SyntaxCheckers_". a:ft ."_GetLocList")
 endfunction
 
 "return a string representing the state of buffer according to
