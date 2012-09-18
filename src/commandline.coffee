@@ -116,7 +116,7 @@ class Reporter
             [@warn, 'yellow']
         else
             [@ok, 'green']
-        unless options.argv.q or hasError
+        if not options.argv.q or hasError
             @print "  #{overall} #{@stylize(path, color, 'bold')}"
         for e in errors
             continue if options.argv.q and e.level != 'error'
