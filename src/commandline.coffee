@@ -220,7 +220,7 @@ options = optimist
             .describe("jslint", "Use the JSLint XML reporter.")
             .describe("s", "Lint the source from stdin")
             .boolean("csv")
-            .boolean("jshint")
+            .boolean("jslint")
             .boolean("r")
             .boolean("s")
             .boolean("q", "Print errors only.")
