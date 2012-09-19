@@ -167,7 +167,7 @@ CoffeeLint is freely distributable under the MIT license.
     Reporter.prototype.reportPath = function(path, errors) {
       var color, e, hasError, hasWarning, msg, o, overall, _i, _len, _ref, _results;
       _ref = (hasError = this.errorReport.pathHasError(path)) ? [this.err, 'red'] : (hasWarning = this.errorReport.pathHasWarning(path)) ? [this.warn, 'yellow'] : [this.ok, 'green'], overall = _ref[0], color = _ref[1];
-      if (!(options.argv.q || hasError)) {
+      if (!options.argv.q || hasError) {
         this.print("  " + overall + " " + (this.stylize(path, color, 'bold')));
       }
       _results = [];
