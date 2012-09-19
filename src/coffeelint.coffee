@@ -105,7 +105,7 @@ regexes =
     trailingWhitespace : /[^\s]+[\t ]+\r?$/
     indentation: /\S/
     camelCase: /^[A-Z][a-zA-Z\d]*$/
-    trailingSemicolon: /;$/
+    trailingSemicolon: /;\r?$/
     configStatement: /coffeelint:\s*(disable|enable)(?:=([\w\s,]*))?/
 
 

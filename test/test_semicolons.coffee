@@ -47,4 +47,20 @@ vows.describe('semicolons').addBatch({
             errors = coffeelint.lint(source)
             assert.isEmpty(errors)
 
+    'Semicolons with windows line endings' :
+
+        topic : () ->
+            "x = 1234;\r\n"
+
+        'works as expected' : (source) ->
+            config = {
+                line_endings : {value : 'windows'}
+            }
+            errors = coffeelint.lint(source, config)
+            assert.lengthOf(errors, 1)
+            error = errors[0]
+            assert.equal(error.lineNumber, 1)
+            assert.equal(error.message, "Line contains a trailing semicolon")
+            assert.equal(error.rule, 'no_trailing_semicolons')
+
 }).export(module)
