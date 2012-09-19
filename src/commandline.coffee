@@ -68,7 +68,7 @@ class ErrorReport
 # Reports errors to the command line.
 class Reporter
 
-    constructor : (errorReport, colorize=true) ->
+    constructor : (errorReport, colorize = true) ->
         @errorReport = errorReport
         @colorize = colorize
         @ok = '✓'
