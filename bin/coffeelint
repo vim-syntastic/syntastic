@@ -116,8 +116,12 @@ CoffeeLint is freely distributable under the MIT license.
 
   Reporter = (function() {
 
-    function Reporter(errorReport) {
+    function Reporter(errorReport, colorize) {
+      if (colorize == null) {
+        colorize = true;
+      }
       this.errorReport = errorReport;
+      this.colorize = colorize;
       this.ok = '✓';
       this.warn = '⚡';
       this.err = '✗';
@@ -126,6 +130,9 @@ CoffeeLint is freely distributable under the MIT license.
     Reporter.prototype.stylize = function() {
       var map, message, styles;
       message = arguments[0], styles = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
+      if (!this.colorize) {
+        return message;
+      }
       map = {
         bold: [1, 22],
         yellow: [33, 39],
@@ -297,20 +304,13 @@ CoffeeLint is freely distributable under the MIT license.
   };
 
   reportAndExit = function(errorReport, options) {
-    var ReporterClass, reporter;
-    if (options.argv.jslint) {
-      ReporterClass = JSLintReporter;
-    } else if (options.argv.csv) {
-      ReporterClass = CSVReporter;
-    } else {
-      ReporterClass = Reporter;
-    }
-    reporter = new ReporterClass(errorReport);
+    var colorize, reporter;
+    reporter = options.argv.jslint ? new JSLintReporter(errorReport) : options.argv.csv ? new CSVReporter(errorReport) : (colorize = !options.argv.nocolor, new Reporter(errorReport, colorize));
     reporter.publish();
     return process.exit(errorReport.getExitCode());
   };
 
-  options = optimist.usage("Usage: coffeelint [options] source [...]").alias("f", "file").alias("h", "help").alias("v", "version").alias("s", "stdin").alias("q", "quiet").describe("f", "Specify a custom configuration file.").describe("h", "Print help information.").describe("v", "Print current version number.").describe("r", "Recursively lint .coffee files in subdirectories.").describe("csv", "Use the csv reporter.").describe("jslint", "Use the JSLint XML reporter.").describe("s", "Lint the source from stdin").describe("q", "Only print errors.").boolean("csv").boolean("jslint").boolean("r").boolean("s").boolean("q", "Print errors only.");
+  options = optimist.usage("Usage: coffeelint [options] source [...]").alias("f", "file").alias("h", "help").alias("v", "version").alias("s", "stdin").alias("q", "quiet").describe("f", "Specify a custom configuration file.").describe("h", "Print help information.").describe("v", "Print current version number.").describe("r", "Recursively lint .coffee files in subdirectories.").describe("csv", "Use the csv reporter.").describe("jslint", "Use the JSLint XML reporter.").describe("nocolor", "Don't colorize the output").describe("s", "Lint the source from stdin").describe("q", "Only print errors.").boolean("csv").boolean("jslint").boolean("nocolor").boolean("r").boolean("s").boolean("q", "Print errors only.");
 
   if (options.argv.v) {
     console.log(coffeelint.VERSION);

@@ -68,13 +68,15 @@ class ErrorReport
 # Reports errors to the command line.
 class Reporter
 
-    constructor : (errorReport) ->
+    constructor : (errorReport, colorize=true) ->
         @errorReport = errorReport
+        @colorize = colorize
         @ok = '✓'
         @warn = '⚡'
         @err = '✗'
 
     stylize : (message, styles...) ->
+        return message if not @colorize
         map = {
             bold  : [1,  22],
             yellow: [33, 39],
@@ -195,13 +197,13 @@ lintSource = (source, config) ->
 
 # Publish the error report and exit with the appropriate status.
 reportAndExit = (errorReport, options) ->
-    if options.argv.jslint
-        ReporterClass = JSLintReporter
+    reporter = if options.argv.jslint
+        new JSLintReporter(errorReport)
     else if options.argv.csv
-        ReporterClass = CSVReporter
+        new CSVReporter(errorReport)
     else
-        ReporterClass = Reporter
-    reporter = new ReporterClass(errorReport)
+        colorize = not options.argv.nocolor
+        new Reporter(errorReport, colorize)
     reporter.publish()
     process.exit(errorReport.getExitCode())
 
@@ -219,10 +221,12 @@ options = optimist
             .describe("r", "Recursively lint .coffee files in subdirectories.")
             .describe("csv", "Use the csv reporter.")
             .describe("jslint", "Use the JSLint XML reporter.")
+            .describe("nocolor", "Don't colorize the output")
             .describe("s", "Lint the source from stdin")
             .describe("q", "Only print errors.")
             .boolean("csv")
             .boolean("jslint")
+            .boolean("nocolor")
             .boolean("r")
             .boolean("s")
             .boolean("q", "Print errors only.")
