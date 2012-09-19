@@ -310,7 +310,7 @@ CoffeeLint is freely distributable under the MIT license.
     return process.exit(errorReport.getExitCode());
   };
 
-  options = optimist.usage("Usage: coffeelint [options] source [...]").alias("f", "file").alias("h", "help").alias("v", "version").alias("s", "stdin").describe("f", "Specify a custom configuration file.").describe("h", "Print help information.").describe("v", "Print current version number.").describe("r", "Recursively lint .coffee files in subdirectories.").describe("csv", "Use the csv reporter.").describe("jslint", "Use the JSLint XML reporter.").describe("s", "Lint the source from stdin").boolean("csv").boolean("jslint").boolean("r").boolean("s").boolean("q", "Print errors only.");
+  options = optimist.usage("Usage: coffeelint [options] source [...]").alias("f", "file").alias("h", "help").alias("v", "version").alias("s", "stdin").alias("q", "quiet").describe("f", "Specify a custom configuration file.").describe("h", "Print help information.").describe("v", "Print current version number.").describe("r", "Recursively lint .coffee files in subdirectories.").describe("csv", "Use the csv reporter.").describe("jslint", "Use the JSLint XML reporter.").describe("s", "Lint the source from stdin").describe("q", "Only print errors.").boolean("csv").boolean("jslint").boolean("r").boolean("s").boolean("q", "Print errors only.");
 
   if (options.argv.v) {
     console.log(coffeelint.VERSION);
