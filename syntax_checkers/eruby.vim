@@ -14,21 +14,24 @@ if exists("loaded_eruby_syntax_checker")
 endif
 let loaded_eruby_syntax_checker = 1
 
-"bail if the user doesnt have ruby or cat installed
-if !executable("ruby") || !executable("cat")
+"bail if the user doesnt have ruby installed
+if !executable("ruby")
     finish
 endif
 
 function! SyntaxCheckers_eruby_GetLocList()
+    "gsub fixes issue #7 rails has it's own eruby syntax
     if has('win32')
-        let makeprg='sed "s/<\%=/<\%/g" '. shellescape(expand("%")) . ' \| ruby -e "require \"erb\"; puts ERB.new(ARGF.read, nil, \"-\").src" \| ruby -c'
+        let makeprg='ruby -rerb -e "puts ERB.new(File.read(''' .
+            \ (expand("%")) .
+            \ ''').gsub(''<\%='',''<\%''), nil, ''-'').src" \| ruby -c'
     else
-        let makeprg='sed "s/<\%=/<\%/g" '. shellescape(expand("%")) . ' \| RUBYOPT= ruby -e "require \"erb\"; puts ERB.new(ARGF.read, nil, \"-\").src" \| RUBYOPT= ruby -c'
+        let makeprg='RUBYOPT= ruby -rerb -e "puts ERB.new(File.read(''' .
+            \ (expand("%")) .
+            \ ''').gsub(''<\%='',''<\%''), nil, ''-'').src" \| RUBYOPT= ruby -c'
     endif
 
     let errorformat='%-GSyntax OK,%E-:%l: syntax error\, %m,%Z%p^,%W-:%l: warning: %m,%Z%p^,%-C%.%#'
-    return SyntasticMake({ 'makeprg': makeprg,
-                         \ 'errorformat': errorformat,
-                         \ 'defaults': {'bufnr': bufnr("")} })
 
+    return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat})
 endfunction
