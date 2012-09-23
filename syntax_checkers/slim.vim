@@ -36,6 +36,5 @@ function! SyntaxCheckers_slim_GetLocList()
     else
         let errorformat = '%C\ %#%f\, Line %l,%-G\ %.%#,%ESlim::Parser::SyntaxError: %m,%+C%.%#'
     endif
-    echo errorformat
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 endfunction
