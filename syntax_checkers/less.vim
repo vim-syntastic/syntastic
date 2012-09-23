@@ -44,11 +44,7 @@ end
 function! SyntaxCheckers_less_GetLocList()
     let makeprg = s:check_file . ' ' . g:syntastic_less_options . ' ' .
                 \ shellescape(expand('%')) . ' /dev/null'
-
-    "lessc >= 1.2
     let errorformat = '%m in %f:%l:%c'
-    "lessc < 1.2
-    let errorformat .= ', Syntax %trror on line %l in %f,Syntax %trror on line %l,! Syntax %trror: on line %l: %m,%-G%.%#'
 
     return SyntasticMake({ 'makeprg': makeprg,
                          \ 'errorformat': errorformat,
