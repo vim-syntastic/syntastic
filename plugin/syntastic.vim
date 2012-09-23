@@ -500,6 +500,19 @@ function! SyntasticCheckable(ft)
     return exists("*SyntaxCheckers_". a:ft ."_GetLocList")
 endfunction
 
+"the args must be arrays of the form [major, minor, macro]
+function SyntasticIsVersionAtLeast(installed, required)
+    if a:installed[0] != a:required[0]
+        return a:installed[0] > a:required[0]
+    endif
+
+    if a:installed[1] != a:required[1]
+        return a:installed[1] > a:required[1]
+    endif
+
+    return a:installed[2] >= a:required[2]
+endfunction
+
 "return a string representing the state of buffer according to
 "g:syntastic_stl_format
 "

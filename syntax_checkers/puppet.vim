@@ -50,21 +50,8 @@ function! s:PuppetLintVersion()
     return s:puppet_lint_version
 endfunction
 
-"the args must be arrays of the form [major, minor, macro]
-function s:IsVersionAtLeast(installed, required)
-    if a:installed[0] != a:required[0]
-        return a:installed[0] > a:required[0]
-    endif
-
-    if a:installed[1] != a:required[1]
-        return a:installed[1] > a:required[1]
-    endif
-
-    return a:installed[2] >= a:required[2]
-endfunction
-
 if !g:syntastic_puppet_lint_disable
-    if !s:IsVersionAtLeast(s:PuppetLintVersion(), [0,1,10])
+    if !SyntasticIsVersionAtLeast(s:PuppetLintVersion(), [0,1,10])
         let g:syntastic_puppet_lint_disable = 1
     endif
 end
@@ -81,7 +68,7 @@ endfunction
 
 function! s:getPuppetMakeprg()
     "If puppet is >= version 2.7 then use the new executable
-    if s:IsVersionAtLeast(s:PuppetVersion(), [2,7,0])
+    if SyntasticIsVersionAtLeast(s:PuppetVersion(), [2,7,0])
         let makeprg = 'puppet parser validate ' .
                     \ shellescape(expand('%')) .
                     \ ' --color=false'
