@@ -31,7 +31,11 @@ if !exists("g:syntastic_less_options")
     let g:syntastic_less_options = "--no-color"
 endif
 
-if !exists("g:syntastic_less_use_less_lint") || g:syntastic_less_use_less_lint == 0
+if !exists("g:syntastic_less_use_less_lint")
+    let g:syntastic_less_use_less_lint = 0
+endif
+
+if g:syntastic_less_use_less_lint
     let s:check_file = 'lessc'
 else
     let s:check_file = 'node ' . expand('<sfile>:p:h') . '/less-lint.js'
