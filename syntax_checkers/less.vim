@@ -9,6 +9,14 @@
 "             See http://sam.zoy.org/wtfpl/COPYING for more details.
 "
 "============================================================================
+
+" To send additional options to less use the variable g:syntastic_less_options.
+" The default is
+"   let g:syntastic_less_options = "--no-color"
+"
+" To use less-lint instead of less set the variable
+" g:syntastic_less_use_less_lint.
+
 if exists("loaded_less_syntax_checker")
     finish
 endif
@@ -23,8 +31,15 @@ if !exists("g:syntastic_less_options")
     let g:syntastic_less_options = "--no-color"
 endif
 
+if !exists("g:syntastic_less_use_less_lint") || g:syntastic_less_use_less_lint == 0
+    let s:check_file = 'lessc'
+else
+    let s:check_file = 'node ' . expand('<sfile>:p:h') . '/less-lint.js'
+end
+
 function! SyntaxCheckers_less_GetLocList()
-    let makeprg = 'lessc '. g:syntastic_less_options .' '.  shellescape(expand('%')) . ' /dev/null'
+    let makeprg = s:check_file . ' ' . g:syntastic_less_options . ' ' .
+                \ shellescape(expand('%')) . ' /dev/null'
 
     "lessc >= 1.2
     let errorformat = '%m in %f:%l:%c'
