@@ -92,13 +92,14 @@ my $handle = (defined $opt_f ? \*FILE : \*STDOUT);
 (my $file = shift) or &usage; # display usage if no filename is supplied
 my $args = (@ARGV ? ' ' . join ' ', @ARGV : '');
 
-my @error_lines = `perl @{[defined $opt_I ? "-I$opt_I" : '']} @{[defined $opt_c ? '-c ' : '' ]} @{[defined $opt_w ? '-X ' : '-w ']} "$file$args" 2>&1`;
+my $libs = join ' ', map {"-I$_"} split ',', $opt_I;
+my @error_lines = `perl $libs @{[defined $opt_c ? '-c ' : '' ]} @{[defined $opt_w ? '-X ' : '-w ']} "$file$args" 2>&1`;
 
 my @lines = map { "E:$_" } @error_lines;
 
 my @warn_lines;
 if(defined($opt_w)) {
-    @warn_lines = `perl @{[defined $opt_I ? $opt_I : '']} @{[defined $opt_c ? '-c ' : '' ]} -w "$file$args" 2>&1`;
+    @warn_lines = `perl $libs @{[defined $opt_c ? '-c ' : '' ]} -w "$file$args" 2>&1`;
 }
 
 # Any new errors must be warnings
