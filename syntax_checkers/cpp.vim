@@ -108,6 +108,7 @@ function! SyntaxCheckers_cpp_GetLocList()
     if expand('%') =~? '\%(.h\|.hpp\|.hh\)$'
         if exists('g:syntastic_cpp_check_header')
             let makeprg = g:syntastic_cpp_compiler.' -c '.shellescape(expand('%')).
+                        \ ' ' . g:syntastic_cpp_compiler_options. 
                         \ ' ' . syntastic#c#GetIncludeDirs('cpp')
         else
             return []
