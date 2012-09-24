@@ -19,13 +19,6 @@ let g:loaded_syntastic_plugin = 1
 
 let s:running_windows = has("win16") || has("win32")
 
-function! s:uname()
-    if !exists('s:uname')
-        let s:uname = system('uname')
-    endif
-    return s:uname
-endfunction
-
 if !exists("g:syntastic_enable_signs")
     let g:syntastic_enable_signs = 1
 endif
@@ -491,6 +484,13 @@ function! s:OSSupportsShellpipeHack()
         let s:os_supports_shellpipe_hack = !s:running_windows && (s:uname() !~ "FreeBSD") && (s:uname() !~ "OpenBSD")
     endif
     return s:os_supports_shellpipe_hack
+endfunction
+
+function! s:uname()
+    if !exists('s:uname')
+        let s:uname = system('uname')
+    endif
+    return s:uname
 endfunction
 
 "check if a syntax checker exists for the given filetype - and attempt to
