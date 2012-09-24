@@ -66,7 +66,7 @@
 "
 " Set your compiler executable with e.g. (defaults to g++)
 "
-"   let g:syntastic_cpp_compiler = 'clang++' 
+"   let g:syntastic_cpp_compiler = 'clang++'
 
 if exists('loaded_cpp_syntax_checker')
     finish
@@ -107,7 +107,8 @@ function! SyntaxCheckers_cpp_GetLocList()
 
     if expand('%') =~? '\%(.h\|.hpp\|.hh\)$'
         if exists('g:syntastic_cpp_check_header')
-            let makeprg = g:syntastic_cpp_compiler.' -c '.shellescape(expand('%')).
+            let makeprg = g:syntastic_cpp_compiler.' -c '.shellescape(expand('%')) .
+                        \ ' ' . g:syntastic_cpp_compiler_options .
                         \ ' ' . syntastic#c#GetIncludeDirs('cpp')
         else
             return []
