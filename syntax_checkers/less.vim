@@ -36,9 +36,9 @@ if !exists("g:syntastic_less_use_less_lint")
 endif
 
 if g:syntastic_less_use_less_lint
-    let s:check_file = 'lessc'
-else
     let s:check_file = 'node ' . expand('<sfile>:p:h') . '/less-lint.js'
+else
+    let s:check_file = 'lessc'
 end
 
 function! SyntaxCheckers_less_GetLocList()
