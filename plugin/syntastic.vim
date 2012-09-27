@@ -141,7 +141,7 @@ function! s:UpdateErrors(auto_invoked)
     " highlighting requires getmatches introduced in 7.1.040"
     if g:syntastic_enable_highlighting &&
                 \ (v:version > 702 || v:version == 701 && has('patch040'))
-        call s:HightlightErrors()
+        call s:HighlightErrors()
     endif
 
     if g:syntastic_auto_jump && s:BufHasErrorsOrWarningsToDisplay()
@@ -382,7 +382,7 @@ endfunction
 "
 "If the 'force_highlight_callback' key is set for an error item, then invoke
 "the callback even if it can be highlighted automatically.
-function! s:HightlightErrors()
+function! s:HighlightErrors()
     call s:ClearErrorHighlights()
 
     let fts = substitute(&ft, '-', '_', 'g')
