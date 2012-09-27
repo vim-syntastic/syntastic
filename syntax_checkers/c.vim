@@ -32,4 +32,8 @@ elseif g:syntastic_c_checker == "checkpatch-kernel-only"
     elseif executable("gcc")
         runtime! syntax_checkers/c/gcc.vim
     endif
+elseif g:syntastic_c_checker == "sparse"
+    if executable("cgcc")
+        runtime! syntax_checkers/c/sparse.vim
+    endif
 endif
