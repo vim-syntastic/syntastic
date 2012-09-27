@@ -138,7 +138,9 @@ function! s:UpdateErrors(auto_invoked)
         call s:RefreshSigns()
     endif
 
-    if g:syntastic_enable_highlighting
+    " highlighting requires getmatches introduced in 7.1.040"
+    if g:syntastic_enable_highlighting &&
+                \ (v:version > 702 || v:version == 701 && has('patch040'))
         call s:HightlightErrors()
     endif
 
