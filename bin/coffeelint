@@ -304,10 +304,16 @@ CoffeeLint is freely distributable under the MIT license.
   };
 
   reportAndExit = function(errorReport, options) {
-    var colorize, reporter;
+    var colorize, reporter,
+      _this = this;
     reporter = options.argv.jslint ? new JSLintReporter(errorReport) : options.argv.csv ? new CSVReporter(errorReport) : (colorize = !options.argv.nocolor, new Reporter(errorReport, colorize));
     reporter.publish();
-    return process.exit(errorReport.getExitCode());
+    process.stdout.on('drain', function() {
+      return process.exit(errorReport.getExitCode());
+    });
+    return process.stderr.on('drain', function() {
+      return process.exit(errorReport.getExitCode());
+    });
   };
 
   options = optimist.usage("Usage: coffeelint [options] source [...]").alias("f", "file").alias("h", "help").alias("v", "version").alias("s", "stdin").alias("q", "quiet").describe("f", "Specify a custom configuration file.").describe("h", "Print help information.").describe("v", "Print current version number.").describe("r", "Recursively lint .coffee files in subdirectories.").describe("csv", "Use the csv reporter.").describe("jslint", "Use the JSLint XML reporter.").describe("nocolor", "Don't colorize the output").describe("s", "Lint the source from stdin").describe("q", "Only print errors.").boolean("csv").boolean("jslint").boolean("nocolor").boolean("r").boolean("s").boolean("q", "Print errors only.");
