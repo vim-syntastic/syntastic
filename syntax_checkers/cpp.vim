@@ -100,6 +100,8 @@ function! SyntaxCheckers_cpp_GetLocList()
 
     if exists('g:syntastic_cpp_compiler_options')
         let makeprg .= g:syntastic_cpp_compiler_options
+    else
+        let g:syntastic_cpp_compiler_options = ''
     endif
 
     let makeprg .= ' ' . shellescape(expand('%')) .
