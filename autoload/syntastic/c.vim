@@ -53,6 +53,17 @@ function! s:Unique(list)
     return l
 endfunction
 
+" convenience function to determine the 'null device' parameter
+" based on the current operating system
+function! syntastic#c#GetNullDevice()
+    if has('win32')
+        return '-o nul'
+    elseif has('unix') || has('mac')
+        return '-o /dev/null'
+    endif
+    return ''
+endfunction
+
 " get the gcc include directory argument depending on the default
 " includes and the optional user-defined 'g:syntastic_c_include_dirs'
 function! syntastic#c#GetIncludeDirs(filetype)
