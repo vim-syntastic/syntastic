@@ -1,2 +1,3 @@
 #!/usr/bin/env bash
-erl ${1} -compile ${2}
+INCLUDE_DIR=" -pa `dirname ${2}`/../include "
+erl ${1} ${INCLUDE_DIR} -compile ${2}
