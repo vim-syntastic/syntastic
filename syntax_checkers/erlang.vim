@@ -15,11 +15,16 @@ endif
 let loaded_erlang_syntax_checker = 1
 
 "bail if the user doesnt have escript installed
-if !executable("escript")
+if !executable("erl")
     finish
 endif
 
-let s:check_file = expand('<sfile>:p:h') . '/erlang_check_file.erl'
+"g:syntastic_erlc_attrs currently need to set in .vimrc
+"TODO: make g:syntastic_erlc_attrs project specific
+if !exists("g:syntastic_erlc_attrs")
+    let g:syntastic_erlc_attrs=""
+endif
+let s:check_file = expand('<sfile>:p:h') . '/erlang_check_file "'.g:syntastic_erlc_attrs.'"'
 
 function! SyntaxCheckers_erlang_GetLocList()
     let extension = expand('%:e')
