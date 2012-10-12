@@ -10,7 +10,9 @@
 "
 "============================================================================
 "
-" Set your compiler executable with (defaults to gcc):
+" Set your compiler executable with (defaults to gcc). This will only work for
+" compilers providing the -fsyntax-only flag. Currently, only gcc and clang
+" have been tested.
 "
 "   let g:syntastic_c_compiler = 'clang'
 "
