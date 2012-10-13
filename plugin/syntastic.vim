@@ -104,6 +104,10 @@ if !exists("g:syntastic_loc_list_height")
     let g:syntastic_loc_list_height = 10
 endif
 
+if has("clientserver") && exists("g:loaded_asynccommand") && exists("g:syntastic_async")
+   let g:syntastic_do_async = 1
+endif
+
 command! SyntasticToggleMode call s:ToggleMode()
 command! SyntasticCheck call s:UpdateErrors(0) <bar> redraw!
 command! Errors call s:ShowLocList()
@@ -124,15 +128,7 @@ augroup syntastic
 augroup END
 
 
-"refresh and redraw all the error info for this buf when saving or reading
-function! s:UpdateErrors(auto_invoked)
-    if !empty(&buftype)
-        return
-    endif
-
-    if !a:auto_invoked || s:ModeMapAllowsAutoChecking()
-        call s:CacheErrors()
-    end
+function! s:RedrawErrors(bufnr)
 
     call setloclist(0, s:LocList())
 
@@ -141,7 +137,7 @@ function! s:UpdateErrors(auto_invoked)
     endif
 
     if g:syntastic_enable_signs
-        call s:RefreshSigns()
+        call s:RefreshSigns(a:bufnr)
     endif
 
     if g:syntastic_enable_highlighting
@@ -153,6 +149,19 @@ function! s:UpdateErrors(auto_invoked)
     endif
 
     call s:AutoToggleLocList()
+endfunction
+
+"refresh and redraw all the error info for this buf when saving or reading
+function! s:UpdateErrors(auto_invoked)
+    if !empty(&buftype)
+        return
+    endif
+
+    if !a:auto_invoked || s:ModeMapAllowsAutoChecking()
+        call s:CacheErrors()
+    end
+
+    call s:RedrawErrors(bufnr(''))
 endfunction
 
 "automatically open/close the location list window depending on the users
@@ -201,12 +210,20 @@ function! s:CacheErrors()
         let fts = substitute(&ft, '-', '_', 'g')
         for ft in split(fts, '\.')
             if SyntasticCheckable(ft)
-                let errors = SyntaxCheckers_{ft}_GetLocList()
-                "keep only lines that effectively match an error/warning
-                let errors = s:FilterLocList({'valid': 1}, errors)
-                "make errors have type "E" by default
-                call SyntasticAddToErrors(errors, {'type': 'E'})
-                call extend(s:LocList(), errors)
+                if exists("g:syntastic_do_async") && exists("g:async_".ft."_syntax_checker")
+                    call SyntaxCheckers_{ft}_GetLocList()
+		else
+                    let errors = SyntaxCheckers_{ft}_GetLocList()
+		    if exists("*SyntaxCheckers_".ft."_PostProcess")
+                        let errors = SyntaxCheckers_{ft}_PostProcess(errors)
+		    endif
+                    let errors = SyntaxCheckers_{ft}_GetLocList()
+                    "keep only lines that effectively match an error/warning
+                    let errors = s:FilterLocList({'valid': 1}, errors)
+                    "make errors have type "E" by default
+                    call SyntasticAddToErrors(errors, {'type': 'E'})
+                    call extend(s:LocList(), errors)
+		endif
             endif
         endfor
     endif
@@ -307,10 +324,10 @@ let s:first_sign_id = 5000
 let s:next_sign_id = s:first_sign_id
 
 "place signs by all syntax errs in the buffer
-function! s:SignErrors()
+function! s:SignErrors(bufnr)
     if s:BufHasErrorsOrWarningsToDisplay()
 
-        let errors = s:FilterLocList({'bufnr': bufnr('')})
+        let errors = s:FilterLocList({'bufnr': a:bufnr})
         for i in errors
             let sign_severity = 'Error'
             let sign_subtype = ''
@@ -323,8 +340,8 @@ function! s:SignErrors()
             let sign_type = 'Syntastic' . sign_subtype . sign_severity
 
             if !s:WarningMasksError(i, errors)
-                exec "sign place ". s:next_sign_id ." line=". i['lnum'] ." name=". sign_type ." file=". expand("%:p")
-                call add(s:BufSignIds(), s:next_sign_id)
+                exec "sign place ". s:next_sign_id ." line=". i['lnum'] ." name=". sign_type ." buffer=".a:bufnr
+                call add(s:BufSignIds(a:bufnr), s:next_sign_id)
                 let s:next_sign_id += 1
             endif
         endfor
@@ -342,26 +359,29 @@ function! s:WarningMasksError(error, llist)
 endfunction
 
 "remove the signs with the given ids from this buffer
-function! s:RemoveSigns(ids)
+function! s:RemoveSigns(ids, bufnr)
     for i in a:ids
-        exec "sign unplace " . i
-        call remove(s:BufSignIds(), index(s:BufSignIds(), i))
+        exec "sign unplace " . i." buffer=".a:bufnr
+        call remove(s:BufSignIds(a:bufnr), index(s:BufSignIds(a:bufnr), i))
     endfor
 endfunction
 
 "get all the ids of the SyntaxError signs in the buffer
-function! s:BufSignIds()
-    if !exists("b:syntastic_sign_ids")
-        let b:syntastic_sign_ids = []
+function! s:BufSignIds(bufnr)
+    if !exists("t:syntastic_sign_ids")
+        let t:syntastic_sign_ids = { }
     endif
-    return b:syntastic_sign_ids
+    if !exists("t:syntastic_sign_ids['".bufname(a:bufnr)."']")
+       let t:syntastic_sign_ids[bufname(a:bufnr)] = []
+    endif
+    return t:syntastic_sign_ids[bufname(a:bufnr)]
 endfunction
 
 "update the error signs
-function! s:RefreshSigns()
-    let old_signs = copy(s:BufSignIds())
-    call s:SignErrors()
-    call s:RemoveSigns(old_signs)
+function! s:RefreshSigns(bufnr)
+    let old_signs = copy(s:BufSignIds(a:bufnr))
+    call s:SignErrors(a:bufnr)
+    call s:RemoveSigns(old_signs, a:bufnr)
     let s:first_sign_id = s:next_sign_id
 endfunction
 
@@ -579,7 +599,7 @@ endfunction
 "a:options may also contain:
 "   'defaults' - a dict containing default values for the returned errors
 "   'subtype' - all errors will be assigned the given subtype
-function! SyntasticMake(options)
+function! SyntasticLocalMake(options)
     let old_loclist = getloclist(0)
     let old_makeprg = &l:makeprg
     let old_shellpipe = &shellpipe
@@ -624,6 +644,95 @@ function! SyntasticMake(options)
     endif
 
     return errors
+endfunction
+
+function! SyntasticRemoteMake(options)
+    if has_key(a:options, 'makeprg')
+        let makeprg = a:options['makeprg']
+    else
+        let makeprg = &makeprg
+    endif
+
+    if has_key(a:options, 'errorformat')
+        let efm = a:options['errorformat']
+    else
+        let efm = &errorformat
+    endif
+
+    let async_cmd   = substitute(makeprg, '\\|', '\|', "g")
+    let async_env   = { 'efm' : efm , 'checker': a:options['checker'] , 'bufnr': bufnr('')}
+
+    if has_key(a:options, 'defaults')
+        let async_env['defaults'] = a:options['defaults']
+    endif
+
+    " Add subtype info if present.
+    if has_key(a:options, 'subtype')
+        let async_env['subtype'] = a:options['subtype']
+    endif
+
+    function async_env.get(temp_file) dict
+        let old_loclist = getloclist(0)
+        let old_makeprg = &l:makeprg
+        let old_shellpipe = &shellpipe
+        let old_shell = &shell
+        let old_errorformat = &l:errorformat
+
+        if !s:running_windows && (s:uname !~ "FreeBSD")
+            "this is a hack to stop the screen needing to be ':redraw'n when
+            "when :lmake is run. Otherwise the screen flickers annoyingly
+            let &shellpipe='&>'
+            let &shell = '/bin/bash'
+        endif
+
+        " lget error file
+        let &errorformat = self.efm
+        let cmd = 'lgetfile ' . a:temp_file
+        exe cmd
+        let errors = getloclist(0)
+
+        call setloclist(0, old_loclist)
+        let &l:makeprg = old_makeprg
+        let &l:errorformat = old_errorformat
+        let &shellpipe=old_shellpipe
+        let &shell=old_shell
+
+        if !s:running_windows && s:uname =~ "FreeBSD"
+            redraw!
+        endif
+
+        if has_key(self, 'defaults')
+            call SyntasticAddToErrors(errors, self['defaults'])
+        endif
+
+        " Add subtype info if present.
+        if has_key(self, 'subtype')
+            call SyntasticAddToErrors(errors, {'subtype': self['subtype']})
+        endif
+
+        if exists('*SyntaxCheckers_'.self.checker.'_PostProcess')
+            let errors = SyntaxCheckers_{self.checker}_PostProcess(errors)
+        endif
+        "keep only lines that effectively match an error/warning
+        let errors = s:FilterLocList({'valid': 1}, errors)
+        "make errors have type "E" by default
+        call SyntasticAddToErrors(errors, {'type': 'E'})
+        call extend(s:LocList(), errors)
+
+        call s:RedrawErrors(self.bufnr)
+    endfunction
+    " tab_restore prevents interruption when the task completes.
+    " All provided asynchandlers already use tab_restore.
+    call asynccommand#run(async_cmd, asynccommand#tab_restore(async_env))
+endfunction
+
+function! SyntasticMake(options)
+    if exists("g:syntastic_do_async") && exists("a:options['checker']") && 
+	\ exists("g:async_".a:options['checker']."_syntax_checker")
+       call SyntasticRemoteMake(a:options)
+    else
+       return SyntasticLocalMake(a:options)
+    endif
 endfunction
 
 "get the error balloon for the current mouse position
