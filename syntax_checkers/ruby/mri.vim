@@ -9,6 +9,23 @@
 "             See http://sam.zoy.org/wtfpl/COPYING for more details.
 "
 "============================================================================
+function! s:FindRubyExec()
+    if executable("rvm")
+        return system("rvm tools identifier")
+    endif
+
+    return "ruby"
+endfunction
+
+if !exists("g:syntastic_ruby_exec")
+    let g:syntastic_ruby_exec = s:FindRubyExec()
+endif
+
+"bail if the user doesnt have ruby installed where they said it is
+if !executable(expand(g:syntastic_ruby_exec))
+    finish
+endif
+
 function! SyntaxCheckers_ruby_GetLocList()
     let makeprg = expand(g:syntastic_ruby_exec).' -w -T1 -c '.shellescape(expand('%'))
     if !has('win32')
