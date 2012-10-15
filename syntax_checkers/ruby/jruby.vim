@@ -10,10 +10,9 @@
 "
 "============================================================================
 function! SyntaxCheckers_ruby_GetLocList()
-    if has('win32')
-        let makeprg = 'jruby -W1 -T1 -c '.shellescape(expand('%'))
-    else
-        let makeprg = 'RUBYOPT= jruby -W1 -c '.shellescape(expand('%'))
+    let makeprg = g:syntastic_ruby_exec . ' -W1 -T1 -c '.shellescape(expand('%'))
+    if !has('win32')
+        let makeprg = 'RUBYOPT= ' . makeprg
     endif
     let errorformat =  '%-GSyntax OK for %f,%ESyntaxError in %f:%l: syntax error\, %m,%Z%p^,%W%f:%l: warning: %m,%Z%p^,%W%f:%l: %m,%-C%.%#'
 
