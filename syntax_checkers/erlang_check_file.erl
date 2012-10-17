@@ -12,5 +12,6 @@ main([FileName]) ->
                             warn_export_vars,
                             strong_validation,
                             report,
-                            {i, filename:dirname(FileName) ++ "/../include"}
+                            {i, filename:dirname(FileName) ++ "/../include"},
+                            {i, filename:dirname(FileName) ++ "/../../../deps"}
                         ]).
