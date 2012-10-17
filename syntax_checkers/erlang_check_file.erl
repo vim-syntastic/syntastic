@@ -13,5 +13,6 @@ main([FileName]) ->
                             strong_validation,
                             report,
                             {i, filename:dirname(FileName) ++ "/../include"},
+                            {i, filename:dirname(FileName) ++ "/../deps"},
                             {i, filename:dirname(FileName) ++ "/../../../deps"}
                         ]).
