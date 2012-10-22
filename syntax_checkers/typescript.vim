@@ -14,7 +14,11 @@ if !executable("tsc")
 endif
 
 function! SyntaxCheckers_typescript_GetLocList()
-    let makeprg = 'tsc ' . shellescape(expand("%")) . ' --out /dev/null'
+    let devnull = '/dev/null'
+    if has('win32')
+        let devnull = 'NUL'
+    endif
+    let makeprg = 'tsc ' . shellescape(expand("%")) . ' --out ' . devnull
     let errorformat = '%f (%l\,%c): %m'
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 endfunction
