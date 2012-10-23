@@ -42,12 +42,8 @@ else
 end
 
 function! SyntaxCheckers_less_GetLocList()
-    let devnull = '/dev/null'
-    if has('win32')
-        let devnull = 'NUL'
-    endif
     let makeprg = s:check_file . ' ' . g:syntastic_less_options . ' ' .
-                \ shellescape(expand('%')) . ' ' . devnull
+                \ shellescape(expand('%')) . ' ' . syntastic#util#DevNull()
     let errorformat = '%m in %f:%l:%c'
 
     return SyntasticMake({ 'makeprg': makeprg,
