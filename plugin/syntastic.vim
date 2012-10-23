@@ -486,10 +486,11 @@ endfunction
 "the script changes &shellpipe and &shell to stop the screen flicking when
 "shelling out to syntax checkers. Not all OSs support the hacks though
 function! s:OSSupportsShellpipeHack()
-    if !exists("s:os_supports_shellpipe_hack")
-        let s:os_supports_shellpipe_hack = !s:running_windows && (s:uname() !~ "FreeBSD") && (s:uname() !~ "OpenBSD")
-    endif
-    return s:os_supports_shellpipe_hack
+    return !s:running_windows && (s:uname() !~ "FreeBSD") && (s:uname() !~ "OpenBSD")
+endfunction
+
+function! s:IsRedrawRequiredAfterMake()
+    return !s:running_windows && (s:uname() =~ "FreeBSD" || s:uname() =~ "OpenBSD")
 endfunction
 
 function! s:uname()
@@ -610,7 +611,7 @@ function! SyntasticMake(options)
     let &shellpipe=old_shellpipe
     let &shell=old_shell
 
-    if s:OSSupportsShellpipeHack()
+    if s:IsRedrawRequiredAfterMake()
         redraw!
     endif
 
