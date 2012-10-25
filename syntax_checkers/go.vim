@@ -18,5 +18,5 @@ if exists("loaded_go_syntax_checker")
 endif
 let loaded_go_syntax_checker = 1
 
-let s:supported_checkers = ["go", "6g", "gofmt"]
+let s:supported_checkers = ["go", "gobuildtest", "6g", "gofmt"]
 call SyntasticLoadChecker(s:supported_checkers, 'go')
