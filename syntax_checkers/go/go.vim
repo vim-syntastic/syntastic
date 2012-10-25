@@ -25,8 +25,10 @@ function! SyntaxCheckers_go_GetLocList()
     silent %!gofmt
     call winrestview(view)
 
-    " Use go [build,test]
-    if match(expand("%"), "test.go") == -1
+    " Check syntax with the go compiler.
+    " Test files, i.e. files with a name ending in `_test.go`, are not
+    " compiled by `go build`, therefore `go test` must be called for those.
+    if match(expand('%'), '_test.go$') == -1
         let makeprg = 'go build -o /dev/null'
     else
         let makeprg = 'go test -c -o /dev/null'
