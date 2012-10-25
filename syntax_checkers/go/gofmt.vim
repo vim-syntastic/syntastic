@@ -40,7 +40,7 @@ function! SyntaxCheckers_go_GetLocList()
     " be reloaded.
     if g:syntastic_go_checker_option_gofmt_write == 1
         let view = winsaveview()
-        silent %!cat %
+        silent %!gofmt
         call winrestview(view)
     endif
 
