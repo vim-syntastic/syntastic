@@ -35,6 +35,15 @@ function! SyntaxCheckers_go_GetLocList()
         return errors
     endif
 
+    " If the content of the file might have been changed due to
+    " g:syntastic_go_checker_option_gofmt_write being enabled, the buffer must
+    " be reloaded.
+    if g:syntastic_go_checker_option_gofmt_write == 1
+        let view = winsaveview()
+        silent %!cat %
+        call winrestview(view)
+    endif
+
     " Check syntax with the go compiler.
     " Test files, i.e. files with a name ending in `_test.go`, are not
     " compiled by `go build`, therefore `go test` must be called for those.
