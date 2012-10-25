@@ -31,9 +31,19 @@ function! SyntaxCheckers_go_GetLocList()
     endif
     let errorformat = '%f:%l:%c:%m,%f:%l%m,%-G#%.%#'
 
-    let oldcd = getcwd()
-    exec 'lcd ' . fnameescape(expand('%:p:h'))
+    " The go compiler needs to either be run with an import path as an
+    " argument or directly from the package directory. Since figuring out
+    " the poper import path is fickle, just pushd/popd to the package.
+    let popd = getcwd()
+    let pushd = expand('%:p:h')
+    "
+    " pushd
+    exec 'lcd ' . fnameescape(pushd)
+
     let errors = SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
-    exec 'lcd ' . fnameescape(oldcd)
+
+    " popd
+    exec 'lcd ' . fnameescape(popd)
+
     return errors
 endfunction
