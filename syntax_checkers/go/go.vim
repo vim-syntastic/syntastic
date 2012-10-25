@@ -11,19 +11,15 @@
 "============================================================================
 function! SyntaxCheckers_go_GetLocList()
 
-    " Use go fmt first
-    " This call to go fmt writes out to disk, we'll update the buffer later
-    let makeprg = 'go fmt %'
+    " Use gofmt to check the syntax for the current file.
+    let makeprg = 'gofmt %'
     let errorformat = '%f:%l:%c: %m,%-G%.%#'
     let errors = SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat, 'defaults': {'type': 'e'} })
+
+    " Do not perform further checks if errors were found.
     if !empty(errors)
         return errors
     endif
-
-    " Update the buffer
-    let view = winsaveview()
-    silent %!gofmt
-    call winrestview(view)
 
     " Check syntax with the go compiler.
     " Test files, i.e. files with a name ending in `_test.go`, are not
