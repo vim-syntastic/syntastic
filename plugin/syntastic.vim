@@ -439,7 +439,8 @@ function! s:WideMsg(msg)
     let old_ruler = &ruler
     let old_showcmd = &showcmd
 
-    let msg = strpart(a:msg, 0, winwidth(0)-1)
+    let msg = substitute(a:msg, "\t", repeat(" ", &tabstop), "g")
+    let msg = strpart(msg, 0, winwidth(0)-1)
 
     "This is here because it is possible for some error messages to begin with
     "\n which will cause a "press enter" prompt. I have noticed this in the
