@@ -8,12 +8,26 @@
 "             Want To Public License, Version 2, as published by Sam Hocevar.
 "             See http://sam.zoy.org/wtfpl/COPYING for more details.
 "
+" Use `let g:syntastic_go_checker_option_gofmt_write=1` to allow gofmt to
+" format the source file. Default: disabled.
 "============================================================================
 function! SyntaxCheckers_go_GetLocList()
 
+    " Check the g:syntastic_go_checker_option_gofmt_write variable.
+    if !exists("g:syntastic_go_checker_option_gofmt_write")
+        let g:syntastic_go_checker_option_gofmt_write = 0
+    endif
+
     " Use gofmt to check the syntax for the current file.
-    let makeprg = 'gofmt %'
+    " If the syntastic_go_checker_option_gofmt_write is set to 1, let `gofmt`
+    " format the file. The default is for `gofmt` to just prints to STDOUT.
+    if g:syntastic_go_checker_option_gofmt_write == 1
+        let makeprg = 'gofmt -w %'
+    else
+        let makeprg = 'gofmt %'
+    endif
     let errorformat = '%f:%l:%c: %m,%-G%.%#'
+
     let errors = SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat, 'defaults': {'type': 'e'} })
 
     " Do not perform further checks if errors were found.
