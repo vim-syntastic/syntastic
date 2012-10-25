@@ -1,6 +1,6 @@
 "============================================================================
 "File:        go.vim
-"Description: Check go syntax using 'go build'
+"Description: Check go syntax using 'gofmt' and 'go [build|test]'
 "Maintainer:  Kamil Kisiel <kamil@kamilkisiel.net>
 "License:     This program is free software. It comes without any warranty,
 "             to the extent permitted by applicable law. You can redistribute
