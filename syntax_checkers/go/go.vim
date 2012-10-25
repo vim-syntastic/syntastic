@@ -20,7 +20,7 @@ function! SyntaxCheckers_go_GetLocList()
 
     " Use gofmt to check the syntax for the current file.
     " If the syntastic_go_checker_option_gofmt_write is set to 1, let `gofmt`
-    " format the file. The default is for `gofmt` to just prints to STDOUT.
+    " format the file. The default is for `gofmt` to just print to STDOUT.
     if g:syntastic_go_checker_option_gofmt_write == 1
         let makeprg = 'gofmt -w %'
     else
@@ -56,7 +56,7 @@ function! SyntaxCheckers_go_GetLocList()
 
     " The go compiler needs to either be run with an import path as an
     " argument or directly from the package directory. Since figuring out
-    " the poper import path is fickle, just pushd/popd to the package.
+    " the proper import path is fickle, just pushd/popd to the package.
     let popd = getcwd()
     let pushd = expand('%:p:h')
     "
