@@ -439,6 +439,8 @@ function! s:WideMsg(msg)
     let old_ruler = &ruler
     let old_showcmd = &showcmd
 
+    "convert tabs to spaces so that the tabs count towards the window width
+    "as the proper amount of characters
     let msg = substitute(a:msg, "\t", repeat(" ", &tabstop), "g")
     let msg = strpart(msg, 0, winwidth(0)-1)
 
