@@ -1,6 +1,6 @@
 "============================================================================
 "File:        go.vim
-"Description: Check go syntax using 'go build'
+"Description: Check go syntax using 'go [build|test]'
 "Maintainer:  Kamil Kisiel <kamil@kamilkisiel.net>
 "License:     This program is free software. It comes without any warranty,
 "             to the extent permitted by applicable law. You can redistribute
@@ -10,8 +10,14 @@
 "
 "============================================================================
 function! SyntaxCheckers_go_GetLocList()
-    let makeprg = 'go build -o /dev/null'
-    let errorformat = '%f:%l:%c:%m,%E%f:%l:%m,%C%m,%-G#%.%#'
+    " Test files, i.e. files with a name ending in `_test.go`, are not
+    " compiled by `go build`, therefore `go test` must be called for those.
+    if match(expand('%'), '_test.go$') == -1
+        let makeprg = 'go build -o /dev/null'
+    else
+        let makeprg = 'go test -c -o /dev/null'
+    endif
+    let errorformat = '%f:%l:%c:%m,%f:%l%m,%-G#%.%#'
 
     " The go compiler needs to either be run with an import path as an
     " argument or directly from the package directory. Since figuring out
