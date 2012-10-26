@@ -1,6 +1,6 @@
 "============================================================================
 "File:        go.vim
-"Description: Check go syntax using 'go [build|test]'
+"Description: Check go syntax using 'gofmt -l' followed by 'go [build|test]'
 "Maintainer:  Kamil Kisiel <kamil@kamilkisiel.net>
 "License:     This program is free software. It comes without any warranty,
 "             to the extent permitted by applicable law. You can redistribute
@@ -8,8 +8,22 @@
 "             Want To Public License, Version 2, as published by Sam Hocevar.
 "             See http://sam.zoy.org/wtfpl/COPYING for more details.
 "
+" This syntax checker does not reformat your source code.
+" Use a BufWritePre autocommand to that end:
+"   autocmd FileType go autocmd BufWritePre <buffer> Fmt
 "============================================================================
 function! SyntaxCheckers_go_GetLocList()
+    " Check with gofmt first, since `go build` and `go test` might not report
+    " syntax errors in the current file if another file with syntax error is
+    " compiled first.
+    let makeprg = 'gofmt -l % 1>/dev/null'
+    let errorformat = '%f:%l:%c: %m,%-G%.%#'
+    let errors = SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat, 'defaults': {'type': 'e'} })
+
+    if !empty(errors)
+        return errors
+    endif
+
     " Test files, i.e. files with a name ending in `_test.go`, are not
     " compiled by `go build`, therefore `go test` must be called for those.
     if match(expand('%'), '_test.go$') == -1
