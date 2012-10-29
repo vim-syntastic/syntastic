@@ -14,8 +14,11 @@ if exists("loaded_haskell_syntax_checker")
 endif
 let loaded_haskell_syntax_checker = 1
 
-"bail if the user doesnt have ghc-mod installed
-if !executable("ghc-mod")
+if executable("hdevtools")
+    let s:checker = 'hdevtools'
+elseif executable("ghc-mod")
+    let s:checker = 'ghc-mod'
+else
     finish
 endif
 
@@ -24,15 +27,28 @@ if !exists('g:syntastic_haskell_checker_args')
 endif
 
 function! SyntaxCheckers_haskell_GetLocList()
-    let ghcmod = 'ghc-mod ' . g:syntastic_haskell_checker_args
-    let makeprg =
-          \ "{ ".
-          \ ghcmod . " check ". shellescape(expand('%')) . "; " .
-          \ ghcmod . " lint " . shellescape(expand('%')) . ";" .
-          \ " }"
-    let errorformat = '%-G\\s%#,%f:%l:%c:%trror: %m,%f:%l:%c:%tarning: %m,'.
-                \ '%f:%l:%c: %trror: %m,%f:%l:%c: %tarning: %m,%f:%l:%c:%m,'.
-                \ '%E%f:%l:%c:,%Z%m,'
+    if s:checker == 'ghc-mod'
+        let ghcmod = 'ghc-mod ' . g:syntastic_haskell_checker_args
+        let makeprg =
+              \ "{ ".
+              \ ghcmod . " check ". shellescape(expand('%')) . "; " .
+              \ ghcmod . " lint " . shellescape(expand('%')) . ";" .
+              \ " }"
+        let errorformat = '%-G\\s%#,%f:%l:%c:%trror: %m,%f:%l:%c:%tarning: %m,'.
+                    \ '%f:%l:%c: %trror: %m,%f:%l:%c: %tarning: %m,%f:%l:%c:%m,'.
+                    \ '%E%f:%l:%c:,%Z%m,'
+    elseif s:checker == 'hdevtools'
+        let makeprg = 'hdevtools check ' . get(g:, 'hdevtools_options', '') . ' ' . shellescape(expand('%'))
+
+        let errorformat= '\%-Z\ %#,'.
+                    \ '%W%f:%l:%c:\ Warning:\ %m,'.
+                    \ '%E%f:%l:%c:\ %m,'.
+                    \ '%E%>%f:%l:%c:,'.
+                    \ '%+C\ \ %#%m,'.
+                    \ '%W%>%f:%l:%c:,'.
+                    \ '%+C\ \ %#%tarning:\ %m,'
+
+    endif
 
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 endfunction
