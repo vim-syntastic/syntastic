@@ -274,7 +274,7 @@ this option has the following effects:
 
 Default: [Syntax: line:%F (%t)]
 Use this option to control what the syntastic statusline text contains. Several
-magic flags are availble to insert information:
+magic flags are available to insert information:
     %e - number of errors
     %w - number of warnings
     %t - total number of warnings and errors
