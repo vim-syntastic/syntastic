@@ -1,7 +1,7 @@
 {
   "name":           "coffeelint",
   "description":    "Lint your CoffeeScript",
-  "version":        "0.5.2",
+  "version":        "0.5.3",
   "homepage" :      "http://www.coffeelint.org",
   "keywords" :      ["lint", "coffeescript", "coffee-script"],
   "author" :        "Matthew Perpick <clutchski@gmail.com>",
