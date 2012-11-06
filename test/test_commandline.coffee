@@ -26,7 +26,7 @@ vows.describe('commandline').addBatch({
     'with no args' :
 
         topic : () ->
-            commandline([], this.callback)
+            commandline [], this.callback
             return undefined
 
         'shows usage' : (error, stdout, stderr) ->
@@ -49,7 +49,11 @@ vows.describe('commandline').addBatch({
     'with clean source' :
 
         topic : () ->
-            commandline ["test/fixtures/clean.coffee"], this.callback
+            args = [
+                '--noconfig'
+                'test/fixtures/clean.coffee'
+            ]
+            commandline args, this.callback
             return undefined
 
         'passes' : (error, stdout, stderr) ->
@@ -60,7 +64,11 @@ vows.describe('commandline').addBatch({
     'with failing source' :
 
         topic : () ->
-            commandline ["test/fixtures/fourspaces.coffee"], this.callback
+            args = [
+                '--noconfig'
+                'test/fixtures/fourspaces.coffee'
+            ]
+            commandline args, this.callback
             return undefined
 
         'works' : (error, stdout, stderr) ->
@@ -71,9 +79,9 @@ vows.describe('commandline').addBatch({
 
         topic : () ->
             args = [
-                "-f"
-                "test/fixtures/fourspaces.json"
-                "test/fixtures/fourspaces.coffee"
+                '-f'
+                'test/fixtures/fourspaces.json'
+                'test/fixtures/fourspaces.coffee'
             ]
 
             commandline args, this.callback
@@ -86,10 +94,11 @@ vows.describe('commandline').addBatch({
 
         topic : () ->
             args = [
-                "-f"
-                "test/fixtures/fourspaces.json"
-                "test/fixtures/fourspaces.coffee"
-                "test/fixtures/clean.coffee"
+                '--noconfig'
+                '-f'
+                'test/fixtures/fourspaces.json'
+                'test/fixtures/fourspaces.coffee'
+                'test/fixtures/clean.coffee'
             ]
 
             commandline args, this.callback
@@ -102,9 +111,9 @@ vows.describe('commandline').addBatch({
 
         topic : () ->
             args = [
-                "-f"
-                "examples/coffeelint.json"
-                "test/fixtures/clean.coffee"
+                '-f'
+                'examples/coffeelint.json'
+                'test/fixtures/clean.coffee'
             ]
 
             commandline args, this.callback
@@ -117,9 +126,9 @@ vows.describe('commandline').addBatch({
 
         topic : () ->
             args = [
-                "-f"
-                "test/fixtures/twospaces.warning.json"
-                "test/fixtures/fourspaces.coffee"
+                '-f'
+                'test/fixtures/twospaces.warning.json'
+                'test/fixtures/fourspaces.coffee'
             ]
 
             commandline args, this.callback
@@ -131,7 +140,10 @@ vows.describe('commandline').addBatch({
     'with broken source' :
 
         topic : () ->
-            args = ["test/fixtures/syntax_error.coffee"]
+            args = [
+                '--noconfig'
+                'test/fixtures/syntax_error.coffee'
+            ]
             commandline args, this.callback
             return undefined
 
@@ -142,6 +154,7 @@ vows.describe('commandline').addBatch({
 
         topic : () ->
             args = [
+                '--noconfig',
                 '-r',
                 'test/fixtures/clean.coffee',
                 'test/fixtures/subdir'
@@ -172,7 +185,8 @@ vows.describe('commandline').addBatch({
 
         'with working string':
             topic: () ->
-                exec("echo y = 1 | #{coffeelintPath} --stdin", this.callback)
+                exec("echo y = 1 | #{coffeelintPath} --noconfig --stdin",
+                    this.callback)
                 return undefined
 
             'passes': (error, stdout, stderr) ->
@@ -183,11 +197,54 @@ vows.describe('commandline').addBatch({
 
         'with failing string due to whitespace':
             topic: () ->
-                exec("echo 'x = 1 '| #{coffeelintPath} --stdin", this.callback)
+                exec("echo 'x = 1 '| #{coffeelintPath} --noconfig --stdin",
+                    this.callback)
                 return undefined
 
             'fails': (error, stdout, stderr) ->
                 assert.isNotNull(error)
                 assert.include(stdout.toLowerCase(), 'trailing whitespace')
+
+    'using environment config file':
+
+        'with non existing enviroment set config file':
+            topic: () ->
+                args = [
+                    'test/fixtures/clean.coffee'
+                ]
+                process.env.COFFEELINT_CONFIG = "not_existing_293ujff"
+                commandline args, this.callback
+                return undefined
+
+            'passes': (error, stdout, stderr) ->
+                assert.isNull(error)
+
+        'with existing enviroment set config file':
+            topic: () ->
+                args = [
+                    'test/fixtures/fourspaces.coffee'
+                ]
+                conf = "test/fixtures/fourspaces.json"
+                process.env.COFFEELINT_CONFIG = conf
+                commandline args, this.callback
+                return undefined
+
+            'passes': (error, stdout, stderr) ->
+                assert.isNull(error)
+
+        'with existing enviroment set config file + --noconfig':
+            topic: () ->
+                args = [
+                    '--noconfig'
+                    'test/fixtures/fourspaces.coffee'
+                ]
+                conf = "test/fixtures/fourspaces.json"
+                process.env.COFFEELINT_CONFIG = conf
+                commandline args, this.callback
+                return undefined
+
+            'fails': (error, stdout, stderr) ->
+                assert.isNotNull(error)
+
 
 }).export(module)

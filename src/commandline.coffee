@@ -220,6 +220,8 @@ options = optimist
             .alias("s", "stdin")
             .alias("q", "quiet")
             .describe("f", "Specify a custom configuration file.")
+            .describe("noconfig",
+                "Ignores the environment variable COFFEELINT_CONFIG.")
             .describe("h", "Print help information.")
             .describe("v", "Print current version number.")
             .describe("r", "Recursively lint .coffee files in subdirectories.")
@@ -231,6 +233,7 @@ options = optimist
             .boolean("csv")
             .boolean("jslint")
             .boolean("nocolor")
+            .boolean("noconfig")
             .boolean("r")
             .boolean("s")
             .boolean("q", "Print errors only.")
@@ -244,10 +247,18 @@ else if options.argv.h
 else if options.argv._.length < 1 and not options.argv.s
     options.showHelp()
     process.exit(1)
+
 else
     # Load configuration.
-    configPath = options.argv.f
-    config = if configPath then JSON.parse(read(configPath)) else {}
+    config = {}
+    unless options.argv.noconfig
+        # path.existsSync was moved to fs.existsSync node 0.6 -> 0.8
+        existsFn = fs.existsSync ? path.existsSync
+        if options.argv.f
+            config = JSON.parse read options.argv.f
+        else if (process.env.COFFEELINT_CONFIG and
+        existsFn process.env.COFFEELINT_CONFIG)
+            config = JSON.parse(read(process.env.COFFEELINT_CONFIG))
 
     if options.argv.s
         # Lint from stdin
@@ -266,4 +277,3 @@ else
         # Lint the code.
         errorReport = lintFiles(scripts, config)
         reportAndExit errorReport, options
-
