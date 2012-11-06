@@ -95,6 +95,10 @@ RULES =
         level : IGNORE
         message : 'Operators must be spaced properly'
 
+    no_stand_alone_at :
+        level : IGNORE
+        message : '@ must be followed by property name, without spaces.'
+
     coffeescript_error :
         level : ERROR
         message : '' # The default coffeescript error is fine.
@@ -300,6 +304,7 @@ class LexicalLinter
             when "(", ")"                 then @lintParens(token)
             when "JS"                     then @lintJavascript(token)
             when "CALL_START", "CALL_END" then @lintCall(token)
+            when "@"                      then @lintStandaloneAt(token)
             when "+", "-"                 then @lintPlus(token)
             when "=", "MATH", "COMPARE", "LOGIC"
                 @lintMath(token)
@@ -407,6 +412,10 @@ class LexicalLinter
     lintIncrement : (token) ->
         attrs = {context : "found '#{token[0]}'"}
         @createLexError('no_plusplus', attrs)
+
+    lintStandaloneAt: (token) ->
+        nextIsIdentifier = @peek()[0] == 'IDENTIFIER'
+        @createLexError('no_stand_alone_at') unless nextIsIdentifier
 
     # Return an error if the given indentation token is not correct.
     lintIndentation : (token) ->
@@ -674,4 +683,3 @@ coffeelint.lint = (source, userConfig = {}) ->
       'disable': {}
 
     errors
-
