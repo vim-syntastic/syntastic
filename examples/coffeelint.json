@@ -49,6 +49,10 @@
 
   "no_implicit_parens" : {
     "level" : "ignore"
+  },
+
+  "no_stand_alone_at" : {
+    "level": "ignore"
   }
 
 }
