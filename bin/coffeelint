@@ -10,7 +10,7 @@ CoffeeLint is freely distributable under the MIT license.
 
 
 (function() {
-  var CSVReporter, ErrorReport, JSLintReporter, Reporter, coffeelint, config, configPath, data, errorReport, findCoffeeScripts, fs, glob, lintFiles, lintSource, optimist, options, path, paths, read, reportAndExit, scripts, stdin, thisdir,
+  var CSVReporter, ErrorReport, JSLintReporter, Reporter, coffeelint, config, data, errorReport, existsFn, findCoffeeScripts, fs, glob, lintFiles, lintSource, optimist, options, path, paths, read, reportAndExit, scripts, stdin, thisdir, _ref,
     __slice = [].slice,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -316,7 +316,7 @@ CoffeeLint is freely distributable under the MIT license.
     });
   };
 
-  options = optimist.usage("Usage: coffeelint [options] source [...]").alias("f", "file").alias("h", "help").alias("v", "version").alias("s", "stdin").alias("q", "quiet").describe("f", "Specify a custom configuration file.").describe("h", "Print help information.").describe("v", "Print current version number.").describe("r", "Recursively lint .coffee files in subdirectories.").describe("csv", "Use the csv reporter.").describe("jslint", "Use the JSLint XML reporter.").describe("nocolor", "Don't colorize the output").describe("s", "Lint the source from stdin").describe("q", "Only print errors.").boolean("csv").boolean("jslint").boolean("nocolor").boolean("r").boolean("s").boolean("q", "Print errors only.");
+  options = optimist.usage("Usage: coffeelint [options] source [...]").alias("f", "file").alias("h", "help").alias("v", "version").alias("s", "stdin").alias("q", "quiet").describe("f", "Specify a custom configuration file.").describe("noconfig", "Ignores the environment variable COFFEELINT_CONFIG.").describe("h", "Print help information.").describe("v", "Print current version number.").describe("r", "Recursively lint .coffee files in subdirectories.").describe("csv", "Use the csv reporter.").describe("jslint", "Use the JSLint XML reporter.").describe("nocolor", "Don't colorize the output").describe("s", "Lint the source from stdin").describe("q", "Only print errors.").boolean("csv").boolean("jslint").boolean("nocolor").boolean("noconfig").boolean("r").boolean("s").boolean("q", "Print errors only.");
 
   if (options.argv.v) {
     console.log(coffeelint.VERSION);
@@ -328,8 +328,15 @@ CoffeeLint is freely distributable under the MIT license.
     options.showHelp();
     process.exit(1);
   } else {
-    configPath = options.argv.f;
-    config = configPath ? JSON.parse(read(configPath)) : {};
+    config = {};
+    if (!options.argv.noconfig) {
+      existsFn = (_ref = fs.existsSync) != null ? _ref : path.existsSync;
+      if (options.argv.f) {
+        config = JSON.parse(read(options.argv.f));
+      } else if (process.env.COFFEELINT_CONFIG && existsFn(process.env.COFFEELINT_CONFIG)) {
+        config = JSON.parse(read(process.env.COFFEELINT_CONFIG));
+      }
+    }
     if (options.argv.s) {
       data = '';
       stdin = process.openStdin();
