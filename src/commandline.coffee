@@ -205,7 +205,7 @@ reportAndExit = (errorReport, options) ->
         colorize = not options.argv.nocolor
         new Reporter(errorReport, colorize)
     reporter.publish()
-    
+
     process.stdout.on 'drain', =>
         process.exit errorReport.getExitCode()
     process.stderr.on 'drain', =>
