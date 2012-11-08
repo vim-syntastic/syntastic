@@ -97,7 +97,7 @@ RULES =
 
     no_stand_alone_at :
         level : IGNORE
-        message : '@ must be followed by property name, without spaces.'
+        message : '@ must not be used stand alone'
 
     coffeescript_error :
         level : ERROR
@@ -414,8 +414,16 @@ class LexicalLinter
         @createLexError('no_plusplus', attrs)
 
     lintStandaloneAt: (token) ->
-        nextIsIdentifier = @peek()[0] == 'IDENTIFIER'
-        @createLexError('no_stand_alone_at') unless nextIsIdentifier
+        nextToken = @peek()
+        spaced = token.spaced
+        console.log token.spaced, nextToken
+        isIdentifier = nextToken[0] == 'IDENTIFIER'
+        isIndexStart = nextToken[0] == 'INDEX_START'
+        isDot = nextToken[0] == '.'
+
+        if spaced or (not isIdentifier and not isIndexStart and not isDot)
+            @createLexError('no_stand_alone_at')
+
 
     # Return an error if the given indentation token is not correct.
     lintIndentation : (token) ->
