@@ -481,7 +481,6 @@ class LexicalLinter
     lintStandaloneAt: (token) ->
         nextToken = @peek()
         spaced = token.spaced
-        console.log token.spaced, nextToken
         isIdentifier = nextToken[0] == 'IDENTIFIER'
         isIndexStart = nextToken[0] == 'INDEX_START'
         isDot = nextToken[0] == '.'
