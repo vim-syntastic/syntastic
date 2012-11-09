@@ -160,7 +160,7 @@ class LineLinter
         @tokensByLine = tokensByLine
         @lines = @source.split('\n')
         @lineCount = @lines.length
-        
+
         # maintains some contextual information
         #   inClass: bool; in class or not
         #   lastUnemptyLineInClass: null or lineNumber, if the last not-empty
@@ -265,7 +265,7 @@ class LineLinter
         ending = @config[rule].value
 
         return null if not ending or @isLastLine()
-        
+
         if not @context.class.inClass and
                 @context.class.lastUnemptyLineInClass? and
                 ((@lineNumber - 1) - @context.class.lastUnemptyLineInClass) isnt
@@ -274,9 +274,9 @@ class LineLinter
             return @createLineError( rule, {
                 context: "Expected #{ending} got #{got}"
             } )
-        
+
         null
-    
+
     createLineError : (rule, attrs = {}) ->
         attrs.lineNumber = @lineNumber + 1 # Lines are indexed by zero.
         attrs.level = @config[rule]?.level
@@ -292,7 +292,7 @@ class LineLinter
     # Return tokens for the given line number.
     getLineTokens : () ->
         @tokensByLine[@lineNumber] || []
-    
+
     # maintain the contextual information for class-related stuff
     maintainClassContext: () ->
         if @context.class.inClass
@@ -305,7 +305,7 @@ class LineLinter
                         if @context.class.classIndents is 0
                             @context.class.inClass = false
                             @context.class.classIndents = null
-            
+
             if @context.class.inClass and not @line.match( /^\s*$/ )
                 @context.class.lastUnemptyLineInClass = @lineNumber
         else
