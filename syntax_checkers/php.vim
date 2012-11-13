@@ -24,12 +24,12 @@ if !exists("g:syntastic_phpcs_conf")
     let g:syntastic_phpcs_conf = ""
 endif
 
-if !exists("g:syntastic_phpcs_disable")
+if !exists("g:syntastic_phpcs_disable") || !executable('phpcs')
     let g:syntastic_phpcs_disable = 0
 endif
 
 
-if !exists("g:syntastic_phpmd_disable")
+if !exists("g:syntastic_phpmd_disable") || !executable('phpmd')
     let g:syntastic_phpmd_disable = 0
 endif
 
@@ -48,25 +48,19 @@ function! SyntaxCheckers_php_GetHighlightRegex(item)
 endfunction
 
 function! SyntaxCheckers_php_GetLocList()
-
-    let errors = []
-    let file_is_valid = 0
-
     let makeprg = "php -l -d error_reporting=E_ALL -d display_errors=1 -d log_errors=0 ".shellescape(expand('%'))
     let errorformat='%-GNo syntax errors detected in%.%#,Parse error: %#syntax %trror\ , %m in %f on line %l,Parse %trror: %m in %f on line %l,Fatal %trror: %m in %f on line %l,%-G\s%#,%-GErrors parsing %.%#'
     let errors = SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 
-    if empty(errors) 
-        let file_is_valid = 1
-    endif
+    if empty(errors)
+        if !g:syntastic_phpcs_disable
+            let errors = errors + s:GetPHPCSErrors()
+        endif
 
-    if empty(errors) && !g:syntastic_phpcs_disable && executable("phpcs")
-        let errors = errors + s:GetPHPCSErrors()
-    endif
-
-    if file_is_valid && !g:syntastic_phpmd_disable && executable("phpmd")
-        let errors = errors + s:getPHPMDErrors()
-    endif
+        if !g:syntastic_phpmd_disable
+            let errors = errors + s:GetPHPMDErrors()
+        endif
+    end
 
     return errors
 endfunction
@@ -78,7 +72,7 @@ function! s:GetPHPCSErrors()
 endfunction
 
 "Helper function. This one runs and parses phpmd tool output.
-function! s:getPHPMDErrors() 
+function! s:GetPHPMDErrors()
     let makeprg = "phpmd " . shellescape(expand('%')) . " text " . g:syntastic_phpmd_rules
     let errorformat = '%E%f:%l%m'
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat, 'subtype' : 'Style' })
