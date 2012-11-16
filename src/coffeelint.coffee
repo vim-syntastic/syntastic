@@ -286,8 +286,16 @@ class LineLinter
         return @lineNumber == @lineCount - 1
 
     # Return true if the given line actually has tokens.
-    lineHasToken : () ->
-        return @tokensByLine[@lineNumber]?
+    # Optional parameter to check for a specific token type.
+    lineHasToken : (tokenType = null) ->
+        unless tokenType?
+            return @tokensByLine[@lineNumber]?
+        else
+            tokens = @tokensByLine[@lineNumber]
+            return null unless tokens?
+            for token in tokens
+                return true if token[0] == tokenType
+            return false
 
     # Return tokens for the given line number.
     getLineTokens : () ->
@@ -296,15 +304,13 @@ class LineLinter
     # maintain the contextual information for class-related stuff
     maintainClassContext: () ->
         if @context.class.inClass
-            if @lineHasToken()
-                for token in @tokensByLine[@lineNumber]
-                    if token[0] is "INDENT"
-                        @context.class.classIndents++
-                    else if token[0] is "OUTDENT"
-                        @context.class.classIndents--
-                        if @context.class.classIndents is 0
-                            @context.class.inClass = false
-                            @context.class.classIndents = null
+            if @lineHasToken 'INDENT'
+                @context.class.classIndents++
+            else if @lineHasToken "OUTDENT"
+                @context.class.classIndents--
+                if @context.class.classIndents is 0
+                    @context.class.inClass = false
+                    @context.class.classIndents = null
 
             if @context.class.inClass and not @line.match( /^\s*$/ )
                 @context.class.lastUnemptyLineInClass = @lineNumber
@@ -312,12 +318,10 @@ class LineLinter
             unless @line.match(/\\s*/)
                 @context.class.lastUnemptyLineInClass = null
 
-            if @lineHasToken()
-                for token in @tokensByLine[@lineNumber]
-                    if token[0] is 'CLASS'
-                        @context.class.inClass = true
-                        @context.class.lastUnemptyLineInClass = @lineNumber
-                        @context.class.classIndents = 0
+            if @lineHasToken 'CLASS'
+                @context.class.inClass = true
+                @context.class.lastUnemptyLineInClass = @lineNumber
+                @context.class.classIndents = 0
 
         null
 
