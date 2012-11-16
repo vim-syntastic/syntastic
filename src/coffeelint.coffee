@@ -286,12 +286,13 @@ class LineLinter
         return @lineNumber == @lineCount - 1
 
     # Return true if the given line actually has tokens.
-    # Optional parameter to check for a specific token type.
-    lineHasToken : (tokenType = null) ->
+    # Optional parameter to check for a specific token type and line number.
+    lineHasToken : (tokenType = null, lineNumber = null) ->
+        lineNumber = lineNumber ? @lineNumber
         unless tokenType?
-            return @tokensByLine[@lineNumber]?
+            return @tokensByLine[lineNumber]?
         else
-            tokens = @tokensByLine[@lineNumber]
+            tokens = @tokensByLine[lineNumber]
             return null unless tokens?
             for token in tokens
                 return true if token[0] == tokenType
