@@ -306,7 +306,7 @@ class LineLinter
         if @context.class.inClass
             if @lineHasToken 'INDENT'
                 @context.class.classIndents++
-            else if @lineHasToken "OUTDENT"
+            else if @lineHasToken 'OUTDENT'
                 @context.class.classIndents--
                 if @context.class.classIndents is 0
                     @context.class.inClass = false
