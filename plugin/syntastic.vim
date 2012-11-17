@@ -55,9 +55,8 @@ if !exists("g:syntastic_enable_highlighting")
 endif
 
 " highlighting requires getmatches introduced in 7.1.040
-if g:syntastic_enable_highlighting == 1 &&
-            \ (v:version < 701 || v:version == 701 && has('patch040'))
-    let g:syntastic_enable_highlighting = 1
+if v:version < 701 || (v:version == 701 && !has('patch040'))
+    let g:syntastic_enable_highlighting = 0
 endif
 
 if !exists("g:syntastic_echo_current_error")
