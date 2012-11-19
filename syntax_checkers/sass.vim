@@ -19,6 +19,10 @@ if !executable("sass")
     finish
 endif
 
+"sass caching for large files drastically speeds up the checking, but store it
+"in a temp location otherwise sass puts .sass_cache dirs in the users project
+let s:sass_cache_location = tempname()
+
 "By default do not check partials as unknown variables are a syntax error
 if !exists("g:syntastic_sass_check_partials")
     let g:syntastic_sass_check_partials = 0
@@ -34,7 +38,7 @@ function! SyntaxCheckers_sass_GetLocList()
     if !g:syntastic_sass_check_partials && expand('%:t')[0] == '_'
         return []
     end
-    let makeprg='sass --no-cache '.s:imports.' --check '.shellescape(expand('%'))
+    let makeprg='sass --cache-location '.s:sass_cache_location.'  '.s:imports.' --check '.shellescape(expand('%'))
     let errorformat = '%ESyntax %trror:%m,%C        on line %l of %f,%Z%.%#'
     let errorformat .= ',%Wwarning on line %l:,%Z%m,Syntax %trror on line %l: %m'
     let loclist = SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
