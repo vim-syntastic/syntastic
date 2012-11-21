@@ -14,22 +14,25 @@ if exists("loaded_eruby_syntax_checker")
 endif
 let loaded_eruby_syntax_checker = 1
 
+if !exists("g:syntastic_ruby_exec")
+    let g:syntastic_ruby_exec = "ruby"
+endif
+
 "bail if the user doesnt have ruby installed
-if !executable("ruby")
+if !executable(expand(g:syntastic_ruby_exec))
     finish
 endif
 
 function! SyntaxCheckers_eruby_GetLocList()
-    "gsub fixes issue #7 rails has it's own eruby syntax
-    if has('win32')
-        let makeprg='ruby -rerb -e "puts ERB.new(File.read(''' .
-            \ (expand("%")) .
-            \ ''').gsub(''<\%='',''<\%''), nil, ''-'').src" \| ruby -c'
-    else
-        let makeprg='RUBYOPT= ruby -rerb -e "puts ERB.new(File.read(''' .
-            \ (expand("%")) .
-            \ ''').gsub(''<\%='',''<\%''), nil, ''-'').src" \| RUBYOPT= ruby -c'
+    let ruby_exec=expand(g:syntastic_ruby_exec)
+    if !has('win32')
+        let ruby_exec='RUBYOPT= ' . ruby_exec
     endif
+
+    "gsub fixes issue #7 rails has it's own eruby syntax
+    let makeprg=ruby_exec . ' -rerb -e "puts ERB.new(File.read(''' .
+        \ (expand("%")) .
+        \ ''').gsub(''<\%='',''<\%''), nil, ''-'').src" \| ' . ruby_exec . ' -c'
 
     let errorformat='%-GSyntax OK,%E-:%l: syntax error\, %m,%Z%p^,%W-:%l: warning: %m,%Z%p^,%-C%.%#'
 
