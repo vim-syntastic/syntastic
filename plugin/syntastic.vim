@@ -103,6 +103,10 @@ if !exists("g:syntastic_loc_list_height")
     let g:syntastic_loc_list_height = 10
 endif
 
+if !exists("g:syntastic_supported_ft_checkers")
+    let g:syntastic_supported_ft_checkers = {}
+endif
+
 command! SyntasticToggleMode call s:ToggleMode()
 command! SyntasticCheck call s:UpdateErrors(0) <bar> redraw!
 command! Errors call s:ShowLocList()
@@ -506,6 +510,16 @@ endfunction
 "load one
 function! SyntasticCheckable(ft)
     if !exists("g:loaded_" . a:ft . "_syntax_checker")
+        " find any "stray" checkers not defined in an FT.vim file
+        let ft_checkers = get(g:syntastic_supported_ft_checkers, a:ft, [])
+        for ft_checker_fname in split(globpath(&runtimepath, "syntax_checkers/" . a:ft . "/*.vim"), '\n')
+            let checker_name = fnamemodify(ft_checker_fname, ':t:r')
+            if index(ft_checkers, checker_name) == -1
+                let ft_checkers += [checker_name]
+            endif
+        endfor
+        let g:syntastic_supported_ft_checkers[a:ft] = ft_checkers
+
         exec "runtime syntax_checkers/" . a:ft . ".vim"
     endif
 
@@ -672,7 +686,15 @@ function! SyntasticLoadChecker(checkers, ft)
             echoerr &ft . " syntax not supported or not installed."
         endif
     else
-        for checker in a:checkers
+        " add any "stray" checkers to the end of the checkers list
+        let checkers = a:checkers
+        for stray_checker_name in get(g:syntastic_supported_ft_checkers, a:ft, [])
+            if index(checkers, stray_checker_name) == -1
+                let checkers += [stray_checker_name]
+            endif
+        endfor
+
+        for checker in checkers
             if executable(checker)
                 return s:LoadChecker(checker, a:ft)
             endif
