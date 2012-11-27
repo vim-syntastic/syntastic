@@ -508,6 +508,7 @@ function! SyntasticCheckable(ft)
     if !exists("g:loaded_" . a:ft . "_syntax_checker")
         exec "runtime syntax_checkers/" . a:ft . ".vim"
     endif
+    let {"g:loaded_" . a:ft . "_syntax_checker"} = 1
 
     return exists("*SyntaxCheckers_". a:ft ."_GetLocList")
 endfunction

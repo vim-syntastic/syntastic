@@ -64,11 +64,6 @@
 "
 "   let g:syntastic_objc_errorformat = '%f:%l:%c: %trror: %m'
 
-if exists('loaded_objc_syntax_checker')
-    finish
-endif
-let loaded_objc_syntax_checker = 1
-
 if !executable('gcc')
     finish
 endif

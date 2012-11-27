@@ -14,11 +14,6 @@
 " in your .vimrc. Default is flake8.
 "============================================================================
 
-if exists("loaded_python_syntax_checker")
-    finish
-endif
-let loaded_python_syntax_checker = 1
-
 if !exists('g:syntastic_python_checker_args')
     let g:syntastic_python_checker_args = ''
 endif

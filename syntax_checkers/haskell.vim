@@ -9,10 +9,6 @@
 "             See http://sam.zoy.org/wtfpl/COPYING for more details.
 "
 "============================================================================
-if exists('g:loaded_haskell_syntax_checker')
-    finish
-endif
-let g:loaded_haskell_syntax_checker = 1
 
 if !exists('g:syntastic_haskell_checker')
     if executable('hdevtools')

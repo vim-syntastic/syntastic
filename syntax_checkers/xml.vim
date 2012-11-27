@@ -14,11 +14,6 @@
 " and allow you to validate XML data without network access, see xmlcatalog(1)
 " and http://www.xmlsoft.org/catalog.html for more information.
 
-if exists("loaded_xml_syntax_checker")
-    finish
-endif
-let loaded_xml_syntax_checker = 1
-
 "bail if the user doesnt have tidy or grep installed
 if !executable("xmllint")
     finish

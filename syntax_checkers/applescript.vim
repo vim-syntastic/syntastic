@@ -25,11 +25,6 @@
 "
 "============================================================================
 
-if exists("loaded_applescript_syntax_checker")
-    finish
-endif
-let loaded_applescript_syntax_checker = 1
-
 "bail if the user doesnt have osacompile installed
 if !executable("osacompile")
     finish
