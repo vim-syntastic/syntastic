@@ -678,22 +678,22 @@ endfunction
 function! SyntasticLoadChecker(checkers, ft)
     let opt_name = "g:syntastic_" . a:ft . "_checker"
 
+    " add any "stray" checkers to the end of the checkers list
+    let checkers = a:checkers
+    for stray_checker_name in get(g:syntastic_supported_ft_checkers, a:ft, [])
+        if index(checkers, stray_checker_name) == -1
+            let checkers += [stray_checker_name]
+        endif
+    endfor
+
     if exists(opt_name)
         let opt_val = {opt_name}
-        if index(a:checkers, opt_val) != -1
+        if index(checkers, opt_val) != -1
             call s:LoadChecker(opt_val, a:ft)
         else
             echoerr &ft . " syntax not supported or not installed."
         endif
     else
-        " add any "stray" checkers to the end of the checkers list
-        let checkers = a:checkers
-        for stray_checker_name in get(g:syntastic_supported_ft_checkers, a:ft, [])
-            if index(checkers, stray_checker_name) == -1
-                let checkers += [stray_checker_name]
-            endif
-        endfor
-
         for checker in checkers
             if executable(checker)
                 return s:LoadChecker(checker, a:ft)
