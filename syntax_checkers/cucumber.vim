@@ -19,8 +19,16 @@ if !executable("cucumber")
     finish
 endif
 
+function! BundleExec()
+  if executable("bundle")
+    return 'bundle exec '
+  else
+    return ''
+  endif
+endfunction
+
 function! SyntaxCheckers_cucumber_GetLocList()
-    let makeprg = 'cucumber --dry-run --quiet --strict --format pretty '.shellescape(expand('%'))
+    let makeprg = BundleExec() + 'cucumber --dry-run --quiet --strict --format pretty '.shellescape(expand('%'))
     let errorformat =  '%f:%l:%c:%m,%W      %.%# (%m),%-Z%f:%l:%.%#,%-G%.%#'
 
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
