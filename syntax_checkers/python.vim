@@ -23,5 +23,5 @@ if !exists('g:syntastic_python_checker_args')
     let g:syntastic_python_checker_args = ''
 endif
 
-let s:supported_checkers = ["flake8", "pyflakes", "pylint"]
+let s:supported_checkers = ["flake8", "pyflakes", "pylint", "python"]
 call SyntasticLoadChecker(s:supported_checkers, 'python')
