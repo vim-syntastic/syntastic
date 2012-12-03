@@ -11,6 +11,6 @@ endif
 
 function! SyntaxCheckers_typescript_GetLocList()
     let makeprg = 'tsc ' . shellescape(expand("%")) . ' --out ' . syntastic#util#DevNull()
-    let errorformat = '%f\ %#(%l\,%c): %m'
+    let errorformat = '%f %#(%l\,%c): %m'
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 endfunction
