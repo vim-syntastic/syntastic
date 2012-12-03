@@ -17,11 +17,6 @@
 " To use less-lint instead of less set the variable
 " g:syntastic_less_use_less_lint.
 
-if exists("loaded_less_syntax_checker")
-    finish
-endif
-let loaded_less_syntax_checker = 1
-
 "bail if the user doesnt have the lessc binary installed
 if !executable("lessc")
     finish

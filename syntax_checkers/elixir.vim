@@ -9,10 +9,6 @@
 "             See http://sam.zoy.org/wtfpl/COPYING for more details.
 "
 "============================================================================
-if exists("loaded_elixir_syntax_checker")
-    finish
-endif
-let loaded_elixir_syntax_checker = 1
 
 if !executable('elixir')
   finish

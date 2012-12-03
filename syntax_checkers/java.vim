@@ -14,10 +14,6 @@
 " If g:syntastic_java_checker is not set, just use the first syntax
 " checker that we find installed.
 "============================================================================
-if exists("loaded_java_syntax_checker")
-    finish
-endif
-let loaded_java_syntax_checker = 1
 
 let s:supported_checkers = ["javac", "checkstyle"]
 call SyntasticLoadChecker(s:supported_checkers, 'java')

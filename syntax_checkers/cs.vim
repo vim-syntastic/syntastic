@@ -10,11 +10,6 @@
 "
 "============================================================================
 
-if exists('loaded_cs_syntax_checker')
-    finish
-endif
-let loaded_cs_syntax_checker = 1
-
 if !executable('mcs')
     finish
 endif

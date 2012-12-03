@@ -67,11 +67,6 @@
 "
 "   let g:syntastic_cpp_compiler = 'clang++'
 
-if exists('loaded_cpp_syntax_checker')
-    finish
-endif
-let loaded_cpp_syntax_checker = 1
-
 if !exists('g:syntastic_cpp_compiler')
     let g:syntastic_cpp_compiler = 'g++'
 endif

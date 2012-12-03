@@ -10,11 +10,6 @@
 "
 "============================================================================
 
-if exists("loaded_matlab_syntax_checker")
-    finish
-endif
-let loaded_matlab_syntax_checker = 1
-
 "bail if the user doesn't have mlint installed
 if !executable("mlint")
     finish

@@ -18,11 +18,6 @@
 "
 "   let g:syntastic_cuda_arch = "sm_20"
 
-if exists('loaded_cuda_syntax_checker')
-    finish
-endif
-let loaded_cuda_syntax_checker = 1
-
 if !executable('nvcc')
     finish
 endif

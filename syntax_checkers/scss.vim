@@ -10,10 +10,6 @@
 "             See http://sam.zoy.org/wtfpl/COPYING for more details.
 "
 "============================================================================
-if exists("loaded_scss_syntax_checker")
-    finish
-endif
-let loaded_scss_syntax_checker = 1
 
 "bail if the user doesnt have the sass binary installed
 if !executable("sass")

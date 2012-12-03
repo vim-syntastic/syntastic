@@ -10,11 +10,6 @@
 "
 "============================================================================
 
-if exists("loaded_lisp_syntax_checker")
-  finish
-endif
-let loaded_lisp_syntax_checker = 1
-
 " Bail if the user doesnt have clisp installed
 if !executable("clisp")
   finish
