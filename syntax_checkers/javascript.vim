@@ -15,5 +15,4 @@
 " checker that we find installed.
 "============================================================================
 
-let s:supported_checkers = ["gjslint", "jslint", "jsl", "jshint", "closurecompiler"]
-call SyntasticLoadChecker(s:supported_checkers, 'javascript')
+call SyntasticLoadChecker('javascript')

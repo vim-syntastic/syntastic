@@ -14,5 +14,4 @@
 " checker that we find installed.
 "============================================================================
 
-let s:supported_checkers = ["go", "gofmt"]
-call SyntasticLoadChecker(s:supported_checkers, 'go')
+call SyntasticLoadChecker('go')

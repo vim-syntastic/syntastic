@@ -15,5 +15,4 @@
 " checker that we find installed.
 "============================================================================
 
-let s:supported_checkers = ["jsonlint", "jsonval"]
-call SyntasticLoadChecker(s:supported_checkers, 'json')
+call SyntasticLoadChecker('json')
