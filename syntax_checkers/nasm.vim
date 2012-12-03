@@ -9,10 +9,6 @@
 "             See http://sam.zoy.org/wtfpl/COPYING for more details.
 "
 "============================================================================
-if exists("loaded_nasm_syntax_checker")
-    finish
-endif
-let loaded_nasm_syntax_checker = 1
 
 "bail if the user doesnt have nasm installed
 if !executable("nasm")

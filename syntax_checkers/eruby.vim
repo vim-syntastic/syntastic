@@ -9,10 +9,6 @@
 "             See http://sam.zoy.org/wtfpl/COPYING for more details.
 "
 "============================================================================
-if exists("loaded_eruby_syntax_checker")
-    finish
-endif
-let loaded_eruby_syntax_checker = 1
 
 if !exists("g:syntastic_ruby_exec")
     let g:syntastic_ruby_exec = "ruby"

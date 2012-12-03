@@ -24,10 +24,6 @@
 "
 "   let g:syntastic_perl_efm_program = "foo.pl -o -m -g"
 "
-if exists("loaded_perl_syntax_checker")
-    finish
-endif
-let loaded_perl_syntax_checker = 1
 
 "bail if the user doesnt have perl installed
 if !executable("perl")

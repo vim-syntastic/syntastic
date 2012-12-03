@@ -9,10 +9,6 @@
 "             See http://sam.zoy.org/wtfpl/COPYING for more details.
 "
 "============================================================================
-if exists("loaded_html_syntax_checker")
-    finish
-endif
-let loaded_html_syntax_checker = 1
 
 if !exists('g:syntastic_html_checker')
     let g:syntastic_html_checker = "tidy"

@@ -56,11 +56,6 @@
 "
 "   let g:syntastic_ada_remove_include_errors = 1
 
-if exists('loaded_ada_syntax_checker')
-    finish
-endif
-let loaded_ada_syntax_checker = 1
-
 if !executable('gcc')
     finish
 endif

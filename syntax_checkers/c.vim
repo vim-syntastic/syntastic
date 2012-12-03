@@ -9,10 +9,6 @@
 "             See http://sam.zoy.org/wtfpl/COPYING for more details.
 "
 "============================================================================
-if exists("loaded_c_syntax_checker")
-    finish
-endif
-let loaded_c_syntax_checker = 1
 
 if !exists('g:syntastic_c_checker')
     let g:syntastic_c_checker = "gcc"

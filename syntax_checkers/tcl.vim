@@ -10,11 +10,6 @@
 "
 "============================================================================
 
-if exists("loaded_tcl_syntax_checker")
-    finish
-endif
-let loaded_tcl_syntax_checker = 1
-
 "bail if the user doesnt have tclsh installed
 if !executable("tclsh")
     finish

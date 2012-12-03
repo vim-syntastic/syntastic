@@ -14,11 +14,6 @@
 "
 "   let g:syntastic_csslint_options = "--warnings=none"
 
-if exists("loaded_css_syntax_checker")
-    finish
-endif
-let loaded_css_syntax_checker = 1
-
 if !exists('g:syntastic_csslint_options')
     let g:syntastic_csslint_options = ""
 endif

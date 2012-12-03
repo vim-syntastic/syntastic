@@ -64,11 +64,6 @@
 "
 "   let g:syntastic_d_remove_include_errors = 1
 
-if exists('loaded_d_syntax_checker')
-    finish
-endif
-let loaded_d_syntax_checker = 1
-
 if !executable('dmd')
     finish
 endif
