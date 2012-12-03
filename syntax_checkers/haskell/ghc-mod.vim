@@ -11,7 +11,7 @@
 "============================================================================
 
 if !exists('g:syntastic_haskell_checker_args')
-    let g:syntastic_haskell_checker_args = '--hlintOpt="--language=XmlSyntax"'
+    let g:syntastic_haskell_checker_args = '--ghcOpt="-fno-code" --hlintOpt="--language=XmlSyntax"'
 endif
 
 function! SyntaxCheckers_haskell_GetLocList()
