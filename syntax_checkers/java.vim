@@ -15,5 +15,4 @@
 " checker that we find installed.
 "============================================================================
 
-let s:supported_checkers = ["javac", "checkstyle"]
-call SyntasticLoadChecker(s:supported_checkers, 'java')
+call SyntasticLoadChecker('java')
