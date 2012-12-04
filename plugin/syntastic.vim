@@ -505,6 +505,12 @@ endfunction
 "check if a syntax checker exists for the given filetype - and attempt to
 "load one
 function! SyntasticCheckable(ft)
+    "users can just define a syntax checking function and it will override the
+    "syntastic default
+    if exists("*SyntaxCheckers_". a:ft ."_GetLocList")
+        return 1
+    endif
+
     if !exists("g:loaded_" . a:ft . "_syntax_checker")
         exec "runtime syntax_checkers/" . a:ft . ".vim"
         let {"g:loaded_" . a:ft . "_syntax_checker"} = 1
