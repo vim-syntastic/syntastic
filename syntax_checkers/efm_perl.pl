@@ -1,6 +1,4 @@
 #!/usr/bin/perl
-use warnings
-
 # vimparse.pl - Reformats the error messages of the Perl interpreter for use
 # with the quickfix mode of Vim
 #
@@ -67,7 +65,7 @@ use warnings
 #
 # Tested under SunOS 5.7 with Perl 5.6.0.  Let me know if it's not working for
 # you.
-
+use warnings;
 use strict;
 use Getopt::Std;
 
