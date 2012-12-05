@@ -111,6 +111,10 @@ A. Vim provides several built in commands for this. See `:help :lnext` and `:hel
 
 If you use these commands a lot then you may want to add shortcut mappings to your vimrc, or install something like [unimpaired](https://github.com/tpope/vim-unimpaired) - which provides such mappings (among other things).
 
+__Q. A syntax checker is giving me unwanted/strange style tips??__
+
+A. Some filetypes (e.g. php) have style checkers as well as syntax checkers. You can usually configure the options that are passed to the style checkers, or just disable them. Take a look at the syntax checker integration file (e.g. `syntax_checkers/php.vim`) to see what options are available.
+
 Changelog
 ---------
 2.3.0 (16-feb-2012)
