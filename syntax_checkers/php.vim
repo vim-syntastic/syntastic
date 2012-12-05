@@ -9,6 +9,18 @@
 "             See http://sam.zoy.org/wtfpl/COPYING for more details.
 "
 "============================================================================
+"
+"This syntax checker is composed of three checkers:
+"   - php -l
+"   - phpcs (see http://pear.php.net/package/PHP_CodeSniffer)
+"   - phpmd (see http://phpmd.org)
+"
+"If any of these checkers are installed then they will be used. Phpcs and
+"Phpmd are 'style checkers' and will only be called if `php -l` doesnt find
+"any syntax errors.
+"
+"There are options below to config and disable phpcs and phpmd.
+
 
 "bail if the user doesnt have php installed
 if !executable("php")
