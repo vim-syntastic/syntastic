@@ -68,7 +68,7 @@ if exists('loaded_gcc_syntax_checker')
 endif
 let loaded_gcc_syntax_checker = 1
 
-if !executable('gcc')
+if !executable(g:syntastic_c_checker)
     finish
 endif
 
@@ -84,7 +84,7 @@ if !exists('g:syntastic_c_config_file')
 endif
 
 function! SyntaxCheckers_c_GetLocList()
-    let makeprg = 'gcc -fsyntax-only '
+    let makeprg = g:syntastic_c_checker . ' -fsyntax-only '
     let errorformat = '%-G%f:%s:,%-G%f:%l: %#error: %#(Each undeclared '.
                \ 'identifier is reported only%.%#,%-G%f:%l: %#error: %#for '.
                \ 'each function it appears%.%#,%-GIn file included%.%#,'.
@@ -105,7 +105,8 @@ function! SyntaxCheckers_c_GetLocList()
     " determine whether to parse header files as well
     if expand('%') =~? '.h$'
         if exists('g:syntastic_c_check_header')
-            let makeprg = 'gcc -c '.shellescape(expand('%')) .
+            let makeprg = g:syntastic_c_checker
+                        \ ' -c ' . shellescape(expand('%')) .
                         \ ' ' . g:syntastic_c_compiler_options .
                         \ ' ' . syntastic#c#GetNullDevice() .
                         \ ' ' . syntastic#c#GetIncludeDirs('c')
