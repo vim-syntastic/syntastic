@@ -19,6 +19,11 @@
 "
 "   let g:syntastic_c_no_include_search = 1
 "
+" To disable the include of the default include dirs (such as /usr/include)
+" add this line to your .vimrc:
+"
+"   let g:syntastic_c_no_default_include_dirs = 1
+"
 " To enable header files being re-checked on every file write add the
 " following line to your .vimrc. Otherwise the header files are checked only
 " one time on initially loading the file.

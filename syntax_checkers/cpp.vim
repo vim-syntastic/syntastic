@@ -19,6 +19,11 @@
 "
 "   let g:syntastic_cpp_no_include_search = 1
 "
+" To disable the include of the default include dirs (such as /usr/include)
+" add this line to your .vimrc:
+"
+"   let g:syntastic_cpp_no_default_include_dirs = 1
+"
 " In order to add some custom include directories that should be added to the
 " gcc command line you can add those to the global variable
 " g:syntastic_cpp_include_dirs. This list can be used like this:
