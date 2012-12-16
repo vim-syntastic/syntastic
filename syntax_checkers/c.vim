@@ -14,8 +14,8 @@ if !exists('g:syntastic_c_checker')
     let g:syntastic_c_checker = "gcc"
 endif
 
-if g:syntastic_c_checker == "gcc"
-    if executable("gcc")
+if g:syntastic_c_checker == "gcc" || g:syntastic_c_checker == "clang"
+    if executable(g:syntastic_c_checker)
         runtime! syntax_checkers/c/gcc.vim
     endif
 elseif g:syntastic_c_checker == "checkpatch"
