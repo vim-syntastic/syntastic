@@ -92,7 +92,7 @@ if !exists('g:syntastic_cpp_config_file')
 endif
 
 function! SyntaxCheckers_cpp_GetLocList()
-    let makeprg = g:syntastic_cpp_compiler . ' -fsyntax-only ' .
+    let makeprg = g:syntastic_cpp_compiler . ' -x c++ -fsyntax-only ' .
                 \ g:syntastic_cpp_compiler_options
     let errorformat =  '%-G%f:%s:,%f:%l:%c: %trror: %m,%f:%l:%c: %tarning: '.
                 \ '%m,%f:%l:%c: %m,%f:%l: %trror: %m,%f:%l: %tarning: %m,'.

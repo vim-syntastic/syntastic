@@ -89,7 +89,7 @@ if !exists('g:syntastic_c_config_file')
 endif
 
 function! SyntaxCheckers_c_GetLocList()
-    let makeprg = g:syntastic_c_checker . ' -fsyntax-only '
+    let makeprg = g:syntastic_c_checker . ' -x c -fsyntax-only '
     let errorformat = '%-G%f:%s:,%-G%f:%l: %#error: %#(Each undeclared '.
                \ 'identifier is reported only%.%#,%-G%f:%l: %#error: %#for '.
                \ 'each function it appears%.%#,%-GIn file included%.%#,'.
