@@ -19,6 +19,11 @@
 "
 "   let g:syntastic_c_no_include_search = 1
 "
+" To disable the include of the default include dirs (such as /usr/include)
+" add this line to your .vimrc:
+"
+"   let g:syntastic_c_no_default_include_dirs = 1
+"
 " To enable header files being re-checked on every file write add the
 " following line to your .vimrc. Otherwise the header files are checked only
 " one time on initially loading the file.
@@ -68,7 +73,7 @@ if exists('loaded_gcc_syntax_checker')
 endif
 let loaded_gcc_syntax_checker = 1
 
-if !executable('gcc')
+if !executable(g:syntastic_c_checker)
     finish
 endif
 
@@ -84,7 +89,7 @@ if !exists('g:syntastic_c_config_file')
 endif
 
 function! SyntaxCheckers_c_GetLocList()
-    let makeprg = 'gcc -fsyntax-only '
+    let makeprg = g:syntastic_c_checker . ' -x c -fsyntax-only '
     let errorformat = '%-G%f:%s:,%-G%f:%l: %#error: %#(Each undeclared '.
                \ 'identifier is reported only%.%#,%-G%f:%l: %#error: %#for '.
                \ 'each function it appears%.%#,%-GIn file included%.%#,'.
@@ -105,7 +110,8 @@ function! SyntaxCheckers_c_GetLocList()
     " determine whether to parse header files as well
     if expand('%') =~? '.h$'
         if exists('g:syntastic_c_check_header')
-            let makeprg = 'gcc -c '.shellescape(expand('%')) .
+            let makeprg = g:syntastic_c_checker
+                        \ ' -c ' . shellescape(expand('%')) .
                         \ ' ' . g:syntastic_c_compiler_options .
                         \ ' ' . syntastic#c#GetNullDevice() .
                         \ ' ' . syntastic#c#GetIncludeDirs('c')
