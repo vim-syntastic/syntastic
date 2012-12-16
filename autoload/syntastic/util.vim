@@ -13,6 +13,28 @@ function! syntastic#util#DevNull()
     return '/dev/null'
 endfunction
 
+"search the first 5 lines of the file for a magic number and return a map
+"containing the args and the executable
+"
+"e.g.
+"
+"#!/usr/bin/perl -f -bar
+"
+"returns
+"
+"{'exe': '/usr/bin/perl', 'args': ['-f', '-bar']}
+function! syntastic#util#ParseMagicNumber()
+    for lnum in range(1,5)
+        let line = getline(lnum)
+
+        if line =~ '^#!'
+            let exe = matchstr(line, '^#!\s*\zs[^ \t]*')
+            let args = split(matchstr(line, '^#!\s*[^ \t]*\zs.*'))
+            return {'exe': exe, 'args': args}
+        endif
+    endfor
+endfunction
+
 let &cpo = s:save_cpo
 unlet s:save_cpo
 " vim: set et sts=4 sw=4:
