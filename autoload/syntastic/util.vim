@@ -23,7 +23,7 @@ endfunction
 "returns
 "
 "{'exe': '/usr/bin/perl', 'args': ['-f', '-bar']}
-function! syntastic#util#ParseMagicNumber()
+function! syntastic#util#ParseShebang()
     for lnum in range(1,5)
         let line = getline(lnum)
 
@@ -33,6 +33,8 @@ function! syntastic#util#ParseMagicNumber()
             return {'exe': exe, 'args': args}
         endif
     endfor
+
+    return {'exe': '', 'args': []}
 endfunction
 
 let &cpo = s:save_cpo

@@ -40,7 +40,18 @@ function! SyntaxCheckers_perl_GetLocList()
     else
         let makeprg = g:syntastic_perl_efm_program . ' ' . shellescape(expand('%'))
     endif
+    let makeprg .= s:ExtraMakeprgArgs()
+
     let errorformat =  '%t:%f:%l:%m'
 
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
+endfunction
+
+function! s:ExtraMakeprgArgs()
+    let shebang = syntastic#util#ParseShebang()
+    if index(shebang['args'], '-T') != -1
+        return ' -Tc'
+    endif
+
+    return ''
 endfunction
