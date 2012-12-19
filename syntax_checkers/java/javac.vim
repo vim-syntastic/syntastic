@@ -28,8 +28,24 @@ if !exists("g:syntastic_java_javac_delete_output")
     let g:syntastic_java_javac_delete_output = 1
 endif
 
+if !exists("g:syntastic_java_javac_temp_dir")
+    if has('win32') || has('win64')
+        let g:syntastic_java_javac_temp_dir = $TEMP."\\vim-syntastic-javac"
+    else
+        let g:syntastic_java_javac_temp_dir = '/tmp/vim-syntastic-javac'
+    endif
+endif
+
 if !exists("g:syntastic_java_javac_autoload_maven_classpath")
     let g:syntastic_java_javac_autoload_maven_classpath = 1
+endif
+
+if !exists('g:syntastic_java_javac_config_file_enabled')
+    let g:syntastic_java_javac_config_file_enabled = 0
+endif
+
+if !exists('g:syntastic_java_javac_config_file')
+    let g:syntastic_java_javac_config_file = '.syntastic_javac_config'
 endif
 
 " Internal variables, do not ovveride those
@@ -45,20 +61,55 @@ if !exists("g:syntastic_java_javac_maven_pom_classpath")
     let g:syntastic_java_javac_maven_pom_classpath = ''
 endif
 
+" recursively remove directory and all it's sub-directories
+function! s:RemoveDir(dir)
+    if isdirectory(a:dir)
+        for f in split(globpath(a:dir,'*'),"\n")
+            call s:RemoveDir(f)
+        endfor
+        silent! call system('rmdir '.a:dir) 
+    else
+        silent! call delete(a:dir)
+    endif
+endfunction
+
 function! s:AddToClasspath(classpath,path)
     if a:path == ''
         return a:classpath
     endif
     if a:classpath != '' && a:path != ''
-        return a:classpath . ":" . a:path
+        if has('win32') || has('win64')
+            return a:classpath . ";" . a:path
+        else
+            return a:classpath . ":" . a:path
+        endif
     else
         return a:path
+    endif
+endfunction
+
+function! s:LoadClasspathFromConfigFile()
+    if filereadable(g:syntastic_java_javac_config_file)
+        let path = ''
+        let lines = readfile(g:syntastic_java_javac_config_file)
+        for l in lines
+            if l != ''
+                let path .= l."\n" 
+            endif
+        endfor
+        return path
+    else
+        return ''
     endif
 endfunction
 
 function! s:SaveClasspath()
     let path = ''
     let lines = getline(1,line('$'))
+    " save classpath to config file
+    if g:syntastic_java_javac_config_file_enabled
+        call writefile(lines,g:syntastic_java_javac_config_file)
+    endif
     for l in lines
         if l != ''
             let path .= l."\n" 
@@ -112,8 +163,16 @@ function! SyntaxCheckers_java_GetLocList()
     let javac_opts = g:syntastic_java_javac_options 
 
     if g:syntastic_java_javac_delete_output
-        let output_dir = '/tmp/vim-syntastic'
+        let output_dir = g:syntastic_java_javac_temp_dir 
         let javac_opts .= ' -d ' .output_dir
+    endif
+
+    " load classpath from config file
+    if g:syntastic_java_javac_config_file_enabled
+        let loaded_classpath = s:LoadClasspathFromConfigFile()
+        if loaded_classpath != ''
+            let g:syntastic_java_javac_classpath = loaded_classpath
+        endif
     endif
 
     let javac_classpath = ''
@@ -149,11 +208,11 @@ function! SyntaxCheckers_java_GetLocList()
     let errorformat = '%E%f:%l:\ error:\ %m,%W%f:%l:\ warning:\ %m,%A%f:%l:\ %m,%+Z%p^,%+C%.%#,%-G%.%#'
 
     if g:syntastic_java_javac_delete_output
-        call system('mkdir -p ' . output_dir)
+        silent! call mkdir(output_dir,'p')
     endif
     let r = SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
     if g:syntastic_java_javac_delete_output
-        call system('rm -rf ' . output_dir)
+        call s:RemoveDir(output_dir)
     endif
     return r
 
