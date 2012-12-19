@@ -91,7 +91,7 @@ my $handle = (defined $opt_f ? \*FILE : \*STDOUT);
 (my $file = shift) or &usage; # display usage if no filename is supplied
 my $args = (@ARGV ? ' ' . join ' ', @ARGV : '');
 
-my $libs = join ' ', map {"-I$_"} split ',', $opt_I;
+my $libs = join ' ', map {"-I$_"} split ',', $opt_I || '';
 my @error_lines = `perl $libs @{[defined $opt_c ? '-c ' : '' ]} @{[defined $opt_w ? '-X ' : '-Mwarnings ']} "$file$args" 2>&1`;
 
 my @lines = map { "E:$_" } @error_lines;
