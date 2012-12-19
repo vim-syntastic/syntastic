@@ -200,8 +200,16 @@ function! SyntaxCheckers_java_GetLocList()
         let javac_opts .= ' -cp ' . javac_classpath
     endif
 
+
+    " path seperator
+    if has('win32') || has('win64')
+        let sep = "\\" 
+    else
+        let sep = '/'
+    endif
+
     let makeprg = g:syntastic_java_javac_executable . ' '. javac_opts . ' '
-               \. expand ( '%:p:h' ) . '/' . expand ( '%:t' )
+               \. '"'.expand ( '%:p:h' ) . sep . expand ( '%:t' ).'"'
                \. ' 2>&1 '
 
     " unashamedly stolen from *errorformat-javac* (quickfix.txt) and modified to include error types
