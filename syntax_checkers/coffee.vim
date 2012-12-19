@@ -9,19 +9,37 @@
 "             See http://sam.zoy.org/wtfpl/COPYING for more details.
 "
 "============================================================================
-if exists("loaded_coffee_syntax_checker")
-    finish
-endif
-let loaded_coffee_syntax_checker = 1
 
 "bail if the user doesnt have coffee installed
 if !executable("coffee")
     finish
 endif
 
+if !exists('g:syntastic_coffee_lint_options')
+    let g:syntastic_coffee_lint_options = ""
+endif
+
+
 function! SyntaxCheckers_coffee_GetLocList()
     let makeprg = 'coffee -c -l -o /tmp '.shellescape(expand('%'))
     let errorformat =  'Syntax%trror: In %f\, %m on line %l,%EError: In %f\, Parse error on line %l: %m,%EError: In %f\, %m on line %l,%W%f(%l): lint warning: %m,%-Z%p^,%W%f(%l): warning: %m,%-Z%p^,%E%f(%l): SyntaxError: %m,%-Z%p^,%-G%.%#'
 
-    return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
+    let coffee_results = SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
+
+    if !empty(coffee_results)
+        return coffee_results
+    endif
+
+    if executable("coffeelint")
+        return s:GetCoffeeLintErrors()
+    endif
+
+    return []
+endfunction
+
+function s:GetCoffeeLintErrors()
+    let coffeelint = 'coffeelint --csv '.g:syntastic_coffee_lint_options.' '.shellescape(expand('%'))
+    let lint_results = SyntasticMake({ 'makeprg': coffeelint, 'errorformat': '%f\,%l\,%trror\,%m', 'subtype': 'Style' })
+
+    return lint_results
 endfunction

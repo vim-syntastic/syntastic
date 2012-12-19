@@ -13,10 +13,5 @@
 " If g:syntastic_go_checker is not set, just use the first syntax
 " checker that we find installed.
 "============================================================================
-if exists("loaded_go_syntax_checker")
-    finish
-endif
-let loaded_go_syntax_checker = 1
 
-let s:supported_checkers = ["go", "6g", "gofmt"]
-call SyntasticLoadChecker(s:supported_checkers, 'go')
+call SyntasticLoadChecker('go')

@@ -9,26 +9,28 @@
 "             See http://sam.zoy.org/wtfpl/COPYING for more details.
 "
 "============================================================================
-if exists("loaded_eruby_syntax_checker")
-    finish
-endif
-let loaded_eruby_syntax_checker = 1
 
-"bail if the user doesnt have ruby or cat installed
-if !executable("ruby") || !executable("cat")
+if !exists("g:syntastic_ruby_exec")
+    let g:syntastic_ruby_exec = "ruby"
+endif
+
+"bail if the user doesnt have ruby installed
+if !executable(expand(g:syntastic_ruby_exec))
     finish
 endif
 
 function! SyntaxCheckers_eruby_GetLocList()
-    if has('win32')
-        let makeprg='sed "s/<\%=/<\%/g" '. shellescape(expand("%")) . ' \| ruby -e "require \"erb\"; puts ERB.new(ARGF.read, nil, \"-\").src" \| ruby -c'
-    else
-        let makeprg='sed "s/<\%=/<\%/g" '. shellescape(expand("%")) . ' \| RUBYOPT= ruby -e "require \"erb\"; puts ERB.new(ARGF.read, nil, \"-\").src" \| RUBYOPT= ruby -c'
+    let ruby_exec=expand(g:syntastic_ruby_exec)
+    if !has('win32')
+        let ruby_exec='RUBYOPT= ' . ruby_exec
     endif
 
-    let errorformat='%-GSyntax OK,%E-:%l: syntax error\, %m,%Z%p^,%W-:%l: warning: %m,%Z%p^,%-C%.%#'
-    return SyntasticMake({ 'makeprg': makeprg,
-                         \ 'errorformat': errorformat,
-                         \ 'defaults': {'bufnr': bufnr("")} })
+    "gsub fixes issue #7 rails has it's own eruby syntax
+    let makeprg=ruby_exec . ' -rerb -e "puts ERB.new(File.read(''' .
+        \ (expand("%")) .
+        \ ''').gsub(''<\%='',''<\%''), nil, ''-'').src" \| ' . ruby_exec . ' -c'
 
+    let errorformat='%-GSyntax OK,%E-:%l: syntax error\, %m,%Z%p^,%W-:%l: warning: %m,%Z%p^,%-C%.%#'
+
+    return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat})
 endfunction

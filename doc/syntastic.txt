@@ -163,6 +163,20 @@ syntax errors: >
     let g:syntastic_enable_signs=1
 <
 
+                   *'syntastic_error_symbol'* *'syntastic_style_error_symbol'*
+               *'syntastic_warning_symbol'* *'syntastic_style_warning_symbol'*
+Use this option to control what the syntastic |:sign| text contains. Several
+error symobls can be customized:
+    syntastic_error_symbol - For syntax errors, defaults to '>>'
+    syntastic_style_error_symbol - For style errors, defaults to 'S>'
+    syntastic_warning_symbol - For syntax warnings, defaults to '>>'
+    syntastic_style_warning_symbol - For style warnings, defaults to 'S>'
+
+Example: >
+    let g:syntastic_error_symbol='✗'
+    let g:syntastic_warning_symbol='⚠'
+<
+
                                                  *'syntastic_enable_balloons'*
 Default: 1
 Use this option to tell syntastic whether to display error messages in balloons
@@ -260,7 +274,7 @@ this option has the following effects:
 
 Default: [Syntax: line:%F (%t)]
 Use this option to control what the syntastic statusline text contains. Several
-magic flags are availble to insert information:
+magic flags are available to insert information:
     %e - number of errors
     %w - number of warnings
     %t - total number of warnings and errors
@@ -340,7 +354,7 @@ The author of syntastic is a mighty wild stallion, hear him roar! >
 
 <
 He likes to trot around in the back yard reading his emails and sipping a
-scolding hot cup of Earl Grey. Email him at martin.grenfell at gmail dot com.
+scalding hot cup of Earl Grey. Email him at martin.grenfell at gmail dot com.
 He can also be found trolling the #vim channel on the freenode IRC network as
 scrooloose.
 

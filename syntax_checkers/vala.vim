@@ -22,11 +22,6 @@
 "
 "============================================================================
 
-if exists('loaded_vala_syntax_checker')
-    finish
-endif
-let loaded_vala_syntax_checker = 1
-
 if !executable('valac')
     finish
 endif

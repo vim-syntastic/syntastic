@@ -10,11 +10,6 @@
 "
 "============================================================================
 
-if exists('loaded_lua_syntax_checker')
-    finish
-endif
-let loaded_lua_syntax_checker = 1
-
 " check if the lua compiler is installed
 if !executable('luac')
     finish

@@ -13,11 +13,6 @@
 " We use rst2pseudoxml.py, as it is ever so marginally faster than the other
 " rst2${x} tools in docutils.
 
-if exists("loaded_rst_syntax_checker")
-    finish
-endif
-let loaded_rst_syntax_checker = 1
-
 "bail if the user doesn't have rst2pseudoxml.py installed
 if !executable("rst2pseudoxml.py")
     finish
@@ -25,7 +20,7 @@ endif
 
 function! SyntaxCheckers_rst_GetLocList()
     let makeprg = 'rst2pseudoxml.py --report=2 --exit-status=1 ' .
-      \ shellescape(expand('%')) . ' /dev/null'
+      \ shellescape(expand('%')) . ' ' . syntastic#util#DevNull()
 
     let errorformat = '%f:%l:\ (%tNFO/1)\ %m,
       \%f:%l:\ (%tARNING/2)\ %m,

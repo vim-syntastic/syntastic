@@ -9,10 +9,6 @@
 "             See http://sam.zoy.org/wtfpl/COPYING for more details.
 "
 "============================================================================
-if exists("loaded_z80_syntax_checker")
-    finish
-endif
-let loaded_z80_syntax_checker = 1
 
 "bail if the user doesnt have z80_syntax_checker.py installed
 "To obtain this application there are two solutions:

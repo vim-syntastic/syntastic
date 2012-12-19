@@ -9,10 +9,6 @@
 "             See http://sam.zoy.org/wtfpl/COPYING for more details.
 "
 "============================================================================
-if exists("loaded_docbk_syntax_checker")
-    finish
-endif
-let loaded_docbk_syntax_checker = 1
 
 "bail if the user doesnt have tidy or grep installed
 if !executable("xmllint")
@@ -21,7 +17,7 @@ endif
 
 function! SyntaxCheckers_docbk_GetLocList()
 
-    let makeprg="xmllint --xinclude --noout --postvalid ".shellescape(expand(%:p))
+    let makeprg="xmllint --xinclude --noout --postvalid ".shellescape(expand("%:p"))
     let errorformat='%E%f:%l: parser error : %m,%W%f:%l: parser warning : %m,%E%f:%l:%.%# validity error : %m,%W%f:%l:%.%# validity warning : %m,%-Z%p^,%-C%.%#,%-G%.%#'
     let loclist = SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 

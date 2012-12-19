@@ -10,6 +10,20 @@
 "
 "============================================================================
 "
+" The more reliable way to check for a single .ml file is to use ocamlc.
+" You can do that setting this in your .vimrc:
+"
+"   let g:syntastic_ocaml_use_ocamlc = 1
+" It's possible to use ocamlc in conjuction with Jane Street's Core. In order
+" to do that, you have to specify this in your .vimrc:
+"
+"   let g:syntastic_ocaml_use_janestreet_core = 1
+"   let g:syntastic_ocaml_janestreet_core_dir = <path>
+"
+" Where path is the path to your core installation (usually a collection of
+" .cmx and .cmxa files).
+"
+"
 " By default the camlp4o preprocessor is used to check the syntax of .ml, and .mli files,
 " ocamllex is used to check .mll files and menhir is used to check .mly files.
 " The output is all redirected to /dev/null, nothing is written to the disk.
@@ -34,11 +48,6 @@
 " For best results your current directory should be the project root
 " (same situation if you want useful output from :make).
 
-if exists("loaded_ocaml_syntax_checker")
-    finish
-endif
-let loaded_ocaml_syntax_checker = 1
-
 if exists('g:syntastic_ocaml_camlp4r') &&
     \ g:syntastic_ocaml_camlp4r != 0
     let s:ocamlpp="camlp4r"
@@ -51,30 +60,24 @@ if !executable(s:ocamlpp)
     finish
 endif
 
+if !exists('g:syntastic_ocaml_use_ocamlc') || !executable('ocamlc')
+    let g:syntastic_ocaml_use_ocamlc = 0
+endif
+
+if !exists('g:syntastic_ocaml_use_janestreet_core')
+    let g:syntastic_ocaml_use_ocamlc = 0
+endif
+
+if !exists('g:syntastic_ocaml_use_ocamlbuild') || !executable("ocamlbuild")
+    let g:syntastic_ocaml_use_ocamlbuild = 0
+endif
+
 function! SyntaxCheckers_ocaml_GetLocList()
-    if exists('g:syntastic_ocaml_use_ocamlbuild') &&
-                \ g:syntastic_ocaml_use_ocamlbuild != 0 &&
-                \ executable("ocamlbuild") &&
-                \ isdirectory('_build')
-        let makeprg = "ocamlbuild -quiet -no-log -tag annot,". s:ocamlpp. " -no-links -no-hygiene -no-sanitize ".
-                    \ shellescape(expand('%:r')).".cmi"
-    else
-        let extension = expand('%:e')
-        if match(extension, 'mly') >= 0
-            " ocamlyacc output can't be redirected, so use menhir
-            if !executable("menhir")
-                return []
-            endif
-            let makeprg = "menhir --only-preprocess ".shellescape(expand('%')) . " >/dev/null"
-        elseif match(extension,'mll') >= 0
-            if !executable("ocamllex")
-                return []
-            endif
-            let makeprg = "ocamllex -q -o /dev/null ".shellescape(expand('%'))
-        else
-            let makeprg = "camlp4o -o /dev/null ".shellescape(expand('%'))
-        endif
+    let makeprg = s:GetMakeprg()
+    if makeprg == ""
+        return []
     endif
+
     let errorformat = '%AFile "%f"\, line %l\, characters %c-%*\d:,'.
                 \ '%AFile "%f"\, line %l\, characters %c-%*\d (end at line %*\d\, character %*\d):,'.
                 \ '%AFile "%f"\, line %l\, character %c:,'.
@@ -86,4 +89,52 @@ function! SyntaxCheckers_ocaml_GetLocList()
                 \ '%-G+%.%#'
 
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
+endfunction
+
+function s:GetMakeprg()
+    if g:syntastic_ocaml_use_ocamlc
+        return s:GetOcamlcMakeprg()
+    endif
+
+    if g:syntastic_ocaml_use_ocamlbuild && isdirectory('_build')
+        return s:GetOcamlBuildMakeprg()
+    endif
+
+    return s:GetOtherMakeprg()
+endfunction
+
+function s:GetOcamlcMakeprg()
+    if g:syntastic_ocaml_use_janestreet_core
+        let build_cmd = "ocamlc -I "
+        let build_cmd .= expand(g:syntastic_ocaml_janestreet_core_dir)
+        let build_cmd .= " -c ".expand('%')
+        return build_cmd
+    else
+        return "ocamlc -c ". expand('%')
+    endif
+endfunction
+
+function s:GetOcamlBuildMakeprg()
+    return "ocamlbuild -quiet -no-log -tag annot,". s:ocamlpp. " -no-links -no-hygiene -no-sanitize ".
+                \ shellescape(expand('%:r')).".cmi"
+endfunction
+
+function s:GetOtherMakeprg()
+    "TODO: give this function a better name?
+    "
+    "TODO: should use throw/catch instead of returning an empty makeprg
+
+    let extension = expand('%:e')
+    let makeprg = ""
+
+    if match(extension, 'mly') >= 0 && executable("menhir")
+        " ocamlyacc output can't be redirected, so use menhir
+        let makeprg = "menhir --only-preprocess ".shellescape(expand('%')) . " >/dev/null"
+    elseif match(extension,'mll') >= 0 && executable("ocamllex")
+        let makeprg = "ocamllex -q -o /dev/null ".shellescape(expand('%'))
+    else
+        let makeprg = "camlp4o -o /dev/null ".shellescape(expand('%'))
+    endif
+
+    return makeprg
 endfunction

@@ -2,7 +2,7 @@
                   / \,,_  .'|
                ,{{| /}}}}/_.'            _____________________________________________
               }}}}` '{{'  '.            /                                             \
-            {{{{{    _   ;, \          /                Gentlemen,                     \
+            {{{{{    _   ;, \          /            Ladies and Gentlemen,              \
          ,}}}}}}    /o`\  ` ;)        |                                                |
         {{{{{{   /           (        |                 this is ...                    |
         }}}}}}   |            \       |                                                |
@@ -50,12 +50,44 @@ enabled.
 Installation
 ------------
 
-[pathogen.vim](https://github.com/tpope/vim-pathogen) is the recommended way to install syntastic.
+Installing syntastic is easy but first you need to have the pathogen plugin installed.  If you already
+have pathogen working then skip Step 1 and go to Step 2.
+
+Step 1: Install pathogen.vim
+----------------------------
+
+First I'll show you how to install tpope's [pathogen.vim](https://github.com/tpope/vim-pathogen) so that 
+it's easy to install syntastic.  Do this in your Terminal so that you get the pathogen.vim file 
+and the directories it needs:
+
+    mkdir -p ~/.vim/autoload ~/.vim/bundle; \
+    curl -so ~/.vim/autoload/pathogen.vim \
+        https://raw.github.com/tpope/vim-pathogen/master/autoload/pathogen.vim
+
+Next you *need to add this* to your ~/.vimrc:
+
+        call pathogen#infect()
+
+Step 2: Install syntastic as a pathogen bundle
+----------------------------------------------
+
+You now have pathogen installed and can put syntastic into ~/.vim/bundle like this:
+    
 
     cd ~/.vim/bundle
     git clone https://github.com/scrooloose/syntastic.git
 
-Then reload vim, run `:Helptags`, and check out `:help syntastic.txt`.
+Quit vim and start it back up to reload it, then type:
+
+    :Helptags
+
+If you get an error when you do this, then you probably didn't install pathogen right.  Go back to
+step 1 and make sure you did the following:
+
+1. Created both the ~/.vim/autoload and ~/.vim/bundle directories.
+2. Added the "call pathogen#infect()" line to your ~/.vimrc file
+3. Did the git clone of syntastic inside ~/.vim/bundle
+4. Have permissions to access all of these directories.
 
 
 Google group
@@ -69,10 +101,19 @@ FAQ
 
 __Q. I installed syntastic but it isn't reporting any errors ...__
 
-A. The most likely reason is that the syntax checker that it requires isn't installed. For example: python requires either `flake8`, `pyflakes` or `pylint` to be installed and in `$PATH`. To see which executable is required, just look in `syntax_checkers/<filetype>.vim`.
+A. The most likely reason is that the syntax checker that it requires isn't installed. For example: python requires either `flake8`, `pyflakes` or `pylint` to be installed and in `$PATH`. To see which executable is required, just look in `syntax_checkers/<filetype>.vim`.  Note that aliases do not work; the actual executable must be available in your `$PATH`.  Symbolic links are okay.
 
 Another reason it could fail is that the error output for the syntax checker may have changed. In this case, make sure you have the latest version of the syntax checker installed. If it still fails then create an issue - or better yet, create a pull request.
 
+__Q. How can I jump between the different errors without using the location list at the bottom of the window?__
+
+A. Vim provides several built in commands for this. See `:help :lnext` and `:help :lprev`.
+
+If you use these commands a lot then you may want to add shortcut mappings to your vimrc, or install something like [unimpaired](https://github.com/tpope/vim-unimpaired) - which provides such mappings (among other things).
+
+__Q. A syntax checker is giving me unwanted/strange style tips??__
+
+A. Some filetypes (e.g. php) have style checkers as well as syntax checkers. You can usually configure the options that are passed to the style checkers, or just disable them. Take a look at the syntax checker integration file (e.g. `syntax_checkers/php.vim`) to see what options are available.
 
 Changelog
 ---------

@@ -18,11 +18,6 @@
 "
 "============================================================================
 
-if exists("loaded_fortran_syntax_checker")
-    finish
-endif
-let loaded_fortran_syntax_checker = 1
-
 "bail if the user doesnt have fortran installed
 if !executable("gfortran")
     finish

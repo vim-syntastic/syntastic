@@ -9,34 +9,19 @@
 "             See http://sam.zoy.org/wtfpl/COPYING for more details.
 "
 "============================================================================
-if exists("loaded_haskell_syntax_checker")
-    finish
+
+if !exists('g:syntastic_haskell_checker')
+    if executable('hdevtools')
+        runtime! syntax_checkers/haskell/hdevtools.vim
+    elseif executable('ghc-mod')
+        runtime! syntax_checkers/haskell/ghc-mod.vim
+    endif
+elseif g:syntastic_haskell_checker == 'hdevtools'
+    if executable('hdevtools')
+        runtime! syntax_checkers/haskell/hdevtools.vim
+    endif
+elseif g:syntastic_haskell_checker == 'ghc-mod'
+    if executable('ghc-mod')
+        runtime! syntax_checkers/haskell/ghc-mod.vim
+    endif
 endif
-let loaded_haskell_syntax_checker = 1
-
-"bail if the user doesnt have ghc-mod installed
-if !executable("ghc-mod")
-    finish
-endif
-
-if !exists('g:syntastic_haskell_checker_args')
-    let g:syntastic_haskell_checker_args = '--hlintOpt="--language=XmlSyntax"'
-endif
-
-function! SyntaxCheckers_haskell_GetLocList()
-    let ghcmod = 'ghc-mod ' . g:syntastic_haskell_checker_args
-    let makeprg =
-          \ "{ ".
-          \ ghcmod . " check ". shellescape(expand('%')) . "; " .
-          \ ghcmod . " lint " . shellescape(expand('%')) . ";" .
-          \ " }"
-    let errorformat = '%-G\\s%#,%f:%l:%c:%trror: %m,%f:%l:%c:%tarning: %m,'.
-                \ '%f:%l:%c: %trror: %m,%f:%l:%c: %tarning: %m,%f:%l:%c:%m,'.
-                \ '%E%f:%l:%c:,%Z%m,'
-
-    return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
-endfunction
-
-function! SyntaxCheckers_lhaskell_GetLocList()
-    return SyntaxCheckers_haskell_GetLocList()
-endfunction

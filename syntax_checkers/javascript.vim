@@ -14,10 +14,5 @@
 " If g:syntastic_javascript_checker is not set, just use the first syntax
 " checker that we find installed.
 "============================================================================
-if exists("loaded_javascript_syntax_checker")
-    finish
-endif
-let loaded_javascript_syntax_checker = 1
 
-let s:supported_checkers = ["gjslint", "jslint", "jsl", "jshint"]
-call SyntasticLoadChecker(s:supported_checkers, 'javascript')
+call SyntasticLoadChecker('javascript')
