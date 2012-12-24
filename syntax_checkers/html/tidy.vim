@@ -34,7 +34,8 @@ let s:ignore_html_errors = [
                 \ "<meta> proprietary attribute \"charset\"",
                 \ "<meta> lacks \"content\" attribute",
                 \ "inserting \"type\" attribute",
-                \ "proprietary attribute \"data-"
+                \ "proprietary attribute \"data-",
+                \ "<input> attribute \"type\" has invalid value \"search\""
                 \]
 
 function! s:ValidateError(text)
