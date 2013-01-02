@@ -22,7 +22,7 @@ function! SyntaxCheckers_python_GetHighlightRegex(i)
 endfunction
 
 function! SyntaxCheckers_python_GetLocList()
-    let makeprg = 'flake8 '.g:syntastic_python_checker_args.' '.shellescape(expand('%'))
+    let makeprg = 'python -m flake8.run '.g:syntastic_python_checker_args.' '.shellescape(expand('%'))
     let errorformat = '%E%f:%l: could not compile,%-Z%p^,%E%f:%l:%c: %m,%W%f:%l: %m,%-G%.%#'
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 endfunction
