@@ -23,7 +23,8 @@ function! SyntaxCheckers_python_GetHighlightRegex(i)
 endfunction
 
 function! SyntaxCheckers_python_GetLocList()
-    let makeprg = 'pyflakes '.g:syntastic_python_checker_args.' '.shellescape(expand('%'))
+    let makeprg = SyntasticCheckerCommand('python', 'pyflakes')
+		\ .' '.g:syntastic_python_checker_args .' '.shellescape(expand('%'))
     let errorformat = '%E%f:%l: could not compile,%-Z%p^,%E%f:%l:%c: %m,%E%f:%l: %m,%-G%.%#'
 
     let errors = SyntasticMake({ 'makeprg': makeprg,

@@ -697,10 +697,40 @@ function! SyntasticLoadChecker(ft)
         endif
     else
         for checker in checkers
-            if executable(checker)
+            if SyntasticCheckerCommand(a:ft, checker, "DEFAULT") != "DEFAULT"
+                    \ || executable(checker)
                 return s:LoadChecker(checker, a:ft)
             endif
         endfor
+    endif
+endfunction
+
+" Returns command name for given checker which will be used to call this
+" checker. User can override this command name by defining special variable
+" in own vimrc file. It makes Syntastic more flexible and usable
+" in complex environments.
+" You can pass default value for command in third argument.
+"
+" Usage:
+" SyntasticCheckerCommand('python', 'pyflakes')
+" SyntasticCheckerCommand('javascript', 'closure_java', 'java')
+"
+" Example of settings in .vimrc:
+" let g:syntastic_javascript_jshint_cmd = 'path/to/jshint/executable'
+" let g:syntastic_python_flake8_cmd = 'python26 -m flake8.run'
+" let g:syntastic_javascript_closure_java_cmd = '/home/user/jre1.7/bin/java'
+"
+function! SyntasticCheckerCommand(file_type, tool, ...)
+    let opt_name = 'g:syntastic_' . a:file_type . '_' . a:tool . '_cmd'
+    if exists(opt_name)
+        return {opt_name}
+    else
+        if a:0 > 0
+            let default = a:1
+        else
+            let default = a:tool
+        endif
+        return default
     endif
 endfunction
 

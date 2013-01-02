@@ -11,7 +11,8 @@
 function! SyntaxCheckers_python_GetLocList()
     let l:path = shellescape(expand('%'))
     let l:cmd = "compile(open(" . l:path . ").read(), " . l:path . ", 'exec')"
-    let l:makeprg = 'python -c "' . l:cmd . '"'
+    let l:makeprg = SyntasticCheckerCommand('python', 'interpreter', 'python -c') 
+	\ . ' "' . l:cmd . '"'
 
     let l:errorformat =
         \ "\%A\ \ File\ \"%f\"\\\,\ line\ %l\\\,%m," .

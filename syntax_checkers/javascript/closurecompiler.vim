@@ -36,8 +36,12 @@ function! SyntaxCheckers_javascript_GetLocList()
     else
         let file_list = shellescape(expand('%'))
     endif
+    let java_cmd = SyntasticCheckerCommand('javascript', 'closure_java', 'java')
 
-    let makeprg = 'java -jar ' . g:syntastic_javascript_closure_compiler_path . ' ' . g:syntastic_javascript_closure_compiler_options . ' --js ' . file_list
+    let makeprg = java_cmd . ' -jar ' 
+		    \ . g:syntastic_javascript_closure_compiler_path
+		    \ . ' ' . g:syntastic_javascript_closure_compiler_options
+		    \ . ' --js ' . file_list
     let errorformat = '%-GOK,%E%f:%l: ERROR - %m,%Z%p^,%W%f:%l: WARNING - %m,%Z%p^'
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 endfunction
