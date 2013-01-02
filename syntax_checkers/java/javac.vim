@@ -197,7 +197,7 @@ function! SyntaxCheckers_java_GetLocList()
     endif
 
     if javac_classpath != ''
-        let javac_opts .= ' -cp ' . javac_classpath
+        let javac_opts .= ' -cp ' . fnameescape(javac_classpath)
     endif
 
 
@@ -209,7 +209,7 @@ function! SyntaxCheckers_java_GetLocList()
     endif
 
     let makeprg = g:syntastic_java_javac_executable . ' '. javac_opts . ' '
-               \. '"'.expand ( '%:p:h' ) . sep . expand ( '%:t' ).'"'
+               \. fnameescape(expand ( '%:p:h' ) . sep . expand ( '%:t' ))
                \. ' 2>&1 '
 
     " unashamedly stolen from *errorformat-javac* (quickfix.txt) and modified to include error types
