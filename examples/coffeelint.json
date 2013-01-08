@@ -53,6 +53,10 @@
 
   "no_stand_alone_at" : {
     "level": "ignore"
+  },
+
+  "arrow_spacing" : {
+    "level": "ignore"
   }
 
 }

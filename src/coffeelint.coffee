@@ -104,6 +104,14 @@ RULES =
         level : IGNORE
         message : '@ must not be used stand alone'
 
+    arrow_spacing :
+        level : IGNORE
+        message : 'Function arrow (->) must be spaced properly'
+
+    space_assignment :
+        level : IGNORE
+        message  : 'Assignment must be spaced properly'
+
     coffeescript_error :
         level : ERROR
         message : '' # The default coffeescript error is fine.
@@ -362,9 +370,11 @@ class LexicalLinter
         # CoffeeScript loses line numbers of interpolations and multi-line
         # regexes, so fake it by using the last line number we know.
         @lineNumber = lineNumber or @lineNumber or 0
-
+        # console.log(token)
         # Now lint it.
         switch type
+            when "->"
+                @lintArrowSpacing(token, @tokens[@i - 1])
             when "INDENT"                 then @lintIndentation(token)
             when "CLASS"                  then @lintClass(token)
             when "{"                      then @lintBrace(token)
@@ -564,6 +574,19 @@ class LexicalLinter
         if not regexes.camelCase.test(className)
             attrs = {context: "class name: #{className}"}
             @createLexError('camel_case_classes', attrs)
+        else
+            null
+
+    # have to send in the raw value of the prevToken
+    # because doing @peek(-1) does not contain the 'spaced' property
+    lintArrowSpacing : (token, prevTok) ->
+        unless (token.spaced? or token.newLine?) and
+               (prevTok.spaced? or
+                prevTok.generated? or
+                prevTok.isInterpolation? or
+                prevTok[0] is "INDENT" or
+                (prevTok[0] is "CALL_START" and not prevTok.generated?))
+            @createLexError('arrow_spacing')
         else
             null
 
