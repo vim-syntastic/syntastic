@@ -57,7 +57,7 @@ function! s:getPuppetLintErrors()
         let g:syntastic_puppet_lint_arguments = ''
     endif
 
-    let makeprg = 'puppet-lint --log-format "\%{KIND} [\%{check}] \%{message} at \%{fullpath}:\%{linenumber}" '.g:syntastic_puppet_lint_arguments.shellescape(expand('%'))
+    let makeprg = 'puppet-lint --log-format "\%{KIND} [\%{check}] \%{message} at \%{fullpath}:\%{linenumber}" '.g:syntastic_puppet_lint_arguments.' '.shellescape(expand('%'))
     let errorformat = '%t%*[a-zA-Z] %m at %f:%l'
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat, 'subtype': 'Style' })
 endfunction
