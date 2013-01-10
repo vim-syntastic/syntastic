@@ -20,12 +20,20 @@
 "any syntax errors.
 "
 "There are options below to config and disable phpcs and phpmd.
+"bail if the user doesnt have php installed
+
+
+"check if path to custom php bin exists in config
+if !exists("g:syntastic_php_bin")
+    let g:syntastic_php_bin = "php"
+endif
 
 
 "bail if the user doesnt have php installed
-if !executable("php")
+if !executable(g:syntastic_php_bin)
     finish
 endif
+
 
 "Support passing configuration directives to phpcs
 if !exists("g:syntastic_phpcs_conf")
@@ -56,7 +64,7 @@ function! SyntaxCheckers_php_GetHighlightRegex(item)
 endfunction
 
 function! SyntaxCheckers_php_GetLocList()
-    let makeprg = "php -l -d error_reporting=E_ALL -d display_errors=1 -d log_errors=0 ".shellescape(expand('%'))
+    let makeprg = g:syntastic_php_bin . " -l -d error_reporting=E_ALL -d display_errors=1 -d log_errors=0 ".shellescape(expand('%'))
     let errorformat='%-GNo syntax errors detected in%.%#,Parse error: %#syntax %trror\ , %m in %f on line %l,Parse %trror: %m in %f on line %l,Fatal %trror: %m in %f on line %l,%-G\s%#,%-GErrors parsing %.%#'
     let errors = SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 
