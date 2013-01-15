@@ -10,6 +10,13 @@
 "
 "============================================================================
 
+" NOTE: IF you are using the YouCompleteMe plugin
+" (https://github.com/Valloric/YouCompleteMe), everything will 'just work'
+" (if you configured YouCompleteMe properly that is).
+" Ignore all the below g:syntastic_cpp* options, YCM does not use them. If you
+" are NOT using YCM, then continue reading.
+"
+"
 " In order to also check header files add this to your .vimrc:
 " (this usually creates a .gch file in your source directory)
 "
@@ -64,7 +71,7 @@
 "
 "   let g:syntastic_objc_errorformat = '%f:%l:%c: %trror: %m'
 
-if !executable('gcc')
+if !executable('gcc') && !exists('g:loaded_youcompleteme')
     finish
 endif
 
@@ -80,8 +87,12 @@ if !exists('g:syntastic_objc_config_file')
 endif
 
 function! SyntaxCheckers_objc_GetLocList()
+    if exists('g:loaded_youcompleteme')
+        return youcompleteme#CurrentFileDiagnostics()
+    endif
+
     let makeprg = 'gcc -fsyntax-only -lobjc'
-    let errorformat = 
+    let errorformat =
                     \ '%-G%f:%s:,'.
                     \ '%f:%l:%c: %trror: %m,'.
                     \ '%f:%l:%c: %tarning: %m,'.

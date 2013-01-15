@@ -10,6 +10,13 @@
 "
 "============================================================================
 
+" NOTE: IF you are using the YouCompleteMe plugin
+" (https://github.com/Valloric/YouCompleteMe), everything will 'just work'
+" (if you configured YouCompleteMe properly that is).
+" Ignore all the below g:syntastic_cpp* options, YCM does not use them. If you
+" are NOT using YCM, then continue reading.
+"
+"
 " In order to also check header files add this to your .vimrc:
 "
 "   let g:syntastic_c_check_header = 1
@@ -73,7 +80,7 @@ if exists('loaded_gcc_syntax_checker')
 endif
 let loaded_gcc_syntax_checker = 1
 
-if !executable(g:syntastic_c_checker)
+if !executable(g:syntastic_c_checker) && !exists('g:loaded_youcompleteme')
     finish
 endif
 
@@ -89,6 +96,10 @@ if !exists('g:syntastic_c_config_file')
 endif
 
 function! SyntaxCheckers_c_GetLocList()
+    if exists('g:loaded_youcompleteme')
+        return youcompleteme#CurrentFileDiagnostics()
+    endif
+
     let makeprg = g:syntastic_c_checker . ' -x c -fsyntax-only '
     let errorformat = '%-G%f:%s:,%-G%f:%l: %#error: %#(Each undeclared '.
                \ 'identifier is reported only%.%#,%-G%f:%l: %#error: %#for '.
