@@ -14,28 +14,5 @@
 " If g:syntastic_javascript_checker is not set, just use the first syntax
 " checker that we find installed.
 "============================================================================
-if exists("loaded_javascript_syntax_checker")
-    finish
-endif
-let loaded_javascript_syntax_checker = 1
 
-let s:supported_checkers = ["gjslint", "jslint", "jsl", "jshint"]
-
-function! s:load_checker(checker)
-    exec "runtime syntax_checkers/javascript/" . a:checker . ".vim"
-endfunction
-
-if exists("g:syntastic_javascript_checker")
-    if index(s:supported_checkers, g:syntastic_javascript_checker) != -1 && executable(g:syntastic_javascript_checker)
-        call s:load_checker(g:syntastic_javascript_checker)
-    else
-        echoerr "Javascript syntax not supported or not installed."
-    endif
-else
-    for checker in s:supported_checkers
-        if executable(checker)
-            call s:load_checker(checker)
-            break
-        endif
-    endfor
-endif
+call SyntasticLoadChecker('javascript')

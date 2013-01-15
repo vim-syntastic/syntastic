@@ -19,11 +19,6 @@
 " Then install the zptlint program, found on pypi:
 " http://pypi.python.org/pypi/zptlint
 
-if exists("loaded_zpt_syntax_checker")
-    finish
-endif
-let loaded_zpt_syntax_checker = 1
-
 " Bail if the user doesn't have zptlint installed
 if !executable("zptlint")
     finish

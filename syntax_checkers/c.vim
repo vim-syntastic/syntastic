@@ -1,7 +1,7 @@
 "============================================================================
 "File:        c.vim
 "Description: Syntax checking plugin for syntastic.vim
-"Maintainer:  Gregor Uhlenheuer <kongo2002 at gmail dot com>
+"Maintainer:  Martin Grenfell <martin.grenfell at gmail dot com>
 "License:     This program is free software. It comes without any warranty,
 "             to the extent permitted by applicable law. You can redistribute
 "             it and/or modify it under the terms of the Do What The Fuck You
@@ -10,147 +10,26 @@
 "
 "============================================================================
 
-" In order to also check header files add this to your .vimrc:
-" (this usually creates a .gch file in your source directory)
-"
-"   let g:syntastic_c_check_header = 1
-"
-" To disable the search of included header files after special
-" libraries like gtk and glib add this line to your .vimrc:
-"
-"   let g:syntastic_c_no_include_search = 1
-"
-" To enable header files being re-checked on every file write add the
-" following line to your .vimrc. Otherwise the header files are checked only
-" one time on initially loading the file.
-" In order to force syntastic to refresh the header includes simply
-" unlet b:syntastic_c_includes. Then the header files are being re-checked on
-" the next file write.
-"
-"   let g:syntastic_c_auto_refresh_includes = 1
-"
-" Alternatively you can set the buffer local variable b:syntastic_c_cflags.
-" If this variable is set for the current buffer no search for additional
-" libraries is done. I.e. set the variable like this:
-"
-"   let b:syntastic_c_cflags = ' -I/usr/include/libsoup-2.4'
-"
-" In order to add some custom include directories that should be added to the
-" gcc command line you can add those to the global variable
-" g:syntastic_c_include_dirs. This list can be used like this:
-"
-"   let g:syntastic_c_include_dirs = [ 'includes', 'headers' ]
-"
-" Moreover it is possible to add additional compiler options to the syntax
-" checking execution via the variable 'g:syntastic_c_compiler_options':
-"
-"   let g:syntastic_c_compiler_options = ' -ansi'
-"
-" Using the global variable 'g:syntastic_c_remove_include_errors' you can
-" specify whether errors of files included via the g:syntastic_c_include_dirs'
-" setting are removed from the result set:
-"
-"   let g:syntastic_c_remove_include_errors = 1
-
-if exists('loaded_c_syntax_checker')
-    finish
-endif
-let loaded_c_syntax_checker = 1
-
-if !executable('gcc')
-    finish
+if !exists('g:syntastic_c_checker')
+    let g:syntastic_c_checker = "gcc"
 endif
 
-let s:save_cpo = &cpo
-set cpo&vim
-
-" default include directories
-let s:default_includes = [ '.', '..', 'include', 'includes',
-            \ '../include', '../includes' ]
-
-" uniquify the input list
-function! s:Unique(list)
-    let l = []
-    for elem in a:list
-        if index(l, elem) == -1
-            let l = add(l, elem)
-        endif
-    endfor
-    return l
-endfunction
-
-" get the gcc include directory argument depending on the default
-" includes and the optional user-defined 'g:syntastic_c_include_dirs'
-function! s:GetIncludeDirs()
-    let include_dirs = s:default_includes
-
-    if exists('g:syntastic_c_include_dirs')
-        call extend(include_dirs, g:syntastic_c_include_dirs)
+if g:syntastic_c_checker == "gcc" || g:syntastic_c_checker == "clang"
+    if executable(g:syntastic_c_checker)
+        runtime! syntax_checkers/c/gcc.vim
     endif
-
-    return join(map(s:Unique(include_dirs), '"-I" . v:val'), ' ')
-endfunction
-
-function! SyntaxCheckers_c_GetLocList()
-    let makeprg = 'gcc -fsyntax-only -std=gnu99 '.shellescape(expand('%')).
-               \ ' '.s:GetIncludeDirs()
-    let errorformat = '%-G%f:%s:,%-G%f:%l: %#error: %#(Each undeclared '.
-               \ 'identifier is reported only%.%#,%-G%f:%l: %#error: %#for '.
-               \ 'each function it appears%.%#,%-GIn file included%.%#,'.
-               \ '%-G %#from %f:%l\,,%f:%l:%c: %m,%f:%l: %trror: %m,%f:%l: %m'
-
-    " determine whether to parse header files as well
-    if expand('%') =~? '.h$'
-        if exists('g:syntastic_c_check_header')
-            let makeprg = 'gcc -c '.shellescape(expand('%')).
-                        \ ' '.s:GetIncludeDirs()
-        else
-            return []
-        endif
+elseif g:syntastic_c_checker == "checkpatch"
+    if executable("checkpatch.pl") || executable("./scripts/checkpatch.pl")
+        runtime! syntax_checkers/c/checkpatch.vim
     endif
-
-    " add optional user-defined compiler options
-    if exists('g:syntastic_c_compiler_options')
-        let makeprg .= g:syntastic_c_compiler_options
+elseif g:syntastic_c_checker == "checkpatch-kernel-only"
+    if executable("./scripts/checkpatch.pl")
+        runtime! syntax_checkers/c/checkpatch.vim
+    elseif executable("gcc")
+        runtime! syntax_checkers/c/gcc.vim
     endif
-
-    " check if the user manually set some cflags
-    if !exists('b:syntastic_c_cflags')
-        " check whether to search for include files at all
-        if !exists('g:syntastic_c_no_include_search') ||
-                    \ g:syntastic_c_no_include_search != 1
-            " refresh the include file search if desired
-            if exists('g:syntastic_c_auto_refresh_includes') &&
-                        \ g:syntastic_c_auto_refresh_includes != 0
-                let makeprg .= syntastic#c#SearchHeaders()
-            else
-                " search for header includes if not cached already
-                if !exists('b:syntastic_c_includes')
-                    let b:syntastic_c_includes = syntastic#c#SearchHeaders()
-                endif
-                let makeprg .= b:syntastic_c_includes
-            endif
-        endif
-    else
-        " use the user-defined cflags
-        let makeprg .= b:syntastic_c_cflags
+elseif g:syntastic_c_checker == "sparse"
+    if executable("cgcc")
+        runtime! syntax_checkers/c/sparse.vim
     endif
-
-    " process makeprg
-    let errors = SyntasticMake({ 'makeprg': makeprg,
-                \ 'errorformat': errorformat })
-
-    " filter the processed errors if desired
-    if exists('g:syntastic_c_remove_include_errors') &&
-                \ g:syntastic_c_remove_include_errors != 0
-        return filter(errors,
-                    \ 'has_key(v:val, "bufnr") && v:val["bufnr"]=='.bufnr(''))
-    else
-        return errors
-    endif
-endfunction
-
-let &cpo = s:save_cpo
-unlet s:save_cpo
-
-" vim: set et sts=4 sw=4:
+endif

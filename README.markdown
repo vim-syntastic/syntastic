@@ -2,7 +2,7 @@
                   / \,,_  .'|
                ,{{| /}}}}/_.'            _____________________________________________
               }}}}` '{{'  '.            /                                             \
-            {{{{{    _   ;, \          /                Gentlemen,                     \
+            {{{{{    _   ;, \          /            Ladies and Gentlemen,              \
          ,}}}}}}    /o`\  ` ;)        |                                                |
         {{{{{{   /           (        |                 this is ...                    |
         }}}}}}   |            \       |                                                |
@@ -50,12 +50,44 @@ enabled.
 Installation
 ------------
 
-[pathogen.vim](https://github.com/tpope/vim-pathogen) is the recommended way to install syntastic.
+Installing syntastic is easy but first you need to have the pathogen plugin installed.  If you already
+have pathogen working then skip Step 1 and go to Step 2.
+
+Step 1: Install pathogen.vim
+----------------------------
+
+First I'll show you how to install tpope's [pathogen.vim](https://github.com/tpope/vim-pathogen) so that 
+it's easy to install syntastic.  Do this in your Terminal so that you get the pathogen.vim file 
+and the directories it needs:
+
+    mkdir -p ~/.vim/autoload ~/.vim/bundle; \
+    curl -so ~/.vim/autoload/pathogen.vim \
+        https://raw.github.com/tpope/vim-pathogen/master/autoload/pathogen.vim
+
+Next you *need to add this* to your ~/.vimrc:
+
+        call pathogen#infect()
+
+Step 2: Install syntastic as a pathogen bundle
+----------------------------------------------
+
+You now have pathogen installed and can put syntastic into ~/.vim/bundle like this:
+    
 
     cd ~/.vim/bundle
     git clone https://github.com/scrooloose/syntastic.git
 
-Then reload vim, run `:helptags`, and check out `:help syntastic.txt`.
+Quit vim and start it back up to reload it, then type:
+
+    :Helptags
+
+If you get an error when you do this, then you probably didn't install pathogen right.  Go back to
+step 1 and make sure you did the following:
+
+1. Created both the ~/.vim/autoload and ~/.vim/bundle directories.
+2. Added the "call pathogen#infect()" line to your ~/.vimrc file
+3. Did the git clone of syntastic inside ~/.vim/bundle
+4. Have permissions to access all of these directories.
 
 
 Google group
@@ -64,8 +96,56 @@ Google group
 To get information or make suggestions check out the [google group](https://groups.google.com/group/vim-syntastic).
 
 
+FAQ
+---
+
+__Q. I installed syntastic but it isn't reporting any errors ...__
+
+A. The most likely reason is that the syntax checker that it requires isn't installed. For example: python requires either `flake8`, `pyflakes` or `pylint` to be installed and in `$PATH`. To see which executable is required, just look in `syntax_checkers/<filetype>.vim`.  Note that aliases do not work; the actual executable must be available in your `$PATH`.  Symbolic links are okay.
+
+Another reason it could fail is that the error output for the syntax checker may have changed. In this case, make sure you have the latest version of the syntax checker installed. If it still fails then create an issue - or better yet, create a pull request.
+
+__Q. How can I jump between the different errors without using the location list at the bottom of the window?__
+
+A. Vim provides several built in commands for this. See `:help :lnext` and `:help :lprev`.
+
+If you use these commands a lot then you may want to add shortcut mappings to your vimrc, or install something like [unimpaired](https://github.com/tpope/vim-unimpaired) - which provides such mappings (among other things).
+
+__Q. A syntax checker is giving me unwanted/strange style tips??__
+
+A. Some filetypes (e.g. php) have style checkers as well as syntax checkers. You can usually configure the options that are passed to the style checkers, or just disable them. Take a look at the syntax checker integration file (e.g. `syntax_checkers/php.vim`) to see what options are available.
+
 Changelog
 ---------
+2.3.0 (16-feb-2012)
+
+  * Add syntastic_loc_list_height option
+  * Allow errors to have a "subtype" that is signed differently to standard
+    errors. Currently geared towards differentiating style errors from
+    syntax errors. Currently implemented for phpcs (technosophos).
+  * New checkers for:
+    * yaml
+    * haxe (davidB)
+    * ocaml (edwintorok)
+    * pylint (parantapa)
+    * rust (cjab)
+  * Updates to existing checkers:
+    * jslint
+    * jshint (gillesruppert)
+    * fortran (bmattern)
+    * sass
+    * html (darcyparker)
+    * coffee (darcyparker)
+    * docbk (darcyparker)
+    * xml
+    * xslt
+    * less (irrationalfab)
+    * php (AD7six, technosophos)
+    * cuda
+    * python (mitchellh, pneff)
+    * perl (Anthony Carapetis)
+    * c (naoina, zsprackett)
+    * puppet (frimik)
 
 2.2.0 (24-dec-2011)
 
@@ -82,61 +162,3 @@ Changelog
     * JSON (millermedeiros, tocer)
     * rst (reStructuredText files) (JNRowe)
     * gentoo-metadata (JNRowe)
-
-2.1.0 (14-dec-2011)
-
-  * when the cursor is on a line containing an error, echo the
-  * error msg (kevinw)
-  * various bug fixes and refactoring
-  * updates/fixes to existing checkers:
-    * html (millermedeiros)
-    * erlang
-    * coffeescript
-    * javascript
-    * sh
-    * php (add support for phpcs - technosophos)
-  * add an applescript checker (Zhai Cai)
-  * add support for hyphenated filetypes (JNRowe)
-
-2.0.0 (2-dec-2011):
-
-  * Add support for highlighting the erroneous parts of lines (kstep)
-  * Add support for displaying errors via balloons (kstep)
-  * Add syntastic_mode_map option to give more control over when checking should be done.
-  * Add :SyntasticCheck command to force a syntax check -  useful in passive mode (justone).
-  * Add the option to automatically close the location list, but not automatically open it (milkypostman)
-  * Add syntastic_auto_jump option to automatically jump to the first error (milkypostman)
-  * Only source syntax checkers as needed - instead of loading all of them when vim starts
-
-  * Support for new filetypes:
-    * less (julienXX)
-    * docbook (tpope)
-    * matlab (jasongraham)
-    * go (dtjm)
-    * puppet (uggedal, roman, zsprackett)
-    * haskell (baldo, roman)
-    * tcl (et)
-    * vala (kstep)
-    * cuda (temporaer)
-    * css (oryband, sitedyno)
-    * fortran (Karl Yngve Lervåg)
-    * xml (kusnier)
-    * xslt (kusnier)
-    * erlang (kTT)
-    * zpt (claytron)
-
-  * updates to existing checkers:
-    * javascript (mogren, bryanforbes, cjab, ajduncan)
-    * sass/scss (tmm1, atourino, dlee, epeli)
-    * ruby (changa)
-    * perl (harleypig)
-    * haml (bmihelac)
-    * php (kstep, docteurklein)
-    * python (kstep, soli)
-    * lua (kstep)
-    * html (kstep)
-    * xhtml (kstep)
-    * c (kongo2002, brandonw)
-    * cpp (kongo2002)
-    * coffee (industrial)
-    * eruby (sergevm)

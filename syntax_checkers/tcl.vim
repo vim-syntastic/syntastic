@@ -19,7 +19,6 @@ if exists("loaded_tcl_syntax_checker")
 endif
 let loaded_tcl_syntax_checker = 1
 
-
 let s:supported_checkers = ["tclsh", "nagelfar"]
 
 function! s:load_checker(checker)

@@ -6,6 +6,9 @@
 "             "// modules: " and containing space delimited list of vala
 "             modules, used by the file, so this script can build correct
 "             --pkg arguments.
+"             Alternatively you can set g:syntastic_vala_modules array
+"             in your .vimrc or .lvimrc with localvimrc plugin
+"             (http://www.vim.org/scripts/script.php?script_id=441).
 "             Valac compiler is not the fastest thing in the world, so you
 "             may want to disable this plugin with
 "             let g:syntastic_vala_check_disabled = 1 command in your .vimrc or
@@ -19,11 +22,6 @@
 "
 "============================================================================
 
-if exists('loaded_vala_syntax_checker')
-    finish
-endif
-let loaded_vala_syntax_checker = 1
-
 if !executable('valac')
     finish
 endif
@@ -32,16 +30,25 @@ if exists('g:syntastic_vala_check_disabled') && g:syntastic_vala_check_disabled
     finish
 endif
 
-function! SyntaxCheckers_vala_Term(pos)
+function! SyntaxCheckers_vala_GetHighlightRegex(pos)
     let strlength = strlen(matchstr(a:pos['text'], '\^\+$'))
     return '\%>'.(a:pos.col-1).'c.*\%<'.(a:pos.col+strlength+1).'c'
 endfunction
 
 function! s:GetValaModules()
+    if exists('g:syntastic_vala_modules')
+        if type(g:syntastic_vala_modules) == type('')
+            return split(g:syntastic_vala_modules, '\s\+')
+        elseif type(g:syntastic_vala_modules) == type([])
+            return g:syntastic_vala_modules
+        else
+            echoerr 'g:syntastic_vala_modules must be either list or string: fallback to in file modules string'
+        endif
+    endif
+
     let modules_line = search('^// modules: ', 'n')
     let modules_str = getline(modules_line)
-    let modules = split(strpart(modules_str, 12), '\s\+')
-    return modules
+    return split(strpart(modules_str, 12), '\s\+')
 endfunction
 
 function! SyntaxCheckers_vala_GetLocList()
@@ -49,8 +56,8 @@ function! SyntaxCheckers_vala_GetLocList()
     let makeprg = 'valac -C ' . vala_pkg_args . ' ' .shellescape(expand('%'))
     let errorformat = '%A%f:%l.%c-%\d%\+.%\d%\+: %t%[a-z]%\+: %m,%C%m,%Z%m'
 
-    let loclist = SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
-    call SyntasticHighlightErrors(loclist, function("SyntaxCheckers_vala_Term"), 1)
-    return loclist
+    return SyntasticMake({ 'makeprg': makeprg,
+                         \ 'errorformat': errorformat,
+                         \ 'defaults': {'force_highlight_callback': 1} })
 endfunction
 

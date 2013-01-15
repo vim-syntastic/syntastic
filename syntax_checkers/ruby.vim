@@ -8,25 +8,14 @@
 "             Want To Public License, Version 2, as published by Sam Hocevar.
 "             See http://sam.zoy.org/wtfpl/COPYING for more details.
 "
+"Supports MRI and JRuby but loads the MRI syntax checker by default.
+"
+"Use the g:syntastic_ruby_checker option to specify which checker to load -
+"set it to "jruby" to load the jruby checker.
 "============================================================================
-if exists("loaded_ruby_syntax_checker")
-    finish
+
+if !exists("g:syntastic_ruby_checker")
+    let g:syntastic_ruby_checker = "mri"
 endif
-let loaded_ruby_syntax_checker = 1
+exec "runtime! syntax_checkers/ruby/" . g:syntastic_ruby_checker . ".vim"
 
-"bail if the user doesnt have ruby installed
-if !executable("ruby")
-    finish
-endif
-
-function! SyntaxCheckers_ruby_GetLocList()
-    " we cannot set RUBYOPT on windows like that
-    if has('win32') || has('win64')
-        let makeprg = 'ruby -W1 -T1 -c '.shellescape(expand('%'))
-    else
-        let makeprg = 'RUBYOPT= ruby -W1 -c '.shellescape(expand('%'))
-    endif
-    let errorformat =  '%-GSyntax OK,%E%f:%l: syntax error\, %m,%Z%p^,%W%f:%l: warning: %m,%Z%p^,%W%f:%l: %m,%-C%.%#'
-
-    return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
-endfunction

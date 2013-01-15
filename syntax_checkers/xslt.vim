@@ -9,10 +9,6 @@
 "             See http://sam.zoy.org/wtfpl/COPYING for more details.
 "
 "============================================================================
-if exists("loaded_xslt_syntax_checker")
-    finish
-endif
-let loaded_xslt_syntax_checker = 1
 
 "bail if the user doesnt have tidy or grep installed
 if !executable("xmllint")
@@ -21,7 +17,7 @@ endif
 
 function! SyntaxCheckers_xslt_GetLocList()
 
-    let makeprg="xmllint --xinclude --noout --postvalid %"
+    let makeprg="xmllint --xinclude --noout --postvalid " . shellescape(expand("%:p"))
     let errorformat='%E%f:%l:\ error\ :\ %m,
         \%-G%f:%l:\ validity\ error\ :\ Validation\ failed:\ no\ DTD\ found\ %m,
         \%W%f:%l:\ warning\ :\ %m,

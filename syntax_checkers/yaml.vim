@@ -9,13 +9,9 @@
 "             See http://sam.zoy.org/wtfpl/COPYING for more details.
 "
 "
-"Installation: $ npm install -g js-yaml.bin
+"Installation: $ npm install -g js-yaml
 "
 "============================================================================
-if exists("loaded_yaml_syntax_checker")
-    finish
-endif
-let loaded_yaml_syntax_checker = 1
 
 if !executable("js-yaml")
     finish

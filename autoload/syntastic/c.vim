@@ -38,6 +38,85 @@ function! s:Init()
     call s:RegHandler('php\.h', 'syntastic#c#CheckPhp', [])
 endfunction
 
+" default include directories
+let s:default_includes = [ '.', '..', 'include', 'includes',
+            \ '../include', '../includes' ]
+
+" uniquify the input list
+function! s:Unique(list)
+    let l = []
+    for elem in a:list
+        if index(l, elem) == -1
+            let l = add(l, elem)
+        endif
+    endfor
+    return l
+endfunction
+
+" convenience function to determine the 'null device' parameter
+" based on the current operating system
+function! syntastic#c#GetNullDevice()
+    if has('win32')
+        return '-o nul'
+    elseif has('unix') || has('mac')
+        return '-o /dev/null'
+    endif
+    return ''
+endfunction
+
+" get the gcc include directory argument depending on the default
+" includes and the optional user-defined 'g:syntastic_c_include_dirs'
+function! syntastic#c#GetIncludeDirs(filetype)
+    let include_dirs = []
+
+    if !exists('g:syntastic_'.a:filetype.'_no_default_include_dirs') ||
+        \ !g:syntastic_{a:filetype}_no_default_include_dirs
+        let include_dirs = copy(s:default_includes)
+    endif
+
+    if exists('g:syntastic_'.a:filetype.'_include_dirs')
+        call extend(include_dirs, g:syntastic_{a:filetype}_include_dirs)
+    endif
+
+    return join(map(s:Unique(include_dirs), '"-I" . v:val'), ' ')
+endfunction
+
+" read additional compiler flags from the given configuration file
+" the file format and its parsing mechanism is inspired by clang_complete
+function! syntastic#c#ReadConfig(file)
+    " search in the current file's directory upwards
+    let config = findfile(a:file, '.;')
+    if config == '' || !filereadable(config) | return '' | endif
+
+    " convert filename into absolute path
+    let filepath = substitute(fnamemodify(config, ':p:h'), '\', '/', 'g')
+
+    " try to read config file
+    try
+        let lines = map(readfile(config),
+                    \ 'substitute(v:val, ''\'', ''/'', ''g'')')
+    catch /E484/
+        return ''
+    endtry
+
+    let parameters = []
+    for line in lines
+        let matches = matchlist(line, '^\s*-I\s*\(\S\+\)')
+        if matches != [] && matches[1] != ''
+            " this one looks like an absolute path
+            if match(matches[1], '^\%(/\|\a:\)') != -1
+                call add(parameters, '-I' . matches[1])
+            else
+                call add(parameters, '-I' . filepath . '/' . matches[1])
+            endif
+        else
+            call add(parameters, line)
+        endif
+    endfor
+
+    return join(parameters, ' ')
+endfunction
+
 " search the first 100 lines for include statements that are
 " given in the handlers dictionary
 function! syntastic#c#SearchHeaders()
@@ -65,7 +144,7 @@ function! syntastic#c#SearchHeaders()
     " search included headers
     for hfile in files
         if hfile != ''
-            let filename = expand('%:p:h') . ((has('win32') || has('win64')) ?
+            let filename = expand('%:p:h') . (has('win32') ?
                         \ '\' : '/') . hfile
             try
                 let lines = readfile(filename, '', 100)
@@ -145,7 +224,7 @@ function! syntastic#c#CheckPython()
     if executable('python')
         if !exists('s:python_flags')
             let s:python_flags = system('python -c ''from distutils import '
-                        \ . 'sysconfig; print sysconfig.get_python_inc()''')
+                        \ . 'sysconfig; import sys; sys.stdout.write(sysconfig.get_python_inc())''')
             let s:python_flags = substitute(s:python_flags, "\n", '', '')
             let s:python_flags = ' -I' . s:python_flags
         endif

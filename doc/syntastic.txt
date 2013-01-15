@@ -163,6 +163,20 @@ syntax errors: >
     let g:syntastic_enable_signs=1
 <
 
+                   *'syntastic_error_symbol'* *'syntastic_style_error_symbol'*
+               *'syntastic_warning_symbol'* *'syntastic_style_warning_symbol'*
+Use this option to control what the syntastic |:sign| text contains. Several
+error symobls can be customized:
+    syntastic_error_symbol - For syntax errors, defaults to '>>'
+    syntastic_style_error_symbol - For style errors, defaults to 'S>'
+    syntastic_warning_symbol - For syntax warnings, defaults to '>>'
+    syntastic_style_warning_symbol - For style warnings, defaults to 'S>'
+
+Example: >
+    let g:syntastic_error_symbol='✗'
+    let g:syntastic_warning_symbol='⚠'
+<
+
                                                  *'syntastic_enable_balloons'*
 Default: 1
 Use this option to tell syntastic whether to display error messages in balloons
@@ -202,6 +216,14 @@ When set to 2 the error window will be automatically closed when no errors are
 detected, but not opened automatically. >
     let g:syntastic_auto_loc_list=2
 <
+
+                                                 *'syntastic_loc_list_height'*
+Default: 10
+Use this option to specify the height of the location lists that syntastic
+opens. >
+    let g:syntastic_loc_list_height=5
+<
+
 
                                                         *'syntastic_mode_map'*
 Default: { "mode": "active",
@@ -252,7 +274,7 @@ this option has the following effects:
 
 Default: [Syntax: line:%F (%t)]
 Use this option to control what the syntastic statusline text contains. Several
-magic flags are availble to insert information:
+magic flags are available to insert information:
     %e - number of errors
     %w - number of warnings
     %t - total number of warnings and errors
@@ -332,7 +354,7 @@ The author of syntastic is a mighty wild stallion, hear him roar! >
 
 <
 He likes to trot around in the back yard reading his emails and sipping a
-scolding hot cup of Earl Grey. Email him at martin.grenfell at gmail dot com.
+scalding hot cup of Earl Grey. Email him at martin.grenfell at gmail dot com.
 He can also be found trolling the #vim channel on the freenode IRC network as
 scrooloose.
 
@@ -347,9 +369,35 @@ The latest dev versions are on github
 ==============================================================================
 7. Changelog                                             *syntastic-changelog*
 
-next
-    - Support for new filetypes:
+2.3.0
+    - Add syntastic_loc_list_height option
+    - Allow errors to have a "subtype" that is signed differently to standard
+      errors. Currently geared towards differentiating style errors from
+      syntax errors. Currently implemented for phpcs (technosophos).
+    - New checkers for:
         - yaml
+        - haxe (davidB)
+        - ocaml (edwintorok)
+        - pylint (parantapa)
+        - rust (cjab)
+
+    - Updates to existing checkers:
+        - jslint
+        - jshint (gillesruppert)
+        - fortran (bmattern)
+        - sass
+        - html (darcyparker)
+        - coffee (darcyparker)
+        - docbk (darcyparker)
+        - xml
+        - xslt
+        - less (irrationalfab)
+        - php (AD7six, technosophos)
+        - cuda
+        - python (mitchellh, pneff)
+        - perl (Anthony Carapetis)
+        - c (naoina, zsprackett)
+        - puppet (frimik)
 
 2.2.0
     - only do syntax checks when files are saved (not when first opened) - add
@@ -463,6 +511,19 @@ next
 Thanks to the following people for testing, bug reports, patches etc. They own,
 hard.
 
+    Mikael Fridh (frimik)
+    Patrice Neff (pneff )
+    Gilles Ruppert (gillesruppert)
+    Naoya INADA (naoina)
+    Mitchell Hashimoto (mitchellh)
+    irrationalfab
+    Andy Dawson (AD7six)
+    Parantapa Bhattacharya (parantapa)
+    edwintorok
+    Darcy Parker (darcyparker)
+    bmattern
+    David Bernard (davidB)
+    Aleksey V. Zapparov (ixti)
     Benji Fisher (benjifisher)
     Lance Fetters (ashikase)
     datanoise
