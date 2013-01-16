@@ -8,6 +8,9 @@
 " Want To Public License, Version 2, as published by Sam Hocevar.
 " See http://sam.zoy.org/wtfpl/COPYING for more details.
 "
+" Notes: Requires nagelfar v1.1.12 or later with support for -H option. See
+" nagelfar homepage http://nagelfar.berlios.de/.
+"
 "============================================================================
 function! SyntaxCheckers_tcl_GetLocList()
     let makeprg = "nagelfar -H " . g:syntastic_tcl_nagelfar_conf . " " . shellescape(expand('%'))
