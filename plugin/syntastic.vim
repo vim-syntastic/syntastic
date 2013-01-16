@@ -104,7 +104,7 @@ if !exists("g:syntastic_loc_list_height")
 endif
 
 command! SyntasticToggleMode call s:ToggleMode()
-command! SyntasticCheck call s:UpdateErrors(0) <bar> redraw!
+command! SyntasticCheck call s:UpdateErrors(0) <bar> redraw
 command! Errors call s:ShowLocList()
 
 highlight link SyntasticError SpellBad
@@ -632,7 +632,7 @@ function! SyntasticMake(options)
     let &shell=old_shell
 
     if s:IsRedrawRequiredAfterMake()
-        redraw!
+        redraw
     endif
 
     if has_key(a:options, 'defaults')
