@@ -104,7 +104,7 @@ if !exists("g:syntastic_loc_list_height")
 endif
 
 command! SyntasticToggleMode call s:ToggleMode()
-command! SyntasticCheck call s:UpdateErrors(0) <bar> redraw!
+command! SyntasticCheck call s:UpdateErrors(0) <bar> call s:Redraw()
 command! Errors call s:ShowLocList()
 
 highlight link SyntasticError SpellBad
@@ -495,6 +495,21 @@ function! s:IsRedrawRequiredAfterMake()
     return !s:running_windows && (s:uname() =~ "FreeBSD" || s:uname() =~ "OpenBSD")
 endfunction
 
+"Redraw in a way that doesnt make the screen flicker or leave anomalies behind.
+"
+"Some terminal versions of vim require `redraw!` - otherwise there can be
+"random anomalies left behind.
+"
+"However, on some versions of gvim using `redraw!` causes the screen to
+"flicker - so use redraw.
+function! s:Redraw()
+    if has('gui_running')
+        redraw
+    else
+        redraw!
+    endif
+endfunction
+
 function! s:uname()
     if !exists('s:uname')
         let s:uname = system('uname')
@@ -632,7 +647,7 @@ function! SyntasticMake(options)
     let &shell=old_shell
 
     if s:IsRedrawRequiredAfterMake()
-        redraw!
+        call s:Redraw()
     endif
 
     if has_key(a:options, 'defaults')
