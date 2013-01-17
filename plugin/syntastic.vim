@@ -103,8 +103,12 @@ if !exists("g:syntastic_loc_list_height")
     let g:syntastic_loc_list_height = 10
 endif
 
+function! s:CompleteCheckerName(argLead, cmdLine, cursorPos)
+    return join(s:FindCheckersForFt(&ft), "\n")
+endfunction
+
 command! SyntasticToggleMode call s:ToggleMode()
-command! SyntasticCheck call s:UpdateErrors(0) <bar> call s:Redraw()
+command! -nargs=? -complete=custom,s:CompleteCheckerName SyntasticCheck call s:UpdateErrors(0, <f-args>) <bar> call s:Redraw()
 command! Errors call s:ShowLocList()
 
 highlight link SyntasticError SpellBad
@@ -124,13 +128,17 @@ augroup END
 
 
 "refresh and redraw all the error info for this buf when saving or reading
-function! s:UpdateErrors(auto_invoked)
+function! s:UpdateErrors(auto_invoked, ...)
     if !empty(&buftype)
         return
     endif
 
     if !a:auto_invoked || s:ModeMapAllowsAutoChecking()
-        call s:CacheErrors()
+        if a:0 >= 1
+            call s:CacheErrors(a:1)
+        else
+            call s:CacheErrors()
+        endif
     end
 
     call setloclist(0, s:LocList())
@@ -190,7 +198,7 @@ endfunction
 "
 "depends on a function called SyntaxCheckers_{&ft}_GetLocList() existing
 "elsewhere
-function! s:CacheErrors()
+function! s:CacheErrors(...)
     call s:ClearCache()
 
     if filereadable(expand("%"))
@@ -199,7 +207,12 @@ function! s:CacheErrors()
         "functions legally for filetypes like "gentoo-metadata"
         let fts = substitute(&ft, '-', '_', 'g')
         for ft in split(fts, '\.')
-            if SyntasticCheckable(ft)
+            if a:0 >= 1
+                let checkable = SyntasticCheckable(ft, a:1)
+            else
+                let checkable = SyntasticCheckable(ft)
+            endif
+            if checkable
                 let errors = SyntaxCheckers_{ft}_GetLocList()
                 "keep only lines that effectively match an error/warning
                 let errors = s:FilterLocList({'valid': 1}, errors)
@@ -482,7 +495,12 @@ endfunction
 "load the chosen checker for the current filetype - useful for filetypes like
 "javascript that have more than one syntax checker
 function! s:LoadChecker(checker, ft)
+    let {"s:last_" . a:ft . "_checker"} = a:checker
+    if exists("*SyntaxCheckers_". a:ft ."_GetLocList")
+        exec "delfunction SyntaxCheckers_". a:ft ."_GetLocList"
+    endif
     exec "runtime syntax_checkers/" . a:ft . "/" . a:checker . ".vim"
+    return exists("*SyntaxCheckers_". a:ft ."_GetLocList")
 endfunction
 
 "the script changes &shellpipe and &shell to stop the screen flicking when
@@ -530,16 +548,41 @@ endfunction
 
 "check if a syntax checker exists for the given filetype - and attempt to
 "load one
-function! SyntasticCheckable(ft)
+function! SyntasticCheckable(ft, ...)
     "users can just define a syntax checking function and it will override the
     "syntastic default
+    if a:0 >= 1
+        let checker = a:1
+    elseif exists("g:syntastic_" . a:ft . "_checker")
+        let checker = {"g:syntastic_" . a:ft . "_checker"}
+    elseif exists("s:default_" . a:ft . "_checker")
+        let checker = {"s:default_" . a:ft . "_checker"}
+    endif
+
     if exists("*SyntaxCheckers_". a:ft ."_GetLocList")
-        return 1
+        if !exists("checker")
+            return 1
+        elseif exists("s:last_" . a:ft . "_checker") && checker == {"s:last_" . a:ft . "_checker"}
+            return 1
+        endif
     endif
 
     if !exists("g:loaded_" . a:ft . "_syntax_checker")
         exec "runtime syntax_checkers/" . a:ft . ".vim"
         let {"g:loaded_" . a:ft . "_syntax_checker"} = 1
+        " Store this checker name as the default so we can switch back to it.
+        if exists("s:last_" . a:ft . "_checker")
+            let {"s:default_" . a:ft . "_checker"} = {"s:last_" . a:ft . "_checker"}
+        endif
+    endif
+
+    if exists("checker") && exists("s:last_" . a:ft . "_checker")
+        if checker != {"s:last_" . a:ft . "_checker"}
+            " Wrong checker loaded. Attempt to load the given one instead.
+            if !s:LoadChecker(checker, a:ft)
+                echoerr &ft . " syntax not supported or not installed."
+            endif
+        endif
     endif
 
     return exists("*SyntaxCheckers_". a:ft ."_GetLocList")
@@ -701,16 +744,14 @@ endfunction
 "flake8 for python.
 function! SyntasticLoadChecker(ft)
     let opt_name = "g:syntastic_" . a:ft . "_checker"
-    let checkers = s:FindCheckersForFt(&ft)
 
     if exists(opt_name)
         let opt_val = {opt_name}
-        if index(checkers, opt_val) != -1
-            call s:LoadChecker(opt_val, a:ft)
-        else
+        if !s:LoadChecker(opt_val, a:ft)
             echoerr &ft . " syntax not supported or not installed."
         endif
     else
+        let checkers = s:FindCheckersForFt(&ft)
         for checker in checkers
             if executable(checker)
                 return s:LoadChecker(checker, a:ft)
