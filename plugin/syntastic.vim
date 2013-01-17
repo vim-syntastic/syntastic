@@ -103,8 +103,12 @@ if !exists("g:syntastic_loc_list_height")
     let g:syntastic_loc_list_height = 10
 endif
 
+function! s:CompleteCheckerName(argLead, cmdLine, cursorPos)
+    return join(s:FindCheckersForFt(&ft), "\n")
+endfunction
+
 command! SyntasticToggleMode call s:ToggleMode()
-command! -nargs=? SyntasticCheck call s:UpdateErrors(0, <f-args>) <bar> call s:Redraw()
+command! -nargs=? -complete=custom,s:CompleteCheckerName SyntasticCheck call s:UpdateErrors(0, <f-args>) <bar> call s:Redraw()
 command! Errors call s:ShowLocList()
 
 highlight link SyntasticError SpellBad
