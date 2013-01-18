@@ -18,8 +18,10 @@
 " g:syntastic_less_use_less_lint.
 
 "bail if the user doesnt have the lessc binary installed
-if !executable("lessc")
-    finish
+
+
+if !exists("g:syntastic_less_checker")
+    let g:syntastic_less_checker = 'lessc'
 endif
 
 if !exists("g:syntastic_less_options")
@@ -33,7 +35,7 @@ endif
 if g:syntastic_less_use_less_lint
     let s:check_file = 'node ' . expand('<sfile>:p:h') . '/less-lint.js'
 else
-    let s:check_file = 'lessc'
+		let s:check_file = 	g:syntastic_less_checker	
 end
 
 function! SyntaxCheckers_less_GetLocList()
