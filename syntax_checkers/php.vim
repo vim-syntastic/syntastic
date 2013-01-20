@@ -56,7 +56,10 @@ function! SyntaxCheckers_php_GetHighlightRegex(item)
 endfunction
 
 function! SyntaxCheckers_php_GetLocList()
-    let makeprg = "php -l -d error_reporting=E_ALL -d display_errors=1 -d log_errors=0 ".shellescape(expand('%'))
+    let makeprg = syntastic#makeprg#build({
+                \ 'exe': 'php',
+                \ 'args': '-l -d error_reporting=E_ALL -d display_errors=1 -d log_errors=0',
+                \ 'subchecker': 'php' })
     let errorformat='%-GNo syntax errors detected in%.%#,Parse error: %#syntax %trror\ , %m in %f on line %l,Parse %trror: %m in %f on line %l,Fatal %trror: %m in %f on line %l,%-G\s%#,%-GErrors parsing %.%#'
     let errors = SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 
@@ -74,14 +77,20 @@ function! SyntaxCheckers_php_GetLocList()
 endfunction
 
 function! s:GetPHPCSErrors()
-    let makeprg = "phpcs " . g:syntastic_phpcs_conf . " --report=csv ".shellescape(expand('%'))
+    let makeprg = syntastic#makeprg#build({
+                \ 'exe': 'phpcs',
+                \ 'args': g:syntastic_phpcs_conf . " --report=csv",
+                \ 'subchecker': 'phpcs' })
     let errorformat = '%-GFile\,Line\,Column\,Type\,Message\,Source\,Severity,"%f"\,%l\,%c\,%t%*[a-zA-Z]\,"%m"\,%*[a-zA-Z0-9_.-]\,%*[0-9]'
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat, 'subtype': 'Style' })
 endfunction
 
 "Helper function. This one runs and parses phpmd tool output.
 function! s:GetPHPMDErrors()
-    let makeprg = "phpmd " . shellescape(expand('%')) . " text " . g:syntastic_phpmd_rules
+    let makeprg = syntastic#makeprg#build({
+                \ 'exe': 'phpmd',
+                \ 'args': 'text ' . g:syntastic_phpmd_rules,
+                \ 'subchecker': 'phpcs' })
     let errorformat = '%E%f:%l%m'
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat, 'subtype' : 'Style' })
 endfunction
