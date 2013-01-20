@@ -616,6 +616,22 @@ endfunction
 "   'defaults' - a dict containing default values for the returned errors
 "   'subtype' - all errors will be assigned the given subtype
 function! SyntasticMake(options)
+
+    if &modified
+        let buf_name = shellescape(expand("%"))
+        
+        if ! exists("b:syntastic_tmp_name")
+            let b:syntastic_tmp_name = tempname() 
+        endif
+
+        let tmp_name = b:syntastic_tmp_name
+            
+        execute ":silent write! " . tmp_name
+        
+        let a:options.makeprg = substitute(a:options["makeprg"], buf_name, tmp_name, 'g' )
+    endif
+
+
     let old_loclist = getloclist(0)
     let old_makeprg = &l:makeprg
     let old_shellpipe = &shellpipe
@@ -639,7 +655,6 @@ function! SyntasticMake(options)
 
     silent lmake!
     let errors = getloclist(0)
-
     call setloclist(0, old_loclist)
     let &l:makeprg = old_makeprg
     let &l:errorformat = old_errorformat
@@ -660,6 +675,7 @@ function! SyntasticMake(options)
     endif
 
     return errors
+    
 endfunction
 
 "get the error balloon for the current mouse position
