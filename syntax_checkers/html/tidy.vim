@@ -61,8 +61,8 @@ function! SyntaxCheckers_html_GetLocList()
     let makeprg = syntastic#makeprg#build({
                 \ 'exe': 'tidy',
                 \ 'args': s:Args(),
+                \ 'tail': '2>&1',
                 \ 'subchecker': 'tidy' })
-    let makeprg .= " 2>&1"
     let errorformat='%Wline %l column %c - Warning: %m,%Eline %l column %c - Error: %m,%-G%.%#,%-G%.%#'
 
     let loclist = SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })

@@ -16,8 +16,8 @@ function! SyntaxCheckers_dart_GetLocList()
     let args = !empty(g:syntastic_dart_analyzer_conf) ? ' ' . g:syntastic_dart_analyzer_conf : ''
     let makeprg = syntastic#makeprg#build({
                 \ 'exe': 'dart_analyzer',
+                \ 'post_args': args,
                 \ 'subchecker': 'dart_analyser' })
-    let makeprg .= ' ' . args
 
     let errorformat = '%Efile:%f:%l:%c: %m'
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })

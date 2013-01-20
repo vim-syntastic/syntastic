@@ -10,8 +10,9 @@ if !executable("tsc")
 endif
 
 function! SyntaxCheckers_typescript_GetLocList()
-    let makeprg = syntastic#makeprg#build({ 'exe': 'tsc' })
-    let makeprg .= ' --out ' . syntastic#util#DevNull()
+    let makeprg = syntastic#makeprg#build({
+                \ 'exe': 'tsc',
+                \ 'post_args': '--out ' . syntastic#util#DevNull() })
     let errorformat = '%f %#(%l\,%c): %m'
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 endfunction

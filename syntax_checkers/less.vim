@@ -39,8 +39,8 @@ end
 function! SyntaxCheckers_less_GetLocList()
     let makeprg = syntastic#makeprg#build({
                 \ 'exe': s:check_file,
-                \ 'args': g:syntastic_less_options })
-    let makeprg .= syntastic#util#DevNull()
+                \ 'args': g:syntastic_less_options,
+                \ 'tail': syntastic#util#DevNull() })
     let errorformat = '%m in %f:%l:%c'
 
     return SyntasticMake({ 'makeprg': makeprg,

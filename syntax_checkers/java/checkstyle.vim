@@ -17,13 +17,13 @@ endif
 if !exists("g:syntastic_java_checkstyle_conf_file")
     let g:syntastic_java_checkstyle_conf_file = 'sun_checks.xml'
 endif
-
 function! SyntaxCheckers_java_GetLocList()
-
-    let makeprg = 'java -cp ' . g:syntastic_java_checkstyle_classpath . ' com.puppycrawl.tools.checkstyle.Main -c '
-               \. g:syntastic_java_checkstyle_conf_file . ' '
-               \. expand ( '%:p:h' ) . '/' . expand ( '%:t' )
-               \. ' 2>&1 '
+    let makeprg = syntastic#makeprg#build({
+                \ 'exe': 'java',
+                \ 'args': '-cp ' . g:syntastic_java_checkstyle_classpath . ' com.puppycrawl.tools.checkstyle.Main -c ' . g:syntastic_java_checkstyle_conf_file,
+                \ 'fname': expand ( '%:p:h' ) . '/' . expand ( '%:t' ),
+                \ 'tail': '2>&1',
+                \ 'subchecker': 'checkstyle' })
 
     " check style format
     let errorformat = '%f:%l:%c:\ %m,%f:%l:\ %m'

@@ -16,7 +16,7 @@ if !executable("tclsh")
 endif
 
 function! SyntaxCheckers_tclsh_GetLocList()
-    let makeprg = 'tclsh '.shellescape(expand('%'))
+    let makeprg = syntastic#makeprg#build({'exe': 'tclsh'})
     let errorformat = '%f:%l:%m'
 
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })

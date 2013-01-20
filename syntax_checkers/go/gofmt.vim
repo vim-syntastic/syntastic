@@ -16,8 +16,8 @@ function! SyntaxCheckers_go_GetLocList()
     let makeprg = syntastic#makeprg#build({
                 \ 'exe': 'gofmt',
                 \ 'args': '-l',
+                \ 'tail': '1>' . syntastic#util#DevNull(),
                 \ 'subchecker': 'gofmt' })
-    let makeprg .= ' 1>/dev/null'
     let errorformat = '%f:%l:%c: %m,%-G%.%#'
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat, 'defaults': {'type': 'e'} })
 endfunction

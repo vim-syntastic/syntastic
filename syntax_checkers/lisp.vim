@@ -16,8 +16,10 @@ if !executable("clisp")
 endif
 
 function! SyntaxCheckers_lisp_GetLocList()
-    let makeprg = syntastic#makeprg#build({ 'exe': 'clisp', 'args': '-c' })
-    let makeprg .= ' -o /tmp/clisp-vim-compiled-file'
+    let makeprg = syntastic#makeprg#build({
+                \ 'exe': 'clisp',
+                \ 'args': '-c'
+                \ 'tail': '-o /tmp/clisp-vim-compiled-file' })
     let efm  = '%-G;%.%#,'
     let efm .= '%W%>WARNING:%.%#line %l : %m,%C  %#%m,'
     let efm .= '%E%>The following functions were %m,%Z %m,'

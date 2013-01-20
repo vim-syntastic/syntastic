@@ -21,9 +21,8 @@ endif
 function! SyntaxCheckers_rst_GetLocList()
     let makeprg = syntastic#makeprg#build({
                 \ 'exe': 'rst2pseudoxml.py',
-                \ 'args': '--report=2 --exit-status=1' })
-
-    let makeprg .= syntastic#util#DevNull()
+                \ 'args': '--report=2 --exit-status=1',
+                \ 'tail': syntastic#util#DevNull() })
 
     let errorformat = '%f:%l:\ (%tNFO/1)\ %m,
       \%f:%l:\ (%tARNING/2)\ %m,

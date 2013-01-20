@@ -208,9 +208,12 @@ function! SyntaxCheckers_java_GetLocList()
         let sep = '/'
     endif
 
-    let makeprg = g:syntastic_java_javac_executable . ' '. javac_opts . ' '
-               \. fnameescape(expand ( '%:p:h' ) . sep . expand ( '%:t' ))
-               \. ' 2>&1 '
+    let makeprg = syntastic#makeprg#build({
+                \ 'exe': g:syntastic_java_javac_executable,
+                \ 'args': javac_opts,
+                \ 'fname': fnameescape(expand ( '%:p:h' ) . sep . expand ( '%:t' )),
+                \ 'tail': '2>&1',
+                \ 'subchecker': 'javac' })
 
     " unashamedly stolen from *errorformat-javac* (quickfix.txt) and modified to include error types
     let errorformat = '%E%f:%l:\ error:\ %m,%W%f:%l:\ warning:\ %m,%A%f:%l:\ %m,%+Z%p^,%+C%.%#,%-G%.%#'

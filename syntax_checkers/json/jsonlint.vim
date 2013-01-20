@@ -10,7 +10,10 @@
 "============================================================================
 
 function! SyntaxCheckers_json_GetLocList()
-    let makeprg = 'jsonlint ' . shellescape(expand("%")) . ' --compact'
+    let makeprg = syntastic#makeprg#build({
+                \ 'exe': 'jsonlint',
+                \ 'post_args': '--compact',
+                \ 'subchecker': 'jsonlint' })
     let errorformat = '%ELine %l:%c,%Z\\s%#Reason: %m,%C%.%#,%f: line %l\, col %c\, %m,%-G%.%#'
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat, 'defaults': {'bufnr': bufnr('')} })
 endfunction
