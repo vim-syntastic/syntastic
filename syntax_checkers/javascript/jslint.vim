@@ -21,7 +21,10 @@ function! SyntaxCheckers_javascript_HighlightTerm(error)
 endfunction
 
 function! SyntaxCheckers_javascript_GetLocList()
-    let makeprg = "jslint " . g:syntastic_javascript_jslint_conf . " " . shellescape(expand('%'))
+    let makeprg = syntastic#makeprg#build({
+                \ 'exe': 'jslint',
+                \ 'args': g:syntastic_javascript_jslint_conf,
+                \ 'subchecker': 'jslint' })
     let errorformat='%E %##%n %m,%-Z%.%#Line %l\, Pos %c,%-G%.%#'
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat, 'defaults': {'bufnr': bufnr("")} })
 endfunction

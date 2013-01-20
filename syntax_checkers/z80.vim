@@ -19,7 +19,7 @@ if !executable("z80_syntax_checker.py")
 endif
 
 function! SyntaxCheckers_z80_GetLocList()
-    let makeprg = 'z80_syntax_checker.py '.shellescape(expand('%'))
+    let makeprg = syntastic#makeprg#build({ 'exe': 'z80_syntax_checker.py' })
     let errorformat =  '%f:%l %m' 
     let loclist = SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
     return loclist

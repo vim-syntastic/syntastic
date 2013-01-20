@@ -37,8 +37,10 @@ else
 end
 
 function! SyntaxCheckers_less_GetLocList()
-    let makeprg = s:check_file . ' ' . g:syntastic_less_options . ' ' .
-                \ shellescape(expand('%')) . ' ' . syntastic#util#DevNull()
+    let makeprg = syntastic#makeprg#build({
+                \ 'exe': s:check_file,
+                \ 'args': g:syntastic_less_options })
+    let makeprg .= syntastic#util#DevNull()
     let errorformat = '%m in %f:%l:%c'
 
     return SyntasticMake({ 'makeprg': makeprg,

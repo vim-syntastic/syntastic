@@ -11,7 +11,7 @@
 
 function! SyntaxCheckers_json_GetLocList()
     " based on https://gist.github.com/1196345
-    let makeprg = 'jsonval '. shellescape(expand('%'))
+    let makeprg = syntastic#makeprg#build({ 'exe': 'jsonval', 'subchecker': 'jsonval' })
     let errorformat = '%E%f:\ %m\ at\ line\ %l,%-G%.%#'
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat, 'defaults': {'bufnr': bufnr('')} })
 endfunction

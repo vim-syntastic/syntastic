@@ -25,7 +25,7 @@ if !executable("zptlint")
 endif
 
 function! SyntaxCheckers_zpt_GetLocList()
-    let makeprg="zptlint ".shellescape(expand('%'))
+    let makeprg = syntastic#makeprg#build({ 'exe': 'zptlint' })
     let errorformat='%-P*** Error in: %f,%Z%*\s\, at line %l\, column %c,%E%*\s%m,%-Q'
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 endfunction

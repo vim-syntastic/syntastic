@@ -17,7 +17,9 @@ endif
 
 function! SyntaxCheckers_xslt_GetLocList()
 
-    let makeprg="xmllint --xinclude --noout --postvalid " . shellescape(expand("%:p"))
+    let makeprg = syntastic#makeprg#build({
+                \ 'exe': 'xmllint',
+                \ 'args': '--xinclude --noout --postvalid' })
     let errorformat='%E%f:%l:\ error\ :\ %m,
         \%-G%f:%l:\ validity\ error\ :\ Validation\ failed:\ no\ DTD\ found\ %m,
         \%W%f:%l:\ warning\ :\ %m,

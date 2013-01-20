@@ -49,10 +49,22 @@ function! s:ValidateError(text)
     return valid
 endfunction
 
+function s:Args()
+    let args = s:TidyEncOptByFenc()
+    let args .= " --new-blocklevel-tags " . shellescape('section, article, aside, hgroup, header, footer, nav, figure, figcaption')
+    let args .= " --new-inline-tags " . shellescape('video, audio, source, embed, mark, progress, meter, time, ruby, rt, rp, canvas, command, details, datalist')
+    let args .= " --new-empty-tags " . shellescape('wbr, keygen')
+    let args .= " -e"
+endfunction
+
 function! SyntaxCheckers_html_GetLocList()
-    let encopt = s:TidyEncOptByFenc()
-    let makeprg="tidy ".encopt." --new-blocklevel-tags ".shellescape('section, article, aside, hgroup, header, footer, nav, figure, figcaption')." --new-inline-tags ".shellescape('video, audio, source, embed, mark, progress, meter, time, ruby, rt, rp, canvas, command, details, datalist')." --new-empty-tags ".shellescape('wbr, keygen')." -e ".shellescape(expand('%'))." 2>&1"
+    let makeprg = syntastic#makeprg#build({
+                \ 'exe': 'tidy',
+                \ 'args': s:Args(),
+                \ 'subchecker': 'tidy' })
+    let makeprg .= " 2>&1"
     let errorformat='%Wline %l column %c - Warning: %m,%Eline %l column %c - Error: %m,%-G%.%#,%-G%.%#'
+
     let loclist = SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 
     " process loclist since we need to add some info and filter out valid HTML5

@@ -16,7 +16,7 @@ if !executable("mlint")
 endif
 
 function! SyntaxCheckers_matlab_GetLocList()
-    let makeprg = 'mlint -id $* '.shellescape(expand('%'))
+    let makeprg = syntastic#makeprg#build({ 'exe': 'mlint', 'args': '-id $*' })
     let errorformat = 'L %l (C %c): %*[a-zA-Z0-9]: %m,L %l (C %c-%*[0-9]): %*[a-zA-Z0-9]: %m'
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat, 'defaults': {'bufnr': bufnr("")} })
 endfunction

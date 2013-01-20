@@ -31,7 +31,9 @@ if !executable("osacompile")
 endif
 
 function! SyntaxCheckers_applescript_GetLocList()
-    let makeprg = 'osacompile -o ' . tempname() . '.scpt '. shellescape(expand('%'))
+    let makeprg = syntastic#makeprg#build({
+                \ 'exe': 'osacompile',
+                \ 'args': '-o ' . tempname() . '.scpt ' })
     let errorformat = '%f:%l:%m'
 
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })

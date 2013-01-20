@@ -49,7 +49,10 @@ function! SyntaxCheckers_sh_GetLocList()
         return []
     endif
 
-    let makeprg = s:GetShell() . ' -n ' . shellescape(expand('%'))
+    let makeprg = syntastic#makeprg#build({
+                \ 'exe': s:GetShell(),
+                \ 'args': '-n' })
+
     let errorformat = '%f: line %l: %m'
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat})
 endfunction

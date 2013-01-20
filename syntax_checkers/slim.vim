@@ -26,7 +26,9 @@ function! s:SlimrbVersion()
 endfunction
 
 function! SyntaxCheckers_slim_GetLocList()
-    let makeprg = "slimrb -c " . shellescape(expand("%"))
+    let makeprg = syntastic#makeprg#build({
+                \ 'exe': 'slimrb',
+                \ 'args': '-c' })
     if SyntasticIsVersionAtLeast(s:SlimrbVersion(), [1,3,1])
         let errorformat = '%C\ %#%f\, Line %l\, Column %c,%-G\ %.%#,%ESlim::Parser::SyntaxError: %m,%+C%.%#'
     else

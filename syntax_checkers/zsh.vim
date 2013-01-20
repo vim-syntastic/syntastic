@@ -16,7 +16,7 @@ if !executable("zsh")
 endif
 
 function! SyntaxCheckers_zsh_GetLocList()
-    let makeprg = 'zsh -n ' . shellescape(expand('%'))
+    let makeprg = syntastic#makeprg#build({ 'exe': 'zsh', 'args': '-n' })
     let errorformat = '%f:%l: %m'
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat})
 endfunction

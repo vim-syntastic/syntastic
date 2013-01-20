@@ -11,8 +11,10 @@
 "============================================================================
 
 function! SyntaxCheckers_haskell_GetLocList()
-    let makeprg = 'hdevtools check ' . get(g:, 'hdevtools_options', '') .
-                \ ' ' . shellescape(expand('%'))
+    let makeprg = syntastic#makeprg#build({
+                \ 'exe': 'hdevtools check',
+                \ 'args': get(g:, 'hdevtools_options', ''),
+                \ 'subchecker': 'hdevtools' })
 
     let errorformat= '\%-Z\ %#,'.
                 \ '%W%f:%l:%c:\ Warning:\ %m,'.

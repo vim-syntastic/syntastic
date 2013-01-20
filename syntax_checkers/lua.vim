@@ -39,7 +39,7 @@ function! SyntaxCheckers_lua_GetHighlightRegex(pos)
 endfunction
 
 function! SyntaxCheckers_lua_GetLocList()
-    let makeprg = 'luac -p ' . shellescape(expand('%'))
+    let makeprg = syntastic#makeprg#build({ 'exe': 'luac', 'args': '-p' })
     let errorformat =  'luac: %#%f:%l: %m'
 
     return SyntasticMake({ 'makeprg': makeprg,

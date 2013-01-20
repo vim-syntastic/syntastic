@@ -14,7 +14,10 @@ endif
 
 function! SyntaxCheckers_dart_GetLocList()
     let args = !empty(g:syntastic_dart_analyzer_conf) ? ' ' . g:syntastic_dart_analyzer_conf : ''
-    let makeprg = 'dart_analyzer ' . shellescape(expand("%")) . args
+    let makeprg = syntastic#makeprg#build({
+                \ 'exe': 'dart_analyzer',
+                \ 'subchecker': 'dart_analyser' })
+    let makeprg .= ' ' . args
 
     let errorformat = '%Efile:%f:%l:%c: %m'
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })

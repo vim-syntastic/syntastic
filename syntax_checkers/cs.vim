@@ -15,11 +15,12 @@ if !executable('mcs')
 endif
 
 function! SyntaxCheckers_cs_GetLocList()
-    let makeprg = "mcs --parse ".shellescape(expand('%'))
+    let makeprg = syntastic#makeprg#build({
+                \ 'exe': 'mcs',
+                \ 'args': '--parse' })
     let errorformat = '%f(%l\,%c): %trror %m'
-    let loclist = SyntasticMake({ 'makeprg': makeprg,
-                                \ 'errorformat': errorformat,
-                                \ 'defaults': {'bufnr': bufnr("")} })
-    return loclist
+    return SyntasticMake({ 'makeprg': makeprg,
+                         \ 'errorformat': errorformat,
+                         \ 'defaults': {'bufnr': bufnr("")} })
 endfunction
 

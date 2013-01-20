@@ -16,7 +16,7 @@ if !executable("lacheck")
 endif
 
 function! SyntaxCheckers_tex_GetLocList()
-    let makeprg = 'lacheck '.shellescape(expand('%'))
+    let makeprg = syntastic#makeprg#build({ 'exe': 'lacheck' })
     let errorformat =  '%-G** %f:,%E"%f"\, line %l: %m'
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 endfunction

@@ -19,11 +19,10 @@ if !executable("sparse")
 endif
 
 function! SyntaxCheckers_c_GetLocList()
-    let makeprg = "sparse "
-
-    let makeprg .= ' '.syntastic#c#ReadConfig(g:syntastic_sparse_config_file).' '
-
-    let makeprg .= shellescape(expand('%'))
+    let makeprg = syntastic#makeprg#build({
+                \ 'exe': 'sparse',
+                \ 'args': syntastic#c#ReadConfig(g:syntastic_sparse_config_file) })
+                \ 'subchecker': ':parse' })
 
     let errorformat = '%f:%l:%c: %trror: %m,%f:%l:%c: %tarning: %m,'
 

@@ -18,7 +18,9 @@ if !executable("js-yaml")
 endif
 
 function! SyntaxCheckers_yaml_GetLocList()
-    let makeprg='js-yaml --compact ' . shellescape(expand('%'))
+    let makeprg = syntastic#makeprg#build({
+                \ 'exe': 'js-yaml',
+                \ 'args': '--compact' })
     let errorformat='Error on line %l\, col %c:%m,%-G%.%#'
     return SyntasticMake({ 'makeprg': makeprg,
                          \ 'errorformat': errorformat,

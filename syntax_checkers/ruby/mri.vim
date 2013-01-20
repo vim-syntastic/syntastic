@@ -27,10 +27,15 @@ if !executable(expand(g:syntastic_ruby_exec))
 endif
 
 function! SyntaxCheckers_ruby_GetLocList()
-    let makeprg = expand(g:syntastic_ruby_exec).' -w -T1 -c '.shellescape(expand('%'))
+    let exe = expand(g:syntastic_ruby_exec)
     if !has('win32')
-        let makeprg = 'RUBYOPT= ' . makeprg
+        let exe = 'RUBYOPT= ' . exe
     endif
+
+    let makeprg = syntastic#makeprg#build({
+                \ 'exe': exe,
+                \ 'args': '-w -T1 -c',
+                \ 'subchecker': 'mri' })
 
     "this is a hack to filter out a repeated useless warning in rspec files
     "containing lines like

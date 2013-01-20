@@ -22,7 +22,9 @@ function! SyntaxCheckers_nasm_GetLocList()
         let outfile="/dev/null"
     endif
     let wd = shellescape(expand("%:p:h") . "/")
-    let makeprg = "nasm -X gnu -f elf -I " . wd . " -o " . outfile . " " . shellescape(expand("%"))
+    let makeprg = syntastic#makeprg#build({
+                \ 'exe': 'nasm',
+                \ 'args': '-X gnu -f elf -I ' . wd . ' -o ' . outfile })
     let errorformat = '%f:%l: %t%*[^:]: %m'
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 endfunction
