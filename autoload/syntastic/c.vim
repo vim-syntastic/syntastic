@@ -101,7 +101,7 @@ function! syntastic#c#ReadConfig(file)
 
     let parameters = []
     for line in lines
-        let matches = matchlist(line, '^\s*-I\s*\(\S\+\)')
+        let matches = matchlist(line, '\C^\s*-I\s*\(\S\+\)')
         if matches != [] && matches[1] != ''
             " this one looks like an absolute path
             if match(matches[1], '^\%(/\|\a:\)') != -1
