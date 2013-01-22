@@ -26,6 +26,6 @@ function! SyntaxCheckers_python_GetLocList()
                 \ 'exe': 'flake8',
                 \ 'args': g:syntastic_python_checker_args,
                 \ 'subchecker': 'flake8' })
-    let errorformat = '%E%f:%l: could not compile,%-Z%p^,%E%f:%l:%c: %m,%W%f:%l: %m,%-G%.%#'
+    let errorformat = '%E%f:%l: could not compile,%-Z%p^,%E%f:%l:%c: %t%n %m,%E%f:%l: %t%n %m,%-G%.%#'
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 endfunction
