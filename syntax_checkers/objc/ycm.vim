@@ -1,5 +1,5 @@
 "============================================================================
-"File:        cpp.vim
+"File:        ycm.vim
 "Description: Syntax checking plugin for syntastic.vim
 "Maintainer:  Val Markovic <val at markovic dot io>
 "License:     This program is free software. It comes without any warranty,
@@ -10,19 +10,16 @@
 "
 "============================================================================
 
-if !exists('g:syntastic_cpp_checker')
-    if exists('g:loaded_youcompleteme')
-        let g:syntastic_cpp_checker = "ycm"
-    else
-        let g:syntastic_cpp_checker = "gcc"
-    endif
+if exists("loaded_ycm_objc_syntax_checker")
+    finish
+endif
+let loaded_ycm_objc_syntax_checker = 1
+
+if !exists('g:loaded_youcompleteme')
+    finish
 endif
 
-if g:syntastic_cpp_checker == "ycm"
-    runtime! syntax_checkers/cpp/ycm.vim
-elseif g:syntastic_cpp_checker == "gcc" || g:syntastic_cpp_checker == "clang"
-    if executable(g:syntastic_cpp_checker)
-        runtime! syntax_checkers/cpp/gcc.vim
-    endif
-endif
+function! SyntaxCheckers_objc_GetLocList()
+    return youcompleteme#CurrentFileDiagnostics()
+endfunction
 
