@@ -11,10 +11,16 @@
 "============================================================================
 
 if !exists('g:syntastic_c_checker')
-    let g:syntastic_c_checker = "gcc"
+    if exists('g:loaded_youcompleteme')
+        let g:syntastic_c_checker = "ycm"
+    else
+        let g:syntastic_c_checker = "gcc"
+    endif
 endif
 
-if g:syntastic_c_checker == "gcc" || g:syntastic_c_checker == "clang"
+if g:syntastic_c_checker == "ycm"
+    runtime! syntax_checkers/c/ycm.vim
+elseif g:syntastic_c_checker == "gcc" || g:syntastic_c_checker == "clang"
     if executable(g:syntastic_c_checker)
         runtime! syntax_checkers/c/gcc.vim
     endif
