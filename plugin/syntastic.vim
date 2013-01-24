@@ -17,6 +17,8 @@ if exists("g:loaded_syntastic_plugin")
 endif
 let g:loaded_syntastic_plugin = 1
 
+runtime plugin/syntastic/*.vim
+
 let s:running_windows = has("win16") || has("win32")
 
 if !exists("g:syntastic_enable_signs")
@@ -102,6 +104,8 @@ endif
 if !exists("g:syntastic_loc_list_height")
     let g:syntastic_loc_list_height = 10
 endif
+
+let s:registry = g:SyntasticRegistry.Instance()
 
 command! SyntasticToggleMode call s:ToggleMode()
 command! SyntasticCheck call s:UpdateErrors(0) <bar> call s:Redraw()
@@ -199,14 +203,21 @@ function! s:CacheErrors()
         "functions legally for filetypes like "gentoo-metadata"
         let fts = substitute(&ft, '-', '_', 'g')
         for ft in split(fts, '\.')
-            if SyntasticCheckable(ft)
-                let errors = SyntaxCheckers_{ft}_GetLocList()
-                "keep only lines that effectively match an error/warning
-                let errors = s:FilterLocList({'valid': 1}, errors)
-                "make errors have type "E" by default
-                call SyntasticAddToErrors(errors, {'type': 'E'})
-                call extend(s:LocList(), errors)
-            endif
+            let checkers = s:registry.getActiveCheckers(ft)
+            for checker in checkers
+                let errors = checker.getLocList()
+
+                if !empty(errors)
+                    "keep only lines that effectively match an error/warning
+                    let errors = s:FilterLocList({'valid': 1}, errors)
+                    "make errors have type "E" by default
+                    call SyntasticAddToErrors(errors, {'type': 'E'})
+                    call extend(s:LocList(), errors)
+
+                    "only get errors from one checker at a time
+                    break
+                endif
+            endfor
         endfor
     endif
 endfunction
@@ -531,18 +542,7 @@ endfunction
 "check if a syntax checker exists for the given filetype - and attempt to
 "load one
 function! SyntasticCheckable(ft)
-    "users can just define a syntax checking function and it will override the
-    "syntastic default
-    if exists("*SyntaxCheckers_". a:ft ."_GetLocList")
-        return 1
-    endif
-
-    if !exists("g:loaded_" . a:ft . "_syntax_checker")
-        exec "runtime syntax_checkers/" . a:ft . ".vim"
-        let {"g:loaded_" . a:ft . "_syntax_checker"} = 1
-    endif
-
-    return exists("*SyntaxCheckers_". a:ft ."_GetLocList")
+    return s:registry.checkable(a:ft)
 endfunction
 
 "the args must be arrays of the form [major, minor, macro]
