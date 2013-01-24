@@ -89,8 +89,8 @@ endfunction
 function! s:GetPHPMDErrors()
     let makeprg = syntastic#makeprg#build({
                 \ 'exe': 'phpmd',
-                \ 'args': 'text ' . g:syntastic_phpmd_rules,
-                \ 'subchecker': 'phpcs' })
+                \ 'post_args': 'text ' . g:syntastic_phpmd_rules,
+                \ 'subchecker': 'phpmd' })
     let errorformat = '%E%f:%l%m'
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat, 'subtype' : 'Style' })
 endfunction
