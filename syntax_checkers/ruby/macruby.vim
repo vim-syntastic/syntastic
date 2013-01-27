@@ -8,7 +8,7 @@
 "             See http://sam.zoy.org/wtfpl/COPYING for more details.
 "
 "============================================================================
-function! SyntaxCheckers_ruby_macruby_GetLocList()
+function! SyntaxCheckers_ruby_macruby_IsAvailable()
     return executable('macruby')
 endfunction
 

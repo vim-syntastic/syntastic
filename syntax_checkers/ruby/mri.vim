@@ -21,7 +21,7 @@ if !exists("g:syntastic_ruby_exec")
     let g:syntastic_ruby_exec = s:FindRubyExec()
 endif
 
-function! SyntaxCheckers_ruby_mri_GetLocList()
+function! SyntaxCheckers_ruby_mri_IsAvailable()
     return executable(expand(g:syntastic_ruby_exec))
 endfunction
 
