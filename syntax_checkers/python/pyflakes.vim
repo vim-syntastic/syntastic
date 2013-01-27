@@ -29,7 +29,6 @@ endfunction
 function! SyntaxCheckers_python_pyflakes_GetLocList()
     let makeprg = syntastic#makeprg#build({
                 \ 'exe': 'pyflakes',
-                \ 'args': g:syntastic_python_checker_args,
                 \ 'subchecker': 'pyflakes' })
     let errorformat = '%E%f:%l: could not compile,%-Z%p^,%E%f:%l:%c: %m,%E%f:%l: %m,%-G%.%#'
 
@@ -39,8 +38,5 @@ function! SyntaxCheckers_python_pyflakes_GetLocList()
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
-    \ 'loclistFunc': function('SyntaxCheckers_python_pyflakes_GetLocList'),
-    \ 'highlightRegexFunc': function('SyntaxCheckers_python_pyflakes_GetHighlightRegex'),
     \ 'filetype': 'python',
-    \ 'name': 'pyflakes',
-    \ 'isAvailableFunc': function('SyntaxCheckers_python_pyflakes_IsAvailable')} )
+    \ 'name': 'pyflakes'})

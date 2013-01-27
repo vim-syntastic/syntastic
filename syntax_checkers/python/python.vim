@@ -7,11 +7,11 @@
 " http://www.vim.org/scripts/download_script.php?src_id=1392
 "
 "============================================================================
-function! SyntaxCheckers_python_pyflakes_IsAvailable()
+function! SyntaxCheckers_python_python_IsAvailable()
     return executable('python')
 endfunction
 
-function! SyntaxCheckers_python_pyflakes_GetLocList()
+function! SyntaxCheckers_python_python_GetLocList()
     let l:path = shellescape(expand('%'))
     let l:cmd = "compile(open(" . l:path . ").read(), " . l:path . ", 'exec')"
     let l:makeprg = 'python -c "' . l:cmd . '"'
@@ -30,7 +30,5 @@ function! SyntaxCheckers_python_pyflakes_GetLocList()
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
-    \ 'loclistFunc': function('SyntaxCheckers_python_pyflakes_GetLocList'),
     \ 'filetype': 'python',
-    \ 'name': 'python',
-    \ 'isAvailableFunc': function('SyntaxCheckers_python_pyflakes_IsAvailable')} )
+    \ 'name': 'python'})

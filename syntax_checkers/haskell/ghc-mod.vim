@@ -14,7 +14,11 @@ if !exists('g:syntastic_haskell_checker_args')
     let g:syntastic_haskell_checker_args = '--ghcOpt="-fno-code" --hlintOpt="--language=XmlSyntax"'
 endif
 
-function! SyntaxCheckers_haskell_GetLocList()
+function! SyntaxCheckers_haskell_ghc_mod_IsAvailable()
+    return executable('ghc-mod')
+endfunction
+
+function! SyntaxCheckers_haskell_ghc_mod_GetLocList()
     let ghcmod = 'ghc-mod ' . g:syntastic_haskell_checker_args
     let makeprg =
           \ "{ ".
@@ -28,6 +32,6 @@ function! SyntaxCheckers_haskell_GetLocList()
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 endfunction
 
-function! SyntaxCheckers_lhaskell_GetLocList()
-    return SyntaxCheckers_haskell_GetLocList()
-endfunction
+call g:SyntasticRegistry.CreateAndRegisterChecker({
+    \ 'filetype': 'haskell',
+    \ 'name': 'ghc_mod'})

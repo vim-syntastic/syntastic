@@ -12,7 +12,11 @@
 " Use a BufWritePre autocommand to that end:
 "   autocmd FileType go autocmd BufWritePre <buffer> Fmt
 "============================================================================
-function! SyntaxCheckers_go_GetLocList()
+function! SyntaxCheckers_go_go_IsAvailable()
+    return executable('go')
+endfunction
+
+function! SyntaxCheckers_go_go_GetLocList()
     " Check with gofmt first, since `go build` and `go test` might not report
     " syntax errors in the current file if another file with syntax error is
     " compiled first.
@@ -49,3 +53,7 @@ function! SyntaxCheckers_go_GetLocList()
 
     return errors
 endfunction
+
+call g:SyntasticRegistry.CreateAndRegisterChecker({
+    \ 'filetype': 'go',
+    \ 'name': 'go'})

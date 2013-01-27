@@ -10,12 +10,19 @@ let g:SyntasticChecker = {}
 function! g:SyntasticChecker.New(args)
     let newObj = copy(self)
 
-    let newObj._locListFunc = a:args['loclistFunc']
-    let newObj._isAvailableFunc = a:args['isAvailableFunc']
     let newObj._filetype = a:args['filetype']
     let newObj._name = a:args['name']
 
-    let newObj._highlightRegexFunc = get(a:args, 'highlightRegexFunc', '')
+
+    let prefix = 'SyntaxCheckers_' . newObj._filetype . '_' . newObj._name . '_'
+    let newObj._locListFunc = function(prefix . 'GetLocList')
+    let newObj._isAvailableFunc = function(prefix . 'IsAvailable')
+
+    if exists('*' . prefix . 'GetHighlightRegex')
+        let newObj._highlightRegexFunc = function(prefix. 'GetHighlightRegex')
+    else
+        let newObj._highlightRegexFunc = ''
+    endif
 
     return newObj
 endfunction

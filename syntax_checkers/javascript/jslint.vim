@@ -14,13 +14,17 @@ if !exists("g:syntastic_javascript_jslint_conf")
     let g:syntastic_javascript_jslint_conf = "--white --undef --nomen --regexp --plusplus --bitwise --newcap --sloppy --vars"
 endif
 
-function! SyntaxCheckers_javascript_HighlightTerm(error)
+function! SyntaxCheckers_javascript_jslint_IsAvailable()
+    return executable('jslint')
+endfunction
+
+function! SyntaxCheckers_javascript_jslint_HighlightTerm(error)
     let unexpected = matchstr(a:error['text'], 'Expected.*and instead saw \'\zs.*\ze\'')
     if len(unexpected) < 1 | return '' | end
     return '\V'.split(unexpected, "'")[1]
 endfunction
 
-function! SyntaxCheckers_javascript_GetLocList()
+function! SyntaxCheckers_javascript_jslint_GetLocList()
     let makeprg = syntastic#makeprg#build({
                 \ 'exe': 'jslint',
                 \ 'args': g:syntastic_javascript_jslint_conf,
@@ -28,4 +32,8 @@ function! SyntaxCheckers_javascript_GetLocList()
     let errorformat='%E %##%n %m,%-Z%.%#Line %l\, Pos %c,%-G%.%#'
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat, 'defaults': {'bufnr': bufnr("")} })
 endfunction
+
+call g:SyntasticRegistry.CreateAndRegisterChecker({
+    \ 'filetype': 'javascript',
+    \ 'name': 'jslint'})
 

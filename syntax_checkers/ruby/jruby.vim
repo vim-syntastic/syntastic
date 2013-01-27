@@ -9,7 +9,11 @@
 "             See http://sam.zoy.org/wtfpl/COPYING for more details.
 "
 "============================================================================
-function! SyntaxCheckers_ruby_GetLocList()
+function! SyntaxCheckers_ruby_jruby_IsAvailable()
+    return executable('jruby')
+endfunction
+
+function! SyntaxCheckers_ruby_jruby_GetLocList()
     let makeprg = syntastic#makeprg#build({
                 \ 'exe': s:exe(),
                 \ 'args': s:args(),
@@ -27,3 +31,7 @@ endfunction
 function s:exe()
     return has('win32') ? 'jruby' : 'RUBYOPT= jruby'
 endfunction
+
+call g:SyntasticRegistry.CreateAndRegisterChecker({
+    \ 'filetype': 'ruby',
+    \ 'name': 'jruby'})

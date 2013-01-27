@@ -11,7 +11,7 @@ endfunction
 function! SyntaxCheckers_python_pylint_GetLocList()
     let makeprg = syntastic#makeprg#build({
                 \ 'exe': 'pylint',
-                \ 'args': g:syntastic_python_checker_args. ' -f parseable -r n -i y',
+                \ 'args': ' -f parseable -r n -i y',
                 \ 'tail': s:MakeprgTail(),
                 \ 'subchecker': 'pylint' })
     let errorformat = '%f:%l: [%t] %m,%Z,%-GNo config %m'
@@ -25,7 +25,5 @@ function! s:MakeprgTail()
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
-    \ 'loclistFunc': function('SyntaxCheckers_python_pylint_GetLocList'),
     \ 'filetype': 'python',
-    \ 'name': 'pylint',
-    \ 'isAvailableFunc': function('SyntaxCheckers_python_pylint_IsAvailable')} )
+    \ 'name': 'pylint' })

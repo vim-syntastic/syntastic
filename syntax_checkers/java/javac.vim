@@ -158,7 +158,11 @@ function! s:GetMavenClasspath()
     return ''
 endfunction
 
-function! SyntaxCheckers_java_GetLocList()
+function! SyntaxCheckers_java_javac_IsAvailable()
+    return executable(g:syntastic_java_javac_executable)
+endfunction
+
+function! SyntaxCheckers_java_javac_GetLocList()
 
     let javac_opts = g:syntastic_java_javac_options 
 
@@ -232,3 +236,8 @@ function! SyntaxCheckers_java_GetLocList()
     return r
 
 endfunction
+
+call g:SyntasticRegistry.CreateAndRegisterChecker({
+    \ 'filetype': 'java',
+    \ 'name': 'javac'})
+

@@ -73,8 +73,8 @@ if exists('loaded_gcc_syntax_checker')
 endif
 let loaded_gcc_syntax_checker = 1
 
-if !executable(g:syntastic_c_checker)
-    finish
+function SyntaxCheckers_c_gcc_IsAvailable()
+    return executable(g:syntastic_c_checker)
 endif
 
 let s:save_cpo = &cpo
@@ -88,7 +88,7 @@ if !exists('g:syntastic_c_config_file')
     let g:syntastic_c_config_file = '.syntastic_c_config'
 endif
 
-function! SyntaxCheckers_c_GetLocList()
+function! SyntaxCheckers_c_gcc_GetLocList()
     let makeprg = g:syntastic_c_checker . ' -x c -fsyntax-only '
     let errorformat = '%-G%f:%s:,%-G%f:%l: %#error: %#(Each undeclared '.
                \ 'identifier is reported only%.%#,%-G%f:%l: %#error: %#for '.
@@ -158,6 +158,10 @@ function! SyntaxCheckers_c_GetLocList()
         return errors
     endif
 endfunction
+
+call g:SyntasticRegistry.CreateAndRegisterChecker({
+    \ 'filetype': 'c',
+    \ 'name': 'gcc'})
 
 let &cpo = s:save_cpo
 unlet s:save_cpo

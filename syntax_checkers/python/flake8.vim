@@ -34,8 +34,5 @@ function! SyntaxCheckers_python_flake8_GetLocList()
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
-    \ 'loclistFunc': function("SyntaxCheckers_python_flake8_GetLocList"),
-    \ 'highlightRegexFunc': function("SyntaxCheckers_python_flake8_GetHighlightRegex"),
     \ 'filetype': 'python',
-    \ 'name': 'flake8',
-    \ 'isAvailableFunc': function("SyntaxCheckers_python_flake8_IsAvailable")} )
+    \ 'name': 'flake8'})
