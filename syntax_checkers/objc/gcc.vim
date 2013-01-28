@@ -11,7 +11,6 @@
 "============================================================================
 
 " In order to also check header files add this to your .vimrc:
-" (this usually creates a .gch file in your source directory)
 "
 "   let g:syntastic_objc_check_header = 1
 "
@@ -19,6 +18,11 @@
 " libraries like gtk and glib add this line to your .vimrc:
 "
 "   let g:syntastic_objc_no_include_search = 1
+"
+" To disable the include of the default include dirs (such as /usr/include)
+" add this line to your .vimrc:
+"
+"   let g:syntastic_objc_no_default_include_dirs = 1
 "
 " To enable header files being re-checked on every file write add the
 " following line to your .vimrc. Otherwise the header files are checked only
@@ -64,7 +68,12 @@
 "
 "   let g:syntastic_objc_errorformat = '%f:%l:%c: %trror: %m'
 
-if !executable('gcc')
+if exists('loaded_gcc_syntax_checker')
+    finish
+endif
+let loaded_gcc_syntax_checker = 1
+
+if !executable(g:syntastic_objc_checker)
     finish
 endif
 
@@ -72,7 +81,7 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 if !exists('g:syntastic_objc_compiler_options')
-    let g:syntastic_objc_compiler_options = ''
+    let g:syntastic_objc_compiler_options = '-std=gnu99'
 endif
 
 if !exists('g:syntastic_objc_config_file')
@@ -80,15 +89,13 @@ if !exists('g:syntastic_objc_config_file')
 endif
 
 function! SyntaxCheckers_objc_GetLocList()
-    let makeprg = 'gcc -fsyntax-only -lobjc'
-    let errorformat =
-                    \ '%-G%f:%s:,'.
-                    \ '%f:%l:%c: %trror: %m,'.
-                    \ '%f:%l:%c: %tarning: %m,'.
-                    \ '%f:%l:%c: %m,'.
-                    \ '%f:%l: %trror: %m,'.
-                    \ '%f:%l: %tarning: %m,'.
-                    \ '%f:%l: %m'
+    let makeprg = g:syntastic_objc_checker . ' -ObjC -fsyntax-only '
+    let errorformat = '%-G%f:%s:,%-G%f:%l: %#error: %#(Each undeclared '.
+               \ 'identifier is reported only%.%#,%-G%f:%l: %#error: %#for '.
+               \ 'each function it appears%.%#,%-GIn file included%.%#,'.
+               \ '%-G %#from %f:%l\,,%f:%l:%c: %trror: %m,%f:%l:%c: '.
+               \ '%tarning: %m,%f:%l:%c: %m,%f:%l: %trror: %m,'.
+               \ '%f:%l: %tarning: %m,%f:%l: %m'
 
     if exists('g:syntastic_objc_errorformat')
         let errorformat = g:syntastic_objc_errorformat
@@ -103,8 +110,10 @@ function! SyntaxCheckers_objc_GetLocList()
     " determine whether to parse header files as well
     if expand('%') =~? '.h$'
         if exists('g:syntastic_objc_check_header')
-            let makeprg = 'gcc -c '.shellescape(expand('%')).
-                        \ ' '.syntastic#c#GetIncludeDirs('c')
+            let makeprg = g:syntastic_objc_checker
+                        \ ' -c ' . shellescape(expand('%')) .
+                        \ ' ' . g:syntastic_objc_compiler_options .
+                        \ ' ' . syntastic#c#GetIncludeDirs('c')
         else
             return []
         endif
