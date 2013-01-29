@@ -1,7 +1,7 @@
 "============================================================================
-"File:        cpp.vim
+"File:        twig.vim
 "Description: Syntax checking plugin for syntastic.vim
-"Maintainer:  Val Markovic <val at markovic dot io>
+"Maintainer:  Alexander <iam.asm89 at gmail dot com>
 "License:     This program is free software. It comes without any warranty,
 "             to the extent permitted by applicable law. You can redistribute
 "             it and/or modify it under the terms of the Do What The Fuck You
@@ -10,19 +10,13 @@
 "
 "============================================================================
 
-if !exists('g:syntastic_cpp_checker')
-    if exists('g:loaded_youcompleteme')
-        let g:syntastic_cpp_checker = "ycm"
-    else
-        let g:syntastic_cpp_checker = "gcc"
-    endif
-endif
+function! SyntaxCheckers_twig_GetHighlightRegex(item)
+    " Let's match the full line for now
+    return '\V'
+endfunction
 
-if g:syntastic_cpp_checker == "ycm"
-    runtime! syntax_checkers/cpp/ycm.vim
-elseif g:syntastic_cpp_checker == "gcc" || g:syntastic_cpp_checker == "clang"
-    if executable(g:syntastic_cpp_checker)
-        runtime! syntax_checkers/cpp/gcc.vim
-    endif
-endif
-
+function! SyntaxCheckers_twig_GetLocList()
+    let makeprg = "twig-lint lint --format=csv ".shellescape(expand('%'))
+    let errorformat = '"%f"\,%l\,%m'
+    return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat})
+endfunction
