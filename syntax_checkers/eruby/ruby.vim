@@ -16,7 +16,7 @@ endif
 
 
 function! SyntaxCheckers_eruby_ruby_IsAvailable()
-    executable(expand(g:syntastic_ruby_exec))
+    return executable(expand(g:syntastic_ruby_exec))
 endfunction
 
 function! SyntaxCheckers_eruby_ruby_GetLocList()
@@ -36,5 +36,5 @@ function! SyntaxCheckers_eruby_ruby_GetLocList()
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
-    \ 'filetype': 'erlang',
+    \ 'filetype': 'eruby',
     \ 'name': 'ruby'})
