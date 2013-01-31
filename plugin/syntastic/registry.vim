@@ -5,6 +5,8 @@ let g:loaded_syntastic_registry=1
 
 let s:defaultCheckers = {
         \ 'c': ['gcc'],
+        \ 'cpp': ['gcc'],
+        \ 'objc': ['gcc'],
         \ 'java': ['javac'],
         \ 'ruby': ['mri']
     \ }
