@@ -57,7 +57,11 @@ function s:Args()
     let args .= " -e"
 endfunction
 
-function! SyntaxCheckers_html_GetLocList()
+function! SyntaxCheckers_html_tidy_IsAvailable()
+    return executable('tidy')
+endfunction
+
+function! SyntaxCheckers_html_tidy_GetLocList()
     let makeprg = syntastic#makeprg#build({
                 \ 'exe': 'tidy',
                 \ 'args': s:Args(),
@@ -85,3 +89,8 @@ function! SyntaxCheckers_html_GetLocList()
 
     return loclist
 endfunction
+
+call g:SyntasticRegistry.CreateAndRegisterChecker({
+    \ 'filetype': 'html',
+    \ 'name': 'tidy'})
+

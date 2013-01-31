@@ -18,11 +18,14 @@ if executable("checkpatch.pl")
     let g:syntastic_c_checker_checkpatch_location = 'checkpatch.pl'
 elseif executable("./scripts/checkpatch.pl")
     let g:syntastic_c_checker_checkpatch_location = './scripts/checkpatch.pl'
-else
-    finish
 endif
 
-function! SyntaxCheckers_c_GetLocList()
+function SyntaxCheckers_c_checkpatch_IsAvailable()
+    exists("g:syntastic_c_checker_checkpatch_location")
+endfunction
+
+
+function! SyntaxCheckers_c_checkpatch_GetLocList()
     let makeprg = syntastic#makeprg#build({
                 \ 'exe': g:syntastic_c_checker_checkpatch_location,
                 \ 'args': '--no-summary --no-tree --terse --file',
@@ -30,8 +33,11 @@ function! SyntaxCheckers_c_GetLocList()
 
     let errorformat = '%f:%l: %tARNING: %m,%f:%l: %tRROR: %m'
 
-    let oclist = SyntasticMake({ 'makeprg': makeprg,
-                                \ 'errorformat': errorformat,
-                                \ 'defaults': {'bufnr': bufnr("")} })
-    return loclist
+    return SyntasticMake({ 'makeprg': makeprg,
+                         \ 'errorformat': errorformat,
+                         \ 'defaults': {'bufnr': bufnr("")} })
 endfunction
+
+call g:SyntasticRegistry.CreateAndRegisterChecker({
+    \ 'filetype': 'c',
+    \ 'name': 'checkpatch'})

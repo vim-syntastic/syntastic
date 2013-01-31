@@ -15,11 +15,14 @@ if exists("loaded_ycm_cpp_syntax_checker")
 endif
 let loaded_ycm_cpp_syntax_checker = 1
 
-if !exists('g:loaded_youcompleteme')
-    finish
-endif
+function! SyntaxCheckers_objc_ycm_IsAvailable()
+    return exists('g:loaded_youcompleteme')
+endfunction
 
-function! SyntaxCheckers_cpp_GetLocList()
+function! SyntaxCheckers_cpp_ycm_GetLocList()
     return youcompleteme#CurrentFileDiagnostics()
 endfunction
 
+call g:SyntasticRegistry.CreateAndRegisterChecker({
+    \ 'filetype': 'cpp',
+    \ 'name': 'ycm'})

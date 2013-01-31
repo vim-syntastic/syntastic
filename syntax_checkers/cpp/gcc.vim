@@ -80,10 +80,6 @@ if !exists('g:syntastic_cpp_compiler_options')
     let g:syntastic_cpp_compiler_options = ''
 endif
 
-if !executable(g:syntastic_cpp_compiler)
-    finish
-endif
-
 let s:save_cpo = &cpo
 set cpo&vim
 
@@ -91,7 +87,11 @@ if !exists('g:syntastic_cpp_config_file')
     let g:syntastic_cpp_config_file = '.syntastic_cpp_config'
 endif
 
-function! SyntaxCheckers_cpp_GetLocList()
+function! SyntaxCheckers_cpp_gcc_IsAvailable()
+    return executable(g:syntastic_cpp_compiler)
+endfunction
+
+function! SyntaxCheckers_cpp_gcc_GetLocList()
     let makeprg = g:syntastic_cpp_compiler . ' -x c++ -fsyntax-only ' .
                 \ g:syntastic_cpp_compiler_options
     let errorformat =  '%-G%f:%s:,%f:%l:%c: %trror: %m,%f:%l:%c: %tarning: '.
@@ -149,6 +149,10 @@ function! SyntaxCheckers_cpp_GetLocList()
         return errors
     endif
 endfunction
+
+call g:SyntasticRegistry.CreateAndRegisterChecker({
+    \ 'filetype': 'cpp',
+    \ 'name': 'gcc'})
 
 let &cpo = s:save_cpo
 unlet s:save_cpo

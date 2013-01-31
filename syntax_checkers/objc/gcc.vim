@@ -64,10 +64,6 @@
 "
 "   let g:syntastic_objc_errorformat = '%f:%l:%c: %trror: %m'
 
-if !executable('gcc')
-    finish
-endif
-
 let s:save_cpo = &cpo
 set cpo&vim
 
@@ -79,7 +75,11 @@ if !exists('g:syntastic_objc_config_file')
     let g:syntastic_objc_config_file = '.syntastic_objc_config'
 endif
 
-function! SyntaxCheckers_objc_GetLocList()
+function! SyntaxCheckers_objc_gcc_IsAvailable()
+    return executable('gcc')
+endif
+
+function! SyntaxCheckers_objc_gcc_GetLocList()
     let makeprg = 'gcc -fsyntax-only -lobjc'
     let errorformat =
                     \ '%-G%f:%s:,'.
@@ -148,6 +148,10 @@ function! SyntaxCheckers_objc_GetLocList()
         return errors
     endif
 endfunction
+
+call g:SyntasticRegistry.CreateAndRegisterChecker({
+    \ 'filetype': 'objc',
+    \ 'name': 'gcc'})
 
 let &cpo = s:save_cpo
 unlet s:save_cpo

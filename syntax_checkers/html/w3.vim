@@ -9,7 +9,11 @@
 "             See http://sam.zoy.org/wtfpl/COPYING for more details.
 "
 "============================================================================
-function! SyntaxCheckers_html_GetLocList()
+function! SyntaxCheckers_html_w3_IsAvailable()
+    return executable('curl') && executable('sed')
+endfunction
+
+function! SyntaxCheckers_html_w3_GetLocList()
     let makeprg2="curl -s -F output=text -F \"uploaded_file=@".expand('%:p').";type=text/html\" http://validator.w3.org/check \\| sed -n -e '/\<em\>Line\.\*/ \{ N; s/\\n//; N; s/\\n//; /msg/p; \}' -e ''/msg_warn/p'' -e ''/msg_info/p'' \\| sed -e 's/[ ]\\+/ /g' -e 's/\<[\^\>]\*\>//g' -e 's/\^[ ]//g'"
     let errorformat2='Line %l\, Column %c: %m'
     let loclist = SyntasticMake({ 'makeprg': makeprg2, 'errorformat': errorformat2 })
@@ -30,3 +34,8 @@ function! SyntaxCheckers_html_GetLocList()
 
     return loclist
 endfunction
+
+call g:SyntasticRegistry.CreateAndRegisterChecker({
+    \ 'filetype': 'html',
+    \ 'name': 'w3'})
+

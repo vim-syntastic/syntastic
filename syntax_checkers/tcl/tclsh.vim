@@ -10,14 +10,17 @@
 "
 "============================================================================
 
-"bail if the user doesnt have tclsh installed
-if !executable("tclsh")
-    finish
-endif
+function! SyntaxCheckers_tcl_tclsh_IsAvailable()
+    return executable('tclsh')
+endfunction
 
-function! SyntaxCheckers_tclsh_GetLocList()
+function! SyntaxCheckers_tcl_tclsh_GetLocList()
     let makeprg = syntastic#makeprg#build({'exe': 'tclsh'})
     let errorformat = '%f:%l:%m'
 
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 endfunction
+
+call g:SyntasticRegistry.CreateAndRegisterChecker({
+    \ 'filetype': 'tcl',
+    \ 'name': 'tclsh'})

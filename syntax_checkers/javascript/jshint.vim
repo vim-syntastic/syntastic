@@ -12,7 +12,11 @@ if !exists("g:syntastic_javascript_jshint_conf")
     let g:syntastic_javascript_jshint_conf = ""
 endif
 
-function! SyntaxCheckers_javascript_GetLocList()
+function! SyntaxCheckers_javascript_jshint_IsAvailable()
+    return executable('jshint')
+endfunction
+
+function! SyntaxCheckers_javascript_jshint_GetLocList()
     let makeprg = syntastic#makeprg#build({
                 \ 'exe': 'jshint',
                 \ 'post_args': s:Args(),
@@ -26,3 +30,8 @@ function s:Args()
     " node-jshint uses .jshintrc as config unless --config arg is present
     return !empty(g:syntastic_javascript_jshint_conf) ? ' --config ' . g:syntastic_javascript_jshint_conf : ''
 endfunction
+
+call g:SyntasticRegistry.CreateAndRegisterChecker({
+    \ 'filetype': 'javascript',
+    \ 'name': 'jshint'})
+

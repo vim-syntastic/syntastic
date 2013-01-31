@@ -21,12 +21,11 @@ if !exists("g:syntastic_ruby_exec")
     let g:syntastic_ruby_exec = s:FindRubyExec()
 endif
 
-"bail if the user doesnt have ruby installed where they said it is
-if !executable(expand(g:syntastic_ruby_exec))
-    finish
-endif
+function! SyntaxCheckers_ruby_mri_IsAvailable()
+    return executable(expand(g:syntastic_ruby_exec))
+endfunction
 
-function! SyntaxCheckers_ruby_GetLocList()
+function! SyntaxCheckers_ruby_mri_GetLocList()
     let exe = expand(g:syntastic_ruby_exec)
     if !has('win32')
         let exe = 'RUBYOPT= ' . exe
@@ -55,3 +54,7 @@ function! SyntaxCheckers_ruby_GetLocList()
     let errorformat .= ',%Z%p^,%W%f:%l: warning: %m,%Z%p^,%W%f:%l: %m,%-C%.%#'
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 endfunction
+
+call g:SyntasticRegistry.CreateAndRegisterChecker({
+    \ 'filetype': 'ruby',
+    \ 'name': 'mri'})
