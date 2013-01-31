@@ -73,9 +73,13 @@ if exists('loaded_gcc_syntax_checker')
 endif
 let loaded_gcc_syntax_checker = 1
 
+if !exists('g:syntastic_c_checker')
+    let g:syntastic_c_checker = "gcc"
+endif
+
 function SyntaxCheckers_c_gcc_IsAvailable()
     return executable(g:syntastic_c_checker)
-endif
+endfunction
 
 let s:save_cpo = &cpo
 set cpo&vim
