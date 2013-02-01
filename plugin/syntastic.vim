@@ -107,8 +107,21 @@ endif
 
 let s:registry = g:SyntasticRegistry.Instance()
 
+function! s:CompleteCheckerName(argLead, cmdLine, cursorPos)
+    let checker_names = []
+    let fts = substitute(&ft, '-', '_', 'g')
+    for ft in split(fts, '\.')
+        for checker in s:registry.availableCheckersFor(ft)
+            if index(checker_names, checker.name()) == -1
+                call add(checker_names, checker.name())
+            endif
+        endfor
+    endfor
+    return join(checker_names, "\n")
+endfunction
+
 command! SyntasticToggleMode call s:ToggleMode()
-command! -nargs=? SyntasticCheck call s:UpdateErrors(0, <f-args>) <bar> call s:Redraw()
+command! -nargs=? -complete=custom,s:CompleteCheckerName SyntasticCheck call s:UpdateErrors(0, <f-args>) <bar> call s:Redraw()
 command! Errors call s:ShowLocList()
 
 highlight link SyntasticError SpellBad
