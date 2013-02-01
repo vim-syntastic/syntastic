@@ -137,7 +137,8 @@ function! s:UpdateErrors(auto_invoked)
         call s:CacheErrors()
     end
 
-    call setloclist(0, s:LocList())
+    let loclist = s:LocList()
+    call setloclist(0, loclist.toRaw())
 
     if g:syntastic_enable_balloons
         call s:RefreshBalloons()
@@ -151,7 +152,7 @@ function! s:UpdateErrors(auto_invoked)
         call s:HighlightErrors()
     endif
 
-    if g:syntastic_auto_jump && s:BufHasErrorsOrWarningsToDisplay()
+    if g:syntastic_auto_jump && loclist.hasErrorsOrWarningsToDisplay()
         silent! ll
     endif
 
@@ -161,7 +162,8 @@ endfunction
 "automatically open/close the location list window depending on the users
 "config and buffer error state
 function! s:AutoToggleLocList()
-    if s:BufHasErrorsOrWarningsToDisplay()
+    let loclist = s:LocList()
+    if loclist.hasErrorsOrWarningsToDisplay()
         if g:syntastic_auto_loc_list == 1
             call s:ShowLocList()
         endif
@@ -178,16 +180,14 @@ endfunction
 "lazy init the loc list for the current buffer
 function! s:LocList()
     if !exists("b:syntastic_loclist")
-        let b:syntastic_loclist = []
+        let b:syntastic_loclist = g:SyntasticLoclist.New([])
     endif
     return b:syntastic_loclist
 endfunction
 
 "clear the loc list for the buffer
 function! s:ClearCache()
-    let b:syntastic_loclist = []
-    unlet! b:syntastic_errors
-    unlet! b:syntastic_warnings
+    unlet! b:syntastic_loclist
 endfunction
 
 "detect and cache all syntax errors in this buffer
@@ -196,6 +196,7 @@ endfunction
 "elsewhere
 function! s:CacheErrors()
     call s:ClearCache()
+    let newLoclist = g:SyntasticLoclist.New([])
 
     if filereadable(expand("%"))
 
@@ -205,14 +206,10 @@ function! s:CacheErrors()
         for ft in split(fts, '\.')
             let checkers = s:registry.getActiveCheckers(ft)
             for checker in checkers
-                let errors = checker.getLocList()
+                let loclist = checker.getLocList()
 
-                if !empty(errors)
-                    "keep only lines that effectively match an error/warning
-                    let errors = s:FilterLocList({'valid': 1}, errors)
-                    "make errors have type "E" by default
-                    call SyntasticAddToErrors(errors, {'type': 'E'})
-                    call extend(s:LocList(), errors)
+                if !loclist.isEmpty()
+                    let newLoclist = newLoclist.extend(loclist)
 
                     "only get errors from one checker at a time
                     break
@@ -220,6 +217,8 @@ function! s:CacheErrors()
             endfor
         endfor
     endif
+
+    let b:syntastic_loclist = newLoclist
 endfunction
 
 "toggle the g:syntastic_mode_map['mode']
@@ -252,56 +251,6 @@ function! s:ModeMapAllowsAutoChecking()
     endif
 endfunction
 
-function! s:BufHasErrorsOrWarningsToDisplay()
-    if empty(s:LocList())
-        return 0
-    endif
-    return len(s:Errors()) || !g:syntastic_quiet_warnings
-endfunction
-
-function! s:Errors()
-    if !exists("b:syntastic_errors")
-        let b:syntastic_errors = s:FilterLocList({'type': "E"})
-    endif
-    return b:syntastic_errors
-endfunction
-
-function! s:Warnings()
-    if !exists("b:syntastic_warnings")
-        let b:syntastic_warnings = s:FilterLocList({'type': "W"})
-    endif
-    return b:syntastic_warnings
-endfunction
-
-"Filter a loc list (defaults to s:LocList()) by a:filters
-"e.g.
-"  s:FilterLocList({'bufnr': 10, 'type': 'e'})
-"
-"would return all errors in s:LocList() for buffer 10.
-"
-"Note that all comparisons are done with ==?
-function! s:FilterLocList(filters, ...)
-    let llist = a:0 ? a:1 : s:LocList()
-
-    let rv = []
-
-    for error in llist
-
-        let passes_filters = 1
-        for key in keys(a:filters)
-            if error[key] !=? a:filters[key]
-                let passes_filters = 0
-                break
-            endif
-        endfor
-
-        if passes_filters
-            call add(rv, error)
-        endif
-    endfor
-    return rv
-endfunction
-
 if g:syntastic_enable_signs
     "define the signs used to display syntax and style errors/warns
     exe 'sign define SyntasticError text='.g:syntastic_error_symbol.' texthl=error'
@@ -318,9 +267,10 @@ let s:next_sign_id = s:first_sign_id
 
 "place signs by all syntax errs in the buffer
 function! s:SignErrors()
-    if s:BufHasErrorsOrWarningsToDisplay()
+    let loclist = s:LocList()
+    if loclist.hasErrorsOrWarningsToDisplay()
 
-        let errors = s:FilterLocList({'bufnr': bufnr('')})
+        let errors = loclist.filter({'bufnr': bufnr('')})
         for i in errors
             let sign_severity = 'Error'
             let sign_subtype = ''
@@ -348,7 +298,8 @@ function! s:WarningMasksError(error, llist)
         return 0
     endif
 
-    return len(s:FilterLocList({ 'type': "E", 'lnum': a:error['lnum'] }, a:llist)) > 0
+    let loclist = g:SyntasticLoclist.New(a:llist)
+    return len(loclist.filter({ 'type': "E", 'lnum': a:error['lnum'] })) > 0
 endfunction
 
 "remove the signs with the given ids from this buffer
@@ -377,8 +328,9 @@ endfunction
 
 "display the cached errors for this buf in the location list
 function! s:ShowLocList()
-    if !empty(s:LocList())
-        call setloclist(0, s:LocList())
+    let loclist = s:LocList()
+    if !loclist.isEmpty()
+        call setloclist(0, loclist.toRaw())
         let num = winnr()
         exec "lopen " . g:syntastic_loc_list_height
         if num != winnr()
@@ -398,11 +350,12 @@ endfunction
 "the callback even if it can be highlighted automatically.
 function! s:HighlightErrors()
     call s:ClearErrorHighlights()
+    let loclist = s:LocList()
 
     let fts = substitute(&ft, '-', '_', 'g')
     for ft in split(fts, '\.')
 
-        for item in s:LocList()
+        for item in loclist.toRaw()
 
             let force_callback = has_key(item, 'force_highlight_callback') && item['force_highlight_callback']
 
@@ -436,8 +389,9 @@ endfunction
 "set up error ballons for the current set of errors
 function! s:RefreshBalloons()
     let b:syntastic_balloons = {}
-    if s:BufHasErrorsOrWarningsToDisplay()
-        for i in s:LocList()
+    let loclist = s:LocList()
+    if loclist.hasErrorsOrWarningsToDisplay()
+        for i in loclist.toRaw()
             let b:syntastic_balloons[i['lnum']] = i['text']
         endfor
         set beval bexpr=SyntasticErrorBalloonExpr()
@@ -471,9 +425,10 @@ endfunction
 
 "echo out the first error we find for the current line in the cmd window
 function! s:EchoCurrentError()
+    let loclist = s:LocList()
     "If we have an error or warning at the current line, show it
-    let errors = s:FilterLocList({'lnum': line("."), "type": 'e'})
-    let warnings = s:FilterLocList({'lnum': line("."), "type": 'w'})
+    let errors = loclist.filter({'lnum': line("."), "type": 'e'})
+    let warnings = loclist.filter({'lnum': line("."), "type": 'w'})
 
     let b:syntastic_echoing_error = len(errors) || len(warnings)
     if len(errors)
@@ -540,9 +495,10 @@ endfunction
 "
 "return '' if no errors are cached for the buffer
 function! SyntasticStatuslineFlag()
-    if s:BufHasErrorsOrWarningsToDisplay()
-        let errors = s:Errors()
-        let warnings = s:Warnings()
+    let loclist = s:LocList()
+    if loclist.hasErrorsOrWarningsToDisplay()
+        let errors = loclist.errors()
+        let warnings = loclist.warnings()
 
         let num_errors = len(errors)
         let num_warnings = len(warnings)
@@ -558,13 +514,14 @@ function! SyntasticStatuslineFlag()
         "hide stuff wrapped in %B(...) unless there are both errors and warnings
         let output = substitute(output, '\C%B{\([^}]*\)}', (num_warnings && num_errors) ? '\1' : '' , 'g')
 
+
         "sub in the total errors/warnings/both
         let output = substitute(output, '\C%w', num_warnings, 'g')
         let output = substitute(output, '\C%e', num_errors, 'g')
-        let output = substitute(output, '\C%t', len(s:LocList()), 'g')
+        let output = substitute(output, '\C%t', loclist.length(), 'g')
 
         "first error/warning line num
-        let output = substitute(output, '\C%F', s:LocList()[0]['lnum'], 'g')
+        let output = substitute(output, '\C%F', loclist.toRaw()[0]['lnum'], 'g')
 
         "first error line num
         let output = substitute(output, '\C%fe', num_errors ? errors[0]['lnum'] : '', 'g')

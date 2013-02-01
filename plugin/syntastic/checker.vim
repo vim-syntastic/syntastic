@@ -36,7 +36,8 @@ function! g:SyntasticChecker.name()
 endfunction
 
 function! g:SyntasticChecker.getLocList()
-    return self._locListFunc()
+    let list = self._locListFunc()
+    return g:SyntasticLoclist.New(list)
 endfunction
 
 function! g:SyntasticChecker.getHighlightRegexFor(error)
