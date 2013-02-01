@@ -31,12 +31,14 @@ function! g:SyntasticRegistry.CreateAndRegisterChecker(args)
     call registry.registerChecker(checker)
 endfunction
 
-function! g:SyntasticRegistry.registerChecker(checker)
+function! g:SyntasticRegistry.registerChecker(checker) abort
     let ft = a:checker.filetype()
 
     if !has_key(self._checkerMap, ft)
         let self._checkerMap[ft] = []
     endif
+
+    call self._validateUniqueName(a:checker)
 
     call add(self._checkerMap[ft], a:checker)
 endfunction
@@ -131,6 +133,14 @@ endfunction
 
 function! g:SyntasticRegistry._userHasFiletypeSettings(filetype)
     return exists("g:syntastic_" . a:filetype . "_checkers")
+endfunction
+
+function! g:SyntasticRegistry._validateUniqueName(checker) abort
+    for checker in self._allCheckersFor(a:checker.filetype())
+        if checker.name() == a:checker.name()
+            throw "Syntastic: Duplicate syntax checker name for: " . a:checker.name()
+        endif
+    endfor
 endfunction
 
 " vim: set sw=4 sts=4 et fdm=marker:

@@ -111,9 +111,7 @@ function! s:CompleteCheckerName(argLead, cmdLine, cursorPos)
     let checker_names = []
     for ft in s:CurrentFiletypes()
         for checker in s:registry.availableCheckersFor(ft)
-            if index(checker_names, checker.name()) == -1
-                call add(checker_names, checker.name())
-            endif
+            call add(checker_names, checker.name())
         endfor
     endfor
     return join(checker_names, "\n")
