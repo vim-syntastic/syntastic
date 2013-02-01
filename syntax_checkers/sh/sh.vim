@@ -28,7 +28,8 @@ function! s:GetShell()
 endfunction
 
 function! s:ForwardToZshChecker()
-    if SyntasticCheckable('zsh')
+    let registry = g:SyntasticRegistry.Instance()
+    if registry.checkable('zsh')
         return SyntaxCheckers_zsh_zsh_GetLocList()
     else
         return []

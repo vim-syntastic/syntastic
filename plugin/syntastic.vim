@@ -490,12 +490,6 @@ function! s:EchoCurrentError()
     endif
 endfunction
 
-"load the chosen checker for the current filetype - useful for filetypes like
-"javascript that have more than one syntax checker
-function! s:LoadChecker(checker, ft)
-    exec "runtime syntax_checkers/" . a:ft . "/" . a:checker . ".vim"
-endfunction
-
 "the script changes &shellpipe and &shell to stop the screen flicking when
 "shelling out to syntax checkers. Not all OSs support the hacks though
 function! s:OSSupportsShellpipeHack()
@@ -526,23 +520,6 @@ function! s:uname()
         let s:uname = system('uname')
     endif
     return s:uname
-endfunction
-
-"find all syntax checkers matching `&rtp/syntax_checkers/a:ft/*.vim`
-function s:FindCheckersForFt(ft)
-    let checkers = []
-    for ft_checker_fname in split(globpath(&runtimepath, "syntax_checkers/" . a:ft . "/*.vim"), '\n')
-        let checker_name = fnamemodify(ft_checker_fname, ':t:r')
-        call add(checkers, checker_name)
-    endfor
-
-    return checkers
-endfunction
-
-"check if a syntax checker exists for the given filetype - and attempt to
-"load one
-function! SyntasticCheckable(ft)
-    return s:registry.checkable(a:ft)
 endfunction
 
 "the args must be arrays of the form [major, minor, macro]
@@ -680,43 +657,6 @@ function! SyntasticAddToErrors(errors, options)
         endfor
     endfor
     return a:errors
-endfunction
-
-"find all checkers for the given filetype and load the right one based on the
-"global settings and checker executable availabity
-"
-"Find all files matching `&rtp/syntax_checkers/a:ft/*.vim`. These files should
-"contain syntastic syntax checkers. The file names are also assumed to be the
-"names of syntax checker executables.
-"
-"e.g. ~/.vim/syntax_checkers/python/flake8.vim is a syntax checker for python
-"that calls the `flake8` executable.
-"
-"a:ft should be the filetype for the checkers being loaded
-"
-"If a option called 'g:syntastic_{a:ft}_checker' exists then attempt to
-"load the checker that it points to.
-"
-"e.g. let g:syntastic_python_checker="flake8" will tell syntastic to use
-"flake8 for python.
-function! SyntasticLoadChecker(ft)
-    let opt_name = "g:syntastic_" . a:ft . "_checker"
-    let checkers = s:FindCheckersForFt(&ft)
-
-    if exists(opt_name)
-        let opt_val = {opt_name}
-        if index(checkers, opt_val) != -1
-            call s:LoadChecker(opt_val, a:ft)
-        else
-            echoerr &ft . " syntax not supported or not installed."
-        endif
-    else
-        for checker in checkers
-            if executable(checker)
-                return s:LoadChecker(checker, a:ft)
-            endif
-        endfor
-    endif
 endfunction
 
 " vim: set et sts=4 sw=4:
