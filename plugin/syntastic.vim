@@ -109,8 +109,7 @@ let s:registry = g:SyntasticRegistry.Instance()
 
 function! s:CompleteCheckerName(argLead, cmdLine, cursorPos)
     let checker_names = []
-    let fts = substitute(&ft, '-', '_', 'g')
-    for ft in split(fts, '\.')
+    for ft in s:CurrentFiletypes()
         for checker in s:registry.availableCheckersFor(ft)
             if index(checker_names, checker.name()) == -1
                 call add(checker_names, checker.name())
@@ -207,30 +206,30 @@ function! s:ClearCache()
     unlet! b:syntastic_loclist
 endfunction
 
+function! s:CurrentFiletypes()
+    "sub - for _ in filetypes otherwise we cant name syntax checker
+    "functions legally for filetypes like "gentoo-metadata"
+    let fts = substitute(&ft, '-', '_', 'g')
+    return split(fts, '\.')
+endfunction
+
 "detect and cache all syntax errors in this buffer
-"
-"depends on a function called SyntaxCheckers_{&ft}_GetLocList() existing
-"elsewhere
 function! s:CacheErrors(...)
     call s:ClearCache()
     let newLoclist = g:SyntasticLoclist.New([])
 
     if filereadable(expand("%"))
+        for ft in s:CurrentFiletypes()
 
-        "sub - for _ in filetypes otherwise we cant name syntax checker
-        "functions legally for filetypes like "gentoo-metadata"
-        let fts = substitute(&ft, '-', '_', 'g')
-        for ft in split(fts, '\.')
-            if a:0 >= 1
-                let checkers = []
-                for checker in s:registry.availableCheckersFor(ft)
-                    if checker.name() == a:1
-                        call add(checkers, checker)
-                    endif
-                endfor
+            if a:0
+                let checker = s:registry.getChecker(ft, a:1)
+                if !empty(checker)
+                    let checkers = [checker]
+                endif
             else
                 let checkers = s:registry.getActiveCheckers(ft)
             endif
+
             for checker in checkers
                 let loclist = checker.getLocList()
 

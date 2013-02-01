@@ -69,12 +69,22 @@ function! g:SyntasticRegistry.getActiveCheckers(filetype)
     return []
 endfunction
 
-" Private methods {{{1
+function! g:SyntasticRegistry.getChecker(filetype, name)
+    for checker in self.availableCheckersFor(a:filetype)
+        if checker.name() == a:name
+            return checker
+        endif
+    endfor
+
+    return {}
+endfunction
 
 function! g:SyntasticRegistry.availableCheckersFor(filetype)
     let checkers = copy(self._allCheckersFor(a:filetype))
     return self._filterCheckersByAvailability(checkers)
 endfunction
+
+" Private methods {{{1
 
 function! g:SyntasticRegistry._allCheckersFor(filetype)
     call self._loadCheckers(a:filetype)
