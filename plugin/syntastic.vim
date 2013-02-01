@@ -151,9 +151,6 @@ function! s:UpdateErrors(auto_invoked, ...)
         endif
     end
 
-    let loclist = s:LocList()
-    call setloclist(0, loclist.toRaw())
-
     if g:syntastic_enable_balloons
         call s:RefreshBalloons()
     endif
