@@ -15,7 +15,7 @@ if exists("loaded_ycm_cpp_syntax_checker")
 endif
 let loaded_ycm_cpp_syntax_checker = 1
 
-function! SyntaxCheckers_objc_ycm_IsAvailable()
+function! SyntaxCheckers_cpp_ycm_IsAvailable()
     return exists('g:loaded_youcompleteme')
 endfunction
 
