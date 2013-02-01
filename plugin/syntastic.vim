@@ -107,8 +107,21 @@ endif
 
 let s:registry = g:SyntasticRegistry.Instance()
 
+function! s:CompleteCheckerName(argLead, cmdLine, cursorPos)
+    let checker_names = []
+    let fts = substitute(&ft, '-', '_', 'g')
+    for ft in split(fts, '\.')
+        for checker in s:registry.availableCheckersFor(ft)
+            if index(checker_names, checker.name()) == -1
+                call add(checker_names, checker.name())
+            endif
+        endfor
+    endfor
+    return join(checker_names, "\n")
+endfunction
+
 command! SyntasticToggleMode call s:ToggleMode()
-command! SyntasticCheck call s:UpdateErrors(0) <bar> call s:Redraw()
+command! -nargs=? -complete=custom,s:CompleteCheckerName SyntasticCheck call s:UpdateErrors(0, <f-args>) <bar> call s:Redraw()
 command! Errors call s:ShowLocList()
 
 highlight link SyntasticError SpellBad
@@ -128,13 +141,17 @@ augroup END
 
 
 "refresh and redraw all the error info for this buf when saving or reading
-function! s:UpdateErrors(auto_invoked)
+function! s:UpdateErrors(auto_invoked, ...)
     if !empty(&buftype)
         return
     endif
 
     if !a:auto_invoked || s:ModeMapAllowsAutoChecking()
-        call s:CacheErrors()
+        if a:0 >= 1
+            call s:CacheErrors(a:1)
+        else
+            call s:CacheErrors()
+        endif
     end
 
     let loclist = s:LocList()
@@ -194,7 +211,7 @@ endfunction
 "
 "depends on a function called SyntaxCheckers_{&ft}_GetLocList() existing
 "elsewhere
-function! s:CacheErrors()
+function! s:CacheErrors(...)
     call s:ClearCache()
     let newLoclist = g:SyntasticLoclist.New([])
 
@@ -204,7 +221,16 @@ function! s:CacheErrors()
         "functions legally for filetypes like "gentoo-metadata"
         let fts = substitute(&ft, '-', '_', 'g')
         for ft in split(fts, '\.')
-            let checkers = s:registry.getActiveCheckers(ft)
+            if a:0 >= 1
+                let checkers = []
+                for checker in s:registry.availableCheckersFor(ft)
+                    if checker.name() == a:1
+                        call add(checkers, checker)
+                    endif
+                endfor
+            else
+                let checkers = s:registry.getActiveCheckers(ft)
+            endif
             for checker in checkers
                 let loclist = checker.getLocList()
 
