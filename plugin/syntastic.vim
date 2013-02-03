@@ -163,6 +163,7 @@ function! s:UpdateErrors(auto_invoked, ...)
         call s:HighlightErrors()
     endif
 
+    let loclist = s:LocList()
     if g:syntastic_auto_jump && loclist.hasErrorsOrWarningsToDisplay()
         silent! ll
     endif
