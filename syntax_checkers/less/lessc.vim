@@ -31,7 +31,7 @@ else
     let s:check_file = 'lessc'
 end
 
-function! SyntaxCheckers_less_lessc_GetLocList()
+function! SyntaxCheckers_less_lessc_IsAvailable()
     return executable('lessc')
 endfunction
 
