@@ -25,6 +25,10 @@ if !exists("g:syntastic_enable_signs")
     let g:syntastic_enable_signs = 1
 endif
 
+if !exists("g:syntastic_highlight_lines")
+    let g:syntastic_highlight_lines = 0
+endif
+
 if !exists("g:syntastic_error_symbol")
     let g:syntastic_error_symbol = '>>'
 endif
@@ -380,16 +384,21 @@ function! s:HighlightErrors()
             let force_callback = has_key(item, 'force_highlight_callback') && item['force_highlight_callback']
 
             let group = item['type'] == 'E' ? 'SyntasticError' : 'SyntasticWarning'
-            if get( item, 'col' ) && !force_callback
+            if g:syntastic_highlight_lines
                 let lastcol = col([item['lnum'], '$'])
-                let lcol = min([lastcol, item['col']])
-                call matchadd(group, '\%'.item['lnum'].'l\%'.lcol.'c')
+                call matchadd(group, '\%'.item['lnum'].'l\%1c.*\%'.lastcol.'c')
             else
+                if get( item, 'col' ) && !force_callback
+                    let lastcol = col([item['lnum'], '$'])
+                    let lcol = min([lastcol, item['col']])
+                    call matchadd(group, '\%'.item['lnum'].'l\%'.lcol.'c')
+                else
 
-                if exists("*SyntaxCheckers_". ft ."_GetHighlightRegex")
-                    let term = SyntaxCheckers_{ft}_GetHighlightRegex(item)
-                    if len(term) > 0
-                        call matchadd(group, '\%' . item['lnum'] . 'l' . term)
+                    if exists("*SyntaxCheckers_". ft ."_GetHighlightRegex")
+                        let term = SyntaxCheckers_{ft}_GetHighlightRegex(item)
+                        if len(term) > 0
+                            call matchadd(group, '\%' . item['lnum'] . 'l' . term)
+                        endif
                     endif
                 endif
             endif
