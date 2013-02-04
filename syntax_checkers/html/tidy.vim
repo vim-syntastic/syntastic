@@ -35,6 +35,11 @@ let s:ignore_html_errors = [
                 \ "<meta> lacks \"content\" attribute",
                 \ "inserting \"type\" attribute",
                 \ "proprietary attribute \"data-",
+                \ "missing <!DOCTYPE> declaration",
+                \ "inserting implicit <body>",
+                \ "inserting missing 'title' element",
+                \ "attribute \"[+",
+                \ "unescaped & or unknown entity",
                 \ "<input> attribute \"type\" has invalid value \"search\""
                 \]
 
