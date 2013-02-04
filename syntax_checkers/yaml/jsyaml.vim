@@ -13,7 +13,7 @@
 "
 "============================================================================
 
-function! SyntaxCheckers_yaml_jsyaml_GetLocList()
+function! SyntaxCheckers_yaml_jsyaml_IsAvailable()
     return executable("js-yaml")
 endfunction
 
