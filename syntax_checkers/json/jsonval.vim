@@ -9,7 +9,7 @@
 "             See http://sam.zoy.org/wtfpl/COPYING for more details.
 "============================================================================
 
-function! SyntaxCheckers_json_jsonlint_IsAvailable()
+function! SyntaxCheckers_json_jsonval_IsAvailable()
     return executable('jsonval')
 endfunction
 
