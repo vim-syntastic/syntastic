@@ -18,9 +18,13 @@ function! SyntaxCheckers_php_phpmd_IsAvailable()
 endfunction
 
 function! SyntaxCheckers_php_phpmd_GetLocList()
+    if !exists('g:syntastic_phpmd_rules')
+        let g:syntastic_phpmd_rules = 'codesize,design,unusedcode,naming'
+    endif
+
     let makeprg = syntastic#makeprg#build({
                 \ 'exe': 'phpmd',
-                \ 'post_args': 'text  codesize,design,unusedcode,naming',
+                \ 'post_args': 'text ' . g:syntastic_phpmd_rules,
                 \ 'subchecker': 'phpmd' })
     let errorformat = '%E%f:%l%m'
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat, 'subtype' : 'Style' })
