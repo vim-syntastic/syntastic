@@ -21,6 +21,7 @@ function! s:TidyEncOptByFenc()
                 \'utf-16le'    : '-utf16le',
                 \'utf-16'      : '-utf16',
                 \'big5'        : '-big5',
+                \'cp932'       : '-shiftjis',
                 \'sjis'        : '-shiftjis',
                 \'cp850'       : '-ibm858',
                 \}
