@@ -10,10 +10,6 @@
 "
 "============================================================================
 function! s:FindRubyExec()
-    if executable("rvm")
-        return system("rvm tools identifier")
-    endif
-
     return "ruby"
 endfunction
 
