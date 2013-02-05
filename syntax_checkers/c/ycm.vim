@@ -15,6 +15,10 @@ if exists("loaded_ycm_c_syntax_checker")
 endif
 let loaded_ycm_c_syntax_checker = 1
 
+function! SyntaxCheckers_c_ycm_IsAvailable()
+    return exists('g:loaded_youcompleteme')
+endfunction
+
 if !exists('g:loaded_youcompleteme')
     finish
 endif
@@ -23,3 +27,6 @@ function! SyntaxCheckers_c_GetLocList()
     return youcompleteme#CurrentFileDiagnostics()
 endfunction
 
+call g:SyntasticRegistry.CreateAndRegisterChecker({
+    \ 'filetype': 'c',
+    \ 'name': 'ycm'})
