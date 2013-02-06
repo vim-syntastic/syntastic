@@ -23,7 +23,11 @@ function! SyntaxCheckers_python_pylint_GetLocList()
         let n -= 1
     endwhile
 
-    return loclist
+    return sort(loclist, 's:CmpLoclist')
+endfunction
+
+function! s:CmpLoclist(a, b)
+    return a:a['lnum'] - a:b['lnum']
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
