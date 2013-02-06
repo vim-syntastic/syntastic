@@ -19,7 +19,7 @@ function! SyntaxCheckers_python_pylint_GetLocList()
 
     let n = len(loclist) - 1
     while n >= 0
-        let loclist[n]['type'] = match(['R', 'C', 'W'], loclist[n]['text'][2]) > 0 ? 'W' : 'E'
+        let loclist[n]['type'] = match(['R', 'C', 'W'], loclist[n]['text'][2]) >= 0 ? 'W' : 'E'
         let n -= 1
     endwhile
 
