@@ -1,5 +1,5 @@
 "============================================================================
-"File:        coffee.vim
+"File:        coffeelint.vim
 "Description: Syntax checking plugin for syntastic.vim
 "Maintainer:  Lincoln Stoll <l@lds.li>
 "License:     This program is free software. It comes without any warranty,
@@ -9,19 +9,22 @@
 "             See http://sam.zoy.org/wtfpl/COPYING for more details.
 "
 "============================================================================
-function! SyntaxCheckers_coffee_coffee_IsAvailable()
-    return executable("coffee")
+if !exists('g:syntastic_coffee_lint_options')
+    let g:syntastic_coffee_lint_options = ""
+endif
+
+function! SyntaxCheckers_coffee_coffeelint_IsAvailable()
+    return executable('coffeelint')
 endfunction
 
-function! SyntaxCheckers_coffee_coffee_GetLocList()
+function! SyntaxCheckers_coffee_coffeelint_GetLocList()
     let makeprg = syntastic#makeprg#build({
-                \ 'exe': 'coffee',
-                \ 'args': '-c -l -o /tmp' })
-    let errorformat =  'Syntax%trror: In %f\, %m on line %l,%EError: In %f\, Parse error on line %l: %m,%EError: In %f\, %m on line %l,%W%f(%l): lint warning: %m,%-Z%p^,%W%f(%l): warning: %m,%-Z%p^,%E%f(%l): SyntaxError: %m,%-Z%p^,%-G%.%#'
-
-    return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
+                \ 'exe': 'coffeelint',
+                \ 'args': '--csv' })
+    let efm = '%f\,%l\,%trror\,%m'
+    return SyntasticMake({ 'makeprg': makeprg, 'errorformat': efm, 'subtype': 'Style' })
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'coffee',
-    \ 'name': 'coffee'})
+    \ 'name': 'coffeelint'})
