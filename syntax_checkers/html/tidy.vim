@@ -61,6 +61,7 @@ function s:Args()
     let args .= " --new-inline-tags " . shellescape('video, audio, source, embed, mark, progress, meter, time, ruby, rt, rp, canvas, command, details, datalist')
     let args .= " --new-empty-tags " . shellescape('wbr, keygen')
     let args .= " -e"
+    return args
 endfunction
 
 function! SyntaxCheckers_html_tidy_IsAvailable()
