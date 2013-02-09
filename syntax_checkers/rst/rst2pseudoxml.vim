@@ -14,12 +14,13 @@
 " rst2${x} tools in docutils.
 
 function! SyntaxCheckers_rst_rst2pseudoxml_IsAvailable()
-    return executable("rst2pseudoxml.py")
+    return executable("rst2pseudoxml.py") || executable("rst2pseudoxml")
 endfunction
 
 function! SyntaxCheckers_rst_rst2pseudoxml_GetLocList()
+    let s:executable = executable("rst2pseudoxml.py") ? "rst2pseudoxml.py" : "rst2pseudoxml"
     let makeprg = syntastic#makeprg#build({
-                \ 'exe': 'rst2pseudoxml.py',
+                \ 'exe': s:executable,
                 \ 'args': '--report=2 --exit-status=1',
                 \ 'tail': syntastic#util#DevNull() })
 
