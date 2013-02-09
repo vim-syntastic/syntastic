@@ -73,6 +73,11 @@ function! g:SyntasticRegistry.getActiveCheckers(filetype)
     return []
 endfunction
 
+function! g:SyntasticRegistry.getActiveCheckerNames(filetype)
+    let checkers = self.getActiveCheckers(a:filetype)
+    return join(map(checkers, 'v:val.name()'))
+endfunction
+
 function! g:SyntasticRegistry.getChecker(filetype, name)
     for checker in self.availableCheckersFor(a:filetype)
         if checker.name() == a:name
