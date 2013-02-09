@@ -17,13 +17,18 @@ function! SyntaxCheckers_javascript_jshint_IsAvailable()
 endfunction
 
 function! SyntaxCheckers_javascript_jshint_GetLocList()
+    let filename = shellescape(expand("%:t"))
     let makeprg = syntastic#makeprg#build({
                 \ 'exe': 'jshint',
+                \ 'fname': filename,
                 \ 'post_args': s:Args(),
                 \ 'subchecker': 'jshint' })
 
     let errorformat = '%ELine %l:%c,%Z\\s%#Reason: %m,%C%.%#,%f: line %l\, col %c\, %m,%-G%.%#'
-    return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat, 'defaults': {'bufnr': bufnr('')} })
+    cd %:h
+    let errors = SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat, 'defaults': {'bufnr': bufnr('')} })
+    cd -
+    return errors
 endfunction
 
 function s:Args()
