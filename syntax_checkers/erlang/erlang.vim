@@ -29,10 +29,10 @@ function! SyntaxCheckers_erlang_escript_GetLocList()
         if match(shebang, 'escript') >= 0
             let makeprg = 'escript -s '.shellescape(expand('%:p'))
         else
-            let makeprg = s:check_file . ' '. shellescape(expand('%:p')).' '.g:syntastic_erlc_include_path
+            let makeprg = 'escript ' . s:check_file . ' '. shellescape(expand('%:p')).' '.g:syntastic_erlc_include_path
         endif
     else
-        let makeprg =  s:check_file . ' ' . shellescape(expand('%:p')).' '.g:syntastic_erlc_include_path
+        let makeprg =  'escript ' . s:check_file . ' ' . shellescape(expand('%:p')).' '.g:syntastic_erlc_include_path
     endif
     let errorformat = '%f:%l:\ %tarning:\ %m,%E%f:%l:\ %m'
 
