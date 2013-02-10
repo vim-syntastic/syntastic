@@ -18,9 +18,8 @@ function! SyntaxCheckers_rst_rst2pseudoxml_IsAvailable()
 endfunction
 
 function! SyntaxCheckers_rst_rst2pseudoxml_GetLocList()
-    let s:executable = executable("rst2pseudoxml.py") ? "rst2pseudoxml.py" : "rst2pseudoxml"
     let makeprg = syntastic#makeprg#build({
-                \ 'exe': s:executable,
+                \ 'exe': s:exe(),
                 \ 'args': '--report=2 --exit-status=1',
                 \ 'tail': syntastic#util#DevNull() })
 
@@ -31,6 +30,10 @@ function! SyntaxCheckers_rst_rst2pseudoxml_GetLocList()
       \%-G%.%#'
 
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
+endfunction
+
+function s:exe()
+    return executable("rst2pseudoxml.py") ? "rst2pseudoxml.py" : "rst2pseudoxml"
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
