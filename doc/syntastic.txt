@@ -25,16 +25,17 @@ CONTENTS                                                  *syntastic-contents*
         2.2.Error signs.......................|syntastic-error-signs|
         2.3.Error window......................|syntastic-error-window|
     3.Commands................................|syntastic-commands|
-    4.Options.................................|syntastic-options|
-    5.Writing syntax checkers.................|syntastic-syntax-checkers|
+    4.Global Options..........................|syntastic-global-options|
+    5.Checker Options.........................|syntastic-checker-options|
     6.About...................................|syntastic-about|
-    7.Changelog...............................|syntastic-changelog|
-    8.Credits.................................|syntastic-credits|
-    9.License.................................|syntastic-license|
+    7.License.................................|syntastic-license|
 
 
 ==============================================================================
 1. Intro                                                     *syntastic-intro*
+
+Note: This doc only deals with using syntastic. To learn how to write syntax
+checker integrations, visit the github wiki (coming soon).
 
 Syntastic is a syntax checking plugin that runs files through external syntax
 checkers. This can be done on demand, or automatically as files are saved and
@@ -42,24 +43,13 @@ opened.  If syntax errors are detected, the user is notified and is happy
 because they didn't have to compile their code or execute their script to find
 them.
 
-Syntastic comes in two parts: the syntax checker plugins, and the core script
-(i.e. syntastic.vim). The syntax checker plugins are defined on a per-filetype
-basis where each one wraps up an external syntax checking program. The core
-script delegates off to these plugins and uses their output to provide the
-syntastic functionality. At the time of this writing, syntax checking plugins
-exist for c, coffee, cpp, css, cucumber, cuda, docbk, erlang, eruby, fortran,
-go, haml, haskell, html, javascript, less, lua, matlab, perl, php, puppet,
-python, ruby, sass/scss, sh, tcl, tex, vala, xhtml, xml, xslt, zpt
+Syntastic comes in two parts: the syntax checker plugins, and the core. The
+syntax checker plugins are defined on a per-filetype basis where each one wraps
+up an external syntax checking program. The core script delegates off to these
+plugins and uses their output to provide the syntastic functionality.
 
-Take a look in the syntax_checkers directory for the most up to date list.
-
-If your language is not supported then see |syntastic-syntax-checkers| for
-details on how to implement a syntax checking plugin, and be sure to send me a
-patch ;-)
-
-This plugin is currently only recommended for *nix users. It is functional on
-Windows, but since the syntax checking plugins shell out, the command window
-briefly appears whenever one is executed.
+Take a look in the syntax_checkers directory for a list of supported filetypes
+and checkers.
 
 
 ==============================================================================
@@ -72,20 +62,15 @@ When syntax checking is done, the features below can be used to notify the
 user of errors. See |syntastic-options| for how to configure and
 activate/deactivate these features.
 
-    * A configurable statusline flag
-    * Lines with errors can have |signs| placed beside them - where a different
-      sign is used for errors and warnings.
-    * A |location-list| can be displayed with error messages for erroneous
-      buffers.
-    * Offending parts of lines can be highlighted (this functionality is only
+    * A statusline flag
+    * Signs beside lines with errors
+    * The |location-list| can be populated with the errors for the associated
+      buffer.
+    * Erroneous parts of lines can be highlighted (this functionality is only
       provided by some syntax checkers).
     * Balloons (if compiled in) can be used to display error messages for
       erroneous lines when hovering the mouse over them.
 
-
-Note: This functionality is only available if a syntax checker plugin is
-present for the filetype of the buffer in question. See
-|syntastic-syntax-checkers| for details.
 
 ------------------------------------------------------------------------------
 2.1. The statusline flag                           *syntastic-statusline-flag*
@@ -139,7 +124,7 @@ current filetype is set to passive. See |'syntastic_mode_map'| for more info.
 
 
 ==============================================================================
-4. Options                                                 *syntastic-options*
+4. Global Options                                   *syntastic-global-options*
 
 
                                                    *'syntastic_check_on_open'*
@@ -301,288 +286,87 @@ If the buffer had 2 warnings, starting on line 5 then this would appear: >
     [Warn: 5 #2]
 <
 
-
 ==============================================================================
-5. Writing syntax checkers                         *syntastic-syntax-checkers*
+5. Checker Options                                  *syntastic-checker-options*
 
+------------------------------------------------------------------------------
+5.1 Telling syntastic which checker to use.
 
-A syntax checker plugin is really nothing more than a single function.  You
-should define them in ~/.vim/syntax_checkers/<filetype>.vim, but this is
-purely for convenience; Syntastic doesn't actually care where these functions
-are defined.
-
-A syntax checker plugin must define a function of the form:
->
-    SyntaxCheckers_<filetype>_GetLocList()
+Stick a line like this in your vimrc: >
+    let g:syntastic_<filetype>_checkers = ['<checker-name>']
 <
-The output of this function must be of the same format as that returned by
-the |getloclist()| function. See |getloclist()| and |getqflist()| for
-details.
+e.g. >
+    let g:syntastic_python_checkers = ['flake8']
+<
 
-To achieve this, the function should call |SyntasticMake()| or shell out to a
-syntax checker, parse the output and munge it into the format.
+To see the list of available checkers for your filetype, look in
+`syntax_checkers/<filetype>/`. The names of the files here correspond to
+'<checker-name>' above.
 
-There are several syntax checker plugins provided with this plugin. The ruby
-one is a good example of |SyntasticMake()|, while the haml one is a good
-example of how to create the data structure manually.
+e.g. Python has the following checkers: flake8, pyflakes, pylint and a
+native python checker.
 
+Some filetypes, like PHP, have style checkers as well as syntax checkers. These
+can be chained together like this: >
+    let g:syntastic_php_checkers=['php', 'phpcs', 'phpmd']`
+<
+This is telling syntastic to run the 'php' checker first, and if no errors are
+found, run 'phpcs', and then 'phpmd'.
 
-SyntasticMake({options})                                     *SyntasticMake()*
-    {options} must be a dictionary. It can contain "makeprg" and "errorformat"
-    as keys (both optional).
+------------------------------------------------------------------------------
+5.2 Configuring specific checkers.
 
-    SyntasticMake will run |:lmake| with the given |'makeprg'| and
-    |'errorformat'| (using the current settings if none are supplied). It will
-    store the resulting error list and use it to provide all of the
-    |syntastic-functionality|. The previous makeprg and errorformat settings
-    will then be restored, as well as the location list for the window.  From
-    the user's perspective, it will be as though |:lmake| was never run.
+Look at the checker in question. If there are specific options that can be set,
+these are usually documented at the top of the script.
 
-    Note that the given "makeprg" and "errorformat" will be set using |:let-&|,
-    so you should not escape spaces.
+If the checker uses the 'syntastic#makeprg#build()' function then many options
+are provided by default - in fact you can customise every part of the command
+that gets called.
 
+A makeprg has the following format: >
+    [exe] [args] [filename] [post_args] [tail]
+<
+
+e.g (this is made up) : >
+    ruby -a -b -c test_file.rb --more --args > /tmp/output
+<
+
+To generate this you would call: >
+    let makeprg = syntastic#makeprg#build({
+                \ 'exe': 'ruby',
+                \ 'args': '-a -b -c',
+                \ 'post_args': '--more --args',
+                \ 'tail': '> /tmp/output',
+                \ 'subchecker': 'mri' })
+<
+
+All of the params above can be overriden by setting global variables - even
+when not specified by the checker in syntastic#makeprg#build().
+
+E.g. To override the checker exe above, you could do this: >
+   let g:syntastic_ruby_mri_exe="another_ruby_checker_exe.rb"
+<
+To override the args and the tail: >
+   let g:syntastic_ruby_mri_args="--my --args --here"
+   let g:syntastic_ruby_mri_tail="> /tmp/my-output-file-biatch"
+<
+
+The general form of the override options is: >
+   syntastic_[filetype]_[subchecker]_[option-name]
+<
 
 ==============================================================================
 6. About                                                     *syntastic-about*
 
-The author of syntastic is a mighty wild stallion, hear him roar! >
-     _   _ _____ _____ ___ ___ ___ ____ _   _ _
-    | \ | | ____| ____|_ _|_ _|_ _/ ___| | | | |
-    |  \| |  _| |  _|  | | | | | | |  _| |_| | |
-    | |\  | |___| |___ | | | | | | |_| |  _  |_|
-    |_| \_|_____|_____|___|___|___\____|_| |_(_)
+The core maintainers of syntastic are:
+    Martin Grenfell (github: scrooloose)
+    Gregor Uhlenheuer (github: kongo2002)
 
-<
-He likes to trot around in the back yard reading his emails and sipping a
-scalding hot cup of Earl Grey. Email him at martin.grenfell at gmail dot com.
-He can also be found trolling the #vim channel on the freenode IRC network as
-scrooloose.
-
-Bug reports, feedback, suggestions etc are welcomed.
-
-
-The latest official releases will be on vim.org at some point.
-
-The latest dev versions are on github
+Find the latest version of syntastic here:
     http://github.com/scrooloose/syntastic
 
 ==============================================================================
-7. Changelog                                             *syntastic-changelog*
-
-2.3.0
-    - Add syntastic_loc_list_height option
-    - Allow errors to have a "subtype" that is signed differently to standard
-      errors. Currently geared towards differentiating style errors from
-      syntax errors. Currently implemented for phpcs (technosophos).
-    - New checkers for:
-        - yaml
-        - haxe (davidB)
-        - ocaml (edwintorok)
-        - pylint (parantapa)
-        - rust (cjab)
-
-    - Updates to existing checkers:
-        - jslint
-        - jshint (gillesruppert)
-        - fortran (bmattern)
-        - sass
-        - html (darcyparker)
-        - coffee (darcyparker)
-        - docbk (darcyparker)
-        - xml
-        - xslt
-        - less (irrationalfab)
-        - php (AD7six, technosophos)
-        - cuda
-        - python (mitchellh, pneff)
-        - perl (Anthony Carapetis)
-        - c (naoina, zsprackett)
-        - puppet (frimik)
-
-2.2.0
-    - only do syntax checks when files are saved (not when first opened) - add
-      g:syntastic_check_on_open option to get the old behavior back
-    - bug fix with echoing error messages; fixes incompatability with cmd-t (datanoise)
-    - dont allow warnings to mask errors when signing/echoing errors (ashikase)
-    - auto close location list when leaving buffer. (millermedeiros)
-    - update errors appropriately when :SyntasticToggleMode is called
-    - updates/fixes to existing checkers:
-        - javascript/jshint (millermedeiros)
-        - javascript/jslint
-        - c (kongo2002)
-    - Support for new filetypes:
-        - JSON (millermedeiros, tocer)
-        - rst (reStructuredText files) (JNRowe)
-        - gentoo-metadata (JNRowe)
-
-
-2.1.0
-    - when the cursor is on a line containing an error, echo the
-      error msg (kevinw)
-    - various bug fixes and refactoring
-    - updates/fixes to existing checkers:
-        - html (millermedeiros)
-        - erlang
-        - coffeescript
-        - javascript
-        - sh
-        - php (add support for phpcs - technosophos)
-    - add an applescript checker (Zhai Cai)
-    - add support for hyphenated filetypes (JNRowe)
-
-2.0.0
-    - Add support for highlighting the erroneous parts of lines (kstep)
-    - Add support for displaying errors via balloons (kstep)
-    - Add syntastic_mode_map option to give more control over when checking
-      should be done.
-    - Add :SyntasticCheck command to force a syntax check -  useful in passive
-      mode (justone).
-    - Add the option to automatically close the location list, but not
-      automatically open it (milkypostman)
-    - Add syntastic_auto_jump option to automatically jump to the first
-      error (milkypostman)
-    - Only source syntax checkers as needed - instead of loading all of them
-      when vim starts
-
-    - Support for new filetypes:
-        - less (julienXX)
-        - docbook (tpope)
-        - matlab (jasongraham)
-        - go (dtjm)
-        - puppet (uggedal, roman, zsprackett)
-        - haskell (baldo, roman)
-        - tcl (et)
-        - vala (kstep)
-        - cuda (temporaer)
-        - css (oryband, sitedyno)
-        - fortran (Karl Yngve Lervåg)
-        - xml (kusnier)
-        - xslt (kusnier)
-        - erlang (kTT)
-        - zpt (claytron)
-
-    - updates to existing checkers:
-        - javascript (mogren, bryanforbes, cjab, ajduncan)
-        - sass/scss (tmm1, atourino, dlee, epeli)
-        - ruby (changa)
-        - perl (harleypig)
-        - haml (bmihelac)
-        - php (kstep, docteurklein)
-        - python (kstep, soli)
-        - lua (kstep)
-        - html (kstep)
-        - xhtml (kstep)
-        - c (kongo2002, brandonw)
-        - cpp (kongo2002)
-        - coffee (industrial)
-        - eruby (sergevm)
-
-1.2.0
-    - New syntax checkers from github:kongo2002
-      - c (thanks also to github:jperras)
-      - cpp
-      - lua
-      - sh (thanks also to github:jmcantrell)
-    - add coffee syntax checked by github:lstoll
-    - add tex syntax checker
-    - make html checker play nicer with html5, thanks to github:enaeseth
-    - escape filenames properly when invoking syntax checkers, thanks to
-      github:jmcantrell
-    - adjust the ruby syntax checker to avoid some common annoying warnings,
-      thanks to github:robertwahler
-
-1.1.0 [codenamed: tpimp]
-    - Dont load rubygems for ruby/eruby syntax checkers. Thanks tpope.
-    - Improve the javascript syntax checker to catch some warnings that were
-      getting missed. Thanks tpope.
-    - Dont automatically focus the error window. Thanks tpope.
-    - Add support for cucumber [tpope], haskell & perl [Anthony Carapetis],
-      and xhtml
-    - Add commands to enable/disable syntax checking at runtime. See :help
-      syntastic-commands.
-    - Add an option to specifiy syntax checkers that should be disabled by
-      default. See :help syntastic_disabled_filetypes.
-    - Dont use :signs if vim wasnt compiled with support for them.
-)
-
-==============================================================================
-8. Credits                                                 *syntastic-credits*
-
-Thanks to the following people for testing, bug reports, patches etc. They own,
-hard.
-
-    Mikael Fridh (frimik)
-    Patrice Neff (pneff )
-    Gilles Ruppert (gillesruppert)
-    Naoya INADA (naoina)
-    Mitchell Hashimoto (mitchellh)
-    irrationalfab
-    Andy Dawson (AD7six)
-    Parantapa Bhattacharya (parantapa)
-    edwintorok
-    Darcy Parker (darcyparker)
-    bmattern
-    David Bernard (davidB)
-    Aleksey V. Zapparov (ixti)
-    Benji Fisher (benjifisher)
-    Lance Fetters (ashikase)
-    datanoise
-    Giuseppe Rota (grota)
-    tocer
-    James Rowe (JNRowe)
-    Zhai Cai
-    Matt Butcher (technosophos)
-    Kevin Watters (kevinw)
-    Miller Medeiros (millermedeiros)
-    Pawel Salata (kTT)
-    Fjölnir Ásgeirsson (aptiva)
-    Clayton Parker (claytron)
-    S. Zachariah Sprackett (zsprackett)
-    Sylvain Soliman (soli)
-    Ricardo Catalinas Jiménez (jimenezrick)
-    kusnier
-    Klein Florian (docteurklein)
-    sitedyno
-    Matthew Batema (mlb-)
-    Nate Jones (justone)
-    sergevm
-    Karl Yngve Lervåg
-    Pavel Argentov (argent-smith)
-    Andy Duncan (ajduncan)
-    Antonio Touriño (atourino)
-    Chad Jablonski (cjab)
-    Roman Gonzalez (roman)
-    Tom Wieland (industrial)
-    Ory Band (oryband)
-    Esa-Matti Suuronen (epeli)
-    Brandon Waskiewicz (brandonw)
-    dlee
-    temporaer
-    Jason Graham (jasongraham)
-    Sam Nguyen (dtjm)
-    Claes Mogren (mogren)
-    Eivind Uggedal (uggedal)
-    kstep
-    Andreas Baldeau (baldo)
-    Eric Thomas (et)
-    Brian Donovan (eventualbuddha)
-    Bryan Forbes (bryanforbes)
-    Aman Gupta (tmm1)
-    Donald Ephraim Curtis (milkypostman)
-    Dominique Rose-Rosette (changa)
-    Harley Pig (harleypig)
-    bmihelac
-    Julien Blanchard (julienXX)
-    Gregor Uhlenheuer (kongo2002)
-    Lincoln Stoll
-    Tim Carey-Smith (halorgium)
-    Tim Pope (tpope)
-    Travis Jeffery
-    Anthony Carapetis
-
-
-==============================================================================
-9. License                                                 *syntastic-license*
+7. License                                                 *syntastic-license*
 
 Syntastic is released under the wtfpl.
 See http://sam.zoy.org/wtfpl/COPYING.
