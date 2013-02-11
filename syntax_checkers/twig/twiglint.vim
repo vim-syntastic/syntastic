@@ -20,7 +20,11 @@ function! SyntaxCheckers_twig_twiglint_IsAvailable()
 endfunction
 
 function! SyntaxCheckers_twig_twiglint_GetLocList()
-    let makeprg = "twig-lint lint --format=csv ".shellescape(expand('%'))
+    let makeprg = syntastic#makeprg#build({
+                \ 'exe': 'twig-lint',
+                \ 'args': 'lint --format=csv',
+                \ 'subchecker': 'twiglint' })
+
     let errorformat = '"%f"\,%l\,%m'
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat})
 endfunction
