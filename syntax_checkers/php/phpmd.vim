@@ -13,6 +13,10 @@
 " See here for details of phpmd
 "   - phpmd (see http://phpmd.org)
 
+if !exists("g:syntastic_phpmd_rulesets")
+    let g:syntastic_phpmd_rulesets = "codesize,design,unusedcode,naming"
+endif
+
 function! SyntaxCheckers_php_phpmd_IsAvailable()
     return executable('phpmd')
 endfunction
@@ -20,7 +24,7 @@ endfunction
 function! SyntaxCheckers_php_phpmd_GetLocList()
     let makeprg = syntastic#makeprg#build({
                 \ 'exe': 'phpmd',
-                \ 'post_args': 'text  codesize,design,unusedcode,naming',
+                \ 'post_args': 'text ' . g:syntastic_phpmd_rulesets,
                 \ 'subchecker': 'phpmd' })
     let errorformat = '%E%f:%l%m'
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat, 'subtype' : 'Style' })
