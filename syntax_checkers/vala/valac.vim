@@ -23,7 +23,7 @@
 "============================================================================
 
 function! SyntaxCheckers_vala_valac_IsAvailable()
-    return executable('valac') || (exists('g:syntastic_vala_check_disabled') && g:syntastic_vala_check_disabled)
+    return executable('valac')
 endfunction
 
 function! SyntaxCheckers_vala_valac_GetHighlightRegex(pos)
