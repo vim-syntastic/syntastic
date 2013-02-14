@@ -107,9 +107,9 @@ Another reason it could fail is that the error output for the syntax checker may
 
 __Q. Recently some of my syntax checker options have stopped working...__
 
-A. The options are still there, they have just been renamed. Recently, almost all syntax checkers were refactored to use the new `syntastic#makeprg#build()` function. This made a lot of the old explicit options redundant - as they are no implied. The new implied option usually have slightly different names to the old options.
+A. The options are still there, they have just been renamed. Recently, almost all syntax checkers were refactored to use the new `syntastic#makeprg#build()` function. This made a lot of the old explicit options redundant - as they are now implied. The new implied options usually have slightly different names to the old options.
 
-e.g. Previously there was this option: `g:syntastic_phpcs_conf`, now you must use `g:syntastic_php_phpcs_args`.
+e.g. Previously there was `g:syntastic_phpcs_conf`, now you must use `g:syntastic_php_phpcs_args`.
 
 See `:help syntastic-checker-options` for more information.
 
