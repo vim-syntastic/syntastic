@@ -105,6 +105,14 @@ A. The most likely reason is that the syntax checker that it requires isn't inst
 
 Another reason it could fail is that the error output for the syntax checker may have changed. In this case, make sure you have the latest version of the syntax checker installed. If it still fails then create an issue - or better yet, create a pull request.
 
+__Q. Recently some of my syntax checker options have stopped working...__
+
+A. The options are still there, they have just been renamed. Recently, almost all syntax checkers were refactored to use the new `syntastic#makeprg#build()` function. This made a lot of the old explicit options redundant - as they are no implied. The new implied option usually have slightly different names to the old options.
+
+e.g. Previously there was this option: `g:syntastic_phpcs_conf`, now you must use `g:syntastic_php_phpcs_args`.
+
+See `:help syntastic-checker-options` for more information.
+
 __Q. Syntastic supports several checkers for my filetype - how do I tell it which one(s) to use?__
 
 A. Stick a line like this in your vimrc:
@@ -134,51 +142,3 @@ If you use these commands a lot then you may want to add shortcut mappings to yo
 __Q. A syntax checker is giving me unwanted/strange style tips??__
 
 A. Some filetypes (e.g. php) have style checkers as well as syntax checkers. You can usually configure the options that are passed to the style checkers, or just disable them. Take a look at the syntax checker integration file (e.g. `syntax_checkers/php.vim`) to see what options are available.
-
-Changelog
----------
-2.3.0 (16-feb-2012)
-
-  * Add syntastic_loc_list_height option
-  * Allow errors to have a "subtype" that is signed differently to standard
-    errors. Currently geared towards differentiating style errors from
-    syntax errors. Currently implemented for phpcs (technosophos).
-  * New checkers for:
-    * yaml
-    * haxe (davidB)
-    * ocaml (edwintorok)
-    * pylint (parantapa)
-    * rust (cjab)
-  * Updates to existing checkers:
-    * jslint
-    * jshint (gillesruppert)
-    * fortran (bmattern)
-    * sass
-    * html (darcyparker)
-    * coffee (darcyparker)
-    * docbk (darcyparker)
-    * xml
-    * xslt
-    * less (irrationalfab)
-    * php (AD7six, technosophos)
-    * cuda
-    * python (mitchellh, pneff)
-    * perl (Anthony Carapetis)
-    * c (naoina, zsprackett)
-    * puppet (frimik)
-
-2.2.0 (24-dec-2011)
-
-  * only do syntax checks when files are saved (not when first opened) - add g:syntastic_check_on_open option to get the old behavior back
-  * bug fix with echoing error messages; fixes incompatability with cmd-t (datanoise)
-  * dont allow warnings to mask errors when signing/echoing errors (ashikase)
-  * auto close location list when leaving buffer. (millermedeiros)
-  * update errors appropriately when :SyntasticToggleMode is called
-  * updates/fixes to existing checkers:
-    * javascript/jshint (millermedeiros)
-    * javascript/jslint
-    * c (kongo2002)
-  * Support for new filetypes:
-    * JSON (millermedeiros, tocer)
-    * rst (reStructuredText files) (JNRowe)
-    * gentoo-metadata (JNRowe)
