@@ -9,10 +9,6 @@
 "             See http://sam.zoy.org/wtfpl/COPYING for more details.
 "
 "============================================================================
-if !exists('g:syntastic_coffee_lint_options')
-    let g:syntastic_coffee_lint_options = ""
-endif
-
 function! SyntaxCheckers_coffee_coffeelint_IsAvailable()
     return executable('coffeelint')
 endfunction
