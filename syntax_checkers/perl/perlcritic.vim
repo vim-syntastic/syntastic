@@ -17,16 +17,12 @@
 "
 " Checker options:
 "
-" - g:syntastic_perl_perlcritic_options (string; default: "--severity 3")
-"   options to pass to perlcritic
-"
 " - g:syntastic_perl_perlcritic_thres (integer; default: 5)
-"   error thresholdi: policy violations with a severity above this
+"   error threshold: policy violations with a severity above this
 "   value are highlighted as errors, the others are warnings
-
-if !exists('g:syntastic_perl_perlcritic_options')
-    let g:syntastic_perl_perlcritic_options = '--severity 3'
-endif
+"
+" - g:syntastic_perl_perlcritic_args (string; default: empty)
+"   command line options to pass to perlcritic
 
 if !exists('g:syntastic_perl_perlcritic_thres')
     let g:syntastic_perl_perlcritic_thres = 5
@@ -39,7 +35,7 @@ endfunction
 function! SyntaxCheckers_perl_perlcritic_GetLocList()
     let makeprg = syntastic#makeprg#build({
                 \ 'exe': 'perlcritic',
-                \ 'args': '--quiet --nocolor --verbose "\%s:\%f:\%l:\%c:(\%s) \%m (\%e)\n" '.g:syntastic_perl_perlcritic_options,
+                \ 'post_args': '--quiet --nocolor --verbose "\%s:\%f:\%l:\%c:(\%s) \%m (\%e)\n"',
                 \ 'subchecker': 'perlcritic' })
     let errorformat='%t:%f:%l:%c:%m'
     let loclist = SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat, 'subtype': 'Style' })
