@@ -57,11 +57,7 @@ function! g:SyntasticRegistry.getActiveCheckers(filetype)
     endif
 
     if has_key(s:defaultCheckers, a:filetype)
-        let checkers = self._filterCheckersByDefaultSettings(checkers, a:filetype)
-
-        if !empty(checkers)
-            return checkers
-        endif
+        return self._filterCheckersByDefaultSettings(checkers, a:filetype)
     endif
 
     let checkers = self.availableCheckersFor(a:filetype)
