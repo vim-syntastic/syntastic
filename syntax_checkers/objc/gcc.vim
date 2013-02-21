@@ -82,7 +82,7 @@ endif
 
 function! SyntaxCheckers_objc_gcc_IsAvailable()
     return executable('gcc')
-endif
+endfunction
 
 function! SyntaxCheckers_objc_gcc_GetLocList()
     let makeprg = 'gcc -fsyntax-only -lobjc'
