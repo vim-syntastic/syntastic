@@ -19,7 +19,7 @@ endif
 
 function! SyntaxCheckers_dart_dart_analyser_IsAvailable()
     return executable("dart_analyser")
-endif
+endfunction
 
 function! SyntaxCheckers_dart_dart_analyser_GetLocList()
     let args = !empty(g:syntastic_dart_analyzer_conf) ? ' ' . g:syntastic_dart_analyzer_conf : ''
