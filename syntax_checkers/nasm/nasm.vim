@@ -14,7 +14,7 @@ if exists("g:loaded_syntastic_nasm_nasm_checker")
 endif
 let g:loaded_syntastic_nasm_nasm_checker=1
 
-function! SyntaxCheckers_nasm_nasm_GetLocList()
+function! SyntaxCheckers_nasm_nasm_IsAvailable()
     return executable("nasm")
 endfunction
 
