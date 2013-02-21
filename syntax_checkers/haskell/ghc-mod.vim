@@ -10,10 +10,10 @@
 "
 "============================================================================
 
-if exists("g:loaded_syntastic_haskell_ghc-mod_checker")
+if exists("g:loaded_syntastic_haskell_ghc_mod_checker")
     finish
 endif
-let g:loaded_syntastic_haskell_ghc-mod_checker=1
+let g:loaded_syntastic_haskell_ghc_mod_checker=1
 
 if !exists('g:syntastic_haskell_checker_args')
     let g:syntastic_haskell_checker_args = '--hlintOpt="--language=XmlSyntax"'
