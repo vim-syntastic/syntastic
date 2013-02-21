@@ -16,7 +16,7 @@ endfunction
 function! SyntaxCheckers_lisp_clisp_GetLocList()
     let makeprg = syntastic#makeprg#build({
                 \ 'exe': 'clisp',
-                \ 'args': '-c'
+                \ 'args': '-c',
                 \ 'tail': '-o /tmp/clisp-vim-compiled-file' })
     let efm  = '%-G;%.%#,'
     let efm .= '%W%>WARNING:%.%#line %l : %m,%C  %#%m,'
