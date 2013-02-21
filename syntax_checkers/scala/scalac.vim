@@ -10,6 +10,11 @@
 "
 "============================================================================
 
+if exists("g:loaded_syntastic_scala_scalac_checker")
+    finish
+endif
+let g:loaded_syntastic_scala_scalac_checker=1
+
 function! SyntaxCheckers_scala_scalac_IsAvailable()
     return executable("scalac")
 endfunction

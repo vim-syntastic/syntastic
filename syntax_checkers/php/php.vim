@@ -9,7 +9,12 @@
 "             See http://sam.zoy.org/wtfpl/COPYING for more details.
 "
 "============================================================================
-"
+
+if exists("g:loaded_syntastic_php_php_checker")
+    finish
+endif
+let g:loaded_syntastic_php_php_checker=1
+
 function! SyntaxCheckers_php_php_IsAvailable()
     return executable("php")
 endfunction

@@ -10,6 +10,11 @@
 "
 "============================================================================
 
+if exists("g:loaded_syntastic_tcl_tclsh_checker")
+    finish
+endif
+let g:loaded_syntastic_tcl_tclsh_checker=1
+
 function! SyntaxCheckers_tcl_tclsh_IsAvailable()
     return executable('tclsh')
 endfunction

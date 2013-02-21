@@ -64,6 +64,11 @@
 "
 "   let g:syntastic_objc_errorformat = '%f:%l:%c: %trror: %m'
 
+if exists("g:loaded_syntastic_objc_gcc_checker")
+    finish
+endif
+let g:loaded_syntastic_objc_gcc_checker=1
+
 let s:save_cpo = &cpo
 set cpo&vim
 

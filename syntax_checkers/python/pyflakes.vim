@@ -6,6 +6,11 @@
 "             Parantapa Bhattacharya <parantapa@gmail.com>
 "
 "============================================================================
+if exists("g:loaded_syntastic_python_pyflakes_checker")
+    finish
+endif
+let g:loaded_syntastic_python_pyflakes_checker=1
+
 function! SyntaxCheckers_python_pyflakes_IsAvailable()
     return executable('pyflakes')
 endfunction

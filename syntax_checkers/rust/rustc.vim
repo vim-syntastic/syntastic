@@ -10,6 +10,11 @@
 "
 "============================================================================
 
+if exists("g:loaded_syntastic_rust_rustc_checker")
+    finish
+endif
+let g:loaded_syntastic_rust_rustc_checker=1
+
 function! SyntaxCheckers_rust_rustc_IsAvailable()
     return executable("rustc")
 endfunction

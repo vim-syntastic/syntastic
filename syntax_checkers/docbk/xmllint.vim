@@ -10,6 +10,10 @@
 "
 "============================================================================
 
+if exists("g:loaded_syntastic_docbk_xmllint_checker")
+    finish
+endif
+let g:loaded_syntastic_docbk_xmllint_checker=1
 
 function! SyntaxCheckers_docbk_xmllint_IsAvailable()
     return executable('xmllint')

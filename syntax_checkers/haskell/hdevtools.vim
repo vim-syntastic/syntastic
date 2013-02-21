@@ -10,6 +10,11 @@
 "
 "============================================================================
 
+if exists("g:loaded_syntastic_haskell_hdevtools_checker")
+    finish
+endif
+let g:loaded_syntastic_haskell_hdevtools_checker=1
+
 function! SyntaxCheckers_haskell_hdevtools_IsAvailable()
     return executable('hdevtools')
 endfunction

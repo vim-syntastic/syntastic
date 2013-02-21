@@ -10,6 +10,11 @@
 "
 "============================================================================
 
+if exists("g:loaded_syntastic_erlang_erlang_checker")
+    finish
+endif
+let g:loaded_syntastic_erlang_erlang_checker=1
+
 let s:check_file = expand('<sfile>:p:h') . '/erlang_check_file.erl'
 if !exists("g:syntastic_erlc_include_path")
     let g:syntastic_erlc_include_path=""

@@ -72,6 +72,11 @@
 "
 "   let g:syntastic_cpp_compiler = 'clang++'
 
+if exists("g:loaded_syntastic_cpp_gcc_checker")
+    finish
+endif
+let g:loaded_syntastic_cpp_gcc_checker=1
+
 if !exists('g:syntastic_cpp_compiler')
     let g:syntastic_cpp_compiler = 'g++'
 endif

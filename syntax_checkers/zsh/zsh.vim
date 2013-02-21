@@ -10,6 +10,11 @@
 "
 "============================================================================
 
+if exists("g:loaded_syntastic_zsh_zsh_checker")
+    finish
+endif
+let g:loaded_syntastic_zsh_zsh_checker=1
+
 function! SyntaxCheckers_zsh_zsh_IsAvailable()
     return executable("zsh")
 endfunction

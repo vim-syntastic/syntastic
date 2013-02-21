@@ -10,6 +10,11 @@
 "
 "============================================================================
 
+if exists("g:loaded_syntastic_cs_mcs_checker")
+    finish
+endif
+let g:loaded_syntastic_cs_mcs_checker=1
+
 function! SyntaxCheckers_cs_mcs_IsAvailable()
     return executable('mcs')
 endfunction

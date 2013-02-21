@@ -19,6 +19,11 @@
 "   let g:syntastic_cuda_arch = "sm_20"
 
 
+if exists("g:loaded_syntastic_cuda_nvcc_checker")
+    finish
+endif
+let g:loaded_syntastic_cuda_nvcc_checker=1
+
 function! SyntaxCheckers_cuda_nvcc_IsAvailable()
     return executable('nvcc')
 endfunction

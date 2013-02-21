@@ -10,6 +10,11 @@
 "
 "============================================================================
 
+if exists("g:loaded_syntastic_puppet_puppetlint_checker")
+    finish
+endif
+let g:loaded_syntastic_puppet_puppetlint_checker=1
+
 function! SyntaxCheckers_puppet_puppetlint_IsAvailable()
     return executable("puppet")
 endfunction

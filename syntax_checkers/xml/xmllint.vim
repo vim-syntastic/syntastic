@@ -9,6 +9,10 @@
 "             See http://sam.zoy.org/wtfpl/COPYING for more details.
 "
 "============================================================================
+if exists("g:loaded_syntastic_xml_xmllint_checker")
+    finish
+endif
+let g:loaded_syntastic_xml_xmllint_checker=1
 
 " You can use a local installation of DTDs to significantly speed up validation
 " and allow you to validate XML data without network access, see xmlcatalog(1)

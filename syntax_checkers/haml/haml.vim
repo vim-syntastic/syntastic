@@ -10,6 +10,11 @@
 "
 "============================================================================
 
+if exists("g:loaded_syntastic_haml_haml_checker")
+    finish
+endif
+let g:loaded_syntastic_haml_haml_checker=1
+
 function! SyntaxCheckers_haml_haml_IsAvailable()
     return executable('haml')
 endfunction

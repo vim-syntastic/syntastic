@@ -24,6 +24,11 @@
 " - g:syntastic_perl_perlcritic_args (string; default: empty)
 "   command line options to pass to perlcritic
 
+if exists("g:loaded_syntastic_perl_perlcritic_checker")
+    finish
+endif
+let g:loaded_syntastic_perl_perlcritic_checker=1
+
 if !exists('g:syntastic_perl_perlcritic_thres')
     let g:syntastic_perl_perlcritic_thres = 5
 endif

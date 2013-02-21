@@ -10,6 +10,11 @@
 "
 "============================================================================
 
+if exists("g:loaded_syntastic_xhtml_tidy_checker")
+    finish
+endif
+let g:loaded_syntastic_xhtml_tidy_checker=1
+
 function! SyntaxCheckers_xhtml_tidy_IsAvailable()
     return executable("tidy")
 endfunction

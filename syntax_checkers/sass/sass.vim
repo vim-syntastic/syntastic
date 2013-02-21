@@ -10,6 +10,11 @@
 "
 "============================================================================
 
+if exists("g:loaded_syntastic_sass_sass_checker")
+    finish
+endif
+let g:loaded_syntastic_sass_sass_checker=1
+
 function! SyntaxCheckers_sass_sass_IsAvailable()
     return executable("sass")
 endfunction

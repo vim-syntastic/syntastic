@@ -17,6 +17,11 @@
 " To use less-lint instead of less set the variable
 " g:syntastic_less_use_less_lint.
 
+if exists("g:loaded_syntastic_less_lessc_checker")
+    finish
+endif
+let g:loaded_syntastic_less_lessc_checker=1
+
 if !exists("g:syntastic_less_options")
     let g:syntastic_less_options = "--no-color"
 endif

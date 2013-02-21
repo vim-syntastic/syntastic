@@ -9,6 +9,11 @@
 "             See http://sam.zoy.org/wtfpl/COPYING for more details.
 "
 "============================================================================
+if exists("g:loaded_syntastic_html_w3_checker")
+    finish
+endif
+let g:loaded_syntastic_html_w3_checker=1
+
 function! SyntaxCheckers_html_w3_IsAvailable()
     return executable('curl') && executable('sed')
 endfunction

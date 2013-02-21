@@ -5,6 +5,11 @@
 "             kstep <me@kstep.me>
 "
 "============================================================================
+if exists("g:loaded_syntastic_python_flake8_checker")
+    finish
+endif
+let g:loaded_syntastic_python_flake8_checker=1
+
 function! SyntaxCheckers_python_flake8_IsAvailable()
     return executable('flake8')
 endfunction

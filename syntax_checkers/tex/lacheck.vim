@@ -10,6 +10,11 @@
 "
 "============================================================================
 
+if exists("g:loaded_syntastic_tex_lacheck_checker")
+    finish
+endif
+let g:loaded_syntastic_tex_lacheck_checker=1
+
 function! SyntaxCheckers_tex_lacheck_IsAvailable()
     return executable("lacheck")
 endfunction

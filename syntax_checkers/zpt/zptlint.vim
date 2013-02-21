@@ -10,6 +10,11 @@
 "
 "============================================================================
 
+if exists("g:loaded_syntastic_zpt_zptlint_checker")
+    finish
+endif
+let g:loaded_syntastic_zpt_zptlint_checker=1
+
 " In order for this plugin to be useful, you will need to set up the
 " zpt filetype in your vimrc
 "

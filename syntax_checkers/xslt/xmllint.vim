@@ -9,6 +9,10 @@
 "             See http://sam.zoy.org/wtfpl/COPYING for more details.
 "
 "============================================================================
+if exists("g:loaded_syntastic_xslt_xmllint_checker")
+    finish
+endif
+let g:loaded_syntastic_xslt_xmllint_checker=1
 
 function! SyntaxCheckers_xslt_xmllint_GetLocList()
     return executable("xmllint")

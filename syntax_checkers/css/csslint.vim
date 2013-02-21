@@ -14,6 +14,11 @@
 "
 "   let g:syntastic_csslint_options = "--warnings=none"
 
+if exists("g:loaded_syntastic_css_csslint_checker")
+    finish
+endif
+let g:loaded_syntastic_css_csslint_checker=1
+
 if !exists('g:syntastic_csslint_options')
     let g:syntastic_csslint_options = ""
 endif

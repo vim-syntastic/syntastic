@@ -7,6 +7,11 @@
 " http://www.vim.org/scripts/download_script.php?src_id=1392
 "
 "============================================================================
+if exists("g:loaded_syntastic_python_python_checker")
+    finish
+endif
+let g:loaded_syntastic_python_python_checker=1
+
 function! SyntaxCheckers_python_python_IsAvailable()
     return executable('python')
 endfunction

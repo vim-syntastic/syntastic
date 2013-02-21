@@ -9,6 +9,11 @@
 "             See http://sam.zoy.org/wtfpl/COPYING for more details.
 "
 "============================================================================
+if exists("g:loaded_syntastic_nasm_nasm_checker")
+    finish
+endif
+let g:loaded_syntastic_nasm_nasm_checker=1
+
 function! SyntaxCheckers_nasm_nasm_GetLocList()
     return executable("nasm")
 endfunction

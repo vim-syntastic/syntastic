@@ -10,6 +10,11 @@
 "
 "============================================================================
 
+if exists("g:loaded_syntastic_matlab_mlint_checker")
+    finish
+endif
+let g:loaded_syntastic_matlab_mlint_checker=1
+
 function! SyntaxCheckers_matlab_mlint_IsAvailable()
     return executable("mlint")
 endfunction

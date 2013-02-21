@@ -10,6 +10,11 @@
 "
 "============================================================================
 
+if exists("g:loaded_syntastic_sh_sh_checker")
+    finish
+endif
+let g:loaded_syntastic_sh_sh_checker=1
+
 function! s:GetShell()
     if !exists('b:shell') || b:shell == ""
         let b:shell = ''

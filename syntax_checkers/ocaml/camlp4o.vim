@@ -48,6 +48,11 @@
 " For best results your current directory should be the project root
 " (same situation if you want useful output from :make).
 
+if exists("g:loaded_syntastic_ocaml_camlp4o_checker")
+    finish
+endif
+let g:loaded_syntastic_ocaml_camlp4o_checker=1
+
 if exists('g:syntastic_ocaml_camlp4r') &&
     \ g:syntastic_ocaml_camlp4r != 0
     let s:ocamlpp="camlp4r"

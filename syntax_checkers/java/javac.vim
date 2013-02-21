@@ -11,6 +11,11 @@
 "
 "============================================================================
 
+if exists("g:loaded_syntastic_java_javac_checker")
+    finish
+endif
+let g:loaded_syntastic_java_javac_checker=1
+
 " Global Options
 if !exists("g:syntastic_java_javac_executable")
     let g:syntastic_java_javac_executable = 'javac'

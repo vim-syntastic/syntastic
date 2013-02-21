@@ -13,6 +13,11 @@
 " See here for details of phpmd
 "   - phpmd (see http://phpmd.org)
 
+if exists("g:loaded_syntastic_php_phpmd_checker")
+    finish
+endif
+let g:loaded_syntastic_php_phpmd_checker=1
+
 function! SyntaxCheckers_php_phpmd_IsAvailable()
     return executable('phpmd')
 endfunction

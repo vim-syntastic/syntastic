@@ -10,10 +10,14 @@
 "
 "============================================================================
 
+if exists("g:loaded_syntastic_eruby_ruby_checker")
+    finish
+endif
+let g:loaded_syntastic_eruby_ruby_checker=1
+
 if !exists("g:syntastic_ruby_exec")
     let g:syntastic_ruby_exec = "ruby"
 endif
-
 
 function! SyntaxCheckers_eruby_ruby_IsAvailable()
     return executable(expand(g:syntastic_ruby_exec))

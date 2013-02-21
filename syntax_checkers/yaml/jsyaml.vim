@@ -13,6 +13,11 @@
 "
 "============================================================================
 
+if exists("g:loaded_syntastic_yaml_jsyaml_checker")
+    finish
+endif
+let g:loaded_syntastic_yaml_jsyaml_checker=1
+
 function! SyntaxCheckers_yaml_jsyaml_IsAvailable()
     return executable("js-yaml")
 endfunction

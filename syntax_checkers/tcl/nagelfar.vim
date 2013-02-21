@@ -11,6 +11,11 @@
 "             See nagelfar homepage http://nagelfar.berlios.de/.
 "
 "============================================================================
+if exists("g:loaded_syntastic_tcl_nagelfar_checker")
+    finish
+endif
+let g:loaded_syntastic_tcl_nagelfar_checker=1
+
 function! SyntaxCheckers_tcl_nagelfar_IsAvailable()
     return executable('nagelfar')
 endfunction

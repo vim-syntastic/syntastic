@@ -4,6 +4,11 @@
 "Author:      Parantapa Bhattacharya <parantapa at gmail dot com>
 "
 "============================================================================
+if exists("g:loaded_syntastic_python_pylint_checker")
+    finish
+endif
+let g:loaded_syntastic_python_pylint_checker=1
+
 function! SyntaxCheckers_python_pylint_IsAvailable()
     return executable('pylint')
 endfunction

@@ -10,6 +10,11 @@
 "
 "============================================================================
 
+if exists("g:loaded_syntastic_z80_z80syntaxchecker_checker")
+    finish
+endif
+let g:loaded_syntastic_z80_z80syntaxchecker_checker=1
+
 "bail if the user doesnt have z80_syntax_checker.py installed
 "To obtain this application there are two solutions:
 " - Install this python package: https://github.com/rgiot/pycpcdemotools

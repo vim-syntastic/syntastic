@@ -13,6 +13,11 @@
 " We use rst2pseudoxml.py, as it is ever so marginally faster than the other
 " rst2${x} tools in docutils.
 
+if exists("g:loaded_syntastic_rst_rst2pseudoxml_checker")
+    finish
+endif
+let g:loaded_syntastic_rst_rst2pseudoxml_checker=1
+
 function! SyntaxCheckers_rst_rst2pseudoxml_IsAvailable()
     return executable("rst2pseudoxml.py") || executable("rst2pseudoxml")
 endfunction

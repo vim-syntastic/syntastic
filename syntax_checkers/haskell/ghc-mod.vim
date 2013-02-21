@@ -10,6 +10,11 @@
 "
 "============================================================================
 
+if exists("g:loaded_syntastic_haskell_ghc-mod_checker")
+    finish
+endif
+let g:loaded_syntastic_haskell_ghc-mod_checker=1
+
 if !exists('g:syntastic_haskell_checker_args')
     let g:syntastic_haskell_checker_args = '--ghcOpt="-fno-code" --hlintOpt="--language=XmlSyntax"'
 endif

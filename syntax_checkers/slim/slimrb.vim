@@ -10,6 +10,11 @@
 "
 "============================================================================
 
+if exists("g:loaded_syntastic_slim_slimrb_checker")
+    finish
+endif
+let g:loaded_syntastic_slim_slimrb_checker=1
+
 function! SyntaxCheckers_slim_slimrb_IsAvailable()
     return executable("slimrb")
 endfunction

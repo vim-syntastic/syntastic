@@ -67,6 +67,11 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
+if exists("g:loaded_syntastic_d_dmd_checker")
+    finish
+endif
+let g:loaded_syntastic_d_dmd_checker=1
+
 if !exists('g:syntastic_d_config_file')
     let g:syntastic_d_config_file = '.syntastic_d_config'
 endif

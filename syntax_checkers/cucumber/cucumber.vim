@@ -10,6 +10,11 @@
 "
 "============================================================================
 
+if exists("g:loaded_syntastic_cucumber_cucumber_checker")
+    finish
+endif
+let g:loaded_syntastic_cucumber_cucumber_checker=1
+
 function! SyntaxCheckers_cucumber_cucumber_IsAvailable()
     return executable('cucumber')
 endfunction

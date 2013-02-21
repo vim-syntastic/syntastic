@@ -18,6 +18,11 @@
 "
 "============================================================================
 
+if exists("g:loaded_syntastic_fortran_gfortran_checker")
+    finish
+endif
+let g:loaded_syntastic_fortran_gfortran_checker=1
+
 if !exists('g:syntastic_fortran_flags')
     let g:syntastic_fortran_flags = ''
 endif

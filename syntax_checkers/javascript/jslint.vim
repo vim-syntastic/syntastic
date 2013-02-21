@@ -10,6 +10,11 @@
 "
 "Tested with jslint 0.1.4.
 "============================================================================
+if exists("g:loaded_syntastic_javascript_jslint_checker")
+    finish
+endif
+let g:loaded_syntastic_javascript_jslint_checker=1
+
 if !exists("g:syntastic_javascript_jslint_conf")
     let g:syntastic_javascript_jslint_conf = "--white --undef --nomen --regexp --plusplus --bitwise --newcap --sloppy --vars"
 endif

@@ -9,6 +9,11 @@
 "             See http://sam.zoy.org/wtfpl/COPYING for more details.
 "
 "============================================================================
+if exists("g:loaded_syntastic_coffee_coffee_checker")
+    finish
+endif
+let g:loaded_syntastic_coffee_coffee_checker=1
+
 function! SyntaxCheckers_coffee_coffee_IsAvailable()
     return executable("coffee")
 endfunction

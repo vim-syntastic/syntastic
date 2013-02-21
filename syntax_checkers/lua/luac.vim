@@ -10,6 +10,11 @@
 "
 "============================================================================
 
+if exists("g:loaded_syntastic_lua_luac_checker")
+    finish
+endif
+let g:loaded_syntastic_lua_luac_checker=1
+
 function! SyntaxCheckers_lua_luac_IsAvailable()
     return executable('luac')
 endfunction

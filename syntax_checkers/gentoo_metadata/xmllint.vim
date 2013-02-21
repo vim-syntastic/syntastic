@@ -20,6 +20,11 @@
 " See xmlcatalog(1) and http://www.xmlsoft.org/catalog.html for more
 " information.
 
+if exists("g:loaded_syntastic_gentoo_metadata_xmllint_checker")
+    finish
+endif
+let g:loaded_syntastic_gentoo_metadata_xmllint_checker=1
+
 runtime syntax_checkers/xml/xmllint.vim
 
 function! SyntaxCheckers_gentoo_metadata_xmllint_GetLocList()

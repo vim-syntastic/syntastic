@@ -56,6 +56,11 @@
 "
 "   let g:syntastic_ada_remove_include_errors = 1
 
+if exists("g:loaded_syntastic_ada_gcc_checker")
+    finish
+endif
+let g:loaded_syntastic_ada_gcc_checker=1
+
 if !executable('gcc')
     finish
 endif

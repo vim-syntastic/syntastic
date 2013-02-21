@@ -12,6 +12,11 @@
 " Use a BufWritePre autocommand to that end:
 "   autocmd FileType go autocmd BufWritePre <buffer> Fmt
 "============================================================================
+if exists("g:loaded_syntastic_go_go_checker")
+    finish
+endif
+let g:loaded_syntastic_go_go_checker=1
+
 function! SyntaxCheckers_go_go_IsAvailable()
     return executable('go')
 endfunction

@@ -10,6 +10,11 @@
 "
 "============================================================================
 
+if exists("g:loaded_syntastic_haxe_haxe_checker")
+    finish
+endif
+let g:loaded_syntastic_haxe_haxe_checker=1
+
 function! SyntaxCheckers_haxe_haxe_IsAvailable()
     return executable('haxe')
 endfunction
