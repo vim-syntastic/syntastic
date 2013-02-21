@@ -24,7 +24,7 @@ let g:loaded_syntastic_zpt_zptlint_checker=1
 " Then install the zptlint program, found on pypi:
 " http://pypi.python.org/pypi/zptlint
 
-function! SyntaxCheckers_zpt_zptlint_GetLocList()
+function! SyntaxCheckers_zpt_zptlint_IsAvailable()
     return executable("zptlint")
 endfunction
 
