@@ -14,7 +14,7 @@ if exists("g:loaded_syntastic_xslt_xmllint_checker")
 endif
 let g:loaded_syntastic_xslt_xmllint_checker=1
 
-function! SyntaxCheckers_xslt_xmllint_GetLocList()
+function! SyntaxCheckers_xslt_xmllint_IsAvailable()
     return executable("xmllint")
 endfunction
 
