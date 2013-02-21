@@ -25,12 +25,16 @@
 "   let g:syntastic_perl_efm_program = "foo.pl -o -m -g"
 "
 
+if !exists("g:perl_interpreter")
+    let g:perl_interpreter = '/usr/bin/perl'
+endif
+
 function! SyntaxCheckers_perl_perl_IsAvailable()
-    return executable("perl")
+    return executable(g:perl_interpreter)
 endfunction
 
 if !exists("g:syntastic_perl_efm_program")
-    let g:syntastic_perl_efm_program = 'perl ' . shellescape(expand('<sfile>:p:h') . '/efm_perl.pl') . ' -c -w'
+    let g:syntastic_perl_efm_program = g:perl_interpreter . ' ' . shellescape(expand('<sfile>:p:h') . '/efm_perl.pl') . ' -c -w'
 endif
 
 function! SyntaxCheckers_perl_perl_GetLocList()
