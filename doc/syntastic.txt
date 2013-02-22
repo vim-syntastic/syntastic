@@ -316,22 +316,11 @@ found, run 'phpcs', and then 'phpmd'.
 ------------------------------------------------------------------------------
 5.2 Configuring specific checkers.
 
-Look at the checker in question. If there are specific options that can be set,
-these are usually documented at the top of the script.
-
-If the checker uses the 'syntastic#makeprg#build()' function then many options
-are provided by default - in fact you can customise every part of the command
+Most checkers use the 'syntastic#makeprg#build()' function and provide many
+options by default - in fact you can customise every part of the command
 that gets called.
 
-A makeprg has the following format: >
-    [exe] [args] [filename] [post_args] [tail]
-<
-
-e.g (this is made up) : >
-    ruby -a -b -c test_file.rb --more --args > /tmp/output
-<
-
-To generate this you would call: >
+Checkers that use 'syntastic#makeprg#build()' look like this: >
     let makeprg = syntastic#makeprg#build({
                 \ 'exe': 'ruby',
                 \ 'args': '-a -b -c',
@@ -340,8 +329,8 @@ To generate this you would call: >
                 \ 'subchecker': 'mri' })
 <
 
-All of the params above can be overriden by setting global variables - even
-when not specified by the checker in syntastic#makeprg#build().
+All of the parameters above can be overriden by setting global variables -
+even parameters not specified in syntastic#makeprg#build().
 
 E.g. To override the checker exe above, you could do this: >
     let g:syntastic_ruby_mri_exe="another_ruby_checker_exe.rb"
@@ -354,6 +343,11 @@ To override the args and the tail: >
 The general form of the override options is: >
     syntastic_[filetype]_[subchecker]_[option-name]
 <
+
+For checkers that do not use the 'syntastic#makeprg#build()' function you
+will have to look at the source code of checker in question. If there are
+specific options that can be set, these are usually documented at the top of
+the script.
 
 ==============================================================================
 6. About                                                     *syntastic-about*
