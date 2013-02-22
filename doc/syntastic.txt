@@ -330,7 +330,7 @@ Checkers that use 'syntastic#makeprg#build()' look like this: >
 <
 
 All of the parameters above can be overriden by setting global variables -
-even parameters not specified in syntastic#makeprg#build().
+even parameters not specified in the call to syntastic#makeprg#build().
 
 E.g. To override the checker exe above, you could do this: >
     let g:syntastic_ruby_mri_exe="another_ruby_checker_exe.rb"
@@ -345,7 +345,7 @@ The general form of the override options is: >
 <
 
 For checkers that do not use the 'syntastic#makeprg#build()' function you
-will have to look at the source code of checker in question. If there are
+will have to look at the source code of the checker in question. If there are
 specific options that can be set, these are usually documented at the top of
 the script.
 
