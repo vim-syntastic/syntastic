@@ -113,6 +113,18 @@ e.g. Previously there was `g:syntastic_phpcs_conf`, now you must use `g:syntasti
 
 See `:help syntastic-checker-options` for more information.
 
+__Q. How can I pass additional arguments to a checker?__
+
+A. Almost all syntax checkers use the `syntastic#makeprg#build()` function. Those checkers that do can be configured using global variables. The general form of the global args variables are:
+
+`syntastic_[filetype]_[subchecker]_args`
+
+So, If you wanted to pass "--my --args --here" to the ruby mri checker you would add this line to your vimrc:
+
+`let g:syntastic_ruby_mri_args="--my --args --here"`
+
+See `:help syntastic-checker-options` for more information.
+
 __Q. Syntastic supports several checkers for my filetype - how do I tell it which one(s) to use?__
 
 A. Stick a line like this in your vimrc:
