@@ -274,10 +274,29 @@ endfunction
 
 if g:syntastic_enable_signs
     "define the signs used to display syntax and style errors/warns
-    exe 'sign define SyntasticError text='.g:syntastic_error_symbol.' texthl=error'
-    exe 'sign define SyntasticWarning text='.g:syntastic_warning_symbol.' texthl=todo'
-    exe 'sign define SyntasticStyleError text='.g:syntastic_style_error_symbol.' texthl=error'
-    exe 'sign define SyntasticStyleWarning text='.g:syntastic_style_warning_symbol.' texthl=todo'
+    exe 'sign define SyntasticError text='.g:syntastic_error_symbol.' texthl=SyntasticErrorSign linehl=SyntasticErrorLine'
+    exe 'sign define SyntasticWarning text='.g:syntastic_warning_symbol.' texthl=SyntasticWarningSign linehl=SyntasticWarningLine'
+    exe 'sign define SyntasticStyleError text='.g:syntastic_style_error_symbol.' texthl=SyntasticStyleErrorSign linehl=SyntasticStyleErrorLine'
+    exe 'sign define SyntasticStyleWarning text='.g:syntastic_style_warning_symbol.' texthl=SyntasticStyleWarningSign linehl=SyntasticStyleWarningLine'
+
+    if !hlexists('SyntasticErrorSign')
+        highlight link SyntasticErrorSign error
+    endif
+    if !hlexists('SyntasticWarningSign')
+        highlight link SyntasticWarningSign todo
+    endif
+    if !hlexists('SyntasticStyleErrorSign')
+        highlight link SyntasticStyleErrorSign SyntasticErrorSign
+    endif
+    if !hlexists('SyntasticStyleWarningSign')
+        highlight link SyntasticStyleWarningSign SyntasticWarningSign
+    endif
+    if !hlexists('SyntasticStyleErrorLine')
+        highlight link SyntasticStyleErrorLine SyntasticErrorLine
+    endif
+    if !hlexists('SyntasticStyleWarningLine')
+        highlight link SyntasticStyleWarningLine SyntasticWarningLine
+    endif
 endif
 
 "start counting sign ids at 5000, start here to hopefully avoid conflicting
