@@ -16,8 +16,8 @@ let g:loaded_syntastic_elixir_elixir_checker=1
 
 let s:syntastic_elixir_compile_command = 'elixir'
 
-if filereadable("mix.exs")
-    let s:syntastic_elixir_compile_command = "mix compile"
+if filereadable('mix.exs')
+    let s:syntastic_elixir_compile_command = 'mix compile'
 endif
 
 function! SyntaxCheckers_elixir_elixir_IsAvailable()
@@ -32,11 +32,7 @@ function! SyntaxCheckers_elixir_elixir_GetLocList()
     let makeprg = syntastic#makeprg#build({ 'exe': s:syntastic_elixir_compile_command })
     let errorformat = '** %*[^\ ] %f:%l: %m'
 
-    let elixir_results = SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
-
-    if !empty(elixir_results)
-        return elixir_results
-    endif
+    return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
