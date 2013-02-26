@@ -16,10 +16,6 @@ endif
 let g:loaded_syntastic_ruby_mri_checker=1
 
 function! s:FindRubyExec()
-    if executable("rvm")
-        return system("rvm tools identifier")
-    endif
-
     return "ruby"
 endfunction
 
