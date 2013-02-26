@@ -151,6 +151,11 @@ function! s:UpdateErrors(auto_invoked, ...)
         endif
     end
 
+    let loclist = s:LocList()
+    if loclist.hasErrorsOrWarningsToDisplay()
+        call setloclist(0, loclist.toRaw())
+    endif
+
     if g:syntastic_enable_balloons
         call s:RefreshBalloons()
     endif
@@ -163,7 +168,6 @@ function! s:UpdateErrors(auto_invoked, ...)
         call s:HighlightErrors()
     endif
 
-    let loclist = s:LocList()
     if g:syntastic_auto_jump && loclist.hasErrorsOrWarningsToDisplay()
         silent! ll
     endif
