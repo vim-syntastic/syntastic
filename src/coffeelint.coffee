@@ -91,6 +91,10 @@ RULES =
         level : IGNORE
         message : 'Implicit parens are forbidden'
 
+    empty_param_list :
+        level : IGNORE
+        message : 'Empty parameter list is forbidden'
+
     space_operators :
         level : IGNORE
         message : 'Operators must be spaced properly'
@@ -374,6 +378,7 @@ class LexicalLinter
             when "(", ")"                 then @lintParens(token)
             when "JS"                     then @lintJavascript(token)
             when "CALL_START", "CALL_END" then @lintCall(token)
+            when "PARAM_START"            then @lintParam(token)
             when "@"                      then @lintStandaloneAt(token)
             when "+", "-"                 then @lintPlus(token)
             when "=", "MATH", "COMPARE", "LOGIC"
@@ -453,6 +458,13 @@ class LexicalLinter
         else
             @callTokens.pop()
             return null
+
+    lintParam : (token) ->
+        nextType = @peek()[0]
+        if nextType == 'PARAM_END'
+            @createLexError('empty_param_list')
+        else
+            null
 
     lintBrace : (token) ->
         if token.generated
