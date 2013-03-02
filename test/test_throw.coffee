@@ -22,7 +22,7 @@ vows.describe('throw').addBatch({
             assert.equal(error.message, 'Throwing strings is forbidden')
             assert.equal(error.rule, 'no_throwing_strings')
 
-        'can be permittted' : (source) ->
+        'can be permitted' : (source) ->
             config = {no_throwing_strings : {level : 'ignore'}}
             errors = coffeelint.lint(source, config)
             assert.isEmpty(errors)

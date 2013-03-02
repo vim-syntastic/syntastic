@@ -719,7 +719,7 @@ coffeelint.lint = (source, userConfig = {}) ->
                         disabled_initially.push r
                         config[r] = { level: 'error' }
 
-   # Do AST linting first so all compile errors are caught.
+    # Do AST linting first so all compile errors are caught.
     astErrors = new ASTLinter(source, config).lint()
 
     # Do lexical linting.
@@ -759,7 +759,7 @@ coffeelint.lint = (source, userConfig = {}) ->
                     difference(disabled, rules)
                     disabled = disabled_initially if rules.length is 0
             }[cmd]() if rules?
-        # advance line and append relevent messages
+        # advance line and append relevant messages
         while next_line is i and all_errors.length > 0
             next_line = all_errors[0].lineNumber - 1
             e = all_errors[0]
