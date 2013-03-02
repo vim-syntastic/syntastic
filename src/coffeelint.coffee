@@ -91,7 +91,7 @@ RULES =
         level : IGNORE
         message : 'Implicit parens are forbidden'
 
-    empty_param_list :
+    no_empty_param_list :
         level : IGNORE
         message : 'Empty parameter list is forbidden'
 
@@ -462,7 +462,7 @@ class LexicalLinter
     lintParam : (token) ->
         nextType = @peek()[0]
         if nextType == 'PARAM_END'
-            @createLexError('empty_param_list')
+            @createLexError('no_empty_param_list')
         else
             null
 
