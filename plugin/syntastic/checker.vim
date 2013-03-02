@@ -37,6 +37,7 @@ endfunction
 
 function! g:SyntasticChecker.getLocList()
     let list = self._locListFunc()
+    call g:SyntasticAddToErrors(list, {'checker': self._name})
     return g:SyntasticLoclist.New(list)
 endfunction
 
