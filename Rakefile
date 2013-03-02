@@ -39,6 +39,7 @@ task :compile do
   # Add a hack for adding node shebang.
   node='#!/usr/bin/env node'
   sh("echo '#{node}' | cat - lib/commandline.js > bin/coffeelint")
+  sh("chmod +x bin/coffeelint")
   sh("rm lib/commandline.js")
   notify("compiled!")
 end
