@@ -220,6 +220,7 @@ options = optimist
             .alias("s", "stdin")
             .alias("q", "quiet")
             .describe("f", "Specify a custom configuration file.")
+            .describe("makeconfig", "Prints a default config file")
             .describe("noconfig",
                 "Ignores the environment variable COFFEELINT_CONFIG.")
             .describe("h", "Print help information.")
@@ -234,6 +235,7 @@ options = optimist
             .boolean("jslint")
             .boolean("nocolor")
             .boolean("noconfig")
+            .boolean("makeconfig")
             .boolean("r")
             .boolean("s")
             .boolean("q", "Print errors only.")
@@ -244,6 +246,9 @@ if options.argv.v
 else if options.argv.h
     options.showHelp()
     process.exit(0)
+else if options.argv.makeconfig
+    console.log JSON.stringify coffeelint.RULES,
+        ((k,v) -> v unless k is 'message'), 4
 else if options.argv._.length < 1 and not options.argv.s
     options.showHelp()
     process.exit(1)

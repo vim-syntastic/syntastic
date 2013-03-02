@@ -33,7 +33,7 @@ IGNORE  = 'ignore'
 
 
 # CoffeeLint's default rule configuration.
-RULES =
+coffeelint.RULES = RULES =
 
     no_tabs :
         level : ERROR
