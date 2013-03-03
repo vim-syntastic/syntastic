@@ -370,7 +370,6 @@ class LexicalLinter
         # CoffeeScript loses line numbers of interpolations and multi-line
         # regexes, so fake it by using the last line number we know.
         @lineNumber = lineNumber or @lineNumber or 0
-        # console.log(token)
         # Now lint it.
         switch type
             when "->"
