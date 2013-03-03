@@ -37,7 +37,16 @@ endfunction
 
 function! g:SyntasticChecker.getLocList()
     let list = self._locListFunc()
-    call g:SyntasticAddToErrors(list, {'checker': self._name})
+    if !empty(self._highlightRegexFunc)
+        for i in range(0, len(list)-1)
+            if list[i]['valid']
+                let term = self._highlightRegexFunc(list[i])
+                if len(term) > 0
+                    let list[i]['hl'] = term
+                endif
+            endif
+        endfor
+    endif
     return g:SyntasticLoclist.New(list)
 endfunction
 

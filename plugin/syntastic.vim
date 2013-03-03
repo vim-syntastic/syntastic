@@ -395,11 +395,8 @@ function! s:HighlightErrors()
         for item in loclist.toRaw()
             let group = item['type'] == 'E' ? 'SyntasticError' : 'SyntasticWarning'
 
-            if exists('*SyntaxCheckers_'. ft . '_' . item['checker'] .'_GetHighlightRegex')
-                let term = SyntaxCheckers_{ft}_{item['checker']}_GetHighlightRegex(item)
-                if len(term) > 0
-                    call matchadd(group, '\%' . item['lnum'] . 'l' . term)
-                endif
+            if has_key(item, 'hl')
+                call matchadd(group, '\%' . item['lnum'] . 'l' . item['hl'])
             elseif get(item, 'col')
                 let lastcol = col([item['lnum'], '$'])
                 let lcol = min([lastcol, item['col']])
@@ -604,12 +601,12 @@ function! SyntasticMake(options)
     endif
 
     if has_key(a:options, 'defaults')
-        call g:SyntasticAddToErrors(errors, a:options['defaults'])
+        call SyntasticAddToErrors(errors, a:options['defaults'])
     endif
 
     " Add subtype info if present.
     if has_key(a:options, 'subtype')
-        call g:SyntasticAddToErrors(errors, {'subtype': a:options['subtype']})
+        call SyntasticAddToErrors(errors, {'subtype': a:options['subtype']})
     endif
 
     return errors
@@ -624,7 +621,7 @@ function! SyntasticErrorBalloonExpr()
 endfunction
 
 "take a list of errors and add default values to them from a:options
-function! g:SyntasticAddToErrors(errors, options)
+function! SyntasticAddToErrors(errors, options)
     for i in range(0, len(a:errors)-1)
         for key in keys(a:options)
             if !has_key(a:errors[i], key) || empty(a:errors[i][key])
