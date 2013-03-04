@@ -299,6 +299,12 @@ e.g. >
     let g:syntastic_python_checkers = ['flake8']
 <
 
+There's also a per-buffer version of this setting, b:syntastic_checkers. Use
+this in an autocmd to configure specific checkers for particular paths: >
+    autocmd FileType python if stridx(expand('%:p'), '/some/path/') == 0 |
+        \ let b:syntastic_checkers = ['pylint'] | endif
+<
+
 To see the list of available checkers for your filetype, look in
 `syntax_checkers/<filetype>/`. The names of the files here correspond to
 '<checker-name>' above.
