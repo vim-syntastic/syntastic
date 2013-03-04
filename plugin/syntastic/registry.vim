@@ -110,7 +110,11 @@ function! g:SyntasticRegistry._filterCheckersByDefaultSettings(checkers, filetyp
 endfunction
 
 function! g:SyntasticRegistry._filterCheckersByUserSettings(checkers, filetype)
-    let whitelist = g:syntastic_{a:filetype}_checkers
+    if exists("b:syntastic_checkers")
+        let whitelist = b:syntastic_checkers
+    else
+        let whitelist = g:syntastic_{a:filetype}_checkers
+    endif
     return filter(a:checkers, "index(whitelist, v:val.name()) != -1")
 endfunction
 
@@ -135,7 +139,7 @@ function! g:SyntasticRegistry._haveLoadedCheckers(filetype)
 endfunction
 
 function! g:SyntasticRegistry._userHasFiletypeSettings(filetype)
-    return exists("g:syntastic_" . a:filetype . "_checkers")
+    return exists("b:syntastic_checkers") || exists("g:syntastic_" . a:filetype . "_checkers")
 endfunction
 
 function! g:SyntasticRegistry._validateUniqueName(checker) abort
