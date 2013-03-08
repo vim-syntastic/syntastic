@@ -51,7 +51,7 @@ function! s:PuppetLintVersion()
 endfunction
 
 if !g:syntastic_puppet_lint_disable
-    if !SyntasticIsVersionAtLeast(s:PuppetLintVersion(), [0,1,10])
+    if !syntastic#util#versionIsAtLeast(s:PuppetLintVersion(), [0,1,10])
         let g:syntastic_puppet_lint_disable = 1
     endif
 end
@@ -68,7 +68,7 @@ endfunction
 
 function! s:getPuppetMakeprg()
     "If puppet is >= version 2.7 then use the new executable
-    if SyntasticIsVersionAtLeast(s:PuppetVersion(), [2,7,0])
+    if syntastic#util#versionIsAtLeast(s:PuppetVersion(), [2,7,0])
         let makeprg = 'puppet parser validate ' .
                     \ shellescape(expand('%')) .
                     \ ' --color=false'
@@ -86,7 +86,7 @@ function! s:getPuppetEfm()
 
     "Puppet 3.0.0 changes this from "err:" to "Error:"
     "reset errorformat in that case
-    if SyntasticIsVersionAtLeast(s:PuppetVersion(), [3,0,0])
+    if syntastic#util#versionIsAtLeast(s:PuppetVersion(), [3,0,0])
         let errorformat = '%-GError: Try ''puppet help parser validate'' for usage,'
         let errorformat .= 'Error: Could not parse for environment %*[a-z]: %m at %f:%l'
     endif

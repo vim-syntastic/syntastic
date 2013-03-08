@@ -37,6 +37,37 @@ function! syntastic#util#ParseShebang()
     return {'exe': '', 'args': []}
 endfunction
 
+" Verify that the 'installed' version is at the 'required' version, if not
+" better.
+"
+" 'installed' and 'required' must be arrays.  Only the
+" first three elements (major, minor, patch) are looked at.
+"
+" Either array may be less than three elements. The "missing" elements
+" will be assumed to be '0' for the purposes of checking.
+"
+" See http://semver.org for info about version numbers.
+function syntastic#util#versionIsAtLeast(installed, required)
+    for index in [0,1,2]
+        if len(a:installed) <= index
+            let installed_element = 0
+        else
+            let installed_element = a:installed[index]
+        endif
+        if len(a:required) <= index
+            let required_element = 0
+        else
+            let required_element = a:required[index]
+        endif
+        if installed_element != required_element
+            return installed_element > required_element
+        endif
+    endfor
+    " Everything matched, so it is at least the required version.
+    return 1
+endfunction
+
+
 let &cpo = s:save_cpo
 unlet s:save_cpo
 " vim: set et sts=4 sw=4:

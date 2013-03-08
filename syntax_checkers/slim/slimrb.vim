@@ -33,7 +33,7 @@ function! SyntaxCheckers_slim_slimrb_GetLocList()
     let makeprg = syntastic#makeprg#build({
                 \ 'exe': 'slimrb',
                 \ 'args': '-c' })
-    if SyntasticIsVersionAtLeast(s:SlimrbVersion(), [1,3,1])
+    if syntastic#util#versionIsAtLeast(s:SlimrbVersion(), [1,3,1])
         let errorformat = '%C\ %#%f\, Line %l\, Column %c,%-G\ %.%#,%ESlim::Parser::SyntaxError: %m,%+C%.%#'
     else
         let errorformat = '%C\ %#%f\, Line %l,%-G\ %.%#,%ESlim::Parser::SyntaxError: %m,%+C%.%#'
