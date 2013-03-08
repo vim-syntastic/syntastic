@@ -15,12 +15,8 @@ if exists("g:loaded_syntastic_ruby_mri_checker")
 endif
 let g:loaded_syntastic_ruby_mri_checker=1
 
-function! s:FindRubyExec()
-    return "ruby"
-endfunction
-
 if !exists("g:syntastic_ruby_exec")
-    let g:syntastic_ruby_exec = s:FindRubyExec()
+    let g:syntastic_ruby_exec = "ruby"
 endif
 
 function! SyntaxCheckers_ruby_mri_IsAvailable()
