@@ -92,6 +92,30 @@ Syntastic uses the |:sign| commands to mark lines with errors and warnings in
 the sign column. To enable this feature, use the |'syntastic_enable_signs'|
 option.
 
+Signs are colored using the Error and Todo syntax highlight groups by default.
+If you wish to customize the colors for the signs, you can use the following
+groups:
+    SyntasticErrorSign - For syntax errors, links to 'error' by default
+    SyntasticWarningSign - For syntax warnings, links to 'todo' by default
+    SyntasticStyleErrorSign - For style errors, links to 'SyntasticErrorSign'
+                              by default
+    SyntasticStyleWarningSign - For style warnings, links to
+                                'SyntasticWarningSign' by default
+
+Example: >
+    highlight SyntasticErrorSign guifg=white guibg=red
+<
+To set up highlighting for the line where a sign resides, you can use the
+following highlight groups:
+    SyntasticErrorLine
+    SyntasticWarningLine
+    SyntasticStyleErrorLine - Links to 'SyntasticErrorLine' by default
+    SyntasticStyleWarningLine - Links to 'SyntasticWarningLine' by default
+
+Example: >
+    highlight SyntasticErrorLine guibg=#2f0000
+<
+
 ------------------------------------------------------------------------------
 2.3. The error window                       *:Errors* *syntastic-error-window*
 
