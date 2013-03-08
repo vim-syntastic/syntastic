@@ -165,6 +165,7 @@ function! s:UpdateErrors(auto_invoked, ...)
 
     let loclist = s:LocList()
     if g:syntastic_auto_jump && loclist.hasErrorsOrWarningsToDisplay()
+        call setloclist(0, loclist.toRaw())
         silent! ll
     endif
 
