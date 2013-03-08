@@ -90,3 +90,5 @@ function! g:SyntasticLoclist.filter(filters)
     endfor
     return rv
 endfunction
+
+" vim: set sw=4 sts=4 et fdm=marker:

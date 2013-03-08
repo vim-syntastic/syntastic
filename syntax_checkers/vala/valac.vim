@@ -55,8 +55,7 @@ function! SyntaxCheckers_vala_valac_GetLocList()
     let errorformat = '%A%f:%l.%c-%\d%\+.%\d%\+: %t%[a-z]%\+: %m,%C%m,%Z%m'
 
     return SyntasticMake({ 'makeprg': makeprg,
-                         \ 'errorformat': errorformat,
-                         \ 'defaults': {'force_highlight_callback': 1} })
+                         \ 'errorformat': errorformat })
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({

@@ -19,7 +19,7 @@ function! SyntaxCheckers_lua_luac_IsAvailable()
     return executable('luac')
 endfunction
 
-function! SyntaxCheckers_lua_GetHighlightRegex(pos)
+function! SyntaxCheckers_lua_luac_GetHighlightRegex(pos)
     let near = matchstr(a:pos['text'], "near '[^']\\+'")
     let result = ''
     if len(near) > 0

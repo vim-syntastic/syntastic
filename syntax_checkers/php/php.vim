@@ -19,7 +19,7 @@ function! SyntaxCheckers_php_php_IsAvailable()
     return executable("php")
 endfunction
 
-function! SyntaxCheckers_php_GetHighlightRegex(item)
+function! SyntaxCheckers_php_php_GetHighlightRegex(item)
     let unexpected = matchstr(a:item['text'], "unexpected '[^']\\+'")
     if len(unexpected) < 1
         return ''
