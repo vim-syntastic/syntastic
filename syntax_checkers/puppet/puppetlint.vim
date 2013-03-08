@@ -16,7 +16,7 @@ endif
 let g:loaded_syntastic_puppet_puppetlint_checker=1
 
 function! SyntaxCheckers_puppet_puppetlint_IsAvailable()
-    return executable("puppet")
+    return executable("puppet-lint")
 endfunction
 
 if !exists("g:syntastic_puppet_validate_disable")
