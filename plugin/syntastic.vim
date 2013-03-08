@@ -274,12 +274,6 @@ function! s:ModeMapAllowsAutoChecking()
 endfunction
 
 if g:syntastic_enable_signs
-    "define the signs used to display syntax and style errors/warns
-    exe 'sign define SyntasticError text='.g:syntastic_error_symbol.' texthl=SyntasticErrorSign linehl=SyntasticErrorLine'
-    exe 'sign define SyntasticWarning text='.g:syntastic_warning_symbol.' texthl=SyntasticWarningSign linehl=SyntasticWarningLine'
-    exe 'sign define SyntasticStyleError text='.g:syntastic_style_error_symbol.' texthl=SyntasticStyleErrorSign linehl=SyntasticStyleErrorLine'
-    exe 'sign define SyntasticStyleWarning text='.g:syntastic_style_warning_symbol.' texthl=SyntasticStyleWarningSign linehl=SyntasticStyleWarningLine'
-
     if !hlexists('SyntasticErrorSign')
         highlight link SyntasticErrorSign error
     endif
@@ -298,6 +292,12 @@ if g:syntastic_enable_signs
     if !hlexists('SyntasticStyleWarningLine')
         highlight link SyntasticStyleWarningLine SyntasticWarningLine
     endif
+
+    "define the signs used to display syntax and style errors/warns
+    exe 'sign define SyntasticError text='.g:syntastic_error_symbol.' texthl=SyntasticErrorSign linehl=SyntasticErrorLine'
+    exe 'sign define SyntasticWarning text='.g:syntastic_warning_symbol.' texthl=SyntasticWarningSign linehl=SyntasticWarningLine'
+    exe 'sign define SyntasticStyleError text='.g:syntastic_style_error_symbol.' texthl=SyntasticStyleErrorSign linehl=SyntasticStyleErrorLine'
+    exe 'sign define SyntasticStyleWarning text='.g:syntastic_style_warning_symbol.' texthl=SyntasticStyleWarningSign linehl=SyntasticStyleWarningLine'
 endif
 
 "start counting sign ids at 5000, start here to hopefully avoid conflicting
