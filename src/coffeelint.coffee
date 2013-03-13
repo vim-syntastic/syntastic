@@ -575,8 +575,6 @@ class LexicalLinter
         else
             null
 
-    # have to send in the raw value of the prevToken
-    # because doing @peek(-1) does not contain the 'spaced' property
     lintArrowSpacing : (token) ->
         # Throw error unless the following happens.
         unless (token.spaced? or token.newLine?) and
