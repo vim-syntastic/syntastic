@@ -372,8 +372,7 @@ class LexicalLinter
         @lineNumber = lineNumber or @lineNumber or 0
         # Now lint it.
         switch type
-            when "->"
-                @lintArrowSpacing(token, @tokens[@i - 1])
+            when "->"                     then @lintArrowSpacing(token)
             when "INDENT"                 then @lintIndentation(token)
             when "CLASS"                  then @lintClass(token)
             when "{"                      then @lintBrace(token)
@@ -578,13 +577,16 @@ class LexicalLinter
 
     # have to send in the raw value of the prevToken
     # because doing @peek(-1) does not contain the 'spaced' property
-    lintArrowSpacing : (token, prevTok) ->
+    lintArrowSpacing : (token) ->
+        # Throw error unless the following happens.
         unless (token.spaced? or token.newLine?) and
-               (prevTok.spaced? or
-                prevTok.generated? or
-                prevTok.isInterpolation? or
-                prevTok[0] is "INDENT" or
-                (prevTok[0] is "CALL_START" and not prevTok.generated?))
+               # Throw error unless the previous token...
+               (@peek(-1).spaced? or #1. has a space.
+                @peek(-1).generated? or #2. was generated.
+                @peek(-1)[0] is "INDENT" or #3. is from indenting.
+                (@peek(-1)[0] is "CALL_START" and not @peek(-1).generated?))
+                #4. is the start of function call but has no parameters.
+                #   (In this case accept spacing or no spacing before ->)
             @createLexError('arrow_spacing')
         else
             null
