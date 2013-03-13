@@ -108,10 +108,6 @@ RULES =
         level : IGNORE
         message : 'Function arrow (->) must be spaced properly'
 
-    space_assignment :
-        level : IGNORE
-        message  : 'Assignment must be spaced properly'
-
     coffeescript_error :
         level : ERROR
         message : '' # The default coffeescript error is fine.
