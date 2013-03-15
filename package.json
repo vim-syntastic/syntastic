@@ -28,9 +28,7 @@
   "scripts": {
     "pretest": "node_modules/.bin/coffee -c -o lib/ src/coffeelint.coffee",
     "test": "node_modules/.bin/vows --spec test/*.coffee",
-    "posttest": "./bin/coffeelint -f test/fixtures/coffeelint.json src/*.coffee test/*.coffee"
-  },
-  "scripts": {
+    "posttest": "./bin/coffeelint -f test/fixtures/coffeelint.json src/*.coffee test/*.coffee",
     "prepublish": "rake compile"
   }
 }
