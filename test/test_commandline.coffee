@@ -107,16 +107,21 @@ vows.describe('commandline').addBatch({
         'works' : (error, stdout, stderr) ->
             assert.isNotNull(error)
 
-    'with example configuration' :
+    'with configuration file' :
 
         topic : () ->
-            args = [
-                '-f'
-                'examples/coffeelint.json'
-                'test/fixtures/clean.coffee'
-            ]
+            configPath = 'test/fixtures/generated_coffeelint.json'
+            configFile = fs.openSync configPath, 'w'
+            stdio = stdio: [ null, configFile, null ]
+            commandline '--makeconfig', stdio, (error, stdout, stderr) =>
+                assert.isNull(error)
+                args = [
+                    '-f'
+                    configPath
+                    'test/fixtures/clean.coffee'
+                ]
+                commandline args, this.callback
 
-            commandline args, this.callback
             return undefined
 
         'works' : (error, stdout, stderr) ->
