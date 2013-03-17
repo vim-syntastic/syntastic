@@ -67,6 +67,10 @@
 " format:
 "
 "   let g:syntastic_c_errorformat = '%f:%l:%c: %trror: %m'
+"
+" Set your compiler executable with e.g. (defaults to gcc)
+"
+"   let g:syntastic_c_checker = 'clang'
 
 if exists('loaded_gcc_syntax_checker')
     finish
