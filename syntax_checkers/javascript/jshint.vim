@@ -24,10 +24,10 @@ endfunction
 function! SyntaxCheckers_javascript_jshint_GetLocList()
     let makeprg = syntastic#makeprg#build({
                 \ 'exe': 'jshint',
-                \ 'post_args': s:Args(),
+                \ 'post_args': ' --verbose ' . s:Args(),
                 \ 'subchecker': 'jshint' })
 
-    let errorformat = '%ELine %l:%c,%Z\\s%#Reason: %m,%C%.%#,%f: line %l\, col %c\, %m,%-G%.%#'
+    let errorformat = '%f: line %l\, col %c\, %m. \(%t%*\d\)'
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat, 'defaults': {'bufnr': bufnr('')} })
 endfunction
 
