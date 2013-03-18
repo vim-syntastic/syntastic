@@ -36,7 +36,7 @@ function! s:GetValaModules()
         if type(g:syntastic_vala_modules) == type('')
             return split(g:syntastic_vala_modules, '\s\+')
         elseif type(g:syntastic_vala_modules) == type([])
-            return g:syntastic_vala_modules
+            return copy(g:syntastic_vala_modules)
         else
             echoerr 'g:syntastic_vala_modules must be either list or string: fallback to in file modules string'
         endif
