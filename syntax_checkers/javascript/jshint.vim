@@ -8,6 +8,9 @@
 "             Want To Public License, Version 2, as published by Sam Hocevar.
 "             See http://sam.zoy.org/wtfpl/COPYING for more details.
 "============================================================================
+"
+"Requires jshint >= 1.1.0
+
 if exists("g:loaded_syntastic_javascript_jshint_checker")
     finish
 endif
