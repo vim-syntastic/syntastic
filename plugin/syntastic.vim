@@ -495,7 +495,7 @@ endfunction
 "However, on some versions of gvim using `redraw!` causes the screen to
 "flicker - so use redraw.
 function! s:Redraw()
-    if has('gui_running')
+    if has('gui_running') || has('gui_macvim')
         redraw
     else
         redraw!
