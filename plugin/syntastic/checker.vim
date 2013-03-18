@@ -37,16 +37,7 @@ endfunction
 
 function! g:SyntasticChecker.getLocList()
     let list = self._locListFunc()
-    if !empty(self._highlightRegexFunc)
-        for i in range(0, len(list)-1)
-            if list[i]['valid']
-                let term = self._highlightRegexFunc(list[i])
-                if len(term) > 0
-                    let list[i]['hl'] = term
-                endif
-            endif
-        endfor
-    endif
+    call self._populateHighlightRegexes(list)
     return g:SyntasticLoclist.New(list)
 endfunction
 
@@ -60,6 +51,21 @@ endfunction
 
 function! g:SyntasticChecker.isAvailable()
     return self._isAvailableFunc()
+endfunction
+
+function! g:SyntasticChecker._populateHighlightRegexes(list)
+    let list = a:list
+    if !empty(self._highlightRegexFunc)
+        for i in range(0, len(list)-1)
+            if list[i]['valid']
+                let term = self._highlightRegexFunc(list[i])
+                if len(term) > 0
+                    let list[i]['hl'] = term
+                endif
+            endif
+        endfor
+    endif
+    return list
 endfunction
 
 " vim: set sw=4 sts=4 et fdm=marker:
