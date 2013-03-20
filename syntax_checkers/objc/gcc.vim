@@ -98,7 +98,7 @@ if !exists('g:syntastic_objc_config_file')
 endif
 
 function! SyntaxCheckers_objc_gcc_GetLocList()
-    let makeprg = g:syntastic_objc_compiler . ' -fsyntax-only -lobjc'
+    let makeprg = g:syntastic_objc_compiler . ' -x objective-c -fsyntax-only -lobjc'
     let errorformat =
                     \ '%-G%f:%s:,' .
                     \ '%f:%l:%c: %trror: %m,' .
@@ -116,15 +116,16 @@ function! SyntaxCheckers_objc_gcc_GetLocList()
     let makeprg .= g:syntastic_objc_compiler_options
 
     let makeprg .= ' ' . shellescape(expand('%')) .
-               \ ' ' . syntastic#c#GetIncludeDirs('c')
+               \ ' ' . syntastic#c#GetIncludeDirs('objc')
 
     " determine whether to parse header files as well
     if expand('%') =~? '\.h$'
         if exists('g:syntastic_objc_check_header')
             let makeprg = g:syntastic_c_compiler .
+                        \ ' -x objective-c-header ' .
                         \ ' -c ' . shellescape(expand('%')) .
                         \ ' ' . g:syntastic_objc_compiler_options .
-                        \ ' ' . syntastic#c#GetIncludeDirs('c')
+                        \ ' ' . syntastic#c#GetIncludeDirs('objc')
         else
             return []
         endif
