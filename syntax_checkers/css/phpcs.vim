@@ -18,17 +18,14 @@ if exists("g:loaded_syntastic_css_phpcs_checker")
 endif
 let g:loaded_syntastic_css_phpcs_checker=1
 
+runtime syntax_checkers/php/phpcs.vim
+
 function! SyntaxCheckers_css_phpcs_IsAvailable()
-    return executable('phpcs')
+    return SyntaxCheckers_php_phpcs_IsAvailable()
 endfunction
 
 function! SyntaxCheckers_css_phpcs_GetLocList()
-    let makeprg = syntastic#makeprg#build({
-                \ 'exe': 'phpcs',
-                \ 'args': '--report=csv',
-                \ 'subchecker': 'phpcs' })
-    let errorformat = '%-GFile\,Line\,Column\,Type\,Message\,Source\,Severity,"%f"\,%l\,%c\,%t%*[a-zA-Z]\,"%m"\,%*[a-zA-Z0-9_.-]\,%*[0-9]'
-    return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat, 'subtype': 'Style' })
+    return SyntaxCheckers_php_phpcs_GetLocList()
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
