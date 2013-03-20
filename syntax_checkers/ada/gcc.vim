@@ -94,7 +94,7 @@ if !exists('g:syntastic_ada_config_file')
 endif
 
 function! SyntaxCheckers_ada_gcc_GetLocList()
-    let makeprg = g:syntastic_ada_compiler . ' -c -fsyntax-only '
+    let makeprg = g:syntastic_ada_compiler . ' -c -x ada -fsyntax-only '
     let errorformat =  '%-G%f:%s:,%f:%l:%c: %m,%f:%l: %m'
 
     if exists('g:syntastic_c_errorformat')
