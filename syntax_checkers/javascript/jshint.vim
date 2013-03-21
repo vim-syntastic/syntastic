@@ -30,7 +30,7 @@ function! SyntaxCheckers_javascript_jshint_GetLocList()
                 \ 'post_args': ' --verbose ' . s:Args(),
                 \ 'subchecker': 'jshint' })
 
-    let errorformat = '%f: line %l\, col %c\, %m. \(%t%*\d\)'
+    let errorformat = '%f: line %l\, col %c\, %m \(%t%*\d\)'
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat, 'defaults': {'bufnr': bufnr('')} })
 endfunction
 
