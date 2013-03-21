@@ -106,6 +106,8 @@ if !exists("g:syntastic_loc_list_height")
 endif
 
 let s:registry = g:SyntasticRegistry.Instance()
+let s:signer = g:SyntasticSigner.New()
+call s:signer.SetUpSignStyles()
 
 function! s:CompleteCheckerName(argLead, cmdLine, cursorPos)
     let checker_names = []
@@ -156,7 +158,7 @@ function! s:UpdateErrors(auto_invoked, ...)
     endif
 
     if g:syntastic_enable_signs
-        call s:RefreshSigns()
+        call s:signer.refreshSigns(s:LocList())
     endif
 
     if g:syntastic_enable_highlighting
@@ -271,100 +273,6 @@ function! s:ModeMapAllowsAutoChecking()
         let passives = g:syntastic_mode_map["passive_filetypes"]
         return empty(filter(fts, 'index(passives, v:val) != -1'))
     endif
-endfunction
-
-if g:syntastic_enable_signs
-    if !hlexists('SyntasticErrorSign')
-        highlight link SyntasticErrorSign error
-    endif
-    if !hlexists('SyntasticWarningSign')
-        highlight link SyntasticWarningSign todo
-    endif
-    if !hlexists('SyntasticStyleErrorSign')
-        highlight link SyntasticStyleErrorSign SyntasticErrorSign
-    endif
-    if !hlexists('SyntasticStyleWarningSign')
-        highlight link SyntasticStyleWarningSign SyntasticWarningSign
-    endif
-    if !hlexists('SyntasticStyleErrorLine')
-        highlight link SyntasticStyleErrorLine SyntasticErrorLine
-    endif
-    if !hlexists('SyntasticStyleWarningLine')
-        highlight link SyntasticStyleWarningLine SyntasticWarningLine
-    endif
-
-    "define the signs used to display syntax and style errors/warns
-    exe 'sign define SyntasticError text='.g:syntastic_error_symbol.' texthl=SyntasticErrorSign linehl=SyntasticErrorLine'
-    exe 'sign define SyntasticWarning text='.g:syntastic_warning_symbol.' texthl=SyntasticWarningSign linehl=SyntasticWarningLine'
-    exe 'sign define SyntasticStyleError text='.g:syntastic_style_error_symbol.' texthl=SyntasticStyleErrorSign linehl=SyntasticStyleErrorLine'
-    exe 'sign define SyntasticStyleWarning text='.g:syntastic_style_warning_symbol.' texthl=SyntasticStyleWarningSign linehl=SyntasticStyleWarningLine'
-endif
-
-"start counting sign ids at 5000, start here to hopefully avoid conflicting
-"with any other code that places signs (not sure if this precaution is
-"actually needed)
-let s:first_sign_id = 5000
-let s:next_sign_id = s:first_sign_id
-
-"place signs by all syntax errs in the buffer
-function! s:SignErrors()
-    let loclist = s:LocList()
-    if loclist.hasErrorsOrWarningsToDisplay()
-
-        let errors = loclist.filter({'bufnr': bufnr('')})
-        for i in errors
-            let sign_severity = 'Error'
-            let sign_subtype = ''
-            if has_key(i,'subtype')
-                let sign_subtype = i['subtype']
-            endif
-            if i['type'] ==? 'w'
-                let sign_severity = 'Warning'
-            endif
-            let sign_type = 'Syntastic' . sign_subtype . sign_severity
-
-            if !s:WarningMasksError(i, errors)
-                exec "sign place ". s:next_sign_id ." line=". i['lnum'] ." name=". sign_type ." file=". expand("%:p")
-                call add(s:BufSignIds(), s:next_sign_id)
-                let s:next_sign_id += 1
-            endif
-        endfor
-    endif
-endfunction
-
-"return true if the given error item is a warning that, if signed, would
-"potentially mask an error if displayed at the same time
-function! s:WarningMasksError(error, llist)
-    if a:error['type'] !=? 'w'
-        return 0
-    endif
-
-    let loclist = g:SyntasticLoclist.New(a:llist)
-    return len(loclist.filter({ 'type': "E", 'lnum': a:error['lnum'] })) > 0
-endfunction
-
-"remove the signs with the given ids from this buffer
-function! s:RemoveSigns(ids)
-    for i in a:ids
-        exec "sign unplace " . i
-        call remove(s:BufSignIds(), index(s:BufSignIds(), i))
-    endfor
-endfunction
-
-"get all the ids of the SyntaxError signs in the buffer
-function! s:BufSignIds()
-    if !exists("b:syntastic_sign_ids")
-        let b:syntastic_sign_ids = []
-    endif
-    return b:syntastic_sign_ids
-endfunction
-
-"update the error signs
-function! s:RefreshSigns()
-    let old_signs = copy(s:BufSignIds())
-    call s:SignErrors()
-    call s:RemoveSigns(old_signs)
-    let s:first_sign_id = s:next_sign_id
 endfunction
 
 "display the cached errors for this buf in the location list
