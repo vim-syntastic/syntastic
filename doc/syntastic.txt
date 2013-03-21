@@ -201,6 +201,12 @@ errors (where possible). Highlighting can be turned off with the following >
     let g:syntastic_enable_highlighting = 0
 <
 
+                                      *'g:syntastic_always_populate_loc_list'*
+Default: 0
+Enable this option to tell syntastic to always stick any detected errors into
+the loclist: >
+    let g:syntastic_always_populate_loc_list=1
+<
                                                        *'syntastic_auto_jump'*
 Default: 0
 Enable this option if you want the cursor to jump to the first detected error

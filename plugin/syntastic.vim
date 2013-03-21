@@ -69,6 +69,10 @@ if !exists("g:syntastic_auto_loc_list")
     let g:syntastic_auto_loc_list = 2
 endif
 
+if !exists("g:syntastic_always_populate_loc_list")
+    let g:syntastic_always_populate_loc_list = 0
+endif
+
 if !exists("g:syntastic_auto_jump")
     let syntastic_auto_jump=0
 endif
@@ -166,6 +170,10 @@ function! s:UpdateErrors(auto_invoked, ...)
     endif
 
     let loclist = s:LocList()
+    if g:syntastic_always_populate_loc_list && loclist.hasErrorsOrWarningsToDisplay()
+        call setloclist(0, loclist.toRaw())
+    endif
+
     if g:syntastic_auto_jump && loclist.hasErrorsOrWarningsToDisplay()
         call setloclist(0, loclist.toRaw())
         silent! ll
