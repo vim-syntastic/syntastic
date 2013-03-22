@@ -61,22 +61,6 @@ if !exists("g:syntastic_stl_format")
     let g:syntastic_stl_format = '[Syntax: line:%F (%t)]'
 endif
 
-if !exists("g:syntastic_mode_map")
-    let g:syntastic_mode_map = {}
-endif
-
-if !has_key(g:syntastic_mode_map, "mode")
-    let g:syntastic_mode_map['mode'] = 'active'
-endif
-
-if !has_key(g:syntastic_mode_map, "active_filetypes")
-    let g:syntastic_mode_map['active_filetypes'] = []
-endif
-
-if !has_key(g:syntastic_mode_map, "passive_filetypes")
-    let g:syntastic_mode_map['passive_filetypes'] = []
-endif
-
 if !exists("g:syntastic_check_on_open")
     let g:syntastic_check_on_open = 0
 endif
@@ -88,6 +72,7 @@ endif
 let s:registry = g:SyntasticRegistry.Instance()
 let s:signer = g:SyntasticSigner.New()
 call s:signer.SetUpSignStyles()
+let s:modemap = g:SyntasticModeMap.Instance()
 
 function! s:CompleteCheckerName(argLead, cmdLine, cursorPos)
     let checker_names = []
@@ -125,7 +110,7 @@ function! s:UpdateErrors(auto_invoked, ...)
         return
     endif
 
-    if !a:auto_invoked || s:ModeMapAllowsAutoChecking()
+    if !a:auto_invoked || s:modemap.allowsAutoChecking(&filetype)
         if a:0 >= 1
             call s:CacheErrors(a:1)
         else
@@ -229,34 +214,11 @@ function! s:CacheErrors(...)
     let b:syntastic_loclist = newLoclist
 endfunction
 
-"toggle the g:syntastic_mode_map['mode']
 function! s:ToggleMode()
-    if g:syntastic_mode_map['mode'] == "active"
-        let g:syntastic_mode_map['mode'] = "passive"
-    else
-        let g:syntastic_mode_map['mode'] = "active"
-    endif
-
+    call s:modemap.toggleMode()
     call s:ClearCache()
     call s:UpdateErrors(1)
-
-    echo "Syntastic: " . g:syntastic_mode_map['mode'] . " mode enabled"
-endfunction
-
-"check the current filetypes against g:syntastic_mode_map to determine whether
-"active mode syntax checking should be done
-function! s:ModeMapAllowsAutoChecking()
-    let fts = split(&ft, '\.')
-
-    if g:syntastic_mode_map['mode'] == 'passive'
-        "check at least one filetype is active
-        let actives = g:syntastic_mode_map["active_filetypes"]
-        return !empty(filter(fts, 'index(actives, v:val) != -1'))
-    else
-        "check no filetypes are passive
-        let passives = g:syntastic_mode_map["passive_filetypes"]
-        return empty(filter(fts, 'index(passives, v:val) != -1'))
-    endif
+    call s:modemap.echoMode()
 endfunction
 
 "display the cached errors for this buf in the location list
