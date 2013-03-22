@@ -21,30 +21,6 @@ runtime plugin/syntastic/*.vim
 
 let s:running_windows = has("win16") || has("win32")
 
-if !exists("g:syntastic_enable_signs")
-    let g:syntastic_enable_signs = 1
-endif
-
-if !exists("g:syntastic_error_symbol")
-    let g:syntastic_error_symbol = '>>'
-endif
-
-if !exists("g:syntastic_warning_symbol")
-    let g:syntastic_warning_symbol = '>>'
-endif
-
-if !exists("g:syntastic_style_error_symbol")
-    let g:syntastic_style_error_symbol = 'S>'
-endif
-
-if !exists("g:syntastic_style_warning_symbol")
-    let g:syntastic_style_warning_symbol = 'S>'
-endif
-
-if !has('signs')
-    let g:syntastic_enable_signs = 0
-endif
-
 if !exists("g:syntastic_enable_balloons")
     let g:syntastic_enable_balloons = 1
 endif

@@ -3,6 +3,31 @@ if exists("g:loaded_syntastic_signer")
 endif
 let g:loaded_syntastic_signer=1
 
+if !exists("g:syntastic_enable_signs")
+    let g:syntastic_enable_signs = 1
+endif
+
+if !exists("g:syntastic_error_symbol")
+    let g:syntastic_error_symbol = '>>'
+endif
+
+if !exists("g:syntastic_warning_symbol")
+    let g:syntastic_warning_symbol = '>>'
+endif
+
+if !exists("g:syntastic_style_error_symbol")
+    let g:syntastic_style_error_symbol = 'S>'
+endif
+
+if !exists("g:syntastic_style_warning_symbol")
+    let g:syntastic_style_warning_symbol = 'S>'
+endif
+
+if !has('signs')
+    let g:syntastic_enable_signs = 0
+endif
+
+
 "start counting sign ids at 5000, start here to hopefully avoid conflicting
 "with any other code that places signs (not sure if this precaution is
 "actually needed)
