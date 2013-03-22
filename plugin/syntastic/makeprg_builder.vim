@@ -1,3 +1,8 @@
+if exists("g:loaded_syntastic_makeprg_builder")
+    finish
+endif
+let g:loaded_syntastic_makeprg_builder=1
+
 let g:SyntasticMakeprgBuilder = {}
 
 function! g:SyntasticMakeprgBuilder.New(exe, args, fname, post_args, tail, subchecker)

@@ -1,7 +1,7 @@
 if exists("g:loaded_syntastic_signer")
     finish
 endif
-let g:loaded_syntastic_list=1
+let g:loaded_syntastic_signer=1
 
 "start counting sign ids at 5000, start here to hopefully avoid conflicting
 "with any other code that places signs (not sure if this precaution is

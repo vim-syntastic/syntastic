@@ -1,7 +1,7 @@
 if exists("g:loaded_syntastic_loclist")
     finish
 endif
-let g:loaded_syntastic_list=1
+let g:loaded_syntastic_loclist=1
 
 let g:SyntasticLoclist = {}
 
