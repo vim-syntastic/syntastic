@@ -9,32 +9,20 @@
 "             See http://sam.zoy.org/wtfpl/COPYING for more details.
 "
 "============================================================================
+
 if exists("g:loaded_syntastic_xslt_xmllint_checker")
     finish
 endif
 let g:loaded_syntastic_xslt_xmllint_checker=1
 
+runtime syntax_checkers/xml/xmllint.vim
+
 function! SyntaxCheckers_xslt_xmllint_IsAvailable()
-    return executable("xmllint")
+    return SyntaxCheckers_xml_xmllint_IsAvailable()
 endfunction
 
 function! SyntaxCheckers_xslt_xmllint_GetLocList()
-    let makeprg = syntastic#makeprg#build({
-                \ 'exe': 'xmllint',
-                \ 'args': '--xinclude --noout --postvalid' })
-    let errorformat='%E%f:%l:\ error\ :\ %m,
-        \%-G%f:%l:\ validity\ error\ :\ Validation\ failed:\ no\ DTD\ found\ %m,
-        \%W%f:%l:\ warning\ :\ %m,
-        \%W%f:%l:\ validity\ warning\ :\ %m,
-        \%E%f:%l:\ validity\ error\ :\ %m,
-        \%E%f:%l:\ parser\ error\ :\ %m,
-        \%E%f:%l:\ namespace\ error\ :\ %m,
-        \%E%f:%l:\ %m,
-        \%-Z%p^,
-        \%-G%.%#'
-    let loclist = SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
-
-    return loclist
+    return SyntaxCheckers_xml_xmllint_GetLocList()
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({

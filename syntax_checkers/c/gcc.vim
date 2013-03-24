@@ -70,19 +70,19 @@
 "
 " Set your compiler executable with e.g. (defaults to gcc)
 "
-"   let g:syntastic_c_checker = 'clang'
+"   let g:syntastic_c_compiler = 'clang'
 
-if exists('loaded_gcc_syntax_checker')
+if exists('g:loaded_syntastic_c_gcc_checker')
     finish
 endif
-let loaded_gcc_syntax_checker = 1
+let g:loaded_syntastic_c_gcc_checker = 1
 
-if !exists('g:syntastic_c_checker')
-    let g:syntastic_c_checker = "gcc"
+if !exists('g:syntastic_c_compiler')
+    let g:syntastic_c_compiler = 'gcc'
 endif
 
-function SyntaxCheckers_c_gcc_IsAvailable()
-    return executable(g:syntastic_c_checker)
+function! SyntaxCheckers_c_gcc_IsAvailable()
+    return executable(g:syntastic_c_compiler)
 endfunction
 
 let s:save_cpo = &cpo
@@ -97,12 +97,12 @@ if !exists('g:syntastic_c_config_file')
 endif
 
 function! SyntaxCheckers_c_gcc_GetLocList()
-    let makeprg = g:syntastic_c_checker . ' -x c -fsyntax-only '
-    let errorformat = '%-G%f:%s:,%-G%f:%l: %#error: %#(Each undeclared '.
-               \ 'identifier is reported only%.%#,%-G%f:%l: %#error: %#for '.
-               \ 'each function it appears%.%#,%-GIn file included%.%#,'.
-               \ '%-G %#from %f:%l\,,%f:%l:%c: %trror: %m,%f:%l:%c: '.
-               \ '%tarning: %m,%f:%l:%c: %m,%f:%l: %trror: %m,'.
+    let makeprg = g:syntastic_c_compiler . ' -x c -fsyntax-only '
+    let errorformat = '%-G%f:%s:,%-G%f:%l: %#error: %#(Each undeclared ' .
+               \ 'identifier is reported only%.%#,%-G%f:%l: %#error: %#for ' .
+               \ 'each function it appears%.%#,%-GIn file included%.%#,' .
+               \ '%-G %#from %f:%l\,,%f:%l:%c: %trror: %m,%f:%l:%c: ' .
+               \ '%tarning: %m,%f:%l:%c: %m,%f:%l: %trror: %m,' .
                \ '%f:%l: %tarning: %m,%f:%l: %m'
 
     if exists('g:syntastic_c_errorformat')
@@ -112,13 +112,13 @@ function! SyntaxCheckers_c_gcc_GetLocList()
     " add optional user-defined compiler options
     let makeprg .= g:syntastic_c_compiler_options
 
-    let makeprg .= ' '.shellescape(expand('%')).
-               \ ' '.syntastic#c#GetIncludeDirs('c')
+    let makeprg .= ' ' . shellescape(expand('%')) .
+               \ ' ' . syntastic#c#GetIncludeDirs('c')
 
     " determine whether to parse header files as well
-    if expand('%') =~? '.h$'
+    if expand('%') =~? '\.h$'
         if exists('g:syntastic_c_check_header')
-            let makeprg = g:syntastic_c_checker
+            let makeprg = g:syntastic_c_compiler .
                         \ ' -c ' . shellescape(expand('%')) .
                         \ ' ' . g:syntastic_c_compiler_options .
                         \ ' ' . syntastic#c#GetNullDevice() .
@@ -151,7 +151,7 @@ function! SyntaxCheckers_c_gcc_GetLocList()
     endif
 
     " add optional config file parameters
-    let makeprg .= ' '.syntastic#c#ReadConfig(g:syntastic_c_config_file)
+    let makeprg .= ' ' . syntastic#c#ReadConfig(g:syntastic_c_config_file)
 
     " process makeprg
     let errors = SyntasticMake({ 'makeprg': makeprg,
