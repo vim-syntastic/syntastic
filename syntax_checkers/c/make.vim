@@ -33,6 +33,10 @@ function! SyntaxCheckers_c_make_GetLocList()
         \ '%tarning: %m,%f:%l:%c: %m,%f:%l: %trror: %m,'.
         \ '%f:%l: %tarning: %m,%f:%l: %m'
 
+    if exists('g:syntastic_c_errorformat')
+        let errorformat = g:syntastic_c_errorformat
+    endif
+
     " process makeprg
     let errors = SyntasticMake({ 'makeprg': makeprg,
         \ 'errorformat': errorformat })
