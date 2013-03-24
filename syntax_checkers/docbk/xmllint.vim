@@ -15,18 +15,14 @@ if exists("g:loaded_syntastic_docbk_xmllint_checker")
 endif
 let g:loaded_syntastic_docbk_xmllint_checker=1
 
+runtime syntax_checkers/xml/xmllint.vim
+
 function! SyntaxCheckers_docbk_xmllint_IsAvailable()
-    return executable('xmllint')
+    return SyntaxCheckers_xml_xmllint_IsAvailable()
 endfunction
 
 function! SyntaxCheckers_docbk_xmllint_GetLocList()
-    let makeprg = syntastic#makeprg#build({
-                \ 'exe': 'xmllint',
-                \ 'args': '--xinclude --noout --postvalid' })
-    let errorformat='%E%f:%l: parser error : %m,%W%f:%l: parser warning : %m,%E%f:%l:%.%# validity error : %m,%W%f:%l:%.%# validity warning : %m,%-Z%p^,%-C%.%#,%-G%.%#'
-    let loclist = SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
-
-    return loclist
+    return SyntaxCheckers_xml_xmllint_GetLocList()
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({

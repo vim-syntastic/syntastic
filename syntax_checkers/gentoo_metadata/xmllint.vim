@@ -27,6 +27,14 @@ let g:loaded_syntastic_gentoo_metadata_xmllint_checker=1
 
 runtime syntax_checkers/xml/xmllint.vim
 
+function! SyntaxCheckers_gentoo_metadata_xmllint_IsAvailable()
+    return SyntaxCheckers_xml_xmllint_IsAvailable()
+endfunction
+
 function! SyntaxCheckers_gentoo_metadata_xmllint_GetLocList()
     return SyntaxCheckers_xml_xmllint_GetLocList()
 endfunction
+
+call g:SyntasticRegistry.CreateAndRegisterChecker({
+    \ 'filetype': 'gentoo_metadata',
+    \ 'name': 'xmllint'})
