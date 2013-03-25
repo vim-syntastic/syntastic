@@ -100,7 +100,7 @@ augroup syntastic
     autocmd BufWritePost * call s:UpdateErrors(1)
 
     autocmd BufWinEnter * if empty(&bt) | call s:AutoToggleLocList() | endif
-    autocmd BufWinLeave * if empty(&bt) | lclose | endif
+    autocmd BufEnter * if &bt=='quickfix' && !empty(getloclist(0)) && !bufloaded(getloclist(0)[0].bufnr) | call s:HideLocList() | endif
 augroup END
 
 
@@ -231,6 +231,14 @@ function! s:ShowLocList()
         if num != winnr()
             wincmd p
         endif
+    endif
+endfunction
+
+function! s:HideLocList()
+    if len(filter( range(1,bufnr('$')), 'buflisted(v:val) && bufloaded(v:val)' )) == 1
+        quit
+    else
+        lclose
     endif
 endfunction
 
