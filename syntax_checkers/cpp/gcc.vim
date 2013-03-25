@@ -113,7 +113,7 @@ function! SyntaxCheckers_cpp_gcc_GetLocList()
                 \ ' ' . syntastic#c#GetIncludeDirs('cpp')
 
     " determine whether to parse header files as well
-    if expand('%') =~? '\.(h\|hpp\|hh\)$'
+    if expand('%') =~? '\.\(h\|hpp\|hh\)$'
         if exists('g:syntastic_cpp_check_header')
             let makeprg = g:syntastic_cpp_compiler .
                         \ ' -c ' . shellescape(expand('%')) .
