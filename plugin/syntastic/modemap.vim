@@ -30,9 +30,9 @@ endfunction
 
 function! g:SyntasticModeMap.toggleMode()
     if self._mode == "active"
-        self._mode = "passive"
+        let self._mode = "passive"
     else
-        self._mode = "active"
+        let self._mode = "active"
     endif
 endfunction
 
