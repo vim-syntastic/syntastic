@@ -17,21 +17,46 @@ if !exists("g:syntastic_dart_analyzer_conf")
     let g:syntastic_dart_analyzer_conf = ''
 endif
 
-function! SyntaxCheckers_dart_dart_analyser_IsAvailable()
-    return executable("dart_analyser")
+function! SyntaxCheckers_dart_dart_analyzer_IsAvailable()
+    return executable("dart_analyzer")
 endfunction
 
-function! SyntaxCheckers_dart_dart_analyser_GetLocList()
+function! SyntaxCheckers_dart_dart_analyzer_GetHighlightRegex(error)
+  let lcol = a:error['col'] - 1
+  let rcol = a:error['nr'] + lcol + 1
+
+  return '\%>'.lcol.'c\%<'.rcol.'c'
+endfunction
+
+function! SyntaxCheckers_dart_dart_analyzer_GetLocList()
     let args = !empty(g:syntastic_dart_analyzer_conf) ? ' ' . g:syntastic_dart_analyzer_conf : ''
     let makeprg = syntastic#makeprg#build({
                 \ 'exe': 'dart_analyzer',
+                \ 'args': '--error_format machine',
                 \ 'post_args': args,
-                \ 'subchecker': 'dart_analyser' })
+                \ 'subchecker': 'dart_analyzer' })
+    " Machine readable format looks like:
+    " SEVERITY|TYPE|ERROR_CODE|file:FILENAME|LINE_NUMBER|COLUMN|LENGTH|MESSAGE
+    " SEVERITY: (WARNING|ERROR)
+    " TYPE: (RESOLVER|STATIC_TYPE|...)
+    " ERROR_CODE: (NO_SUCH_TYPE|...)
+    " FILENAME: String
+    " LINE_NUMBER: int
+    " COLUMN: int
+    " LENGHT: int
+    " MESSAGE: String
 
-    let errorformat = '%Efile:%f:%l:%c: %m'
+    " We use %n to grab the error length to be able to access it in the matcher.
+    let commonformat = '|%.%#|%.%#|file:%f|%l|%c|%n|%m'
+
+    " TODO(amouravski): simply take everything after ERROR|WARNING as a message
+    " and then parse it by hand later.
+    let errorformat = '%EERROR'.l:commonformat.','.
+                   \'%WWARNING'.l:commonformat
+
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'dart',
-    \ 'name': 'dart_analyser'})
+    \ 'name': 'dart_analyzer'})
