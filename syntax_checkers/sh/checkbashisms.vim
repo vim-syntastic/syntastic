@@ -18,15 +18,15 @@ endfunction
 
 
 function! SyntaxCheckers_sh_checkbashisms_GetLocList()
-    let l:makeprg = syntastic#makeprg#build({'exe': 'checkbashisms.pl', 'args': '-fpx'})
+    let makeprg = syntastic#makeprg#build({'exe': 'checkbashisms.pl', 'args': '-fpx'})
 
-    let l:errorformat =
+    let errorformat =
         \ '%Eerror: %f: %m,' .
         \ '%Ecannot open script %f for reading: %m,' .
         \ '%Wscript %f %m,%C%.# lines,' .
         \ '%Wpossible bashism in %f line %l (%m):,%C%.%#,%Z.%#'
 
-    return SyntasticMake({'makeprg': l:makeprg, 'errorformat': l:errorformat})
+    return SyntasticMake({'makeprg': makeprg, 'errorformat': errorformat})
 endfunction
 
 
