@@ -8,8 +8,6 @@
 "             Want To Public License, Version 2, as published by Sam Hocevar.
 "             See http://sam.zoy.org/wtfpl/COPYING for more details.
 "============================================================================
-"
-"Requires jshint >= 1.1.0
 
 if exists("g:loaded_syntastic_javascript_jshint_checker")
     finish
@@ -25,13 +23,21 @@ function! SyntaxCheckers_javascript_jshint_IsAvailable()
 endfunction
 
 function! SyntaxCheckers_javascript_jshint_GetLocList()
+    let jshint_new = s:JshintNew()
     let makeprg = syntastic#makeprg#build({
                 \ 'exe': 'jshint',
-                \ 'post_args': ' --verbose ' . s:Args(),
+                \ 'post_args': (jshint_new ? ' --verbose ' : '') . s:Args(),
                 \ 'subchecker': 'jshint' })
 
-    let errorformat = '%f: line %l\, col %c\, %m \(%t%*\d\)'
+    let errorformat = jshint_new ?
+                \ '%f: line %l\, col %c\, %m \(%t%*\d\)' :
+                \ '%E%f: line %l\, col %c\, %m'
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat, 'defaults': {'bufnr': bufnr('')} })
+endfunction
+
+function s:JshintNew()
+    let ver = matchlist(system('jshint --version'), '^\D*\(\d\+\)\.\(\d\+\)')
+    return (ver[1] > 1 || (ver[1] == 1 && ver[2] >= 1))
 endfunction
 
 function s:Args()
