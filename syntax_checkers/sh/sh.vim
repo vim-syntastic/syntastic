@@ -63,7 +63,8 @@ function! SyntaxCheckers_sh_sh_GetLocList()
 
     let makeprg = syntastic#makeprg#build({
                 \ 'exe': s:GetShell(),
-                \ 'args': '-n' })
+                \ 'args': '-n',
+                \ 'subchecker': 'sh'})
 
     let errorformat = '%f: line %l: %m'
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat})
