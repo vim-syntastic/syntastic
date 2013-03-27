@@ -26,7 +26,8 @@ function! SyntaxCheckers_rst_rst2pseudoxml_GetLocList()
     let makeprg = syntastic#makeprg#build({
                 \ 'exe': s:exe(),
                 \ 'args': '--report=2 --exit-status=1',
-                \ 'tail': syntastic#util#DevNull() })
+                \ 'tail': syntastic#util#DevNull(),
+                \ 'subchecker': 'rst2pseudoxml' })
 
     let errorformat = '%f:%l:\ (%tNFO/1)\ %m,
       \%f:%l:\ (%tARNING/2)\ %m,

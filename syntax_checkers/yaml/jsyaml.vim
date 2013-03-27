@@ -25,7 +25,8 @@ endfunction
 function! SyntaxCheckers_yaml_jsyaml_GetLocList()
     let makeprg = syntastic#makeprg#build({
                 \ 'exe': 'js-yaml',
-                \ 'args': '--compact' })
+                \ 'args': '--compact',
+                \ 'subchecker': 'jsyaml' })
     let errorformat='Error on line %l\, col %c:%m,%-G%.%#'
     return SyntasticMake({ 'makeprg': makeprg,
                          \ 'errorformat': errorformat,

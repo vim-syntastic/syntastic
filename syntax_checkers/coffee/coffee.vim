@@ -21,7 +21,8 @@ endfunction
 function! SyntaxCheckers_coffee_coffee_GetLocList()
     let makeprg = syntastic#makeprg#build({
                 \ 'exe': 'coffee',
-                \ 'args': '-c -l -o /tmp' })
+                \ 'args': '-c -l -o /tmp',
+                \ 'subchecker': 'coffee' })
     let errorformat =  'Syntax%trror: In %f\, %m on line %l,%EError: In %f\, Parse error on line %l: %m,%EError: In %f\, %m on line %l,%W%f(%l): lint warning: %m,%-Z%p^,%W%f(%l): warning: %m,%-Z%p^,%E%f(%l): SyntaxError: %m,%-Z%p^,%-G%.%#'
 
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })

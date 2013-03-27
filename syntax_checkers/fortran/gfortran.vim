@@ -34,7 +34,8 @@ endfunction
 function! SyntaxCheckers_fortran_gfortran_GetLocList()
     let makeprg = syntastic#makeprg#build({
                 \ 'exe': 'gfortran',
-                \ 'args': s:args() })
+                \ 'args': s:args(),
+                \ 'subchecker': 'gfortran' })
     let errorformat = '%-C %#,%-C  %#%.%#,%A%f:%l.%c:,%Z%m,%G%.%#'
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 endfunction

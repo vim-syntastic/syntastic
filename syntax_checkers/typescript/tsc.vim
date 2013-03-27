@@ -17,7 +17,8 @@ endfunction
 function! SyntaxCheckers_typescript_tsc_GetLocList()
     let makeprg = syntastic#makeprg#build({
                 \ 'exe': 'tsc',
-                \ 'post_args': '--out ' . syntastic#util#DevNull() })
+                \ 'post_args': '--out ' . syntastic#util#DevNull(),
+                \ 'subchecker': 'tsc' })
     let errorformat = '%f %#(%l\,%c): %m'
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 endfunction

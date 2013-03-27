@@ -27,7 +27,8 @@ endif
 function! SyntaxCheckers_scala_scalac_GetLocList()
     let makeprg = syntastic#makeprg#build({
                 \ 'exe': 'scalac',
-                \ 'args': '-Ystop-after:parser '. g:syntastic_scala_options })
+                \ 'args': '-Ystop-after:parser '. g:syntastic_scala_options,
+                \ 'subchecker': 'scalac' })
 
     let errorformat = '%f\:%l: %trror: %m'
 
