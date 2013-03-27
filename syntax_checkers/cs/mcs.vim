@@ -22,7 +22,8 @@ endfunction
 function! SyntaxCheckers_cs_mcs_GetLocList()
     let makeprg = syntastic#makeprg#build({
                 \ 'exe': 'mcs',
-                \ 'args': '--parse' })
+                \ 'args': '--parse',
+                \ 'subchecker': 'mcs' })
     let errorformat = '%f(%l\,%c): %trror %m'
     return SyntasticMake({ 'makeprg': makeprg,
                          \ 'errorformat': errorformat,

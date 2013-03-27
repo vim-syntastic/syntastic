@@ -22,7 +22,8 @@ endfunction
 function! SyntaxCheckers_cucumber_cucumber_GetLocList()
     let makeprg = syntastic#makeprg#build({
                 \ 'exe': 'cucumber',
-                \ 'args': '--dry-run --quiet --strict --format pretty' })
+                \ 'args': '--dry-run --quiet --strict --format pretty',
+                \ 'subchecker': 'cucumber' })
     let errorformat =  '%f:%l:%c:%m,%W      %.%# (%m),%-Z%f:%l:%.%#,%-G%.%#'
 
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })

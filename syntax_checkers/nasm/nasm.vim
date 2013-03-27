@@ -27,7 +27,8 @@ function! SyntaxCheckers_nasm_nasm_GetLocList()
     let wd = shellescape(expand("%:p:h") . "/")
     let makeprg = syntastic#makeprg#build({
                 \ 'exe': 'nasm',
-                \ 'args': '-X gnu -f elf -I ' . wd . ' -o ' . outfile })
+                \ 'args': '-X gnu -f elf -I ' . wd . ' -o ' . outfile,
+                \ 'subchecker': 'nasm' })
     let errorformat = '%f:%l: %t%*[^:]: %m'
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 endfunction

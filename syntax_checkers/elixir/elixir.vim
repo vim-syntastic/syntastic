@@ -29,7 +29,9 @@ function! SyntaxCheckers_elixir_elixir_IsAvailable()
 endfunction
 
 function! SyntaxCheckers_elixir_elixir_GetLocList()
-    let makeprg = syntastic#makeprg#build({ 'exe': s:syntastic_elixir_compile_command })
+    let makeprg = syntastic#makeprg#build({
+        \ 'exe': s:syntastic_elixir_compile_command,
+        \ 'subchecker': 'elixir' })
     let errorformat = '** %*[^\ ] %f:%l: %m'
 
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })

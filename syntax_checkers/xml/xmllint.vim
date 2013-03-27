@@ -26,7 +26,8 @@ endfunction
 function! SyntaxCheckers_xml_xmllint_GetLocList()
     let makeprg = syntastic#makeprg#build({
                 \ 'exe': 'xmllint',
-                \ 'args': '--xinclude --noout --postvalid' })
+                \ 'args': '--xinclude --noout --postvalid',
+                \ 'subchecker': 'xmllint' })
     let errorformat='%E%f:%l: error : %m,' .
                 \ '%-G%f:%l: validity error : Validation failed: no DTD found %m,' .
                 \ '%W%f:%l: warning : %m,' .

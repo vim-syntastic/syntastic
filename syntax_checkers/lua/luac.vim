@@ -44,7 +44,10 @@ endfunction
 
 
 function! SyntaxCheckers_lua_luac_GetLocList()
-    let makeprg = syntastic#makeprg#build({ 'exe': 'luac', 'args': '-p' })
+    let makeprg = syntastic#makeprg#build({
+        \ 'exe': 'luac',
+        \ 'args': '-p',
+        \ 'subchecker': 'luac' })
     let errorformat =  'luac: %#%f:%l: %m'
 
     return SyntasticMake({ 'makeprg': makeprg,
