@@ -22,7 +22,8 @@ function! SyntaxCheckers_lisp_clisp_GetLocList()
     let makeprg = syntastic#makeprg#build({
                 \ 'exe': 'clisp',
                 \ 'args': '-c',
-                \ 'tail': '-o /tmp/clisp-vim-compiled-file' })
+                \ 'tail': '-o /tmp/clisp-vim-compiled-file',
+                \ 'subchecker': 'clisp' })
     let efm  = '%-G;%.%#,'
     let efm .= '%W%>WARNING:%.%#line %l : %m,%C  %#%m,'
     let efm .= '%E%>The following functions were %m,%Z %m,'

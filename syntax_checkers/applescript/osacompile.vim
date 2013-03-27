@@ -4,8 +4,8 @@
 "         Author: Zhao Cai
 "          Email: caizhaoff@gmail.com
 "        Version: 0.2.1
-"   Date Created: Thu 09 Sep 2011 10:30:09 AM EST 
-"  Last Modified: Fri 09 Dec 2011 01:10:24 PM EST 
+"   Date Created: Thu 09 Sep 2011 10:30:09 AM EST
+"  Last Modified: Fri 09 Dec 2011 01:10:24 PM EST
 "
 "        History: 0.1.0 - working, but it will run the script everytime to check
 "                 syntax. Should use osacompile but strangely it does not give
@@ -37,7 +37,8 @@ endfunction
 function! SyntaxCheckers_applescript_osacompile_GetLocList()
     let makeprg = syntastic#makeprg#build({
                 \ 'exe': 'osacompile',
-                \ 'args': '-o ' . tempname() . '.scpt ' })
+                \ 'args': '-o ' . tempname() . '.scpt ',
+                \ 'subchecker': 'osacompile' })
     let errorformat = '%f:%l:%m'
 
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })

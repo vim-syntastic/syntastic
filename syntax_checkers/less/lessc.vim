@@ -44,7 +44,8 @@ function! SyntaxCheckers_less_lessc_GetLocList()
     let makeprg = syntastic#makeprg#build({
                 \ 'exe': s:check_file,
                 \ 'args': g:syntastic_less_options,
-                \ 'tail': syntastic#util#DevNull() })
+                \ 'tail': syntastic#util#DevNull(),
+                \ 'subchecker': 'lessc' })
     let errorformat = '%m in %f:%l:%c'
 
     return SyntasticMake({ 'makeprg': makeprg,
