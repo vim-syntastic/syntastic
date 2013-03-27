@@ -262,7 +262,7 @@ function! s:HighlightErrors()
             elseif get(item, 'col')
                 let lastcol = col([item['lnum'], '$'])
                 let lcol = min([lastcol, item['col']])
-                call matchadd(group, '\%'.item['lnum'].'l\%'.lcol.'c')
+                call matchadd(group, '\%'.item['lnum'].'l\%'.lcol.(item['vcol'] ? 'v' : 'c'))
             endif
         endfor
     endfor
