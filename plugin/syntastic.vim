@@ -262,7 +262,12 @@ function! s:HighlightErrors()
             elseif get(item, 'col')
                 let lastcol = col([item['lnum'], '$'])
                 let lcol = min([lastcol, item['col']])
-                call matchadd(group, '\%'.item['lnum'].'l\%'.lcol.(has_key(item, 'vcol') && item['vcol'] ? 'v' : 'c'))
+
+                "a bug in vim can sometimes cause there to be no 'vcol' key,
+                "so check for its existence
+                let coltype = has_key(item, 'vcol') && item['vcol'] ? 'v' : 'c'
+
+                call matchadd(group, '\%' . item['lnum'] . 'l\%' . lcol . coltype)
             endif
         endfor
     endfor
