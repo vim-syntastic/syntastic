@@ -17,7 +17,7 @@ if exists("g:loaded_syntastic_plugin")
 endif
 let g:loaded_syntastic_plugin = 1
 
-runtime plugin/syntastic/*.vim
+runtime! plugin/syntastic/*.vim
 
 let s:running_windows = has("win16") || has("win32")
 
