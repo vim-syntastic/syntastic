@@ -206,9 +206,7 @@ reportAndExit = (errorReport, options) ->
         new Reporter(errorReport, colorize)
     reporter.publish()
 
-    process.stdout.on 'drain', =>
-        process.exit errorReport.getExitCode()
-    process.stderr.on 'drain', =>
+    process.on 'exit', () ->
         process.exit errorReport.getExitCode()
 
 # Declare command line options.
