@@ -155,4 +155,16 @@ vows.describe('indent').addBatch({
             errors = coffeelint.lint(source)
             assert.isEmpty(errors)
 
+    'Indenting a callback in a chained call inside a function':
+
+        topic: """
+            someFunction = ->
+              $.when(somePromise)
+                .done (result) ->
+                  foo = result.bar
+            """
+        'is permitted. See issue #88': (source) ->
+            errors = coffeelint.lint(source)
+            assert.isEmpty(errors)
+
 }).export(module)

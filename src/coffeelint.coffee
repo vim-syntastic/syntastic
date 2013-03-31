@@ -539,9 +539,19 @@ class LexicalLinter
         # Compensate for indentation in function invocations that span multiple
         # lines, which can be ignored.
         if @isChainedCall()
+            currentLine = @lines[@lineNumber]
             previousLine = @lines[@lineNumber - 1]
             previousIndentation = previousLine.match(/^(\s*)/)[1].length
+
+            # I don't know why, but when inside a function, you make a chained
+            # call and define an inline callback as a parameter, the body of
+            # that callback gets the indentation reported higher than it really
+            # is. See issue #88
+            # NOTE: Adding this line moved the cyclomatic complexity over the
+            # limit, I'm not sure why
+            numIndents = currentLine.match(/^(\s*)/)[1].length
             numIndents -= previousIndentation
+
 
         # Now check the indentation.
         expected = @config['indentation'].value
