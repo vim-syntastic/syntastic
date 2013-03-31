@@ -1,12 +1,8 @@
 "============================================================================
 "File:        python.vim
 "Description: Syntax checking plugin for syntastic.vim
-"Author:      Artem Nezvigin <artem at artnez dot com>
-"
-" `errorformat` derived from:
-" http://www.vim.org/scripts/download_script.php?src_id=1392
-"
 "============================================================================
+
 if exists("g:loaded_syntastic_python_python_checker")
     finish
 endif
@@ -18,18 +14,8 @@ endfunction
 
 function! SyntaxCheckers_python_python_GetLocList()
     let l:path = shellescape(expand('%'))
-    let l:cmd = "compile(open(" . l:path . ").read(), " . l:path . ", 'exec')"
-    let l:makeprg = 'python -c "' . l:cmd . '"'
-
-    let l:errorformat =
-        \ "\%A\ \ File\ \"%f\"\\\,\ line\ %l\\\,%m," .
-        \ "\%C\ \ \ \ %.%#," .
-        \ "\%+Z%.%#Error\:\ %.%#," .
-        \ "\%A\ \ File\ \"%f\"\\\,\ line\ %l," .
-        \ "\%+C\ \ %.%#," .
-        \ "\%-C%p^," .
-        \ "\%Z%m," .
-        \ "\%-G%.%#"
+    let l:makeprg = 'python -m py_compile ' . l:path
+    let l:errorformat = "%m\:\ ('%[%^']%#'\\\,\ ('%f'\\\,\ %l\\\,\ %c\\\,\ '%.%#'))"
 
     return SyntasticMake({ 'makeprg': l:makeprg, 'errorformat': l:errorformat })
 endfunction
