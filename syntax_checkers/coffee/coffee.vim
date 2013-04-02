@@ -21,7 +21,7 @@ endfunction
 function! SyntaxCheckers_coffee_coffee_GetLocList()
     let makeprg = syntastic#makeprg#build({
                 \ 'exe': 'coffee',
-                \ 'args': '-c -l -o /tmp',
+                \ 'args': '--lint',
                 \ 'subchecker': 'coffee' })
     let errorformat = '%E%f:%l:%c: %trror: %m,' .
                 \ 'Syntax%trror: In %f\, %m on line %l,' .
