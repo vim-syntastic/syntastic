@@ -106,7 +106,7 @@ augroup END
 
 "refresh and redraw all the error info for this buf when saving or reading
 function! s:UpdateErrors(auto_invoked, ...)
-    if !empty(&buftype)
+    if !empty(&buftype) || s:SkipFile()
         return
     endif
 
@@ -186,7 +186,7 @@ function! s:CacheErrors(...)
     call s:ClearCache()
     let newLoclist = g:SyntasticLoclist.New([])
 
-    if filereadable(expand("%"))
+    if !s:SkipFile()
         for ft in s:CurrentFiletypes()
 
             if a:0
@@ -364,6 +364,11 @@ function! s:Redraw()
     else
         redraw!
     endif
+endfunction
+
+" Skip running in special buffers
+function! s:SkipFile()
+    return !filereadable(expand('%')) || getwinvar(0, '&diff')
 endfunction
 
 function! s:uname()
