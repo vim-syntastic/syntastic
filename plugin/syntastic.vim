@@ -106,7 +106,7 @@ augroup END
 
 "refresh and redraw all the error info for this buf when saving or reading
 function! s:UpdateErrors(auto_invoked, ...)
-    if !empty(&buftype) || s:SkipFile()
+    if s:SkipFile()
         return
     endif
 
@@ -368,7 +368,7 @@ endfunction
 
 " Skip running in special buffers
 function! s:SkipFile()
-    return !filereadable(expand('%')) || getwinvar(0, '&diff')
+    return !empty(&buftype) || !filereadable(expand('%')) || getwinvar(0, '&diff')
 endfunction
 
 function! s:uname()
