@@ -32,7 +32,7 @@ endif
 function! SyntaxCheckers_c_sparse_GetLocList()
     let makeprg = syntastic#makeprg#build({
                 \ 'exe': 'sparse',
-                \ 'args': syntastic#c#ReadConfig(g:syntastic_sparse_config_file),
+                \ 'args': '-ftabstop=' . &ts . ' ' . syntastic#c#ReadConfig(g:syntastic_sparse_config_file),
                 \ 'subchecker': 'sparse' })
 
     let errorformat = '%f:%l:%v: %trror: %m,%f:%l:%v: %tarning: %m,'
