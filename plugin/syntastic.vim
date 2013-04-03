@@ -132,11 +132,11 @@ function! s:UpdateErrors(auto_invoked, ...)
 
     let loclist = s:LocList()
     if g:syntastic_always_populate_loc_list && loclist.hasErrorsOrWarningsToDisplay()
-        call setloclist(0, loclist.toRaw())
+        call setloclist(0, loclist.filteredRaw())
     endif
 
     if g:syntastic_auto_jump && loclist.hasErrorsOrWarningsToDisplay()
-        call setloclist(0, loclist.toRaw())
+        call setloclist(0, loclist.filteredRaw())
         silent! ll
     endif
 
@@ -224,8 +224,8 @@ endfunction
 "display the cached errors for this buf in the location list
 function! s:ShowLocList()
     let loclist = s:LocList()
-    if !loclist.isEmpty()
-        call setloclist(0, loclist.toRaw())
+    if loclist.hasErrorsOrWarningsToDisplay()
+        call setloclist(0, loclist.filteredRaw())
         let num = winnr()
         exec "lopen " . g:syntastic_loc_list_height
         if num != winnr()
@@ -254,7 +254,7 @@ function! s:HighlightErrors()
     let fts = substitute(&ft, '-', '_', 'g')
     for ft in split(fts, '\.')
 
-        for item in loclist.toRaw()
+        for item in loclist.filteredRaw()
             let group = item['type'] == 'E' ? 'SyntasticError' : 'SyntasticWarning'
 
             if has_key(item, 'hl')
@@ -287,7 +287,7 @@ function! s:RefreshBalloons()
     let b:syntastic_balloons = {}
     let loclist = s:LocList()
     if loclist.hasErrorsOrWarningsToDisplay()
-        for i in loclist.toRaw()
+        for i in loclist.filteredRaw()
             let b:syntastic_balloons[i['lnum']] = i['text']
         endfor
         set beval bexpr=SyntasticErrorBalloonExpr()
@@ -409,7 +409,7 @@ function! SyntasticStatuslineFlag()
         let output = substitute(output, '\C%t', loclist.length(), 'g')
 
         "first error/warning line num
-        let output = substitute(output, '\C%F', loclist.toRaw()[0]['lnum'], 'g')
+        let output = substitute(output, '\C%F', loclist.filteredRaw()[0]['lnum'], 'g')
 
         "first error line num
         let output = substitute(output, '\C%fe', num_errors ? errors[0]['lnum'] : '', 'g')
