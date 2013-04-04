@@ -19,7 +19,10 @@ function! SyntaxCheckers_vhdl_ghdl_IsAvailable()
 endfunction
 
 function! SyntaxCheckers_vhdl_ghdl_GetLocList()
-    let makeprg = 'ghdl -s '.shellescape(expand('%'))
+    let makeprg = syntastic#makeprg#build({
+                \ 'exe': 'ghdl',
+                \ 'args': '-s',
+                \ 'subchecker': 'ghdl' })
     let errorformat =  '%f:%l:%c: %m'
 
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
