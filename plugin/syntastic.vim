@@ -344,7 +344,7 @@ endfunction
 "the script changes &shellpipe and &shell to stop the screen flicking when
 "shelling out to syntax checkers. Not all OSs support the hacks though
 function! s:OSSupportsShellpipeHack()
-    return !s:running_windows && (s:uname() !~ "FreeBSD") && (s:uname() !~ "OpenBSD")
+    return !s:running_windows && executable('/bin/bash') && (s:uname() !~ "FreeBSD") && (s:uname() !~ "OpenBSD")
 endfunction
 
 function! s:IsRedrawRequiredAfterMake()
