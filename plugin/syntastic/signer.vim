@@ -43,7 +43,7 @@ function! g:SyntasticSigner.New()
 endfunction
 
 function! g:SyntasticSigner.SetUpSignStyles()
-    if g:syntastic_enable_signs
+    if has('signs')
         if !hlexists('SyntasticErrorSign')
             highlight link SyntasticErrorSign error
         endif
