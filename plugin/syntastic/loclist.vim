@@ -120,4 +120,24 @@ function! g:SyntasticLoclist.filter(filters)
     return rv
 endfunction
 
+"display the cached errors for this buf in the location list
+function! g:SyntasticLoclist.show()
+    if self.hasErrorsOrWarningsToDisplay()
+        call setloclist(0, self.filteredRaw())
+        let num = winnr()
+        exec "lopen " . g:syntastic_loc_list_height
+        if num != winnr()
+            wincmd p
+        endif
+    endif
+endfunction
+
+function! g:SyntasticLoclist.Hide()
+    if len(filter( range(1,bufnr('$')), 'buflisted(v:val) && bufloaded(v:val)' )) == 1
+        quit
+    else
+        lclose
+    endif
+endfunction
+
 " vim: set sw=4 sts=4 et fdm=marker:

@@ -55,8 +55,8 @@ endif
 
 let s:registry = g:SyntasticRegistry.Instance()
 let s:notifiers = g:SyntasticNotifiers.New()
+let s:cursor_notifier = g:SyntasticNotifierCursor.New()
 let s:modemap = g:SyntasticModeMap.Instance()
-let s:old_line = -1
 
 function! s:CompleteCheckerName(argLead, cmdLine, cursorPos)
     let checker_names = []
@@ -77,14 +77,14 @@ highlight link SyntasticWarning SpellCap
 
 augroup syntastic
     if g:syntastic_echo_current_error
-        autocmd CursorMoved * call s:EchoCurrentError()
+        autocmd CursorMoved * call s:cursor_notifier.refresh(s:LocList())
     endif
 
     autocmd BufReadPost * if g:syntastic_check_on_open | call s:UpdateErrors(1) | endif
     autocmd BufWritePost * call s:UpdateErrors(1)
 
-    autocmd BufWinEnter * if empty(&bt) | call s:AutoToggleLocList() | endif
-    autocmd BufEnter * if &bt=='quickfix' && !empty(getloclist(0)) && !bufloaded(getloclist(0)[0].bufnr) | call s:HideLocList() | endif
+    autocmd BufWinEnter * if empty(&bt) | call g:SyntasticNotifierAutoloclist.AutoToggle(s:LocList()) | endif
+    autocmd BufEnter * if &bt=='quickfix' && !empty(getloclist(0)) && !bufloaded(getloclist(0)[0].bufnr) | call g:SyntasticLoclist.Hide() | endif
 augroup END
 
 
@@ -113,26 +113,6 @@ function! s:UpdateErrors(auto_invoked, ...)
         call setloclist(0, loclist.filteredRaw())
         silent! ll
     endif
-
-    call s:AutoToggleLocList()
-endfunction
-
-"automatically open/close the location list window depending on the users
-"config and buffer error state
-function! s:AutoToggleLocList()
-    let loclist = s:LocList()
-    if loclist.hasErrorsOrWarningsToDisplay()
-        if g:syntastic_auto_loc_list == 1
-            call s:ShowLocList()
-        endif
-    else
-        if g:syntastic_auto_loc_list > 0
-
-            "TODO: this will close the loc list window if one was opened by
-            "something other than syntastic
-            lclose
-        endif
-    endif
 endfunction
 
 "lazy init the loc list for the current buffer
@@ -146,7 +126,7 @@ endfunction
 "clear the loc list for the buffer
 function! s:ClearCache()
     unlet! b:syntastic_loclist
-    let s:old_line = -1
+    call s:cursor_notifier.resetOldLine()
 endfunction
 
 function! s:CurrentFiletypes()
@@ -199,64 +179,7 @@ endfunction
 "display the cached errors for this buf in the location list
 function! s:ShowLocList()
     let loclist = s:LocList()
-    if loclist.hasErrorsOrWarningsToDisplay()
-        call setloclist(0, loclist.filteredRaw())
-        let num = winnr()
-        exec "lopen " . g:syntastic_loc_list_height
-        if num != winnr()
-            wincmd p
-        endif
-    endif
-endfunction
-
-function! s:HideLocList()
-    if len(filter( range(1,bufnr('$')), 'buflisted(v:val) && bufloaded(v:val)' )) == 1
-        quit
-    else
-        lclose
-    endif
-endfunction
-
-"print as much of a:msg as possible without "Press Enter" prompt appearing
-function! s:WideMsg(msg)
-    let old_ruler = &ruler
-    let old_showcmd = &showcmd
-
-    "convert tabs to spaces so that the tabs count towards the window width
-    "as the proper amount of characters
-    let msg = substitute(a:msg, "\t", repeat(" ", &tabstop), "g")
-    let msg = strpart(msg, 0, winwidth(0)-1)
-
-    "This is here because it is possible for some error messages to begin with
-    "\n which will cause a "press enter" prompt. I have noticed this in the
-    "javascript:jshint checker and have been unable to figure out why it
-    "happens
-    let msg = substitute(msg, "\n", "", "g")
-
-    set noruler noshowcmd
-    redraw
-
-    echo msg
-
-    let &ruler=old_ruler
-    let &showcmd=old_showcmd
-endfunction
-
-"echo out the first error we find for the current line in the cmd window
-function! s:EchoCurrentError()
-    let l = line('.')
-    if l == s:old_line
-        return
-    endif
-    let s:old_line = l
-
-    let loclist = s:LocList()
-    let messages = loclist.messages()
-    if has_key(messages, l)
-        return s:WideMsg(messages[l])
-    else
-        echo
-    endif
+    call loclist.show()
 endfunction
 
 "the script changes &shellpipe and &shell to stop the screen flicking when

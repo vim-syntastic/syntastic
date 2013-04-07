@@ -67,6 +67,30 @@ function syntastic#util#versionIsAtLeast(installed, required)
     return 1
 endfunction
 
+"print as much of a:msg as possible without "Press Enter" prompt appearing
+function! syntastic#util#wideMsg(msg)
+    let old_ruler = &ruler
+    let old_showcmd = &showcmd
+
+    "convert tabs to spaces so that the tabs count towards the window width
+    "as the proper amount of characters
+    let msg = substitute(a:msg, "\t", repeat(" ", &tabstop), "g")
+    let msg = strpart(msg, 0, winwidth(0)-1)
+
+    "This is here because it is possible for some error messages to begin with
+    "\n which will cause a "press enter" prompt. I have noticed this in the
+    "javascript:jshint checker and have been unable to figure out why it
+    "happens
+    let msg = substitute(msg, "\n", "", "g")
+
+    set noruler noshowcmd
+    redraw
+
+    echo msg
+
+    let &ruler=old_ruler
+    let &showcmd=old_showcmd
+endfunction
 
 let &cpo = s:save_cpo
 unlet s:save_cpo

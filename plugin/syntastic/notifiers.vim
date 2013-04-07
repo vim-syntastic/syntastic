@@ -5,7 +5,7 @@ let g:loaded_syntastic_notifiers=1
 
 let g:SyntasticNotifiers = {}
 
-let s:notifier_types = ['signs', 'balloons', 'highlighting']
+let s:notifier_types = ['signs', 'balloons', 'highlighting', 'autoloclist']
 
 " Public methods {{{1
 
