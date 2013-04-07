@@ -21,22 +21,6 @@ runtime! plugin/syntastic/*.vim
 
 let s:running_windows = has("win16") || has("win32")
 
-if !exists("g:syntastic_enable_balloons")
-    let g:syntastic_enable_balloons = 1
-endif
-if !has('balloon_eval')
-    let g:syntastic_enable_balloons = 0
-endif
-
-if !exists("g:syntastic_enable_highlighting")
-    let g:syntastic_enable_highlighting = 1
-endif
-
-" highlighting requires getmatches introduced in 7.1.040
-if v:version < 701 || (v:version == 701 && !has('patch040'))
-    let g:syntastic_enable_highlighting = 0
-endif
-
 if !exists("g:syntastic_echo_current_error")
     let g:syntastic_echo_current_error = 1
 endif
@@ -70,9 +54,9 @@ if !exists("g:syntastic_loc_list_height")
 endif
 
 let s:registry = g:SyntasticRegistry.Instance()
-let s:signer = g:SyntasticSigner.New()
-call s:signer.SetUpSignStyles()
+let s:notifiers = g:SyntasticNotifiers.New()
 let s:modemap = g:SyntasticModeMap.Instance()
+let s:old_line = -1
 
 function! s:CompleteCheckerName(argLead, cmdLine, cursorPos)
     let checker_names = []
@@ -93,7 +77,7 @@ highlight link SyntasticWarning SpellCap
 
 augroup syntastic
     if g:syntastic_echo_current_error
-        autocmd cursormoved * call s:EchoCurrentError()
+        autocmd CursorMoved * call s:EchoCurrentError()
     endif
 
     autocmd BufReadPost * if g:syntastic_check_on_open | call s:UpdateErrors(1) | endif
@@ -118,17 +102,7 @@ function! s:UpdateErrors(auto_invoked, ...)
         endif
     end
 
-    if g:syntastic_enable_balloons
-        call s:RefreshBalloons()
-    endif
-
-    if g:syntastic_enable_signs
-        call s:signer.refreshSigns(s:LocList())
-    endif
-
-    if g:syntastic_enable_highlighting
-        call s:HighlightErrors()
-    endif
+    call s:notifiers.refresh(s:LocList())
 
     let loclist = s:LocList()
     if g:syntastic_always_populate_loc_list && loclist.hasErrorsOrWarningsToDisplay()
@@ -172,6 +146,7 @@ endfunction
 "clear the loc list for the buffer
 function! s:ClearCache()
     unlet! b:syntastic_loclist
+    let s:old_line = -1
 endfunction
 
 function! s:CurrentFiletypes()
@@ -242,58 +217,6 @@ function! s:HideLocList()
     endif
 endfunction
 
-"highlight the current errors using matchadd()
-"
-"The function `Syntastic_{filetype}_{checker}_GetHighlightRegex` is used
-"to override default highlighting.  This function must take one arg (an
-"error item) and return a regex to match that item in the buffer.
-function! s:HighlightErrors()
-    call s:ClearErrorHighlights()
-    let loclist = s:LocList()
-
-    let fts = substitute(&ft, '-', '_', 'g')
-    for ft in split(fts, '\.')
-
-        for item in loclist.filteredRaw()
-            let group = item['type'] == 'E' ? 'SyntasticError' : 'SyntasticWarning'
-
-            if has_key(item, 'hl')
-                call matchadd(group, '\%' . item['lnum'] . 'l' . item['hl'])
-            elseif get(item, 'col')
-                let lastcol = col([item['lnum'], '$'])
-                let lcol = min([lastcol, item['col']])
-
-                "a bug in vim can sometimes cause there to be no 'vcol' key,
-                "so check for its existence
-                let coltype = has_key(item, 'vcol') && item['vcol'] ? 'v' : 'c'
-
-                call matchadd(group, '\%' . item['lnum'] . 'l\%' . lcol . coltype)
-            endif
-        endfor
-    endfor
-endfunction
-
-"remove all error highlights from the window
-function! s:ClearErrorHighlights()
-    for match in getmatches()
-        if stridx(match['group'], 'Syntastic') == 0
-            call matchdelete(match['id'])
-        endif
-    endfor
-endfunction
-
-"set up error ballons for the current set of errors
-function! s:RefreshBalloons()
-    let b:syntastic_balloons = {}
-    let loclist = s:LocList()
-    if loclist.hasErrorsOrWarningsToDisplay()
-        for i in loclist.filteredRaw()
-            let b:syntastic_balloons[i['lnum']] = i['text']
-        endfor
-        set beval bexpr=SyntasticErrorBalloonExpr()
-    endif
-endfunction
-
 "print as much of a:msg as possible without "Press Enter" prompt appearing
 function! s:WideMsg(msg)
     let old_ruler = &ruler
@@ -321,23 +244,18 @@ endfunction
 
 "echo out the first error we find for the current line in the cmd window
 function! s:EchoCurrentError()
+    let l = line('.')
+    if l == s:old_line
+        return
+    endif
+    let s:old_line = l
+
     let loclist = s:LocList()
-    "If we have an error or warning at the current line, show it
-    let errors = loclist.filter({'lnum': line("."), "type": 'e'})
-    let warnings = loclist.filter({'lnum': line("."), "type": 'w'})
-
-    let b:syntastic_echoing_error = len(errors) || len(warnings)
-    if len(errors)
-        return s:WideMsg(errors[0]['text'])
-    endif
-    if len(warnings)
-        return s:WideMsg(warnings[0]['text'])
-    endif
-
-    "Otherwise, clear the status line
-    if b:syntastic_echoing_error
+    let messages = loclist.messages()
+    if has_key(messages, l)
+        return s:WideMsg(messages[l])
+    else
         echo
-        let b:syntastic_echoing_error = 0
     endif
 endfunction
 
@@ -482,14 +400,6 @@ function! SyntasticMake(options)
     endif
 
     return errors
-endfunction
-
-"get the error balloon for the current mouse position
-function! SyntasticErrorBalloonExpr()
-    if !exists('b:syntastic_balloons')
-        return ''
-    endif
-    return get(b:syntastic_balloons, v:beval_lnum, '')
 endfunction
 
 "take a list of errors and add default values to them from a:options
