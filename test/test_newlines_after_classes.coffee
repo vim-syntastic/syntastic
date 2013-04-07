@@ -28,9 +28,11 @@ vows.describe('newlines_after_classes').addBatch({
                     level: 'ignore'
                     value: 4
             errors = coffeelint.lint(source, config)
+            console.log errors
             assert.equal(errors.length, 0)
             
     
+    ###
     'Class with arbitrary Code following' :
             
         topic : () ->
@@ -103,5 +105,6 @@ vows.describe('newlines_after_classes').addBatch({
                     value: 4
             errors = coffeelint.lint(source, config)
             assert.equal(errors.length, 0)
+      ###
     
 }).export(module)
