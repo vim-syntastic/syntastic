@@ -11,6 +11,10 @@ let g:loaded_syntastic_notifier_autoloclist=1
 "than just on or off
 let g:syntastic_enable_autoloclist=1
 
+if !exists("g:syntastic_auto_loc_list")
+    let g:syntastic_auto_loc_list = 2
+endif
+
 let g:SyntasticNotifierAutoloclist = {}
 
 " Public methods {{{1

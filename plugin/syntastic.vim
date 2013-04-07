@@ -21,14 +21,6 @@ runtime! plugin/syntastic/*.vim
 
 let s:running_windows = has("win16") || has("win32")
 
-if !exists("g:syntastic_echo_current_error")
-    let g:syntastic_echo_current_error = 1
-endif
-
-if !exists("g:syntastic_auto_loc_list")
-    let g:syntastic_auto_loc_list = 2
-endif
-
 if !exists("g:syntastic_always_populate_loc_list")
     let g:syntastic_always_populate_loc_list = 0
 endif

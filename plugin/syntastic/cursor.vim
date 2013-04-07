@@ -3,6 +3,10 @@ if exists("g:loaded_syntastic_notifier_cursor")
 endif
 let g:loaded_syntastic_notifier_cursor=1
 
+if !exists("g:syntastic_echo_current_error")
+    let g:syntastic_echo_current_error = 1
+endif
+
 let g:SyntasticNotifierCursor = {}
 
 " Public methods {{{1
