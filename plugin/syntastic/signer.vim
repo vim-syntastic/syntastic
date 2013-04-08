@@ -51,6 +51,10 @@ function! g:SyntasticNotifierSigns.New()
     return newObj
 endfunction
 
+function! g:SyntasticNotifierSigns.enabled()
+    return exists('b:syntastic_enable_signs') ? b:syntastic_enable_signs : g:syntastic_enable_signs
+endfunction
+
 " Update the error signs
 function! g:SyntasticNotifierSigns.refresh(loclist)
     let old_signs = copy(self._bufSignIds())

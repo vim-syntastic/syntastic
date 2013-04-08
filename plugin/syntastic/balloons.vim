@@ -20,6 +20,10 @@ function! g:SyntasticNotifierBalloons.New()
     return newObj
 endfunction
 
+function! g:SyntasticNotifierBalloons.enabled()
+    return exists('b:syntastic_enable_balloons') ? b:syntastic_enable_balloons : g:syntastic_enable_balloons
+endfunction
+
 " Update the error balloons
 function! g:SyntasticNotifierBalloons.refresh(loclist)
     let b:syntastic_balloons = {}

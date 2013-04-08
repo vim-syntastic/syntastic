@@ -5,7 +5,7 @@ let g:loaded_syntastic_notifiers=1
 
 let g:SyntasticNotifiers = {}
 
-let s:notifier_types = ['signs', 'balloons', 'highlighting', 'autoloclist']
+let s:notifier_types = ['signs', 'balloons', 'highlighting', 'cursor', 'autoloclist']
 
 " Public methods {{{1
 
@@ -25,8 +25,17 @@ endfunction
 
 function! g:SyntasticNotifiers.refresh(loclist)
     for type in self._enabled_types
-        if ( exists('b:syntastic_enable_'.type) ? b:syntastic_enable_{type} : g:syntastic_enable_{type} )
+        if self._notifier[type].enabled()
             call self._notifier[type].refresh(a:loclist)
+        endif
+    endfor
+endfunction
+
+function! g:SyntasticNotifiers.reset(loclist)
+    for type in self._enabled_types
+        let class = substitute(type, '.*', 'SyntasticNotifier\u&', '')
+        if has_key(g:{class}, 'reset')
+            call self._notifier[type].reset(a:loclist)
         endif
     endfor
 endfunction

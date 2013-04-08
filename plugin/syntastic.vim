@@ -47,7 +47,6 @@ endif
 
 let s:registry = g:SyntasticRegistry.Instance()
 let s:notifiers = g:SyntasticNotifiers.New()
-let s:cursor_notifier = g:SyntasticNotifierCursor.New()
 let s:modemap = g:SyntasticModeMap.Instance()
 
 function! s:CompleteCheckerName(argLead, cmdLine, cursorPos)
@@ -68,10 +67,6 @@ highlight link SyntasticError SpellBad
 highlight link SyntasticWarning SpellCap
 
 augroup syntastic
-    if g:syntastic_echo_current_error
-        autocmd CursorMoved * call s:cursor_notifier.refresh(s:LocList())
-    endif
-
     autocmd BufReadPost * if g:syntastic_check_on_open | call s:UpdateErrors(1) | endif
     autocmd BufWritePost * call s:UpdateErrors(1)
 
@@ -117,8 +112,8 @@ endfunction
 
 "clear the loc list for the buffer
 function! s:ClearCache()
+    call s:notifiers.reset(s:LocList())
     unlet! b:syntastic_loclist
-    call s:cursor_notifier.resetOldLine()
 endfunction
 
 function! s:CurrentFiletypes()

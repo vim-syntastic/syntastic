@@ -3,14 +3,6 @@ if exists("g:loaded_syntastic_notifier_autoloclist")
 endif
 let g:loaded_syntastic_notifier_autoloclist=1
 
-"TODO: this var is a hack required for the Notifiers class. This is complicated
-"because this notification type doesnt use the same option naming convention
-"that Notifiers assumes
-"
-"i.e. it uses g:syntastic_auto_loc_list which has 3 possible values rather
-"than just on or off
-let g:syntastic_enable_autoloclist=1
-
 if !exists("g:syntastic_auto_loc_list")
     let g:syntastic_auto_loc_list = 2
 endif
@@ -22,6 +14,10 @@ let g:SyntasticNotifierAutoloclist = {}
 function! g:SyntasticNotifierAutoloclist.New()
     let newObj = copy(self)
     return newObj
+endfunction
+
+function! g:SyntasticNotifierAutoloclist.enabled()
+    return 1        " always enabled
 endfunction
 
 function! g:SyntasticNotifierAutoloclist.refresh(loclist)
@@ -42,3 +38,5 @@ function! g:SyntasticNotifierAutoloclist.AutoToggle(loclist)
         endif
     endif
 endfunction
+
+" vim: set sw=4 sts=4 et fdm=marker:
