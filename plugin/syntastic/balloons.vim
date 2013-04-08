@@ -1,7 +1,7 @@
 if exists("g:loaded_syntastic_notifier_balloons")
     finish
 endif
-let g:loaded_syntastic_notifier_balloons=1
+let g:loaded_syntastic_notifier_balloons = 1
 
 if !exists("g:syntastic_enable_balloons")
     let g:syntastic_enable_balloons = 1
@@ -11,21 +11,21 @@ if !has('balloon_eval')
     let g:syntastic_enable_balloons = 0
 endif
 
-let g:SyntasticNotifierBalloons = {}
+let g:SyntasticBalloonsNotifier = {}
 
 " Public methods {{{1
 
-function! g:SyntasticNotifierBalloons.New()
+function! g:SyntasticBalloonsNotifier.New()
     let newObj = copy(self)
     return newObj
 endfunction
 
-function! g:SyntasticNotifierBalloons.enabled()
+function! g:SyntasticBalloonsNotifier.enabled()
     return exists('b:syntastic_enable_balloons') ? b:syntastic_enable_balloons : g:syntastic_enable_balloons
 endfunction
 
 " Update the error balloons
-function! g:SyntasticNotifierBalloons.refresh(loclist)
+function! g:SyntasticBalloonsNotifier.refresh(loclist)
     let b:syntastic_balloons = {}
     if a:loclist.hasErrorsOrWarningsToDisplay()
         for i in a:loclist.filteredRaw()
@@ -35,13 +35,13 @@ function! g:SyntasticNotifierBalloons.refresh(loclist)
                 let b:syntastic_balloons[i['lnum']] = i['text']
             endif
         endfor
-        set beval bexpr=SyntasticNotifierBalloonsExpr()
+        set beval bexpr=SyntasticBalloonsExprNotifier()
     endif
 endfunction
 
 " Private functions {{{1
 
-function! SyntasticNotifierBalloonsExpr()
+function! SyntasticBalloonsExprNotifier()
     if !exists('b:syntastic_balloons')
         return ''
     endif

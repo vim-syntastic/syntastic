@@ -1,7 +1,7 @@
 if exists("g:loaded_syntastic_notifiers")
     finish
 endif
-let g:loaded_syntastic_notifiers=1
+let g:loaded_syntastic_notifiers = 1
 
 let g:SyntasticNotifiers = {}
 
@@ -14,7 +14,7 @@ function! g:SyntasticNotifiers.New()
 
     let newObj._notifier = {}
     for type in s:notifier_types
-        let class = substitute(type, '.*', 'SyntasticNotifier\u&', '')
+        let class = substitute(type, '.*', 'Syntastic\u&Notifier', '')
         let newObj._notifier[type] = g:{class}.New()
     endfor
 
@@ -33,7 +33,7 @@ endfunction
 
 function! g:SyntasticNotifiers.reset(loclist)
     for type in self._enabled_types
-        let class = substitute(type, '.*', 'SyntasticNotifier\u&', '')
+        let class = substitute(type, '.*', 'Syntastic\u&Notifier', '')
         if has_key(g:{class}, 'reset')
             call self._notifier[type].reset(a:loclist)
         endif

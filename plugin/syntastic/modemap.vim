@@ -1,7 +1,7 @@
 if exists("g:loaded_syntastic_modemap")
     finish
 endif
-let g:loaded_syntastic_modemap=1
+let g:loaded_syntastic_modemap = 1
 
 let g:SyntasticModeMap = {}
 

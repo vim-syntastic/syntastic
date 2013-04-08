@@ -70,7 +70,7 @@ augroup syntastic
     autocmd BufReadPost * if g:syntastic_check_on_open | call s:UpdateErrors(1) | endif
     autocmd BufWritePost * call s:UpdateErrors(1)
 
-    autocmd BufWinEnter * if empty(&bt) | call g:SyntasticNotifierAutoloclist.AutoToggle(s:LocList()) | endif
+    autocmd BufWinEnter * if empty(&bt) | call g:SyntasticAutoloclistNotifier.AutoToggle(s:LocList()) | endif
     autocmd BufEnter * if &bt=='quickfix' && !empty(getloclist(0)) && !bufloaded(getloclist(0)[0].bufnr) | call g:SyntasticLoclist.Hide() | endif
 augroup END
 

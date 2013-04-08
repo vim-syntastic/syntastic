@@ -1,36 +1,36 @@
 if exists("g:loaded_syntastic_notifier_cursor")
     finish
 endif
-let g:loaded_syntastic_notifier_cursor=1
+let g:loaded_syntastic_notifier_cursor = 1
 
 if !exists('g:syntastic_echo_current_error')
     let g:syntastic_echo_current_error = 1
 endif
 
-let g:SyntasticNotifierCursor = {}
+let g:SyntasticCursorNotifier = {}
 
 " Public methods {{{1
 
-function! g:SyntasticNotifierCursor.New()
+function! g:SyntasticCursorNotifier.New()
     let newObj = copy(self)
     let b:oldLine = -1
     return newObj
 endfunction
 
-function! g:SyntasticNotifierCursor.enabled()
-    return exists('b:syntastic_echo_current_error') ? b:syntastic_echo_current_error : g:syntastic_echo_current_error
+function! g:SyntasticCursorNotifier.enabled()
+    return 1
 endfunction
 
-function! g:SyntasticNotifierCursor.refresh(loclist)
-    if g:syntastic_echo_current_error
+function! g:SyntasticCursorNotifier.refresh(loclist)
+    autocmd! syntastic CursorMoved
+    let enabled = exists('b:syntastic_echo_current_error') ? b:syntastic_echo_current_error : g:syntastic_echo_current_error
+    if enabled && a:loclist.hasErrorsOrWarningsToDisplay()
         let b:syntastic_messages = copy(a:loclist.messages())
         autocmd syntastic CursorMoved * call g:SyntasticRefreshCursor()
-    else
-        autocmd! syntastic CursorMoved
     endif
 endfunction
 
-function! g:SyntasticNotifierCursor.reset(loclist)
+function! g:SyntasticCursorNotifier.reset(loclist)
     let b:oldLine = -1
 endfunction
 
@@ -38,7 +38,7 @@ endfunction
 
 " The following defensive nonsense is needed because of the nature of autocmd
 function! g:SyntasticRefreshCursor()
-    if exists('b:syntastic_messages')
+    if !exists('b:syntastic_messages')
         " file not checked
         return
     endif

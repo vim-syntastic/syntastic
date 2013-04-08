@@ -1,30 +1,30 @@
 if exists("g:loaded_syntastic_notifier_autoloclist")
     finish
 endif
-let g:loaded_syntastic_notifier_autoloclist=1
+let g:loaded_syntastic_notifier_autoloclist = 1
 
 if !exists("g:syntastic_auto_loc_list")
     let g:syntastic_auto_loc_list = 2
 endif
 
-let g:SyntasticNotifierAutoloclist = {}
+let g:SyntasticAutoloclistNotifier = {}
 
 " Public methods {{{1
 "
-function! g:SyntasticNotifierAutoloclist.New()
+function! g:SyntasticAutoloclistNotifier.New()
     let newObj = copy(self)
     return newObj
 endfunction
 
-function! g:SyntasticNotifierAutoloclist.enabled()
-    return 1        " always enabled
+function! g:SyntasticAutoloclistNotifier.enabled()
+    return 1
 endfunction
 
-function! g:SyntasticNotifierAutoloclist.refresh(loclist)
-    call g:SyntasticNotifierAutoloclist.AutoToggle(a:loclist)
+function! g:SyntasticAutoloclistNotifier.refresh(loclist)
+    call g:SyntasticAutoloclistNotifier.AutoToggle(a:loclist)
 endfunction
 
-function! g:SyntasticNotifierAutoloclist.AutoToggle(loclist)
+function! g:SyntasticAutoloclistNotifier.AutoToggle(loclist)
     if a:loclist.hasErrorsOrWarningsToDisplay()
         if g:syntastic_auto_loc_list == 1
             call a:loclist.show()

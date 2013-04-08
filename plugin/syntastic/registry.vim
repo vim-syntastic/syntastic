@@ -1,7 +1,7 @@
 if exists("g:loaded_syntastic_registry")
     finish
 endif
-let g:loaded_syntastic_registry=1
+let g:loaded_syntastic_registry = 1
 
 let s:defaultCheckers = {
         \ 'c': ['gcc'],

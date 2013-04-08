@@ -12,23 +12,23 @@ if v:version < 701 || (v:version == 701 && !has('patch040'))
     let g:syntastic_enable_highlighting = 0
 endif
 
-let g:SyntasticNotifierHighlighting = {}
+let g:SyntasticHighlightingNotifier = {}
 
 " Public methods {{{1
 
-function! g:SyntasticNotifierHighlighting.New()
+function! g:SyntasticHighlightingNotifier.New()
     let newObj = copy(self)
     return newObj
 endfunction
 
-function! g:SyntasticNotifierHighlighting.enabled()
+function! g:SyntasticHighlightingNotifier.enabled()
     return exists('b:syntastic_enable_highlighting') ? b:syntastic_enable_highlighting : g:syntastic_enable_highlighting
 endfunction
 
 " The function `Syntastic_{filetype}_{checker}_GetHighlightRegex` is used
 " to override default highlighting.  This function must take one arg (an
 " error item) and return a regex to match that item in the buffer.
-function! g:SyntasticNotifierHighlighting.refresh(loclist)
+function! g:SyntasticHighlightingNotifier.refresh(loclist)
     let fts = substitute(&ft, '-', '_', 'g')
     for ft in split(fts, '\.')
 
@@ -52,7 +52,7 @@ function! g:SyntasticNotifierHighlighting.refresh(loclist)
 endfunction
 
 " Remove all error highlights from the window
-function! g:SyntasticNotifierHighlighting.reset(loclist)
+function! g:SyntasticHighlightingNotifier.reset(loclist)
     for match in getmatches()
         if stridx(match['group'], 'Syntastic') == 0
             call matchdelete(match['id'])
