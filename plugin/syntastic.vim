@@ -70,7 +70,7 @@ augroup syntastic
     autocmd BufReadPost * if g:syntastic_check_on_open | call s:UpdateErrors(1) | endif
     autocmd BufWritePost * call s:UpdateErrors(1)
 
-    autocmd BufWinEnter * if empty(&bt) | call g:SyntasticAutoloclistNotifier.AutoToggle(s:LocList()) | endif
+    autocmd BufWinEnter * if empty(&bt) | call g:SyntasticAutoloclistNotifier.AutoToggle(g:SyntasticLoclist.Current()) | endif
     autocmd BufEnter * if &bt=='quickfix' && !empty(getloclist(0)) && !bufloaded(getloclist(0)[0].bufnr) | call g:SyntasticLoclist.Hide() | endif
 augroup END
 
@@ -89,9 +89,9 @@ function! s:UpdateErrors(auto_invoked, ...)
         endif
     end
 
-    call s:notifiers.refresh(s:LocList())
+    call s:notifiers.refresh(g:SyntasticLoclist.Current())
 
-    let loclist = s:LocList()
+    let loclist = g:SyntasticLoclist.Current()
     if g:syntastic_always_populate_loc_list && loclist.hasErrorsOrWarningsToDisplay()
         call setloclist(0, loclist.filteredRaw())
     endif
@@ -102,17 +102,9 @@ function! s:UpdateErrors(auto_invoked, ...)
     endif
 endfunction
 
-"lazy init the loc list for the current buffer
-function! s:LocList()
-    if !exists("b:syntastic_loclist")
-        let b:syntastic_loclist = g:SyntasticLoclist.New([])
-    endif
-    return b:syntastic_loclist
-endfunction
-
 "clear the loc list for the buffer
 function! s:ClearCache()
-    call s:notifiers.reset(s:LocList())
+    call s:notifiers.reset(g:SyntasticLoclist.Current())
     unlet! b:syntastic_loclist
 endfunction
 
@@ -165,7 +157,7 @@ endfunction
 
 "display the cached errors for this buf in the location list
 function! s:ShowLocList()
-    let loclist = s:LocList()
+    let loclist = g:SyntasticLoclist.Current()
     call loclist.show()
 endfunction
 
@@ -211,7 +203,7 @@ endfunction
 "
 "return '' if no errors are cached for the buffer
 function! SyntasticStatuslineFlag()
-    let loclist = s:LocList()
+    let loclist = g:SyntasticLoclist.Current()
     if loclist.hasErrorsOrWarningsToDisplay()
         let errors = loclist.errors()
         let warnings = loclist.warnings()

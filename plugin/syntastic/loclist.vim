@@ -26,6 +26,13 @@ function! g:SyntasticLoclist.New(rawLoclist)
     return newObj
 endfunction
 
+function! g:SyntasticLoclist.Current()
+    if !exists("b:syntastic_loclist")
+        let b:syntastic_loclist = g:SyntasticLoclist.New([])
+    endif
+    return b:syntastic_loclist
+endfunction
+
 function! g:SyntasticLoclist.extend(other)
     let list = self.toRaw()
     call extend(list, a:other.toRaw())
