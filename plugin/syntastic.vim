@@ -71,9 +71,21 @@ augroup syntastic
     autocmd BufWritePost * call s:UpdateErrors(1)
 
     autocmd BufWinEnter * if empty(&bt) | call g:SyntasticAutoloclistNotifier.AutoToggle(g:SyntasticLoclist.Current()) | endif
-    autocmd BufEnter * if &bt=='quickfix' && !empty(getloclist(0)) && !bufloaded(getloclist(0)[0].bufnr) | call g:SyntasticLoclist.Hide() | endif
+
+    " TODO: the next autocmd should be "autocmd BufWinLeave * if empty(&bt) | lclose | endif"
+    " but in recent versions of Vim lclose can no longer be called from BufWinLeave
+    autocmd BufEnter * call s:BufWinLeaveCleanup()
 augroup END
 
+
+function! s:BufWinLeaveCleanup()
+    " TODO: at this point there is no b:syntastic_loclist
+    let loclist = filter(getloclist(0), 'v:val["valid"] == 1')
+    let buffers = syntastic#util#unique(map( loclist, 'v:val["bufnr"]' ))
+    if &bt=='quickfix' && !empty(loclist) && empty(filter( buffers, 'syntastic#util#bufIsActive(v:val)' ))
+        call g:SyntasticLoclistHide()
+    endif
+endfunction
 
 "refresh and redraw all the error info for this buf when saving or reading
 function! s:UpdateErrors(auto_invoked, ...)
