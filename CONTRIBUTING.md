@@ -6,6 +6,8 @@
 
 Small focused patches are preferred.
 
+Large changes to the code should be discussed with the core team first. Create an issue and explain your plan and see what we say.
+
 # General style notes
 
 Following the coding conventions/styles used in the syntastic core:
