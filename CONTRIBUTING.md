@@ -22,14 +22,14 @@ Following the coding conventions/styles used in the syntastic core:
 The preferred style for error format strings is one "clause" per line. E.g.
 (from the coffeelint checker):
 
-    let errorformat = '%E%f:%l:%c: %trror: %m,' .
-                \ 'Syntax%trror: In %f\, %m on line %l,' .
-                \ '%EError: In %f\, Parse error on line %l: %m,' .
-                \ '%EError: In %f\, %m on line %l,' .
-                \ '%W%f(%l): lint warning: %m,' .
-                \ '%W%f(%l): warning: %m,' .
-                \ '%E%f(%l): SyntaxError: %m,' .
-                \ '%-Z%p^,' .
-                \ '%-G%.%#'
-
-
+```viml
+let errorformat = '%E%f:%l:%c: %trror: %m,' .
+            \ 'Syntax%trror: In %f\, %m on line %l,' .
+            \ '%EError: In %f\, Parse error on line %l: %m,' .
+            \ '%EError: In %f\, %m on line %l,' .
+            \ '%W%f(%l): lint warning: %m,' .
+            \ '%W%f(%l): warning: %m,' .
+            \ '%E%f(%l): SyntaxError: %m,' .
+            \ '%-Z%p^,' .
+            \ '%-G%.%#'
+```
