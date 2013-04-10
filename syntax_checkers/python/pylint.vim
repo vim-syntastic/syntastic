@@ -18,7 +18,11 @@ function! SyntaxCheckers_python_pylint_GetLocList()
                 \ 'exe': 'pylint',
                 \ 'args': ' -f parseable -r n -i y',
                 \ 'subchecker': 'pylint' })
-    let errorformat = '%f:%l:%m,%Z,%-GNo config %m'
+    let errorformat =
+                \ '%A%f:%l:%m,' .
+                \ '%A%f:(%l):%m,' .
+                \ '%-Z%p^%.%#,' .
+                \ '%-G%.%#'
 
     let loclist=SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 
