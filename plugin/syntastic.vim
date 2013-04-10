@@ -101,16 +101,14 @@ function! s:UpdateErrors(auto_invoked, ...)
         endif
     end
 
-    call s:notifiers.refresh(g:SyntasticLoclist.Current())
-
     let loclist = g:SyntasticLoclist.Current()
-    if g:syntastic_always_populate_loc_list && loclist.hasErrorsOrWarningsToDisplay()
-        call setloclist(0, loclist.filteredRaw())
-    endif
+    call s:notifiers.refresh(loclist)
 
-    if g:syntastic_auto_jump && loclist.hasErrorsOrWarningsToDisplay()
+    if (g:syntastic_always_populate_loc_list || g:syntastic_auto_jump) && loclist.hasErrorsOrWarningsToDisplay()
         call setloclist(0, loclist.filteredRaw())
-        silent! ll
+        if g:syntastic_auto_jump
+            silent! ll
+        endif
     endif
 endfunction
 

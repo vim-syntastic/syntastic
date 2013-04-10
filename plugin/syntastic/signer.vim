@@ -103,24 +103,18 @@ function! g:SyntasticSignsNotifier._signErrors(loclist)
     let loclist = a:loclist
     if loclist.hasErrorsOrWarningsToDisplay()
 
-        let lfilter = {'bufnr': bufnr('')}
-        if g:syntastic_quiet_warnings
-            let lfilter['type'] = 'E'
-        endif
-        let errors = loclist.filter(lfilter)
+        let buf = bufnr('')
+        let errors = loclist.quietWarnings() ? [] : loclist.warnings()
+        call extend(errors, loclist.errors())
+        call filter(errors, 'v:val["bufnr"] == buf')
+
         for i in errors
-            let sign_severity = 'Error'
-            let sign_subtype = ''
-            if has_key(i,'subtype')
-                let sign_subtype = i['subtype']
-            endif
-            if i['type'] ==? 'w'
-                let sign_severity = 'Warning'
-            endif
+            let sign_severity = i['type'] ==? 'w' ? 'Warning' : 'Error'
+            let sign_subtype = has_key(i,'subtype') ? i['subtype'] : ''
             let sign_type = 'Syntastic' . sign_subtype . sign_severity
 
             if !self._warningMasksError(i, errors)
-                exec "sign place ". s:next_sign_id ." line=". i['lnum'] ." name=". sign_type ." file=". expand("%:p")
+                exec "sign place " . s:next_sign_id . " line=" . i['lnum'] . " name=" . sign_type . " buffer=" . i['bufnr']
                 call add(self._bufSignIds(), s:next_sign_id)
                 let s:next_sign_id += 1
             endif

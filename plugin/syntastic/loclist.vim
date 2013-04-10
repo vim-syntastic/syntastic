@@ -47,6 +47,10 @@ function! g:SyntasticLoclist.filteredRaw()
     return copy(self._quietWarnings ? self.errors() : self._rawLoclist)
 endfunction
 
+function! g:SyntasticLoclist.quietWarnings()
+    return self._quietWarnings
+endfunction
+
 function! g:SyntasticLoclist.isEmpty()
     return empty(self._rawLoclist)
 endfunction

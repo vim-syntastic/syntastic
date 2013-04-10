@@ -31,6 +31,7 @@ function! g:SyntasticCursorNotifier.refresh(loclist)
 endfunction
 
 function! g:SyntasticCursorNotifier.reset(loclist)
+    unlet b:syntastic_messages
     let b:oldLine = -1
 endfunction
 
