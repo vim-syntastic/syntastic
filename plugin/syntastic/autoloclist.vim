@@ -16,10 +16,6 @@ function! g:SyntasticAutoloclistNotifier.New()
     return newObj
 endfunction
 
-function! g:SyntasticAutoloclistNotifier.enabled()
-    return 1
-endfunction
-
 function! g:SyntasticAutoloclistNotifier.refresh(loclist)
     call g:SyntasticAutoloclistNotifier.AutoToggle(a:loclist)
 endfunction
