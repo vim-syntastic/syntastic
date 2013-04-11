@@ -17,9 +17,9 @@ let g:loaded_syntastic_sh_sh_checker=1
 
 function! s:GetShell()
     if !exists('b:shell') || b:shell == ""
-        let shebang = getbufline(bufnr('%'), 1)[0]
         let b:shell = ''
-        if match(shebang, '^#!') >= 0
+        let shebang = getbufline(bufnr('%'), 1)[0]
+        if len(shebang) > 0
             if match(shebang, 'bash') >= 0
                 let b:shell = 'bash'
             elseif match(shebang, 'zsh') >= 0
@@ -43,10 +43,25 @@ function! s:ForwardToZshChecker()
         return []
     endif
 
-    let makeprg = b:shell . ' -n ' . shellescape(expand('%'))
-    let errorformat = '%f: line %l: %m'
-    if b:shell == 'zsh'
-        let errorformat = '%f:%l: %m'
+endfunction
+
+
+function! s:IsShellValid()
+    return len(s:GetShell()) > 0 && executable(s:GetShell())
+endfunction
+
+
+function! SyntaxCheckers_sh_sh_IsAvailable()
+    return s:IsShellValid()
+endfunction
+
+function! SyntaxCheckers_sh_sh_GetLocList()
+    if s:GetShell() == 'zsh'
+        return s:ForwardToZshChecker()
+    endif
+
+    if !s:IsShellValid()
+        return []
     endif
 
     let makeprg = syntastic#makeprg#build({
