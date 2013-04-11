@@ -10,19 +10,35 @@
 "
 "Tested with jslint 0.1.4.
 "============================================================================
+if exists("g:loaded_syntastic_javascript_jslint_checker")
+    finish
+endif
+let g:loaded_syntastic_javascript_jslint_checker=1
+
 if !exists("g:syntastic_javascript_jslint_conf")
     let g:syntastic_javascript_jslint_conf = "--white --undef --nomen --regexp --plusplus --bitwise --newcap --sloppy --vars"
 endif
 
-function! SyntaxCheckers_javascript_HighlightTerm(error)
+function! SyntaxCheckers_javascript_jslint_IsAvailable()
+    return executable('jslint')
+endfunction
+
+function! SyntaxCheckers_javascript_jslint_HighlightTerm(error)
     let unexpected = matchstr(a:error['text'], 'Expected.*and instead saw \'\zs.*\ze\'')
     if len(unexpected) < 1 | return '' | end
     return '\V'.split(unexpected, "'")[1]
 endfunction
 
-function! SyntaxCheckers_javascript_GetLocList()
-    let makeprg = "jslint " . g:syntastic_javascript_jslint_conf . " " . shellescape(expand('%'))
+function! SyntaxCheckers_javascript_jslint_GetLocList()
+    let makeprg = syntastic#makeprg#build({
+                \ 'exe': 'jslint',
+                \ 'args': g:syntastic_javascript_jslint_conf,
+                \ 'subchecker': 'jslint' })
     let errorformat='%E %##%n %m,%-Z%.%#Line %l\, Pos %c,%-G%.%#'
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat, 'defaults': {'bufnr': bufnr("")} })
 endfunction
+
+call g:SyntasticRegistry.CreateAndRegisterChecker({
+    \ 'filetype': 'javascript',
+    \ 'name': 'jslint'})
 

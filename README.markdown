@@ -2,7 +2,7 @@
                   / \,,_  .'|
                ,{{| /}}}}/_.'            _____________________________________________
               }}}}` '{{'  '.            /                                             \
-            {{{{{    _   ;, \          /                Gentlemen,                     \
+            {{{{{    _   ;, \          /            Ladies and Gentlemen,              \
          ,}}}}}}    /o`\  ` ;)        |                                                |
         {{{{{{   /           (        |                 this is ...                    |
         }}}}}}   |            \       |                                                |
@@ -105,56 +105,52 @@ A. The most likely reason is that the syntax checker that it requires isn't inst
 
 Another reason it could fail is that the error output for the syntax checker may have changed. In this case, make sure you have the latest version of the syntax checker installed. If it still fails then create an issue - or better yet, create a pull request.
 
+__Q. Recently some of my syntax checker options have stopped working...__
+
+A. The options are still there, they have just been renamed. Recently, almost all syntax checkers were refactored to use the new `syntastic#makeprg#build()` function. This made a lot of the old explicit options redundant - as they are now implied. The new implied options usually have slightly different names to the old options.
+
+e.g. Previously there was `g:syntastic_phpcs_conf`, now you must use `g:syntastic_php_phpcs_args`.
+
+See `:help syntastic-checker-options` for more information.
+
+__Q. How can I pass additional arguments to a checker?__
+
+A. Almost all syntax checkers use the `syntastic#makeprg#build()` function. Those checkers that do can be configured using global variables. The general form of the global args variables are:
+
+`syntastic_[filetype]_[subchecker]_args`
+
+So, If you wanted to pass "--my --args --here" to the ruby mri checker you would add this line to your vimrc:
+
+`let g:syntastic_ruby_mri_args="--my --args --here"`
+
+See `:help syntastic-checker-options` for more information.
+
+__Q. Syntastic supports several checkers for my filetype - how do I tell it which one(s) to use?__
+
+A. Stick a line like this in your vimrc:
+
+`let g:syntastic_<filetype>_checkers=['<checker-name>']`
+
+To see the list of checkers for your filetype, look in `syntax_checkers/<filetype>/`.
+
+e.g. Python has the following checkers: `flake8`, `pyflakes`, `pylint` and a native `python` checker.
+
+To tell syntastic to use `pylint`, you would use this setting:
+
+`let g:syntastic_python_checkers=['pylint']`
+
+Some filetypes, like PHP, have style checkers as well as syntax checkers. These can be chained together like this:
+
+`let g:syntastic_php_checkers=['php', 'phpcs', 'phpmd']`
+
+This is telling syntastic to run the `php` checker first, and if no errors are found, run `phpcs`, and then `phpmd`.
+
 __Q. How can I jump between the different errors without using the location list at the bottom of the window?__
 
 A. Vim provides several built in commands for this. See `:help :lnext` and `:help :lprev`.
 
 If you use these commands a lot then you may want to add shortcut mappings to your vimrc, or install something like [unimpaired](https://github.com/tpope/vim-unimpaired) - which provides such mappings (among other things).
 
-Changelog
----------
-2.3.0 (16-feb-2012)
+__Q. A syntax checker is giving me unwanted/strange style tips??__
 
-  * Add syntastic_loc_list_height option
-  * Allow errors to have a "subtype" that is signed differently to standard
-    errors. Currently geared towards differentiating style errors from
-    syntax errors. Currently implemented for phpcs (technosophos).
-  * New checkers for:
-    * yaml
-    * haxe (davidB)
-    * ocaml (edwintorok)
-    * pylint (parantapa)
-    * rust (cjab)
-  * Updates to existing checkers:
-    * jslint
-    * jshint (gillesruppert)
-    * fortran (bmattern)
-    * sass
-    * html (darcyparker)
-    * coffee (darcyparker)
-    * docbk (darcyparker)
-    * xml
-    * xslt
-    * less (irrationalfab)
-    * php (AD7six, technosophos)
-    * cuda
-    * python (mitchellh, pneff)
-    * perl (Anthony Carapetis)
-    * c (naoina, zsprackett)
-    * puppet (frimik)
-
-2.2.0 (24-dec-2011)
-
-  * only do syntax checks when files are saved (not when first opened) - add g:syntastic_check_on_open option to get the old behavior back
-  * bug fix with echoing error messages; fixes incompatability with cmd-t (datanoise)
-  * dont allow warnings to mask errors when signing/echoing errors (ashikase)
-  * auto close location list when leaving buffer. (millermedeiros)
-  * update errors appropriately when :SyntasticToggleMode is called
-  * updates/fixes to existing checkers:
-    * javascript/jshint (millermedeiros)
-    * javascript/jslint
-    * c (kongo2002)
-  * Support for new filetypes:
-    * JSON (millermedeiros, tocer)
-    * rst (reStructuredText files) (JNRowe)
-    * gentoo-metadata (JNRowe)
+A. Some filetypes (e.g. php) have style checkers as well as syntax checkers. You can usually configure the options that are passed to the style checkers, or just disable them. Take a look at the syntax checker integration file (e.g. `syntax_checkers/php.vim`) to see what options are available.

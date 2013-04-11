@@ -4,11 +4,41 @@
 "Author:      Parantapa Bhattacharya <parantapa at gmail dot com>
 "
 "============================================================================
-function! SyntaxCheckers_python_GetLocList()
-    let makeprg = 'pylint '.g:syntastic_python_checker_args.' -f parseable -r n -i y ' .
-                \ shellescape(expand('%')) .
-                \ ' 2>&1 \| sed ''s_: \[\([RCW]\)_: \[W] \[\1_''' .
-                \ ' \| sed ''s_: \[\([FE]\)_:\ \[E] \[\1_'''
-    let errorformat = '%f:%l: [%t] %m,%Z,%-GNo config %m'
-    return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
+if exists("g:loaded_syntastic_python_pylint_checker")
+    finish
+endif
+let g:loaded_syntastic_python_pylint_checker=1
+
+function! SyntaxCheckers_python_pylint_IsAvailable()
+    return executable('pylint')
 endfunction
+
+function! SyntaxCheckers_python_pylint_GetLocList()
+    let makeprg = syntastic#makeprg#build({
+                \ 'exe': 'pylint',
+                \ 'args': ' -f parseable -r n -i y',
+                \ 'subchecker': 'pylint' })
+    let errorformat =
+                \ '%A%f:%l:%m,' .
+                \ '%A%f:(%l):%m,' .
+                \ '%-Z%p^%.%#,' .
+                \ '%-G%.%#'
+
+    let loclist=SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
+
+    let n = len(loclist) - 1
+    while n >= 0
+        let loclist[n]['type'] = match(['R', 'C', 'W'], loclist[n]['text'][2]) >= 0 ? 'W' : 'E'
+        let n -= 1
+    endwhile
+
+    return sort(loclist, 's:CmpLoclist')
+endfunction
+
+function! s:CmpLoclist(a, b)
+    return a:a['lnum'] - a:b['lnum']
+endfunction
+
+call g:SyntasticRegistry.CreateAndRegisterChecker({
+    \ 'filetype': 'python',
+    \ 'name': 'pylint' })
