@@ -41,10 +41,13 @@ endfunction
 function! SyntaxCheckers_xhtml_tidy_GetLocList()
     let encopt = s:TidyEncOptByFenc()
     let makeprg = syntastic#makeprg#build({
-                \ 'exe': 'tidy',
-                \ 'args': encopt . ' -xml -e',
-                \ 'subchecker': 'tidy' })
-    let errorformat='%Wline %l column %c - Warning: %m,%Eline %l column %c - Error: %m,%-G%.%#,%-G%.%#'
+        \ 'exe': 'tidy',
+        \ 'args': encopt . ' -xml -e',
+        \ 'subchecker': 'tidy' })
+    let errorformat=
+        \ '%Wline %l column %c - Warning: %m,' .
+        \ '%Eline %l column %c - Error: %m,' .
+        \ '%-G%.%#'
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat, 'defaults': {'bufnr': bufnr("")} })
 endfunction
 
