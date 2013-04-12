@@ -25,7 +25,7 @@ function! SyntaxCheckers_python_python_GetLocList()
         \ 'subchecker': 'python' })
     let errorformat =
         \ '%E  File "%f"\, line %l,' .
-        \ '%C    %p,' .
+        \ '%C    %p^,' .
         \ '%C    %.%#,' .
         \ '%Z%m,' .
         \ '%-G%.%#'
