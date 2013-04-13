@@ -132,6 +132,8 @@ function! s:CacheErrors(...)
             endif
 
             for checker in checkers
+                call syntastic#util#debug("CacheErrors: Invoking checker: " . checker.name())
+
                 let loclist = checker.getLocList()
 
                 if !loclist.isEmpty()
@@ -257,6 +259,8 @@ endfunction
 "   'defaults' - a dict containing default values for the returned errors
 "   'subtype' - all errors will be assigned the given subtype
 function! SyntasticMake(options)
+    call syntastic#util#debug('SyntasticMake: called with options: '. string(a:options))
+
     let old_loclist = getloclist(0)
     let old_makeprg = &l:makeprg
     let old_shellpipe = &shellpipe

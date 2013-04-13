@@ -92,6 +92,16 @@ function! syntastic#util#wideMsg(msg)
     let &showcmd=old_showcmd
 endfunction
 
+if !exists("g:syntastic_debug")
+    let g:syntastic_debug = 0
+endif
+
+function! syntastic#util#debug(msg)
+    if g:syntastic_debug
+        echomsg "(Syntastic debug) - " . a:msg
+    endif
+endfunction
+
 let &cpo = s:save_cpo
 unlet s:save_cpo
 " vim: set et sts=4 sw=4:
