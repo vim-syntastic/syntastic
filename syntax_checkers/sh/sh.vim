@@ -16,7 +16,7 @@ endif
 let g:loaded_syntastic_sh_sh_checker=1
 
 function! s:GetShell()
-    if !exists('b:shell') || b:shell == ""
+    if !exists('b:shell') || b:shell == ''
         let b:shell = ''
         let shebang = getbufline(bufnr('%'), 1)[0]
         if len(shebang) > 0
@@ -27,6 +27,10 @@ function! s:GetShell()
             elseif match(shebang, 'sh') >= 0
                 let b:shell = 'sh'
             endif
+        endif
+        " try to use env variable in case no shebang could be found
+        if b:shell == ''
+            let b:shell = fnamemodify(expand('$SHELL'), ':t')
         endif
     endif
     return b:shell
