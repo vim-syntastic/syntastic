@@ -61,6 +61,7 @@ endfunction
 command! SyntasticToggleMode call s:ToggleMode()
 command! -nargs=? -complete=custom,s:CompleteCheckerName SyntasticCheck call s:UpdateErrors(0, <f-args>) <bar> call s:Redraw()
 command! Errors call s:ShowLocList()
+command! SyntasticInfo call s:registry.echoInfoFor(&ft)
 
 highlight link SyntasticError SpellBad
 highlight link SyntasticWarning SpellCap

@@ -89,6 +89,15 @@ function! g:SyntasticRegistry.availableCheckersFor(filetype)
     return self._filterCheckersByAvailability(checkers)
 endfunction
 
+function! g:SyntasticRegistry.echoInfoFor(filetype)
+    echomsg "Syntastic info for filetype: " . a:filetype
+
+    let available = self.availableCheckersFor(a:filetype)
+    echomsg "Available checkers: " . join(map(available, "v:val.name()"))
+
+    echomsg "Currently active checker(s): " . self.getActiveCheckerNames(a:filetype)
+endfunction
+
 " Private methods {{{1
 
 function! g:SyntasticRegistry._allCheckersFor(filetype)

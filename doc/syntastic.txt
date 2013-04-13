@@ -148,6 +148,11 @@ for more info.
 Manually cause a syntax check to be done. Useful in passive mode, or if the
 current filetype is set to passive. See |'syntastic_mode_map'| for more info.
 
+:SyntasticInfo                                               *:SyntasticInfo*
+
+Output info about what checkers are available and in use for the current
+filetype.
+
 
 ==============================================================================
 4. Global Options                                   *syntastic-global-options*
