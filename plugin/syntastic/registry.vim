@@ -141,7 +141,7 @@ endfunction
 function! g:SyntasticRegistry._userHasFiletypeSettings(filetype)
     if exists("g:syntastic_" . a:filetype . "_checker") && !exists("g:syntastic_" . a:filetype . "_checkers")
         let g:syntastic_{a:filetype}_checkers = [g:syntastic_{a:filetype}_checker]
-        echomsg "syntastic: warning: variable g:syntastic_" . a:filetype . "_checker is deprecated"
+        call syntastic#util#deprecationWarn("variable g:syntastic_" . a:filetype . "_checker is deprecated")
     endif
     return exists("b:syntastic_checkers") || exists("g:syntastic_" . a:filetype . "_checkers")
 endfunction

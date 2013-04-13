@@ -130,6 +130,16 @@ function! syntastic#util#unique(list)
     return keys(seen)
 endfunction
 
+let s:deprecationNoticesIssued = []
+function! syntastic#util#deprecationWarn(msg)
+    if index(s:deprecationNoticesIssued, a:msg) >= 0
+        return
+    endif
+
+    call add(s:deprecationNoticesIssued, a:msg)
+    echomsg "syntastic: warning: " . a:msg
+endfunction
+
 let &cpo = s:save_cpo
 unlet s:save_cpo
 " vim: set et sts=4 sw=4:
