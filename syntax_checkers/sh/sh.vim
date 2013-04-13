@@ -28,6 +28,9 @@ function! s:GetShell()
                 let b:shell = 'sh'
             endif
         endif
+        if b:shell == ''
+            let b:shell = fnamemodify(expand('$SHELL'), ':t')
+        endif
     endif
     return b:shell
 endfunction
