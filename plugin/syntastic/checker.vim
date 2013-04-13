@@ -1,7 +1,7 @@
 if exists("g:loaded_syntastic_checker")
     finish
 endif
-let g:loaded_syntastic_checker=1
+let g:loaded_syntastic_checker = 1
 
 let g:SyntasticChecker = {}
 
