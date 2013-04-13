@@ -1,3 +1,17 @@
+# Bug reports / Github issues
+
+When reporting a bug make sure you search the existing github issues for the
+same/similar issues. If you find one, feel free to add a `+1` comment with any
+additonal information that may help us solve the issue.
+
+When creating a new issue be sure to state the following:
+
+* Steps to reproduce the bug.
+* The version of vim you are using.
+* The version of syntastic you are using.
+
+For syntax checker bugs also state the version of the checker executable that you are using.
+
 # Submitting a patch
 
 * Fork the repo on github
