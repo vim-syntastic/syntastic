@@ -352,7 +352,7 @@ This is telling syntastic to run the 'php' checker first, and if no errors are
 found, run 'phpcs', and then 'phpmd'.
 
 ------------------------------------------------------------------------------
-5.2 Configuring specific checkers.
+5.2 Configuring specific checkers                  *syntastic-config-makeprg*
 
 Most checkers use the 'syntastic#makeprg#build()' function and provide many
 options by default - in fact you can customise every part of the command
