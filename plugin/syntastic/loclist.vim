@@ -47,6 +47,10 @@ function! g:SyntasticLoclist.filteredRaw()
     return copy(self._quietWarnings ? self.errors() : self._rawLoclist)
 endfunction
 
+function! g:SyntasticLoclist.quietWarnings()
+    return self._quietWarnings
+endfunction
+
 function! g:SyntasticLoclist.isEmpty()
     return empty(self._rawLoclist)
 endfunction
@@ -139,8 +143,10 @@ function! g:SyntasticLoclist.show()
     endif
 endfunction
 
-function! g:SyntasticLoclist.Hide()
-    if len(filter( range(1,bufnr('$')), 'buflisted(v:val) && bufloaded(v:val)' )) == 1
+" Non-method functions {{{1
+
+function! g:SyntasticLoclistHide()
+    if len(filter( range(1, bufnr('$')), 'syntastic#util#bufIsActive(v:val)' )) == 1
         quit
     else
         lclose

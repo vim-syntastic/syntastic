@@ -47,7 +47,7 @@ endfunction
 " will be assumed to be '0' for the purposes of checking.
 "
 " See http://semver.org for info about version numbers.
-function syntastic#util#versionIsAtLeast(installed, required)
+function! syntastic#util#versionIsAtLeast(installed, required)
     for index in [0,1,2]
         if len(a:installed) <= index
             let installed_element = 0
@@ -100,6 +100,34 @@ function! syntastic#util#debug(msg)
     if g:syntastic_debug
         echomsg "(Syntastic debug) - " . a:msg
     endif
+endfunction
+
+" Check whether a buffer is loaded, listed, and not hidden
+function! syntastic#util#bufIsActive(buffer)
+    " convert to number, or hell breaks loose
+    let buf = str2nr(a:buffer)
+
+    if !bufloaded(buf) || !buflisted(buf)
+        return 0
+    endif
+
+    " get rid of hidden buffers
+    for tab in range(1, tabpagenr('$'))
+        if index(tabpagebuflist(tab), buf) >= 0
+            return 1
+        endif
+    endfor
+
+    return 0
+endfunction
+
+" List of buffers referenced by the location list
+function! syntastic#util#unique(list)
+    let seen = {}
+    for e in a:list
+        let seen[e] = 1
+    endfor
+    return keys(seen)
 endfunction
 
 let &cpo = s:save_cpo
