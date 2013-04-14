@@ -20,7 +20,7 @@ endfunction
 
 function! SyntaxCheckers_go_govet_GetLocList()
     let makeprg = 'go vet'
-    let errorformat = '%f:%l: %m,%-G%.%#'
+    let errorformat = '%Evet: %.%\+: %f:%l:%c: %m,%W%f:%l: %m,%-G%.%#'
 
     " The go tool needs to either be run with an import path as an
     " argument or directly from the package directory. Since figuring out
