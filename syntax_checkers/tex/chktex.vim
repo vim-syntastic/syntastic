@@ -44,11 +44,8 @@ function! SyntaxCheckers_tex_chktex_GetLocList()
     let errorformat = '%EError\ %\\d%\\+\ in\ %f\ line\ %l:\ %m,%WWarning\ %\\d%\\+\ in\ %f\ line\ %l:\ %m,' .
                 \ (g:syntastic_tex_chktex_showmsgs ? '%WMessage\ %\\d%\\+\ in\ %f\ line %l:\ %m,' : '') .
                 \ '%+Z%p^,%-G%.%#'
-    return sort(SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat, 'subtype': 'Style' }), 's:CmpLoclist')
-endfunction
-
-function! s:CmpLoclist(a, b)
-    return a:a['lnum'] - a:b['lnum']
+    let loclist = SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat, 'subtype': 'Style' })
+    return sort(loclist, 'syntastic#util#compareErrorItems')
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({

@@ -46,11 +46,9 @@ function! SyntaxCheckers_perl_perlcritic_GetLocList()
     let loclist = SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat, 'subtype': 'Style' })
 
     " change error types according to the prescribed threshold
-    let n = len(loclist) - 1
-    while n >= 0
+    for n in range(len(loclist))
         let loclist[n]['type'] = loclist[n]['type'] < g:syntastic_perl_perlcritic_thres ? 'W' : 'E'
-        let n -= 1
-    endwhile
+    endfor
 
     return loclist
 endfunction

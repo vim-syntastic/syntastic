@@ -52,7 +52,7 @@ function! SyntaxCheckers_perl_perl_GetLocList()
 endfunction
 
 function! s:ExtraMakeprgArgs()
-    let shebang = syntastic#util#ParseShebang()
+    let shebang = syntastic#util#parseShebang()
     if index(shebang['args'], '-T') != -1
         return ' -Tc'
     endif

@@ -47,9 +47,8 @@ function! SyntaxCheckers_cpp_cpplint_GetLocList()
     let loclist = SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat, 'subtype': 'Style' })
 
     " change error types according to the prescribed threshold
-    for n in range(0, len(loclist) - 1)
+    for n in range(len(loclist))
         let loclist[n]['type'] = loclist[n]['type'] < g:syntastic_cpp_cpplint_thres ? 'W' : 'E'
-        let n -= 1
     endfor
 
     return loclist

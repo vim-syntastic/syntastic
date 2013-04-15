@@ -44,15 +44,11 @@ function! SyntaxCheckers_css_prettycss_GetLocList()
         \ '%-G%.%#'
 
     let loclist = SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat, 'defaults': {'bufnr': bufnr("")} })
-    for n in range(0, len(loclist) - 1)
+    for n in range(len(loclist))
         let loclist[n]["text"] .= ')'
     endfor
 
-    return sort(loclist, 's:CmpLoclist')
-endfunction
-
-function! s:CmpLoclist(a, b)
-    return a:a['lnum'] - a:b['lnum']
+    return sort(loclist, 'syntastic#util#compareErrorItems')
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({

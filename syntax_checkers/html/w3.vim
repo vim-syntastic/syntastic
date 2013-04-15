@@ -21,21 +21,11 @@ endfunction
 function! SyntaxCheckers_html_w3_GetLocList()
     let makeprg2="curl -s -F output=text -F \"uploaded_file=@".expand('%:p').";type=text/html\" http://validator.w3.org/check \\| sed -n -e '/\<em\>Line\.\*/ \{ N; s/\\n//; N; s/\\n//; /msg/p; \}' -e ''/msg_warn/p'' -e ''/msg_info/p'' \\| sed -e 's/[ ]\\+/ /g' -e 's/\<[\^\>]\*\>//g' -e 's/\^[ ]//g'"
     let errorformat2='Line %l\, Column %c: %m'
-    let loclist = SyntasticMake({ 'makeprg': makeprg2, 'errorformat': errorformat2 })
+    let loclist = SyntasticMake({ 'makeprg': makeprg2, 'errorformat': errorformat2, 'defaults': {'bufnr': bufnr("")} })
 
-    let n = len(loclist) - 1
-    let bufnum = bufnr("")
-    while n >= 0
-        let i = loclist[n]
-        let i['bufnr'] = bufnum
-
-        if i['lnum'] == 0
-            let i['type'] = 'w'
-        else
-            let i['type'] = 'e'
-        endif
-        let n -= 1
-    endwhile
+    for n in range(len(loclist))
+        let loclist[n]['type'] = loclist[n]['lnum'] ? 'E' : 'W'
+    endfor
 
     return loclist
 endfunction

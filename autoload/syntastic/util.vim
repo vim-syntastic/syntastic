@@ -6,6 +6,12 @@ let g:loaded_syntastic_util_autoload = 1
 let s:save_cpo = &cpo
 set cpo&vim
 
+if !exists("g:syntastic_debug")
+    let g:syntastic_debug = 0
+endif
+
+let s:deprecationNoticesIssued = []
+
 function! syntastic#util#DevNull()
     if has('win32')
         return 'NUL'
@@ -23,7 +29,7 @@ endfunction
 "returns
 "
 "{'exe': '/usr/bin/perl', 'args': ['-f', '-bar']}
-function! syntastic#util#ParseShebang()
+function! syntastic#util#parseShebang()
     for lnum in range(1,5)
         let line = getline(lnum)
 
@@ -92,16 +98,6 @@ function! syntastic#util#wideMsg(msg)
     let &showcmd=old_showcmd
 endfunction
 
-if !exists("g:syntastic_debug")
-    let g:syntastic_debug = 0
-endif
-
-function! syntastic#util#debug(msg)
-    if g:syntastic_debug
-        echomsg "(Syntastic debug) - " . a:msg
-    endif
-endfunction
-
 " Check whether a buffer is loaded, listed, and not hidden
 function! syntastic#util#bufIsActive(buffer)
     " convert to number, or hell breaks loose
@@ -121,6 +117,18 @@ function! syntastic#util#bufIsActive(buffer)
     return 0
 endfunction
 
+" Used to sort error lists
+function! syntastic#util#compareErrorItems(a, b)
+    if a:a['lnum'] != a:b['lnum']
+        return a:a['lnum'] - a:b['lnum']
+    elseif a:a['type'] !=? a:b['type']
+        " errors take precedence over warnings
+        return a:a['type'] ==? 'e' ? -1 : 1
+    else
+        return a:a['col'] - a:b['col']
+    endif
+endfunction
+
 " List of buffers referenced by the location list
 function! syntastic#util#unique(list)
     let seen = {}
@@ -130,7 +138,12 @@ function! syntastic#util#unique(list)
     return keys(seen)
 endfunction
 
-let s:deprecationNoticesIssued = []
+function! syntastic#util#debug(msg)
+    if g:syntastic_debug
+        echomsg "syntastic: debug: " . a:msg
+    endif
+endfunction
+
 function! syntastic#util#deprecationWarn(msg)
     if index(s:deprecationNoticesIssued, a:msg) >= 0
         return
