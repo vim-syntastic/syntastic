@@ -1,5 +1,7 @@
 "============================================================================
-"File:        jsonlint.vim "Description: JSON syntax checker - using jsonlint "Maintainer:  Miller Medeiros <contact at millermedeiros dot com>
+"File:        jsonlint.vim
+"Description: JSON syntax checker - using jsonlint
+"Maintainer:  Miller Medeiros <contact at millermedeiros dot com>
 "License:     This program is free software. It comes without any warranty,
 "             to the extent permitted by applicable law. You can redistribute
 "             it and/or modify it under the terms of the Do What The Fuck You
