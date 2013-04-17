@@ -88,8 +88,8 @@ function! SyntaxCheckers_html_tidy_GetLocList()
         \ 'tail': '2>&1',
         \ 'subchecker': 'tidy' })
     let errorformat =
-        \ '%Wline %l column %c - Warning: %m,' .
-        \ '%Eline %l column %c - Error: %m,' .
+        \ '%Wline %l column %v - Warning: %m,' .
+        \ '%Eline %l column %v - Error: %m,' .
         \ '%-G%.%#'
 
     let loclist = SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat, 'defaults': {'bufnr': bufnr("")} })
