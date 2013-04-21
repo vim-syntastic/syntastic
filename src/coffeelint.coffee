@@ -127,6 +127,11 @@ regexes =
     trailingWhitespace : /[^\s]+[\t ]+\r?$/
     lineHasComment : /^\s*[^\#]*\#/
     indentation: /\S/
+    longUrlComment: ///
+      ^\s*\# # indentation, up to comment
+      \s*
+      http[^\s]+$ # Link that takes up the rest of the line without spaces.
+    ///
     camelCase: /^[A-Z][a-zA-Z\d]*$/
     trailingSemicolon: /;\r?$/
     configStatement: /coffeelint:\s*(disable|enable)(?:=([\w\s,]*))?/
@@ -250,7 +255,7 @@ class LineLinter
         rule = 'max_line_length'
         max = @config[rule]?.value
         if max and max < @line.length
-            @createLineError(rule)
+            @createLineError(rule) unless regexes.longUrlComment.test(@line)
         else
             null
 
