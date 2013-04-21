@@ -100,6 +100,14 @@ coffeelint.RULES = RULES =
         level : IGNORE
         message : 'Operators must be spaced properly'
 
+    # I don't know of any legitimate reason to define duplicate keys in an
+    # object. It seems to always be a mistake, it's also a syntax error in
+    # strict mode.
+    # See http://jslinterrors.com/duplicate-key-a/
+    duplicate_key :
+        level : ERROR
+        message : 'Duplicate key defined in object or class'
+
     newlines_after_classes :
         value : 3
         level : IGNORE
@@ -367,12 +375,14 @@ class LexicalLinter
         @tokensByLine = {}  # A map of tokens by line.
         @arrayTokens = []   # A stack tracking the array token pairs.
         @parenTokens = []   # A stack tracking the parens token pairs.
-        @callTokens = []   # A stack tracking the call token pairs.
+        @callTokens = []    # A stack tracking the call token pairs.
         @lines = source.split('\n')
+        @braceScopes = []   # A stack tracking keys defined in nexted scopes.
 
     # Return a list of errors encountered in the given source.
     lint : () ->
         errors = []
+
         for token, i in @tokens
             @i = i
             error = @lintToken(token)
@@ -394,7 +404,8 @@ class LexicalLinter
         switch type
             when "INDENT"                 then @lintIndentation(token)
             when "CLASS"                  then @lintClass(token)
-            when "{"                      then @lintBrace(token)
+            when "{","}"                  then @lintBrace(token)
+            when "IDENTIFIER"             then @lintIdentifier(token)
             when "++", "--"               then @lintIncrement(token)
             when "THROW"                  then @lintThrow(token)
             when "[", "]"                 then @lintArray(token)
@@ -489,8 +500,38 @@ class LexicalLinter
         else
             null
 
+    lintIdentifier: (token) ->
+        key = token[1]
+
+        # Class names might not be in a scope
+        return null if not @currentScope?
+        nextToken = @peek(1)
+
+        # Exit if this identifier isn't being assigned. A and B
+        # are identifiers, but only A should be examined:
+        # A = B
+        return null if nextToken[1] isnt ':'
+        previousToken = @peek(-1)
+
+        # Assigning "@something" and "something" are not the same thing
+        key = "@#{key}" if previousToken[0] == '@'
+
+        # Added a prefix to not interfere with things like "constructor".
+        key = "identifier-#{key}"
+        if @currentScope[key]
+            @createLexError('duplicate_key')
+        else
+            @currentScope[key] = token
+            null
+
     lintBrace : (token) ->
-        if token.generated
+        if token[0] == '{'
+            @braceScopes.push @currentScope if @currentScope?
+            @currentScope = {}
+        else
+            @currentScope = @braceScopes.pop()
+
+        if token.generated and token[0] == '{'
             # Peek back to the last line break. If there is a class
             # definition, ignore the generated brace.
             i = -1
