@@ -42,6 +42,7 @@ coffeelint.RULES = RULES =
     no_trailing_whitespace :
         level : ERROR
         message : 'Line ends with trailing whitespace'
+        allowed_in_comments : false
 
     max_line_length :
         value: 80
@@ -116,6 +117,7 @@ coffeelint.RULES = RULES =
 # Some repeatedly used regular expressions.
 regexes =
     trailingWhitespace : /[^\s]+[\t ]+\r?$/
+    lineHasComment : /^\s*[^\#]*\#/
     indentation: /\S/
     camelCase: /^[A-Z][a-zA-Z\d]*$/
     trailingSemicolon: /;\r?$/
@@ -211,9 +213,30 @@ class LineLinter
 
     checkTrailingWhitespace : () ->
         if regexes.trailingWhitespace.test(@line)
-            @createLineError('no_trailing_whitespace')
+            # By default only the regex above is needed.
+            console.log @config['no_trailing_whitespace']?.allowed_in_comments
+            if !@config['no_trailing_whitespace']?.allowed_in_comments
+                return @createLineError('no_trailing_whitespace')
+
+            line = @line
+            tokens = @tokensByLine[@lineNumber]
+
+            # If we're in a block comment there won't be any tokens on this
+            # line. Some previous line holds the token spanning multiple lines.
+            if !tokens
+                return null
+
+            # To avoid confusion when a string might contain a "#", every string
+            # on this line will be removed. before checking for a comment
+            for str in (token[1] for token in tokens when token[0] == 'STRING')
+                line = line.replace(str, 'STRING')
+
+            if !regexes.lineHasComment.test(line)
+                return @createLineError('no_trailing_whitespace')
+            else
+                return null
         else
-            null
+            return null
 
     checkLineLength : () ->
         rule = 'max_line_length'
