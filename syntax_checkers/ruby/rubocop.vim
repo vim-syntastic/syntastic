@@ -39,7 +39,7 @@ function! SyntaxCheckers_ruby_rubocop_GetLocList()
     for n in range(len(loclist))
         if loclist[n]['type'] == 'F'
             let loclist[n]['type'] = 'E'
-        elseif loclist[n]['type'] != 'W' || loclist[n]['type'] != 'E'
+        elseif loclist[n]['type'] != 'W' && loclist[n]['type'] != 'E'
             let loclist[n]['type'] = 'W'
         endif
     endfor
