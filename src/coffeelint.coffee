@@ -227,7 +227,6 @@ class LineLinter
     checkTrailingWhitespace : () ->
         if regexes.trailingWhitespace.test(@line)
             # By default only the regex above is needed.
-            console.log @config['no_trailing_whitespace']?.allowed_in_comments
             if !@config['no_trailing_whitespace']?.allowed_in_comments
                 return @createLineError('no_trailing_whitespace')
 
