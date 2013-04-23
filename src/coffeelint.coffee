@@ -92,6 +92,10 @@ coffeelint.RULES = RULES =
         level : IGNORE
         message : 'Implicit parens are forbidden'
 
+    missing_new_parens :
+        level : WARN
+        message : 'Invoking a constructor without parens'
+
     no_empty_param_list :
         level : IGNORE
         message : 'Empty parameter list is forbidden'
@@ -211,7 +215,8 @@ class LineLinter
                @checkTrailingSemicolon() or
                @checkLineEndings() or
                @checkComments() or
-               @checkNewlinesAfterClasses()
+               @checkNewlinesAfterClasses() or
+               @checkMissingParensAfterNew()
 
     checkTabs : () ->
         # Only check lines that have compiled tokens. This helps
@@ -315,6 +320,22 @@ class LineLinter
             } )
 
         null
+
+    checkMissingParensAfterNew : () ->
+        tokens = @getLineTokens()
+
+        while tokens.length
+            [type, value] = tokens.shift()
+            continue unless type is 'UNARY' and value is 'new'
+            expectedIdentifier = tokens.shift()
+            expectedCallStart  = tokens.shift()
+            if expectedIdentifier?[0] is 'IDENTIFIER' and
+              expectedCallStart?[0] isnt 'CALL_START'
+                return @createLineError('missing_new_parens')
+            else
+                tokens.unshift(expectedCallStart, expectedIdentifier)
+
+        return null
 
     createLineError : (rule, attrs = {}) ->
         attrs.lineNumber = @lineNumber + 1 # Lines are indexed by zero.
