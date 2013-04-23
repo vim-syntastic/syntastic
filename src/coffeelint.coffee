@@ -93,8 +93,8 @@ coffeelint.RULES = RULES =
         message : 'Implicit parens are forbidden'
 
     missing_new_parens :
-        level : WARN
-        message : 'Invoking a constructor without parens'
+        level : IGNORE
+        message : 'Invoking a constructor without parens and without arguments'
 
     no_empty_param_list :
         level : IGNORE
