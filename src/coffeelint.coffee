@@ -92,7 +92,7 @@ coffeelint.RULES = RULES =
         level : IGNORE
         message : 'Implicit parens are forbidden'
 
-    missing_new_parens :
+    empty_constructor_needs_parens :
         level : IGNORE
         message : 'Invoking a constructor without parens and without arguments'
 
@@ -215,8 +215,7 @@ class LineLinter
                @checkTrailingSemicolon() or
                @checkLineEndings() or
                @checkComments() or
-               @checkNewlinesAfterClasses() or
-               @checkMissingParensAfterNew()
+               @checkNewlinesAfterClasses()
 
     checkTabs : () ->
         # Only check lines that have compiled tokens. This helps
@@ -321,22 +320,6 @@ class LineLinter
 
         null
 
-    checkMissingParensAfterNew : () ->
-        tokens = @getLineTokens()
-
-        while tokens.length
-            [type, value] = tokens.shift()
-            continue unless type is 'UNARY' and value is 'new'
-            expectedIdentifier = tokens.shift()
-            expectedCallStart  = tokens.shift()
-            if expectedIdentifier?[0] is 'IDENTIFIER' and
-              expectedCallStart?[0] isnt 'CALL_START'
-                return @createLineError('missing_new_parens')
-            else
-                tokens.unshift(expectedCallStart, expectedIdentifier)
-
-        return null
-
     createLineError : (rule, attrs = {}) ->
         attrs.lineNumber = @lineNumber + 1 # Lines are indexed by zero.
         attrs.level = @config[rule]?.level
@@ -429,6 +412,7 @@ class LexicalLinter
         switch type
             when "INDENT"                 then @lintIndentation(token)
             when "CLASS"                  then @lintClass(token)
+            when "UNARY"                  then @lintUnary(token)
             when "{","}"                  then @lintBrace(token)
             when "IDENTIFIER"             then @lintIdentifier(token)
             when "++", "--"               then @lintIncrement(token)
@@ -443,6 +427,16 @@ class LexicalLinter
             when "=", "MATH", "COMPARE", "LOGIC"
                 @lintMath(token)
             else null
+
+    lintUnary: (token) ->
+      if token[1] is 'new'
+        expectedIdentifier = @peek(1)
+        # The callStart is generated if your parameters are on the next line
+        # but is missing if there are no params and no parens.
+        expectedCallStart  = @peek(2)
+        if expectedIdentifier?[0] is 'IDENTIFIER' and
+          expectedCallStart?[0] isnt 'CALL_START'
+            @createLexError('empty_constructor_needs_parens')
 
     # Lint the given array token.
     lintArray : (token) ->
