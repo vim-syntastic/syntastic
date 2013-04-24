@@ -15,8 +15,7 @@
 "
 "============================================================================
 
-" in order to also check header files add this to your .vimrc:
-" (this usually creates a .gch file in your source directory)
+" In order to also check header files add this to your .vimrc:
 "
 "   let g:syntastic_d_check_header = 1
 "
@@ -25,11 +24,10 @@
 "
 "   let g:syntastic_d_no_include_search = 1
 "
-" In order to add some custom include directories that should be added to the
-" gcc command line you can add those to the global variable
-" g:syntastic_d_include_dirs. This list can be used like this:
+" To disable the include of the default include dirs (such as /usr/include)
+" add this line to your .vimrc:
 "
-"   let g:syntastic_d_include_dirs = [ 'includes', 'headers' ]
+"   let g:syntastic_d_no_default_include_dirs = 1
 "
 " To enable header files being re-checked on every file write add the
 " following line to your .vimrc. Otherwise the header files are checked only
@@ -45,6 +43,12 @@
 " libraries is done. I.e. set the variable like this:
 "
 "   let b:syntastic_d_cflags = ' -I/usr/include/libsoup-2.4'
+"
+" In order to add some custom include directories that should be added to the
+" dmd command line you can add those to the global variable
+" g:syntastic_d_include_dirs. This list can be used like this:
+"
+"   let g:syntastic_d_include_dirs = [ 'includes', 'headers' ]
 "
 " Moreover it is possible to add additional compiler options to the syntax
 " checking execution via the variable 'g:syntastic_d_compiler_options':
@@ -63,50 +67,78 @@
 " g:syntastic_d_include_dirs' setting are removed from the result set:
 "
 "   let g:syntastic_d_remove_include_errors = 1
+"
+" Use the variable 'g:syntastic_d_errorformat' to override the default error
+" format:
+"
+"   let g:syntastic_d_errorformat = '%f:%l:%c: %trror: %m'
+"
+" Set your compiler executable with e.g. (defaults to dmd)
+"
+"   let g:syntastic_d_compiler = 'clang++'
+
+if exists('g:loaded_syntastic_d_dmd_checker')
+    finish
+endif
+let g:loaded_syntastic_d_dmd_checker = 1
+
+if !exists('g:syntastic_d_compiler')
+    let g:syntastic_d_compiler = 'dmd'
+endif
+
+function! SyntaxCheckers_d_dmd_IsAvailable()
+    return executable(g:syntastic_d_compiler)
+endfunction
 
 let s:save_cpo = &cpo
 set cpo&vim
 
-if exists("g:loaded_syntastic_d_dmd_checker")
-    finish
+if !exists('g:syntastic_d_compiler_options')
+    let g:syntastic_d_compiler_options = ''
 endif
-let g:loaded_syntastic_d_dmd_checker=1
 
 if !exists('g:syntastic_d_config_file')
     let g:syntastic_d_config_file = '.syntastic_d_config'
 endif
 
-function! SyntaxCheckers_d_dmd_IsAvailable()
-    return executable('dmd')
-endfunction
-
 function! SyntaxCheckers_d_dmd_GetLocList()
-    let makeprg = 'dmd -of/dev/null -c '
+    let makeprg = g:syntastic_d_compiler . ' -c -of' . syntastic#util#DevNull() . ' '
     let errorformat =  '%-G%f:%s:,%f(%l): %m,%f:%l: %m'
 
-    if exists('g:syntastic_d_compiler_options')
-        let makeprg .= g:syntastic_d_compiler_options
+    if exists('g:syntastic_d_errorformat')
+        let errorformat = g:syntastic_d_errorformat
     endif
+
+    " add optional user-defined compiler options
+    let makeprg .= g:syntastic_d_compiler_options
 
     let makeprg .= ' ' . shellescape(expand('%')) .
                 \ ' ' . syntastic#c#GetIncludeDirs('d')
 
-    if expand('%') =~? '\%(.di\)$'
+    " determine whether to parse header files as well
+    if expand('%') =~? '\.di$'
         if exists('g:syntastic_d_check_header')
-            let makeprg = 'dmd -c '.shellescape(expand('%')).
+            let makeprg = g:syntastic_d_compiler .
+                        \ ' -c ' . shellescape(expand('%')) .
+                        \ ' -of' . syntastic#util#DevNull() .
+                        \ ' ' . g:syntastic_d_compiler_options .
                         \ ' ' . syntastic#c#GetIncludeDirs('d')
         else
             return []
         endif
     endif
 
+    " check if the user manually set some cflags
     if !exists('b:syntastic_d_cflags')
+        " check whether to search for include files at all
         if !exists('g:syntastic_d_no_include_search') ||
                     \ g:syntastic_d_no_include_search != 1
+            " refresh the include file search if desired
             if exists('g:syntastic_d_auto_refresh_includes') &&
                         \ g:syntastic_d_auto_refresh_includes != 0
                 let makeprg .= syntastic#c#SearchHeaders()
             else
+                " search for header includes if not cached already
                 if !exists('b:syntastic_d_includes')
                     let b:syntastic_d_includes = syntastic#c#SearchHeaders()
                 endif
@@ -114,6 +146,7 @@ function! SyntaxCheckers_d_dmd_GetLocList()
             endif
         endif
     else
+        " use the user-defined cflags
         let makeprg .= b:syntastic_d_cflags
     endif
 
