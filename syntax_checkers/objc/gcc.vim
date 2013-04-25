@@ -90,7 +90,7 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 if !exists('g:syntastic_objc_compiler_options')
-    let g:syntastic_objc_compiler_options = ''
+    let g:syntastic_objc_compiler_options = '-std=gnu99'
 endif
 
 if !exists('g:syntastic_objc_config_file')
@@ -101,6 +101,10 @@ function! SyntaxCheckers_objc_gcc_GetLocList()
     let makeprg = g:syntastic_objc_compiler . ' -x objective-c -fsyntax-only -lobjc'
     let errorformat =
                     \ '%-G%f:%s:,' .
+                    \ '%-G%f:%l: %#error: %#(Each undeclared identifier is reported only%.%#,' .
+                    \ '%-G%f:%l: %#error: %#for each function it appears%.%#,' .
+                    \ '%-GIn file included%.%#,'.
+                    \ '%-G %#from %f:%l\,,' .
                     \ '%f:%l:%c: %trror: %m,' .
                     \ '%f:%l:%c: %tarning: %m,' .
                     \ '%f:%l:%c: %m,' .
@@ -121,7 +125,7 @@ function! SyntaxCheckers_objc_gcc_GetLocList()
     " determine whether to parse header files as well
     if expand('%') =~? '\.h$'
         if exists('g:syntastic_objc_check_header')
-            let makeprg = g:syntastic_c_compiler .
+            let makeprg = g:syntastic_objc_compiler .
                         \ ' -x objective-c-header ' .
                         \ ' -c ' . shellescape(expand('%')) .
                         \ ' ' . g:syntastic_objc_compiler_options .
