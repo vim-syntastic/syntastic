@@ -42,6 +42,7 @@ coffeelint.RULES = RULES =
     no_trailing_whitespace :
         level : ERROR
         message : 'Line ends with trailing whitespace'
+        allowed_in_comments : false
 
     max_line_length :
         value: 80
@@ -91,6 +92,10 @@ coffeelint.RULES = RULES =
         level : IGNORE
         message : 'Implicit parens are forbidden'
 
+    empty_constructor_needs_parens :
+        level : IGNORE
+        message : 'Invoking a constructor without parens and without arguments'
+
     no_empty_param_list :
         level : IGNORE
         message : 'Empty parameter list is forbidden'
@@ -98,6 +103,14 @@ coffeelint.RULES = RULES =
     space_operators :
         level : IGNORE
         message : 'Operators must be spaced properly'
+
+    # I don't know of any legitimate reason to define duplicate keys in an
+    # object. It seems to always be a mistake, it's also a syntax error in
+    # strict mode.
+    # See http://jslinterrors.com/duplicate-key-a/
+    duplicate_key :
+        level : ERROR
+        message : 'Duplicate key defined in object or class'
 
     newlines_after_classes :
         value : 3
@@ -116,7 +129,13 @@ coffeelint.RULES = RULES =
 # Some repeatedly used regular expressions.
 regexes =
     trailingWhitespace : /[^\s]+[\t ]+\r?$/
+    lineHasComment : /^\s*[^\#]*\#/
     indentation: /\S/
+    longUrlComment: ///
+      ^\s*\# # indentation, up to comment
+      \s*
+      http[^\s]+$ # Link that takes up the rest of the line without spaces.
+    ///
     camelCase: /^[A-Z][a-zA-Z\d]*$/
     trailingSemicolon: /;\r?$/
     configStatement: /coffeelint:\s*(disable|enable)(?:=([\w\s,]*))?/
@@ -211,15 +230,35 @@ class LineLinter
 
     checkTrailingWhitespace : () ->
         if regexes.trailingWhitespace.test(@line)
-            @createLineError('no_trailing_whitespace')
+            # By default only the regex above is needed.
+            if !@config['no_trailing_whitespace']?.allowed_in_comments
+                return @createLineError('no_trailing_whitespace')
+
+            line = @line
+            tokens = @tokensByLine[@lineNumber]
+
+            # If we're in a block comment there won't be any tokens on this
+            # line. Some previous line holds the token spanning multiple lines.
+            if !tokens
+                return null
+
+            # To avoid confusion when a string might contain a "#", every string
+            # on this line will be removed. before checking for a comment
+            for str in (token[1] for token in tokens when token[0] == 'STRING')
+                line = line.replace(str, 'STRING')
+
+            if !regexes.lineHasComment.test(line)
+                return @createLineError('no_trailing_whitespace')
+            else
+                return null
         else
-            null
+            return null
 
     checkLineLength : () ->
         rule = 'max_line_length'
         max = @config[rule]?.value
         if max and max < @line.length
-            @createLineError(rule)
+            @createLineError(rule) unless regexes.longUrlComment.test(@line)
         else
             null
 
@@ -344,12 +383,14 @@ class LexicalLinter
         @tokensByLine = {}  # A map of tokens by line.
         @arrayTokens = []   # A stack tracking the array token pairs.
         @parenTokens = []   # A stack tracking the parens token pairs.
-        @callTokens = []   # A stack tracking the call token pairs.
+        @callTokens = []    # A stack tracking the call token pairs.
         @lines = source.split('\n')
+        @braceScopes = []   # A stack tracking keys defined in nexted scopes.
 
     # Return a list of errors encountered in the given source.
     lint : () ->
         errors = []
+
         for token, i in @tokens
             @i = i
             error = @lintToken(token)
@@ -371,7 +412,9 @@ class LexicalLinter
         switch type
             when "INDENT"                 then @lintIndentation(token)
             when "CLASS"                  then @lintClass(token)
-            when "{"                      then @lintBrace(token)
+            when "UNARY"                  then @lintUnary(token)
+            when "{","}"                  then @lintBrace(token)
+            when "IDENTIFIER"             then @lintIdentifier(token)
             when "++", "--"               then @lintIncrement(token)
             when "THROW"                  then @lintThrow(token)
             when "[", "]"                 then @lintArray(token)
@@ -384,6 +427,16 @@ class LexicalLinter
             when "=", "MATH", "COMPARE", "LOGIC"
                 @lintMath(token)
             else null
+
+    lintUnary: (token) ->
+      if token[1] is 'new'
+        expectedIdentifier = @peek(1)
+        # The callStart is generated if your parameters are on the next line
+        # but is missing if there are no params and no parens.
+        expectedCallStart  = @peek(2)
+        if expectedIdentifier?[0] is 'IDENTIFIER' and
+          expectedCallStart?[0] isnt 'CALL_START'
+            @createLexError('empty_constructor_needs_parens')
 
     # Lint the given array token.
     lintArray : (token) ->
@@ -466,8 +519,38 @@ class LexicalLinter
         else
             null
 
+    lintIdentifier: (token) ->
+        key = token[1]
+
+        # Class names might not be in a scope
+        return null if not @currentScope?
+        nextToken = @peek(1)
+
+        # Exit if this identifier isn't being assigned. A and B
+        # are identifiers, but only A should be examined:
+        # A = B
+        return null if nextToken[1] isnt ':'
+        previousToken = @peek(-1)
+
+        # Assigning "@something" and "something" are not the same thing
+        key = "@#{key}" if previousToken[0] == '@'
+
+        # Added a prefix to not interfere with things like "constructor".
+        key = "identifier-#{key}"
+        if @currentScope[key]
+            @createLexError('duplicate_key')
+        else
+            @currentScope[key] = token
+            null
+
     lintBrace : (token) ->
-        if token.generated
+        if token[0] == '{'
+            @braceScopes.push @currentScope if @currentScope?
+            @currentScope = {}
+        else
+            @currentScope = @braceScopes.pop()
+
+        if token.generated and token[0] == '{'
             # Peek back to the last line break. If there is a class
             # definition, ignore the generated brace.
             i = -1

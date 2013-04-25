@@ -39,4 +39,17 @@ vows.describe('linelength').addBatch({
                 errors = coffeelint.lint(source, config)
                 assert.isEmpty(errors)
 
+    'Maximum length exceptions':
+        topic: """
+            # Since the line length check only reads lines in isolation it will
+            # see the following line as a comment even though it's in a string.
+            # I don't think that's a problem.
+            #
+            # http://testing.example.com/really-really-long-url-that-shouldnt-have-to-be-split-to-avoid-the-lint-error
+        """
+
+        'excludes long urls': (source) ->
+            errors = coffeelint.lint(source)
+            assert.isEmpty(errors)
+
 }).export(module)
