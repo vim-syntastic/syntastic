@@ -15,26 +15,32 @@ if exists("g:loaded_syntastic_haskell_ghc_mod_checker")
 endif
 let g:loaded_syntastic_haskell_ghc_mod_checker=1
 
-if !exists('g:syntastic_haskell_checker_args')
-    let g:syntastic_haskell_checker_args = '--hlintOpt="--language=XmlSyntax"'
-endif
-
 function! SyntaxCheckers_haskell_ghc_mod_IsAvailable()
     return executable('ghc-mod')
 endfunction
 
 function! SyntaxCheckers_haskell_ghc_mod_GetLocList()
-    let ghcmod = 'ghc-mod ' . g:syntastic_haskell_checker_args
-    let makeprg =
-          \ "{ ".
-          \ ghcmod . " check ". shellescape(expand('%')) . "; " .
-          \ ghcmod . " lint " . shellescape(expand('%')) . ";" .
-          \ " }"
-    let errorformat = '%-G\\s%#,%f:%l:%c:%trror: %m,%f:%l:%c:%tarning: %m,'.
-                \ '%f:%l:%c: %trror: %m,%f:%l:%c: %tarning: %m,%f:%l:%c:%m,'.
-                \ '%E%f:%l:%c:,%Z%m,'
+    let errorformat =
+        \ '%-G%\s%#,' .
+        \ '%f:%l:%c:%trror: %m,' .
+        \ '%f:%l:%c:%tarning: %m,'.
+        \ '%f:%l:%c: %trror: %m,' .
+        \ '%f:%l:%c: %tarning: %m,' .
+        \ '%f:%l:%c:%m,' .
+        \ '%E%f:%l:%c:,' .
+        \ '%Z%m'
 
-    return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
+    let makeprg = syntastic#makeprg#build({
+        \ 'exe': 'ghc-mod check',
+        \ 'args': '--hlintOpt="--language=XmlSyntax"' })
+    let loclist1 = SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
+
+    let makeprg = syntastic#makeprg#build({
+        \ 'exe': 'ghc-mod lint',
+        \ 'args': '--hlintOpt="--language=XmlSyntax"' })
+    let loclist2 = SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
+
+    return loclist1 + loclist2
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
