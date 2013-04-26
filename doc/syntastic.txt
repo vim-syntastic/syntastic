@@ -167,7 +167,7 @@ well as on saving >
 
                                               *'syntastic_echo_current_error'*
 Default: 1
-If enabled, syntastic will error message associated with the current line to
+If enabled, syntastic will echo the errror associated with the current line to
 the command window. If multiple errors are found, the first will be used. >
     let g:syntastic_echo_current_error=1
 <
