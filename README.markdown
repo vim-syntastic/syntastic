@@ -25,11 +25,11 @@ demand, or automatically as files are saved. If syntax errors are detected, the
 user is notified and is happy because they didn't have to compile their code or
 execute their script to find them.
 
-At the time of this writing, syntax checking plugins exist for applescript, c,
-coffee, cpp, css, cucumber, cuda, docbk, erlang, eruby, fortran,
-gentoo_metadata, go, haml, haskell, html, javascript, json, less, lua, matlab,
-perl, php, puppet, python, rst, ruby, sass/scss, sh, tcl, tex, vala, xhtml,
-xml, xslt, yaml, zpt
+At the time of this writing, syntax checking plugins exist for ada, applescript, c, co,
+coffee, coq, cpp, cs, css, cucumber, cuda, d, dart, docbk, elixir, erlang, eruby, fortran,
+gentoo_metadata, go, haml, haskell, haxe, html, java, javascript, json, less, lisp, lua, matlab,
+nasm, objc, ocaml, perl, php, puppet, python, rst, ruby, rust, sass/scss, scala, sh, slim, tcl, tex, 
+twig, typescript, vala, vhdl, xhtml, xml, xslt, yaml, z80, zpt, zsh
 
 Screenshot
 ----------
