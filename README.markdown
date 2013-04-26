@@ -27,7 +27,7 @@ execute their script to find them.
 
 At the time of this writing, syntax checking plugins exist for applescript, c,
 coffee, cpp, css, cucumber, cuda, docbk, erlang, eruby, fortran,
-gentoo_metadata, go, haml, haskell, html, javascript, json, less, lua, matlab,
+gentoo_metadata, go, haml, haskell, html, java, javascript, json, less, lua, matlab,
 perl, php, puppet, python, rst, ruby, sass/scss, sh, tcl, tex, vala, xhtml,
 xml, xslt, yaml, zpt
 
