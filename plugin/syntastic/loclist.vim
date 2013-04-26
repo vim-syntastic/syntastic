@@ -147,7 +147,9 @@ endfunction
 
 function! g:SyntasticLoclistHide()
     if len(filter( range(1, bufnr('$')), 'syntastic#util#bufIsActive(v:val)' )) == 1
-        quit
+        if g:syntastic_allow_quit
+            quit
+        endif
     else
         lclose
     endif
