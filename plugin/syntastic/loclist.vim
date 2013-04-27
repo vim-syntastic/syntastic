@@ -146,13 +146,7 @@ endfunction
 " Non-method functions {{{1
 
 function! g:SyntasticLoclistHide()
-    if len(filter( range(1, bufnr('$')), 'syntastic#util#bufIsActive(v:val)' )) == 1
-        if g:syntastic_allow_quit
-            quit
-        endif
-    else
-        lclose
-    endif
+    silent! lclose
 endfunction
 
 " vim: set sw=4 sts=4 et fdm=marker:

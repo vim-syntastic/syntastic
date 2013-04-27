@@ -40,10 +40,6 @@ if !exists("g:syntastic_check_on_open")
     let g:syntastic_check_on_open = 0
 endif
 
-if !exists("g:syntastic_allow_quit")
-    let g:syntastic_allow_quit = 1
-endif
-
 if !exists("g:syntastic_loc_list_height")
     let g:syntastic_loc_list_height = 10
 endif
@@ -79,6 +75,7 @@ augroup syntastic
     " TODO: the next autocmd should be "autocmd BufWinLeave * if empty(&bt) | lclose | endif"
     " but in recent versions of Vim lclose can no longer be called from BufWinLeave
     autocmd BufEnter * call s:BufWinLeaveCleanup()
+    autocmd QuitPre * call g:SyntasticLoclistHide()
 augroup END
 
 
