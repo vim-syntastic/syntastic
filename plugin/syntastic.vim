@@ -75,8 +75,14 @@ augroup syntastic
     " TODO: the next autocmd should be "autocmd BufWinLeave * if empty(&bt) | lclose | endif"
     " but in recent versions of Vim lclose can no longer be called from BufWinLeave
     autocmd BufEnter * call s:BufWinLeaveCleanup()
-    autocmd QuitPre * call g:SyntasticLoclistHide()
 augroup END
+
+if v:version > 703 || (v:version == 703 && has('patch544'))
+    " QuitPre was added in Vim 7.3.544
+    augroup syntastic
+        autocmd QuitPre * call g:SyntasticLoclistHide()
+    augroup END
+endif
 
 
 function! s:BufWinLeaveCleanup()
