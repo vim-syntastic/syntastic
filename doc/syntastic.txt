@@ -220,19 +220,6 @@ Enable this option if you want the cursor to jump to the first detected error
 when saving or opening a file: >
     let g:syntastic_auto_jump=1
 <
-
-                                                      *'syntastic_allow_quit'*
-Default: 1
-When the |location-list| is open and you quit a buffer, syntastic attempts to
-detect if this is the last active buffer, and quit Vim if it is.  This is
-usually what you want, but in that situation Vim will also abandon any hidden
-buffers, thus potentially destroying a carefully crafted session.  Use this
-variable to prevent syntastic from quitting Vim.
-
-When |syntastic_allow_quit| is 0 syntastic will never issue a 'quit' command: >
-    let g:syntastic_allow_quit=0
-<
-
                                                    *'syntastic_auto_loc_list'*
 Default: 2
 Use this option to tell syntastic to automatically open and/or close the
