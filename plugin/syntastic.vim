@@ -40,10 +40,6 @@ if !exists("g:syntastic_check_on_open")
     let g:syntastic_check_on_open = 0
 endif
 
-if !exists("g:syntastic_allow_quit")
-    let g:syntastic_allow_quit = 1
-endif
-
 if !exists("g:syntastic_loc_list_height")
     let g:syntastic_loc_list_height = 10
 endif
@@ -79,8 +75,8 @@ augroup syntastic
     " TODO: the next autocmd should be "autocmd BufWinLeave * if empty(&bt) | lclose | endif"
     " but in recent versions of Vim lclose can no longer be called from BufWinLeave
     autocmd BufEnter * call s:BufWinLeaveCleanup()
+    autocmd QuitPre * call s:QuitCleanup()
 augroup END
-
 
 function! s:BufWinLeaveCleanup()
     " TODO: at this point there is no b:syntastic_loclist
@@ -89,6 +85,15 @@ function! s:BufWinLeaveCleanup()
     if &bt=='quickfix' && !empty(loclist) && empty(filter( buffers, 'syntastic#util#bufIsActive(v:val)' ))
         call g:SyntasticLoclistHide()
     endif
+endfunction
+
+function s:QuitCleanup()
+    try
+        lclose 
+    catch /^Vim\%((\a\+)\)\=:E444/
+        " the loclist is the last open window, it will be closed automatically
+        " by vim, so we do nothing
+    endtry
 endfunction
 
 "refresh and redraw all the error info for this buf when saving or reading
