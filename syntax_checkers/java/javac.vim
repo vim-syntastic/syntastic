@@ -152,7 +152,7 @@ function! s:GetMavenClasspath()
             let class_path_next = 0
             for line in mvn_classpath_output
                 if class_path_next == 1
-                    let mvn_classpath = substitute(line, '', '', 'g')
+                    let mvn_classpath = substitute(line, '\r', '', 'g')
                     break
                 endif
                 if match(line,'Dependencies classpath:') >= 0
