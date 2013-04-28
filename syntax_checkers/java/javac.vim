@@ -40,6 +40,8 @@ endif
 if !exists("g:syntastic_java_javac_temp_dir")
     if has('win32') || has('win64')
         let g:syntastic_java_javac_temp_dir = $TEMP."\\vim-syntastic-javac"
+	elseif has('win32unix')
+		let g:syntastic_java_javac_temp_dir=substitute(system("cygpath -m /tmp/vim-syntastic-javac"), '\%x00', '', 'g')
     else
         let g:syntastic_java_javac_temp_dir = '/tmp/vim-syntastic-javac'
     endif
@@ -87,7 +89,7 @@ function! s:AddToClasspath(classpath,path)
         return a:classpath
     endif
     if a:classpath != '' && a:path != ''
-        if has('win32') || has('win64')
+        if has('win32') || has('win32unix') || has('win64')
             return a:classpath . ";" . a:path
         else
             return a:classpath . ":" . a:path
@@ -150,7 +152,7 @@ function! s:GetMavenClasspath()
             let class_path_next = 0
             for line in mvn_classpath_output
                 if class_path_next == 1
-                    let mvn_classpath = line
+                    let mvn_classpath = substitute(line, '', '', 'g')
                     break
                 endif
                 if match(line,'Dependencies classpath:') >= 0
@@ -214,21 +216,26 @@ function! SyntaxCheckers_java_javac_GetLocList()
     endif
 
     if javac_classpath != ''
-        let javac_opts .= ' -cp ' . fnameescape(javac_classpath)
+        let javac_opts .= ' -cp "' . fnameescape(javac_classpath) . '"'
     endif
 
-
     " path seperator
-    if has('win32') || has('win64')
+    if has('win32') || has('win32unix') || has('win64')
         let sep = "\\" 
     else
         let sep = '/'
     endif
 
+	let fname = fnameescape(expand ( '%:p:h' ) . sep . expand ( '%:t' ))
+
+	if has('win32unix')
+		let fname =  substitute(system("cygpath -m " . fname),  '\%x00', '', 'g')
+	endif
+
     let makeprg = syntastic#makeprg#build({
                 \ 'exe': g:syntastic_java_javac_executable,
                 \ 'args': javac_opts,
-                \ 'fname': fnameescape(expand ( '%:p:h' ) . sep . expand ( '%:t' )),
+                \ 'fname': fname,
                 \ 'tail': '2>&1',
                 \ 'subchecker': 'javac' })
 
