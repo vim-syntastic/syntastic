@@ -24,6 +24,7 @@ function! SyntaxCheckers_sh_checkbashisms_GetLocList()
         \ 'subchecker': 'checkbashisms'})
 
     let errorformat =
+        \ '%-Gscript %f is already a bash script; skipping,' .
         \ '%Eerror: %f: %m\, opened in line %l,' .
         \ '%Eerror: %f: %m,' .
         \ '%Ecannot open script %f for reading: %m,' .
