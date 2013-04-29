@@ -160,6 +160,7 @@ function! s:GetMavenClasspath()
                 endif
             endfor
             let mvn_classpath = s:AddToClasspath(mvn_classpath,'target/classes')
+            let mvn_classpath = s:AddToClasspath(mvn_classpath,'target/test-classes')
             let g:syntastic_java_javac_maven_pom_cwd = getcwd()
             let g:syntastic_java_javac_maven_pom_ftime = getftime('pom.xml')
             let g:syntastic_java_javac_maven_pom_classpath = mvn_classpath
