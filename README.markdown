@@ -151,6 +151,15 @@ A. Vim provides several built in commands for this. See `:help :lnext` and `:hel
 
 If you use these commands a lot then you may want to add shortcut mappings to your vimrc, or install something like [unimpaired](https://github.com/tpope/vim-unimpaired) - which provides such mappings (among other things).
 
-__Q. A syntax checker is giving me unwanted/strange style tips??__
+__Q. A syntax checker is giving me unwanted/strange style tips?__
 
 A. Some filetypes (e.g. php) have style checkers as well as syntax checkers. You can usually configure the options that are passed to the style checkers, or just disable them. Take a look at the syntax checker integration file (e.g. `syntax_checkers/php.vim`) to see what options are available.
+
+__Q. The error window is closed automatically when I :quit the current buffer but not when I :bdelete it?__
+
+A. There is no safe way to handle that situation automatically, but you can work around it:
+
+```vim
+nnoremap <silent> <C-d> :lclose<CR>:bdelete<CR>
+cabbrev <silent> bd lclose\|bdelete
+```
