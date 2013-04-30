@@ -12,6 +12,8 @@
 "
 " In order to use rubocop with the default ruby checker (mri):
 "     let g:syntastic_ruby_checkers = ['mri', 'rubocop']
+" Since rubocop returns only warning, you'll need to set the below too:
+"     let g:syntastic_quiet_warnings = 0
 
 if exists("g:loaded_syntastic_ruby_rubocop_checker")
     finish
