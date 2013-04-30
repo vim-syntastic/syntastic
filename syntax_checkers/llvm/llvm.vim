@@ -21,7 +21,7 @@ endfunction
 function! SyntaxCheckers_llvm_llvm_GetLocList()
     let makeprg = syntastic#makeprg#build({
                 \ 'exe': 'llc',
-                \ 'args': '-o /tmp/syntastic-llc-trash',
+                \ 'args': syntastic#c#GetNullDevice(),
                 \ 'subchecker': 'llvm' })
     let errorformat = 'llc: %f:%l:%c: %trror: %m'
 
