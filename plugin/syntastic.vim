@@ -117,7 +117,7 @@ function! s:UpdateErrors(auto_invoked, ...)
         if g:syntastic_auto_jump
             silent! ll
         endif
-    else
+    elseif !empty(cur_loclist)
         call setloclist(0, cur_loclist)
         sil lopen
     endif
