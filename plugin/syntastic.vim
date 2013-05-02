@@ -108,6 +108,7 @@ function! s:UpdateErrors(auto_invoked, ...)
         endif
     end
 
+    let cur_loclist = getloclist(0)
     let loclist = g:SyntasticLoclist.Current()
     call s:notifiers.refresh(loclist)
 
@@ -116,6 +117,9 @@ function! s:UpdateErrors(auto_invoked, ...)
         if g:syntastic_auto_jump
             silent! ll
         endif
+    else
+        call setloclist(0, cur_loclist)
+        sil lopen
     endif
 endfunction
 
