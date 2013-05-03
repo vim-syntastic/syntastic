@@ -35,7 +35,7 @@ endfunction
 function! g:SyntasticNotifiers.reset(loclist)
     for type in self._enabled_types
         let class = substitute(type, '.*', 'Syntastic\u&Notifier', '')
-        if has_key(g:{class}, 'reset')
+        if has_key(g:{class}, 'reset') && (!has_key(g:{class}, 'enabled') || self._notifier[type].enabled())
             call self._notifier[type].reset(a:loclist)
         endif
     endfor
