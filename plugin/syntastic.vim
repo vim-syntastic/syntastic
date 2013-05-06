@@ -40,6 +40,10 @@ if !exists("g:syntastic_check_on_open")
     let g:syntastic_check_on_open = 0
 endif
 
+if !exists("g:syntastic_check_on_wq")
+    let g:syntastic_check_on_wq = 1
+endif
+
 if !exists("g:syntastic_loc_list_height")
     let g:syntastic_loc_list_height = 10
 endif
@@ -74,24 +78,30 @@ augroup syntastic
 
     " TODO: the next autocmd should be "autocmd BufWinLeave * if empty(&bt) | lclose | endif"
     " but in recent versions of Vim lclose can no longer be called from BufWinLeave
-    autocmd BufEnter * call s:BufWinLeaveCleanup()
+    autocmd BufEnter * call s:BufEnterHook()
 augroup END
 
 if v:version > 703 || (v:version == 703 && has('patch544'))
     " QuitPre was added in Vim 7.3.544
     augroup syntastic
-        autocmd QuitPre * call g:SyntasticLoclistHide()
+        autocmd QuitPre * call s:QuitPreHook()
     augroup END
 endif
 
 
-function! s:BufWinLeaveCleanup()
+function! s:BufEnterHook()
     " TODO: at this point there is no b:syntastic_loclist
     let loclist = filter(getloclist(0), 'v:val["valid"] == 1')
     let buffers = syntastic#util#unique(map( loclist, 'v:val["bufnr"]' ))
     if &bt=='quickfix' && !empty(loclist) && empty(filter( buffers, 'syntastic#util#bufIsActive(v:val)' ))
         call g:SyntasticLoclistHide()
     endif
+endfunction
+
+
+function! s:QuitPreHook()
+    let b:syntastic_skip_checks = !g:syntastic_check_on_wq
+    call g:SyntasticLoclistHide()
 endfunction
 
 "refresh and redraw all the error info for this buf when saving or reading
@@ -207,7 +217,8 @@ endfunction
 
 " Skip running in special buffers
 function! s:SkipFile()
-    return !empty(&buftype) || !filereadable(expand('%')) || getwinvar(0, '&diff')
+    let force_skip = exists('b:syntastic_skip_checks') ? b:syntastic_skip_checks : 0
+    return force_skip || !empty(&buftype) || !filereadable(expand('%')) || getwinvar(0, '&diff')
 endfunction
 
 function! s:uname()

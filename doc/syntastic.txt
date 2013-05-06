@@ -165,6 +165,14 @@ well as on saving >
     let g:syntastic_check_on_open=1
 <
 
+                                                     *'syntastic_check_on_wq'*
+Default: 1
+Normally syntastic runs syntax checks whenever buffers are written to disk.
+If you want to skip these checks when you issue |:wq|, |:x|, and |:ZZ|, set this
+variable to 0. >
+    let g:syntastic_check_on_wq=0
+<
+
                                               *'syntastic_echo_current_error'*
 Default: 1
 If enabled, syntastic will echo the errror associated with the current line to
