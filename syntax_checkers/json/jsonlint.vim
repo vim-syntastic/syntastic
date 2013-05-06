@@ -9,8 +9,24 @@
 "             See http://sam.zoy.org/wtfpl/COPYING for more details.
 "============================================================================
 
-function! SyntaxCheckers_json_GetLocList()
-    let makeprg = 'jsonlint ' . shellescape(expand("%")) . ' --compact'
+if exists("g:loaded_syntastic_json_jsonlint_checker")
+    finish
+endif
+let g:loaded_syntastic_json_jsonlint_checker=1
+
+function! SyntaxCheckers_json_jsonlint_IsAvailable()
+    return executable('jsonlint')
+endfunction
+
+function! SyntaxCheckers_json_jsonlint_GetLocList()
+    let makeprg = syntastic#makeprg#build({
+                \ 'exe': 'jsonlint',
+                \ 'post_args': '--compact',
+                \ 'subchecker': 'jsonlint' })
     let errorformat = '%ELine %l:%c,%Z\\s%#Reason: %m,%C%.%#,%f: line %l\, col %c\, %m,%-G%.%#'
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat, 'defaults': {'bufnr': bufnr('')} })
 endfunction
+
+call g:SyntasticRegistry.CreateAndRegisterChecker({
+    \ 'filetype': 'json',
+    \ 'name': 'jsonlint'})

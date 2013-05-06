@@ -2,7 +2,7 @@
                   / \,,_  .'|
                ,{{| /}}}}/_.'            _____________________________________________
               }}}}` '{{'  '.            /                                             \
-            {{{{{    _   ;, \          /                Gentlemen,                     \
+            {{{{{    _   ;, \          /            Ladies and Gentlemen,              \
          ,}}}}}}    /o`\  ` ;)        |                                                |
         {{{{{{   /           (        |                 this is ...                    |
         }}}}}}   |            \       |                                                |
@@ -25,11 +25,11 @@ demand, or automatically as files are saved. If syntax errors are detected, the
 user is notified and is happy because they didn't have to compile their code or
 execute their script to find them.
 
-At the time of this writing, syntax checking plugins exist for applescript, c,
-coffee, cpp, css, cucumber, cuda, docbk, erlang, eruby, fortran,
-gentoo_metadata, go, haml, haskell, html, javascript, json, less, lua, matlab,
-perl, php, puppet, python, rst, ruby, sass/scss, sh, tcl, tex, vala, xhtml,
-xml, xslt, yaml, zpt
+At the time of this writing, syntax checking plugins exist for ada, applescript, c, co,
+coffee, coq, cpp, cs, css, cucumber, cuda, d, dart, docbk, elixir, erlang, eruby, fortran,
+gentoo_metadata, go, haml, haskell, haxe, html, java, javascript, json, less, lisp, lua, matlab,
+nasm, objc, ocaml, perl, php, puppet, python, rst, ruby, rust, sass/scss, scala, sh, slim, tcl, tex, 
+twig, typescript, vala, vhdl, xhtml, xml, xslt, yaml, z80, zpt, zsh
 
 Screenshot
 ----------
@@ -50,12 +50,44 @@ enabled.
 Installation
 ------------
 
-[pathogen.vim](https://github.com/tpope/vim-pathogen) is the recommended way to install syntastic.
+Installing syntastic is easy but first you need to have the pathogen plugin installed.  If you already
+have pathogen working then skip Step 1 and go to Step 2.
+
+Step 1: Install pathogen.vim
+----------------------------
+
+First I'll show you how to install tpope's [pathogen.vim](https://github.com/tpope/vim-pathogen) so that 
+it's easy to install syntastic.  Do this in your Terminal so that you get the pathogen.vim file 
+and the directories it needs:
+
+    mkdir -p ~/.vim/autoload ~/.vim/bundle; \
+    curl -so ~/.vim/autoload/pathogen.vim \
+        https://raw.github.com/tpope/vim-pathogen/master/autoload/pathogen.vim
+
+Next you *need to add this* to your ~/.vimrc:
+
+        call pathogen#infect()
+
+Step 2: Install syntastic as a pathogen bundle
+----------------------------------------------
+
+You now have pathogen installed and can put syntastic into ~/.vim/bundle like this:
+    
 
     cd ~/.vim/bundle
     git clone https://github.com/scrooloose/syntastic.git
 
-Then reload vim, run `:Helptags`, and check out `:help syntastic.txt`.
+Quit vim and start it back up to reload it, then type:
+
+    :Helptags
+
+If you get an error when you do this, then you probably didn't install pathogen right.  Go back to
+step 1 and make sure you did the following:
+
+1. Created both the ~/.vim/autoload and ~/.vim/bundle directories.
+2. Added the "call pathogen#infect()" line to your ~/.vimrc file
+3. Did the git clone of syntastic inside ~/.vim/bundle
+4. Have permissions to access all of these directories.
 
 
 Google group
@@ -69,55 +101,65 @@ FAQ
 
 __Q. I installed syntastic but it isn't reporting any errors ...__
 
-A. The most likely reason is that the syntax checker that it requires isn't installed. For example: python requires either `flake8`, `pyflakes` or `pylint` to be installed and in `$PATH`. To see which executable is required, just look in `syntax_checkers/<filetype>.vim`.
+A. The most likely reason is that the syntax checker that it requires isn't installed. For example: python requires either `flake8`, `pyflakes` or `pylint` to be installed and in `$PATH`. To see which executable is required, just look in `syntax_checkers/<filetype>.vim`.  Note that aliases do not work; the actual executable must be available in your `$PATH`.  Symbolic links are okay.
 
 Another reason it could fail is that the error output for the syntax checker may have changed. In this case, make sure you have the latest version of the syntax checker installed. If it still fails then create an issue - or better yet, create a pull request.
 
+__Q. Recently some of my syntax checker options have stopped working...__
 
-Changelog
----------
-2.3.0 (16-feb-2012)
+A. The options are still there, they have just been renamed. Recently, almost all syntax checkers were refactored to use the new `syntastic#makeprg#build()` function. This made a lot of the old explicit options redundant - as they are now implied. The new implied options usually have slightly different names to the old options.
 
-  * Add syntastic_loc_list_height option
-  * Allow errors to have a "subtype" that is signed differently to standard
-    errors. Currently geared towards differentiating style errors from
-    syntax errors. Currently implemented for phpcs (technosophos).
-  * New checkers for:
-    * yaml
-    * haxe (davidB)
-    * ocaml (edwintorok)
-    * pylint (parantapa)
-    * rust (cjab)
-  * Updates to existing checkers:
-    * jslint
-    * jshint (gillesruppert)
-    * fortran (bmattern)
-    * sass
-    * html (darcyparker)
-    * coffee (darcyparker)
-    * docbk (darcyparker)
-    * xml
-    * xslt
-    * less (irrationalfab)
-    * php (AD7six, technosophos)
-    * cuda
-    * python (mitchellh, pneff)
-    * perl (Anthony Carapetis)
-    * c (naoina, zsprackett)
-    * puppet (frimik)
+e.g. Previously there was `g:syntastic_phpcs_conf`, now you must use `g:syntastic_php_phpcs_args`.
 
-2.2.0 (24-dec-2011)
+See `:help syntastic-checker-options` for more information.
 
-  * only do syntax checks when files are saved (not when first opened) - add g:syntastic_check_on_open option to get the old behavior back
-  * bug fix with echoing error messages; fixes incompatability with cmd-t (datanoise)
-  * dont allow warnings to mask errors when signing/echoing errors (ashikase)
-  * auto close location list when leaving buffer. (millermedeiros)
-  * update errors appropriately when :SyntasticToggleMode is called
-  * updates/fixes to existing checkers:
-    * javascript/jshint (millermedeiros)
-    * javascript/jslint
-    * c (kongo2002)
-  * Support for new filetypes:
-    * JSON (millermedeiros, tocer)
-    * rst (reStructuredText files) (JNRowe)
-    * gentoo-metadata (JNRowe)
+__Q. How can I pass additional arguments to a checker?__
+
+A. Almost all syntax checkers use the `syntastic#makeprg#build()` function. Those checkers that do can be configured using global variables. The general form of the global args variables are:
+
+`syntastic_[filetype]_[subchecker]_args`
+
+So, If you wanted to pass "--my --args --here" to the ruby mri checker you would add this line to your vimrc:
+
+`let g:syntastic_ruby_mri_args="--my --args --here"`
+
+See `:help syntastic-checker-options` for more information.
+
+__Q. Syntastic supports several checkers for my filetype - how do I tell it which one(s) to use?__
+
+A. Stick a line like this in your vimrc:
+
+`let g:syntastic_<filetype>_checkers=['<checker-name>']`
+
+To see the list of checkers for your filetype, look in `syntax_checkers/<filetype>/`.
+
+e.g. Python has the following checkers: `flake8`, `pyflakes`, `pylint` and a native `python` checker.
+
+To tell syntastic to use `pylint`, you would use this setting:
+
+`let g:syntastic_python_checkers=['pylint']`
+
+Some filetypes, like PHP, have style checkers as well as syntax checkers. These can be chained together like this:
+
+`let g:syntastic_php_checkers=['php', 'phpcs', 'phpmd']`
+
+This is telling syntastic to run the `php` checker first, and if no errors are found, run `phpcs`, and then `phpmd`.
+
+__Q. How can I jump between the different errors without using the location list at the bottom of the window?__
+
+A. Vim provides several built in commands for this. See `:help :lnext` and `:help :lprev`.
+
+If you use these commands a lot then you may want to add shortcut mappings to your vimrc, or install something like [unimpaired](https://github.com/tpope/vim-unimpaired) - which provides such mappings (among other things).
+
+__Q. A syntax checker is giving me unwanted/strange style tips?__
+
+A. Some filetypes (e.g. php) have style checkers as well as syntax checkers. You can usually configure the options that are passed to the style checkers, or just disable them. Take a look at the syntax checker integration file (e.g. `syntax_checkers/php.vim`) to see what options are available.
+
+__Q. The error window is closed automatically when I :quit the current buffer but not when I :bdelete it?__
+
+A. There is no safe way to handle that situation automatically, but you can work around it:
+
+```vim
+nnoremap <silent> <C-d> :lclose<CR>:bdelete<CR>
+cabbrev <silent> bd lclose\|bdelete
+```

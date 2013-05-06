@@ -9,13 +9,34 @@
 "             See http://sam.zoy.org/wtfpl/COPYING for more details.
 "
 "============================================================================
-function! SyntaxCheckers_ruby_GetLocList()
-    if has('win32')
-        let makeprg = 'jruby -W1 -T1 -c '.shellescape(expand('%'))
-    else
-        let makeprg = 'RUBYOPT= jruby -W1 -c '.shellescape(expand('%'))
-    endif
+if exists("g:loaded_syntastic_ruby_jruby_checker")
+    finish
+endif
+let g:loaded_syntastic_ruby_jruby_checker=1
+
+function! SyntaxCheckers_ruby_jruby_IsAvailable()
+    return executable('jruby')
+endfunction
+
+function! SyntaxCheckers_ruby_jruby_GetLocList()
+    let makeprg = syntastic#makeprg#build({
+                \ 'exe': s:exe(),
+                \ 'args': s:args(),
+                \ 'subchecker': 'jruby' })
+
     let errorformat =  '%-GSyntax OK for %f,%ESyntaxError in %f:%l: syntax error\, %m,%Z%p^,%W%f:%l: warning: %m,%Z%p^,%W%f:%l: %m,%-C%.%#'
 
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 endfunction
+
+function s:args()
+    return has('win32') ? '-W1 -T1 -c' : '-W1 -c'
+endfunction
+
+function s:exe()
+    return has('win32') ? 'jruby' : 'RUBYOPT= jruby'
+endfunction
+
+call g:SyntasticRegistry.CreateAndRegisterChecker({
+    \ 'filetype': 'ruby',
+    \ 'name': 'jruby'})
