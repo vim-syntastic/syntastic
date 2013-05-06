@@ -37,11 +37,15 @@ if !exists("g:syntastic_java_javac_delete_output")
     let g:syntastic_java_javac_delete_output = 1
 endif
 
+function! s:CygwinPath(path) 
+	return substitute(system("cygpath -m ".a:path), '\%x00', '', 'g')
+endfunction
+
 if !exists("g:syntastic_java_javac_temp_dir")
     if has('win32') || has('win64')
         let g:syntastic_java_javac_temp_dir = $TEMP."\\vim-syntastic-javac"
 	elseif has('win32unix')
-		let g:syntastic_java_javac_temp_dir=substitute(system("cygpath -m /tmp/vim-syntastic-javac"), '\%x00', '', 'g')
+		let g:syntastic_java_javac_temp_dir=s:CygwinPath('/tmp/vim-syntastic-javac')
     else
         let g:syntastic_java_javac_temp_dir = '/tmp/vim-syntastic-javac'
     endif
@@ -71,6 +75,16 @@ endif
 if !exists("g:syntastic_java_javac_maven_pom_classpath")
     let g:syntastic_java_javac_maven_pom_classpath = ''
 endif
+
+function! s:RemoveCarriageReturn(line)
+	return substitute(a:line, '\r', '', 'g')
+endfunction
+
+function! s:RemoveCarriageReturns(errors)
+	for error in a:errors
+		let error['text'] = s:RemoveCarriageReturn(error['text'])
+	endfor
+endfunction
 
 " recursively remove directory and all it's sub-directories
 function! s:RemoveDir(dir)
@@ -152,7 +166,7 @@ function! s:GetMavenClasspath()
             let class_path_next = 0
             for line in mvn_classpath_output
                 if class_path_next == 1
-                    let mvn_classpath = substitute(line, '\r', '', 'g')
+                    let mvn_classpath = s:RemoveCarriageReturn(line)
                     break
                 endif
                 if match(line,'Dependencies classpath:') >= 0
@@ -172,6 +186,23 @@ endfunction
 
 function! SyntaxCheckers_java_javac_IsAvailable()
     return executable(g:syntastic_java_javac_executable)
+endfunction
+
+function! s:MavenOutputDirectory()
+    if filereadable('pom.xml')
+		let output_dir = getcwd()
+		if match(expand( '%:p:h' ), "src.main.java") >= 0
+			let output_dir .= '/target/classes' 
+		endif	
+		if match(expand( '%:p:h' ), "src.test.java") >= 0
+			let output_dir .= '/target/test-classes' 
+		endif	
+
+		if has('win32unix')
+			let output_dir=s:CygwinPath(output_dir)
+		endif 
+		return output_dir
+    endif
 endfunction
 
 function! SyntaxCheckers_java_javac_GetLocList()
@@ -212,6 +243,10 @@ function! SyntaxCheckers_java_javac_GetLocList()
     endfor
 
     if g:syntastic_java_javac_autoload_maven_classpath
+		if !g:syntastic_java_javac_delete_output
+			let maven_output_dir = s:MavenOutputDirectory()
+			let javac_opts .= ' -d ' . maven_output_dir
+		endif
         let maven_classpath = s:GetMavenClasspath()
         let javac_classpath = s:AddToClasspath(javac_classpath,maven_classpath)
     endif
@@ -230,7 +265,7 @@ function! SyntaxCheckers_java_javac_GetLocList()
 	let fname = fnameescape(expand ( '%:p:h' ) . sep . expand ( '%:t' ))
 
 	if has('win32unix')
-		let fname =  substitute(system("cygpath -m " . fname),  '\%x00', '', 'g')
+		let fname =  s:CygwinPath(fname)
 	endif
 
     let makeprg = syntastic#makeprg#build({
@@ -246,11 +281,16 @@ function! SyntaxCheckers_java_javac_GetLocList()
     if g:syntastic_java_javac_delete_output
         silent! call mkdir(output_dir,'p')
     endif
-    let r = SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
+    let errors = SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
+	
+	if has('win32unix')
+		call s:RemoveCarriageReturns(errors)
+	endif
+
     if g:syntastic_java_javac_delete_output
         call s:RemoveDir(output_dir)
     endif
-    return r
+    return errors
 
 endfunction
 
