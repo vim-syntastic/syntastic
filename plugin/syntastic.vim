@@ -98,10 +98,15 @@ if !exists("g:syntastic_check_on_open")
     let g:syntastic_check_on_open = 0
 endif
 
+if !exists("g:syntastic_check_on_write")
+    let g:syntastic_check_on_write = 1
+endif
+
 if !exists("g:syntastic_loc_list_height")
     let g:syntastic_loc_list_height = 10
 endif
 
+command! SyntasticEchoCurrentError call s:EchoCurrentError()
 command! SyntasticToggleMode call s:ToggleMode()
 command! SyntasticCheck call s:UpdateErrors(0) <bar> redraw!
 command! Errors call s:ShowLocList()
@@ -115,7 +120,7 @@ augroup syntastic
     endif
 
     autocmd BufReadPost * if g:syntastic_check_on_open | call s:UpdateErrors(1) | endif
-    autocmd BufWritePost * call s:UpdateErrors(1)
+    autocmd BufWritePost * if g:syntastic_check_on_write | call s:UpdateErrors(1) | endif
 
     autocmd BufWinEnter * if empty(&bt) | call s:AutoToggleLocList() | endif
     autocmd BufWinLeave * if empty(&bt) | lclose | endif
@@ -167,7 +172,7 @@ function! s:AutoToggleLocList()
 
             "TODO: this will close the loc list window if one was opened by
             "something other than syntastic
-            lclose
+            silent! lclose
         endif
     endif
 endfunction
@@ -364,10 +369,11 @@ endfunction
 
 "display the cached errors for this buf in the location list
 function! s:ShowLocList()
+    call setloclist(0, s:LocList())
     if !empty(s:LocList())
-        call setloclist(0, s:LocList())
         let num = winnr()
-        exec "lopen " . g:syntastic_loc_list_height
+        let size = min([g:syntastic_loc_list_height, len(s:LocList()) + 1])
+        exec "lopen " . size
         if num != winnr()
             wincmd p
         endif
