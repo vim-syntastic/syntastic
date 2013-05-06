@@ -129,13 +129,13 @@ function! syntastic#util#compareErrorItems(a, b)
     endif
 endfunction
 
-" List of buffers referenced by the location list
+" Returns unique elements in a list
 function! syntastic#util#unique(list)
     let seen = {}
     for e in a:list
         let seen[e] = 1
     endfor
-    return keys(seen)
+    return copy(keys(seen))
 endfunction
 
 function! syntastic#util#debug(msg)
