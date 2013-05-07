@@ -28,6 +28,7 @@ vows.describe('CoffeeScript 1.5.0+').addBatch({
             assert.isArray(errors)
             assert.lengthOf(errors, 1)
             assert.isTrue(CoffeeScript.updated_tokens_called)
+            error = errors[0]
             assert.equal(error.lineNumber, 1)
             assert.equal(error.message, "Line contains a trailing semicolon")
             assert.equal(error.rule, 'no_trailing_semicolons')
