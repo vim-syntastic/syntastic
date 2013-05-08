@@ -24,4 +24,11 @@ require('fs').readdirSync('./test').forEach (file) ->
                 new_batch[test_name] = batch.tests
                 vow = vow.addBatch(new_batch)
 
-vow.export(module)
+vow.addBatch({
+
+    "Cleanup" : () ->
+
+        CoffeeScript.tokens = CoffeeScript.old_tokens
+        delete CoffeeScript.old_tokens
+
+}).export(module)
