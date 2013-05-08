@@ -430,14 +430,15 @@ class LexicalLinter
             else null
 
     lintUnary: (token) ->
-      if token[1] is 'new'
-        expectedIdentifier = @peek(1)
-        # The callStart is generated if your parameters are on the next line
-        # but is missing if there are no params and no parens.
-        expectedCallStart  = @peek(2)
-        if expectedIdentifier?[0] is 'IDENTIFIER' and
-          expectedCallStart?[0] isnt 'CALL_START'
-            @createLexError('empty_constructor_needs_parens')
+        if token[1] is 'new'
+            expectedIdentifier = @peek(1)
+            # The callStart is generated if your parameters are on the next line
+            # but is missing if there are no params and no parens.
+            expectedCallStart  = @peek(2)
+            if expectedIdentifier?[0] is 'IDENTIFIER' and
+            expectedCallStart?[0] isnt 'CALL_START'
+
+                @createLexError('empty_constructor_needs_parens')
 
     # Lint the given array token.
     lintArray : (token) ->
