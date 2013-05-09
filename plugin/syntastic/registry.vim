@@ -9,6 +9,7 @@ let s:defaultCheckers = {
         \ 'cpp': ['gcc'],
         \ 'html': ['tidy'],
         \ 'java': ['javac'],
+        \ 'javascript': ['jslint', 'jshint'],
         \ 'objc': ['gcc'],
         \ 'php': ['php', 'phpcs', 'phpmd'],
         \ 'ruby': ['mri']
