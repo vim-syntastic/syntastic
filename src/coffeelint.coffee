@@ -776,10 +776,10 @@ class ASTLinter
 
         # Parse the line number
         lineNumber = -1
-        match = /line (\d+)/.exec message
         if coffeeError.location?
             lineNumber = coffeeError.location.first_line + 1
         else
+            match = /line (\d+)/.exec message
             lineNumber = parseInt match[1], 10 if match?.length > 1
         attrs = {
             message: message
