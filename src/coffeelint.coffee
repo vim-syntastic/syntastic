@@ -410,7 +410,11 @@ class LexicalLinter
     lintToken : (token) ->
         [type, value, lineNumber] = token
 
-        lineNumber = lineNumber.first_line if lineNumber?.first_line?
+        if typeof lineNumber == "object"
+            if type == 'OUTDENT' or type == 'INDENT'
+                lineNumber = lineNumber.last_line
+            else
+                lineNumber = lineNumber.first_line
         @tokensByLine[lineNumber] ?= []
         @tokensByLine[lineNumber].push(token)
         # CoffeeScript loses line numbers of interpolations and multi-line
