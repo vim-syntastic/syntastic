@@ -41,7 +41,10 @@ vows.describe('coffeelint').addBatch({
             assert.lengthOf(errors, 1)
             error = errors[0]
             assert.equal(error.rule, 'coffeescript_error')
-            m = "Error: Parse error on line 3: Unexpected 'RELATION'"
+            if error.message.indexOf('on line') != -1
+                m = "Error: Parse error on line 3: Unexpected 'RELATION'"
+            else
+                m = "SyntaxError: unexpected RELATION"
             assert.equal(error.message, m)
             assert.equal(error.lineNumber, 3)
 
