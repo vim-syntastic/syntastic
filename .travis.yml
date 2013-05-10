@@ -1,8 +1,17 @@
 language: node_js
 node_js:
-  - 0.6
-  - 0.7
-  - 0.8
+  - "0.6"
+  - "0.8"
+  - "0.10"
+
+env:
+  - CoffeeScript=1.4.0
+  - CoffeeScript=1.5.0
+  - CoffeeScript=1.6.2
+
+before_script:
+  - npm install coffee-script@$CoffeeScript
+
 
 branches:
   only:
