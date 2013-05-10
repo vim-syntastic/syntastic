@@ -117,18 +117,6 @@ function! syntastic#util#bufIsActive(buffer)
     return 0
 endfunction
 
-" Used to sort error lists
-function! syntastic#util#compareErrorItems(a, b)
-    if a:a['lnum'] != a:b['lnum']
-        return a:a['lnum'] - a:b['lnum']
-    elseif a:a['type'] !=? a:b['type']
-        " errors take precedence over warnings
-        return a:a['type'] ==? 'e' ? -1 : 1
-    else
-        return a:a['col'] - a:b['col']
-    endif
-endfunction
-
 " Returns unique elements in a list
 function! syntastic#util#unique(list)
     let seen = {}

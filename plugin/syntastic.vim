@@ -287,6 +287,7 @@ endfunction
 "a:options may also contain:
 "   'defaults' - a dict containing default values for the returned errors
 "   'subtype' - all errors will be assigned the given subtype
+"   'postprocess' - a list of functions to be applied to the error list
 function! SyntasticMake(options)
     call syntastic#util#debug('SyntasticMake: called with options: '. string(a:options))
 
@@ -331,6 +332,12 @@ function! SyntasticMake(options)
     " Add subtype info if present.
     if has_key(a:options, 'subtype')
         call SyntasticAddToErrors(errors, {'subtype': a:options['subtype']})
+    endif
+
+    if has_key(a:options, 'postprocess') && !empty(a:options['postprocess'])
+        for rule in a:options['postprocess']
+            let errors = call('syntastic#postprocess#' . rule, [errors])
+        endfor
     endif
 
     return errors

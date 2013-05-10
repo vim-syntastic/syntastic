@@ -38,14 +38,22 @@ endfunction
 
 function! SyntaxCheckers_tex_chktex_GetLocList()
     let makeprg = syntastic#makeprg#build({
-                \ 'exe': 'chktex',
-                \ 'post_args': '-q -v1',
-                \ 'subchecker': 'chktex' })
-    let errorformat = '%EError\ %\\d%\\+\ in\ %f\ line\ %l:\ %m,%WWarning\ %\\d%\\+\ in\ %f\ line\ %l:\ %m,' .
-                \ (g:syntastic_tex_chktex_showmsgs ? '%WMessage\ %\\d%\\+\ in\ %f\ line %l:\ %m,' : '') .
-                \ '%+Z%p^,%-G%.%#'
-    let loclist = SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat, 'subtype': 'Style' })
-    return sort(loclist, 'syntastic#util#compareErrorItems')
+        \ 'exe': 'chktex',
+        \ 'post_args': '-q -v1',
+        \ 'subchecker': 'chktex' })
+
+    let errorformat =
+        \ '%EError\ %\\d%\\+\ in\ %f\ line\ %l:\ %m,' .
+        \ '%WWarning\ %\\d%\\+\ in\ %f\ line\ %l:\ %m,' .
+        \ (g:syntastic_tex_chktex_showmsgs ? '%WMessage\ %\\d%\\+\ in\ %f\ line %l:\ %m,' : '') .
+        \ '%+Z%p^,' .
+        \ '%-G%.%#'
+
+    return SyntasticMake({
+        \ 'makeprg': makeprg,
+        \ 'errorformat': errorformat,
+        \ 'subtype': 'Style',
+        \ 'postprocess': ['sort'] })
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
