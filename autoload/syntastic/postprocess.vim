@@ -36,6 +36,22 @@ function syntastic#postprocess#compressWhitespace(errors)
     return llist
 endfunction
 
+" remove spurious CR under Cygwin
+function! syntastic#postprocess#cygwinRemoveCR(errors)
+    if has('win32unix')
+        let llist = []
+
+        for e in a:errors
+            let e['text'] = substitute(e['text'], '\r', '', 'g')
+            call add(llist, e)
+        endfor
+    else
+        let llist = a:errors
+    endif
+
+    return llist
+endfunction
+
 let &cpo = s:save_cpo
 unlet s:save_cpo
 " vim: set et sts=4 sw=4:

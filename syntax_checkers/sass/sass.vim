@@ -39,14 +39,18 @@ function! SyntaxCheckers_sass_sass_GetLocList()
         return []
     end
     let makeprg = syntastic#makeprg#build({
-                \ 'exe': 'sass',
-                \ 'args': '--cache-location ' . s:sass_cache_location . ' ' . s:imports . ' --check',
-                \ 'subchecker': 'sass' })
-    let errorformat = '%ESyntax %trror:%m,%C        on line %l of %f,%Z%.%#'
-    let errorformat .= ',%Wwarning on line %l:,%Z%m,Syntax %trror on line %l: %m'
-    let loclist = SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
+        \ 'exe': 'sass',
+        \ 'args': '--cache-location ' . s:sass_cache_location . ' ' . s:imports . ' --check',
+        \ 'subchecker': 'sass' })
+    let errorformat =
+        \ '%ESyntax %trror:%m,' .
+        \ '%C        on line %l of %f,' .
+        \ '%Z%.%#,' .
+        \ '%Wwarning on line %l:,' .
+        \ '%Z%m,' .
+        \ 'Syntax %trror on line %l: %m'
 
-    return loclist
+    return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
