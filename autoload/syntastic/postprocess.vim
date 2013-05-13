@@ -8,6 +8,7 @@ set cpo&vim
 
 function! s:compareErrorItems(a, b)
     if a:a['bufnr'] != a:b['bufnr']
+        " group by files
         return a:a['bufnr'] - a:b['bufnr']
     elseif a:a['lnum'] != a:b['lnum']
         return a:a['lnum'] - a:b['lnum']
@@ -15,7 +16,7 @@ function! s:compareErrorItems(a, b)
         " errors take precedence over warnings
         return a:a['type'] ==? 'e' ? -1 : 1
     else
-        return a:a['col'] - a:b['col']
+        return get(a:a, 'col') - get(a:b, 'col')
     endif
 endfunction
 
