@@ -45,7 +45,9 @@ function! SyntaxCheckers_c_splint_GetLocList()
     return SyntasticMake({
         \ 'makeprg': makeprg,
         \ 'errorformat': errorformat,
-        \ 'defaults': {'type': 'W', 'subtype': 'Style' } })
+        \ 'subtype': 'Style',
+        \ 'postprocess': ['compressWhitespace'],
+        \ 'defaults': {'type': 'W'} })
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
