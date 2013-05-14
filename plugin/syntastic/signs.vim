@@ -65,6 +65,7 @@ endfunction
 
 " Private methods {{{1
 
+" One time setup: define our own sign types and highlighting
 function! g:SyntasticSignsNotifier._setup()
     if has('signs')
         if !hlexists('SyntasticErrorSign')
@@ -98,39 +99,28 @@ function! g:SyntasticSignsNotifier._setup()
     endif
 endfunction
 
-" Place signs by all syntax errs in the buffer
+" Place signs by all syntax errors in the buffer
 function! g:SyntasticSignsNotifier._signErrors(loclist)
     let loclist = a:loclist
     if loclist.hasErrorsOrWarningsToDisplay()
 
+        " make sure the errors come after the warnings, so that errors mask
+        " the warnings on the same line, not the other way around
         let buf = bufnr('')
-        let errors = loclist.quietWarnings() ? [] : loclist.warnings()
-        call extend(errors, loclist.errors())
-        call filter(errors, 'v:val["bufnr"] == buf')
+        let issues = loclist.quietWarnings() ? [] : loclist.warnings()
+        call extend(issues, loclist.errors())
+        call filter(issues, 'v:val["bufnr"] == buf')
 
-        for i in errors
-            let sign_severity = i['type'] ==? 'w' ? 'Warning' : 'Error'
-            let sign_subtype = has_key(i,'subtype') ? i['subtype'] : ''
+        for i in issues
+            let sign_severity = i['type'] ==? 'W' ? 'Warning' : 'Error'
+            let sign_subtype = get(i, 'subtype', '')
             let sign_type = 'Syntastic' . sign_subtype . sign_severity
 
-            if !self._warningMasksError(i, errors)
-                exec "sign place " . s:next_sign_id . " line=" . i['lnum'] . " name=" . sign_type . " buffer=" . i['bufnr']
-                call add(self._bufSignIds(), s:next_sign_id)
-                let s:next_sign_id += 1
-            endif
+            exec "sign place " . s:next_sign_id . " line=" . i['lnum'] . " name=" . sign_type . " buffer=" . i['bufnr']
+            call add(self._bufSignIds(), s:next_sign_id)
+            let s:next_sign_id += 1
         endfor
     endif
-endfunction
-
-" Return true if the given error item is a warning that, if signed, would
-" potentially mask an error if displayed at the same time
-function! g:SyntasticSignsNotifier._warningMasksError(error, llist)
-    if a:error['type'] !=? 'w'
-        return 0
-    endif
-
-    let loclist = g:SyntasticLoclist.New(a:llist)
-    return len(loclist.filter({ 'type': "E", 'lnum': a:error['lnum'] })) > 0
 endfunction
 
 " Remove the signs with the given ids from this buffer

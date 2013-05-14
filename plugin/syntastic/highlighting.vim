@@ -25,29 +25,26 @@ function! g:SyntasticHighlightingNotifier.enabled()
     return exists('b:syntastic_enable_highlighting') ? b:syntastic_enable_highlighting : g:syntastic_enable_highlighting
 endfunction
 
-" The function `Syntastic_{filetype}_{checker}_GetHighlightRegex` is used
-" to override default highlighting.  This function must take one arg (an
-" error item) and return a regex to match that item in the buffer.
+" Sets error highlights in the cuirrent window
 function! g:SyntasticHighlightingNotifier.refresh(loclist)
-    let fts = substitute(&ft, '-', '_', 'g')
-    for ft in split(fts, '\.')
+    call self.reset(a:loclist)
+    for item in a:loclist.filteredRaw()
+        let group = item['type'] == 'E' ? 'SyntasticError' : 'SyntasticWarning'
 
-        for item in a:loclist.filteredRaw()
-            let group = item['type'] == 'E' ? 'SyntasticError' : 'SyntasticWarning'
+        " The function `Syntastic_{filetype}_{checker}_GetHighlightRegex` is
+        " used to override default highlighting.
+        if has_key(item, 'hl')
+            call matchadd(group, '\%' . item['lnum'] . 'l' . item['hl'])
+        elseif get(item, 'col')
+            let lastcol = col([item['lnum'], '$'])
+            let lcol = min([lastcol, item['col']])
 
-            if has_key(item, 'hl')
-                call matchadd(group, '\%' . item['lnum'] . 'l' . item['hl'])
-            elseif get(item, 'col')
-                let lastcol = col([item['lnum'], '$'])
-                let lcol = min([lastcol, item['col']])
+            " a bug in vim can sometimes cause there to be no 'vcol' key,
+            " so check for its existence
+            let coltype = has_key(item, 'vcol') && item['vcol'] ? 'v' : 'c'
 
-                " a bug in vim can sometimes cause there to be no 'vcol' key,
-                " so check for its existence
-                let coltype = has_key(item, 'vcol') && item['vcol'] ? 'v' : 'c'
-
-                call matchadd(group, '\%' . item['lnum'] . 'l\%' . lcol . coltype)
-            endif
-        endfor
+            call matchadd(group, '\%' . item['lnum'] . 'l\%' . lcol . coltype)
+        endif
     endfor
 endfunction
 

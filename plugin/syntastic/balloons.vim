@@ -39,6 +39,11 @@ function! g:SyntasticBalloonsNotifier.refresh(loclist)
     endif
 endfunction
 
+" Reset the error balloons
+function! g:SyntasticBalloonsNotifier.reset(loclist)
+    set nobeval
+endfunction
+
 " Private functions {{{1
 
 function! SyntasticBalloonsExprNotifier()
