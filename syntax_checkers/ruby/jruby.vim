@@ -24,7 +24,14 @@ function! SyntaxCheckers_ruby_jruby_GetLocList()
                 \ 'args': s:args(),
                 \ 'subchecker': 'jruby' })
 
-    let errorformat =  '%-GSyntax OK for %f,%ESyntaxError in %f:%l: syntax error\, %m,%Z%p^,%W%f:%l: warning: %m,%Z%p^,%W%f:%l: %m,%-C%.%#'
+    let errorformat =
+        \ '%-GSyntax OK for %f,'.
+        \ '%ESyntaxError in %f:%l: syntax error\, %m,'.
+        \ '%Z%p^,'.
+        \ '%W%f:%l: warning: %m,'.
+        \ '%Z%p^,'.
+        \ '%W%f:%l: %m,'.
+        \ '%-C%.%#'
 
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 endfunction

@@ -98,9 +98,14 @@ endif
 
 function! SyntaxCheckers_cpp_gcc_GetLocList()
     let makeprg = g:syntastic_cpp_compiler . ' -x c++ -fsyntax-only '
-    let errorformat =  '%-G%f:%s:,%f:%l:%c: %trror: %m,%f:%l:%c: %tarning: '.
-                \ '%m,%f:%l:%c: %m,%f:%l: %trror: %m,%f:%l: %tarning: %m,'.
-                \ '%f:%l: %m'
+    let errorformat =
+        \ '%-G%f:%s:,' .
+        \ '%f:%l:%c: %trror: %m,' .
+        \ '%f:%l:%c: %tarning: %m,' .
+        \ '%f:%l:%c: %m,'.
+        \ '%f:%l: %trror: %m,'.
+        \ '%f:%l: %tarning: %m,'.
+        \ '%f:%l: %m'
 
     if exists('g:syntastic_cpp_errorformat')
         let errorformat = g:syntastic_cpp_errorformat

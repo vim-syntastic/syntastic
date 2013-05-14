@@ -100,17 +100,17 @@ endif
 function! SyntaxCheckers_objc_gcc_GetLocList()
     let makeprg = g:syntastic_objc_compiler . ' -x objective-c -fsyntax-only -lobjc'
     let errorformat =
-                    \ '%-G%f:%s:,' .
-                    \ '%-G%f:%l: %#error: %#(Each undeclared identifier is reported only%.%#,' .
-                    \ '%-G%f:%l: %#error: %#for each function it appears%.%#,' .
-                    \ '%-GIn file included%.%#,'.
-                    \ '%-G %#from %f:%l\,,' .
-                    \ '%f:%l:%c: %trror: %m,' .
-                    \ '%f:%l:%c: %tarning: %m,' .
-                    \ '%f:%l:%c: %m,' .
-                    \ '%f:%l: %trror: %m,' .
-                    \ '%f:%l: %tarning: %m,' .
-                    \ '%f:%l: %m'
+        \ '%-G%f:%s:,' .
+        \ '%-G%f:%l: %#error: %#(Each undeclared identifier is reported only%.%#,' .
+        \ '%-G%f:%l: %#error: %#for each function it appears%.%#,' .
+        \ '%-GIn file included%.%#,'.
+        \ '%-G %#from %f:%l\,,' .
+        \ '%f:%l:%c: %trror: %m,' .
+        \ '%f:%l:%c: %tarning: %m,' .
+        \ '%f:%l:%c: %m,' .
+        \ '%f:%l: %trror: %m,' .
+        \ '%f:%l: %tarning: %m,' .
+        \ '%f:%l: %m'
 
     if exists('g:syntastic_objc_errorformat')
         let errorformat = g:syntastic_objc_errorformat

@@ -39,7 +39,9 @@ function! SyntaxCheckers_erlang_escript_GetLocList()
     else
         let makeprg =  'escript ' . s:check_file . ' ' . shellescape(expand('%:p')).' '.g:syntastic_erlc_include_path
     endif
-    let errorformat = '%f:%l:\ %tarning:\ %m,%E%f:%l:\ %m'
+    let errorformat =
+        \ '%f:%l:\ %tarning:\ %m,'.
+        \ '%E%f:%l:\ %m'
 
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 endfunction

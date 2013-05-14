@@ -29,11 +29,12 @@ function! SyntaxCheckers_rst_rst2pseudoxml_GetLocList()
                 \ 'tail': syntastic#util#DevNull(),
                 \ 'subchecker': 'rst2pseudoxml' })
 
-    let errorformat = '%f:%l:\ (%tNFO/1)\ %m,
-      \%f:%l:\ (%tARNING/2)\ %m,
-      \%f:%l:\ (%tRROR/3)\ %m,
-      \%f:%l:\ (%tEVERE/4)\ %m,
-      \%-G%.%#'
+    let errorformat =
+        \ '%f:%l:\ (%tNFO/1)\ %m,'.
+        \ '%f:%l:\ (%tARNING/2)\ %m,'.
+        \ '%f:%l:\ (%tRROR/3)\ %m,'.
+        \ '%f:%l:\ (%tEVERE/4)\ %m,'.
+        \ '%-G%.%#'
 
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 endfunction

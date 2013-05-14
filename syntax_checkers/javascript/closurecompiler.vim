@@ -47,7 +47,12 @@ function! SyntaxCheckers_javascript_closurecompiler_GetLocList()
                 \ 'fname': file_list,
                 \ 'subchecker': 'closurecompiler' })
 
-    let errorformat = '%-GOK,%E%f:%l: ERROR - %m,%Z%p^,%W%f:%l: WARNING - %m,%Z%p^'
+    let errorformat =
+        \ '%-GOK,'.
+        \ '%E%f:%l: ERROR - %m,'.
+        \ '%Z%p^,'.
+        \ '%W%f:%l: WARNING - %m,'.
+        \ '%Z%p^'
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 endfunction
 

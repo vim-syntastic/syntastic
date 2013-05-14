@@ -28,15 +28,16 @@ function! SyntaxCheckers_xml_xmllint_GetLocList()
                 \ 'exe': 'xmllint',
                 \ 'args': '--xinclude --noout --postvalid',
                 \ 'subchecker': 'xmllint' })
-    let errorformat='%E%f:%l: error : %m,' .
-                \ '%-G%f:%l: validity error : Validation failed: no DTD found %m,' .
-                \ '%W%f:%l: warning : %m,' .
-                \ '%W%f:%l: validity warning : %m,' .
-                \ '%E%f:%l: validity error : %m,' .
-                \ '%E%f:%l: parser error : %m,' .
-                \ '%E%f:%l: %m,' .
-                \ '%-Z%p^,' .
-                \ '%-G%.%#'
+    let errorformat=
+        \ '%E%f:%l: error : %m,' .
+        \ '%-G%f:%l: validity error : Validation failed: no DTD found %m,' .
+        \ '%W%f:%l: warning : %m,' .
+        \ '%W%f:%l: validity warning : %m,' .
+        \ '%E%f:%l: validity error : %m,' .
+        \ '%E%f:%l: parser error : %m,' .
+        \ '%E%f:%l: %m,' .
+        \ '%-Z%p^,' .
+        \ '%-G%.%#'
     let loclist = SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 
     return loclist

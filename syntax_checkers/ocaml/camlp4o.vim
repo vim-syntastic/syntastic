@@ -82,15 +82,16 @@ function! SyntaxCheckers_ocaml_camlp4o_GetLocList()
         return []
     endif
 
-    let errorformat = '%AFile "%f"\, line %l\, characters %c-%*\d:,'.
-                \ '%AFile "%f"\, line %l\, characters %c-%*\d (end at line %*\d\, character %*\d):,'.
-                \ '%AFile "%f"\, line %l\, character %c:,'.
-                \ '%AFile "%f"\, line %l\, character %c:%m,'.
-                \ '%-GPreprocessing error %.%#,'.
-                \ '%-GCommand exited %.%#,'.
-                \ '%C%tarning %n: %m,'.
-                \ '%C%m,'.
-                \ '%-G+%.%#'
+    let errorformat =
+        \ '%AFile "%f"\, line %l\, characters %c-%*\d:,'.
+        \ '%AFile "%f"\, line %l\, characters %c-%*\d (end at line %*\d\, character %*\d):,'.
+        \ '%AFile "%f"\, line %l\, character %c:,'.
+        \ '%AFile "%f"\, line %l\, character %c:%m,'.
+        \ '%-GPreprocessing error %.%#,'.
+        \ '%-GCommand exited %.%#,'.
+        \ '%C%tarning %n: %m,'.
+        \ '%C%m,'.
+        \ '%-G+%.%#'
 
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 endfunction

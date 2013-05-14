@@ -34,7 +34,10 @@ function! SyntaxCheckers_javascript_jslint_GetLocList()
                 \ 'exe': 'jslint',
                 \ 'args': g:syntastic_javascript_jslint_conf,
                 \ 'subchecker': 'jslint' })
-    let errorformat='%E %##%n %m,%-Z%.%#Line %l\, Pos %c,%-G%.%#'
+    let errorformat =
+        \ '%E %##%n %m,'.
+        \ '%-Z%.%#Line %l\, Pos %c,'.
+        \ '%-G%.%#'
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat, 'defaults': {'bufnr': bufnr("")} })
 endfunction
 

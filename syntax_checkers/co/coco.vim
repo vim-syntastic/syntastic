@@ -28,7 +28,11 @@ function! SyntaxCheckers_co_coco_GetLocList()
                 \ 'exe': 'coco',
                 \ 'args': '-c -o /tmp',
                 \ 'subchecker': 'coco' })
-    let errorformat = '%EFailed at: %f,%ZSyntax%trror: %m on line %l,%EFailed at: %f,%Z%trror: Parse error on line %l: %m'
+    let errorformat =
+        \ '%EFailed at: %f,' .
+        \ '%ZSyntax%trror: %m on line %l,'.
+        \ '%EFailed at: %f,'.
+        \ '%Z%trror: Parse error on line %l: %m'
 
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 endfunction

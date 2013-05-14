@@ -32,13 +32,13 @@ function! SyntaxCheckers_java_checkstyle_GetLocList()
     let fname = fnameescape( expand('%:p:h') . '/' . expand('%:t') )
 
     if has('win32unix')
-	let fname = substitute(system('cygpath -m ' . fname), '\%x00', '', 'g')
+        let fname = substitute(system('cygpath -m ' . fname), '\%x00', '', 'g')
     endif
 
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'java',
-	\ 'args': '-cp ' . g:syntastic_java_checkstyle_classpath .
-	\	  ' com.puppycrawl.tools.checkstyle.Main -c ' . g:syntastic_java_checkstyle_conf_file,
+        \ 'args': '-cp ' . g:syntastic_java_checkstyle_classpath .
+        \         ' com.puppycrawl.tools.checkstyle.Main -c ' . g:syntastic_java_checkstyle_conf_file,
         \ 'fname': fname,
         \ 'subchecker': 'checkstyle' })
 

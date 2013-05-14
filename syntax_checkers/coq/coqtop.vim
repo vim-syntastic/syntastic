@@ -24,7 +24,9 @@ function! SyntaxCheckers_coq_coqtop_GetLocList()
                 \ 'exe': 'coqtop',
                 \ 'args': '-noglob -batch -load-vernac-source',
                 \ 'subchecker': 'coqtop' })
-    let errorformat = '%AFile \"%f\"\, line %l\, characters %c\-%.%#\:,%C%m'
+    let errorformat =
+        \ '%AFile \"%f\"\, line %l\, characters %c\-%.%#\:,'.
+        \ '%C%m'
 
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 endfunction

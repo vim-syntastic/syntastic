@@ -34,7 +34,12 @@ function! SyntaxCheckers_eruby_ruby_GetLocList()
         \ (expand("%")) .
         \ ''').gsub(''<\%='',''<\%''), nil, ''-'').src" \| ' . ruby_exec . ' -c'
 
-    let errorformat='%-GSyntax OK,%E-:%l: syntax error\, %m,%Z%p^,%W-:%l: warning: %m,%Z%p^,%-C%.%#'
+    let errorformat =
+        \ '%-GSyntax OK,'.
+        \ '%E-:%l: syntax error\, %m,%Z%p^,'.
+        \ '%W-:%l: warning: %m,'.
+        \ '%Z%p^,'.
+        \ '%-C%.%#'
 
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat})
 endfunction

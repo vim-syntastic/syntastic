@@ -35,7 +35,12 @@ function! SyntaxCheckers_python_pyflakes_GetLocList()
     let makeprg = syntastic#makeprg#build({
                 \ 'exe': 'pyflakes',
                 \ 'subchecker': 'pyflakes' })
-    let errorformat = '%E%f:%l: could not compile,%-Z%p^,%E%f:%l:%c: %m,%E%f:%l: %m,%-G%.%#'
+    let errorformat =
+        \ '%E%f:%l: could not compile,'.
+        \ '%-Z%p^,'.
+        \ '%E%f:%l:%c: %m,'.
+        \ '%E%f:%l: %m,'.
+        \ '%-G%.%#'
 
     return SyntasticMake({ 'makeprg': makeprg,
                          \ 'errorformat': errorformat,

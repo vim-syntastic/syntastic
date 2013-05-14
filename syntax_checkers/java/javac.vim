@@ -38,14 +38,14 @@ if !exists("g:syntastic_java_javac_delete_output")
 endif
 
 function! s:CygwinPath(path)
-	return substitute(system("cygpath -m ".a:path), '\%x00', '', 'g')
+    return substitute(system("cygpath -m ".a:path), '\%x00', '', 'g')
 endfunction
 
 if !exists("g:syntastic_java_javac_temp_dir")
     if has('win32') || has('win64')
         let g:syntastic_java_javac_temp_dir = $TEMP."\\vim-syntastic-javac"
     elseif has('win32unix')
-	let g:syntastic_java_javac_temp_dir = s:CygwinPath('/tmp/vim-syntastic-javac')
+        let g:syntastic_java_javac_temp_dir = s:CygwinPath('/tmp/vim-syntastic-javac')
     else
         let g:syntastic_java_javac_temp_dir = '/tmp/vim-syntastic-javac'
     endif
@@ -248,10 +248,10 @@ function! SyntaxCheckers_java_javac_GetLocList()
     endfor
 
     if g:syntastic_java_javac_autoload_maven_classpath
-	if !g:syntastic_java_javac_delete_output
-	    let maven_output_dir = s:MavenOutputDirectory()
-	    let javac_opts .= ' -d ' . maven_output_dir
-	endif
+        if !g:syntastic_java_javac_delete_output
+            let maven_output_dir = s:MavenOutputDirectory()
+            let javac_opts .= ' -d ' . maven_output_dir
+        endif
         let maven_classpath = s:GetMavenClasspath()
         let javac_classpath = s:AddToClasspath(javac_classpath,maven_classpath)
     endif
@@ -270,7 +270,7 @@ function! SyntaxCheckers_java_javac_GetLocList()
     let fname = fnameescape(expand ( '%:p:h' ) . sep . expand ( '%:t' ))
 
     if has('win32unix')
-	let fname =  s:CygwinPath(fname)
+        let fname =  s:CygwinPath(fname)
     endif
 
     let makeprg = syntastic#makeprg#build({
@@ -281,7 +281,13 @@ function! SyntaxCheckers_java_javac_GetLocList()
         \ 'subchecker': 'javac' })
 
     " unashamedly stolen from *errorformat-javac* (quickfix.txt) and modified to include error types
-    let errorformat = '%E%f:%l:\ error:\ %m,%W%f:%l:\ warning:\ %m,%A%f:%l:\ %m,%+Z%p^,%+C%.%#,%-G%.%#'
+    let errorformat =
+        \ '%E%f:%l:\ error:\ %m,'.
+        \ '%W%f:%l:\ warning:\ %m,'.
+        \ '%A%f:%l:\ %m,'.
+        \ '%+Z%p^,'.
+        \ '%+C%.%#,'.
+        \ '%-G%.%#'
 
     if g:syntastic_java_javac_delete_output
         silent! call mkdir(output_dir,'p')

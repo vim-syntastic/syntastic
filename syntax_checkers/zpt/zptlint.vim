@@ -30,7 +30,11 @@ endfunction
 
 function! SyntaxCheckers_zpt_zptlint_GetLocList()
     let makeprg = syntastic#makeprg#build({ 'exe': 'zptlint', 'subchecker': 'zptlint' })
-    let errorformat='%-P*** Error in: %f,%Z%*\s\, at line %l\, column %c,%E%*\s%m,%-Q'
+    let errorformat=
+        \ '%-P*** Error in: %f,'.
+        \ '%Z%*\s\, at line %l\, column %c,'.
+        \ '%E%*\s%m,'.
+        \ '%-Q'
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 endfunction
 

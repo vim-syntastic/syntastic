@@ -53,7 +53,10 @@ function! SyntaxCheckers_vala_valac_GetLocList()
                 \ 'exe': 'valac',
                 \ 'args': '-C ' . vala_pkg_args,
                 \ 'subchecker': 'valac' })
-    let errorformat = '%A%f:%l.%c-%\d%\+.%\d%\+: %t%[a-z]%\+: %m,%C%m,%Z%m'
+    let errorformat =
+        \ '%A%f:%l.%c-%\d%\+.%\d%\+: %t%[a-z]%\+: %m,'.
+        \ '%C%m,'.
+        \ '%Z%m'
 
     return SyntasticMake({ 'makeprg': makeprg,
                          \ 'errorformat': errorformat })

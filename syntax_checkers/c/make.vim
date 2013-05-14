@@ -26,12 +26,18 @@ function! SyntaxCheckers_c_make_GetLocList()
 
     let makeprg = 'make -sk'
 
-    let errorformat = '%-G%f:%s:,%-G%f:%l: %#error: %#(Each undeclared '.
-        \ 'identifier is reported only%.%#,%-G%f:%l: %#error: %#for '.
-        \ 'each function it appears%.%#,%-GIn file included%.%#,'.
-        \ '%-G %#from %f:%l\,,%f:%l:%c: %trror: %m,%f:%l:%c: '.
-        \ '%tarning: %m,%f:%l:%c: %m,%f:%l: %trror: %m,'.
-        \ '%f:%l: %tarning: %m,%f:%l: %m'
+    let errorformat =
+        \ '%-G%f:%s:,' .
+        \ '%-G%f:%l: %#error: %#(Each undeclared identifier is reported only%.%#,' .
+        \ '%-G%f:%l: %#error: %#for each function it appears%.%#,' .
+        \ '%-GIn file included%.%#,' .
+        \ '%-G %#from %f:%l\,,' .
+        \ '%f:%l:%c: %trror: %m,' .
+        \ '%f:%l:%c: %tarning: %m,' .
+        \ '%f:%l:%c: %m,' .
+        \ '%f:%l: %trror: %m,' .
+        \ '%f:%l: %tarning: %m,'.
+        \ '%f:%l: %m'
 
     if exists('g:syntastic_c_errorformat')
         let errorformat = g:syntastic_c_errorformat

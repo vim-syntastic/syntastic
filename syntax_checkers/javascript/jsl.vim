@@ -34,7 +34,14 @@ function! SyntaxCheckers_javascript_jsl_GetLocList()
                 \ 'exe': 'jsl',
                 \ 'args': s:ConfFlag() . " -nologo -nofilelisting -nosummary -nocontext -process",
                 \ 'subchecker': 'jsl' })
-    let errorformat='%W%f(%l): lint warning: %m,%-Z%p^,%W%f(%l): warning: %m,%-Z%p^,%E%f(%l): SyntaxError: %m,%-Z%p^,%-G'
+    let errorformat =
+        \ '%W%f(%l): lint warning: %m,'.
+        \ '%-Z%p^,'.
+        \ '%W%f(%l): warning: %m,'.
+        \ '%-Z%p^,'.
+        \ '%E%f(%l): SyntaxError: %m,'.
+        \ '%-Z%p^,'.
+        \ '%-G'
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 endfunction
 

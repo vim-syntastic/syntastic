@@ -23,7 +23,12 @@ function! SyntaxCheckers_json_jsonlint_GetLocList()
                 \ 'exe': 'jsonlint',
                 \ 'post_args': '--compact',
                 \ 'subchecker': 'jsonlint' })
-    let errorformat = '%ELine %l:%c,%Z\\s%#Reason: %m,%C%.%#,%f: line %l\, col %c\, %m,%-G%.%#'
+    let errorformat =
+        \ '%ELine %l:%c,'.
+        \ '%Z\\s%#Reason: %m,'.
+        \ '%C%.%#,'.
+        \ '%f: line %l\, col %c\, %m,'.
+        \ '%-G%.%#'
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat, 'defaults': {'bufnr': bufnr('')} })
 endfunction
 

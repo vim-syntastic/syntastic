@@ -25,7 +25,10 @@ function! SyntaxCheckers_tcl_nagelfar_GetLocList()
                 \ 'exe': 'nagelfar',
                 \ 'args': '-H ' . g:syntastic_tcl_nagelfar_conf,
                 \ 'subchecker': 'nagelfar' })
-    let errorformat='%I%f: %l: N %m, %f: %l: %t %m, %-GChecking file %f'
+    let errorformat =
+        \ '%I%f: %l: N %m,'.
+        \ '%f: %l: %t %m,'.
+        \ '%-GChecking file %f'
 
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 endfunction
