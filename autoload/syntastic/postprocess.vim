@@ -29,6 +29,7 @@ function syntastic#postprocess#compressWhitespace(errors)
     let llist = []
 
     for e in a:errors
+        let e['text'] = substitute(e['text'], '\n', ' ', 'g')
         let e['text'] = substitute(e['text'], '\s\{2,}', ' ', 'g')
         call add(llist, e)
     endfor
