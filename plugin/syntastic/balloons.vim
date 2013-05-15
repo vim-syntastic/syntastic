@@ -28,14 +28,18 @@ endfunction
 function! g:SyntasticBalloonsNotifier.refresh(loclist)
     let b:syntastic_balloons = {}
     if a:loclist.hasErrorsOrWarningsToDisplay()
-        for i in a:loclist.filteredRaw()
-            if has_key(b:syntastic_balloons, i['lnum'])
-                let b:syntastic_balloons[i['lnum']] .= "\n" . i['text']
-            else
-                let b:syntastic_balloons[i['lnum']] = i['text']
-            endif
-        endfor
-        set beval bexpr=SyntasticBalloonsExprNotifier()
+        let buf = bufnr('')
+        let issues = filter(a:loclist.filteredRaw(), 'v:val["bufnr"] == buf')
+        if !empty(issues)
+            for i in issues
+                if has_key(b:syntastic_balloons, i['lnum'])
+                    let b:syntastic_balloons[i['lnum']] .= "\n" . i['text']
+                else
+                    let b:syntastic_balloons[i['lnum']] = i['text']
+                endif
+            endfor
+            set beval bexpr=SyntasticBalloonsExprNotifier()
+        endif
     endif
 endfunction
 

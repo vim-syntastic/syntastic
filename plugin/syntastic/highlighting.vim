@@ -28,7 +28,9 @@ endfunction
 " Sets error highlights in the cuirrent window
 function! g:SyntasticHighlightingNotifier.refresh(loclist)
     call self.reset(a:loclist)
-    for item in a:loclist.filteredRaw()
+    let buf = bufnr('')
+    let issues = filter(a:loclist.filteredRaw(), 'v:val["bufnr"] == buf')
+    for item in issues
         let group = item['type'] == 'E' ? 'SyntasticError' : 'SyntasticWarning'
 
         " The function `Syntastic_{filetype}_{checker}_GetHighlightRegex` is
