@@ -48,6 +48,10 @@ if !exists("g:syntastic_loc_list_height")
     let g:syntastic_loc_list_height = 10
 endif
 
+if !exists("g:syntastic_ignore_files")
+    let g:syntastic_ignore_files = []
+endif
+
 let s:registry = g:SyntasticRegistry.Instance()
 let s:notifiers = g:SyntasticNotifiers.New()
 let s:modemap = g:SyntasticModeMap.Instance()
@@ -222,10 +226,21 @@ function! s:Redraw()
     endif
 endfunction
 
+function! s:IgnoreFile(filename)
+    let fname = fnamemodify(a:filename, ':p')
+    for p in g:syntastic_ignore_files
+        if fname =~# p
+            return 1
+        endif
+    endfor
+    return 0
+endfunction
+
 " Skip running in special buffers
 function! s:SkipFile()
     let force_skip = exists('b:syntastic_skip_checks') ? b:syntastic_skip_checks : 0
-    return force_skip || !empty(&buftype) || !filereadable(expand('%')) || getwinvar(0, '&diff')
+    let fname = expand('%')
+    return force_skip || !empty(&buftype) || !filereadable(fname) || getwinvar(0, '&diff') || s:IgnoreFile(fname)
 endfunction
 
 function! s:uname()
@@ -337,6 +352,9 @@ function! SyntasticMake(options)
     if has_key(a:options, 'defaults')
         call SyntasticAddToErrors(errors, a:options['defaults'])
     endif
+
+    " Apply ignore patterns
+    call filter(errors, '!s:IgnoreFile(bufname(str2nr(v:val["bufnr"])))')
 
     " Add subtype info if present.
     if has_key(a:options, 'subtype')

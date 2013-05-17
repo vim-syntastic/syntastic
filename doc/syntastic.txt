@@ -254,6 +254,15 @@ opens. >
     let g:syntastic_loc_list_height=5
 <
 
+                                                    *'syntastic_ignore_files'*
+Default: []
+Use this option to specify files that syntastic should neither check, nor
+include in error lists. It has to be a list of |regular-expression| patterns.
+The full paths of files (see |::p|) are matched against these patterns, and
+the matches are case sensitive. Use |\c| if you need case insensitive
+patterns. >
+    let g:syntastic_ignore_files=['^/usr/include/', '\c\.h$']
+<
 
                                                         *'syntastic_mode_map'*
 Default: { "mode": "active",
