@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/env perl
 # vimparse.pl - Reformats the error messages of the Perl interpreter for use
 # with the quickfix mode of Vim
 #
@@ -100,7 +100,7 @@ if ($file eq '-') { # make STDIN seek-able, so it can be read twice
 }
 
 my $libs = join ' ', map {"-I$_"} split ',', $opt_I || '';
-my @error_lines = `perl $libs @{[defined $opt_c ? '-c ' : '' ]} @{[defined $opt_w ? '-X ' : '-Mwarnings ']} "$file$args" 2>&1`;
+my @error_lines = `$^X $libs @{[defined $opt_c ? '-c ' : '' ]} @{[defined $opt_w ? '-X ' : '-Mwarnings ']} "$file$args" 2>&1`;
 
 my @lines = map { "E:$_" } @error_lines;
 
@@ -109,7 +109,7 @@ if(defined($opt_w)) {
     if ($file eq '-') {
         seek \*STDIN, 0, 0 or die "seek: $!";
     }
-    @warn_lines = `perl $libs @{[defined $opt_c ? '-c ' : '' ]} -Mwarnings "$file$args" 2>&1`;
+    @warn_lines = `$^X $libs @{[defined $opt_c ? '-c ' : '' ]} -Mwarnings "$file$args" 2>&1`;
 }
 
 # Any new errors must be warnings

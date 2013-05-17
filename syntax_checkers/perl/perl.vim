@@ -30,21 +30,27 @@ if exists("g:loaded_syntastic_perl_perl_checker")
 endif
 let g:loaded_syntastic_perl_perl_checker=1
 
+if !exists("g:syntastic_perl_interpreter")
+    let g:syntastic_perl_interpreter = "perl"
+endif
+
 function! SyntaxCheckers_perl_perl_IsAvailable()
-    return executable("perl")
+    return executable(g:syntastic_perl_interpreter)
 endfunction
 
 if !exists("g:syntastic_perl_efm_program")
-    let g:syntastic_perl_efm_program = 'perl ' . shellescape(expand('<sfile>:p:h') . '/efm_perl.pl') . ' -c -w'
+    let g:syntastic_perl_efm_program =
+        \ g:syntastic_perl_interpreter . ' ' .
+        \ shellescape(expand('<sfile>:p:h') . '/efm_perl.pl') .
+        \ ' -c -w'
 endif
 
 function! SyntaxCheckers_perl_perl_GetLocList()
+    let makeprg = g:syntastic_perl_efm_program
     if exists("g:syntastic_perl_lib_path")
-        let makeprg = g:syntastic_perl_efm_program . ' -I' . g:syntastic_perl_lib_path . ' ' . shellescape(expand('%'))
-    else
-        let makeprg = g:syntastic_perl_efm_program . ' ' . shellescape(expand('%'))
+        let makeprg .= ' -I' . g:syntastic_perl_lib_path
     endif
-    let makeprg .= s:ExtraMakeprgArgs()
+    let makeprg .= ' ' . shellescape(expand('%')) . s:ExtraMakeprgArgs()
 
     let errorformat =  '%t:%f:%l:%m'
 
