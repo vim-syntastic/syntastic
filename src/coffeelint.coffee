@@ -602,7 +602,7 @@ class LexicalLinter
         isIndexStart = nextToken[0] == 'INDEX_START'
         isDot = nextToken[0] == '.'
 
-        # https://github.githubcom/jashkenas/coffee-script/issues/1601
+        # https://github.com/jashkenas/coffee-script/issues/1601
         # @::foo is valid, but @:: behaves inconsistently and is planned for
         # removal. Technically @:: is a stand alone ::, but I think it makes
         # sense to group it into no_stand_alone_at
