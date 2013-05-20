@@ -74,7 +74,7 @@ endfunction
 
 function s:Args()
     let args = s:TidyEncOptByFenc() .
-        \ ' --new-blocklevel-tags ' . shellescape('section, article, aside, hgroup, header, footer, nav, figure, figcaption') .
+        \ ' --new-blocklevel-tags ' . shellescape('main, section, article, aside, hgroup, header, footer, nav, figure, figcaption') .
         \ ' --new-inline-tags ' . shellescape('video, audio, source, embed, mark, progress, meter, time, ruby, rt, rp, canvas, command, details, datalist') .
         \ ' --new-empty-tags ' . shellescape('wbr, keygen') .
         \ ' -e'
