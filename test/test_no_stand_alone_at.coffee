@@ -16,6 +16,8 @@ vows.describe('stand alone @').addBatch({
             @[ok]
             @.ok
             not(@).ok
+            @::ok
+            @:: #notok
             """
 
         'are allowed by default' : (source) ->
@@ -27,7 +29,7 @@ vows.describe('stand alone @').addBatch({
             config = {no_stand_alone_at : {level:'error'}}
             errors = coffeelint.lint(source, config)
             assert.isArray(errors)
-            assert.lengthOf(errors, 3)
+            assert.lengthOf(errors, 4)
             error = errors[0]
             assert.equal(error.lineNumber, 2)
             assert.equal(error.rule, 'no_stand_alone_at')
@@ -36,6 +38,9 @@ vows.describe('stand alone @').addBatch({
             assert.equal(error.rule, 'no_stand_alone_at')
             error = errors[2]
             assert.equal(error.lineNumber, 7)
+            assert.equal(error.rule, 'no_stand_alone_at')
+            error = errors[3]
+            assert.equal(error.lineNumber, 9)
             assert.equal(error.rule, 'no_stand_alone_at')
 
 }).export(module)

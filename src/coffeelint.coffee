@@ -602,7 +602,16 @@ class LexicalLinter
         isIndexStart = nextToken[0] == 'INDEX_START'
         isDot = nextToken[0] == '.'
 
-        if spaced or (not isIdentifier and not isIndexStart and not isDot)
+        # https://github.com/jashkenas/coffee-script/issues/1601
+        # @::foo is valid, but @:: behaves inconsistently and is planned for
+        # removal. Technically @:: is a stand alone ::, but I think it makes
+        # sense to group it into no_stand_alone_at
+        if nextToken[0] == '::'
+            protoProperty = @peek(2)
+            isValidProtoProperty = protoProperty[0] == 'IDENTIFIER'
+
+        if spaced or (not isIdentifier and not isIndexStart and
+        not isDot and not isValidProtoProperty)
             @createLexError('no_stand_alone_at')
 
 
