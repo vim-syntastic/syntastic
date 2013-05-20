@@ -36,6 +36,7 @@ function! SyntaxCheckers_c_splint_GetLocList()
         \ 'subchecker': 'splint' })
 
     let errorformat =
+        \ '%-G%f:%l:%v: %[%#]%[%#]%[%#] Internal Bug %.%#,' .
         \ '%W%f:%l:%v: %m,' .
         \ '%W%f:%l: %m,' .
         \ '%-C %\+In file included from %.%#,' .
