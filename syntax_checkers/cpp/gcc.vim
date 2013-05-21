@@ -45,6 +45,7 @@ function! SyntaxCheckers_cpp_gcc_GetLocList()
         \     '%f:%l: %tarning: %m,'.
         \     '%f:%l: %m',
         \ 'makeprg_main': '-x c++ -fsyntax-only',
+        \ 'makeprg_headers': '-x c++',
         \ 'headers_pattern': '\.\(h\|hpp\|hh\)$' })
 endfunction
 
