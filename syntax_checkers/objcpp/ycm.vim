@@ -1,7 +1,7 @@
 "============================================================================
-"File:        llvm.vim
+"File:        ycm.vim
 "Description: Syntax checking plugin for syntastic.vim
-"Maintainer:  Andrew Kelley <superjoe30@gmail.com>
+"Maintainer:  Val Markovic <val at markovic dot io>
 "License:     This program is free software. It comes without any warranty,
 "             to the extent permitted by applicable law. You can redistribute
 "             it and/or modify it under the terms of the Do What The Fuck You
@@ -9,26 +9,26 @@
 "             See http://sam.zoy.org/wtfpl/COPYING for more details.
 "
 "============================================================================
-if exists("g:loaded_syntastic_llvm_llvm_checker")
+
+if exists("loaded_ycm_objcpp_syntax_checker")
     finish
 endif
-let g:loaded_syntastic_llvm_llvm_checker=1
+let loaded_ycm_objcpp_syntax_checker = 1
 
-function! SyntaxCheckers_llvm_llvm_IsAvailable()
-    return executable("llc")
+runtime syntax_checkers/c/ycm.vim
+
+function! SyntaxCheckers_objcpp_ycm_IsAvailable()
+    return SyntaxCheckers_c_ycm_IsAvailable()
 endfunction
 
-function! SyntaxCheckers_llvm_llvm_GetLocList()
-    let makeprg = syntastic#makeprg#build({
-                \ 'exe': 'llc',
-                \ 'args': syntastic#c#NullOutput('llvm'),
-                \ 'subchecker': 'llvm' })
-    let errorformat = 'llc: %f:%l:%c: %trror: %m'
+if !exists('g:loaded_youcompleteme')
+    finish
+endif
 
-    return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
+function! SyntaxCheckers_objcpp_ycm_GetLocList()
+    return SyntaxCheckers_c_ycm_GetLocList()
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
-    \ 'filetype': 'llvm',
-    \ 'name': 'llvm'})
-
+    \ 'filetype': 'objcpp',
+    \ 'name': 'ycm'})
