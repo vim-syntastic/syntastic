@@ -44,7 +44,7 @@ function! SyntaxCheckers_d_dmd_GetLocList()
         \ 'errorformat':
         \     '%-G%f:%s:,%f(%l): %m,' .
         \     '%f:%l: %m',
-        \ 'makeprg_main': '-c',
+        \ 'makeprg_main': '-c ' . syntastic#c#NullOutput('d'),
         \ 'headers_pattern': '\.di$' })
 endfunction
 
