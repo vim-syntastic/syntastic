@@ -6,51 +6,14 @@ let g:loaded_syntastic_c_autoload = 1
 let s:save_cpo = &cpo
 set cpo&vim
 
-" initialize c/cpp syntax checker handlers
-function! s:Init()
-    let s:handlers = []
-    let s:cflags = {}
-
-    call s:RegHandler('gtk', 'syntastic#c#CheckPKG',
-                \ ['gtk', 'gtk+-2.0', 'gtk+', 'glib-2.0', 'glib'])
-    call s:RegHandler('glib', 'syntastic#c#CheckPKG',
-                \ ['glib', 'glib-2.0', 'glib'])
-    call s:RegHandler('glade', 'syntastic#c#CheckPKG',
-                \ ['glade', 'libglade-2.0', 'libglade'])
-    call s:RegHandler('libsoup', 'syntastic#c#CheckPKG',
-                \ ['libsoup', 'libsoup-2.4', 'libsoup-2.2'])
-    call s:RegHandler('webkit', 'syntastic#c#CheckPKG',
-                \ ['webkit', 'webkit-1.0'])
-    call s:RegHandler('cairo', 'syntastic#c#CheckPKG',
-                \ ['cairo', 'cairo'])
-    call s:RegHandler('pango', 'syntastic#c#CheckPKG',
-                \ ['pango', 'pango'])
-    call s:RegHandler('libxml', 'syntastic#c#CheckPKG',
-                \ ['libxml', 'libxml-2.0', 'libxml'])
-    call s:RegHandler('freetype', 'syntastic#c#CheckPKG',
-                \ ['freetype', 'freetype2', 'freetype'])
-    call s:RegHandler('SDL', 'syntastic#c#CheckPKG',
-                \ ['sdl', 'sdl'])
-    call s:RegHandler('opengl', 'syntastic#c#CheckPKG',
-                \ ['opengl', 'gl'])
-    call s:RegHandler('ruby', 'syntastic#c#CheckRuby', [])
-    call s:RegHandler('Python\.h', 'syntastic#c#CheckPython', [])
-    call s:RegHandler('php\.h', 'syntastic#c#CheckPhp', [])
-endfunction
-
-" default include directories
-let s:default_includes = [ '.', '..', 'include', 'includes',
-            \ '../include', '../includes' ]
+" Public functions {{{1
 
 " convenience function to determine the 'null device' parameter
 " based on the current operating system
-function! syntastic#c#GetNullDevice()
-    if has('win32')
-        return '-o nul'
-    elseif has('unix') || has('mac')
-        return '-o /dev/null'
-    endif
-    return ''
+function! syntastic#c#NullOutput(ft)
+    let known_os = has('win32') || has('unix') || has('mac')
+    let opt_o = ft ==# 'd' ? '-of' : '-o '
+    return known_os ? opt_o . syntastic#util#DevNull() : ''
 endfunction
 
 " get the gcc include directory argument depending on the default
@@ -112,7 +75,7 @@ function! syntastic#c#SearchHeaders()
     let includes = ''
     let files = []
     let found = []
-    let lines = filter(getline(1, 100), 'v:val =~# "#\s*include"')
+    let lines = filter(getline(1, 100), 'v:val =~# "^\s*#\s*include"')
 
     " search current buffer
     for line in lines
@@ -140,7 +103,7 @@ function! syntastic#c#SearchHeaders()
             catch /E484/
                 continue
             endtry
-            let lines = filter(lines, 'v:val =~# "#\s*include"')
+            let lines = filter(lines, 'v:val =~# "^\s*#\s*include"')
             for handler in s:handlers
                 if index(found, handler["regex"]) != -1
                     continue
@@ -157,6 +120,40 @@ function! syntastic#c#SearchHeaders()
     endfor
 
     return includes
+endfunction
+
+" Private functions {{{1
+
+" initialize c/cpp syntax checker handlers
+function! s:Init()
+    let s:handlers = []
+    let s:cflags = {}
+
+    call s:RegHandler('gtk', 'syntastic#c#CheckPKG',
+                \ ['gtk', 'gtk+-2.0', 'gtk+', 'glib-2.0', 'glib'])
+    call s:RegHandler('glib', 'syntastic#c#CheckPKG',
+                \ ['glib', 'glib-2.0', 'glib'])
+    call s:RegHandler('glade', 'syntastic#c#CheckPKG',
+                \ ['glade', 'libglade-2.0', 'libglade'])
+    call s:RegHandler('libsoup', 'syntastic#c#CheckPKG',
+                \ ['libsoup', 'libsoup-2.4', 'libsoup-2.2'])
+    call s:RegHandler('webkit', 'syntastic#c#CheckPKG',
+                \ ['webkit', 'webkit-1.0'])
+    call s:RegHandler('cairo', 'syntastic#c#CheckPKG',
+                \ ['cairo', 'cairo'])
+    call s:RegHandler('pango', 'syntastic#c#CheckPKG',
+                \ ['pango', 'pango'])
+    call s:RegHandler('libxml', 'syntastic#c#CheckPKG',
+                \ ['libxml', 'libxml-2.0', 'libxml'])
+    call s:RegHandler('freetype', 'syntastic#c#CheckPKG',
+                \ ['freetype', 'freetype2', 'freetype'])
+    call s:RegHandler('SDL', 'syntastic#c#CheckPKG',
+                \ ['sdl', 'sdl'])
+    call s:RegHandler('opengl', 'syntastic#c#CheckPKG',
+                \ ['opengl', 'gl'])
+    call s:RegHandler('ruby', 'syntastic#c#CheckRuby', [])
+    call s:RegHandler('Python\.h', 'syntastic#c#CheckPython', [])
+    call s:RegHandler('php\.h', 'syntastic#c#CheckPhp', [])
 endfunction
 
 " try to find library with 'pkg-config'
@@ -231,9 +228,15 @@ function! s:RegHandler(regex, function, args)
     call add(s:handlers, handler)
 endfunction
 
+" }}}1
+
+" default include directories
+let s:default_includes = [ '.', '..', 'include', 'includes',
+            \ '../include', '../includes' ]
+
 call s:Init()
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
 
-" vim: set et sts=4 sw=4:
+" vim: set et sts=4 sw=4 fdm=marker:

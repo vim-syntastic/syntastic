@@ -1,5 +1,5 @@
 "============================================================================
-"File:        c.vim
+"File:        objcpp.vim
 "Description: Syntax checking plugin for syntastic.vim
 "Maintainer:  Gregor Uhlenheuer <kongo2002 at gmail dot com>
 "License:     This program is free software. It comes without any warranty,
@@ -10,51 +10,51 @@
 "
 "============================================================================
 
-
-if exists('g:loaded_syntastic_c_gcc_checker')
+if exists('g:loaded_syntastic_objcpp_gcc_checker')
     finish
 endif
-let g:loaded_syntastic_c_gcc_checker = 1
+let g:loaded_syntastic_objcpp_gcc_checker = 1
 
-if !exists('g:syntastic_c_compiler')
-    let g:syntastic_c_compiler = 'gcc'
+if !exists('g:syntastic_objcpp_compiler')
+    let g:syntastic_objcpp_compiler = 'gcc'
 endif
 
-function! SyntaxCheckers_c_gcc_IsAvailable()
-    return executable(g:syntastic_c_compiler)
+function! SyntaxCheckers_objcpp_gcc_IsAvailable()
+    return executable(g:syntastic_objcpp_compiler)
 endfunction
 
 let s:save_cpo = &cpo
 set cpo&vim
 
-if !exists('g:syntastic_c_compiler_options')
-    let g:syntastic_c_compiler_options = '-std=gnu99'
+if !exists('g:syntastic_objcpp_compiler_options')
+    let g:syntastic_objcpp_compiler_options = '-std=gnu99'
 endif
 
-if !exists('g:syntastic_c_config_file')
-    let g:syntastic_c_config_file = '.syntastic_c_config'
+if !exists('g:syntastic_objcpp_config_file')
+    let g:syntastic_objcpp_config_file = '.syntastic_objcpp_config'
 endif
 
-function! SyntaxCheckers_c_gcc_GetLocList()
-    return syntastic#gcc#GetLocList('c', {
+function! SyntaxCheckers_objcpp_gcc_GetLocList()
+    return syntastic#gcc#GetLocList('objcpp', {
         \ 'errorformat':
         \     '%-G%f:%s:,' .
         \     '%-G%f:%l: %#error: %#(Each undeclared identifier is reported only%.%#,' .
         \     '%-G%f:%l: %#error: %#for each function it appears%.%#,' .
-        \     '%-GIn file included%.%#,' .
+        \     '%-GIn file included%.%#,'.
         \     '%-G %#from %f:%l\,,' .
         \     '%f:%l:%c: %trror: %m,' .
         \     '%f:%l:%c: %tarning: %m,' .
         \     '%f:%l:%c: %m,' .
         \     '%f:%l: %trror: %m,' .
-        \     '%f:%l: %tarning: %m,'.
+        \     '%f:%l: %tarning: %m,' .
         \     '%f:%l: %m',
-        \ 'makeprg_main': '-x c -fsyntax-only',
+        \ 'makeprg_main': '-x objective-c++ -fsyntax-only',
+        \ 'makeprg_headers': '-x objective-c++-header -lobjc',
         \ 'headers_pattern': '\.h$' })
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
-    \ 'filetype': 'c',
+    \ 'filetype': 'objcpp',
     \ 'name': 'gcc'})
 
 let &cpo = s:save_cpo
