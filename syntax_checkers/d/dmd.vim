@@ -152,10 +152,32 @@ function! SyntaxCheckers_d_dmd_GetLocList()
 
     " add optional config file parameters
     let makeprg .= ' ' . syntastic#c#ReadConfig(g:syntastic_d_config_file)
+    
+    "find proper cwd from module line
+    let cwd = expand('%:h')
+    for lnum in range(1,15)
+        let line = getline(lnum)
+
+        if line =~ '^module\s'
+            let module = matchstr(line, '^module\s*\zs[^;]*')
+
+            "nasty hack to count . in module name
+            let n=[0]
+            call substitute(module, '\.', "\\=map(n, 'v:val+1')", 'g')
+
+            "for each module part, go up one level
+            for b in range(1, n[0])
+                let cwd = fnamemodify(l:cwd, ':h')
+            endfor
+
+            break
+        endif
+    endfor
 
     " process makeprg
     let errors = SyntasticMake({ 'makeprg': makeprg,
-                \ 'errorformat': errorformat })
+                \ 'errorformat': errorformat,
+                \ 'cwd': cwd })
 
     " filter the processed errors if desired
     if exists('g:syntastic_d_remove_include_errors') &&
