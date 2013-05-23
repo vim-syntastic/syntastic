@@ -354,7 +354,11 @@ function! SyntasticMake(options)
     endif
 
     " Apply ignore patterns
-    call filter(errors, '!s:IgnoreFile(bufname(str2nr(v:val["bufnr"])))')
+    let ignore = {}
+    for buf in syntastic#util#unique(map(copy(errors), 'v:val["bufnr"]'))
+        let ignore[buf] = s:IgnoreFile(bufname(str2nr(buf)))
+    endfor
+    call filter(errors, '!ignore[v:val["bufnr"]]')
 
     " Add subtype info if present.
     if has_key(a:options, 'subtype')
