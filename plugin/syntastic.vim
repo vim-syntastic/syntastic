@@ -40,6 +40,10 @@ if !exists("g:syntastic_check_on_open")
     let g:syntastic_check_on_open = 0
 endif
 
+if !exists("g:syntastic_check_on_write")
+    let g:syntastic_check_on_write = 1
+endif
+
 if !exists("g:syntastic_check_on_wq")
     let g:syntastic_check_on_wq = 1
 endif
@@ -76,7 +80,7 @@ highlight link SyntasticWarning SpellCap
 
 augroup syntastic
     autocmd BufReadPost * if g:syntastic_check_on_open | call s:UpdateErrors(1) | endif
-    autocmd BufWritePost * call s:UpdateErrors(1)
+    autocmd BufWritePost * if g:syntastic_check_on_write | call s:UpdateErrors(1) | endif
 
     autocmd BufWinEnter * call s:BufWinEnterHook()
 
