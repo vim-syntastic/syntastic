@@ -304,6 +304,7 @@ endfunction
 "a:options can contain the following keys:
 "    'makeprg'
 "    'errorformat'
+"    'cwd'
 "
 "The corresponding options are set for the duration of the function call. They
 "are set with :let, so dont escape spaces.
@@ -320,6 +321,7 @@ function! SyntasticMake(options)
     let old_shellpipe = &shellpipe
     let old_shell = &shell
     let old_errorformat = &l:errorformat
+    let old_cwd = getcwd()
 
     if s:OSSupportsShellpipeHack()
         "this is a hack to stop the screen needing to be ':redraw'n when
@@ -336,6 +338,10 @@ function! SyntasticMake(options)
         let &l:errorformat = a:options['errorformat']
     endif
 
+    if has_key(a:options, 'cwd')
+        execute "silent cd " . a:options['cwd']
+    endif
+
     silent lmake!
     let errors = getloclist(0)
 
@@ -344,6 +350,8 @@ function! SyntasticMake(options)
     let &l:errorformat = old_errorformat
     let &shellpipe=old_shellpipe
     let &shell=old_shell
+    execute "silent cd " . old_cwd
+
 
     if s:IsRedrawRequiredAfterMake()
         call s:Redraw()
