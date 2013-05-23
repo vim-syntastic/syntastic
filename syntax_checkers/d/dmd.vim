@@ -112,7 +112,7 @@ function! SyntaxCheckers_d_dmd_GetLocList()
     " add optional user-defined compiler options
     let makeprg .= g:syntastic_d_compiler_options
 
-    let makeprg .= ' ' . shellescape(expand('%')) .
+    let makeprg .= ' ' . shellescape(expand('%:p')) .
                 \ ' ' . syntastic#c#GetIncludeDirs('d')
 
     " determine whether to parse header files as well
