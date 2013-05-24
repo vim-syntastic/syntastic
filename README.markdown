@@ -66,7 +66,7 @@ and the directories it needs:
 
 Next you *need to add this* to your ~/.vimrc:
 
-        call pathogen#infect()
+        execute pathogen#infect()
 
 Step 2: Install syntastic as a pathogen bundle
 ----------------------------------------------
