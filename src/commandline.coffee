@@ -60,9 +60,9 @@ class ErrorReport
         return @_hasLevel(path, 'error')
 
     hasError : () ->
-      for path of @paths
-        return true if @pathHasError(path)
-      return false
+        for path of @paths
+            return true if @pathHasError(path)
+        return false
 
     _hasLevel : (path, level) ->
         for error in @paths[path]
