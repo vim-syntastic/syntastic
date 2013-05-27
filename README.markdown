@@ -25,11 +25,14 @@ demand, or automatically as files are saved. If syntax errors are detected, the
 user is notified and is happy because they didn't have to compile their code or
 execute their script to find them.
 
-At the time of this writing, syntax checking plugins exist for ada, applescript, c, co,
-coffee, coq, cpp, cs, css, cucumber, cuda, d, dart, docbk, elixir, erlang, eruby, fortran,
-gentoo_metadata, go, haml, haskell, haxe, html, java, javascript, json, less, lisp, lua, matlab,
-nasm, objc, ocaml, perl, php, puppet, python, rst, ruby, rust, sass/scss, scala, sh, slim, tcl, tex, 
-twig, typescript, vala, vhdl, xhtml, xml, xslt, yaml, z80, zpt, zsh
+At the time of this writing, syntax checking plugins exist for Ada,
+AppleScript, Bourne shell, C, C++, C#, CoffeeScript, Coco, Coq, CSS,
+Cucumber, CUDA, D, Dart, DocBook, Elixir, Erlang, eRuby, Fortran, Gentoo
+metadata, Go, Haml, Haskell, Haxe, HTML, Java, JavaScript, JSON, LESS,
+LISP, LLVM intermediate language, Lua, MATLAB, NASM, Objective-C, OCaml,
+Perl, Perl POD, PHP, Puppet, Python, reStructuredText, Ruby, Rust,
+SASS/SCSS, Scala, Slim, Tcl, TeX, Twig, TypeScript, Vala, VHDL, xHtml,
+XML, XSLT, YAML, z80, Zope page templates, zsh.
 
 ## Screenshot
 
@@ -155,11 +158,11 @@ This is telling syntastic to run the `php` checker first, and if no errors are f
 
 A. Vim provides several built in commands for this. See `:help :lnext` and `:help :lprev`.
 
-If you use these commands a lot then you may want to add shortcut mappings to your vimrc, or install something like [unimpaired](https://github.com/tpope/vim-unimpaired) - which provides such mappings (among other things).
+If you use these commands a lot then you may want to add shortcut mappings to your vimrc, or install something like [unimpaired](https://github.com/tpope/vim-unimpaired), which provides such mappings (among other things).
 
 ### Q. A syntax checker is giving me unwanted/strange style tips?
 
-A. Some filetypes (e.g. php) have style checkers as well as syntax checkers. You can usually configure the options that are passed to the style checkers, or just disable them. Take a look at the syntax checker integration file (e.g. `syntax_checkers/php.vim`) to see what options are available.
+A. Some filetypes (e.g. php) have style checkers as well as syntax checkers. You can usually configure the options that are passed to the style checkers, or just disable them. Take a look at the [wiki](https://github.com/scrooloose/syntastic/wiki/Syntaxcheckers) to see what options are available.
 
 ### Q. The error window is closed automatically when I :quit the current buffer but not when I :bdelete it?
 
