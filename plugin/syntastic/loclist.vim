@@ -133,8 +133,8 @@ endfunction
 
 "display the cached errors for this buf in the location list
 function! g:SyntasticLoclist.show()
+    call setloclist(0, self.filteredRaw())
     if self.hasErrorsOrWarningsToDisplay()
-        call setloclist(0, self.filteredRaw())
         let num = winnr()
         exec "lopen " . g:syntastic_loc_list_height
         if num != winnr()
