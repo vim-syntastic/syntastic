@@ -33,19 +33,14 @@ endif
 
 function! s:PuppetVersion()
     if !exists("s:puppet_version")
-        let output = system("puppet --version 2>/dev/null")
-        let output = substitute(output, '\n$', '', '')
-        let s:puppet_version = split(output, '\.')
+        let s:puppet_version = syntastic#util#parseVersion("puppet --version 2>/dev/null")
     endif
     return s:puppet_version
 endfunction
 
 function! s:PuppetLintVersion()
     if !exists("s:puppet_lint_version")
-        let output = system("puppet-lint --version 2>/dev/null")
-        let output = substitute(output, '\n$', '', '')
-        let output = substitute(output, '^puppet-lint ', '', 'i')
-        let s:puppet_lint_version = split(output, '\.')
+        let s:puppet_lint_version = syntastic#util#parseVersion("puppet-lint --version 2>/dev/null")
     endif
     return s:puppet_lint_version
 endfunction

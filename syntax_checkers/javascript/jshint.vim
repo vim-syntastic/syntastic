@@ -36,8 +36,7 @@ function! SyntaxCheckers_javascript_jshint_GetLocList()
 endfunction
 
 function s:JshintNew()
-    let ver = matchlist(system('jshint --version'), '^\D*\(\d\+\)\.\(\d\+\)')
-    return (ver[1] > 1 || (ver[1] == 1 && ver[2] >= 1))
+    return syntastic#util#versionIsAtLeast(syntastic#util#parseVersion('jshint --version'), [1, 1])
 endfunction
 
 function s:Args()
