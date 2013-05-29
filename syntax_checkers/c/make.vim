@@ -10,10 +10,10 @@
 "
 "============================================================================
 
-if exists('loaded_make_syntax_checker')
+if exists('g:loaded_syntastic_c_make_checker')
     finish
 endif
-let loaded_make_syntax_checker = 1
+let g:loaded_syntastic_c_make_checker = 1
 
 function SyntaxCheckers_c_make_IsAvailable()
     return executable('make')

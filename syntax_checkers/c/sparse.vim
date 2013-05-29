@@ -16,10 +16,10 @@
 "
 "   let g:syntastic_sparse_config_file = '.config'
 
-if exists("loaded_sparse_syntax_checker")
+if exists("g:loaded_syntastic_c_sparse_checker")
     finish
 endif
-let loaded_sparse_syntax_checker = 1
+let g:loaded_syntastic_c_sparse_checker = 1
 
 function! SyntaxCheckers_c_sparse_IsAvailable()
     return executable("sparse")
