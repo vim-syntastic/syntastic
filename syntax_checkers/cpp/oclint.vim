@@ -21,39 +21,14 @@ if exists("g:loaded_syntastic_cpp_oclint_checker")
 endif
 let g:loaded_syntastic_cpp_oclint_checker = 1
 
+runtime syntax_checkers/c/oclint.vim
+
 function! SyntaxCheckers_cpp_oclint_IsAvailable()
-    return executable("oclint")
+    return SyntaxCheckers_c_oclint_IsAvailable()
 endfunction
 
-if !exists('g:syntastic_oclint_config_file')
-    let g:syntastic_oclint_config_file = '.syntastic_oclint_config'
-endif
-
 function! SyntaxCheckers_cpp_oclint_GetLocList()
-    let makeprg = syntastic#makeprg#build({
-        \ 'exe': 'oclint',
-        \ 'args': '-text',
-        \ 'post_args': '-- -c' . syntastic#c#ReadConfig(g:syntastic_oclint_config_file),
-        \ 'subchecker': 'oclint' })
-
-    let errorformat =
-        \ '%W%f:%l:%c: %m,' .
-        \ '%E%f:%l:%c: error: %m,' .
-        \ '%-G%.%#'
-
-    let loclist = SyntasticMake({
-        \ 'makeprg': makeprg,
-        \ 'errorformat': errorformat,
-        \ 'subtype': 'Style',
-        \ 'postprocess': ['compressWhitespace', 'sort'] })
-
-    for n in range(len(loclist))
-        if loclist[n]['text'] =~# ' P[12] \=$'
-            let loclist[n]['type'] = 'E'
-        endif
-    endfor
-
-    return loclist
+    return SyntaxCheckers_c_oclint_GetLocList()
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
