@@ -16,12 +16,12 @@
 "
 "   let g:syntastic_oclint_config_file = '.config'
 
-if exists("g:loaded_syntastic_c_oclint_checker")
+if exists("g:loaded_syntastic_objc_oclint_checker")
     finish
 endif
-let g:loaded_syntastic_c_oclint_checker = 1
+let g:loaded_syntastic_objc_oclint_checker = 1
 
-function! SyntaxCheckers_c_oclint_IsAvailable()
+function! SyntaxCheckers_objc_oclint_IsAvailable()
     return executable("oclint")
 endfunction
 
@@ -29,7 +29,7 @@ if !exists('g:syntastic_oclint_config_file')
     let g:syntastic_oclint_config_file = '.syntastic_oclint_config'
 endif
 
-function! SyntaxCheckers_c_oclint_GetLocList()
+function! SyntaxCheckers_objc_oclint_GetLocList()
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'oclint',
         \ 'args': '-text',
@@ -57,5 +57,5 @@ function! SyntaxCheckers_c_oclint_GetLocList()
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
-    \ 'filetype': 'c',
+    \ 'filetype': 'objc',
     \ 'name': 'oclint'})

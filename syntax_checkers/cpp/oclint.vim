@@ -16,10 +16,10 @@
 "
 "   let g:syntastic_oclint_config_file = '.config'
 
-if exists("loaded_oclint_syntax_checker")
+if exists("g:loaded_syntastic_cpp_oclint_checker")
     finish
 endif
-let loaded_oclint_syntax_checker = 1
+let g:loaded_syntastic_cpp_oclint_checker = 1
 
 function! SyntaxCheckers_cpp_oclint_IsAvailable()
     return executable("oclint")
@@ -37,15 +37,23 @@ function! SyntaxCheckers_cpp_oclint_GetLocList()
         \ 'subchecker': 'oclint' })
 
     let errorformat =
-        \ '%f:%l:%c:\ %m,' .
+        \ '%W%f:%l:%c: %m,' .
+        \ '%E%f:%l:%c: error: %m,' .
         \ '%-G%.%#'
 
-    return SyntasticMake({
+    let loclist = SyntasticMake({
         \ 'makeprg': makeprg,
         \ 'errorformat': errorformat,
         \ 'subtype': 'Style',
-        \ 'postprocess': ['compressWhitespace'],
-        \ 'defaults': {'type': 'W'} })
+        \ 'postprocess': ['compressWhitespace', 'sort'] })
+
+    for n in range(len(loclist))
+        if loclist[n]['text'] =~# ' P[12] \=$'
+            let loclist[n]['type'] = 'E'
+        endif
+    endfor
+
+    return loclist
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
