@@ -37,23 +37,18 @@ function! SyntaxCheckers_c_oclint_GetLocList()
         \ 'subchecker': 'oclint' })
 
     let errorformat =
-        \ '%W%f:%l:%c: %m,' .
+        \ '%E%f:%l:%c: %m P1 ,' .
+        \ '%E%f:%l:%c: %m P2 ,' .
+        \ '%W%f:%l:%c: %m P3 ,' .
         \ '%E%f:%l:%c: error: %m,' .
+        \ '%W%f:%l:%c: warning: %m,' .
         \ '%-G%.%#'
 
-    let loclist = SyntasticMake({
+    return SyntasticMake({
         \ 'makeprg': makeprg,
         \ 'errorformat': errorformat,
         \ 'subtype': 'Style',
         \ 'postprocess': ['compressWhitespace', 'sort'] })
-
-    for n in range(len(loclist))
-        if loclist[n]['text'] =~# ' P[12] \=$'
-            let loclist[n]['type'] = 'E'
-        endif
-    endfor
-
-    return loclist
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
