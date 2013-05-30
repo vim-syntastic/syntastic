@@ -40,6 +40,7 @@ function! SyntaxCheckers_c_oclint_GetLocList()
         \ '%E%f:%l:%c: %m P1 ,' .
         \ '%E%f:%l:%c: %m P2 ,' .
         \ '%W%f:%l:%c: %m P3 ,' .
+        \ '%E%f:%l:%c: fatal error: %m,' .
         \ '%E%f:%l:%c: error: %m,' .
         \ '%W%f:%l:%c: warning: %m,' .
         \ '%-G%.%#'
