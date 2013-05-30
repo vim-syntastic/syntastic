@@ -22,6 +22,11 @@
 "
 "============================================================================
 
+if exists("g:loaded_syntastic_vala_valac_checker")
+    finish
+endif
+let g:loaded_syntastic_vala_valac_checker = 1
+
 function! SyntaxCheckers_vala_valac_IsAvailable()
     return executable('valac')
 endfunction

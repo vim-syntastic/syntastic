@@ -133,9 +133,9 @@ function! s:UpdateErrors(auto_invoked, ...)
     let loclist = g:SyntasticLoclist.current()
     call s:notifiers.refresh(loclist)
 
-    if (g:syntastic_always_populate_loc_list || g:syntastic_auto_jump) && loclist.hasErrorsOrWarningsToDisplay()
+    if g:syntastic_always_populate_loc_list || g:syntastic_auto_jump
         call setloclist(0, loclist.filteredRaw())
-        if g:syntastic_auto_jump
+        if g:syntastic_auto_jump && loclist.hasErrorsOrWarningsToDisplay()
             silent! lrewind
         endif
     endif
@@ -354,7 +354,11 @@ function! SyntasticMake(options)
     endif
 
     " Apply ignore patterns
-    call filter(errors, '!s:IgnoreFile(bufname(str2nr(v:val["bufnr"])))')
+    let ignore = {}
+    for buf in syntastic#util#unique(map(copy(errors), 'v:val["bufnr"]'))
+        let ignore[buf] = s:IgnoreFile(bufname(str2nr(buf)))
+    endfor
+    call filter(errors, '!ignore[v:val["bufnr"]]')
 
     " Add subtype info if present.
     if has_key(a:options, 'subtype')
