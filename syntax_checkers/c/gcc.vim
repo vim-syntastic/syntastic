@@ -36,7 +36,7 @@ if !exists('g:syntastic_c_config_file')
 endif
 
 function! SyntaxCheckers_c_gcc_GetLocList()
-    return syntastic#gcc#GetLocList('c', {
+    return syntastic#c#GetLocList('c', {
         \ 'errorformat':
         \     '%-G%f:%s:,' .
         \     '%-G%f:%l: %#error: %#(Each undeclared identifier is reported only%.%#,' .
