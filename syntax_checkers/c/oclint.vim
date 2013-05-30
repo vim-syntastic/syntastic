@@ -33,7 +33,7 @@ function! SyntaxCheckers_c_oclint_GetLocList()
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'oclint',
         \ 'args': '-text',
-        \ 'post_args': '-- -c' . syntastic#c#ReadConfig(g:syntastic_oclint_config_file),
+        \ 'post_args': '-- -c ' . syntastic#c#ReadConfig(g:syntastic_oclint_config_file),
         \ 'subchecker': 'oclint' })
 
     let errorformat =

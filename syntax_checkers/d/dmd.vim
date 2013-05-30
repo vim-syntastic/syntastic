@@ -40,7 +40,7 @@ if !exists('g:syntastic_d_config_file')
 endif
 
 function! SyntaxCheckers_d_dmd_GetLocList()
-    return syntastic#gcc#GetLocList('d', {
+    return syntastic#c#GetLocList('d', {
         \ 'errorformat':
         \     '%-G%f:%s:,%f(%l): %m,' .
         \     '%f:%l: %m',

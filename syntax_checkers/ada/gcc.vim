@@ -32,7 +32,7 @@ if !exists('g:syntastic_ada_config_file')
 endif
 
 function! SyntaxCheckers_ada_gcc_GetLocList()
-    return syntastic#gcc#GetLocList('ada', {
+    return syntastic#c#GetLocList('ada', {
         \ 'errorformat':
         \     '%-G%f:%s:,' .
         \     '%f:%l:%c: %m,' .

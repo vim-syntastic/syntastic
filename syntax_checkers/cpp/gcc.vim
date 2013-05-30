@@ -35,7 +35,7 @@ if !exists('g:syntastic_cpp_config_file')
 endif
 
 function! SyntaxCheckers_cpp_gcc_GetLocList()
-    return syntastic#gcc#GetLocList('cpp', {
+    return syntastic#c#GetLocList('cpp', {
         \ 'errorformat':
         \     '%-G%f:%s:,' .
         \     '%f:%l:%c: %trror: %m,' .

@@ -35,7 +35,7 @@ if !exists('g:syntastic_objc_config_file')
 endif
 
 function! SyntaxCheckers_objc_gcc_GetLocList()
-    return syntastic#gcc#GetLocList('objc', {
+    return syntastic#c#GetLocList('objc', {
         \ 'errorformat':
         \     '%-G%f:%s:,' .
         \     '%-G%f:%l: %#error: %#(Each undeclared identifier is reported only%.%#,' .

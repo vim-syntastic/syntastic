@@ -35,7 +35,7 @@ if !exists('g:syntastic_objcpp_config_file')
 endif
 
 function! SyntaxCheckers_objcpp_gcc_GetLocList()
-    return syntastic#gcc#GetLocList('objcpp', {
+    return syntastic#c#GetLocList('objcpp', {
         \ 'errorformat':
         \     '%-G%f:%s:,' .
         \     '%-G%f:%l: %#error: %#(Each undeclared identifier is reported only%.%#,' .
