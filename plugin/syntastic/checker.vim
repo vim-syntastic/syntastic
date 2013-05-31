@@ -53,6 +53,8 @@ function! g:SyntasticChecker.isAvailable()
     return self._isAvailableFunc()
 endfunction
 
+" Private methods {{{1
+
 function! g:SyntasticChecker._populateHighlightRegexes(list)
     let list = a:list
     if !empty(self._highlightRegexFunc)
