@@ -57,7 +57,7 @@ function! g:SyntasticMakeprgBuilder._optExists(name)
 endfunction
 
 function! g:SyntasticMakeprgBuilder._optName(name)
-    let setting = "g:syntastic_" . &ft
+    let setting = "g:syntastic_" . SyntasticNormalizeFiletype(&filetype)
     if !empty(self._subchecker)
         let setting .= '_' . self._subchecker
     endif
