@@ -20,12 +20,16 @@ endfunction
 
 function! SyntaxCheckers_llvm_llvm_GetLocList()
     let makeprg = syntastic#makeprg#build({
-                \ 'exe': 'llc',
-                \ 'args': syntastic#c#GetNullDevice(),
-                \ 'subchecker': 'llvm' })
+        \ 'exe': 'llc',
+        \ 'args': syntastic#c#GetNullDevice(),
+        \ 'filetype': 'llvm',
+        \ 'subchecker': 'llvm' })
+
     let errorformat = 'llc: %f:%l:%c: %trror: %m'
 
-    return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
+    return SyntasticMake({
+        \ 'makeprg': makeprg,
+        \ 'errorformat': errorformat })
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({

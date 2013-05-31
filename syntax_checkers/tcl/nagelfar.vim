@@ -22,15 +22,19 @@ endfunction
 
 function! SyntaxCheckers_tcl_nagelfar_GetLocList()
     let makeprg = syntastic#makeprg#build({
-                \ 'exe': 'nagelfar',
-                \ 'args': '-H ' . g:syntastic_tcl_nagelfar_conf,
-                \ 'subchecker': 'nagelfar' })
+        \ 'exe': 'nagelfar',
+        \ 'args': '-H ' . g:syntastic_tcl_nagelfar_conf,
+        \ 'filetype': 'tcl',
+        \ 'subchecker': 'nagelfar' })
+
     let errorformat =
         \ '%I%f: %l: N %m,'.
         \ '%f: %l: %t %m,'.
         \ '%-GChecking file %f'
 
-    return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
+    return SyntasticMake({
+        \ 'makeprg': makeprg,
+        \ 'errorformat': errorformat })
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({

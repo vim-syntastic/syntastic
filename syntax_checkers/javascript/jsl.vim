@@ -31,9 +31,11 @@ endfunction
 
 function! SyntaxCheckers_javascript_jsl_GetLocList()
     let makeprg = syntastic#makeprg#build({
-                \ 'exe': 'jsl',
-                \ 'args': s:ConfFlag() . " -nologo -nofilelisting -nosummary -nocontext -process",
-                \ 'subchecker': 'jsl' })
+        \ 'exe': 'jsl',
+        \ 'args': s:ConfFlag() . " -nologo -nofilelisting -nosummary -nocontext -process",
+        \ 'filetype': 'javascript',
+        \ 'subchecker': 'jsl' })
+
     let errorformat =
         \ '%W%f(%l): lint warning: %m,'.
         \ '%-Z%p^,'.
@@ -42,7 +44,10 @@ function! SyntaxCheckers_javascript_jsl_GetLocList()
         \ '%E%f(%l): SyntaxError: %m,'.
         \ '%-Z%p^,'.
         \ '%-G'
-    return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
+
+    return SyntasticMake({
+        \ 'makeprg': makeprg,
+        \ 'errorformat': errorformat })
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({

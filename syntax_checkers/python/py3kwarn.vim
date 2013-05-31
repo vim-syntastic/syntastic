@@ -15,10 +15,15 @@ endfunction
 
 function! SyntaxCheckers_python_py3kwarn_GetLocList()
     let makeprg = syntastic#makeprg#build({
-                \ 'exe': 'py3kwarn',
-                \ 'subchecker': 'py3kwarn' })
+        \ 'exe': 'py3kwarn',
+        \ 'filetype': 'python',
+        \ 'subchecker': 'py3kwarn' })
+
     let errorformat = '%W%f:%l:%c: %m'
-    return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
+
+    return SyntasticMake({
+        \ 'makeprg': makeprg,
+        \ 'errorformat': errorformat })
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({

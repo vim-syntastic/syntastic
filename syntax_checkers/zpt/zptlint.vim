@@ -29,13 +29,20 @@ function! SyntaxCheckers_zpt_zptlint_IsAvailable()
 endfunction
 
 function! SyntaxCheckers_zpt_zptlint_GetLocList()
-    let makeprg = syntastic#makeprg#build({ 'exe': 'zptlint', 'subchecker': 'zptlint' })
+    let makeprg = syntastic#makeprg#build({
+        \ 'exe': 'zptlint',
+        \ 'filetype': 'zpt',
+        \ 'subchecker': 'zptlint' })
+
     let errorformat=
         \ '%-P*** Error in: %f,'.
         \ '%Z%*\s\, at line %l\, column %c,'.
         \ '%E%*\s%m,'.
         \ '%-Q'
-    return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
+
+    return SyntasticMake({
+        \ 'makeprg': makeprg,
+        \ 'errorformat': errorformat })
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({

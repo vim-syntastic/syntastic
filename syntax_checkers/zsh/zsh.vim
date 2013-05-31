@@ -23,9 +23,14 @@ function! SyntaxCheckers_zsh_zsh_GetLocList()
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'zsh',
         \ 'args': '-n',
+        \ 'filetype': 'zsh',
         \ 'subchecker': 'zsh' })
+
     let errorformat = '%f:%l: %m'
-    return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat})
+
+    return SyntasticMake({
+        \ 'makeprg': makeprg,
+        \ 'errorformat': errorformat})
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({

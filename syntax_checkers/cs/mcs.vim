@@ -21,13 +21,17 @@ endfunction
 
 function! SyntaxCheckers_cs_mcs_GetLocList()
     let makeprg = syntastic#makeprg#build({
-                \ 'exe': 'mcs',
-                \ 'args': '--parse',
-                \ 'subchecker': 'mcs' })
+        \ 'exe': 'mcs',
+        \ 'args': '--parse',
+        \ 'filetype': 'cs',
+        \ 'subchecker': 'mcs' })
+
     let errorformat = '%f(%l\,%c): %trror %m'
-    return SyntasticMake({ 'makeprg': makeprg,
-                         \ 'errorformat': errorformat,
-                         \ 'defaults': {'bufnr': bufnr("")} })
+
+    return SyntasticMake({
+        \ 'makeprg': makeprg,
+        \ 'errorformat': errorformat,
+        \ 'defaults': {'bufnr': bufnr("")} })
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({

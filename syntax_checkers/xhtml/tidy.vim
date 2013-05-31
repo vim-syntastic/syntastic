@@ -61,12 +61,18 @@ function! SyntaxCheckers_xhtml_tidy_GetLocList()
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'tidy',
         \ 'args': encopt . ' -xml -e',
+        \ 'filetype': 'xhtml',
         \ 'subchecker': 'tidy' })
+
     let errorformat=
         \ '%Wline %l column %v - Warning: %m,' .
         \ '%Eline %l column %v - Error: %m,' .
         \ '%-G%.%#'
-    let loclist = SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat, 'defaults': {'bufnr': bufnr("")} })
+
+    let loclist = SyntasticMake({
+        \ 'makeprg': makeprg,
+        \ 'errorformat': errorformat,
+        \ 'defaults': {'bufnr': bufnr("")} })
 
     for n in range(len(loclist))
         if loclist[n]['valid'] && s:IgnoreErrror(loclist[n]['text']) == 1

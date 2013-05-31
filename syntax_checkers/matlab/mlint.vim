@@ -23,11 +23,17 @@ function! SyntaxCheckers_matlab_mlint_GetLocList()
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'mlint',
         \ 'args': '-id $*',
+        \ 'filetype': 'matlab',
         \ 'subchecker': 'mlint' })
+
     let errorformat =
         \ 'L %l (C %c): %*[a-zA-Z0-9]: %m,'.
         \ 'L %l (C %c-%*[0-9]): %*[a-zA-Z0-9]: %m'
-    return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat, 'defaults': {'bufnr': bufnr("")} })
+
+    return SyntasticMake({
+        \ 'makeprg': makeprg,
+        \ 'errorformat': errorformat,
+        \ 'defaults': {'bufnr': bufnr("")} })
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({

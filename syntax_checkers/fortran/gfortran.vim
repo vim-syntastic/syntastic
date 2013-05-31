@@ -33,16 +33,21 @@ endfunction
 
 function! SyntaxCheckers_fortran_gfortran_GetLocList()
     let makeprg = syntastic#makeprg#build({
-                \ 'exe': 'gfortran',
-                \ 'args': s:args(),
-                \ 'subchecker': 'gfortran' })
+        \ 'exe': 'gfortran',
+        \ 'args': s:args(),
+        \ 'filetype': 'fortran',
+        \ 'subchecker': 'gfortran' })
+
     let errorformat =
         \ '%-C %#,'.
         \ '%-C  %#%.%#,'.
         \ '%A%f:%l.%c:,'.
         \ '%Z%m,'.
         \ '%G%.%#'
-    return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
+
+    return SyntasticMake({
+        \ 'makeprg': makeprg,
+        \ 'errorformat': errorformat })
 endfunction
 
 function s:args()

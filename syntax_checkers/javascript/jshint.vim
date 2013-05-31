@@ -25,14 +25,19 @@ endfunction
 function! SyntaxCheckers_javascript_jshint_GetLocList()
     let jshint_new = s:JshintNew()
     let makeprg = syntastic#makeprg#build({
-                \ 'exe': 'jshint',
-                \ 'post_args': (jshint_new ? ' --verbose ' : '') . s:Args(),
-                \ 'subchecker': 'jshint' })
+        \ 'exe': 'jshint',
+        \ 'post_args': (jshint_new ? ' --verbose ' : '') . s:Args(),
+        \ 'filetype': 'javascript',
+        \ 'subchecker': 'jshint' })
 
     let errorformat = jshint_new ?
-                \ '%f: line %l\, col %c\, %m \(%t%*\d\)' :
-                \ '%E%f: line %l\, col %c\, %m'
-    return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat, 'defaults': {'bufnr': bufnr('')} })
+        \ '%f: line %l\, col %c\, %m \(%t%*\d\)' :
+        \ '%E%f: line %l\, col %c\, %m'
+
+    return SyntasticMake({
+        \ 'makeprg': makeprg,
+        \ 'errorformat': errorformat,
+        \ 'defaults': {'bufnr': bufnr('')} })
 endfunction
 
 function s:JshintNew()

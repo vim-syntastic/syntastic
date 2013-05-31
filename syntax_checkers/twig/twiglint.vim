@@ -26,12 +26,16 @@ endfunction
 
 function! SyntaxCheckers_twig_twiglint_GetLocList()
     let makeprg = syntastic#makeprg#build({
-                \ 'exe': 'twig-lint',
-                \ 'args': 'lint --format=csv',
-                \ 'subchecker': 'twiglint' })
+        \ 'exe': 'twig-lint',
+        \ 'args': 'lint --format=csv',
+        \ 'filetype': 'twig',
+        \ 'subchecker': 'twiglint' })
 
     let errorformat = '"%f"\,%l\,%m'
-    return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat})
+
+    return SyntasticMake({
+        \ 'makeprg': makeprg,
+        \ 'errorformat': errorformat})
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({

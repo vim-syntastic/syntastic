@@ -66,12 +66,16 @@ function! SyntaxCheckers_sh_sh_GetLocList()
     endif
 
     let makeprg = syntastic#makeprg#build({
-                \ 'exe': s:GetShell(),
-                \ 'args': '-n',
-                \ 'subchecker': 'sh'})
+        \ 'exe': s:GetShell(),
+        \ 'args': '-n',
+        \ 'filetype': 'sh',
+        \ 'subchecker': 'sh'})
 
     let errorformat = '%f: line %l: %m'
-    return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat})
+
+    return SyntasticMake({
+        \ 'makeprg': makeprg,
+        \ 'errorformat': errorformat})
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
