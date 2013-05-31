@@ -264,6 +264,15 @@ patterns. >
     let g:syntastic_ignore_files=['^/usr/include/', '\c\.h$']
 <
 
+                                                    *'syntastic_filetype_map'*
+Default: {}
+Use this option to map non-standard filetypes to standard ones.  Corresponding
+checkers are mapped accordingly, which allows syntastic to check files with
+non-standard filetypes: >
+    let g:syntastic_filetype_map = { 'latex': 'tex',
+                                   \ 'gentoo-metadata': 'xml' }
+<
+
                                                         *'syntastic_mode_map'*
 Default: { "mode": "active",
            "active_filetypes": [],
