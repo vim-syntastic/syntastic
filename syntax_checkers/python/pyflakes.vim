@@ -33,8 +33,10 @@ endfunction
 
 function! SyntaxCheckers_python_pyflakes_GetLocList()
     let makeprg = syntastic#makeprg#build({
-                \ 'exe': 'pyflakes',
-                \ 'subchecker': 'pyflakes' })
+        \ 'exe': 'pyflakes',
+        \ 'filetype': 'python',
+        \ 'subchecker': 'pyflakes' })
+
     let errorformat =
         \ '%E%f:%l: could not compile,'.
         \ '%-Z%p^,'.
@@ -42,9 +44,10 @@ function! SyntaxCheckers_python_pyflakes_GetLocList()
         \ '%E%f:%l: %m,'.
         \ '%-G%.%#'
 
-    return SyntasticMake({ 'makeprg': makeprg,
-                         \ 'errorformat': errorformat,
-                         \ 'defaults': {'text': "Syntax error"} })
+    return SyntasticMake({
+        \ 'makeprg': makeprg,
+        \ 'errorformat': errorformat,
+        \ 'defaults': {'text': "Syntax error"} })
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({

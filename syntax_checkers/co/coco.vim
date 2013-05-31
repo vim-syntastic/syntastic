@@ -25,9 +25,11 @@ endfunction
 
 function! SyntaxCheckers_co_coco_GetLocList()
     let makeprg = syntastic#makeprg#build({
-                \ 'exe': 'coco',
-                \ 'args': '-c -o /tmp',
-                \ 'subchecker': 'coco' })
+        \ 'exe': 'coco',
+        \ 'args': '-c -o /tmp',
+        \ 'filetype': 'co',
+        \ 'subchecker': 'coco' })
+
     let errorformat =
         \ '%EFailed at: %f,' .
         \ '%ZSyntax%trror: %m on line %l,'.

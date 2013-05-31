@@ -40,6 +40,7 @@ function! SyntaxCheckers_tex_chktex_GetLocList()
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'chktex',
         \ 'post_args': '-q -v1',
+        \ 'filetype': 'tex',
         \ 'subchecker': 'chktex' })
 
     let errorformat =

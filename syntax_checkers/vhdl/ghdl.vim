@@ -20,12 +20,16 @@ endfunction
 
 function! SyntaxCheckers_vhdl_ghdl_GetLocList()
     let makeprg = syntastic#makeprg#build({
-                \ 'exe': 'ghdl',
-                \ 'args': '-s',
-                \ 'subchecker': 'ghdl' })
+        \ 'exe': 'ghdl',
+        \ 'args': '-s',
+        \ 'filetype': 'vhdl',
+        \ 'subchecker': 'ghdl' })
+
     let errorformat =  '%f:%l:%c: %m'
 
-    return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
+    return SyntasticMake({
+        \ 'makeprg': makeprg,
+        \ 'errorformat': errorformat })
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({

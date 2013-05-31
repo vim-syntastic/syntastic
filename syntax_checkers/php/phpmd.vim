@@ -60,11 +60,17 @@ endfunction
 
 function! SyntaxCheckers_php_phpmd_GetLocList()
     let makeprg = syntastic#makeprg#build({
-                \ 'exe': 'phpmd',
-                \ 'post_args': 'text codesize,design,unusedcode,naming',
-                \ 'subchecker': 'phpmd' })
+        \ 'exe': 'phpmd',
+        \ 'post_args': 'text codesize,design,unusedcode,naming',
+        \ 'filetype': 'php',
+        \ 'subchecker': 'phpmd' })
+
     let errorformat = '%E%f:%l%\s%#%m'
-    return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat, 'subtype' : 'Style' })
+
+    return SyntasticMake({
+        \ 'makeprg': makeprg,
+        \ 'errorformat': errorformat,
+        \ 'subtype' : 'Style' })
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({

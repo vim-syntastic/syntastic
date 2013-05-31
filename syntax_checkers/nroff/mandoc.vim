@@ -22,12 +22,16 @@ function! SyntaxCheckers_nroff_mandoc_GetLocList()
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'mandoc',
         \ 'args': '-Tlint',
+        \ 'filetype': 'nroff',
         \ 'subchecker': 'mandoc' })
+
     let errorformat =
         \ '%E%f:%l:%c: %tRROR: %m,' .
         \ '%W%f:%l:%c: %tARNING: %m'
 
-    return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
+    return SyntasticMake({
+        \ 'makeprg': makeprg,
+        \ 'errorformat': errorformat })
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({

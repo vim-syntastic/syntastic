@@ -39,9 +39,10 @@ function! SyntaxCheckers_ruby_mri_GetLocList()
     endif
 
     let makeprg = syntastic#makeprg#build({
-                \ 'exe': exe,
-                \ 'args': '-w -T1 -c',
-                \ 'subchecker': 'mri' })
+        \ 'exe': exe,
+        \ 'args': '-w -T1 -c',
+        \ 'filetype': 'ruby',
+        \ 'subchecker': 'mri' })
 
     "this is a hack to filter out a repeated useless warning in rspec files
     "containing lines like
@@ -65,7 +66,10 @@ function! SyntaxCheckers_ruby_mri_GetLocList()
         \ '%Z%p^,'.
         \ '%W%f:%l: %m,'.
         \ '%-C%.%#'
-    return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
+
+    return SyntasticMake({
+        \ 'makeprg': makeprg,
+        \ 'errorformat': errorformat })
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({

@@ -41,10 +41,16 @@ endfunction
 
 function! SyntaxCheckers_cpp_cpplint_GetLocList()
     let makeprg = syntastic#makeprg#build({
-                \ 'exe': 'cpplint.py',
-                \ 'subchecker': 'cpplint' })
+        \ 'exe': 'cpplint.py',
+        \ 'filetype': 'cpp',
+        \ 'subchecker': 'cpplint' })
+
     let errorformat = '%A%f:%l:  %m [%t],%-G%.%#'
-    let loclist = SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat, 'subtype': 'Style' })
+
+    let loclist = SyntasticMake({
+        \ 'makeprg': makeprg,
+        \ 'errorformat': errorformat,
+        \ 'subtype': 'Style' })
 
     " change error types according to the prescribed threshold
     for n in range(len(loclist))

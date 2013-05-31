@@ -40,12 +40,16 @@ function! SyntaxCheckers_java_checkstyle_GetLocList()
         \ 'args': '-cp ' . g:syntastic_java_checkstyle_classpath .
         \         ' com.puppycrawl.tools.checkstyle.Main -c ' . g:syntastic_java_checkstyle_conf_file,
         \ 'fname': fname,
+        \ 'filetype': 'java',
         \ 'subchecker': 'checkstyle' })
 
     " check style format
     let errorformat = '%f:%l:%c:\ %m,%f:%l:\ %m'
 
-    return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat, 'postprocess': ['cygwinRemoveCR'] })
+    return SyntasticMake({
+        \ 'makeprg': makeprg,
+        \ 'errorformat': errorformat,
+        \ 'postprocess': ['cygwinRemoveCR'] })
 
 endfunction
 

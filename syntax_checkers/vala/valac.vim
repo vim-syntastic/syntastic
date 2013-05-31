@@ -55,16 +55,18 @@ endfunction
 function! SyntaxCheckers_vala_valac_GetLocList()
     let vala_pkg_args = join(map(s:GetValaModules(), '"--pkg ".v:val'), ' ')
     let makeprg = syntastic#makeprg#build({
-                \ 'exe': 'valac',
-                \ 'args': '-C ' . vala_pkg_args,
-                \ 'subchecker': 'valac' })
+        \ 'exe': 'valac',
+        \ 'args': '-C ' . vala_pkg_args,
+        \ 'filetype': 'vala',
+        \ 'subchecker': 'valac' })
     let errorformat =
         \ '%A%f:%l.%c-%\d%\+.%\d%\+: %t%[a-z]%\+: %m,'.
         \ '%C%m,'.
         \ '%Z%m'
 
-    return SyntasticMake({ 'makeprg': makeprg,
-                         \ 'errorformat': errorformat })
+    return SyntasticMake({
+        \ 'makeprg': makeprg,
+        \ 'errorformat': errorformat })
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({

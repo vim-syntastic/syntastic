@@ -20,8 +20,10 @@ endfunction
 
 function! SyntaxCheckers_coffee_coffee_GetLocList()
     let makeprg = syntastic#makeprg#build({
-                \ 'exe': 'coffee',
-                \ 'subchecker': 'coffee' })
+        \ 'exe': 'coffee',
+        \ 'filetype': 'coffee',
+        \ 'subchecker': 'coffee' })
+
     let errorformat =
         \ '%E%f:%l:%c: %trror: %m,' .
         \ 'Syntax%trror: In %f\, %m on line %l,' .

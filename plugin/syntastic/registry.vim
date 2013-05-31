@@ -63,7 +63,7 @@ function! g:SyntasticRegistry.checkable(ftalias)
 endfunction
 
 function! g:SyntasticRegistry.getActiveCheckers(ftalias)
-    let filetype = SyntasticNormalizeFiletype(a:ftalias)
+    let filetype = s:SyntasticRegistryNormaliseFiletype(a:ftalias)
     let checkers = self.availableCheckersFor(filetype)
 
     if self._userHasFiletypeSettings(filetype)
@@ -94,7 +94,7 @@ function! g:SyntasticRegistry.getChecker(ftalias, name)
 endfunction
 
 function! g:SyntasticRegistry.availableCheckersFor(ftalias)
-    let filetype = SyntasticNormalizeFiletype(a:ftalias)
+    let filetype = s:SyntasticRegistryNormaliseFiletype(a:ftalias)
     let checkers = copy(self._allCheckersFor(filetype))
     return self._filterCheckersByAvailability(checkers)
 endfunction
@@ -176,6 +176,16 @@ function! g:SyntasticRegistry._validateUniqueName(checker) abort
             throw "Syntastic: Duplicate syntax checker name for: " . a:checker.name()
         endif
     endfor
+endfunction
+
+" Private functions {{{1
+
+"resolve filetype aliases, and replace - with _ otherwise we cant name
+"syntax checker functions legally for filetypes like "gentoo-metadata"
+function! s:SyntasticRegistryNormaliseFiletype(ftalias)
+    let ft = get(g:syntastic_filetype_map, a:ftalias, a:ftalias)
+    let ft = substitute(ft, '-', '_', 'g')
+    return ft
 endfunction
 
 " vim: set sw=4 sts=4 et fdm=marker:

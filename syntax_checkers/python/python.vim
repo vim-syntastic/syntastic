@@ -18,18 +18,24 @@ endfunction
 
 function! SyntaxCheckers_python_python_GetLocList()
     let fname = "'" . escape(expand('%'), "\\'") . "'"
+
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'python',
         \ 'args': '-c',
         \ 'fname': shellescape("compile(open(" . fname . ").read(), " . fname . ", 'exec')"),
+        \ 'filetype': 'python',
         \ 'subchecker': 'python' })
+
     let errorformat =
         \ '%E  File "%f"\, line %l,' .
         \ '%C    %p^,' .
         \ '%C    %.%#,' .
         \ '%Z%m,' .
         \ '%-G%.%#'
-    return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
+
+    return SyntasticMake({
+        \ 'makeprg': makeprg,
+        \ 'errorformat': errorformat })
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({

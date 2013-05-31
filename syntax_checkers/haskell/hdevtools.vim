@@ -23,6 +23,7 @@ function! SyntaxCheckers_haskell_hdevtools_GetLocList()
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'hdevtools check',
         \ 'args': get(g:, 'hdevtools_options', ''),
+        \ 'filetype': 'haskell',
         \ 'subchecker': 'hdevtools' })
 
     let errorformat= '\%-Z\ %#,'.

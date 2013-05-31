@@ -27,6 +27,7 @@ function! SyntaxCheckers_text_atdtool_GetLocList()
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'atdtool',
         \ 'tail': '2>/dev/null',
+        \ 'filetype': 'text',
         \ 'subchecker': 'atdtool' })
 
     let errorformat =
