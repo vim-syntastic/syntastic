@@ -20,7 +20,12 @@ function! SyntaxCheckers_text_atdtool_IsAvailable()
 endfunction
 
 function! SyntaxCheckers_text_atdtool_GetHighlightRegex(item)
-    return matchstr(a:item['text'], '\m "\zs[^"]\+\ze"\($\| | suggestions:\)')
+    let term = matchstr(a:item['text'], '\m "\zs[^"]\+\ze"\($\| | suggestions:\)')
+    if term != ''
+        let col = get(a:item, 'col', 0)
+        let term = (col != 0 ? '\%' . col . 'c' : '') . '\V' . term
+    endif
+    return term
 endfunction
 
 function! SyntaxCheckers_text_atdtool_GetLocList()
