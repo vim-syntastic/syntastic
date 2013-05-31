@@ -27,15 +27,17 @@ endfunction
 
 function! SyntaxCheckers_c_checkpatch_GetLocList()
     let makeprg = syntastic#makeprg#build({
-                \ 'exe': g:syntastic_c_checker_checkpatch_location,
-                \ 'args': '--no-summary --no-tree --terse --file',
-                \ 'subchecker': 'checkpatch' })
+        \ 'exe': g:syntastic_c_checker_checkpatch_location,
+        \ 'args': '--no-summary --no-tree --terse --file',
+        \ 'filetype': 'c',
+        \ 'subchecker': 'checkpatch' })
 
     let errorformat = '%f:%l: %tARNING: %m,%f:%l: %tRROR: %m'
 
-    return SyntasticMake({ 'makeprg': makeprg,
-                         \ 'errorformat': errorformat,
-                         \ 'defaults': {'bufnr': bufnr("")} })
+    return SyntasticMake({
+        \ 'makeprg': makeprg,
+        \ 'errorformat': errorformat,
+        \ 'defaults': {'bufnr': bufnr("")} })
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({

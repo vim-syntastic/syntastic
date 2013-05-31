@@ -21,12 +21,16 @@ endfunction
 function! SyntaxCheckers_pod_podchecker_GetLocList()
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'podchecker',
+        \ 'filetype': 'pod',
         \ 'subchecker': 'podchecker' })
+
     let errorformat =
         \ '%W%[%#]%[%#]%[%#] WARNING: %m at line %l in file %f,' .
         \ '%E%[%#]%[%#]%[%#] ERROR: %m at line %l in file %f'
 
-    return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
+    return SyntasticMake({
+        \ 'makeprg': makeprg,
+        \ 'errorformat': errorformat })
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({

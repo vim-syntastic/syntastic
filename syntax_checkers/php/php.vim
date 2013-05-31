@@ -29,9 +29,11 @@ endfunction
 
 function! SyntaxCheckers_php_php_GetLocList()
     let makeprg = syntastic#makeprg#build({
-                \ 'exe': 'php',
-                \ 'args': '-l -d error_reporting=E_ALL -d display_errors=1 -d log_errors=0 -d xdebug.cli_color=0',
-                \ 'subchecker': 'php' })
+        \ 'exe': 'php',
+        \ 'args': '-l -d error_reporting=E_ALL -d display_errors=1 -d log_errors=0 -d xdebug.cli_color=0',
+        \ 'filetype': 'php',
+        \ 'subchecker': 'php' })
+
     let errorformat =
         \ '%-GNo syntax errors detected in%.%#,'.
         \ 'Parse error: %#syntax %trror\, %m in %f on line %l,'.
@@ -39,7 +41,10 @@ function! SyntaxCheckers_php_php_GetLocList()
         \ 'Fatal %trror: %m in %f on line %l,'.
         \ '%-G\s%#,'.
         \ '%-GErrors parsing %.%#'
-    return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
+
+    return SyntasticMake({
+        \ 'makeprg': makeprg,
+        \ 'errorformat': errorformat })
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({

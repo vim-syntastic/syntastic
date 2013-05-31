@@ -24,10 +24,11 @@ endfunction
 
 function! SyntaxCheckers_rst_rst2pseudoxml_GetLocList()
     let makeprg = syntastic#makeprg#build({
-                \ 'exe': s:exe(),
-                \ 'args': '--report=2 --exit-status=1',
-                \ 'tail': syntastic#util#DevNull(),
-                \ 'subchecker': 'rst2pseudoxml' })
+        \ 'exe': s:exe(),
+        \ 'args': '--report=2 --exit-status=1',
+        \ 'tail': syntastic#util#DevNull(),
+        \ 'filetype': 'rst',
+        \ 'subchecker': 'rst2pseudoxml' })
 
     let errorformat =
         \ '%f:%l:\ (%tNFO/1)\ %m,'.
@@ -36,7 +37,9 @@ function! SyntaxCheckers_rst_rst2pseudoxml_GetLocList()
         \ '%f:%l:\ (%tEVERE/4)\ %m,'.
         \ '%-G%.%#'
 
-    return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
+    return SyntasticMake({
+        \ 'makeprg': makeprg,
+        \ 'errorformat': errorformat })
 endfunction
 
 function s:exe()

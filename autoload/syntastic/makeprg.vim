@@ -39,6 +39,7 @@ function! syntastic#makeprg#build(opts)
                 \ get(a:opts, 'fname', ''),
                 \ get(a:opts, 'post_args', ''),
                 \ get(a:opts, 'tail', ''),
+                \ get(a:opts, 'filetype', ''),
                 \ get(a:opts, 'subchecker', '') )
 
     return builder.makeprg()

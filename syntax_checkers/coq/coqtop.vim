@@ -21,14 +21,18 @@ endfunction
 
 function! SyntaxCheckers_coq_coqtop_GetLocList()
     let makeprg = syntastic#makeprg#build({
-                \ 'exe': 'coqtop',
-                \ 'args': '-noglob -batch -load-vernac-source',
-                \ 'subchecker': 'coqtop' })
+        \ 'exe': 'coqtop',
+        \ 'args': '-noglob -batch -load-vernac-source',
+        \ 'filetype': 'coq',
+        \ 'subchecker': 'coqtop' })
+
     let errorformat =
         \ '%AFile \"%f\"\, line %l\, characters %c\-%.%#\:,'.
         \ '%C%m'
 
-    return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
+    return SyntasticMake({
+        \ 'makeprg': makeprg,
+        \ 'errorformat': errorformat })
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({

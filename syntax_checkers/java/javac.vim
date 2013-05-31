@@ -278,6 +278,7 @@ function! SyntaxCheckers_java_javac_GetLocList()
         \ 'args': javac_opts,
         \ 'fname': fname,
         \ 'tail': '2>&1',
+        \ 'filetype': 'java',
         \ 'subchecker': 'javac' })
 
     " unashamedly stolen from *errorformat-javac* (quickfix.txt) and modified to include error types
@@ -292,7 +293,10 @@ function! SyntaxCheckers_java_javac_GetLocList()
     if g:syntastic_java_javac_delete_output
         silent! call mkdir(output_dir,'p')
     endif
-    let errors = SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat, 'postprocess': ['cygwinRemoveCR'] })
+    let errors = SyntasticMake({
+        \ 'makeprg': makeprg,
+        \ 'errorformat': errorformat,
+        \ 'postprocess': ['cygwinRemoveCR'] })
 
     if g:syntastic_java_javac_delete_output
         call s:RemoveDir(output_dir)

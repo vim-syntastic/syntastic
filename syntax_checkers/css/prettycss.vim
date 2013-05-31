@@ -35,6 +35,7 @@ endfunction
 function! SyntaxCheckers_css_prettycss_GetLocList()
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'prettycss',
+        \ 'filetype': 'css',
         \ 'subchecker': 'prettycss' })
 
     " Print CSS Lint's error/warning messages from compact format. Ignores blank lines.

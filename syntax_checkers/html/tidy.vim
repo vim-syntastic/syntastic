@@ -86,13 +86,18 @@ function! SyntaxCheckers_html_tidy_GetLocList()
         \ 'exe': 'tidy',
         \ 'args': s:Args(),
         \ 'tail': '2>&1',
+        \ 'filetype': 'html',
         \ 'subchecker': 'tidy' })
+
     let errorformat =
         \ '%Wline %l column %v - Warning: %m,' .
         \ '%Eline %l column %v - Error: %m,' .
         \ '%-G%.%#'
 
-    let loclist = SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat, 'defaults': {'bufnr': bufnr("")} })
+    let loclist = SyntasticMake({
+        \ 'makeprg': makeprg,
+        \ 'errorformat': errorformat,
+        \ 'defaults': {'bufnr': bufnr("")} })
 
     " filter out valid HTML5 from the errors
     for n in range(len(loclist))

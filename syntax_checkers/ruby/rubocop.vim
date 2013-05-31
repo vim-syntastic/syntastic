@@ -24,16 +24,17 @@ endfunction
 
 function! SyntaxCheckers_ruby_rubocop_GetLocList()
     let makeprg = syntastic#makeprg#build({
-                \ 'exe': 'rubocop',
-                \ 'args': '--emacs --silent',
-                \ 'subchecker': 'rubocop' })
+        \ 'exe': 'rubocop',
+        \ 'args': '--emacs --silent',
+        \ 'filetype': 'ruby',
+        \ 'subchecker': 'rubocop' })
 
     let errorformat = '%f:%l:\ %t:\ %m'
 
     let loclist = SyntasticMake({
-                \ 'makeprg': makeprg,
-                \ 'errorformat': errorformat,
-                \ 'subtype': 'Style'})
+        \ 'makeprg': makeprg,
+        \ 'errorformat': errorformat,
+        \ 'subtype': 'Style'})
 
     " convert rubocop severities to error types recognized by syntastic
     for n in range(len(loclist))

@@ -24,9 +24,15 @@ endfunction
 function! SyntaxCheckers_python_pep8_GetLocList()
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'pep8',
+        \ 'filetype': 'python',
         \ 'subchecker': 'pep8' })
+
     let errorformat = '%f:%l:%c: %m'
-    let loclist = SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat, 'subtype': 'Style' })
+
+    let loclist = SyntasticMake({
+        \ 'makeprg': makeprg,
+        \ 'errorformat': errorformat,
+        \ 'subtype': 'Style' })
 
     for n in range(len(loclist))
         let loclist[n]['type'] = loclist[n]['text'] =~? '^W' ? 'W' : 'E'

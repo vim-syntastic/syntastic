@@ -20,9 +20,16 @@ function! SyntaxCheckers_tex_lacheck_IsAvailable()
 endfunction
 
 function! SyntaxCheckers_tex_lacheck_GetLocList()
-    let makeprg = syntastic#makeprg#build({ 'exe': 'lacheck', 'subchecker': 'lacheck' })
+    let makeprg = syntastic#makeprg#build({
+        \ 'exe': 'lacheck',
+        \ 'filetype': 'tex',
+        \ 'subchecker': 'lacheck' })
+
     let errorformat =  '%-G** %f:,%E"%f"\, line %l: %m'
-    return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
+
+    return SyntasticMake({
+        \ 'makeprg': makeprg,
+        \ 'errorformat': errorformat })
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({

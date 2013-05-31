@@ -36,9 +36,10 @@ endfunction
 
 function! SyntaxCheckers_applescript_osacompile_GetLocList()
     let makeprg = syntastic#makeprg#build({
-                \ 'exe': 'osacompile',
-                \ 'args': '-o ' . tempname() . '.scpt ',
-                \ 'subchecker': 'osacompile' })
+        \ 'exe': 'osacompile',
+        \ 'args': '-o ' . tempname() . '.scpt ',
+        \ 'filetype': 'applescript',
+        \ 'subchecker': 'osacompile' })
     let errorformat = '%f:%l:%m'
 
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
