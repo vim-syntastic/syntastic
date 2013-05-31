@@ -16,11 +16,16 @@ endfunction
 
 function! SyntaxCheckers_typescript_tsc_GetLocList()
     let makeprg = syntastic#makeprg#build({
-                \ 'exe': 'tsc',
-                \ 'post_args': '--out ' . syntastic#util#DevNull(),
-                \ 'subchecker': 'tsc' })
+        \ 'exe': 'tsc',
+        \ 'post_args': '--out ' . syntastic#util#DevNull(),
+        \ 'filetype': 'typescript',
+        \ 'subchecker': 'tsc' })
+
     let errorformat = '%f %#(%l\,%c): %m'
-    return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
+
+    return SyntasticMake({
+        \ 'makeprg': makeprg,
+        \ 'errorformat': errorformat })
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({

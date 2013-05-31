@@ -5,13 +5,16 @@ let g:loaded_syntastic_makeprg_builder = 1
 
 let g:SyntasticMakeprgBuilder = {}
 
-function! g:SyntasticMakeprgBuilder.New(exe, args, fname, post_args, tail, subchecker)
+" Public methods {{{1
+
+function! g:SyntasticMakeprgBuilder.New(exe, args, fname, post_args, tail, filetype, subchecker)
     let newObj = copy(self)
     let newObj._exe = a:exe
     let newObj._args = a:args
     let newObj._fname = a:fname
     let newObj._post_args = a:post_args
     let newObj._tail = a:tail
+    let newObj._filetype = empty(a:filetype) ? &filetype : a:filetype
     let newObj._subchecker = a:subchecker
     return newObj
 endfunction
@@ -44,6 +47,8 @@ function! g:SyntasticMakeprgBuilder.tail()
     return self._getOpt('tail')
 endfunction
 
+" Private methods {{{1
+
 function g:SyntasticMakeprgBuilder._getOpt(name)
     if self._optExists(a:name)
         return {self._optName(a:name)}
@@ -57,9 +62,11 @@ function! g:SyntasticMakeprgBuilder._optExists(name)
 endfunction
 
 function! g:SyntasticMakeprgBuilder._optName(name)
-    let setting = "g:syntastic_" . &ft
+    let setting = "g:syntastic_" . self._filetype
     if !empty(self._subchecker)
         let setting .= '_' . self._subchecker
     endif
     return setting . '_' . a:name
 endfunction
+
+" vim: set sw=4 sts=4 et fdm=marker:

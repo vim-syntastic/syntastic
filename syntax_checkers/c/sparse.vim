@@ -31,15 +31,17 @@ endif
 
 function! SyntaxCheckers_c_sparse_GetLocList()
     let makeprg = syntastic#makeprg#build({
-                \ 'exe': 'sparse',
-                \ 'args': '-ftabstop=' . &ts . ' ' . syntastic#c#ReadConfig(g:syntastic_sparse_config_file),
-                \ 'subchecker': 'sparse' })
+        \ 'exe': 'sparse',
+        \ 'args': '-ftabstop=' . &ts . ' ' . syntastic#c#ReadConfig(g:syntastic_sparse_config_file),
+        \ 'filetype': 'c',
+        \ 'subchecker': 'sparse' })
 
     let errorformat = '%f:%l:%v: %trror: %m,%f:%l:%v: %tarning: %m,'
 
-    let loclist = SyntasticMake({ 'makeprg': makeprg,
-                                \ 'errorformat': errorformat,
-                                \ 'defaults': {'bufnr': bufnr("")} })
+    let loclist = SyntasticMake({
+        \ 'makeprg': makeprg,
+        \ 'errorformat': errorformat,
+        \ 'defaults': {'bufnr': bufnr("")} })
     return loclist
 endfunction
 

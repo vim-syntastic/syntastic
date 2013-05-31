@@ -4,21 +4,30 @@ endif
 let g:loaded_syntastic_registry = 1
 
 let s:defaultCheckers = {
-        \ 'c': ['gcc'],
-        \ 'coffee': ['coffee', 'coffeelint'],
-        \ 'cpp': ['gcc'],
-        \ 'html': ['tidy'],
-        \ 'java': ['javac'],
+        \ 'c':          ['gcc'],
+        \ 'coffee':     ['coffee', 'coffeelint'],
+        \ 'cpp':        ['gcc'],
+        \ 'css':        ['csslint', 'phpcs'],
+        \ 'go':         ['go'],
+        \ 'html':       ['tidy'],
+        \ 'java':       ['javac'],
         \ 'javascript': ['jshint', 'jslint'],
-        \ 'objc': ['gcc'],
-        \ 'objcpp': ['gcc'],
-        \ 'perl': ['perl'],
-        \ 'python': ['python', 'flake8', 'pylint'],
-        \ 'php': ['php', 'phpcs', 'phpmd'],
-        \ 'ruby': ['mri']
+        \ 'json':       ['jsonlint', 'jsonval'],
+        \ 'objc':       ['gcc'],
+        \ 'objcpp':     ['gcc'],
+        \ 'perl':       ['perl', 'perlcritic'],
+        \ 'php':        ['php', 'phpcs', 'phpmd'],
+        \ 'python':     ['python', 'flake8', 'pylint'],
+        \ 'ruby':       ['mri'],
+        \ 'sh':         ['sh'],
+        \ 'tex':        ['lacheck']
     \ }
 
 let g:SyntasticRegistry = {}
+
+" TODO: Handling of filetype aliases: all public methods take aliases as
+" parameters, all private methods take normalized filetypes.  Public methods
+" are thus supposed to normalize filetypes before calling private methods.
 
 " Public methods {{{1
 
@@ -49,22 +58,23 @@ function! g:SyntasticRegistry.registerChecker(checker) abort
     call add(self._checkerMap[ft], a:checker)
 endfunction
 
-function! g:SyntasticRegistry.checkable(filetype)
-    return !empty(self.getActiveCheckers(a:filetype))
+function! g:SyntasticRegistry.checkable(ftalias)
+    return !empty(self.getActiveCheckers(a:ftalias))
 endfunction
 
-function! g:SyntasticRegistry.getActiveCheckers(filetype)
-    let checkers = self.availableCheckersFor(a:filetype)
+function! g:SyntasticRegistry.getActiveCheckers(ftalias)
+    let filetype = s:SyntasticRegistryNormaliseFiletype(a:ftalias)
+    let checkers = self.availableCheckersFor(filetype)
 
-    if self._userHasFiletypeSettings(a:filetype)
-        return self._filterCheckersByUserSettings(checkers, a:filetype)
+    if self._userHasFiletypeSettings(filetype)
+        return self._filterCheckersByUserSettings(checkers, filetype)
     endif
 
-    if has_key(s:defaultCheckers, a:filetype)
-        return self._filterCheckersByDefaultSettings(checkers, a:filetype)
+    if has_key(s:defaultCheckers, filetype)
+        return self._filterCheckersByDefaultSettings(checkers, filetype)
     endif
 
-    let checkers = self.availableCheckersFor(a:filetype)
+    let checkers = self.availableCheckersFor(filetype)
 
     if !empty(checkers)
         return [checkers[0]]
@@ -73,13 +83,8 @@ function! g:SyntasticRegistry.getActiveCheckers(filetype)
     return []
 endfunction
 
-function! g:SyntasticRegistry.getActiveCheckerNames(filetype)
-    let checkers = self.getActiveCheckers(a:filetype)
-    return join(map(checkers, 'v:val.name()'))
-endfunction
-
-function! g:SyntasticRegistry.getChecker(filetype, name)
-    for checker in self.availableCheckersFor(a:filetype)
+function! g:SyntasticRegistry.getChecker(ftalias, name)
+    for checker in self.availableCheckersFor(a:ftalias)
         if checker.name() == a:name
             return checker
         endif
@@ -88,18 +93,24 @@ function! g:SyntasticRegistry.getChecker(filetype, name)
     return {}
 endfunction
 
-function! g:SyntasticRegistry.availableCheckersFor(filetype)
-    let checkers = copy(self._allCheckersFor(a:filetype))
+function! g:SyntasticRegistry.availableCheckersFor(ftalias)
+    let filetype = s:SyntasticRegistryNormaliseFiletype(a:ftalias)
+    let checkers = copy(self._allCheckersFor(filetype))
     return self._filterCheckersByAvailability(checkers)
 endfunction
 
-function! g:SyntasticRegistry.echoInfoFor(filetype)
-    echomsg "Syntastic info for filetype: " . a:filetype
+function! g:SyntasticRegistry.echoInfoFor(ftalias_list)
+    echomsg "Syntastic info for filetype: " . join(a:ftalias_list, '.')
 
-    let available = self.availableCheckersFor(a:filetype)
-    echomsg "Available checkers: " . join(map(available, "v:val.name()"))
+    let available = []
+    let active = []
+    for ftalias in a:ftalias_list
+        call extend(available, self.availableCheckersFor(ftalias))
+        call extend(active, self.getActiveCheckers(ftalias))
+    endfor
 
-    echomsg "Currently active checker(s): " . self.getActiveCheckerNames(a:filetype)
+    echomsg "Available checkers: " . join(syntastic#util#unique(map(available, "v:val.name()")))
+    echomsg "Currently active checker(s): " . join(syntastic#util#unique(map(active, "v:val.name()")))
 endfunction
 
 " Private methods {{{1
@@ -165,6 +176,16 @@ function! g:SyntasticRegistry._validateUniqueName(checker) abort
             throw "Syntastic: Duplicate syntax checker name for: " . a:checker.name()
         endif
     endfor
+endfunction
+
+" Private functions {{{1
+
+"resolve filetype aliases, and replace - with _ otherwise we cant name
+"syntax checker functions legally for filetypes like "gentoo-metadata"
+function! s:SyntasticRegistryNormaliseFiletype(ftalias)
+    let ft = get(g:syntastic_filetype_map, a:ftalias, a:ftalias)
+    let ft = substitute(ft, '-', '_', 'g')
+    return ft
 endfunction
 
 " vim: set sw=4 sts=4 et fdm=marker:

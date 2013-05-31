@@ -32,8 +32,10 @@ endfunction
 
 function! SyntaxCheckers_python_flake8_GetLocList()
     let makeprg = syntastic#makeprg#build({
-                \ 'exe': 'flake8',
-                \ 'subchecker': 'flake8' })
+        \ 'exe': 'flake8',
+        \ 'filetype': 'python',
+        \ 'subchecker': 'flake8' })
+
     let errorformat =
         \ '%E%f:%l: could not compile,%-Z%p^,'.
         \ '%W%f:%l:%c: F%n %m,'.
@@ -41,7 +43,10 @@ function! SyntaxCheckers_python_flake8_GetLocList()
         \ '%E%f:%l:%c: %t%n %m,'.
         \ '%E%f:%l: %t%n %m,'.
         \ '%-G%.%#'
-    return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
+
+    return SyntasticMake({
+        \ 'makeprg': makeprg,
+        \ 'errorformat': errorformat })
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({

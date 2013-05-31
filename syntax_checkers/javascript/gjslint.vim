@@ -23,11 +23,21 @@ endfunction
 
 function! SyntaxCheckers_javascript_gjslint_GetLocList()
     let makeprg = syntastic#makeprg#build({
-                \ 'exe': 'gjslint',
-                \ 'args': g:syntastic_javascript_gjslint_conf . " --nosummary --unix_mode --nodebug_indentation --nobeep",
-                \ 'subchecker': 'gjslint' })
-    let errorformat="%f:%l:(New Error -%\\?\%n) %m,%f:%l:(-%\\?%n) %m,%-G1 files checked, no errors found.,%-G%.%#"
-    return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
+        \ 'exe': 'gjslint',
+        \ 'args': g:syntastic_javascript_gjslint_conf . " --nosummary --unix_mode --nodebug_indentation --nobeep",
+        \ 'filetype': 'javascript',
+        \ 'subchecker': 'gjslint' })
+
+    let errorformat =
+        \ "%f:%l:(New Error -%\\?\%n) %m," .
+        \ "%f:%l:(-%\\?%n) %m," .
+        \ "%-G1 files checked," .
+        \ " no errors found.," .
+        \ "%-G%.%#"
+
+    return SyntasticMake({
+        \ 'makeprg': makeprg,
+        \ 'errorformat': errorformat })
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({

@@ -17,7 +17,9 @@ function! SyntaxCheckers_python_pylint_GetLocList()
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'pylint',
         \ 'args': ' -f parseable -r n -i y',
+        \ 'filetype': 'python',
         \ 'subchecker': 'pylint' })
+
     let errorformat =
         \ '%A%f:%l:%m,' .
         \ '%A%f:(%l):%m,' .

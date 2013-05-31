@@ -39,11 +39,17 @@ endfunction
 
 function! SyntaxCheckers_perl_perlcritic_GetLocList()
     let makeprg = syntastic#makeprg#build({
-                \ 'exe': 'perlcritic',
-                \ 'post_args': '--quiet --nocolor --verbose "\%s:\%f:\%l:\%c:(\%s) \%m (\%e)\n"',
-                \ 'subchecker': 'perlcritic' })
-    let errorformat='%t:%f:%l:%c:%m'
-    let loclist = SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat, 'subtype': 'Style' })
+        \ 'exe': 'perlcritic',
+        \ 'post_args': '--quiet --nocolor --verbose "\%s:\%f:\%l:\%c:(\%s) \%m (\%e)\n"',
+        \ 'filetype': 'perl',
+        \ 'subchecker': 'perlcritic' })
+
+    let errorformat = '%t:%f:%l:%c:%m'
+
+    let loclist = SyntasticMake({
+        \ 'makeprg': makeprg,
+        \ 'errorformat': errorformat,
+        \ 'subtype': 'Style' })
 
     " change error types according to the prescribed threshold
     for n in range(len(loclist))

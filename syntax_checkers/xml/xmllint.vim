@@ -25,9 +25,11 @@ endfunction
 
 function! SyntaxCheckers_xml_xmllint_GetLocList()
     let makeprg = syntastic#makeprg#build({
-                \ 'exe': 'xmllint',
-                \ 'args': '--xinclude --noout --postvalid',
-                \ 'subchecker': 'xmllint' })
+        \ 'exe': 'xmllint',
+        \ 'args': '--xinclude --noout --postvalid',
+        \ 'filetype': 'xml',
+        \ 'subchecker': 'xmllint' })
+
     let errorformat=
         \ '%E%f:%l: error : %m,' .
         \ '%-G%f:%l: validity error : Validation failed: no DTD found %m,' .
@@ -38,9 +40,10 @@ function! SyntaxCheckers_xml_xmllint_GetLocList()
         \ '%E%f:%l: %m,' .
         \ '%-Z%p^,' .
         \ '%-G%.%#'
-    let loclist = SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 
-    return loclist
+    return SyntasticMake({
+        \ 'makeprg': makeprg,
+        \ 'errorformat': errorformat })
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({

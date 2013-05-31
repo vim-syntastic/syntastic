@@ -29,9 +29,10 @@ endfunction
 
 function! SyntaxCheckers_css_csslint_GetLocList()
     let makeprg = syntastic#makeprg#build({
-                \ 'exe': 'csslint',
-                \ 'args': '--format=compact ' . g:syntastic_csslint_options,
-                \ 'subchecker': 'csslint' })
+        \ 'exe': 'csslint',
+        \ 'args': '--format=compact ' . g:syntastic_csslint_options,
+        \ 'filetype': 'css',
+        \ 'subchecker': 'csslint' })
 
     " Print CSS Lint's error/warning messages from compact format. Ignores blank lines.
     let errorformat =
@@ -41,9 +42,10 @@ function! SyntaxCheckers_css_csslint_GetLocList()
         \ '%f: line %l\, col %c\, %tarning - %m,'.
         \ '%f: line %l\, col %c\, %m,'
 
-    return SyntasticMake({ 'makeprg': makeprg,
-                         \ 'errorformat': errorformat,
-                         \ 'defaults': {'bufnr': bufnr("")} })
+    return SyntasticMake({
+        \ 'makeprg': makeprg,
+        \ 'errorformat': errorformat,
+        \ 'defaults': {'bufnr': bufnr("")} })
 
 endfunction
 

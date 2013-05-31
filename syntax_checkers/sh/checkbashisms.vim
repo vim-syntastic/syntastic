@@ -21,6 +21,7 @@ function! SyntaxCheckers_sh_checkbashisms_GetLocList()
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'checkbashisms',
         \ 'args': '-fpx',
+        \ 'filetype': 'sh',
         \ 'subchecker': 'checkbashisms'})
 
     let errorformat =
@@ -32,7 +33,10 @@ function! SyntaxCheckers_sh_checkbashisms_GetLocList()
         \ '%Wpossible bashism in %f line %l (%m):,%C%.%#,%Z.%#,' .
         \ '%-G%.%#'
 
-    return SyntasticMake({'makeprg': makeprg, 'errorformat': errorformat, 'subtype': 'Style'})
+    return SyntasticMake({
+        \ 'makeprg': makeprg,
+        \ 'errorformat': errorformat,
+        \ 'subtype': 'Style'})
 endfunction
 
 

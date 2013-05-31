@@ -24,13 +24,17 @@ endfunction
 
 function! SyntaxCheckers_yaml_jsyaml_GetLocList()
     let makeprg = syntastic#makeprg#build({
-                \ 'exe': 'js-yaml',
-                \ 'args': '--compact',
-                \ 'subchecker': 'jsyaml' })
+        \ 'exe': 'js-yaml',
+        \ 'args': '--compact',
+        \ 'filetype': 'yaml',
+        \ 'subchecker': 'jsyaml' })
+
     let errorformat='Error on line %l\, col %c:%m,%-G%.%#'
-    return SyntasticMake({ 'makeprg': makeprg,
-                         \ 'errorformat': errorformat,
-                         \ 'defaults': {'bufnr': bufnr("")} })
+
+    return SyntasticMake({
+        \ 'makeprg': makeprg,
+        \ 'errorformat': errorformat,
+        \ 'defaults': {'bufnr': bufnr("")} })
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({

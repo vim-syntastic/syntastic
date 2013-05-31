@@ -24,13 +24,19 @@ endfunction
 
 function! SyntaxCheckers_php_phpcs_GetLocList()
     let makeprg = syntastic#makeprg#build({
-                \ 'exe': 'phpcs',
-                \ 'args': '--report=csv',
-                \ 'subchecker': 'phpcs' })
+        \ 'exe': 'phpcs',
+        \ 'args': '--report=csv',
+        \ 'filetype': 'php',
+        \ 'subchecker': 'phpcs' })
+
     let errorformat =
         \ '%-GFile\,Line\,Column\,Type\,Message\,Source\,Severity,'.
         \ '"%f"\,%l\,%c\,%t%*[a-zA-Z]\,"%m"\,%*[a-zA-Z0-9_.-]\,%*[0-9]'
-    return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat, 'subtype': 'Style' })
+
+    return SyntasticMake({
+        \ 'makeprg': makeprg,
+        \ 'errorformat': errorformat,
+        \ 'subtype': 'Style' })
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({

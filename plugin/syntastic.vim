@@ -52,6 +52,10 @@ if !exists("g:syntastic_ignore_files")
     let g:syntastic_ignore_files = []
 endif
 
+if !exists("g:syntastic_filetype_map")
+    let g:syntastic_filetype_map = {}
+endif
+
 let s:registry = g:SyntasticRegistry.Instance()
 let s:notifiers = g:SyntasticNotifiers.New()
 let s:modemap = g:SyntasticModeMap.Instance()
@@ -69,7 +73,7 @@ endfunction
 command! SyntasticToggleMode call s:ToggleMode()
 command! -nargs=? -complete=custom,s:CompleteCheckerName SyntasticCheck call s:UpdateErrors(0, <f-args>) <bar> call s:Redraw()
 command! Errors call s:ShowLocList()
-command! SyntasticInfo call s:registry.echoInfoFor(&ft)
+command! SyntasticInfo call s:registry.echoInfoFor(s:CurrentFiletypes())
 
 highlight link SyntasticError SpellBad
 highlight link SyntasticWarning SpellCap
@@ -148,10 +152,7 @@ function! s:ClearCache()
 endfunction
 
 function! s:CurrentFiletypes()
-    "sub - for _ in filetypes otherwise we cant name syntax checker
-    "functions legally for filetypes like "gentoo-metadata"
-    let fts = substitute(&ft, '-', '_', 'g')
-    return split(fts, '\.')
+    return split(&filetype, '\.')
 endfunction
 
 "detect and cache all syntax errors in this buffer

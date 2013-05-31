@@ -23,12 +23,18 @@ endfunction
 
 function! SyntaxCheckers_go_gofmt_GetLocList()
     let makeprg = syntastic#makeprg#build({
-                \ 'exe': 'gofmt',
-                \ 'args': '-l',
-                \ 'tail': '1>' . syntastic#util#DevNull(),
-                \ 'subchecker': 'gofmt' })
+        \ 'exe': 'gofmt',
+        \ 'args': '-l',
+        \ 'tail': '1>' . syntastic#util#DevNull(),
+        \ 'filetype': 'go',
+        \ 'subchecker': 'gofmt' })
+
     let errorformat = '%f:%l:%c: %m,%-G%.%#'
-    return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat, 'defaults': {'type': 'e'} })
+
+    return SyntasticMake({
+        \ 'makeprg': makeprg,
+        \ 'errorformat': errorformat,
+        \ 'defaults': {'type': 'e'} })
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
