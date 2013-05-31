@@ -78,11 +78,6 @@ function! g:SyntasticRegistry.getActiveCheckers(ftalias)
     return []
 endfunction
 
-function! g:SyntasticRegistry.getActiveCheckerNames(ftalias)
-    let checkers = self.getActiveCheckers(a:ftalias)
-    return join(map(checkers, 'v:val.name()'))
-endfunction
-
 function! g:SyntasticRegistry.getChecker(ftalias, name)
     for checker in self.availableCheckersFor(a:ftalias)
         if checker.name() == a:name
@@ -99,13 +94,18 @@ function! g:SyntasticRegistry.availableCheckersFor(ftalias)
     return self._filterCheckersByAvailability(checkers)
 endfunction
 
-function! g:SyntasticRegistry.echoInfoFor(ftalias)
-    echomsg "Syntastic info for filetype: " . a:ftalias
+function! g:SyntasticRegistry.echoInfoFor(ftalias_list)
+    echomsg "Syntastic info for filetype: " . join(a:ftalias_list, '.')
 
-    let available = self.availableCheckersFor(a:ftalias)
-    echomsg "Available checkers: " . join(map(available, "v:val.name()"))
+    let available = []
+    let active = []
+    for ftalias in a:ftalias_list
+        call extend(available, self.availableCheckersFor(ftalias))
+        call extend(active, self.getActiveCheckers(ftalias))
+    endfor
 
-    echomsg "Currently active checker(s): " . self.getActiveCheckerNames(a:ftalias)
+    echomsg "Available checkers: " . join(syntastic#util#unique(map(available, "v:val.name()")))
+    echomsg "Currently active checker(s): " . join(syntastic#util#unique(map(active, "v:val.name()")))
 endfunction
 
 " Private methods {{{1
