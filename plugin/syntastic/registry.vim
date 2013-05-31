@@ -4,18 +4,23 @@ endif
 let g:loaded_syntastic_registry = 1
 
 let s:defaultCheckers = {
-        \ 'c': ['gcc'],
-        \ 'coffee': ['coffee', 'coffeelint'],
-        \ 'cpp': ['gcc'],
-        \ 'html': ['tidy'],
-        \ 'java': ['javac'],
+        \ 'c':          ['gcc'],
+        \ 'coffee':     ['coffee', 'coffeelint'],
+        \ 'cpp':        ['gcc'],
+        \ 'css':        ['csslint', 'phpcs'],
+        \ 'go':         ['go'],
+        \ 'html':       ['tidy'],
+        \ 'java':       ['javac'],
         \ 'javascript': ['jshint', 'jslint'],
-        \ 'objc': ['gcc'],
-        \ 'objcpp': ['gcc'],
-        \ 'perl': ['perl'],
-        \ 'python': ['python', 'flake8', 'pylint'],
-        \ 'php': ['php', 'phpcs', 'phpmd'],
-        \ 'ruby': ['mri']
+        \ 'json':       ['jsonlint', 'jsonval'],
+        \ 'objc':       ['gcc'],
+        \ 'objcpp':     ['gcc'],
+        \ 'perl':       ['perl', 'perlcritic'],
+        \ 'php':        ['php', 'phpcs', 'phpmd'],
+        \ 'python':     ['python', 'flake8', 'pylint'],
+        \ 'ruby':       ['mri'],
+        \ 'sh':         ['sh'],
+        \ 'tex':        ['lacheck']
     \ }
 
 let g:SyntasticRegistry = {}
