@@ -27,11 +27,11 @@ function! g:SyntasticChecker.New(args)
     return newObj
 endfunction
 
-function! g:SyntasticChecker.filetype()
+function! g:SyntasticChecker.getFiletype()
     return self._filetype
 endfunction
 
-function! g:SyntasticChecker.name()
+function! g:SyntasticChecker.getName()
     return self._name
 endfunction
 
