@@ -55,7 +55,7 @@ function! g:SyntasticLoclist.isEmpty()
     return empty(self._rawLoclist)
 endfunction
 
-function! g:SyntasticLoclist.length()
+function! g:SyntasticLoclist.getLength()
     return len(self._rawLoclist)
 endfunction
 

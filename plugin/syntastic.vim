@@ -57,14 +57,14 @@ if !exists("g:syntastic_filetype_map")
 endif
 
 let s:registry = g:SyntasticRegistry.Instance()
-let s:notifiers = g:SyntasticNotifiers.New()
+let s:notifiers = g:SyntasticNotifiers.Instance()
 let s:modemap = g:SyntasticModeMap.Instance()
 
 function! s:CompleteCheckerName(argLead, cmdLine, cursorPos)
     let checker_names = []
     for ft in s:CurrentFiletypes()
         for checker in s:registry.availableCheckersFor(ft)
-            call add(checker_names, checker.name())
+            call add(checker_names, checker.getName())
         endfor
     endfor
     return join(checker_names, "\n")
@@ -172,7 +172,7 @@ function! s:CacheErrors(...)
             endif
 
             for checker in checkers
-                call syntastic#util#debug("CacheErrors: Invoking checker: " . checker.name())
+                call syntastic#util#debug("CacheErrors: Invoking checker: " . checker.getName())
 
                 let loclist = checker.getLocList()
 
@@ -258,7 +258,7 @@ endfunction
 function! SyntasticStatuslineFlag()
     let loclist = g:SyntasticLoclist.current()
     let issues = loclist.filteredRaw()
-    let num_issues = loclist.length()
+    let num_issues = loclist.getLength()
     if loclist.hasErrorsOrWarningsToDisplay()
         let errors = loclist.errors()
         let warnings = loclist.warnings()
