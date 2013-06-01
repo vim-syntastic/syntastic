@@ -47,7 +47,7 @@ function! g:SyntasticRegistry.CreateAndRegisterChecker(args)
 endfunction
 
 function! g:SyntasticRegistry.registerChecker(checker) abort
-    let ft = a:checker.filetype()
+    let ft = a:checker.getFiletype()
 
     if !has_key(self._checkerMap, ft)
         let self._checkerMap[ft] = []
@@ -85,7 +85,7 @@ endfunction
 
 function! g:SyntasticRegistry.getChecker(ftalias, name)
     for checker in self.availableCheckersFor(a:ftalias)
-        if checker.name() == a:name
+        if checker.getName() == a:name
             return checker
         endif
     endfor
@@ -109,8 +109,8 @@ function! g:SyntasticRegistry.echoInfoFor(ftalias_list)
         call extend(active, self.getActiveCheckers(ftalias))
     endfor
 
-    echomsg "Available checkers: " . join(syntastic#util#unique(map(available, "v:val.name()")))
-    echomsg "Currently active checker(s): " . join(syntastic#util#unique(map(active, "v:val.name()")))
+    echomsg "Available checkers: " . join(syntastic#util#unique(map(available, "v:val.getName()")))
+    echomsg "Currently active checker(s): " . join(syntastic#util#unique(map(active, "v:val.getName()")))
 endfunction
 
 " Private methods {{{1
@@ -127,7 +127,7 @@ endfunction
 function! g:SyntasticRegistry._filterCheckersByDefaultSettings(checkers, filetype)
     if has_key(s:defaultCheckers, a:filetype)
         let whitelist = s:defaultCheckers[a:filetype]
-        return filter(a:checkers, "index(whitelist, v:val.name()) != -1")
+        return filter(a:checkers, "index(whitelist, v:val.getName()) != -1")
     endif
 
     return a:checkers
@@ -139,7 +139,7 @@ function! g:SyntasticRegistry._filterCheckersByUserSettings(checkers, filetype)
     else
         let whitelist = g:syntastic_{a:filetype}_checkers
     endif
-    return filter(a:checkers, "index(whitelist, v:val.name()) != -1")
+    return filter(a:checkers, "index(whitelist, v:val.getName()) != -1")
 endfunction
 
 function! g:SyntasticRegistry._filterCheckersByAvailability(checkers)
@@ -171,9 +171,9 @@ function! g:SyntasticRegistry._userHasFiletypeSettings(filetype)
 endfunction
 
 function! g:SyntasticRegistry._validateUniqueName(checker) abort
-    for checker in self._allCheckersFor(a:checker.filetype())
-        if checker.name() == a:checker.name()
-            throw "Syntastic: Duplicate syntax checker name for: " . a:checker.name()
+    for checker in self._allCheckersFor(a:checker.getFiletype())
+        if checker.getName() == a:checker.getName()
+            throw "Syntastic: Duplicate syntax checker name for: " . a:checker.getName()
         endif
     endfor
 endfunction

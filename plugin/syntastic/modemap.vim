@@ -5,6 +5,8 @@ let g:loaded_syntastic_modemap = 1
 
 let g:SyntasticModeMap = {}
 
+" Public methods {{{1
+
 function! g:SyntasticModeMap.Instance()
     if !exists('s:SyntasticModeMapInstance')
         let s:SyntasticModeMapInstance = copy(self)
@@ -40,6 +42,8 @@ function! g:SyntasticModeMap.echoMode()
     echo "Syntastic: " . self._mode . " mode enabled"
 endfunction
 
+" Private methods {{{1
+
 function! g:SyntasticModeMap._initModeMapFromGlobalOpts()
     let self._mode = "active"
     let self._activeFiletypes = []
@@ -60,3 +64,4 @@ function! g:SyntasticModeMap._noFiletypesArePassive(filetypes)
     return empty(filter(a:filetypes, 'index(self._passiveFiletypes, v:val) != -1'))
 endfunction
 
+" vim: set sw=4 sts=4 et fdm=marker:
