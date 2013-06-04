@@ -63,7 +63,7 @@ let s:ignore_html_errors = [
                 \ "<input> attribute \"type\" has invalid value \"search\""
                 \ ]
 
-function! s:IgnoreErrror(text)
+function! s:IgnoreError(text)
     for i in s:ignore_html_errors + g:syntastic_html_tidy_ignore_errors
         if stridx(a:text, i) != -1
             return 1
@@ -101,7 +101,7 @@ function! SyntaxCheckers_html_tidy_GetLocList()
 
     " filter out valid HTML5 from the errors
     for n in range(len(loclist))
-        if loclist[n]['valid'] && s:IgnoreErrror(loclist[n]['text']) == 1
+        if loclist[n]['valid'] && s:IgnoreError(loclist[n]['text']) == 1
             let loclist[n]['valid'] = 0
         endif
     endfor
