@@ -18,6 +18,11 @@ if exists("g:loaded_syntastic_php_phpcs_checker")
 endif
 let g:loaded_syntastic_php_phpcs_checker=1
 
+"Support passing configuration directives to phpcs
+if !exists("g:syntastic_phpcs_conf")
+    let g:syntastic_phpcs_conf = ""
+endif
+
 function! SyntaxCheckers_php_phpcs_IsAvailable()
     return executable('phpcs')
 endfunction
@@ -25,7 +30,7 @@ endfunction
 function! SyntaxCheckers_php_phpcs_GetLocList()
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'phpcs',
-        \ 'args': '--report=csv',
+        \ 'args': g:syntastic_phpcs_conf . ' --report=csv',
         \ 'filetype': 'php',
         \ 'subchecker': 'phpcs' })
 
