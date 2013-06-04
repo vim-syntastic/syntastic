@@ -47,7 +47,7 @@ function! s:TidyEncOptByFenc()
     return get(tidy_opts, &fileencoding, '-utf8')
 endfunction
 
-function! s:IgnoreErrror(text)
+function! s:IgnoreError(text)
     for i in g:syntastic_xhtml_tidy_ignore_errors
         if stridx(a:text, i) != -1
             return 1
@@ -75,7 +75,7 @@ function! SyntaxCheckers_xhtml_tidy_GetLocList()
         \ 'defaults': {'bufnr': bufnr("")} })
 
     for n in range(len(loclist))
-        if loclist[n]['valid'] && s:IgnoreErrror(loclist[n]['text']) == 1
+        if loclist[n]['valid'] && s:IgnoreError(loclist[n]['text']) == 1
             let loclist[n]['valid'] = 0
         endif
     endfor
