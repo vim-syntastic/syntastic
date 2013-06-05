@@ -25,7 +25,7 @@ function! SyntaxCheckers_coffee_coffee_GetLocList()
     " Sadly, Vim doesn't have a function to create temporary directories.
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'coffee',
-        \ 'args': '-c',
+        \ 'args': '-t',
         \ 'filetype': 'coffee',
         \ 'subchecker': 'coffee' })
 
