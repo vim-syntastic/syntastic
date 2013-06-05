@@ -59,6 +59,11 @@ class ErrorReport
     pathHasError : (path) ->
         return @_hasLevel(path, 'error')
 
+    hasError : () ->
+        for path of @paths
+            return true if @pathHasError(path)
+        return false
+
     _hasLevel : (path, level) ->
         for error in @paths[path]
             return true if error.level == level
@@ -88,11 +93,14 @@ class Reporter
         , message
 
     publish : () ->
-        @print ""
-        @reportPath(path, errors) for path, errors of @errorReport.paths
-        summary = @errorReport.getSummary()
-        @reportSummary(summary)
-        @print ""
+        paths = @errorReport.paths
+
+        report  = ""
+        report += @reportPath(path, errors) for path, errors of paths
+        report += @reportSummary(@errorReport.getSummary())
+        report += ""
+
+        @print report if not options.argv.q or @errorReport.hasError()
         return this
 
     reportSummary : (s) ->
@@ -109,7 +117,7 @@ class Reporter
         warn = @plural('warning', w)
         file = @plural('file', p)
         msg = "#{start} » #{e} #{err} and #{w} #{warn} in #{p} #{file}"
-        @print "\n" + @stylize(msg)
+        return "\n" + @stylize(msg) + "\n"
 
     reportPath : (path, errors) ->
         [overall, color] = if hasError = @errorReport.pathHasError(path)
@@ -118,15 +126,20 @@ class Reporter
             [@warn, 'yellow']
         else
             [@ok, 'green']
+
+        pathReport = ""
         if not options.argv.q or hasError
-            @print "  #{overall} #{@stylize(path, color, 'bold')}"
+            pathReport += "  #{overall} #{@stylize(path, color, 'bold')}\n"
+
         for e in errors
             continue if options.argv.q and e.level != 'error'
             o = if e.level == 'error' then @err else @warn
-            msg = "     " +
-                    "#{o} #{@stylize("#" + e.lineNumber, color)}: #{e.message}."
-            msg += " #{e.context}." if e.context
-            @print(msg)
+            pathReport += "     " +
+                "#{o} #{@stylize("#" + e.lineNumber, color)}: #{e.message}."
+            pathReport += " #{e.context}." if e.context
+            pathReport += "\n"
+
+        pathReport
 
     print : (message) ->
         console.log message

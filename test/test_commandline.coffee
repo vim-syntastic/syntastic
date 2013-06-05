@@ -186,6 +186,7 @@ vows.describe('commandline').addBatch({
 
         'Handles cyclomatic complexity check' : (error, stdout, stderr) ->
             assert.include(stdout.toLowerCase(), 'cyclomatic complexity')
+
     'using stdin':
 
         'with working string':
@@ -251,5 +252,44 @@ vows.describe('commandline').addBatch({
             'fails': (error, stdout, stderr) ->
                 assert.isNotNull(error)
 
+    'reports using basic reporter':
+        'with option q set':
+            'and no errors occured':
+                topic: () ->
+                    args = [ '-q', '--noconfig', 'test/fixtures/clean.coffee' ]
+                    commandline args, this.callback
+                    return undefined
+
+                'no output': (err, stdout, stderr) ->
+                    assert.isEmpty(stdout)
+
+            'and errors occured':
+                topic: () ->
+                    args = [ '-q', 'test/fixtures/syntax_error.coffee' ]
+                    commandline args, this.callback
+                    return undefined
+
+                'output': (error, stdout, stderr) ->
+                    assert.isNotEmpty(stderr)
+
+        'with option q not set':
+            'and no errors occured':
+                topic: () ->
+                    console.log process.env.COFFEELINT_CONFIG
+                    args = [ 'test/fixtures/clean.coffee' ]
+                    commandline args, this.callback
+                    return undefined
+
+                'output': (err, stdout, stderr) ->
+                    assert.isNotEmpty(stdout)
+
+            'and errors occured':
+                topic: () ->
+                    args = [ 'test/fixtures/syntax_error.coffee' ]
+                    commandline args, this.callback
+                    return undefined
+
+                'output': (error, stdout, stderr) ->
+                    assert.isNotEmpty(stderr)
 
 }).export(module)
