@@ -23,6 +23,14 @@ vows.describe('spacing').addBatch({
             (a='b') -> a
             a|b
             a&b
+            a*=-5
+            a*=-b
+            a*=5
+            a*=a
+            -a+=-2
+            -a+=-a
+            -a+=2
+            -a+=a
             '''
 
         'are permitted by default' : (source) ->
@@ -81,6 +89,14 @@ vows.describe('spacing').addBatch({
             if -1 then -1 else -1
             a | b
             a & b
+            a *= 5
+            a *= -5
+            a *= b
+            a *= -b
+            -a *= 5
+            -a *= -5
+            -a *= b
+            -a *= -b
             '''
 
         'are permitted' : (source) ->
