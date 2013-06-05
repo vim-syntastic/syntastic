@@ -21,7 +21,7 @@ endfunction
 function! SyntaxCheckers_coffee_coffee_GetLocList()
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'coffee',
-        \ 'args': '-t',
+        \ 'args': '-n',
         \ 'filetype': 'coffee',
         \ 'subchecker': 'coffee' })
 
