@@ -17,13 +17,17 @@ let g:loaded_syntastic_makeprg_autoload = 1
 "                \ 'args': '-a -b -c',
 "                \ 'post_args': '--more --args',
 "                \ 'tail': '> /tmp/output',
+"                \ 'filetype': 'ruby',
 "                \ 'subchecker': 'mri' })
 "
 "Note that the current filename is added by default - but can be overridden by
 "passing in an 'fname' arg.
 "
-"All options can be overriden by the user with global variables - even when
-"not specified by the checker in syntastic#makeprg#build().
+"Arguments 'filetype' and 'subchecker' are mandatory, handling of composite
+"types and user-defined variables breaks if you omit them.
+"
+"All other options can be overriden by the user with global variables - even
+"when not specified by the checker in syntastic#makeprg#build().
 "
 "E.g. They could override the checker exe with
 "
