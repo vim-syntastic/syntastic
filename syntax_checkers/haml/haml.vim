@@ -13,15 +13,20 @@
 if exists("g:loaded_syntastic_haml_haml_checker")
     finish
 endif
+
+if !exists("g:syntastic_ruby_exec")
+    let g:syntastic_haml_exec = "haml"
+endif
+
 let g:loaded_syntastic_haml_haml_checker=1
 
 function! SyntaxCheckers_haml_haml_IsAvailable()
-    return executable('haml')
+     return executable(expand(g:syntastic_haml_exec))
 endfunction
 
 function! SyntaxCheckers_haml_haml_GetLocList()
     let makeprg = syntastic#makeprg#build({
-        \ 'exe': 'haml',
+        \ 'exe': expand(g:syntastic_haml_exec),
         \ 'args': '-c',
         \ 'filetype': 'haml',
         \ 'subchecker': 'haml' })
