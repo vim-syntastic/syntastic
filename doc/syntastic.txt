@@ -175,7 +175,7 @@ variable to 0. >
 
                                               *'syntastic_echo_current_error'*
 Default: 1
-If enabled, syntastic will echo the errror associated with the current line to
+If enabled, syntastic will echo the error associated with the current line to
 the command window. If multiple errors are found, the first will be used. >
     let g:syntastic_echo_current_error=1
 <
@@ -395,11 +395,14 @@ Checkers that use 'syntastic#makeprg#build()' look like this: >
                 \ 'args': '-a -b -c',
                 \ 'post_args': '--more --args',
                 \ 'tail': '> /tmp/output',
+                \ 'filetype': 'ruby',
                 \ 'subchecker': 'mri' })
 <
 
-All of the parameters above can be overriden by setting global variables -
-even parameters not specified in the call to syntastic#makeprg#build().
+The 'filetype' and 'subchecker' parameters are mandatory.  All of the other
+parameters above are optional (well, you probably need at least 'exe'), and
+can be overriden by setting global variables - even parameters not specified
+in the call to syntastic#makeprg#build().
 
 E.g. To override the checker exe above, you could do this: >
     let g:syntastic_ruby_mri_exe="another_ruby_checker_exe.rb"
