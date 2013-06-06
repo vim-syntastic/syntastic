@@ -321,6 +321,7 @@ function! SyntasticMake(options)
     let old_shellpipe = &shellpipe
     let old_shell = &shell
     let old_errorformat = &l:errorformat
+    let old_lc_all = $LC_ALL
 
     if s:OSSupportsShellpipeHack()
         "this is a hack to stop the screen needing to be ':redraw'n when
@@ -337,7 +338,10 @@ function! SyntasticMake(options)
         let &l:errorformat = a:options['errorformat']
     endif
 
+    let $LC_ALL = 'C'
     silent lmake!
+    let $LC_ALL = old_lc_all
+
     let errors = getloclist(0)
 
     call setloclist(0, old_loclist)
