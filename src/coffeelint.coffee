@@ -378,8 +378,7 @@ class LineLinter
         null
 
 #
-# A class that performs checks on the output of CoffeeScript's
-# lexer.
+# A class that performs checks on the output of CoffeeScript's lexer.
 #
 class LexicalLinter
 
@@ -405,8 +404,7 @@ class LexicalLinter
             errors.push(error) if error
         errors
 
-    # Return an error if the given token fails a lint check, false
-    # otherwise.
+    # Return an error if the given token fails a lint check, false otherwise.
     lintToken : (token) ->
         [type, value, lineNumber] = token
 
@@ -443,11 +441,20 @@ class LexicalLinter
 
     lintUnary: (token) ->
         if token[1] is 'new'
-            expectedIdentifier = @peek(1)
+            # Find the last chained identifier, e.g. Bar in new foo.bar.Bar().
+            identifierIndex = 1
+            loop
+                expectedIdentifier = @peek(identifierIndex)
+                expectedCallStart  = @peek(identifierIndex + 1)
+                if expectedIdentifier?[0] is 'IDENTIFIER'
+                    if expectedCallStart?[0] is '.'
+                        identifierIndex += 2
+                        continue
+                break
+
             # The callStart is generated if your parameters are all on the same
             # line with implicit parens, and if your parameters start on the
             # next line, but is missing if there are no params and no parens.
-            expectedCallStart  = @peek(2)
             if expectedIdentifier?[0] is 'IDENTIFIER' and expectedCallStart?
                 if expectedCallStart[0] is 'CALL_START'
                     if expectedCallStart.generated
