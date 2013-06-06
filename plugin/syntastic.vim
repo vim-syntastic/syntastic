@@ -179,7 +179,7 @@ function! s:CacheErrors(...)
 
                 if !loclist.isEmpty()
                     let newLoclist = newLoclist.extend(loclist)
-                    call newLoclist.setName(checker.getName())
+                    call newLoclist.setName( checker.getName() . ' ('. checker.getFiletype() . ')' )
 
                     "only get errors from one checker at a time
                     break
