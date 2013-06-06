@@ -135,7 +135,6 @@ function! s:UpdateErrors(auto_invoked, ...)
     end
 
     let loclist = g:SyntasticLoclist.current()
-    call s:notifiers.refresh(loclist)
 
     if g:syntastic_always_populate_loc_list || g:syntastic_auto_jump
         call setloclist(0, loclist.filteredRaw())
@@ -143,6 +142,8 @@ function! s:UpdateErrors(auto_invoked, ...)
             silent! lrewind
         endif
     endif
+
+    call s:notifiers.refresh(loclist)
 endfunction
 
 "clear the loc list for the buffer
@@ -178,6 +179,7 @@ function! s:CacheErrors(...)
 
                 if !loclist.isEmpty()
                     let newLoclist = newLoclist.extend(loclist)
+                    call newLoclist.setName(checker.getName())
 
                     "only get errors from one checker at a time
                     break
