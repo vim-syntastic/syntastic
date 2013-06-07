@@ -25,10 +25,21 @@ function! SyntaxCheckers_go_go_GetLocList()
     " Check with gofmt first, since `go build` and `go test` might not report
     " syntax errors in the current file if another file with syntax error is
     " compiled first.
-    let makeprg = 'gofmt -l % 1>/dev/null'
-    let errorformat = '%f:%l:%c: %m,%-G%.%#'
-    let errors = SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat, 'defaults': {'type': 'e'} })
+    let makeprg = syntastic#makeprg#build({
+        \ 'exe': 'gofmt',
+        \ 'args': '-l',
+        \ 'tail': '1>' . syntastic#util#DevNull(),
+        \ 'filetype': 'go',
+        \ 'subchecker': 'go' })
 
+    let errorformat =
+        \ '%f:%l:%c: %m,' .
+        \ '%-G%.%#'
+
+    let errors = SyntasticMake({
+        \ 'makeprg': makeprg,
+        \ 'errorformat': errorformat,
+        \ 'defaults': {'type': 'e'} })
     if !empty(errors)
         return errors
     endif
@@ -36,22 +47,29 @@ function! SyntaxCheckers_go_go_GetLocList()
     " Test files, i.e. files with a name ending in `_test.go`, are not
     " compiled by `go build`, therefore `go test` must be called for those.
     if match(expand('%'), '_test.go$') == -1
-        let makeprg = 'go build -o /dev/null'
+        let makeprg = 'go build ' . syntastic#c#GetNullDevice()
     else
-        let makeprg = 'go test -c -o /dev/null'
+        let makeprg = 'go test -c ' . syntastic#c#GetNullDevice()
     endif
-    let errorformat = '%f:%l:%c:%m,%f:%l%m,%-G#%.%#'
+
+    let errorformat =
+        \ '%f:%l:%c:%m,' .
+        \ '%f:%l%m,' .
+        \ '%-G#%.%#'
 
     " The go compiler needs to either be run with an import path as an
     " argument or directly from the package directory. Since figuring out
     " the poper import path is fickle, just pushd/popd to the package.
     let popd = getcwd()
     let pushd = expand('%:p:h')
-    "
+
     " pushd
     exec 'lcd ' . fnameescape(pushd)
 
-    let errors = SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
+    let errors = SyntasticMake({
+        \ 'makeprg': makeprg,
+        \ 'errorformat': errorformat,
+        \ 'defaults': {'type': 'e'} })
 
     " popd
     exec 'lcd ' . fnameescape(popd)

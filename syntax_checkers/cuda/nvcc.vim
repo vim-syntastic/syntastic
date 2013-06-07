@@ -30,11 +30,13 @@ endfunction
 
 function! SyntaxCheckers_cuda_nvcc_GetLocList()
     if exists('g:syntastic_cuda_arch')
-        let arch_flag = '-arch='.g:syntastic_cuda_arch
+        let arch_flag = '-arch=' . g:syntastic_cuda_arch
     else
         let arch_flag = ''
     endif
-    let makeprg = 'nvcc '.arch_flag.' --cuda -O0 -I . -Xcompiler -fsyntax-only '.shellescape(expand('%')).' -o /dev/null'
+    let makeprg =
+        \ 'nvcc ' . arch_flag . ' --cuda -O0 -I . -Xcompiler -fsyntax-only ' .
+        \ shellescape(expand('%')) . ' ' . syntastic#c#GetNullDevice()
     let errorformat =
         \ '%*[^"]"%f"%*\D%l: %m,'.
         \ '"%f"%*\D%l: %m,'.
@@ -53,7 +55,10 @@ function! SyntaxCheckers_cuda_nvcc_GetLocList()
 
     if expand('%') =~? '\%(.h\|.hpp\|.cuh\)$'
         if exists('g:syntastic_cuda_check_header')
-            let makeprg = 'echo > .syntastic_dummy.cu ; nvcc '.arch_flag.' --cuda -O0 -I . .syntastic_dummy.cu -Xcompiler -fsyntax-only -include '.shellescape(expand('%')).' -o /dev/null'
+            let makeprg =
+                \ 'echo > .syntastic_dummy.cu ; ' .
+                \ 'nvcc ' . arch_flag . ' --cuda -O0 -I . .syntastic_dummy.cu -Xcompiler -fsyntax-only -include ' .
+                \ shellescape(expand('%')) . ' ' . syntastic#c#GetNullDevice()
         else
             return []
         endif

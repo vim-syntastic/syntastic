@@ -112,16 +112,16 @@ function s:GetOcamlcMakeprg()
     if g:syntastic_ocaml_use_janestreet_core
         let build_cmd = "ocamlc -I "
         let build_cmd .= expand(g:syntastic_ocaml_janestreet_core_dir)
-        let build_cmd .= " -c ".expand('%')
+        let build_cmd .= " -c " . expand('%')
         return build_cmd
     else
-        return "ocamlc -c ". expand('%')
+        return "ocamlc -c " . expand('%')
     endif
 endfunction
 
 function s:GetOcamlBuildMakeprg()
-    return "ocamlbuild -quiet -no-log -tag annot,". s:ocamlpp. " -no-links -no-hygiene -no-sanitize ".
-                \ shellescape(expand('%:r')).".cmi"
+    return "ocamlbuild -quiet -no-log -tag annot," . s:ocamlpp . " -no-links -no-hygiene -no-sanitize " .
+                \ shellescape(expand('%:r')) . ".cmi"
 endfunction
 
 function s:GetOtherMakeprg()
@@ -134,11 +134,11 @@ function s:GetOtherMakeprg()
 
     if match(extension, 'mly') >= 0 && executable("menhir")
         " ocamlyacc output can't be redirected, so use menhir
-        let makeprg = "menhir --only-preprocess ".shellescape(expand('%')) . " >/dev/null"
+        let makeprg = "menhir --only-preprocess " . shellescape(expand('%')) . " >" . syntastic#util#DevNull()
     elseif match(extension,'mll') >= 0 && executable("ocamllex")
-        let makeprg = "ocamllex -q -o /dev/null ".shellescape(expand('%'))
+        let makeprg = "ocamllex -q " . syntastic#c#GetNullDevice() . " " . shellescape(expand('%'))
     else
-        let makeprg = "camlp4o -o /dev/null ".shellescape(expand('%'))
+        let makeprg = "camlp4o " . syntastic#c#GetNullDevice() . " " . shellescape(expand('%'))
     endif
 
     return makeprg

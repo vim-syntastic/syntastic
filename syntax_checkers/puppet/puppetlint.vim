@@ -33,14 +33,14 @@ endif
 
 function! s:PuppetVersion()
     if !exists("s:puppet_version")
-        let s:puppet_version = syntastic#util#parseVersion("puppet --version 2>/dev/null")
+        let s:puppet_version = syntastic#util#parseVersion("puppet --version 2>" . syntastic#util#DevNull())
     endif
     return s:puppet_version
 endfunction
 
 function! s:PuppetLintVersion()
     if !exists("s:puppet_lint_version")
-        let s:puppet_lint_version = syntastic#util#parseVersion("puppet-lint --version 2>/dev/null")
+        let s:puppet_lint_version = syntastic#util#parseVersion("puppet-lint --version 2>" . syntastic#util#DevNull())
     endif
     return s:puppet_lint_version
 endfunction

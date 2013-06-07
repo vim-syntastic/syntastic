@@ -19,15 +19,10 @@ function! SyntaxCheckers_nasm_nasm_IsAvailable()
 endfunction
 
 function! SyntaxCheckers_nasm_nasm_GetLocList()
-    if has("win32")
-        let outfile="NUL"
-    else
-        let outfile="/dev/null"
-    endif
     let wd = shellescape(expand("%:p:h") . "/")
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'nasm',
-        \ 'args': '-X gnu -f elf -I ' . wd . ' -o ' . outfile,
+        \ 'args': '-X gnu -f elf -I ' . wd . ' ' . syntastic#c#GetNullDevice()
         \ 'filetype': 'nasm',
         \ 'subchecker': 'nasm' })
 
