@@ -46,16 +46,31 @@ function! SyntaxCheckers_sass_sass_GetLocList()
         \ 'subchecker': 'sass' })
 
     let errorformat =
-        \ '%ESyntax %trror:%m,' .
+        \ '%ESyntax %trror: %m,' .
+        \ '%+C              %.%#,' .
+        \ '%C        on line %l of %f\, %.%#,' .
         \ '%C        on line %l of %f,' .
-        \ '%Z%.%#,' .
-        \ '%Wwarning on line %l:,' .
+        \ '%-G %\+from line %.%#,' .
+        \ '%-G %\+Use --trace for backtrace.,' .
+        \ '%W%>DEPRECATION WARNING on line %l of %f:,' .
+        \ '%+C%>  %.%#,' .
+        \ '%W%>WARNING: on line %l of %f:,' .
+        \ '%+C%>  %.%#,' .
+        \ '%W%>WARNING on line %l of %f: %m,' .
+        \ '%+C%>  %.%#,' .
+        \ '%W%>WARNING on line %l of %f:,' .
         \ '%Z%m,' .
-        \ 'Syntax %trror on line %l: %m'
+        \ '%W%>WARNING: %m,' .
+        \ '%C         on line %l of %f\, %.%#,' .
+        \ '%C         on line %l of %f,' .
+        \ '%-G %\+from line %.%#,' .
+        \ 'Syntax %trror on line %l: %m,' .
+        \ '%-G%.%#'
 
     return SyntasticMake({
         \ 'makeprg': makeprg,
-        \ 'errorformat': errorformat })
+        \ 'errorformat': errorformat,
+        \ 'postprocess': ['compressWhitespace'] })
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
