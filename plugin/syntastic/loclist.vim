@@ -155,7 +155,7 @@ function! g:SyntasticLoclist.show()
         for buf in tabpagebuflist()
             if buflisted(buf) && bufloaded(buf) && getbufvar(buf, '&buftype') ==# 'quickfix'
                 let win = bufwinnr(buf)
-                let title = getwinvar(win, 'quickfix_title', '')
+                let title = getwinvar(win, 'quickfix_title')
                 if title ==# ':setloclist()' || strpart(title, 0, 16) ==# ':SyntasticCheck '
                     call setwinvar(win, 'quickfix_title', ':SyntasticCheck ' . self._name)
                 endif
