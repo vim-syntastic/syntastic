@@ -32,12 +32,14 @@ function! SyntaxCheckers_c_checkpatch_GetLocList()
         \ 'filetype': 'c',
         \ 'subchecker': 'checkpatch' })
 
-    let errorformat = '%f:%l: %tARNING: %m,%f:%l: %tRROR: %m'
+    let errorformat =
+        \ '%f:%l: %tARNING: %m,' .
+        \ '%f:%l: %tRROR: %m'
 
     return SyntasticMake({
         \ 'makeprg': makeprg,
         \ 'errorformat': errorformat,
-        \ 'defaults': {'bufnr': bufnr("")} })
+        \ 'subtype': 'Style' })
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
