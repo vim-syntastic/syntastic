@@ -10,10 +10,9 @@ set cpo&vim
 
 " convenience function to determine the 'null device' parameter
 " based on the current operating system
-function! syntastic#c#NullOutput(ft)
+function! syntastic#c#NullOutput()
     let known_os = has('win32') || has('unix') || has('mac')
-    let opt_o = ft ==# 'd' ? '-of' : '-o '
-    return known_os ? opt_o . syntastic#util#DevNull() : ''
+    return known_os ? '-o ' . syntastic#util#DevNull() : ''
 endfunction
 
 " get the gcc include directory argument depending on the default
@@ -136,7 +135,7 @@ function! syntastic#c#GetLocList(filetype, options)
                 \ ' ' . get(a:options, 'makeprg_headers', '') .
                 \ ' ' . g:syntastic_{ft}_compiler_options .
                 \ ' ' . syntastic#c#GetIncludeDirs(ft) .
-                \ ' ' . syntastic#c#NullOutput(ft) .
+                \ ' ' . syntastic#c#NullOutput() .
                 \ ' -c ' . shellescape(expand('%'))
         else
             return []
