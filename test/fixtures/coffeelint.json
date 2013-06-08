@@ -4,6 +4,10 @@
         "value" : 4
     },
 
+    "max_line_length": {
+      "level": "ignore"
+    },
+
     "cyclomatic_complexity" : {
         "level" : "warn",
         "value" : 11
