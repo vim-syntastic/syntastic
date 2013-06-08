@@ -26,9 +26,14 @@
     "url": "http://github.com/clutchski/coffeelint/raw/master/LICENSE"
   }],
   "scripts": {
-    "pretest": "rake compile",
-    "test": "node_modules/.bin/vows --spec test/*.coffee",
-    "posttest": "./bin/coffeelint -f test/fixtures/coffeelint.json src/*.coffee test/*.coffee",
-    "prepublish": "rake compile"
+    "pretest": "npm run compile",
+    "test": "vows --spec test/*.coffee",
+    "posttest": "npm run lint",
+    "prepublish": "npm run compile",
+    "preinstall": "[ -e bin/coffeelint ] || (which coffee && npm run compile) || true",
+    "lint": "npm run compile && ./bin/coffeelint -f test/fixtures/coffeelint.json src/*.coffee test/*.coffee",
+    "lint-csv": "npm run compile && ./bin/coffeelint --csv -f test/fixtures/coffeelint.json src/*.coffee test/*.coffee",
+    "lint-jslint": "npm run compile && ./bin/coffeelint --jslint -f test/fixtures/coffeelint.json src/*.coffee test/*.coffee",
+    "compile": "coffee -c -o lib src && mkdir -p bin && echo '#!/usr/bin/env node' | cat - lib/commandline.js > bin/coffeelint && chmod +x bin/coffeelint && rm lib/commandline.js"
   }
 }
