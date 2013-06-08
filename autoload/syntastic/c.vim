@@ -37,6 +37,10 @@ function! syntastic#c#ReadConfig(file)
     " filter out empty lines and comments
     call filter(lines, 'v:val !~ ''\v^(\s*#|$)''')
 
+    " remove leading and trailing spaces
+    call map(lines, 'substitute(v:val, ''^\s\+'', "", "")')
+    call map(lines, 'substitute(v:val, ''\s\+$'', "", "")')
+
     let parameters = []
     for line in lines
         let matches = matchlist(line, '\C^\s*-I\s*\(\S\+\)')
