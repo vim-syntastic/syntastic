@@ -26,10 +26,11 @@
     "url": "http://github.com/clutchski/coffeelint/raw/master/LICENSE"
   }],
   "scripts": {
+    "pretest": "npm run compile",
     "test": "vows --spec test/*.coffee",
     "posttest": "npm run lint",
     "prepublish": "npm run compile",
-    "preinstall": "[ -e bin/coffeelint ] || npm run compile",
+    "preinstall": "[ -e bin/coffeelint ] || (which coffee && npm run compile) || true",
     "lint": "npm run compile && ./bin/coffeelint -f test/fixtures/coffeelint.json src/*.coffee test/*.coffee",
     "lint-csv": "npm run compile && ./bin/coffeelint --csv -f test/fixtures/coffeelint.json src/*.coffee test/*.coffee",
     "lint-jslint": "npm run compile && ./bin/coffeelint --jslint -f test/fixtures/coffeelint.json src/*.coffee test/*.coffee",
