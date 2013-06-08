@@ -20,7 +20,7 @@ endfunction
 function! SyntaxCheckers_sh_checkbashisms_GetLocList()
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'checkbashisms',
-        \ 'args': '-fpx',
+        \ 'args': '-fx',
         \ 'filetype': 'sh',
         \ 'subchecker': 'checkbashisms'})
 
