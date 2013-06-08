@@ -39,7 +39,8 @@ coffeelint.RULES = RULES =
         level : ERROR
         message : 'Line contains tab indentation'
         description: """
-            This rule forbids tabs in indentation. Enough said. It is enabled by default.
+            This rule forbids tabs in indentation. Enough said. It is enabled by
+            default.
             """
 
     no_trailing_whitespace :
@@ -47,7 +48,8 @@ coffeelint.RULES = RULES =
         message : 'Line ends with trailing whitespace'
         allowed_in_comments : false
         description: """
-            This rule forbids trailing whitespace in your code, since it is needless cruft. It is enabled by default.
+            This rule forbids trailing whitespace in your code, since it is
+            needless cruft. It is enabled by default.
             """
 
     max_line_length :
@@ -55,7 +57,10 @@ coffeelint.RULES = RULES =
         level : ERROR
         message : 'Line exceeds maximum allowed length'
         description: """
-            This rule imposes a maximum line length on your code. <a href="http://www.python.org/dev/peps/pep-0008/">Python's style guide</a> does a good job explaining why you might want to limit the length of your lines, though this is a matter of taste.
+            This rule imposes a maximum line length on your code. <a
+            href="http://www.python.org/dev/peps/pep-0008/">Python's style
+            guide</a> does a good job explaining why you might want to limit the
+            length of your lines, though this is a matter of taste.
 
             Lines can be no longer than eighty characters by default.
             """
@@ -64,7 +69,10 @@ coffeelint.RULES = RULES =
         level : ERROR
         message : 'Class names should be camel cased'
         description: """
-            This rule mandates that all class names are camel cased. Camel casing class names is a generally accepted way of distinguishing constructor functions - which require the 'new' prefix to behave properly - from plain old functions.
+            This rule mandates that all class names are camel cased. Camel
+            casing class names is a generally accepted way of distinguishing
+            constructor functions - which require the 'new' prefix to behave
+            properly - from plain old functions.
             <pre>
             <code># Good!
             class BoaConstrictor
@@ -80,10 +88,11 @@ coffeelint.RULES = RULES =
         level : ERROR
         message : 'Line contains inconsistent indentation'
         description: """
-            This rule imposes a standard number of spaces to be used for indentation.
-            Since whitespace is significant in CoffeeScript, it's critical that a project chooses a standard indentation format and stays consistent. Other roads lead to darkness.
-            <pre>
-            <code># Enabling this option will prevent this ugly
+            This rule imposes a standard number of spaces to be used for
+            indentation. Since whitespace is significant in CoffeeScript, it's
+            critical that a project chooses a standard indentation format and
+            stays consistent. Other roads lead to darkness. <pre> <code>#
+            Enabling this option will prevent this ugly
             # but otherwise valid CoffeeScript.
             twoSpaces = () ->
               fourSpaces = () ->
@@ -99,7 +108,9 @@ coffeelint.RULES = RULES =
         level : IGNORE
         message : 'Implicit braces are forbidden'
         description: """
-            This rule prohibits implicit braces when declaring object literals. Implicit braces can make code more difficult to understand, especially when used in combination with optional parenthesis.
+            This rule prohibits implicit braces when declaring object literals.
+            Implicit braces can make code more difficult to understand,
+            especially when used in combination with optional parenthesis.
             <pre>
             <code># Do you find this code ambiguous? Is it a
             # function call with three arguments or four?
@@ -110,14 +121,16 @@ coffeelint.RULES = RULES =
             myFunction(a, b, {1:2, 3:4})
             </code>
             </pre>
-            Implicit braces are permitted by default, since their use is idiomatic CoffeeScript.
+            Implicit braces are permitted by default, since their use is
+            idiomatic CoffeeScript.
             """
 
     no_trailing_semicolons:
         level : ERROR
         message : 'Line contains a trailing semicolon'
         description: """
-            This rule prohibits trailing semicolons, since they are needless cruft in CoffeeScript.
+            This rule prohibits trailing semicolons, since they are needless
+            cruft in CoffeeScript.
             <pre>
             <code># This semicolon is meaningful.
             x = '1234'; console.log(x)
@@ -133,7 +146,10 @@ coffeelint.RULES = RULES =
         level : IGNORE
         message : 'The increment and decrement operators are forbidden'
         description: """
-            This rule forbids the increment and decrement arithmetic operators. Some people believe the <tt>++</tt> and <tt>--</tt> to be cryptic and the cause of bugs due to misunderstandings of their precedence rules.
+            This rule forbids the increment and decrement arithmetic operators.
+            Some people believe the <tt>++</tt> and <tt>--</tt> to be cryptic
+            and the cause of bugs due to misunderstandings of their precedence
+            rules.
             This rule is disabled by default.
             """
 
@@ -141,7 +157,15 @@ coffeelint.RULES = RULES =
         level : ERROR
         message : 'Throwing strings is forbidden'
         description: """
-            This rule forbids throwing string literals or interpolations. While JavaScript (and CoffeeScript by extension) allow any expression to be thrown, it is best to only throw <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Error">Error</a> objects, because they contain valuable debugging information like the stack trace. Because of JavaScript's dynamic nature, CoffeeLint cannot ensure you are always throwing instances of <tt>Error</tt>. It will only catch the simple but real case of throwing literal strings.
+            This rule forbids throwing string literals or interpolations. While
+            JavaScript (and CoffeeScript by extension) allow any expression to
+            be thrown, it is best to only throw <a
+            href="https://developer.mozilla.org
+            /en/JavaScript/Reference/Global_Objects/Error"> Error</a> objects,
+            because they contain valuable debugging information like the stack
+            trace. Because of JavaScript's dynamic nature, CoffeeLint cannot
+            ensure you are always throwing instances of <tt>Error</tt>. It will
+            only catch the simple but real case of throwing literal strings.
             <pre>
             <code># CoffeeLint will catch this:
             throw "i made a boo boo"
@@ -162,7 +186,11 @@ coffeelint.RULES = RULES =
         level : ERROR
         message : 'Backticks are forbidden'
         description: """
-            Backticks allow snippets of JavaScript to be embedded in CoffeeScript. While some folks consider backticks useful in a few niche circumstances, they should be avoided because so none of JavaScript's "bad parts", like <tt>with</tt> and <tt>eval</tt>, sneak into CoffeeScript.
+            Backticks allow snippets of JavaScript to be embedded in
+            CoffeeScript. While some folks consider backticks useful in a few
+            niche circumstances, they should be avoided because so none of
+            JavaScript's "bad parts", like <tt>with</tt> and <tt>eval</tt>,
+            sneak into CoffeeScript.
             This rule is enabled by default.
             """
 
@@ -171,7 +199,8 @@ coffeelint.RULES = RULES =
         value : 'unix' # or 'windows'
         message : 'Line contains incorrect line endings'
         description: """
-            This rule ensures your project uses only <tt>windows</tt> or <tt>unix</tt> line endings. This rule is disabled by default.
+            This rule ensures your project uses only <tt>windows</tt> or
+            <tt>unix</tt> line endings. This rule is disabled by default.
             """
     no_implicit_parens :
         level : IGNORE
@@ -186,7 +215,8 @@ coffeelint.RULES = RULES =
             myFunction(a, b, c)
             </code>
             </pre>
-            Implicit parens are permitted by default, since their use is idiomatic CoffeeScript.
+            Implicit parens are permitted by default, since their use is
+            idiomatic CoffeeScript.
             """
 
     empty_constructor_needs_parens :
@@ -235,16 +265,22 @@ coffeelint.RULES = RULES =
         level : IGNORE
         message : '@ must not be used stand alone'
         description: """
-            This rule checks that no stand alone @ are in use, they are discouraged.
-            Further information in CoffeScript issue <a href="https://github.com/jashkenas/coffee-script/issues/1601">#1601</a>
+            This rule checks that no stand alone @ are in use, they are
+            discouraged. Further information in CoffeScript issue <a
+            href="https://github.com/jashkenas/coffee-script/issues/1601">
+            #1601</a>
             """
 
     arrow_spacing :
         level : IGNORE
         message : 'Function arrow (->) must be spaced properly'
         description: """
-            <p>This rule checks to see that there is spacing before and after the arrow operator that declares a function. This rule is disabled by default.</p>
-            <p>Note that if arrow_spacing is enabled, and you pass an empty function as a parameter, arrow_spacing will accept either a space or no space in-between the arrow operator and the parenthesis</p>
+            <p>This rule checks to see that there is spacing before and after
+            the arrow operator that declares a function. This rule is disabled
+            by default.</p> <p>Note that if arrow_spacing is enabled, and you
+            pass an empty function as a parameter, arrow_spacing will accept
+            either a space or no space in-between the arrow operator and the
+            parenthesis</p>
             <pre><code># Both of this will not trigger an error,
             # even with arrow_spacing enabled.
             x(-> 3)
