@@ -122,10 +122,14 @@ endfunction
 " Returns unique elements in a list
 function! syntastic#util#unique(list)
     let seen = {}
+    let uniques = []
     for e in a:list
-        let seen[e] = 1
+        if !has_key(seen, e)
+            let seen[e] = 1
+            call add(uniques, e)
+        endif
     endfor
-    return copy(keys(seen))
+    return uniques
 endfunction
 
 function! syntastic#util#debug(msg)
