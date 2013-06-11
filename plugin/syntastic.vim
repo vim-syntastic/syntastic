@@ -315,6 +315,7 @@ endfunction
 "   'defaults' - a dict containing default values for the returned errors
 "   'subtype' - all errors will be assigned the given subtype
 "   'postprocess' - a list of functions to be applied to the error list
+"   'cwd' - change directory to the given path before running the checker
 function! SyntasticMake(options)
     call syntastic#util#debug('SyntasticMake: called with options: '. string(a:options))
 
@@ -323,6 +324,7 @@ function! SyntasticMake(options)
     let old_shellpipe = &shellpipe
     let old_shell = &shell
     let old_errorformat = &l:errorformat
+    let old_cwd = getcwd()
     let old_lc_all = $LC_ALL
 
     if s:OSSupportsShellpipeHack()
@@ -340,11 +342,19 @@ function! SyntasticMake(options)
         let &l:errorformat = a:options['errorformat']
     endif
 
+    if has_key(a:options, 'cwd')
+        exec 'lcd ' . fnameescape(a:options['cwd'])
+    endif
+
     let $LC_ALL = 'C'
     silent lmake!
     let $LC_ALL = old_lc_all
 
     let errors = getloclist(0)
+
+    if has_key(a:options, 'cwd')
+        exec 'lcd ' . fnameescape(old_cwd)
+    endif
 
     call setloclist(0, old_loclist)
     let &l:makeprg = old_makeprg
