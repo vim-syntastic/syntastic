@@ -25,14 +25,14 @@ endfunction
 
 function! SyntaxCheckers_eruby_ruby_GetLocList()
     let exe = expand(g:syntastic_ruby_exec)
-    let encoding_string = ''
-    if &encoding == 'utf-8'
-        let encoding_string = ', :encoding => "UTF-8"'
     if !has('win32')
         let exe = 'RUBYOPT= ' . exe
     endif
 
     let fname = fnameescape(expand('%'))
+
+    let enc = &fileencoding != '' ? &fileencoding : &encoding
+    let encoding_string = enc ==# 'utf-8' ? ', :encoding => "UTF-8"' : ''
 
     "gsub fixes issue #7, rails has it's own eruby syntax
     let makeprg =
