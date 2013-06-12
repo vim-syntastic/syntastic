@@ -25,6 +25,9 @@ endfunction
 
 function! SyntaxCheckers_eruby_ruby_GetLocList()
     let exe = expand(g:syntastic_ruby_exec)
+    let encoding_string = ''
+    if &encoding == 'utf-8'
+        let encoding_string = ', :encoding => "UTF-8"'
     if !has('win32')
         let exe = 'RUBYOPT= ' . exe
     endif
@@ -34,7 +37,7 @@ function! SyntaxCheckers_eruby_ruby_GetLocList()
     "gsub fixes issue #7, rails has it's own eruby syntax
     let makeprg =
         \ exe . ' -rerb -e ' .
-        \ shellescape('puts ERB.new(File.read("' . fname . '").gsub(''<\%='',''<\%''), nil, ''-'').src') .
+        \ shellescape('puts ERB.new(File.read("' . fname . '"' . encoding_string . ').gsub(''<\%='',''<\%''), nil, ''-'').src') .
         \ ' \| ' . exe . ' -c'
 
     let errorformat =
