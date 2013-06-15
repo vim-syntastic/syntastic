@@ -138,13 +138,21 @@ function! syntastic#util#debug(msg)
     endif
 endfunction
 
+function! syntastic#util#info(msg)
+    echomsg "syntastic: info: " . a:msg
+endfunction
+
+function! syntastic#util#warn(msg)
+    echomsg "syntastic: warning: " . a:msg
+endfunction
+
 function! syntastic#util#deprecationWarn(msg)
     if index(s:deprecationNoticesIssued, a:msg) >= 0
         return
     endif
 
     call add(s:deprecationNoticesIssued, a:msg)
-    echomsg "syntastic: warning: " . a:msg
+    call syntastic#util#warn(a:msg)
 endfunction
 
 let &cpo = s:save_cpo
