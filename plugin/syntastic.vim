@@ -162,17 +162,17 @@ function! s:CacheErrors(...)
     let newLoclist = g:SyntasticLoclist.New([])
 
     if !s:SkipFile()
+        let active_checkers = 0
         for ft in s:CurrentFiletypes()
             if a:0
                 let checker = s:registry.getChecker(ft, a:1)
-                if !empty(checker)
-                    let checkers = [checker]
-                endif
+                let checkers = !empty(checker) ? [checker] : []
             else
                 let checkers = s:registry.getActiveCheckers(ft)
             endif
 
             for checker in checkers
+                let active_checkers += 1
                 call syntastic#util#debug("CacheErrors: Invoking checker: " . checker.getName())
 
                 let loclist = checker.getLocList()
@@ -186,6 +186,14 @@ function! s:CacheErrors(...)
                 endif
             endfor
         endfor
+
+        if !active_checkers
+            if a:0
+                call syntastic#util#warn('checker ' . a:1 . ' is not active for filetype ' . &filetype)
+            else
+                call syntastic#util#info('no active checkers for filetype ' . &filetype)
+            endif
+        endif
     endif
 
     let b:syntastic_loclist = newLoclist
