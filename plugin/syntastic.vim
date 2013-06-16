@@ -191,7 +191,7 @@ function! s:CacheErrors(...)
             if a:0
                 call syntastic#util#warn('checker ' . a:1 . ' is not active for filetype ' . &filetype)
             else
-                call syntastic#util#info('no active checkers for filetype ' . &filetype)
+                call syntastic#util#debug('no active checkers for filetype ' . &filetype)
             endif
         endif
     endif
