@@ -46,11 +46,20 @@ endfunction
 function! SyntaxCheckers_haxe_haxe_GetLocList()
     let [success, hxmldir, hxmlname] = s:FindInParent('*.hxml', expand('%:p:h'), '/')
     if success == 'ok'
-        let makeprg = 'cd ' . hxmldir . '; haxe ' . hxmlname
+        let makeprg = syntastic#makeprg#build({
+            \ 'exe': 'haxe',
+            \ 'fname': shellescape(fnameescape(hxmlname)),
+            \ 'filetype': 'haxe',
+            \ 'subchecker': 'haxe' })
+
         let errorformat = '%E%f:%l: characters %c-%*[0-9] : %m'
-        return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
+
+        return SyntasticMake({
+            \ 'makeprg': makeprg,
+            \ 'errorformat': errorformat,
+            \ 'cwd': hxmldir })
     else
-        return SyntasticMake({})
+        return []
     endif
 endfunction
 
