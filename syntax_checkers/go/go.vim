@@ -59,20 +59,13 @@ function! SyntaxCheckers_go_go_GetLocList()
 
     " The go compiler needs to either be run with an import path as an
     " argument or directly from the package directory. Since figuring out
-    " the poper import path is fickle, just pushd/popd to the package.
-    let popd = getcwd()
-    let pushd = expand('%:p:h')
-
-    " pushd
-    exec 'lcd ' . fnameescape(pushd)
+    " the proper import path is fickle, just cwd to the package.
 
     let errors = SyntasticMake({
         \ 'makeprg': makeprg,
         \ 'errorformat': errorformat,
+        \ 'cwd': expand('%:p:h'),
         \ 'defaults': {'type': 'e'} })
-
-    " popd
-    exec 'lcd ' . fnameescape(popd)
 
     return errors
 endfunction

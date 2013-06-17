@@ -37,6 +37,7 @@ endfunction
 
 function! g:SyntasticChecker.getLocList()
     let list = self._locListFunc()
+    call syntastic#util#debug('getLocList: checker ' . self._filetype . '/' . self._name . ' returned ' . v:shell_error)
     call self._populateHighlightRegexes(list)
     return g:SyntasticLoclist.New(list)
 endfunction
