@@ -35,10 +35,7 @@ function! SyntaxCheckers_eruby_ruby_GetLocList()
     let encoding_string = enc ==# 'utf-8' ? ', :encoding => "UTF-8"' : ''
 
     "gsub fixes issue #7, rails has it's own eruby syntax
-    let makeprg =
-        \ exe . ' -rerb -e ' .
-        \ shellescape('puts ERB.new(File.read("' . fname . '"' . encoding_string . ').gsub(''<\%='',''<\%''), nil, ''-'').src') .
-        \ ' \| ' . exe . ' -c'
+    let makeprg =  'erb -xT - ' . fname . ' \| ruby -c'
 
     let errorformat =
         \ '%-GSyntax OK,'.
