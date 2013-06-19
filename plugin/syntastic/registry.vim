@@ -17,6 +17,7 @@ let s:defaultCheckers = {
         \ 'objcpp':     ['gcc'],
         \ 'perl':       ['perl', 'perlcritic'],
         \ 'php':        ['php', 'phpcs', 'phpmd'],
+        \ 'puppet':     ['puppet', 'puppetlint'],
         \ 'python':     ['python', 'flake8', 'pylint'],
         \ 'ruby':       ['mri'],
         \ 'sh':         ['sh'],
