@@ -28,7 +28,9 @@ function! SyntaxCheckers_eruby_erb_IsAvailable()
 endfunction
 
 function! SyntaxCheckers_eruby_erb_GetLocList()
-    let enc = &fileencoding != '' ? &fileencoding : &encoding
+    " TODO: fix the encoding trainwreck
+    " let enc = &fileencoding != '' ? &fileencoding : &encoding
+    let enc = ''
 
     let makeprg = syntastic#makeprg#build({
         \ 'exe': g:syntastic_erb_exec,
