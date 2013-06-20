@@ -111,7 +111,7 @@ e.g. Previously there was `g:syntastic_phpcs_conf`, now you must use `g:syntasti
 
 See `:help syntastic-checker-options` for more information.
 
-__Q. I run a chacker and the location list is not updated...__
+__Q. I run a checker and the location list is not updated...__
 
 A. By default, the location list is changed only when you run the `:Errors` command, in order to minimise conflicts with other plugins.  If you want the location list to always be updated when you run the checkers, add this line to your vimrc:
 ```vim
