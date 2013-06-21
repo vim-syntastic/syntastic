@@ -152,7 +152,9 @@ endfunction
 function! s:GetIncludeDirs(filetype)
     let include_dirs = []
 
-    if !exists('g:syntastic_'.a:filetype.'_no_default_include_dirs') || !g:syntastic_{a:filetype}_no_default_include_dirs
+    if a:filetype =~# '\v^%(c|cpp|d|objc|objcpp)$' &&
+                \ (!exists('g:syntastic_'.a:filetype.'_no_default_include_dirs') ||
+                \ !g:syntastic_{a:filetype}_no_default_include_dirs)
         let include_dirs = copy(s:default_includes)
     endif
 
