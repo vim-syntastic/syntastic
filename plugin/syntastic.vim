@@ -100,8 +100,7 @@ endif
 function! s:BufWinEnterHook()
     if empty(&bt)
         let loclist = g:SyntasticLoclist.current()
-        call g:SyntasticAutoloclistNotifier.AutoToggle(loclist)
-        call g:SyntasticHighlightingNotifier.refresh(loclist)
+        call s:notifiers.refresh(loclist)
     endif
 endfunction
 
