@@ -92,26 +92,26 @@ function! g:SyntasticLoclist.warnings()
 endfunction
 
 " cache used by EchoCurrentError()
-function! g:SyntasticLoclist.messages()
+function! g:SyntasticLoclist.messages(buf)
     if !exists("self._cachedMessages")
         let self._cachedMessages = {}
+        let errors = self.errors() + (self._quietWarnings ? [] : self.warnings())
 
-        for e in self.errors()
-            if !has_key(self._cachedMessages, e['lnum'])
-                let self._cachedMessages[e['lnum']] = e['text']
+        for e in errors
+            let b = e['bufnr']
+            let l = e['lnum']
+
+            if !has_key(self._cachedMessages, b)
+                let self._cachedMessages[b] = {}
+            endif
+
+            if !has_key(self._cachedMessages[b], l)
+                let self._cachedMessages[b][l] = e['text']
             endif
         endfor
-
-        if !self._quietWarnings
-            for e in self.warnings()
-                if !has_key(self._cachedMessages, e['lnum'])
-                    let self._cachedMessages[e['lnum']] = e['text']
-                endif
-            endfor
-        endif
     endif
 
-    return self._cachedMessages
+    return get(self._cachedMessages, a:buf, {})
 endfunction
 
 "Filter the list and return new native loclist
