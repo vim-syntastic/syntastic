@@ -23,10 +23,6 @@ if !exists("g:syntastic_style_warning_symbol")
     let g:syntastic_style_warning_symbol = 'S>'
 endif
 
-if !has('signs')
-    let g:syntastic_enable_signs = 0
-endif
-
 
 " start counting sign ids at 5000, start here to hopefully avoid conflicting
 " with any other code that places signs (not sure if this precaution is
@@ -52,13 +48,16 @@ function! g:SyntasticSignsNotifier.New()
 endfunction
 
 function! g:SyntasticSignsNotifier.enabled()
-    return exists('b:syntastic_enable_signs') ? b:syntastic_enable_signs : g:syntastic_enable_signs
+    return
+        \ has('signs') &&
+        \ exists('b:syntastic_enable_signs') ? b:syntastic_enable_signs : g:syntastic_enable_signs
 endfunction
 
-" Update the error signs
 function! g:SyntasticSignsNotifier.refresh(loclist)
     let old_signs = copy(self._bufSignIds())
-    call self._signErrors(a:loclist)
+    if self.enabled()
+        call self._signErrors(a:loclist)
+    endif
     call self._removeSigns(old_signs)
     let s:first_sign_id = s:next_sign_id
 endfunction
@@ -125,10 +124,12 @@ endfunction
 
 " Remove the signs with the given ids from this buffer
 function! g:SyntasticSignsNotifier._removeSigns(ids)
-    for i in a:ids
-        exec "sign unplace " . i
-        call remove(self._bufSignIds(), index(self._bufSignIds(), i))
-    endfor
+    if has('signs')
+        for i in a:ids
+            exec "sign unplace " . i
+            call remove(self._bufSignIds(), index(self._bufSignIds(), i))
+        endfor
+    endif
 endfunction
 
 " Get all the ids of the SyntaxError signs in the buffer
