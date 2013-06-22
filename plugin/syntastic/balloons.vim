@@ -21,13 +21,15 @@ function! g:SyntasticBalloonsNotifier.New()
 endfunction
 
 function! g:SyntasticBalloonsNotifier.enabled()
-    return exists('b:syntastic_enable_balloons') ? b:syntastic_enable_balloons : g:syntastic_enable_balloons
+    return
+        \ has('balloon_eval') &&
+        \ (exists('b:syntastic_enable_balloons') ? b:syntastic_enable_balloons : g:syntastic_enable_balloons)
 endfunction
 
 " Update the error balloons
 function! g:SyntasticBalloonsNotifier.refresh(loclist)
     let b:syntastic_balloons = {}
-    if a:loclist.hasErrorsOrWarningsToDisplay()
+    if self.enabled() && a:loclist.hasErrorsOrWarningsToDisplay()
         let buf = bufnr('')
         let issues = filter(a:loclist.filteredRaw(), 'v:val["bufnr"] == buf')
         if !empty(issues)
@@ -45,7 +47,9 @@ endfunction
 
 " Reset the error balloons
 function! g:SyntasticBalloonsNotifier.reset(loclist)
-    set nobeval
+    if has('balloon_eval')
+        set nobeval
+    endif
 endfunction
 
 " Private functions {{{1
