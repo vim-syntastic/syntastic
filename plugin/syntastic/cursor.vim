@@ -16,9 +16,12 @@ function! g:SyntasticCursorNotifier.New()
     return newObj
 endfunction
 
+function! g:SyntasticCursorNotifier.enabled()
+    return exists('b:syntastic_echo_current_error') ? b:syntastic_echo_current_error : g:syntastic_echo_current_error
+endfunction
+
 function! g:SyntasticCursorNotifier.refresh(loclist)
-    let enabled = exists('b:syntastic_echo_current_error') ? b:syntastic_echo_current_error : g:syntastic_echo_current_error
-    if enabled && a:loclist.hasErrorsOrWarningsToDisplay()
+    if self.enabled() && a:loclist.hasErrorsOrWarningsToDisplay()
         let b:syntastic_messages = copy(a:loclist.messages(bufnr('')))
         let b:oldLine = -1
         autocmd! syntastic CursorMoved

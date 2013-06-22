@@ -23,10 +23,6 @@ if !exists("g:syntastic_style_warning_symbol")
     let g:syntastic_style_warning_symbol = 'S>'
 endif
 
-if !has('signs')
-    let g:syntastic_enable_signs = 0
-endif
-
 
 " start counting sign ids at 5000, start here to hopefully avoid conflicting
 " with any other code that places signs (not sure if this precaution is
@@ -52,13 +48,16 @@ function! g:SyntasticSignsNotifier.New()
 endfunction
 
 function! g:SyntasticSignsNotifier.enabled()
-    return exists('b:syntastic_enable_signs') ? b:syntastic_enable_signs : g:syntastic_enable_signs
+    return
+        \ has('signs') &&
+        \ exists('b:syntastic_enable_signs') ? b:syntastic_enable_signs : g:syntastic_enable_signs
 endfunction
 
-" Update the error signs
 function! g:SyntasticSignsNotifier.refresh(loclist)
     let old_signs = copy(self._bufSignIds())
-    call self._signErrors(a:loclist)
+    if self.enabled()
+        call self._signErrors(a:loclist)
+    endif
     call self._removeSigns(old_signs)
     let s:first_sign_id = s:next_sign_id
 endfunction
@@ -104,31 +103,39 @@ function! g:SyntasticSignsNotifier._signErrors(loclist)
     let loclist = a:loclist
     if loclist.hasErrorsOrWarningsToDisplay()
 
-        " make sure the errors come after the warnings, so that errors mask
-        " the warnings on the same line, not the other way around
+        " errors some first, so that they are not masked by warnings
         let buf = bufnr('')
-        let issues = loclist.quietWarnings() ? [] : loclist.warnings()
-        call extend(issues, loclist.errors())
+        let issues = copy(loclist.errors())
+        if !loclist.quietWarnings()
+            call extend(issues, loclist.warnings())
+        endif
         call filter(issues, 'v:val["bufnr"] == buf')
+        let seen = {}
 
         for i in issues
-            let sign_severity = i['type'] ==? 'W' ? 'Warning' : 'Error'
-            let sign_subtype = get(i, 'subtype', '')
-            let sign_type = 'Syntastic' . sign_subtype . sign_severity
+            if !has_key(seen, i['lnum'])
+                let seen[i['lnum']] = 1
 
-            exec "sign place " . s:next_sign_id . " line=" . i['lnum'] . " name=" . sign_type . " buffer=" . i['bufnr']
-            call add(self._bufSignIds(), s:next_sign_id)
-            let s:next_sign_id += 1
+                let sign_severity = i['type'] ==? 'W' ? 'Warning' : 'Error'
+                let sign_subtype = get(i, 'subtype', '')
+                let sign_type = 'Syntastic' . sign_subtype . sign_severity
+
+                exec "sign place " . s:next_sign_id . " line=" . i['lnum'] . " name=" . sign_type . " buffer=" . i['bufnr']
+                call add(self._bufSignIds(), s:next_sign_id)
+                let s:next_sign_id += 1
+            endif
         endfor
     endif
 endfunction
 
 " Remove the signs with the given ids from this buffer
 function! g:SyntasticSignsNotifier._removeSigns(ids)
-    for i in a:ids
-        exec "sign unplace " . i
-        call remove(self._bufSignIds(), index(self._bufSignIds(), i))
-    endfor
+    if has('signs')
+        for i in a:ids
+            exec "sign unplace " . i
+            call remove(self._bufSignIds(), index(self._bufSignIds(), i))
+        endfor
+    endif
 endfunction
 
 " Get all the ids of the SyntaxError signs in the buffer
