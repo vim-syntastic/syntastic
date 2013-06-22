@@ -103,21 +103,27 @@ function! g:SyntasticSignsNotifier._signErrors(loclist)
     let loclist = a:loclist
     if loclist.hasErrorsOrWarningsToDisplay()
 
-        " make sure the errors come after the warnings, so that errors mask
-        " the warnings on the same line, not the other way around
+        " errors some first, so that they are not masked by warnings
         let buf = bufnr('')
-        let issues = loclist.quietWarnings() ? [] : loclist.warnings()
-        call extend(issues, loclist.errors())
+        let issues = copy(loclist.errors())
+        if !loclist.quietWarnings()
+            call extend(issues, loclist.warnings())
+        endif
         call filter(issues, 'v:val["bufnr"] == buf')
+        let seen = {}
 
         for i in issues
-            let sign_severity = i['type'] ==? 'W' ? 'Warning' : 'Error'
-            let sign_subtype = get(i, 'subtype', '')
-            let sign_type = 'Syntastic' . sign_subtype . sign_severity
+            if !has_key(seen, i['lnum'])
+                let seen[i['lnum']] = 1
 
-            exec "sign place " . s:next_sign_id . " line=" . i['lnum'] . " name=" . sign_type . " buffer=" . i['bufnr']
-            call add(self._bufSignIds(), s:next_sign_id)
-            let s:next_sign_id += 1
+                let sign_severity = i['type'] ==? 'W' ? 'Warning' : 'Error'
+                let sign_subtype = get(i, 'subtype', '')
+                let sign_type = 'Syntastic' . sign_subtype . sign_severity
+
+                exec "sign place " . s:next_sign_id . " line=" . i['lnum'] . " name=" . sign_type . " buffer=" . i['bufnr']
+                call add(self._bufSignIds(), s:next_sign_id)
+                let s:next_sign_id += 1
+            endif
         endfor
     endif
 endfunction
