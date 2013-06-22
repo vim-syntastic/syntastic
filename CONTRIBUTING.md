@@ -2,7 +2,7 @@
 
 When reporting a bug make sure you search the existing github issues for the
 same/similar issues. If you find one, feel free to add a `+1` comment with any
-additonal information that may help us solve the issue.
+additional information that may help us solve the issue.
 
 When creating a new issue be sure to state the following:
 
@@ -28,8 +28,8 @@ Following the coding conventions/styles used in the syntastic core:
 
 * Use 4 space indents.
 * Don't use abbreviated keywords - e.g. use `endfunction`, not `endfun` (there's always room for more fun!).
-* Dont use `l:` prefixes for variables unless actually required (i.e. almost never).
-* Code for maintainabiliy. We would rather a function be a couple of lines longer and have (for example) some [explaining variables](http://www.refactoring.com/catalog/introduceExplainingVariable.html) to aid readability.
+* Don't use `l:` prefixes for variables unless actually required (i.e. almost never).
+* Code for maintainability. We would rather a function be a couple of lines longer and have (for example) some [explaining variables](http://www.refactoring.com/catalog/introduceExplainingVariable.html) to aid readability.
 
 # Syntax checker style notes
 
