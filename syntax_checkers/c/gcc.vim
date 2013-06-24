@@ -49,9 +49,9 @@ function! SyntaxCheckers_c_gcc_GetLocList()
         \     '%f:%l: %trror: %m,' .
         \     '%f:%l: %tarning: %m,'.
         \     '%f:%l: %m',
-        \ 'makeprg_main': '-x c -fsyntax-only',
-        \ 'makeprg_headers': '-x c',
-        \ 'headers_pattern': '\.h$' })
+        \ 'main_flags': '-x c -fsyntax-only',
+        \ 'header_flags': '-x c',
+        \ 'header_names': '\.h$' })
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({

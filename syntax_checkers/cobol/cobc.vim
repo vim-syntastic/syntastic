@@ -38,8 +38,7 @@ endif
 function! SyntaxCheckers_cobol_cobc_GetLocList()
     return syntastic#c#GetLocList('cobol', {
         \ 'errorformat': '%f:%l: %trror: %m',
-        \ 'makeprg_main': '-fsyntax-only',
-        \ 'headers_pattern': '^$' })
+        \ 'main_flags': '-fsyntax-only' })
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
