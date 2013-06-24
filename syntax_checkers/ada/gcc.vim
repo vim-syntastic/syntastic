@@ -37,9 +37,9 @@ function! SyntaxCheckers_ada_gcc_GetLocList()
         \     '%-G%f:%s:,' .
         \     '%f:%l:%c: %m,' .
         \     '%f:%l: %m',
-        \ 'makeprg_main': '-c -x ada -fsyntax-only',
-        \ 'makeprg_headers': '-x ada',
-        \ 'headers_pattern': '\.ads$' })
+        \ 'main_flags': '-c -x ada -fsyntax-only',
+        \ 'header_flags': '-x ada',
+        \ 'header_names': '\.ads$' })
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({

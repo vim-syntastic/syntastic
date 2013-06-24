@@ -48,9 +48,9 @@ function! SyntaxCheckers_objc_gcc_GetLocList()
         \     '%f:%l: %trror: %m,' .
         \     '%f:%l: %tarning: %m,' .
         \     '%f:%l: %m',
-        \ 'makeprg_main': '-x objective-c -fsyntax-only',
-        \ 'makeprg_headers': '-x objective-c-header -lobjc',
-        \ 'headers_pattern': '\.h$' })
+        \ 'main_flags': '-x objective-c -fsyntax-only',
+        \ 'header_flags': '-x objective-c-header -lobjc',
+        \ 'header_names': '\.h$' })
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({

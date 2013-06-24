@@ -44,8 +44,8 @@ function! SyntaxCheckers_d_dmd_GetLocList()
         \ 'errorformat':
         \     '%-G%f:%s:,%f(%l): %m,' .
         \     '%f:%l: %m',
-        \ 'makeprg_main': '-c -of' . syntastic#util#DevNull(),
-        \ 'headers_pattern': '\.di$' })
+        \ 'main_flags': '-c -of' . syntastic#util#DevNull(),
+        \ 'header_names': '\.di$' })
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({

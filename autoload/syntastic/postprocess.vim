@@ -53,6 +53,11 @@ function! syntastic#postprocess#cygwinRemoveCR(errors)
     return llist
 endfunction
 
+" filter out errors referencing other files
+function! syntastic#postprocess#filterForeignErrors(errors)
+    return filter(copy(a:errors), 'get(v:val, "bufnr") == ' . bufnr(''))
+endfunction
+
 let &cpo = s:save_cpo
 unlet s:save_cpo
 " vim: set et sts=4 sw=4:
