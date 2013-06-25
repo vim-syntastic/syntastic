@@ -30,12 +30,8 @@ if !exists('g:syntastic_cpp_compiler_options')
     let g:syntastic_cpp_compiler_options = ''
 endif
 
-if !exists('g:syntastic_cpp_config_file')
-    let g:syntastic_cpp_config_file = '.syntastic_cpp_config'
-endif
-
 function! SyntaxCheckers_cpp_gcc_GetLocList()
-    return syntastic#c#GetLocList('cpp', {
+    return syntastic#c#GetLocList('cpp', 'gcc', {
         \ 'errorformat':
         \     '%-G%f:%s:,' .
         \     '%f:%l:%c: %trror: %m,' .

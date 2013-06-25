@@ -31,12 +31,8 @@ if !exists('g:syntastic_c_compiler_options')
     let g:syntastic_c_compiler_options = '-std=gnu99'
 endif
 
-if !exists('g:syntastic_c_config_file')
-    let g:syntastic_c_config_file = '.syntastic_c_config'
-endif
-
 function! SyntaxCheckers_c_gcc_GetLocList()
-    return syntastic#c#GetLocList('c', {
+    return syntastic#c#GetLocList('c', 'gcc', {
         \ 'errorformat':
         \     '%-G%f:%s:,' .
         \     '%-G%f:%l: %#error: %#(Each undeclared identifier is reported only%.%#,' .

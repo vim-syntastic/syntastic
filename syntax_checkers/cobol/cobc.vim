@@ -31,12 +31,8 @@ if !exists('g:syntastic_cobol_compiler_options')
     let g:syntastic_cobol_compiler_options = ''
 endif
 
-if !exists('g:syntastic_cobol_config_file')
-    let g:syntastic_cobol_config_file = '.syntastic_cobol_config'
-endif
-
 function! SyntaxCheckers_cobol_cobc_GetLocList()
-    return syntastic#c#GetLocList('cobol', {
+    return syntastic#c#GetLocList('cobol', 'cobc', {
         \ 'errorformat': '%f:%l: %trror: %m',
         \ 'main_flags': '-fsyntax-only' })
 endfunction

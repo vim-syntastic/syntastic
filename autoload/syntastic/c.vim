@@ -60,12 +60,13 @@ function! syntastic#c#ReadConfig(file)
 endfunction
 
 " GetLocList() for C-like compilers
-function! syntastic#c#GetLocList(filetype, options)
+function! syntastic#c#GetLocList(filetype, subchecker, options)
     let ft = a:filetype
+    let ck = a:subchecker
 
     " determine whether to parse header files as well
     if has_key(a:options, 'header_names') && expand('%') =~? a:options['header_names']
-        if exists('g:syntastic_' . ft . '_check_header') && g:syntastic_{ft}_check_header
+        if s:GetCheckerVar('g', ft, ck, 'check_header', 0)
             let flags = get(a:options, 'header_flags', '') . ' -c ' . syntastic#c#NullOutput()
         else
             return []
@@ -74,15 +75,16 @@ function! syntastic#c#GetLocList(filetype, options)
         let flags = get(a:options, 'main_flags', '')
     endif
 
-    let flags .= ' ' . g:syntastic_{ft}_compiler_options . ' ' . s:GetIncludeDirs(ft)
+    let flags .= ' ' . s:GetCheckerVar('g', ft, ck, 'compiler_options', '') . ' ' . s:GetIncludeDirs(ft)
 
     " check if the user manually set some cflags
-    if !exists('b:syntastic_' . ft . '_cflags')
+    let b_cflags = s:GetCheckerVar('b', ft, ck, 'cflags', '')
+    if b_cflags == ''
         " check whether to search for include files at all
-        if !exists('g:syntastic_' . ft . '_no_include_search') || !g:syntastic_{ft}_no_include_search
+        if !s:GetCheckerVar('g', ft, ck, 'no_include_search', 0)
             if ft ==# 'c' || ft ==# 'cpp'
                 " refresh the include file search if desired
-                if exists('g:syntastic_' . ft . '_auto_refresh_includes') && g:syntastic_{ft}_auto_refresh_includes
+                if s:GetCheckerVar('g', ft, ck, 'auto_refresh_includes', 0)
                     let flags .= ' ' . s:SearchHeaders()
                 else
                     " search for header includes if not cached already
@@ -95,20 +97,17 @@ function! syntastic#c#GetLocList(filetype, options)
         endif
     else
         " user-defined cflags
-        let flags .= ' ' . b:syntastic_{ft}_cflags
+        let flags .= ' ' . b_cflags
     endif
 
     " add optional config file parameters
-    let flags .= ' ' . syntastic#c#ReadConfig(g:syntastic_{ft}_config_file)
+    let flags .= ' ' . syntastic#c#ReadConfig(s:GetCheckerVar('g', ft, ck, 'config_file', '.syntastic_' . ft . '_config'))
 
     let makeprg = g:syntastic_{ft}_compiler . ' ' . flags . ' ' . shellescape(expand('%'))
 
-    let errorformat = exists('g:syntastic_' . ft . '_errorformat') ?
-        \ g:syntastic_{ft}_errorformat : a:options['errorformat']
+    let errorformat = s:GetCheckerVar('g', ft, ck, 'errorformat', a:options['errorformat'])
 
-    let postprocess =
-        \ exists('g:syntastic_' . ft . '_remove_include_errors') && g:syntastic_{ft}_remove_include_errors ?
-        \ ['filterForeignErrors'] : []
+    let postprocess = s:GetCheckerVar('g', ft, ck, 'remove_include_errors', 0) ? ['filterForeignErrors'] : []
 
     " process makeprg
     return SyntasticMake({
@@ -139,6 +138,18 @@ function! s:Init()
     call s:RegHandler('php\.h',    'syntastic#c#CheckPhp',    [])
     call s:RegHandler('Python\.h', 'syntastic#c#CheckPython', [])
     call s:RegHandler('ruby',      'syntastic#c#CheckRuby',   [])
+endfunction
+
+"
+function! s:GetCheckerVar(scope, filetype, subchecker, name, default)
+    let prefix = a:scope . ':' . 'syntastic_'
+    if exists(prefix . a:filetype . '_' . a:subchecker . '_' . a:name)
+        return {a:scope}:syntastic_{a:filetype}_{a:subchecker}_{a:name}
+    elseif exists(prefix . a:filetype . '_' . a:name)
+        return {a:scope}:syntastic_{a:filetype}_{a:name}
+    else
+        return a:default
+    endif
 endfunction
 
 " get the gcc include directory argument depending on the default
