@@ -27,12 +27,8 @@ if !exists('g:syntastic_ada_compiler_options')
     let g:syntastic_ada_compiler_options = ''
 endif
 
-if !exists('g:syntastic_ada_config_file')
-    let g:syntastic_ada_config_file = '.syntastic_ada_config'
-endif
-
 function! SyntaxCheckers_ada_gcc_GetLocList()
-    return syntastic#c#GetLocList('ada', {
+    return syntastic#c#GetLocList('ada', 'gcc', {
         \ 'errorformat':
         \     '%-G%f:%s:,' .
         \     '%f:%l:%c: %m,' .

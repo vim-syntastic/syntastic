@@ -35,12 +35,8 @@ if !exists('g:syntastic_d_compiler_options')
     let g:syntastic_d_compiler_options = ''
 endif
 
-if !exists('g:syntastic_d_config_file')
-    let g:syntastic_d_config_file = '.syntastic_d_config'
-endif
-
 function! SyntaxCheckers_d_dmd_GetLocList()
-    return syntastic#c#GetLocList('d', {
+    return syntastic#c#GetLocList('d', 'dmd', {
         \ 'errorformat':
         \     '%-G%f:%s:,%f(%l): %m,' .
         \     '%f:%l: %m',

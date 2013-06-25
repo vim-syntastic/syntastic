@@ -30,12 +30,8 @@ if !exists('g:syntastic_objc_compiler_options')
     let g:syntastic_objc_compiler_options = '-std=gnu99'
 endif
 
-if !exists('g:syntastic_objc_config_file')
-    let g:syntastic_objc_config_file = '.syntastic_objc_config'
-endif
-
 function! SyntaxCheckers_objc_gcc_GetLocList()
-    return syntastic#c#GetLocList('objc', {
+    return syntastic#c#GetLocList('objc', 'gcc', {
         \ 'errorformat':
         \     '%-G%f:%s:,' .
         \     '%-G%f:%l: %#error: %#(Each undeclared identifier is reported only%.%#,' .
