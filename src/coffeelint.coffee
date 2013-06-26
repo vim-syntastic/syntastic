@@ -820,9 +820,13 @@ class LexicalLinter
         # lines, which can be ignored.
         if @isChainedCall()
             currentLine = @lines[@lineNumber]
-            previousLine = @lines[@lineNumber - 1]
-            previousIndentation = previousLine.match(/^(\s*)/)[1].length
+            prevNum = 1
 
+            # keep going back until we are not at a comment or a blank line
+            prevNum += 1 while (/^\s*(#|$)/.test(@lines[@lineNumber - prevNum]))
+            previousLine = @lines[@lineNumber - prevNum]
+
+            previousIndentation = previousLine.match(/^(\s*)/)[1].length
             # I don't know why, but when inside a function, you make a chained
             # call and define an inline callback as a parameter, the body of
             # that callback gets the indentation reported higher than it really
