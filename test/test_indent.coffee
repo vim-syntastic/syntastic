@@ -143,6 +143,47 @@ vows.describe('indent').addBatch({
         'is permitted' : (source) ->
             assert.isEmpty(coffeelint.lint(source))
 
+    'Ignore comment in indented chained invocations' :
+        topic : () ->
+            """
+            test()
+                .r((s) ->
+                    # Ignore this comment
+                    # Ignore this one too
+                    # Ignore this one three
+                    ab()
+                    x()
+                    y()
+                )
+                .s()
+            """
+        'no error when comment is in first line of a chain' : (source) ->
+            config =
+                indentation:
+                    value: 4
+            errors = coffeelint.lint(source, config)
+            assert.isEmpty(errors)
+
+    'Ignore blank line in indented chained invocations' :
+        topic : () ->
+            """
+            test()
+                .r((s) ->
+
+
+                    ab()
+                    x()
+                    y()
+                )
+                .s()
+            """
+        'no error when blank line is in first line of a chain' : (source) ->
+            config =
+                indentation:
+                    value: 4
+            errors = coffeelint.lint(source, config)
+            assert.isEmpty(errors)
+
     'Arbitrarily indented arguments' :
 
         topic : """
