@@ -43,12 +43,14 @@ function! SyntaxCheckers_java_checkstyle_GetLocList()
         \ 'filetype': 'java',
         \ 'subchecker': 'checkstyle' })
 
-    " check style format
-    let errorformat = '%f:%l:%c:\ %m,%f:%l:\ %m'
+    let errorformat =
+        \ '%f:%l:%c:\ %m,' .
+        \ '%f:%l:\ %m'
 
     return SyntasticMake({
         \ 'makeprg': makeprg,
         \ 'errorformat': errorformat,
+        \ 'subtype': 'Style',
         \ 'postprocess': ['cygwinRemoveCR'] })
 
 endfunction
