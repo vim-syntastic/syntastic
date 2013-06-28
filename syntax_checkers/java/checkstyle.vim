@@ -38,20 +38,26 @@ function! SyntaxCheckers_java_checkstyle_GetLocList()
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'java',
         \ 'args': '-cp ' . g:syntastic_java_checkstyle_classpath .
-        \         ' com.puppycrawl.tools.checkstyle.Main -c ' . g:syntastic_java_checkstyle_conf_file,
+        \         ' com.puppycrawl.tools.checkstyle.Main -c ' . g:syntastic_java_checkstyle_conf_file .
+        \         ' -f xml',
         \ 'fname': fname,
         \ 'filetype': 'java',
         \ 'subchecker': 'checkstyle' })
 
     let errorformat =
-        \ '%f:%l:%c:\ %m,' .
-        \ '%f:%l:\ %m'
+        \ '%P<file name="%f">,' .
+        \ '%Q</file>,' .
+        \ '%E<error line="%l" column="%c" severity="%trror" message="%m" source="%.%#"/>,' .
+        \ '%E<error line="%l" severity="%trror" message="%m" source="%.%#"/>,' .
+        \ '%E<error line="%l" column="%c" severity="%tarning" message="%m" source="%.%#"/>,' .
+        \ '%E<error line="%l" severity="%tarning" message="%m" source="%.%#"/>,' .
+        \ '%-G%.%#'
 
     return SyntasticMake({
         \ 'makeprg': makeprg,
         \ 'errorformat': errorformat,
         \ 'subtype': 'Style',
-        \ 'postprocess': ['cygwinRemoveCR'] })
+        \ 'postprocess': ['cygwinRemoveCR', 'decodeXMLEntities'] })
 
 endfunction
 
