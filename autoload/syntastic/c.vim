@@ -61,53 +61,18 @@ endfunction
 
 " GetLocList() for C-like compilers
 function! syntastic#c#GetLocList(filetype, subchecker, options)
-    let ft = a:filetype
-    let ck = a:subchecker
+    try
+        let flags = s:GetCflags(a:filetype, a:subchecker, a:options)
+    catch /\m\C^syntastic_skip_checks$/
+        return []
+    endtry
 
-    " determine whether to parse header files as well
-    if has_key(a:options, 'header_names') && expand('%') =~? a:options['header_names']
-        if s:GetCheckerVar('g', ft, ck, 'check_header', 0)
-            let flags = get(a:options, 'header_flags', '') . ' -c ' . syntastic#c#NullOutput()
-        else
-            return []
-        endif
-    else
-        let flags = get(a:options, 'main_flags', '')
-    endif
+    let makeprg = g:syntastic_{a:filetype}_compiler . ' ' . flags . ' ' . shellescape(expand('%'))
 
-    let flags .= ' ' . s:GetCheckerVar('g', ft, ck, 'compiler_options', '') . ' ' . s:GetIncludeDirs(ft)
+    let errorformat = s:GetCheckerVar('g', a:filetype, a:subchecker, 'errorformat', a:options['errorformat'])
 
-    " check if the user manually set some cflags
-    let b_cflags = s:GetCheckerVar('b', ft, ck, 'cflags', '')
-    if b_cflags == ''
-        " check whether to search for include files at all
-        if !s:GetCheckerVar('g', ft, ck, 'no_include_search', 0)
-            if ft ==# 'c' || ft ==# 'cpp'
-                " refresh the include file search if desired
-                if s:GetCheckerVar('g', ft, ck, 'auto_refresh_includes', 0)
-                    let flags .= ' ' . s:SearchHeaders()
-                else
-                    " search for header includes if not cached already
-                    if !exists('b:syntastic_' . ft . '_includes')
-                        let b:syntastic_{ft}_includes = s:SearchHeaders()
-                    endif
-                    let flags .= ' ' . b:syntastic_{ft}_includes
-                endif
-            endif
-        endif
-    else
-        " user-defined cflags
-        let flags .= ' ' . b_cflags
-    endif
-
-    " add optional config file parameters
-    let flags .= ' ' . syntastic#c#ReadConfig(s:GetCheckerVar('g', ft, ck, 'config_file', '.syntastic_' . ft . '_config'))
-
-    let makeprg = g:syntastic_{ft}_compiler . ' ' . flags . ' ' . shellescape(expand('%'))
-
-    let errorformat = s:GetCheckerVar('g', ft, ck, 'errorformat', a:options['errorformat'])
-
-    let postprocess = s:GetCheckerVar('g', ft, ck, 'remove_include_errors', 0) ? ['filterForeignErrors'] : []
+    let postprocess = s:GetCheckerVar('g', a:filetype, a:subchecker, 'remove_include_errors', 0) ?
+        \ ['filterForeignErrors'] : []
 
     " process makeprg
     return SyntasticMake({
@@ -140,7 +105,7 @@ function! s:Init()
     call s:RegHandler('ruby',      'syntastic#c#CheckRuby',   [])
 endfunction
 
-"
+" resolve checker-related user variables
 function! s:GetCheckerVar(scope, filetype, subchecker, name, default)
     let prefix = a:scope . ':' . 'syntastic_'
     if exists(prefix . a:filetype . '_' . a:subchecker . '_' . a:name)
@@ -150,6 +115,52 @@ function! s:GetCheckerVar(scope, filetype, subchecker, name, default)
     else
         return a:default
     endif
+endfunction
+
+" resolve user CFLAGS
+function! s:GetCflags(ft, ck, opts)
+    " determine whether to parse header files as well
+    if has_key(a:opts, 'header_names') && expand('%') =~? a:opts['header_names']
+        if s:GetCheckerVar('g', a:ft, a:ck, 'check_header', 0)
+            let flags = get(a:opts, 'header_flags', '') . ' -c ' . syntastic#c#NullOutput()
+        else
+            " checking headers when check_header is unset: bail out
+            throw 'syntastic_skip_checks'
+        endif
+    else
+        let flags = get(a:opts, 'main_flags', '')
+    endif
+
+    let flags .= ' ' . s:GetCheckerVar('g', a:ft, a:ck, 'compiler_options', '') . ' ' . s:GetIncludeDirs(a:ft)
+
+    " check if the user manually set some cflags
+    let b_cflags = s:GetCheckerVar('b', a:ft, a:ck, 'cflags', '')
+    if b_cflags == ''
+        " check whether to search for include files at all
+        if !s:GetCheckerVar('g', a:ft, a:ck, 'no_include_search', 0)
+            if a:ft ==# 'c' || a:ft ==# 'cpp'
+                " refresh the include file search if desired
+                if s:GetCheckerVar('g', a:ft, a:ck, 'auto_refresh_includes', 0)
+                    let flags .= ' ' . s:SearchHeaders()
+                else
+                    " search for header includes if not cached already
+                    if !exists('b:syntastic_' . a:ft . '_includes')
+                        let b:syntastic_{a:ft}_includes = s:SearchHeaders()
+                    endif
+                    let flags .= ' ' . b:syntastic_{a:ft}_includes
+                endif
+            endif
+        endif
+    else
+        " user-defined cflags
+        let flags .= ' ' . b_cflags
+    endif
+
+    " add optional config file parameters
+    let config_file = s:GetCheckerVar('g', a:ft, a:ck, 'config_file', '.syntastic_' . a:ft . '_config')
+    let flags .= ' ' . syntastic#c#ReadConfig(config_file)
+
+    return flags
 endfunction
 
 " get the gcc include directory argument depending on the default
