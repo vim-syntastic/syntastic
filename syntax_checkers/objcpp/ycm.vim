@@ -15,7 +15,7 @@ if exists("g:loaded_syntastic_objcpp_ycm_checker")
 endif
 let g:loaded_syntastic_objcpp_ycm_checker = 1
 
-runtime syntax_checkers/c/ycm.vim
+runtime! syntax_checkers/c/*.vim
 
 function! SyntaxCheckers_objcpp_ycm_IsAvailable()
     return SyntaxCheckers_c_ycm_IsAvailable()
