@@ -15,8 +15,6 @@ if exists("g:loaded_syntastic_docbk_xmllint_checker")
 endif
 let g:loaded_syntastic_docbk_xmllint_checker=1
 
-runtime syntax_checkers/xml/xmllint.vim
-
 function! SyntaxCheckers_docbk_xmllint_IsAvailable()
     return SyntaxCheckers_xml_xmllint_IsAvailable()
 endfunction
@@ -28,3 +26,5 @@ endfunction
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'docbk',
     \ 'name': 'xmllint'})
+
+runtime! syntax_checkers/xml/*.vim
