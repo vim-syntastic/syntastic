@@ -25,8 +25,6 @@ if exists("g:loaded_syntastic_gentoo_metadata_xmllint_checker")
 endif
 let g:loaded_syntastic_gentoo_metadata_xmllint_checker=1
 
-runtime syntax_checkers/xml/xmllint.vim
-
 function! SyntaxCheckers_gentoo_metadata_xmllint_IsAvailable()
     return SyntaxCheckers_xml_xmllint_IsAvailable()
 endfunction
@@ -38,3 +36,5 @@ endfunction
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'gentoo_metadata',
     \ 'name': 'xmllint'})
+
+runtime! syntax_checkers/xml/*.vim

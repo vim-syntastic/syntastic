@@ -15,8 +15,6 @@ if exists("g:loaded_syntastic_cpp_ycm_checker")
 endif
 let g:loaded_syntastic_cpp_ycm_checker = 1
 
-runtime syntax_checkers/c/ycm.vim
-
 function! SyntaxCheckers_cpp_ycm_IsAvailable()
     return SyntaxCheckers_c_ycm_IsAvailable()
 endfunction
@@ -32,3 +30,5 @@ endfunction
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'cpp',
     \ 'name': 'ycm'})
+
+runtime! syntax_checkers/c/*.vim
