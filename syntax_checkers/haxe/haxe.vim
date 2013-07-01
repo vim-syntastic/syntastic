@@ -42,7 +42,14 @@ function! s:FindInParent(what, where)
 endfunction
 
 function! SyntaxCheckers_haxe_haxe_GetLocList()
-    let hxml = exists('b:vaxe_hxml') ? fnamemodify(b:vaxe_hxml, ':p') : s:FindInParent('*.hxml', expand('%:p:h'))
+    if exists('b:vaxe_hxml')
+        let hxml = b:vaxe_hxml
+    elseif exists('g:vaxe_hxml')
+        let hxml = g:vaxe_hxml
+    else
+        let hxml = s:FindInParent('*.hxml', expand('%:p:h'))
+    endif
+    let hxml = fnamemodify(hxml, ':p')
 
     if !empty(hxml)
         let makeprg = syntastic#makeprg#build({
