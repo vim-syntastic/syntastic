@@ -194,7 +194,7 @@ command! SyntasticJavacEditClasspath call s:EditClasspath()
 function! s:GetMavenClasspath()
     let pom = findfile("pom.xml", ".;")
     if filereadable(pom)
-        if !has_key(g:syntastic_java_javac_maven_pom_ftime, pom)
+        if !has_key(g:syntastic_java_javac_maven_pom_ftime, pom) || g:syntastic_java_javac_maven_pom_ftime[pom] != getftime(pom)
             let mvn_cmd = g:syntastic_java_maven_executable . ' -f ' . pom
             let mvn_classpath_output = split(system(mvn_cmd . ' dependency:build-classpath'), "\n")
             let class_path_next = 0
