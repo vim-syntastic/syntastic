@@ -44,7 +44,13 @@ function! s:FindInParent(fln,flsrt,flstp)
 endfunction
 
 function! SyntaxCheckers_haxe_haxe_GetLocList()
-    let [success, hxmldir, hxmlname] = s:FindInParent('*.hxml', expand('%:p:h'), '/')
+    if exists('b:vaxe_hxml')
+        let hxmlname = b:vaxe_hxml
+        let hxmldir = fnamemodify(b:vaxe_hxml, ':p:h')
+        let success = 'ok'
+    else
+        let [success, hxmldir, hxmlname] = s:FindInParent('*.hxml', expand('%:p:h'), '/')
+    endif
     if success == 'ok'
         let makeprg = syntastic#makeprg#build({
             \ 'exe': 'haxe',
