@@ -19,36 +19,35 @@ function! SyntaxCheckers_haxe_haxe_IsAvailable()
     return executable('haxe')
 endfunction
 
-" s:FindInParent
-" find the file argument and returns the path to it.
-" Starting with the current working dir, it walks up the parent folders
-" until it finds the file, or it hits the stop dir.
-" If it doesn't find it, it returns "Nothing"
-function! s:FindInParent(fln,flsrt,flstp)
-    let here = a:flsrt
-    while ( strlen( here) > 0 )
-        let p = split(globpath(here, a:fln), '\n')
-        if len(p) > 0
-            return ['ok', here, fnamemodify(p[0], ':p:t')]
-        endif
-        let fr = match(here, '/[^/]*$')
-        if fr == -1
+" start in directory a:where and walk up the parent folders until it
+" finds a file matching a:what; return path to that file
+function! s:FindInParent(what, where)
+    let here = fnamemodify(a:where, ':p')
+
+    while !empty(here)
+        let p = split(globpath(here, a:what), '\n')
+
+        if !empty(p)
+            return fnamemodify(p[0], ':p')
+        elseif here == '/'
             break
         endif
-        let here = strpart(here, 0, fr)
-        if here == a:flstp
-            break
-        endif
+
+        " we use ':h:h' rather than ':h' since ':p' adds a trailing '/'
+        " if 'here' is a directory
+        let here = fnamemodify(here, ':p:h:h')
     endwhile
-    return ['fail', '', '']
+
+    return ''
 endfunction
 
 function! SyntaxCheckers_haxe_haxe_GetLocList()
-    let [success, hxmldir, hxmlname] = s:FindInParent('*.hxml', expand('%:p:h'), '/')
-    if success == 'ok'
+    let hxml = exists('b:vaxe_hxml') ? fnamemodify(b:vaxe_hxml, ':p') : s:FindInParent('*.hxml', expand('%:p:h'))
+
+    if !empty(hxml)
         let makeprg = syntastic#makeprg#build({
             \ 'exe': 'haxe',
-            \ 'fname': shellescape(fnameescape(hxmlname)),
+            \ 'fname': shellescape(fnameescape(fnamemodify(hxml, ':t'))),
             \ 'filetype': 'haxe',
             \ 'subchecker': 'haxe' })
 
@@ -57,10 +56,10 @@ function! SyntaxCheckers_haxe_haxe_GetLocList()
         return SyntasticMake({
             \ 'makeprg': makeprg,
             \ 'errorformat': errorformat,
-            \ 'cwd': hxmldir })
-    else
-        return []
+            \ 'cwd': fnamemodify(hxml, ':h') })
     endif
+
+    return []
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
