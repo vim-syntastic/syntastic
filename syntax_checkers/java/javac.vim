@@ -252,7 +252,7 @@ function! s:MavenOutputDirectory()
         if match(expand( '%:p:h' ), "src.test.java") >= 0
             let output_dir .= '/target/test-classes'
             if has_key(mvn_properties, 'project.build.testOutputDirectory')
-                let output_dir = mvn_properties['project.testOutputDirectory.outputDirectory']
+                let output_dir = mvn_properties['project.build.testOutputDirectory']
             endif
         endif
 
