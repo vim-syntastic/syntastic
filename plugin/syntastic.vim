@@ -25,7 +25,7 @@ if !exists("g:syntastic_always_populate_loc_list")
 endif
 
 if !exists("g:syntastic_auto_jump")
-    let syntastic_auto_jump=0
+    let g:syntastic_auto_jump = 0
 endif
 
 if !exists("g:syntastic_quiet_warnings")
