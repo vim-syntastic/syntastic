@@ -15,6 +15,8 @@ if exists("g:loaded_syntastic_java_javac_checker")
     finish
 endif
 let g:loaded_syntastic_java_javac_checker=1
+let g:syntastic_java_javac_maven_pom_tags = ["build", "properties"]
+let g:syntastic_java_javac_maven_pom_properties = {}
 
 " Global Options
 if !exists("g:syntastic_java_javac_executable")
@@ -63,17 +65,12 @@ if !exists('g:syntastic_java_javac_config_file')
     let g:syntastic_java_javac_config_file = '.syntastic_javac_config'
 endif
 
-" Internal variables, do not ovveride those
-if !exists("g:syntastic_java_javac_maven_pom_cwd")
-    let g:syntastic_java_javac_maven_pom_cwd = ''
-endif
-
 if !exists("g:syntastic_java_javac_maven_pom_ftime")
-    let g:syntastic_java_javac_maven_pom_ftime = 0
+    let g:syntastic_java_javac_maven_pom_ftime = {}
 endif
 
 if !exists("g:syntastic_java_javac_maven_pom_classpath")
-    let g:syntastic_java_javac_maven_pom_classpath = ''
+    let g:syntastic_java_javac_maven_pom_classpath = {}
 endif
 
 function! s:RemoveCarriageReturn(line)
@@ -157,12 +154,49 @@ function! s:EditClasspath()
         execute winnr . 'wincmd w'
     endif
 endfunction
+
+function! s:GetMavenProperties()
+    let mvn_properties = {}
+    let pom = findfile("pom.xml", ".;")
+    if filereadable(pom)
+        if !has_key(g:syntastic_java_javac_maven_pom_properties, pom)
+            let mvn_cmd = g:syntastic_java_maven_executable . ' -f ' . pom
+            let mvn_is_managed_tag = 1
+            let mvn_settings_output = split(system(mvn_cmd . ' help:effective-pom'), "\n")
+            let current_path = 'project'
+            for line in mvn_settings_output
+                let matches = matchlist(line, '^\s*<\([a-zA-Z0-9\-\.]\+\)>\s*$')
+                if mvn_is_managed_tag && !empty(matches)
+                    let mvn_is_managed_tag = index(g:syntastic_java_javac_maven_pom_tags, matches[1]) >= 0
+                    let current_path .= '.' . matches[1]
+                else
+                    let matches = matchlist(line, '^\s*</\([a-zA-Z0-9\-\.]\+\)>\s*$')
+                    if !empty(matches)
+                        let mvn_is_managed_tag = index(g:syntastic_java_javac_maven_pom_tags, matches[1]) < 0
+                        let current_path  = substitute(current_path, '\.' . matches[1] . "$", '', '')
+                    else
+                        let matches = matchlist(line, '^\s*<\([a-zA-Z0-9\-\.]\+\)>\(.\+\)</[a-zA-Z0-9\-\.]\+>\s*$')
+                        if mvn_is_managed_tag && !empty(matches)
+                            let mvn_properties[current_path . '.' . matches[1]] = matches[2]
+                        endif
+                    endif
+                endif
+            endfor
+            let g:syntastic_java_javac_maven_pom_properties[pom] = mvn_properties
+        endif
+        return g:syntastic_java_javac_maven_pom_properties[pom]
+    endif
+    return mvn_properties
+endfunction
+
 command! SyntasticJavacEditClasspath call s:EditClasspath()
 
 function! s:GetMavenClasspath()
-    if filereadable('pom.xml')
-        if g:syntastic_java_javac_maven_pom_ftime != getftime('pom.xml') || g:syntastic_java_javac_maven_pom_cwd != getcwd()
-            let mvn_classpath_output = split(system(g:syntastic_java_maven_executable . ' dependency:build-classpath'), "\n")
+    let pom = findfile("pom.xml", ".;")
+    if filereadable(pom)
+        if !has_key(g:syntastic_java_javac_maven_pom_ftime, pom) || g:syntastic_java_javac_maven_pom_ftime[pom] != getftime(pom)
+            let mvn_cmd = g:syntastic_java_maven_executable . ' -f ' . pom
+            let mvn_classpath_output = split(system(mvn_cmd . ' dependency:build-classpath'), "\n")
             let class_path_next = 0
 
             for line in mvn_classpath_output
@@ -175,14 +209,24 @@ function! s:GetMavenClasspath()
                 endif
             endfor
 
-            let mvn_classpath = s:AddToClasspath(mvn_classpath, 'target/classes')
-            let mvn_classpath = s:AddToClasspath(mvn_classpath, 'target/test-classes')
+            let mvn_properties = s:GetMavenProperties()
 
-            let g:syntastic_java_javac_maven_pom_cwd = getcwd()
-            let g:syntastic_java_javac_maven_pom_ftime = getftime('pom.xml')
-            let g:syntastic_java_javac_maven_pom_classpath = mvn_classpath
+            let output_dir = 'target/classes'
+            if has_key(mvn_properties, 'project.build.outputDirectory')
+                let output_dir = mvn_properties['project.build.outputDirectory']
+            endif
+            let mvn_classpath = s:AddToClasspath(mvn_classpath, output_dir)
+
+            let test_output_dir = 'target/test-classes'
+            if has_key(mvn_properties, 'project.build.testOutputDirectory')
+                let test_output_dir = mvn_properties['project.build.testOutputDirectory']
+            endif
+            let mvn_classpath = s:AddToClasspath(mvn_classpath, test_output_dir)
+
+            let g:syntastic_java_javac_maven_pom_ftime[pom] = getftime(pom)
+            let g:syntastic_java_javac_maven_pom_classpath[pom] = mvn_classpath
         endif
-        return g:syntastic_java_javac_maven_pom_classpath
+        return g:syntastic_java_javac_maven_pom_classpath[pom]
     endif
     return ''
 endfunction
@@ -192,13 +236,24 @@ function! SyntaxCheckers_java_javac_IsAvailable()
 endfunction
 
 function! s:MavenOutputDirectory()
-    if filereadable('pom.xml')
+    let pom = findfile("pom.xml", ".;")
+    if filereadable(pom)
+        let mvn_properties = s:GetMavenProperties()
         let output_dir = getcwd()
+        if has_key(mvn_properties, 'project.properties.build.dir')
+            let output_dir = mvn_properties['project.properties.build.dir']
+        endif
         if match(expand( '%:p:h' ), "src.main.java") >= 0
             let output_dir .= '/target/classes'
+            if has_key(mvn_properties, 'project.build.outputDirectory')
+                let output_dir = mvn_properties['project.build.outputDirectory']
+            endif
         endif
         if match(expand( '%:p:h' ), "src.test.java") >= 0
             let output_dir .= '/target/test-classes'
+            if has_key(mvn_properties, 'project.build.testOutputDirectory')
+                let output_dir = mvn_properties['project.build.testOutputDirectory']
+            endif
         endif
 
         if has('win32unix')
