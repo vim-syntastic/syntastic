@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "optimist" : ">=0.2.8",
-    "coffee-script" : ">=1.4.0",
+    "coffee-script" : ">=1.6.0",
     "glob" : ">=3.1.9"
   },
   "devDependencies" : {
