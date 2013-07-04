@@ -38,7 +38,7 @@ function! SyntaxCheckers_javascript_closurecompiler_GetLocList()
     if exists("g:syntastic_javascript_closure_compiler_file_list")
         let file_list = join(readfile(g:syntastic_javascript_closure_compiler_file_list), ' ')
     else
-        let file_list = shellescape(expand('%'))
+        let file_list = syntastic#util#shexpand('%')
     endif
 
     let makeprg = syntastic#makeprg#build({

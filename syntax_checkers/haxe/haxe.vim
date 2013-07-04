@@ -54,7 +54,7 @@ function! SyntaxCheckers_haxe_haxe_GetLocList()
     if !empty(hxml)
         let makeprg = syntastic#makeprg#build({
             \ 'exe': 'haxe',
-            \ 'fname': shellescape(fnameescape(fnamemodify(hxml, ':t'))),
+            \ 'fname': syntastic#util#shescape(fnameescape(fnamemodify(hxml, ':t'))),
             \ 'filetype': 'haxe',
             \ 'subchecker': 'haxe' })
 

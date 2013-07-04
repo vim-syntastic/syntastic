@@ -119,7 +119,7 @@ function! SyntaxCheckers_objcpp_gcc_GetLocList()
     " add optional user-defined compiler options
     let makeprg .= g:syntastic_objcpp_compiler_options
 
-    let makeprg .= ' ' . shellescape(expand('%')) .
+    let makeprg .= ' ' . syntastic#util#shexpand('%') .
                \ ' ' . syntastic#c#GetIncludeDirs('objcpp')
 
     " determine whether to parse header files as well
@@ -127,7 +127,7 @@ function! SyntaxCheckers_objcpp_gcc_GetLocList()
         if exists('g:syntastic_objcpp_check_header')
             let makeprg = g:syntastic_objcpp_compiler .
                         \ ' -x objective-c++-header ' .
-                        \ ' -c ' . shellescape(expand('%')) .
+                        \ ' -c ' . syntastic#util#shexpand('%') .
                         \ ' ' . g:syntastic_objcpp_compiler_options .
                         \ ' ' . syntastic#c#GetIncludeDirs('objcpp')
         else

@@ -112,14 +112,14 @@ function! SyntaxCheckers_d_dmd_GetLocList()
     " add optional user-defined compiler options
     let makeprg .= g:syntastic_d_compiler_options
 
-    let makeprg .= ' ' . shellescape(expand('%')) .
+    let makeprg .= ' ' . syntastic#util#shexpand('%') .
                 \ ' ' . syntastic#c#GetIncludeDirs('d')
 
     " determine whether to parse header files as well
     if expand('%') =~? '\.di$'
         if exists('g:syntastic_d_check_header')
             let makeprg = g:syntastic_d_compiler .
-                        \ ' -c ' . shellescape(expand('%')) .
+                        \ ' -c ' . syntastic#util#shexpand('%') .
                         \ ' -of' . syntastic#util#DevNull() .
                         \ ' ' . g:syntastic_d_compiler_options .
                         \ ' ' . syntastic#c#GetIncludeDirs('d')
