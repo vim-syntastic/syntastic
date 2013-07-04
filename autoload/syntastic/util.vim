@@ -137,6 +137,16 @@ function! syntastic#util#unique(list)
     return uniques
 endfunction
 
+" A less noisy shellescape()
+function! syntastic#util#shescape(string)
+    return a:string =~ '\m^[A-Za-z0-9_/.-]\+$' ? a:string : shellescape(a:string)
+endfunction
+
+" A less noisy shellescape(expand())
+function! syntastic#util#shexpand(string)
+    return syntastic#util#shescape(expand(a:string))
+endfunction
+
 function! syntastic#util#debug(msg)
     if g:syntastic_debug
         echomsg "syntastic: debug: " . a:msg

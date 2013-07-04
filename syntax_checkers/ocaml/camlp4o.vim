@@ -121,7 +121,7 @@ endfunction
 
 function s:GetOcamlBuildMakeprg()
     return "ocamlbuild -quiet -no-log -tag annot," . s:ocamlpp . " -no-links -no-hygiene -no-sanitize " .
-                \ shellescape(expand('%:r')) . ".cmi"
+                \ syntastic#util#shexpand('%:r') . ".cmi"
 endfunction
 
 function s:GetOtherMakeprg()
@@ -134,11 +134,11 @@ function s:GetOtherMakeprg()
 
     if match(extension, 'mly') >= 0 && executable("menhir")
         " ocamlyacc output can't be redirected, so use menhir
-        let makeprg = "menhir --only-preprocess " . shellescape(expand('%')) . " >" . syntastic#util#DevNull()
+        let makeprg = "menhir --only-preprocess " . syntastic#util#shexpand('%') . " >" . syntastic#util#DevNull()
     elseif match(extension,'mll') >= 0 && executable("ocamllex")
-        let makeprg = "ocamllex -q " . syntastic#c#NullOutput() . " " . shellescape(expand('%'))
+        let makeprg = "ocamllex -q " . syntastic#c#NullOutput() . " " . syntastic#util#shexpand('%')
     else
-        let makeprg = "camlp4o " . syntastic#c#NullOutput() . " " . shellescape(expand('%'))
+        let makeprg = "camlp4o " . syntastic#c#NullOutput() . " " . syntastic#util#shexpand('%')
     endif
 
     return makeprg

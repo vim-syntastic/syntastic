@@ -41,7 +41,7 @@ endfunction
 if !exists("g:syntastic_perl_efm_program")
     let g:syntastic_perl_efm_program =
         \ g:syntastic_perl_interpreter . ' ' .
-        \ shellescape(expand('<sfile>:p:h') . '/efm_perl.pl') .
+        \ syntastic#util#shescape(expand('<sfile>:p:h') . '/efm_perl.pl') .
         \ ' -c -w'
 endif
 
@@ -50,7 +50,7 @@ function! SyntaxCheckers_perl_perl_GetLocList()
     if exists("g:syntastic_perl_lib_path")
         let makeprg .= ' -I' . g:syntastic_perl_lib_path
     endif
-    let makeprg .= ' ' . shellescape(expand('%')) . s:ExtraMakeprgArgs()
+    let makeprg .= ' ' . syntastic#util#shexpand('%') . s:ExtraMakeprgArgs()
 
     let errorformat =  '%t:%f:%l:%m'
 

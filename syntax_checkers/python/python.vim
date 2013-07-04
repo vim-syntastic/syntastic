@@ -22,7 +22,7 @@ function! SyntaxCheckers_python_python_GetLocList()
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'python',
         \ 'args': '-c',
-        \ 'fname': shellescape("compile(open(" . fname . ").read(), " . fname . ", 'exec')"),
+        \ 'fname': syntastic#util#shescape("compile(open(" . fname . ").read(), " . fname . ", 'exec')"),
         \ 'filetype': 'python',
         \ 'subchecker': 'python' })
 

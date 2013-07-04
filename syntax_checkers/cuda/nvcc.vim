@@ -36,7 +36,7 @@ function! SyntaxCheckers_cuda_nvcc_GetLocList()
     endif
     let makeprg =
         \ 'nvcc ' . arch_flag . ' --cuda -O0 -I . -Xcompiler -fsyntax-only ' .
-        \ shellescape(expand('%')) . ' ' . syntastic#c#NullOutput()
+        \ syntastic#util#shexpand('%') . ' ' . syntastic#c#NullOutput()
     let errorformat =
         \ '%*[^"]"%f"%*\D%l: %m,'.
         \ '"%f"%*\D%l: %m,'.
@@ -58,7 +58,7 @@ function! SyntaxCheckers_cuda_nvcc_GetLocList()
             let makeprg =
                 \ 'echo > .syntastic_dummy.cu ; ' .
                 \ 'nvcc ' . arch_flag . ' --cuda -O0 -I . .syntastic_dummy.cu -Xcompiler -fsyntax-only -include ' .
-                \ shellescape(expand('%')) . ' ' . syntastic#c#NullOutput()
+                \ syntastic#util#shexpand('%') . ' ' . syntastic#c#NullOutput()
         else
             return []
         endif
