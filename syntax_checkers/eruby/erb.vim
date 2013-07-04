@@ -41,7 +41,7 @@ function! SyntaxCheckers_eruby_erb_GetLocList()
     " TODO: fix the encoding trainwreck
     let makeprg =
         \ exe . ' -e ' .
-        \ shellescape('puts File.read("' . fname .
+        \ syntastic#util#shescape('puts File.read("' . fname .
         \     '", :encoding => "' . encoding_string .
         \     '").gsub(''<\%='',''<\%'')') .
         \ ' \| ' . g:syntastic_erb_exec . ' -x -T -' .

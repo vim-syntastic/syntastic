@@ -118,14 +118,14 @@ function! SyntaxCheckers_c_gcc_GetLocList()
     " add optional user-defined compiler options
     let makeprg .= g:syntastic_c_compiler_options
 
-    let makeprg .= ' ' . shellescape(expand('%')) .
+    let makeprg .= ' ' . syntastic#util#shexpand('%') .
                \ ' ' . syntastic#c#GetIncludeDirs('c')
 
     " determine whether to parse header files as well
     if expand('%') =~? '\.h$'
         if exists('g:syntastic_c_check_header')
             let makeprg = g:syntastic_c_compiler .
-                        \ ' -c ' . shellescape(expand('%')) .
+                        \ ' -c ' . syntastic#util#shexpand('%') .
                         \ ' ' . g:syntastic_c_compiler_options .
                         \ ' ' . syntastic#c#GetNullDevice() .
                         \ ' ' . syntastic#c#GetIncludeDirs('c')

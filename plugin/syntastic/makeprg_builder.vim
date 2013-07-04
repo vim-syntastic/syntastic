@@ -33,7 +33,7 @@ endfunction
 
 function! g:SyntasticMakeprgBuilder.fname()
     if empty(self._fname)
-        return  shellescape(expand("%"))
+        return syntastic#util#shexpand('%')
     else
         return self._fname
     endif

@@ -19,7 +19,7 @@ function! SyntaxCheckers_nasm_nasm_IsAvailable()
 endfunction
 
 function! SyntaxCheckers_nasm_nasm_GetLocList()
-    let wd = shellescape(expand("%:p:h") . "/")
+    let wd = syntastic#util#shescape(expand("%:p:h") . "/")
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'nasm',
         \ 'args': '-X gnu -f elf -I ' . wd . ' ' . syntastic#c#GetNullDevice()
