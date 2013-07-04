@@ -12,6 +12,7 @@ glob = require("glob")
 optimist = require("optimist")
 thisdir = path.dirname(fs.realpathSync(__filename))
 coffeelint = require(path.join(thisdir, "..", "lib", "coffeelint"))
+CoffeeScript = require 'coffee-script'
 
 
 # Return the contents of the given file synchronously.
@@ -199,13 +200,15 @@ lintFiles = (paths, config) ->
     errorReport = new ErrorReport()
     for path in paths
         source = read(path)
-        errorReport.paths[path] = coffeelint.lint(source, config)
+        literate = CoffeeScript.helpers.isLiterate path
+
+        errorReport.paths[path] = coffeelint.lint(source, config, literate)
     return errorReport
 
 # Return an error report from linting the given coffeescript source.
-lintSource = (source, config) ->
+lintSource = (source, config, literate = false) ->
     errorReport = new ErrorReport()
-    errorReport.paths["stdin"] = coffeelint.lint(source, config)
+    errorReport.paths["stdin"] = coffeelint.lint(source, config, literate)
     return errorReport
 
 # Publish the error report and exit with the appropriate status.
@@ -247,6 +250,8 @@ options = optimist
             .boolean("nocolor")
             .boolean("noconfig")
             .boolean("makeconfig")
+            .boolean("literate",
+                "Used with --stdin to process as Literate CoffeeScript")
             .boolean("r")
             .boolean("s")
             .boolean("q", "Print errors only.")
@@ -283,7 +288,7 @@ else
         stdin.on 'data', (buffer) ->
             data += buffer.toString() if buffer
         stdin.on 'end', ->
-            errorReport = lintSource(data, config)
+            errorReport = lintSource(data, config, options.argv.literate)
             reportAndExit errorReport, options
     else
         # Find scripts to lint.
@@ -291,5 +296,5 @@ else
         scripts = if options.argv.r then findCoffeeScripts(paths) else paths
 
         # Lint the code.
-        errorReport = lintFiles(scripts, config)
+        errorReport = lintFiles(scripts, config, options.argv.literate)
         reportAndExit errorReport, options
