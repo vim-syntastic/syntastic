@@ -37,7 +37,7 @@ function! SyntaxCheckers_eruby_ruby_GetLocList()
     "gsub fixes issue #7, rails has it's own eruby syntax
     let makeprg =
         \ exe . ' -rerb -e ' .
-        \ shellescape('puts ERB.new(File.read("' . fname .
+        \ syntastic#util#shescape('puts ERB.new(File.read("' . fname .
         \     '", :encoding => "' . encoding_string .
         \     '").gsub(''<\%='',''<\%''), nil, ''-'').src') .
         \ ' \| ' . exe . ' -c'

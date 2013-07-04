@@ -45,7 +45,7 @@ if !exists('g:syntastic_html_validator_nsfilter')
     let g:syntastic_html_validator_nsfilter = ''
 endif
 
-let s:decoder = 'awk -f ' . shellescape(expand('<sfile>:p:h') . '/validator_decode.awk')
+let s:decoder = 'awk -f ' . syntastic#util#shescape(expand('<sfile>:p:h') . '/validator_decode.awk')
 
 function! SyntaxCheckers_html_validator_IsAvailable()
     return executable('curl') && executable('awk')
@@ -55,7 +55,7 @@ function! SyntaxCheckers_html_validator_GetLocList()
     let makeprg = 'curl -s --compressed -F out=gnu -F asciiquotes=yes' .
         \ (!empty(g:syntastic_html_validator_parser) ? ' -F parser=' . g:syntastic_html_validator_parser : '') .
         \ (!empty(g:syntastic_html_validator_nsfilter) ? ' -F nsfilter=' . g:syntastic_html_validator_nsfilter : '') .
-        \ ' -F doc=@' . shellescape(expand('%')) . '\;type=text/html\;filename=' . shellescape(expand('%')) . ' ' .
+        \ ' -F doc=@' . syntastic#util#shexpand('%') . '\;type=text/html\;filename=' . syntastic#util#shexpand('%') . ' ' .
         \ g:syntastic_html_validator_api . ' \| ' . s:decoder
     let errorformat =
         \ '%E"%f":%l: %trror: %m,' .

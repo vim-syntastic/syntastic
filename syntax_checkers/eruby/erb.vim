@@ -28,16 +28,24 @@ function! SyntaxCheckers_eruby_erb_IsAvailable()
 endfunction
 
 function! SyntaxCheckers_eruby_erb_GetLocList()
-    " TODO: fix the encoding trainwreck
-    " let enc = &fileencoding != '' ? &fileencoding : &encoding
-    let enc = ''
+    let exe = expand(g:syntastic_ruby_exec)
+    if !has('win32')
+        let exe = 'RUBYOPT= ' . exe
+    endif
 
-    let makeprg = syntastic#makeprg#build({
-        \ 'exe': g:syntastic_erb_exec,
-        \ 'args': '-x -T -' . (enc ==# 'utf-8' ? ' -U' : ''),
-        \ 'tail': '\| ' . g:syntastic_ruby_exec .  ' -c',
-        \ 'filetype': 'eruby',
-        \ 'subchecker': 'erb' })
+    let fname = fnameescape(expand('%'))
+
+    let enc = &fileencoding != '' ? &fileencoding : &encoding
+    let encoding_string = enc ==? 'utf-8' ? 'UTF-8' : 'BINARY'
+
+    " TODO: fix the encoding trainwreck
+    let makeprg =
+        \ exe . ' -e ' .
+        \ syntastic#util#shescape('puts File.read("' . fname .
+        \     '", :encoding => "' . encoding_string .
+        \     '").gsub(''<\%='',''<\%'')') .
+        \ ' \| ' . g:syntastic_erb_exec . ' -x -T -' .
+        \ ' \| ' . exe . ' -c'
 
     let errorformat =
         \ '%-GSyntax OK,'.
