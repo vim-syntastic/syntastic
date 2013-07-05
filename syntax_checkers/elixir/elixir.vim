@@ -16,7 +16,7 @@ let g:loaded_syntastic_elixir_elixir_checker=1
 
 let s:syntastic_elixir_compile_command = 'elixir'
 
-if filereadable('mix.exs')
+if filereadable(syntastic#util#findInParent('mix.exs', expand('%:p:h')))
     let s:syntastic_elixir_compile_command = 'mix compile'
 endif
 
