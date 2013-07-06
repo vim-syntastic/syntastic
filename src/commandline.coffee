@@ -154,6 +154,8 @@ class Reporter
 class CSVReporter extends Reporter
 
     publish : () ->
+        header = ["path","lineNumber", "lineNumberEnd", "level", "message"]
+        @print header.join(",")
         for path, errors of @errorReport.paths
             for e in errors
                 f = [
