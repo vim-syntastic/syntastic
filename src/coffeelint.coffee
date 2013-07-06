@@ -428,8 +428,10 @@ class LineLinter
     checkLineLength : () ->
         rule = 'max_line_length'
         max = @config[rule]?.value
-        if max and max < @line.length
-            @createLineError(rule) unless regexes.longUrlComment.test(@line)
+        if max and max < @line.length and not regexes.longUrlComment.test(@line)
+            attrs =
+                context: "Length is #{@line.length}, max is #{max}"
+            @createLineError(rule, attrs)
         else
             null
 
@@ -1043,7 +1045,7 @@ coffeelint.lint = (source, userConfig = {}) ->
     disabled_initially = []
     for l in source.split('\n')
         s = regexes.configStatement.exec(l)
-        if s? and s.length > 2 and 'enable' in s
+        if s?.length > 2 and 'enable' in s
             for r in s[1..]
                 unless r in ['enable','disable']
                     unless r of config and config[r].level in ['warn','error']
