@@ -14,31 +14,30 @@ if exists("g:loaded_syntastic_elixir_elixir_checker")
 endif
 let g:loaded_syntastic_elixir_elixir_checker=1
 
-let s:syntastic_elixir_compile_command = 'elixir'
-
-if filereadable('mix.exs')
-    let s:syntastic_elixir_compile_command = 'mix compile'
-endif
-
+" TODO: we should probably split this into separate checkers
 function! SyntaxCheckers_elixir_elixir_IsAvailable()
-    if s:syntastic_elixir_compile_command == 'elixir'
-        return executable('elixir')
-    else
-        return executable('mix')
-    endif
+    return executable('elixir') && executable('mix')
 endfunction
 
 function! SyntaxCheckers_elixir_elixir_GetLocList()
-    let makeprg = syntastic#makeprg#build({
-        \ 'exe': s:syntastic_elixir_compile_command,
+
+    let make_options = {}
+    let compile_command = 'elixir'
+    let mix_file = syntastic#util#findInParent('mix.exs', expand('%:p:h'))
+
+    if filereadable(mix_file)
+        let compile_command = 'mix compile'
+        let make_options['cwd'] = fnamemodify(mix_file, ':p:h')
+    endif
+
+    let make_options['makeprg'] = syntastic#makeprg#build({
+        \ 'exe': compile_command,
         \ 'filetype': 'elixir',
         \ 'subchecker': 'elixir' })
 
-    let errorformat = '** %*[^\ ] %f:%l: %m'
+    let make_options['errorformat'] = '** %*[^\ ] %f:%l: %m'
 
-    return SyntasticMake({
-        \ 'makeprg': makeprg,
-        \ 'errorformat': errorformat })
+    return SyntasticMake(make_options)
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
