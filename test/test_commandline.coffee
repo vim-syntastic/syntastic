@@ -211,6 +211,32 @@ vows.describe('commandline').addBatch({
                 assert.isNotNull(error)
                 assert.include(stdout.toLowerCase(), 'trailing whitespace')
 
+    'literate coffeescript':
+
+        'with working string':
+            topic: () ->
+                exec("echo 'This is Markdown\n\n    y = 1' | " +
+                    "#{coffeelintPath} --noconfig --stdin --literate",
+                    this.callback)
+                return undefined
+
+            'passes': (error, stdout, stderr) ->
+                assert.isNull(error)
+                assert.isEmpty(stderr)
+                assert.isString(stdout)
+                assert.include(stdout, '0 errors and 0 warnings')
+
+        'with failing string due to whitespace':
+            topic: () ->
+                exec("echo 'This is Markdown\n\n    x = 1 \n    y=2'| " +
+                    "#{coffeelintPath} --noconfig --stdin --literate",
+                    this.callback)
+                return undefined
+
+            'fails': (error, stdout, stderr) ->
+                assert.isNotNull(error)
+                assert.include(stdout.toLowerCase(), 'trailing whitespace')
+
     'using environment config file':
 
         'with non existing enviroment set config file':

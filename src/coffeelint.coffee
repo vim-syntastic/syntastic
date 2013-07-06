@@ -1016,6 +1016,22 @@ mergeDefaultConfig = (userConfig) ->
         config[rule] = defaults(userConfig[rule], ruleConfig)
     return config
 
+coffeelint.invertLiterate = (source) ->
+    source = CoffeeScript.helpers.invertLiterate source
+    # Strip the first 4 spaces from every line. After this the markdown is
+    # commented and all of the other code should be at their natural location.
+    newSource = ""
+    for line in source.split "\n"
+        if line.match(/^#/)
+            # strip trailing space
+            line = line.replace /\s*$/, ''
+        # Strip the first 4 spaces of every line. This is how Markdown
+        # indicates code, so in the end this pulls everything back to where it
+        # would be indented if it hadn't been written in literate style.
+        line = line.replace /^\s{4}/g, ''
+        newSource += "#{line}\n"
+
+    newSource
 
 # Check the source against the given configuration and return an array
 # of any errors found. An error is an object with the following
@@ -1029,7 +1045,9 @@ mergeDefaultConfig = (userConfig) ->
 #       context:    'Optional details about why the rule was violated'
 #   }
 #
-coffeelint.lint = (source, userConfig = {}) ->
+coffeelint.lint = (source, userConfig = {}, literate = false) ->
+    source = @invertLiterate source if literate
+
     config = mergeDefaultConfig(userConfig)
 
     # Check ahead for inline enabled rules
