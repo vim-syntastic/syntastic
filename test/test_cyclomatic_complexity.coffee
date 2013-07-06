@@ -39,6 +39,9 @@ vows.describe('cyclomatic complexity').addBatch({
             assert.lengthOf(errors, 1)
             error = errors[0]
             assert.equal(error.rule, 'cyclomatic_complexity')
+            assert.equal(error.context, 11)
+            assert.equal(error.lineNumber, 1)
+            assert.equal(error.lineNumberEnd, 5)
 
         'can be enabled with configurable complexity' : (source) ->
             config = {cyclomatic_complexity : {level: 'error', value: 12}}
@@ -250,5 +253,8 @@ vows.describe('cyclomatic complexity').addBatch({
             assert.lengthOf(errors, 1)
             error = errors[0]
             assert.equal(error.rule, 'cyclomatic_complexity')
+            assert.equal(error.lineNumber, 1)
+            assert.equal(error.lineNumberEnd, 10)
+            assert.equal(error.context, 14)
 
 }).export(module)

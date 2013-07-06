@@ -134,8 +134,12 @@ class Reporter
         for e in errors
             continue if options.argv.q and e.level != 'error'
             o = if e.level == 'error' then @err else @warn
+            lineEnd = ""
+            lineEnd = "-#{e.lineNumberEnd}" if e.lineNumberEnd?
+            output = "#" + e.lineNumber + lineEnd
+
             pathReport += "     " +
-                "#{o} #{@stylize("#" + e.lineNumber, color)}: #{e.message}."
+                "#{o} #{@stylize(output, color)}: #{e.message}."
             pathReport += " #{e.context}." if e.context
             pathReport += "\n"
 
@@ -152,7 +156,13 @@ class CSVReporter extends Reporter
     publish : () ->
         for path, errors of @errorReport.paths
             for e in errors
-                f = [path, e.lineNumber, e.level, e.message]
+                f = [
+                    path
+                    e.lineNumber
+                    e.lineNumberEnd ? e.lineNumberEnd
+                    e.level
+                    e.message
+                ]
                 @print f.join(",")
 
 class JSLintReporter extends Reporter
@@ -167,6 +177,7 @@ class JSLintReporter extends Reporter
                 for e in errors
                     @print """
                     <issue line="#{e.lineNumber}"
+                            lineEnd=#{e.lineNumberEnd ? e.lineNumberEnd}
                             reason="[#{@escape(e.level)}] #{@escape(e.message)}"
                             evidence="#{@escape(e.context)}"/>
                     """

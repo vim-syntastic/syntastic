@@ -953,10 +953,8 @@ class ASTLinter
         @lintNode(@node)
         @errors
 
-    # Lint the AST node and return it's cyclomatic complexity.
-    lintNode : (node) ->
-
-        # Get the complexity of the current node.
+    # returns the "complexity" value of the current node.
+    getComplexity : (node) ->
         name = node.constructor.name
         complexity = if name in ['If', 'While', 'For', 'Try']
             1
@@ -966,21 +964,30 @@ class ASTLinter
             node.cases.length
         else
             0
+        return complexity
+
+    # Lint the AST node and return it's cyclomatic complexity.
+    lintNode : (node, line) ->
+
+        # Get the complexity of the current node.
+        name = node.constructor.name
+        complexity = @getComplexity(node)
 
         # Add the complexity of all child's nodes to this one.
         node.eachChild (childNode) =>
-            return false unless childNode
-            complexity += @lintNode(childNode)
-            return true
+            nodeLine = childNode.locationData.first_line
+            complexity += @lintNode(childNode, nodeLine) if childNode
 
         # If the current node is a function, and it's over our limit, add an
         # error to the list.
         rule = @config.cyclomatic_complexity
+
         if name == 'Code' and complexity >= rule.value
             attrs = {
                 context: complexity + 1
                 level: rule.level
-                line: 0
+                lineNumber: line + 1
+                lineNumberEnd: node.locationData.last_line + 1
             }
             error = createError 'cyclomatic_complexity', attrs
             @errors.push error if error
