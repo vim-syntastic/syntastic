@@ -124,6 +124,28 @@ function! syntastic#util#bufIsActive(buffer)
     return 0
 endfunction
 
+" start in directory a:where and walk up the parent folders until it
+" finds a file matching a:what; return path to that file
+function! syntastic#util#findInParent(what, where)
+    let here = fnamemodify(a:where, ':p')
+
+    while !empty(here)
+        let p = split(globpath(here, a:what), '\n')
+
+        if !empty(p)
+            return fnamemodify(p[0], ':p')
+        elseif here == '/'
+            break
+        endif
+
+        " we use ':h:h' rather than ':h' since ':p' adds a trailing '/'
+        " if 'here' is a directory
+        let here = fnamemodify(here, ':p:h:h')
+    endwhile
+
+    return ''
+endfunction
+
 " Returns unique elements in a list
 function! syntastic#util#unique(list)
     let seen = {}
