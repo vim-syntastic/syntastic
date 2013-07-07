@@ -428,8 +428,10 @@ class LineLinter
     checkLineLength : () ->
         rule = 'max_line_length'
         max = @config[rule]?.value
-        if max and max < @line.length
-            @createLineError(rule) unless regexes.longUrlComment.test(@line)
+        if max and max < @line.length and not regexes.longUrlComment.test(@line)
+            attrs =
+                context: "Length is #{@line.length}, max is #{max}"
+            @createLineError(rule, attrs)
         else
             null
 
@@ -953,10 +955,8 @@ class ASTLinter
         @lintNode(@node)
         @errors
 
-    # Lint the AST node and return it's cyclomatic complexity.
-    lintNode : (node) ->
-
-        # Get the complexity of the current node.
+    # returns the "complexity" value of the current node.
+    getComplexity : (node) ->
         name = node.constructor.name
         complexity = if name in ['If', 'While', 'For', 'Try']
             1
@@ -966,21 +966,30 @@ class ASTLinter
             node.cases.length
         else
             0
+        return complexity
+
+    # Lint the AST node and return it's cyclomatic complexity.
+    lintNode : (node, line) ->
+
+        # Get the complexity of the current node.
+        name = node.constructor.name
+        complexity = @getComplexity(node)
 
         # Add the complexity of all child's nodes to this one.
         node.eachChild (childNode) =>
-            return false unless childNode
-            complexity += @lintNode(childNode)
-            return true
+            nodeLine = childNode.locationData.first_line
+            complexity += @lintNode(childNode, nodeLine) if childNode
 
         # If the current node is a function, and it's over our limit, add an
         # error to the list.
         rule = @config.cyclomatic_complexity
+
         if name == 'Code' and complexity >= rule.value
             attrs = {
                 context: complexity + 1
                 level: rule.level
-                line: 0
+                lineNumber: line + 1
+                lineNumberEnd: node.locationData.last_line + 1
             }
             error = createError 'cyclomatic_complexity', attrs
             @errors.push error if error
@@ -1054,7 +1063,7 @@ coffeelint.lint = (source, userConfig = {}, literate = false) ->
     disabled_initially = []
     for l in source.split('\n')
         s = regexes.configStatement.exec(l)
-        if s? and s.length > 2 and 'enable' in s
+        if s?.length > 2 and 'enable' in s
             for r in s[1..]
                 unless r in ['enable','disable']
                     unless r of config and config[r].level in ['warn','error']
