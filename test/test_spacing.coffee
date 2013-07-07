@@ -97,6 +97,7 @@ vows.describe('spacing').addBatch({
             -a *= -5
             -a *= b
             -a *= -b
+            return -1
             '''
 
         'are permitted' : (source) ->
