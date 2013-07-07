@@ -20,10 +20,16 @@ function! SyntaxCheckers_hss_hss_IsAvailable()
     return executable('hss')
 endfunction
 
+if has('win32')
+    let s:dev_null = 'NUL'
+else
+    let s:dev_null = '/dev/null'
+endif
+
 function! SyntaxCheckers_hss_hss_GetLocList()
     let makeprg = syntastic#makeprg#build({
 		    \ 'exe': 'hss',
-		    \ 'args' : '-output /dev/null',
+		    \ 'args' : '-output ' . s:dev_null,
 		    \ 'fname': syntastic#util#shescape(expand('%')),
 		    \ 'filetype': 'hss',
 		    \ 'subchecker': 'hss' })
