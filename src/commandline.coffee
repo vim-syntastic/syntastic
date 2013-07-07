@@ -245,13 +245,14 @@ options = optimist
             .describe("nocolor", "Don't colorize the output")
             .describe("s", "Lint the source from stdin")
             .describe("q", "Only print errors.")
+            .describe("literate",
+                "Used with --stdin to process as Literate CoffeeScript")
             .boolean("csv")
             .boolean("jslint")
             .boolean("nocolor")
             .boolean("noconfig")
             .boolean("makeconfig")
-            .boolean("literate",
-                "Used with --stdin to process as Literate CoffeeScript")
+            .boolean("literate")
             .boolean("r")
             .boolean("s")
             .boolean("q", "Print errors only.")
