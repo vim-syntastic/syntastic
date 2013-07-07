@@ -23,6 +23,7 @@ endfunction
 function! SyntaxCheckers_hss_hss_GetLocList()
     let makeprg = syntastic#makeprg#build({
 		    \ 'exe': 'hss',
+		    \ 'args' : '-output /dev/null',
 		    \ 'fname': syntastic#util#shescape(expand('%')),
 		    \ 'filetype': 'hss',
 		    \ 'subchecker': 'hss' })
