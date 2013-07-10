@@ -18,7 +18,7 @@ let s:defaultCheckers = {
         \ 'perl':       ['perl', 'perlcritic'],
         \ 'php':        ['php', 'phpcs', 'phpmd'],
         \ 'puppet':     ['puppet', 'puppetlint'],
-        \ 'python':     ['python', 'flake8', 'pylint'],
+        \ 'python':     ['python', 'pyflakes', 'flake8', 'pylint'],
         \ 'ruby':       ['mri'],
         \ 'sh':         ['sh'],
         \ 'tex':        ['lacheck']
