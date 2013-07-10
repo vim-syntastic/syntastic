@@ -33,7 +33,7 @@ function! SyntaxCheckers_eruby_erb_GetLocList()
         let exe = 'RUBYOPT= ' . exe
     endif
 
-    let fname = fnameescape(expand('%'))
+    let fname = "'" . escape(expand('%'), "\\'") . "'"
 
     let enc = &fileencoding != '' ? &fileencoding : &encoding
     let encoding_string = enc ==? 'utf-8' ? 'UTF-8' : 'BINARY'
@@ -41,8 +41,8 @@ function! SyntaxCheckers_eruby_erb_GetLocList()
     " TODO: fix the encoding trainwreck
     let makeprg =
         \ exe . ' -e ' .
-        \ syntastic#util#shescape('puts File.read("' . fname .
-        \     '", :encoding => "' . encoding_string .
+        \ syntastic#util#shescape('puts File.read(' . fname .
+        \     ', :encoding => "' . encoding_string .
         \     '").gsub(''<\%='',''<\%'')') .
         \ ' \| ' . g:syntastic_erb_exec . ' -x -T -' .
         \ ' \| ' . exe . ' -c'
