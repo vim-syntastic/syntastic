@@ -112,10 +112,10 @@ function s:GetOcamlcMakeprg()
     if g:syntastic_ocaml_use_janestreet_core
         let build_cmd = "ocamlc -I "
         let build_cmd .= expand(g:syntastic_ocaml_janestreet_core_dir)
-        let build_cmd .= " -c " . expand('%')
+        let build_cmd .= " -c " . syntastic#util#shexpand('%')
         return build_cmd
     else
-        return "ocamlc -c " . expand('%')
+        return "ocamlc -c " . syntastic#util#shexpand('%')
     endif
 endfunction
 
