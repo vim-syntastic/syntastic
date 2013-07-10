@@ -348,9 +348,17 @@ statusline: >
 If the buffer had 2 warnings, starting on line 5 then this would appear: >
     [Warn: 5 #2]
 <
+                                                           *'syntastic_debug'*
+Default: 0
+Set this to 1 to enable debugging: >
+    let g:syntastic_debug = 1
+<
+Checkers will then add debugging messages to Vim's |message-history|. You can
+examine these messages with |:mes|.
+
 
 ==============================================================================
-5. Checker Options                                  *syntastic-checker-options*
+5. Checker Options                                 *syntastic-checker-options*
 
 ------------------------------------------------------------------------------
 5.1 Telling syntastic which checker to use.
@@ -383,7 +391,7 @@ This is telling syntastic to run the 'php' checker first, and if no errors are
 found, run 'phpcs', and then 'phpmd'.
 
 ------------------------------------------------------------------------------
-5.2 Configuring specific checkers                  *syntastic-config-makeprg*
+5.2 Configuring specific checkers                   *syntastic-config-makeprg*
 
 Most checkers use the 'syntastic#makeprg#build()' function and provide many
 options by default - in fact you can customise every part of the command
