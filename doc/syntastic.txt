@@ -187,8 +187,8 @@ syntax errors: >
     let g:syntastic_enable_signs=1
 <
 
-                   *'syntastic_error_symbol'* *'syntastic_style_error_symbol'*
-               *'syntastic_warning_symbol'* *'syntastic_style_warning_symbol'*
+                     *'syntastic_error_symbol'* *'syntastic_style_error_symbol'*
+                 *'syntastic_warning_symbol'* *'syntastic_style_warning_symbol'*
 Use this option to control what the syntastic |:sign| text contains. Several
 error symobls can be customized:
     syntastic_error_symbol - For syntax errors, defaults to '>>'
@@ -209,7 +209,7 @@ when the mouse is hovered over erroneous lines: >
 <
 Note that vim must be compiled with |+balloon_eval|.
 
-                                            *'syntastic_enable_highlighting'*
+                                             *'syntastic_enable_highlighting'*
 Default: 1
 Use this option to tell syntastic whether to use syntax highlighting to mark
 errors (where possible). Highlighting can be turned off with the following >
@@ -348,6 +348,13 @@ statusline: >
 If the buffer had 2 warnings, starting on line 5 then this would appear: >
     [Warn: 5 #2]
 <
+                                                    *'syntastic_full_redraws'*
+Default: 0 in GUI Vim and MacVim, 1 otherwise
+Controls whether syntastic calls |:redraw| or |:redraw!| for screen redraws.
+Changing it can in principle make screen redraws smoother, but it can also
+cause screen flicker, or ghost characters.  Leaving it to the default should
+be safe.
+
                                                            *'syntastic_debug'*
 Default: 0
 Set this to 1 to enable debugging: >
