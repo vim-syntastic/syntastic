@@ -25,7 +25,7 @@ endfunction
 function! SyntaxCheckers_ruby_rubocop_GetLocList()
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'rubocop',
-        \ 'args': '--emacs --silent',
+        \ 'args': '--format emacs --silent',
         \ 'filetype': 'ruby',
         \ 'subchecker': 'rubocop' })
 
