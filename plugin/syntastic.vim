@@ -56,6 +56,10 @@ if !exists("g:syntastic_filetype_map")
     let g:syntastic_filetype_map = {}
 endif
 
+if !exists("g:syntastic_full_redraws")
+    let g:syntastic_full_redraws = !( has('gui_running') || has('gui_macvim'))
+endif
+
 let s:registry = g:SyntasticRegistry.Instance()
 let s:notifiers = g:SyntasticNotifiers.Instance()
 let s:modemap = g:SyntasticModeMap.Instance()
@@ -229,10 +233,10 @@ endfunction
 "However, on some versions of gvim using `redraw!` causes the screen to
 "flicker - so use redraw.
 function! s:Redraw()
-    if has('gui_running') || has('gui_macvim')
-        redraw
-    else
+    if g:syntastic_full_redraws
         redraw!
+    else
+        redraw
     endif
 endfunction
 
