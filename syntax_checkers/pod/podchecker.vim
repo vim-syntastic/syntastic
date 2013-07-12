@@ -32,7 +32,8 @@ function! SyntaxCheckers_pod_podchecker_GetLocList()
 
     let loclist = SyntasticMake({
         \ 'makeprg': makeprg,
-        \ 'errorformat': errorformat })
+        \ 'errorformat': errorformat,
+        \ 'returns': [0, 1, 2] })
 
     for n in range(len(loclist))
         let e = loclist[n]

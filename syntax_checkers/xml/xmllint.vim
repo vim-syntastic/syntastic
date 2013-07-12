@@ -43,7 +43,8 @@ function! SyntaxCheckers_xml_xmllint_GetLocList()
 
     return SyntasticMake({
         \ 'makeprg': makeprg,
-        \ 'errorformat': errorformat })
+        \ 'errorformat': errorformat,
+        \ 'returns': [0, 1, 2, 3, 4, 5] })
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({

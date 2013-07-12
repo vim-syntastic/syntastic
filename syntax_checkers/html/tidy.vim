@@ -97,7 +97,8 @@ function! SyntaxCheckers_html_tidy_GetLocList()
     let loclist = SyntasticMake({
         \ 'makeprg': makeprg,
         \ 'errorformat': errorformat,
-        \ 'defaults': {'bufnr': bufnr("")} })
+        \ 'defaults': {'bufnr': bufnr("")},
+        \ 'returns': [0, 1, 2] })
 
     " filter out valid HTML5 from the errors
     for n in range(len(loclist))

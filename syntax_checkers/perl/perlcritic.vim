@@ -49,6 +49,7 @@ function! SyntaxCheckers_perl_perlcritic_GetLocList()
     let loclist = SyntasticMake({
         \ 'makeprg': makeprg,
         \ 'errorformat': errorformat,
+        \ 'returns': [0, 2],
         \ 'subtype': 'Style' })
 
     " change error types according to the prescribed threshold

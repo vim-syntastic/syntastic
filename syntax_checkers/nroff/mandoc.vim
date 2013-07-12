@@ -31,7 +31,8 @@ function! SyntaxCheckers_nroff_mandoc_GetLocList()
 
     return SyntasticMake({
         \ 'makeprg': makeprg,
-        \ 'errorformat': errorformat })
+        \ 'errorformat': errorformat,
+        \ 'returns': [0, 2, 3, 4] })
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
