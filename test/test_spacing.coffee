@@ -31,6 +31,7 @@ vows.describe('spacing').addBatch({
             -a+=-a
             -a+=2
             -a+=a
+            a*-b
             '''
 
         'are permitted by default' : (source) ->
@@ -97,6 +98,7 @@ vows.describe('spacing').addBatch({
             -a *= -5
             -a *= b
             -a *= -b
+            a * -b
             return -1
             '''
 

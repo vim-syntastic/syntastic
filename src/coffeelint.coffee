@@ -673,7 +673,7 @@ class LexicalLinter
         unaries = ['TERMINATOR', '(', '=', '-', '+', ',', 'CALL_START',
                     'INDEX_START', '..', '...', 'COMPARE', 'IF',
                     'THROW', 'LOGIC', 'POST_IF', ':', '[', 'INDENT',
-                    'COMPOUND_ASSIGN', 'RETURN']
+                    'COMPOUND_ASSIGN', 'RETURN', 'MATH']
         isUnary = if not p then false else p[0] in unaries
         if (isUnary and token.spaced) or
                     (not isUnary and not token.spaced and not token.newLine)
