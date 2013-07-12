@@ -36,8 +36,13 @@ function! g:SyntasticChecker.getName()
 endfunction
 
 function! g:SyntasticChecker.getLocList()
-    let list = self._locListFunc()
-    call syntastic#util#debug('getLocList: checker ' . self._filetype . '/' . self._name . ' returned ' . v:shell_error)
+    try
+        let list = self._locListFunc()
+        call syntastic#util#debug('getLocList: checker ' . self._filetype . '/' . self._name . ' returned ' . v:shell_error)
+    catch /\m\C^Syntastic: checker error$/
+        let list = []
+        call syntastic#util#error('checker ' . self._filetype . '/' . self._name . ' returned abnormal status ' . v:shell_error)
+    endtry
     call self._populateHighlightRegexes(list)
     return g:SyntasticLoclist.New(list)
 endfunction

@@ -42,6 +42,7 @@ function! SyntaxCheckers_text_atdtool_GetLocList()
     let loclist = SyntasticMake({
         \ 'makeprg': makeprg,
         \ 'errorformat': errorformat,
+        \ 'returns': [0],
         \ 'subtype': 'Style' })
 
     for n in range(len(loclist))

@@ -175,7 +175,16 @@ function! syntastic#util#info(msg)
 endfunction
 
 function! syntastic#util#warn(msg)
+    echohl WarningMsg
     echomsg "syntastic: warning: " . a:msg
+    echohl None
+endfunction
+
+function! syntastic#util#error(msg)
+    execute "normal \<Esc>"
+    echohl ErrorMsg
+    echomsg "syntastic: error: " . a:msg
+    echohl None
 endfunction
 
 function! syntastic#util#deprecationWarn(msg)

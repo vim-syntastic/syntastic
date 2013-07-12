@@ -72,7 +72,8 @@ function! SyntaxCheckers_xhtml_tidy_GetLocList()
     let loclist = SyntasticMake({
         \ 'makeprg': makeprg,
         \ 'errorformat': errorformat,
-        \ 'defaults': {'bufnr': bufnr("")} })
+        \ 'defaults': {'bufnr': bufnr("")},
+        \ 'returns': [0, 1, 2] })
 
     for n in range(len(loclist))
         if loclist[n]['valid'] && s:IgnoreError(loclist[n]['text']) == 1
