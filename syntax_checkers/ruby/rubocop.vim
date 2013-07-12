@@ -29,7 +29,7 @@ function! SyntaxCheckers_ruby_rubocop_GetLocList()
         \ 'filetype': 'ruby',
         \ 'subchecker': 'rubocop' })
 
-    let errorformat = '%f:%l:\ %t:\ %m'
+    let errorformat = '%f:%l:%c:\ %t:\ %m'
 
     let loclist = SyntasticMake({
         \ 'makeprg': makeprg,
