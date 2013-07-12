@@ -41,7 +41,8 @@ function! SyntaxCheckers_c_sparse_GetLocList()
     let loclist = SyntasticMake({
         \ 'makeprg': makeprg,
         \ 'errorformat': errorformat,
-        \ 'defaults': {'bufnr': bufnr("")} })
+        \ 'defaults': {'bufnr': bufnr("")},
+        \ 'returns': [0] })
     return loclist
 endfunction
 

@@ -34,6 +34,7 @@ function! SyntaxCheckers_html_w3_GetLocList()
     let makeprg = 'curl -s -F output=json ' .
         \ '-F uploaded_file=@' . syntastic#util#shexpand('%:p') . '\;type=text/html ' .
         \ g:syntastic_html_w3_api
+
     let errorformat =
         \ '%A %\+{,' .
         \ '%C %\+"lastLine": %l\,%\?,' .
@@ -44,7 +45,12 @@ function! SyntaxCheckers_html_w3_GetLocList()
         \ '%C %\+"subtype": "%tarning"\,%\?,' .
         \ '%Z %\+}\,,' .
         \ '%-G%.%#'
-    let loclist = SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat, 'defaults': {'bufnr': bufnr("")} })
+
+    let loclist = SyntasticMake({
+        \ 'makeprg': makeprg,
+        \ 'errorformat': errorformat,
+        \ 'defaults': {'bufnr': bufnr("")},
+        \ 'returns': [0] })
 
     for n in range(len(loclist))
         let loclist[n]['text'] = substitute(loclist[n]['text'], '\\\([\"]\)', '\1', 'g')

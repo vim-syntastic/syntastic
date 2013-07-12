@@ -39,6 +39,7 @@ function! SyntaxCheckers_c_checkpatch_GetLocList()
     return SyntasticMake({
         \ 'makeprg': makeprg,
         \ 'errorformat': errorformat,
+        \ 'returns': [0],
         \ 'subtype': 'Style' })
 endfunction
 
