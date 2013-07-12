@@ -63,7 +63,7 @@ endfunction
 function! syntastic#c#GetLocList(filetype, subchecker, options)
     try
         let flags = s:GetCflags(a:filetype, a:subchecker, a:options)
-    catch /\m\C^syntastic_skip_checks$/
+    catch /\m\C^Syntastic: skip checks$/
         return []
     endtry
 
@@ -125,7 +125,7 @@ function! s:GetCflags(ft, ck, opts)
             let flags = get(a:opts, 'header_flags', '') . ' -c ' . syntastic#c#NullOutput()
         else
             " checking headers when check_header is unset: bail out
-            throw 'syntastic_skip_checks'
+            throw 'Syntastic: skip checks'
         endif
     else
         let flags = get(a:opts, 'main_flags', '')
