@@ -129,7 +129,8 @@ function! s:UpdateErrors(auto_invoked, ...)
         return
     endif
 
-    if !a:auto_invoked || s:modemap.allowsAutoChecking(&filetype)
+    let run_checks = !a:auto_invoked || s:modemap.allowsAutoChecking(&filetype)
+    if run_checks
         if a:0 >= 1
             call s:CacheErrors(a:1)
         else
@@ -141,7 +142,7 @@ function! s:UpdateErrors(auto_invoked, ...)
 
     if g:syntastic_always_populate_loc_list || g:syntastic_auto_jump
         call setloclist(0, loclist.filteredRaw())
-        if g:syntastic_auto_jump && loclist.hasErrorsOrWarningsToDisplay()
+        if run_checks && g:syntastic_auto_jump && loclist.hasErrorsOrWarningsToDisplay()
             silent! lrewind
         endif
     endif
