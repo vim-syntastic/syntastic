@@ -38,6 +38,9 @@ function! SyntaxCheckers_python_pylama_GetLocList()
 
     for n in range(len(loclist))
         let loclist[n]['type'] = match(['R', 'C', 'W'], loclist[n]['text'][0]) >= 0 ? 'W' : 'E'
+        if loclist[n]['text'] =~# '\v\[%(pep8|pep257|mccabe)\]$'
+            let loclist[n]['subtype'] = 'Style'
+        endif
     endfor
 
     return loclist
