@@ -27,7 +27,7 @@ function! SyntaxCheckers_scala_fsc_GetLocList()
     " fsc has some serious problems with the
     " working directory changing after being started
     " that's why we better pass an absolute path
-    let file = expand('%:p')
+    let file = syntastic#util#shexpand('%:p')
 
     let args = '-Ystop-after:parser ' . g:syntastic_scala_options
     let makeprg = 'fsc ' . args . ' ' . file
