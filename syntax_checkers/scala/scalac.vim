@@ -19,19 +19,19 @@ function! SyntaxCheckers_scala_scalac_IsAvailable()
     return executable("scalac")
 endfunction
 
-if !exists("g:syntastic_scala_options")
-    let g:syntastic_scala_options = " "
+if !exists('g:syntastic_scala_options')
+    let g:syntastic_scala_options = ''
 endif
 
 
 function! SyntaxCheckers_scala_scalac_GetLocList()
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'scalac',
-        \ 'args': '-Ystop-after:parser '. g:syntastic_scala_options,
+        \ 'args': '-Ystop-after:parser ' . g:syntastic_scala_options,
         \ 'filetype': 'scala',
         \ 'subchecker': 'scalac' })
 
-    let errorformat = '%f\:%l: %trror: %m'
+    let errorformat = '%f:%l: %trror: %m'
 
     return SyntasticMake({
         \ 'makeprg': makeprg,
