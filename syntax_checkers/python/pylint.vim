@@ -9,13 +9,17 @@ if exists("g:loaded_syntastic_python_pylint_checker")
 endif
 let g:loaded_syntastic_python_pylint_checker=1
 
+if !exists("g:syntastic_python_pylint_exe")
+    let g:syntastic_python_pylint_exe = 'pylint'
+endif
+
 function! SyntaxCheckers_python_pylint_IsAvailable()
-    return executable('pylint')
+    return executable(g:syntastic_python_pylint_exe)
 endfunction
 
 function! SyntaxCheckers_python_pylint_GetLocList()
     let makeprg = syntastic#makeprg#build({
-        \ 'exe': 'pylint',
+        \ 'exe': g:syntastic_python_pylint_exe,
         \ 'args': ' -f parseable -r n -i y',
         \ 'filetype': 'python',
         \ 'subchecker': 'pylint' })
