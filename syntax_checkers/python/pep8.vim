@@ -17,13 +17,17 @@ if exists("g:loaded_syntastic_python_pep8_checker")
 endif
 let g:loaded_syntastic_python_pep8_checker=1
 
+if !exists("g:syntastic_python_pep8_exe")
+    let g:syntastic_python_pep8_exe = 'pep8'
+endif
+
 function! SyntaxCheckers_python_pep8_IsAvailable()
-    return executable('pep8')
+    return executable(g:syntastic_python_pep8_exe)
 endfunction
 
 function! SyntaxCheckers_python_pep8_GetLocList()
     let makeprg = syntastic#makeprg#build({
-        \ 'exe': 'pep8',
+        \ 'exe': 'g:syntastic_python_pep8_exe',
         \ 'filetype': 'python',
         \ 'subchecker': 'pep8' })
 

@@ -12,15 +12,19 @@ if exists("g:loaded_syntastic_python_python_checker")
 endif
 let g:loaded_syntastic_python_python_checker=1
 
+if !exists("g:syntastic_python_python_exe")
+    let g:syntastic_python_python_exe = 'python'
+endif
+
 function! SyntaxCheckers_python_python_IsAvailable()
-    return executable('python')
+    return executable(g:syntastic_python_python_exe)
 endfunction
 
 function! SyntaxCheckers_python_python_GetLocList()
     let fname = "'" . escape(expand('%'), "\\'") . "'"
 
     let makeprg = syntastic#makeprg#build({
-        \ 'exe': 'python',
+        \ 'exe': g:syntastic_python_python_exe,
         \ 'args': '-c',
         \ 'fname': syntastic#util#shescape("compile(open(" . fname . ").read(), " . fname . ", 'exec')"),
         \ 'filetype': 'python',
