@@ -67,6 +67,23 @@ function! SyntaxCheckers_go_go_GetLocList()
         \ 'cwd': expand('%:p:h'),
         \ 'defaults': {'type': 'e'} })
 
+    for e in errors
+        if !empty(matchlist(e['text'] , 'main redeclared'))
+            if match(expand('%'), '_test.go$') == -1
+                let makeprg = 'go build -o a.out ' . expand('%')
+            else
+                let makeprg = 'go test -c ' . syntastic#c#GetNullDevice()
+            endif
+            let errors = SyntasticMake({
+                \ 'makeprg': makeprg,
+                \ 'errorformat': errorformat,
+                \ 'cwd': expand('%:p:h'),
+                \ 'defaults': {'type': 'e'} })
+            call delete('a.out')
+            break
+        endif
+    endfor
+
     return errors
 endfunction
 
