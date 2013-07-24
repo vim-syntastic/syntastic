@@ -67,6 +67,27 @@ function! SyntaxCheckers_go_go_GetLocList()
         \ 'cwd': expand('%:p:h'),
         \ 'defaults': {'type': 'e'} })
 
+    " When two files in a directory are independent executables this causes
+    " a error saying: "main redeclared"
+    " While this is not realy an error, you can build both executables just
+    " fine in this dir. The loop below filters out there 'errors'.
+    for e in errors
+        if !empty(matchlist(e['text'] , 'main redeclared'))
+            if match(expand('%'), '_test.go$') == -1
+                let makeprg = 'go build -o a.out ' . expand('%')
+            else
+                let makeprg = 'go test -c ' . syntastic#c#GetNullDevice()
+            endif
+            let errors = SyntasticMake({
+                \ 'makeprg': makeprg,
+                \ 'errorformat': errorformat,
+                \ 'cwd': expand('%:p:h'),
+                \ 'defaults': {'type': 'e'} })
+            call delete('a.out')
+            break
+        endif
+    endfor
+
     return errors
 endfunction
 
