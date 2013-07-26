@@ -14,6 +14,12 @@
 "
 " - g:syntastic_html_tidy_ignore_errors (list; default: [])
 "   list of errors to ignore
+" - g:syntastic_html_tidy_blocklevel_tags (list)
+"   list of additional tags to be considered blocklevel
+" - g:syntastic_html_tidy_inline_tags (list)
+"   list of additional tags to be considered inline
+" - g:syntastic_html_tidy_empty_tags (list)
+"   list of additional tags to be considered empty
 
 if exists("g:loaded_syntastic_html_tidy_checker")
     finish
@@ -72,11 +78,43 @@ function! s:IgnoreError(text)
     return 0
 endfunction
 
+function! s:BlocklevelTags()
+    let tags = 'main, section, article, aside, hgroup, header, footer, nav, figure, figcaption'
+    if exists('g:syntastic_html_tidy_blocklevel_tags')
+        for str in g:syntastic_html_tidy_blocklevel_tags
+            let tags = tags . ', ' . str
+        endfor
+    endif
+    return tags
+endfunction
+
+
+function! s:InlineTags()
+    let tags = 'video, audio, source, embed, mark, progress, meter, time, ruby, rt, rp, canvas, command, details, datalist'
+    if exists('g:syntastic_html_tidy_inline_tags')
+        for str in g:syntastic_html_tidy_inline_tags
+            let tags = tags . ', ' . str
+        endfor
+    endif
+    return tags
+endfunction
+
+
+function! s:EmptyTags()
+    let tags = 'wbr, keygen'
+    if exists('g:syntastic_html_tidy_empty_tags')
+        for str in g:syntastic_html_tidy_empty_tags
+            let tags = tags . ', ' . str
+        endfor
+    endif
+    return tags
+endfunction
+
 function s:Args()
     let args = s:TidyEncOptByFenc() .
-        \ ' --new-blocklevel-tags ' . syntastic#util#shescape('main, section, article, aside, hgroup, header, footer, nav, figure, figcaption') .
-        \ ' --new-inline-tags ' . syntastic#util#shescape('video, audio, source, embed, mark, progress, meter, time, ruby, rt, rp, canvas, command, details, datalist') .
-        \ ' --new-empty-tags ' . syntastic#util#shescape('wbr, keygen') .
+        \ ' --new-blocklevel-tags ' . syntastic#util#shescape(s:BlocklevelTags()) .
+        \ ' --new-inline-tags ' . syntastic#util#shescape(s:InlineTags()) .
+        \ ' --new-empty-tags ' . syntastic#util#shescape(s:EmptyTags()) .
         \ ' -e'
     return args
 endfunction
