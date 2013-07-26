@@ -19,7 +19,11 @@ if !exists("g:syntastic_javascript_jshint_conf")
 endif
 
 function! SyntaxCheckers_javascript_jshint_IsAvailable()
-    return executable('jshint')
+		if exists("g:syntastic_javascript_jshint_exe")
+			return executable(g:syntastic_javascript_jshint_exe)
+		else
+			return executable('jshint')
+		endif
 endfunction
 
 function! SyntaxCheckers_javascript_jshint_GetLocList()
@@ -30,9 +34,13 @@ function! SyntaxCheckers_javascript_jshint_GetLocList()
         \ 'filetype': 'javascript',
         \ 'subchecker': 'jshint' })
 
-    let errorformat = jshint_new ?
-        \ '%f: line %l\, col %c\, %m \(%t%*\d\)' :
-        \ '%E%f: line %l\, col %c\, %m'
+		if exists("g:syntastic_javascript_jshint_errorformat")
+			let errorformat = g:syntastic_javascript_jshint_errorformat
+		else
+			let errorformat = jshint_new ?
+					\ '%f: line %l\, col %c\, %m \(%t%*\d\)' :
+					\ '%E%f: line %l\, col %c\, %m'
+		endif
 
     return SyntasticMake({
         \ 'makeprg': makeprg,
