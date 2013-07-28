@@ -14,6 +14,12 @@
 "
 " - g:syntastic_html_tidy_ignore_errors (list; default: [])
 "   list of errors to ignore
+" - g:syntastic_html_tidy_blocklevel_tags (list; default: [])
+"   list of additional blocklevel tags, to be added to "--new-blocklevel-tags"
+" - g:syntastic_html_tidy_inline_tags (list; default: [])
+"   list of additional inline tags, to be added to "--new-inline-tags"
+" - g:syntastic_html_tidy_empty_tags (list; default: [])
+"   list of additional empty tags, to be added to "--new-empty-tags"
 
 if exists("g:loaded_syntastic_html_tidy_checker")
     finish
@@ -22,6 +28,18 @@ let g:loaded_syntastic_html_tidy_checker = 1
 
 if !exists('g:syntastic_html_tidy_ignore_errors')
     let g:syntastic_html_tidy_ignore_errors = []
+endif
+
+if !exists('g:syntastic_html_tidy_blocklevel_tags')
+    let g:syntastic_html_tidy_blocklevel_tags = []
+endif
+
+if !exists('g:syntastic_html_tidy_inline_tags')
+    let g:syntastic_html_tidy_inline_tags = []
+endif
+
+if !exists('g:syntastic_html_tidy_empty_tags')
+    let g:syntastic_html_tidy_empty_tags = []
 endif
 
 function! SyntaxCheckers_html_tidy_IsAvailable()
@@ -47,7 +65,7 @@ function! s:TidyEncOptByFenc()
     return get(tidy_opts, &fileencoding, '-utf8')
 endfunction
 
-let s:ignore_html_errors = [
+let s:ignore_errors = [
                 \ "<table> lacks \"summary\" attribute",
                 \ "not approved by W3C",
                 \ "attribute \"placeholder\"",
@@ -63,8 +81,44 @@ let s:ignore_html_errors = [
                 \ "<input> attribute \"type\" has invalid value \"search\""
                 \ ]
 
+let s:blocklevel_tags = [
+                \ "main",
+                \ "section",
+                \ "article",
+                \ "aside",
+                \ "hgroup",
+                \ "header",
+                \ "footer",
+                \ "nav",
+                \ "figure",
+                \ "figcaption"
+                \ ]
+
+let s:inline_tags = [
+                \ "video",
+                \ "audio",
+                \ "source",
+                \ "embed",
+                \ "mark",
+                \ "progress",
+                \ "meter",
+                \ "time",
+                \ "ruby",
+                \ "rt",
+                \ "rp",
+                \ "canvas",
+                \ "command",
+                \ "details",
+                \ "datalist"
+                \ ]
+
+let s:empty_tags = [
+                \ "wbr",
+                \ "keygen"
+                \ ]
+
 function! s:IgnoreError(text)
-    for i in s:ignore_html_errors + g:syntastic_html_tidy_ignore_errors
+    for i in s:ignore_errors + g:syntastic_html_tidy_ignore_errors
         if stridx(a:text, i) != -1
             return 1
         endif
@@ -72,11 +126,15 @@ function! s:IgnoreError(text)
     return 0
 endfunction
 
+function! s:NewTags(name)
+    return syntastic#util#shescape(join( s:{a:name} + g:syntastic_html_tidy_{a:name}, ',' ))
+endfunction
+
 function s:Args()
     let args = s:TidyEncOptByFenc() .
-        \ ' --new-blocklevel-tags ' . syntastic#util#shescape('main, section, article, aside, hgroup, header, footer, nav, figure, figcaption') .
-        \ ' --new-inline-tags ' . syntastic#util#shescape('video, audio, source, embed, mark, progress, meter, time, ruby, rt, rp, canvas, command, details, datalist') .
-        \ ' --new-empty-tags ' . syntastic#util#shescape('wbr, keygen') .
+        \ ' --new-blocklevel-tags ' . s:NewTags('blocklevel_tags') .
+        \ ' --new-inline-tags ' . s:NewTags('inline_tags') .
+        \ ' --new-empty-tags ' . s:NewTags('empty_tags') .
         \ ' -e'
     return args
 endfunction
