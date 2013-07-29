@@ -32,23 +32,14 @@ function! SyntaxCheckers_haskell_ghc_mod_GetLocList()
 
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'ghc-mod check',
-        \ 'args': '--hlintOpt="--language=XmlSyntax"',
         \ 'filetype': 'haskell',
         \ 'subchecker': 'ghc_mod' })
-    let loclist1 = SyntasticMake({
+
+    let loclist = SyntasticMake({
         \ 'makeprg': makeprg,
         \ 'errorformat': errorformat })
 
-    let makeprg = syntastic#makeprg#build({
-        \ 'exe': 'ghc-mod lint',
-        \ 'args': '--hlintOpt="--language=XmlSyntax"',
-        \ 'filetype': 'haskell',
-        \ 'subchecker': 'ghc_mod' })
-    let loclist2 = SyntasticMake({
-        \ 'makeprg': makeprg,
-        \ 'errorformat': errorformat })
-
-    return loclist1 + loclist2
+    return loclist
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
