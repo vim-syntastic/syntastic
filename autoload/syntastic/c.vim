@@ -199,7 +199,7 @@ function! syntastic#c#CheckRuby()
     if executable('ruby')
         if !exists('s:ruby_flags')
             let s:ruby_flags = system('ruby -r rbconfig -e '
-                        \ . '''puts Config::CONFIG["archdir"]''')
+                        \ . '''puts RbConfig::CONFIG["rubyhdrdir"] || RbConfig::CONFIG["archdir"]''')
             let s:ruby_flags = substitute(s:ruby_flags, "\n", '', '')
             let s:ruby_flags = ' -I' . s:ruby_flags
         endif
