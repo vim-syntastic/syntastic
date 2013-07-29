@@ -27,7 +27,8 @@ function! SyntaxCheckers_haskell_hlint_GetLocList()
 
     let loclist = SyntasticMake({
         \ 'makeprg': makeprg,
-        \ 'errorformat': errorformat })
+        \ 'errorformat': errorformat,
+        \ 'postprocess': ['compressWhitespace'] })
 
     return loclist
 endfunction
