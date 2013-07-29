@@ -16,12 +16,9 @@ endfunction
 
 function! SyntaxCheckers_haskell_hlint_GetLocList()
     let errorformat =
-        \ '%E%f:%l:%c: %trror: %m,' .
-        \ '%W%f:%l:%c: %tarning: %m,' .
-        \ '%+CFound:,' .
-        \ '%+CWhy not:,' .
-        \ '%+C\ \ %m,' .
-        \ '%Z%m'
+        \ '%E%f:%l:%c: Error: %m,' .
+        \ '%W%f:%l:%c: Warning: %m,' .
+        \ '%C%m'
 
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'hlint',
