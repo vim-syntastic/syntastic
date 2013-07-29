@@ -1,5 +1,5 @@
 "============================================================================
-"File:        eruby.vim
+"File:        ruby.vim
 "Description: Syntax checking plugin for syntastic.vim
 "Maintainer:  Martin Grenfell <martin.grenfell at gmail dot com>
 "License:     This program is free software. It comes without any warranty,
@@ -31,15 +31,20 @@ function! SyntaxCheckers_eruby_ruby_GetLocList()
 
     let fname = "'" . escape(expand('%'), "\\'") . "'"
 
-    let enc = &fileencoding != '' ? &fileencoding : &encoding
-    let encoding_string = enc ==? 'utf-8' ? 'UTF-8' : 'BINARY'
+    " TODO: encodings became useful in ruby 1.9 :)
+    if syntastic#util#versionIsAtLeast(syntastic#util#parseVersion('ruby --version'), [1, 9])
+        let enc = &fileencoding != '' ? &fileencoding : &encoding
+        let encoding_spec = ', :encoding => "' . (enc ==? 'utf-8' ? 'UTF-8' : 'BINARY') . '"'
+    else
+        let encoding_spec = ''
+    endif
 
     "gsub fixes issue #7, rails has it's own eruby syntax
     let makeprg =
         \ exe . ' -rerb -e ' .
-        \ syntastic#util#shescape('puts ERB.new(File.read(' . fname .
-        \     ', :encoding => "' . encoding_string .
-        \     '").gsub(''<\%='',''<\%''), nil, ''-'').src') .
+        \ syntastic#util#shescape('puts ERB.new(File.read(' .
+        \     fname . encoding_spec .
+        \     ').gsub(''<\%='',''<\%''), nil, ''-'').src') .
         \ ' \| ' . exe . ' -c'
 
     let errorformat =
