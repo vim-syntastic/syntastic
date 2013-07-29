@@ -33,6 +33,7 @@ function! SyntaxCheckers_haskell_ghc_mod_GetLocList()
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'ghc-mod check',
         \ 'filetype': 'haskell',
+        \ 'tail': '\| tr -d "\\0" \| tr -s " "',
         \ 'subchecker': 'ghc_mod' })
 
     let loclist = SyntasticMake({
