@@ -277,7 +277,8 @@ endfunction
 function! syntastic#c#CheckRuby()
     if executable('ruby')
         if !has_key(s:cflags, 'ruby')
-            let s:cflags['ruby'] = system('ruby -r rbconfig -e ''puts Config::CONFIG["archdir"]''')
+            let s:cflags['ruby'] = system('ruby -r rbconfig -e ' .
+                \ '''puts RbConfig::CONFIG["rubyhdrdir"] || RbConfig::CONFIG["archdir"]''')
             let s:cflags['ruby'] = substitute(s:cflags['ruby'], "\n", '', '')
             let s:cflags['ruby'] = ' -I' . s:cflags['ruby']
         endif
