@@ -24,7 +24,11 @@ if !exists('g:syntastic_csslint_options')
 endif
 
 function! SyntaxCheckers_css_csslint_IsAvailable()
-    return executable('csslint')
+		if exists("g:syntastic_css_csslint_exe")
+			return executable(g:syntastic_css_csslint_exe)
+		else
+			return executable('csslint')
+		endif
 endfunction
 
 function! SyntaxCheckers_css_csslint_GetLocList()
