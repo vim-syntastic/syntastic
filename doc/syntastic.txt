@@ -153,6 +153,10 @@ current filetype is set to passive. See |'syntastic_mode_map'| for more info.
 Output info about what checkers are available and in use for the current
 filetype.
 
+:SyntasticReset                                              *:SyntasticReset*
+
+Resets the list of errors and turns off all error notifiers.
+
 
 ==============================================================================
 4. Global Options                                   *syntastic-global-options*
