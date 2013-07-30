@@ -78,6 +78,7 @@ command! SyntasticToggleMode call s:ToggleMode()
 command! -nargs=? -complete=custom,s:CompleteCheckerName SyntasticCheck call s:UpdateErrors(0, <f-args>) <bar> call s:Redraw()
 command! Errors call s:ShowLocList()
 command! SyntasticInfo call s:registry.echoInfoFor(s:CurrentFiletypes())
+command! SyntasticReset call s:ClearCache() | call s:notifiers.refresh(g:SyntasticLoclist.New([]))
 
 highlight link SyntasticError SpellBad
 highlight link SyntasticWarning SpellCap
