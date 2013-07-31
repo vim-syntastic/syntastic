@@ -32,6 +32,7 @@ function! SyntaxCheckers_haskell_ghc_mod_GetLocList()
 
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'ghc-mod check',
+        \ 'args': get(g:, 'ghcmod_ghc_options', ''),
         \ 'filetype': 'haskell',
         \ 'subchecker': 'ghc_mod' })
 
