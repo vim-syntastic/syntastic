@@ -156,7 +156,7 @@ endfunction
 
 " A less noisy shellescape()
 function! syntastic#util#shescape(string)
-    return a:string =~ '\m^[A-Za-z0-9_/.-]\+$' ? a:string : shellescape(a:string, 1)
+    return a:string =~ '\m^[A-Za-z0-9_/.-]\+$' ? a:string : shellescape(a:string)
 endfunction
 
 " A less noisy shellescape(expand())
