@@ -147,6 +147,14 @@ function! g:SyntasticLoclist.show()
     if self.hasErrorsOrWarningsToDisplay()
         let num = winnr()
         exec "lopen " . g:syntastic_loc_list_height
+
+        " Close error list
+        exec "nnoremap <silent> <buffer> q :call g:SyntasticLoclistHide()<CR>"
+        " Same as enter
+        exec "nnoremap <silent> <buffer> o <CR>"
+        " Jump to file/line, but keep focus in error list
+        exec "nnoremap <silent> <buffer> go <CR><C-W><C-W>"
+
         if num != winnr()
             wincmd p
         endif
