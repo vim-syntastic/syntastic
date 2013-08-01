@@ -164,6 +164,17 @@ function! syntastic#util#shexpand(string)
     return syntastic#util#shescape(escape(expand(a:string), '|'))
 endfunction
 
+" decode XML entities
+function! syntastic#util#decodeXMLEntities(string)
+    let str = a:string
+    let str = substitute(str, '&lt;', '<', 'g')
+    let str = substitute(str, '&gt;', '>', 'g')
+    let str = substitute(str, '&quot;', '"', 'g')
+    let str = substitute(str, '&apos;', "'", 'g')
+    let str = substitute(str, '&amp;', '\&', 'g')
+    return str
+endfunction
+
 function! syntastic#util#debug(msg)
     if g:syntastic_debug
         echomsg "syntastic: debug: " . a:msg

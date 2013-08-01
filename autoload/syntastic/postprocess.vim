@@ -58,11 +58,7 @@ function! syntastic#postprocess#decodeXMLEntities(errors)
     let llist = []
 
     for e in a:errors
-        let e['text'] = substitute(e['text'], '&lt;', '<', 'g')
-        let e['text'] = substitute(e['text'], '&gt;', '>', 'g')
-        let e['text'] = substitute(e['text'], '&quot;', '"', 'g')
-        let e['text'] = substitute(e['text'], '&apos;', "'", 'g')
-        let e['text'] = substitute(e['text'], '&amp;', '\&', 'g')
+        let e['text'] = syntastic#util#decodeXMLEntities(e['text'])
         call add(llist, e)
     endfor
 
