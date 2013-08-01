@@ -313,9 +313,18 @@ function! SyntasticStatuslineFlag()
     endif
 endfunction
 
-"A wrapper for the :lmake command. Sets up the make environment according to
-"the options given, runs make, resets the environment, returns the location
-"list
+"Sane readfile(): handle Mac files, and remove empty lines
+function! s:ReadFile(filename)
+    let lines = readfile(a:filename)
+    let out = []
+    for line in lines
+        call extend(out, split(line, "\r"))
+    endfor
+    return filter(out, '!empty(v:val)')
+endfunction
+
+"Emulates the :lmake command. Sets up the make environment according to the
+"options given, runs make, resets the environment, returns the location list
 "
 "a:options can contain the following keys:
 "    'makeprg'
@@ -327,6 +336,7 @@ endfunction
 "a:options may also contain:
 "   'defaults' - a dict containing default values for the returned errors
 "   'subtype' - all errors will be assigned the given subtype
+"   'preprocess' - a function to be applied to the error file before parsing errors
 "   'postprocess' - a list of functions to be applied to the error list
 "   'cwd' - change directory to the given path before running the checker
 "   'returns' - a list of valid exit codes for the checker
@@ -334,26 +344,21 @@ function! SyntasticMake(options)
     call syntastic#util#debug('SyntasticMake: called with options: '. string(a:options))
 
     let old_loclist = getloclist(0)
-    let old_makeprg = &l:makeprg
-    let old_shellpipe = &shellpipe
     let old_shell = &shell
-    let old_errorformat = &l:errorformat
+    let old_errorformat = &errorformat
     let old_cwd = getcwd()
     let old_lc_all = $LC_ALL
 
+    let shell_pipe = &shellpipe
     if s:OSSupportsShellpipeHack()
         "this is a hack to stop the screen needing to be ':redraw'n when
         "when :lmake is run. Otherwise the screen flickers annoyingly
-        let &shellpipe='&>'
+        let shell_pipe = '&>'
         let &shell = '/bin/bash'
     endif
 
-    if has_key(a:options, 'makeprg')
-        let &l:makeprg = a:options['makeprg']
-    endif
-
     if has_key(a:options, 'errorformat')
-        let &l:errorformat = a:options['errorformat']
+        let &errorformat = a:options['errorformat']
     endif
 
     if has_key(a:options, 'cwd')
@@ -361,7 +366,17 @@ function! SyntasticMake(options)
     endif
 
     let $LC_ALL = 'C'
-    silent lmake!
+
+    let err_file=tempname()
+    call system('(' . a:options['makeprg'] . ') ' . shell_pipe . ' ' . syntastic#util#shescape(err_file))
+    let err_lines = s:ReadFile(err_file)
+    call delete(err_file)
+
+    if has_key(a:options, 'preprocess')
+        let err_lines = call(a:options['preprocess'], [err_lines])
+    endif
+    lgetexpr err_lines
+
     let $LC_ALL = old_lc_all
 
     let errors = getloclist(0)
@@ -371,9 +386,7 @@ function! SyntasticMake(options)
     endif
 
     call setloclist(0, old_loclist)
-    let &l:makeprg = old_makeprg
-    let &l:errorformat = old_errorformat
-    let &shellpipe=old_shellpipe
+    let &errorformat = old_errorformat
     let &shell=old_shell
 
     if s:IsRedrawRequiredAfterMake()
