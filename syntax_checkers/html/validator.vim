@@ -70,6 +70,7 @@ function! SyntaxCheckers_html_validator_GetLocList()
         \ (!empty(g:syntastic_html_validator_nsfilter) ? ' -F nsfilter=' . g:syntastic_html_validator_nsfilter : '') .
         \ ' -F doc=@' . syntastic#util#shexpand('%') . '\;type=text/html\;filename=' . syntastic#util#shexpand('%') . ' ' .
         \ g:syntastic_html_validator_api
+
     let errorformat =
         \ '%E"%f":%l: %trror: %m,' .
         \ '%E"%f":%l-%\d%\+: %trror: %m,' .
@@ -83,10 +84,12 @@ function! SyntaxCheckers_html_validator_GetLocList()
         \ '%W"%f":%l-%\d%\+: info %tarning: %m,' .
         \ '%W"%f":%l%\%.%c: info %tarning: %m,' .
         \ '%W"%f":%l%\%.%c-%\d%\+%\%.%\d%\+: info %tarning: %m'
+
     return SyntasticMake({
         \ 'makeprg': makeprg,
         \ 'errorformat': errorformat,
-        \ 'preprocess': 'SyntaxCheckers_html_validator_Preprocess' })
+        \ 'preprocess': 'SyntaxCheckers_html_validator_Preprocess',
+        \ 'returns': [0] })
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
