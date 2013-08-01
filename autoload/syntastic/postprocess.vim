@@ -53,6 +53,22 @@ function! syntastic#postprocess#cygwinRemoveCR(errors)
     return llist
 endfunction
 
+" decode XML entities
+function! syntastic#postprocess#decodeXMLEntities(errors)
+    let llist = []
+
+    for e in a:errors
+        let e['text'] = substitute(e['text'], '&lt;', '<', 'g')
+        let e['text'] = substitute(e['text'], '&gt;', '>', 'g')
+        let e['text'] = substitute(e['text'], '&quot;', '"', 'g')
+        let e['text'] = substitute(e['text'], '&apos;', "'", 'g')
+        let e['text'] = substitute(e['text'], '&amp;', '\&', 'g')
+        call add(llist, e)
+    endfor
+
+    return llist
+endfunction
+
 let &cpo = s:save_cpo
 unlet s:save_cpo
 " vim: set et sts=4 sw=4:
