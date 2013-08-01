@@ -24,6 +24,7 @@ CONTENTS                                                  *syntastic-contents*
         2.1.The statusline flag...............|syntastic-statusline-flag|
         2.2.Error signs.......................|syntastic-error-signs|
         2.3.Error window......................|syntastic-error-window|
+        2.4.Error window mappings.............|syntastic-mappings|
     3.Commands................................|syntastic-commands|
     4.Global Options..........................|syntastic-global-options|
     5.Checker Options.........................|syntastic-checker-options|
@@ -127,6 +128,16 @@ in the |location-list|.
 Note that when you use :Errors, the current location list is overwritten with
 Syntastic's own location list.
 
+------------------------------------------------------------------------------
+2.4. Error window mappings                                *syntastic-mappings*
+
+The following keyboard shortcuts are available in the error window:
+
+o             open file (same as enter)
+
+go            preview file (open but maintain focus in error window)
+
+q             close error window
 
 ==============================================================================
 3. Commands                                               *syntastic-commands*
