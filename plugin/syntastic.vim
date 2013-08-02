@@ -368,7 +368,7 @@ function! SyntasticMake(options)
     let $LC_ALL = 'C'
 
     let err_file=tempname()
-    call system('(' . a:options['makeprg'] . ') ' . shell_pipe . ' ' . syntastic#util#shescape(err_file))
+    call system(a:options['makeprg'] . ' ' . shell_pipe . ' ' . syntastic#util#shescape(err_file))
     let err_lines = s:ReadFile(err_file)
     call delete(err_file)
 

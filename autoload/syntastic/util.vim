@@ -161,7 +161,7 @@ endfunction
 
 " A less noisy shellescape(expand())
 function! syntastic#util#shexpand(string)
-    return syntastic#util#shescape(escape(expand(a:string), '|'))
+    return syntastic#util#shescape(expand(a:string))
 endfunction
 
 " decode XML entities
