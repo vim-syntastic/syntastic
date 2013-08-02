@@ -369,7 +369,7 @@ function! SyntasticMake(options)
 
     let err_file = tempname()
     let err_file_escaped = &shellquote . syntastic#util#shescape(err_file) . &shellquote
-    let redirect = substitute(shell_pipe, '\m%\([%s]\)', '\=(submatch(1) == "%" ? "%%" : err_file_escaped)', 'g')
+    let redirect = substitute(shell_pipe, '\m%\([%s]\)', '\=(submatch(1) == "%" ? "%" : err_file_escaped)', 'g')
     if redirect == shell_pipe
         " no %s in &shellpipe
         let redirect .= ' ' . err_file_escaped
