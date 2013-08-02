@@ -367,8 +367,15 @@ function! SyntasticMake(options)
 
     let $LC_ALL = 'C'
 
-    let err_file=tempname()
-    call system(a:options['makeprg'] . ' ' . shell_pipe . ' ' . syntastic#util#shescape(err_file))
+    let err_file = tempname()
+    let err_file_escaped = &shellquote . syntastic#util#shescape(err_file) . &shellquote
+    let redirect = substitute(shell_pipe, '\m%\([%s]\)', '\=(submatch(1) == "%" ? "%%" : err_file_escaped)', 'g')
+    if redirect == shell_pipe
+        " no %s in &shellpipe
+        let redirect .= ' ' . err_file_escaped
+    endif
+
+    call system(a:options['makeprg'] . ' ' . redirect)
     let err_lines = s:ReadFile(err_file)
     call delete(err_file)
 
