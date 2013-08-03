@@ -217,9 +217,9 @@ function! s:ShowLocList()
     call loclist.show()
 endfunction
 
-"the script changes &shellpipe and &shell to stop the screen flicking when
+"the script changes &shellredir and &shell to stop the screen flicking when
 "shelling out to syntax checkers. Not all OSs support the hacks though
-function! s:OSSupportsShellpipeHack()
+function! s:OSSupportsShellredirHack()
     return !s:running_windows && executable('/bin/bash') && (s:uname() !~ "FreeBSD") && (s:uname() !~ "OpenBSD")
 endfunction
 
@@ -345,17 +345,21 @@ function! SyntasticMake(options)
 
     let old_loclist = getloclist(0)
     let old_shell = &shell
+    let old_shellredir = &shellredir
     let old_errorformat = &errorformat
     let old_cwd = getcwd()
     let old_lc_all = $LC_ALL
 
-    let shell_pipe = &shellpipe
-    if s:OSSupportsShellpipeHack()
+    let shell_redir = &shellredir
+    if s:OSSupportsShellredirHack()
         "this is a hack to stop the screen needing to be ':redraw'n when
         "when :lmake is run. Otherwise the screen flickers annoyingly
-        let shell_pipe = '&>'
+        let shell_redir = '&>'
         let &shell = '/bin/bash'
     endif
+
+    " disable redirection of stdout & stderr in system()
+    let shellredir = ''
 
     if has_key(a:options, 'errorformat')
         let &errorformat = a:options['errorformat']
@@ -368,10 +372,10 @@ function! SyntasticMake(options)
     let $LC_ALL = 'C'
 
     let err_file = tempname()
-    let err_file_escaped = &shellquote . syntastic#util#shescape(err_file) . &shellquote
-    let redirect = substitute(shell_pipe, '\m%\([%s]\)', '\=(submatch(1) == "%" ? "%" : err_file_escaped)', 'g')
-    if redirect == shell_pipe
-        " no %s in &shellpipe
+    let err_file_escaped = syntastic#util#shescape(err_file)
+    let redirect = substitute(shell_redir, '\m%\([%s]\)', '\=(submatch(1) == "%" ? "%%" : err_file_escaped)', 'g')
+    if redirect == shell_redir
+        " no %s in &shellredir
         let redirect .= ' ' . err_file_escaped
     endif
 
@@ -394,6 +398,7 @@ function! SyntasticMake(options)
 
     call setloclist(0, old_loclist)
     let &errorformat = old_errorformat
+    let &shellredir = old_shellredir
     let &shell=old_shell
 
     if s:IsRedrawRequiredAfterMake()
