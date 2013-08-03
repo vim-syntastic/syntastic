@@ -359,7 +359,7 @@ function! SyntasticMake(options)
     endif
 
     " disable redirection of stdout & stderr in system()
-    let shellredir = ''
+    let &shellredir = ''
 
     if has_key(a:options, 'errorformat')
         let &errorformat = a:options['errorformat']
