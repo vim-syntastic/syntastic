@@ -313,16 +313,6 @@ function! SyntasticStatuslineFlag()
     endif
 endfunction
 
-"Sane readfile(): handle Mac files, and remove empty lines
-function! s:ReadFile(filename)
-    let lines = readfile(a:filename)
-    let out = []
-    for line in lines
-        call extend(out, split(line, "\r"))
-    endfor
-    return filter(out, '!empty(v:val)')
-endfunction
-
 "Emulates the :lmake command. Sets up the make environment according to the
 "options given, runs make, resets the environment, returns the location list
 "
@@ -350,16 +340,12 @@ function! SyntasticMake(options)
     let old_cwd = getcwd()
     let old_lc_all = $LC_ALL
 
-    let shell_redir = &shellredir
     if s:OSSupportsShellredirHack()
         "this is a hack to stop the screen needing to be ':redraw'n when
         "when :lmake is run. Otherwise the screen flickers annoyingly
-        let shell_redir = '&>'
+        let &shellredir = '&>'
         let &shell = '/bin/bash'
     endif
-
-    " disable redirection of stdout & stderr in system()
-    let &shellredir = ''
 
     if has_key(a:options, 'errorformat')
         let &errorformat = a:options['errorformat']
@@ -370,25 +356,13 @@ function! SyntasticMake(options)
     endif
 
     let $LC_ALL = 'C'
-
-    let err_file = tempname()
-    let err_file_escaped = syntastic#util#shescape(err_file)
-    let redirect = substitute(shell_redir, '\m%\([%s]\)', '\=(submatch(1) == "%" ? "%%" : err_file_escaped)', 'g')
-    if redirect == shell_redir
-        " no %s in &shellredir
-        let redirect .= ' ' . err_file_escaped
-    endif
-
-    call system(a:options['makeprg'] . ' ' . redirect)
-    let err_lines = s:ReadFile(err_file)
-    call delete(err_file)
+    let err_lines = system(a:options['makeprg'])
+    let $LC_ALL = old_lc_all
 
     if has_key(a:options, 'preprocess')
         let err_lines = call(a:options['preprocess'], [err_lines])
     endif
     lgetexpr err_lines
-
-    let $LC_ALL = old_lc_all
 
     let errors = getloclist(0)
 
