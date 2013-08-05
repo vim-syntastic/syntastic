@@ -44,6 +44,10 @@ if !exists("g:syntastic_check_on_wq")
     let g:syntastic_check_on_wq = 1
 endif
 
+if !exists("g:syntastic_aggregate_errors")
+    let g:syntastic_aggregate_errors = 0
+endif
+
 if !exists("g:syntastic_loc_list_height")
     let g:syntastic_loc_list_height = 10
 endif
@@ -176,6 +180,7 @@ function! s:CacheErrors(...)
                 let checkers = s:registry.getActiveCheckers(ft)
             endif
 
+            let names = []
             for checker in checkers
                 let active_checkers += 1
                 call syntastic#util#debug("CacheErrors: Invoking checker: " . checker.getName())
@@ -184,13 +189,25 @@ function! s:CacheErrors(...)
 
                 if !loclist.isEmpty()
                     let newLoclist = newLoclist.extend(loclist)
-                    call newLoclist.setName( checker.getName() . ' ('. checker.getFiletype() . ')' )
+                    call add(names, [checker.getName(), checker.getFiletype()])
 
-                    "only get errors from one checker at a time
-                    break
+                    if !(exists('b:syntastic_aggregate_errors') ? b:syntastic_aggregate_errors : g:syntastic_aggregate_errors)
+                        break
+                    endif
                 endif
             endfor
         endfor
+
+        if !empty(names)
+            if len(syntastic#util#unique(map(copy(names), 'v:val[1]'))) == 1
+                let name = join(map(names, 'v:val[0]'), ', ')
+                let type = names[0][1]
+                call newLoclist.setName( name . ' ('. type . ')' )
+            else
+                " checkers from mixed types
+                call newLoclist.setName(join(map(names, 'v:val[1] . "/" . v:val[0]'), ', '))
+            endif
+        endif
 
         if !active_checkers
             if a:0

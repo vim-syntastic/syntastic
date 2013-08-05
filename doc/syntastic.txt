@@ -177,6 +177,15 @@ variable to 0. >
     let g:syntastic_check_on_wq=0
 <
 
+                                                *'syntastic_aggregate_errors'*
+Default: 0
+When enabled, |:SyntasticCheck| runs all checkers that apply, then aggregates
+errors found by all checkers and displays them.  When disabled,
+|:SyntasticCheck| runs each checker in turn, and stops to display the results
+the first time a checker finds any errors. >
+    let g:syntastic_aggregate_errors=1
+<
+
                                               *'syntastic_echo_current_error'*
 Default: 1
 If enabled, syntastic will echo the error associated with the current line to
@@ -295,7 +304,7 @@ The option should be set to something like: >
 "mode" can be mapped to one of two values - "active" or "passive". When set to
 active, syntastic does automatic checking whenever a buffer is saved or
 initially opened.  When set to "passive" syntastic only checks when the user
-calls :SyntasticCheck.
+calls |:SyntasticCheck|.
 
 The exceptions to these rules are defined with "active_filetypes" and
 "passive_filetypes". In passive mode, automatic checks are still done
