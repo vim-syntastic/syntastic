@@ -172,6 +172,7 @@ function! s:CacheErrors(...)
 
     if !s:SkipFile()
         let active_checkers = 0
+        let names = []
         for ft in s:CurrentFiletypes()
             if a:0
                 let checker = s:registry.getChecker(ft, a:1)
@@ -180,7 +181,6 @@ function! s:CacheErrors(...)
                 let checkers = s:registry.getActiveCheckers(ft)
             endif
 
-            let names = []
             for checker in checkers
                 let active_checkers += 1
                 call syntastic#util#debug("CacheErrors: Invoking checker: " . checker.getName())
