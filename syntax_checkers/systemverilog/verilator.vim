@@ -15,7 +15,7 @@ function! SyntaxCheckers_systemverilog_verilator_GetLocList()
         \ 'subchecker': 'verilator' })
 
     let errorformat = '%%%trror: %f:%l: %m'
-                      \ . ',%%%tarning-%*: %f:%l: %m'
+                      \ . ',%%%tarning-%s: %f:%l: %m'
 
     return SyntasticMake({
         \ 'makeprg': makeprg,
