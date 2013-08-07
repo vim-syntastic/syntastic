@@ -32,8 +32,8 @@ Fortran, Gentoo metadata, Go, Haml, Haskell, Haxe, HSS, HTML, Java,
 JavaScript, JSON, LESS, LISP, LLVM intermediate language, Lua, MATLAB,
 NASM, Objective-C, Objective-C++, OCaml, Perl, Perl POD, PHP, Puppet,
 Python, reStructuredText, Ruby, Rust, SASS/SCSS, Scala, Slim, Tcl, TeX,
-Twig, TypeScript, Vala, VHDL, xHtml, XML, XSLT, YAML, z80, Zope page
-templates, zsh.
+Twig, TypeScript, Vala, Verilog, VHDL, xHtml, XML, XSLT, YAML, z80, Zope
+page templates, zsh.
 
 ## Screenshot
 
