@@ -16,7 +16,7 @@ endfunction
 function! SyntaxCheckers_python_pylint_GetLocList()
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'pylint',
-        \ 'args': ' -f parseable -r n -i y',
+        \ 'args': ' --msg-template="{path}:{line}: [{msg_id}] {msg}" -r n',
         \ 'filetype': 'python',
         \ 'subchecker': 'pylint' })
 
