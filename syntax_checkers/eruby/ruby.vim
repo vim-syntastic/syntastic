@@ -44,7 +44,7 @@ function! SyntaxCheckers_eruby_ruby_GetLocList()
         \ exe . ' -rerb -e ' .
         \ syntastic#util#shescape('puts ERB.new(File.read(' .
         \     fname . encoding_spec .
-        \     ').gsub(''<\%='',''<\%''), nil, ''-'').src') .
+        \     ').gsub(''<%='',''<%''), nil, ''-'').src') .
         \ ' \| ' . exe . ' -c'
 
     let errorformat =
