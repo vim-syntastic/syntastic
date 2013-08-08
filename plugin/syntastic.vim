@@ -355,6 +355,7 @@ function! SyntasticMake(options)
     let old_shellredir = &shellredir
     let old_errorformat = &errorformat
     let old_cwd = getcwd()
+    let old_lc_messages = $LC_MESSAGES
     let old_lc_all = $LC_ALL
 
     if s:OSSupportsShellredirHack()
@@ -372,9 +373,11 @@ function! SyntasticMake(options)
         exec 'lcd ' . fnameescape(a:options['cwd'])
     endif
 
-    let $LC_ALL = 'C'
+    let $LC_MESSAGES = 'C'
+    let $LC_ALL = ''
     let err_lines = system(a:options['makeprg'])
     let $LC_ALL = old_lc_all
+    let $LC_MESSAGES = old_lc_messages
 
     if has_key(a:options, 'preprocess')
         let err_lines = call(a:options['preprocess'], [err_lines])
