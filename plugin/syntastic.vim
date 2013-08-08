@@ -356,6 +356,7 @@ function! SyntasticMake(options)
     let old_shell = &shell
     let old_errorformat = &l:errorformat
     let old_cwd = getcwd()
+    let old_lc_messages = $LC_MESSAGES
     let old_lc_all = $LC_ALL
 
     if s:OSSupportsShellpipeHack()
@@ -377,9 +378,11 @@ function! SyntasticMake(options)
         exec 'lcd ' . fnameescape(a:options['cwd'])
     endif
 
-    let $LC_ALL = 'C'
+    let $LC_MESSAGES = 'C'
+    let $LC_ALL = ''
     silent lmake!
     let $LC_ALL = old_lc_all
+    let $LC_MESSAGES = old_lc_messages
 
     let errors = getloclist(0)
 
