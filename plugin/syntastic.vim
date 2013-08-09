@@ -173,6 +173,12 @@ function! s:CacheErrors(...)
     if !s:SkipFile()
         let active_checkers = 0
         let names = []
+
+        call syntastic#util#debug("CacheErrors: g:syntastic_aggregate_errors = " . g:syntastic_aggregate_errors)
+        if exists('b:syntastic_aggregate_errors')
+            call syntastic#util#debug("CacheErrors: b:syntastic_aggregate_errors = " . b:syntastic_aggregate_errors)
+        endif
+
         for ft in s:CurrentFiletypes()
             if a:0
                 let checker = s:registry.getChecker(ft, a:1)
