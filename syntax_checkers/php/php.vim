@@ -30,7 +30,7 @@ endfunction
 function! SyntaxCheckers_php_php_GetLocList()
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'php',
-        \ 'args': '-l -d error_reporting=E_ALL -d display_errors=1 -d log_errors=0 -d xdebug.cli_color=0',
+        \ 'args': '-n -l -d error_reporting=E_ALL -d display_errors=1 -d log_errors=0',
         \ 'filetype': 'php',
         \ 'subchecker': 'php' })
 
