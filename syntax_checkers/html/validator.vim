@@ -51,12 +51,26 @@ function! SyntaxCheckers_html_validator_IsAvailable()
     return executable('curl') && executable('awk')
 endfunction
 
+function! SyntaxCheckers_html_validator_Preprocess(errors)
+    let out = copy(a:errors)
+    for n in range(len(out))
+        let parts = matchlist(out[n], '\v^"([^"]+)"(.+)')
+        " URL decode, except leave alone any "+"
+        let parts[1] = substitute(parts[1], '\m%\(\x\x\)', '\=nr2char("0x".submatch(1))', 'g')
+        let parts[1] = substitute(parts[1], '\\"', '"', 'g')
+        let parts[1] = substitute(parts[1], '\\\\', '\\', 'g')
+        let out[n] = '"' . parts[1] . '"' . parts[2]
+    endfor
+    return out
+endfunction
+
 function! SyntaxCheckers_html_validator_GetLocList()
     let makeprg = 'curl -s --compressed -F out=gnu -F asciiquotes=yes' .
         \ (!empty(g:syntastic_html_validator_parser) ? ' -F parser=' . g:syntastic_html_validator_parser : '') .
         \ (!empty(g:syntastic_html_validator_nsfilter) ? ' -F nsfilter=' . g:syntastic_html_validator_nsfilter : '') .
         \ ' -F doc=@' . syntastic#util#shexpand('%') . '\;type=text/html\;filename=' . syntastic#util#shexpand('%') . ' ' .
-        \ g:syntastic_html_validator_api . ' \| ' . s:decoder
+        \ g:syntastic_html_validator_api
+
     let errorformat =
         \ '%E"%f":%l: %trror: %m,' .
         \ '%E"%f":%l-%\d%\+: %trror: %m,' .
@@ -70,7 +84,12 @@ function! SyntaxCheckers_html_validator_GetLocList()
         \ '%W"%f":%l-%\d%\+: info %tarning: %m,' .
         \ '%W"%f":%l%\%.%c: info %tarning: %m,' .
         \ '%W"%f":%l%\%.%c-%\d%\+%\%.%\d%\+: info %tarning: %m'
-    return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat, 'defaults': {'bufnr': bufnr("")} })
+
+    return SyntasticMake({
+        \ 'makeprg': makeprg,
+        \ 'errorformat': errorformat,
+        \ 'preprocess': 'SyntaxCheckers_html_validator_Preprocess',
+        \ 'returns': [0] })
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({

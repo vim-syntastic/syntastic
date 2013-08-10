@@ -240,9 +240,9 @@ function! s:ShowLocList()
     call loclist.show()
 endfunction
 
-"the script changes &shellpipe and &shell to stop the screen flicking when
+"the script changes &shellredir and &shell to stop the screen flicking when
 "shelling out to syntax checkers. Not all OSs support the hacks though
-function! s:OSSupportsShellpipeHack()
+function! s:OSSupportsShellredirHack()
     return !s:running_windows && executable('/bin/bash') && (s:uname() !~ "FreeBSD") && (s:uname() !~ "OpenBSD")
 endfunction
 
@@ -336,9 +336,8 @@ function! SyntasticStatuslineFlag()
     endif
 endfunction
 
-"A wrapper for the :lmake command. Sets up the make environment according to
-"the options given, runs make, resets the environment, returns the location
-"list
+"Emulates the :lmake command. Sets up the make environment according to the
+"options given, runs make, resets the environment, returns the location list
 "
 "a:options can contain the following keys:
 "    'makeprg'
@@ -350,6 +349,7 @@ endfunction
 "a:options may also contain:
 "   'defaults' - a dict containing default values for the returned errors
 "   'subtype' - all errors will be assigned the given subtype
+"   'preprocess' - a function to be applied to the error file before parsing errors
 "   'postprocess' - a list of functions to be applied to the error list
 "   'cwd' - change directory to the given path before running the checker
 "   'returns' - a list of valid exit codes for the checker
@@ -357,27 +357,22 @@ function! SyntasticMake(options)
     call syntastic#util#debug('SyntasticMake: called with options: '. string(a:options))
 
     let old_loclist = getloclist(0)
-    let old_makeprg = &l:makeprg
-    let old_shellpipe = &shellpipe
     let old_shell = &shell
-    let old_errorformat = &l:errorformat
+    let old_shellredir = &shellredir
+    let old_errorformat = &errorformat
     let old_cwd = getcwd()
     let old_lc_messages = $LC_MESSAGES
     let old_lc_all = $LC_ALL
 
-    if s:OSSupportsShellpipeHack()
+    if s:OSSupportsShellredirHack()
         "this is a hack to stop the screen needing to be ':redraw'n when
         "when :lmake is run. Otherwise the screen flickers annoyingly
-        let &shellpipe='&>'
+        let &shellredir = '&>'
         let &shell = '/bin/bash'
     endif
 
-    if has_key(a:options, 'makeprg')
-        let &l:makeprg = a:options['makeprg']
-    endif
-
     if has_key(a:options, 'errorformat')
-        let &l:errorformat = a:options['errorformat']
+        let &errorformat = a:options['errorformat']
     endif
 
     if has_key(a:options, 'cwd')
@@ -386,9 +381,14 @@ function! SyntasticMake(options)
 
     let $LC_MESSAGES = 'C'
     let $LC_ALL = ''
-    silent lmake!
+    let err_lines = system(a:options['makeprg'])
     let $LC_ALL = old_lc_all
     let $LC_MESSAGES = old_lc_messages
+
+    if has_key(a:options, 'preprocess')
+        let err_lines = call(a:options['preprocess'], [err_lines])
+    endif
+    lgetexpr err_lines
 
     let errors = getloclist(0)
 
@@ -397,9 +397,8 @@ function! SyntasticMake(options)
     endif
 
     call setloclist(0, old_loclist)
-    let &l:makeprg = old_makeprg
-    let &l:errorformat = old_errorformat
-    let &shellpipe=old_shellpipe
+    let &errorformat = old_errorformat
+    let &shellredir = old_shellredir
     let &shell=old_shell
 
     if s:IsRedrawRequiredAfterMake()
