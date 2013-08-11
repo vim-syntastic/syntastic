@@ -32,6 +32,7 @@ function! SyntaxCheckers_coffee_coffeelint_GetLocList()
     return SyntasticMake({
         \ 'makeprg': makeprg,
         \ 'errorformat': errorformat,
+        \ 'returns': [0, 1],
         \ 'subtype': 'Style' })
 endfunction
 
