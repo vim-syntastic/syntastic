@@ -25,7 +25,9 @@ function! SyntaxCheckers_coffee_coffeelint_GetLocList()
         \ 'filetype': 'coffee',
         \ 'subchecker': 'coffeelint' })
 
-    let errorformat = '%f\,%l\,%trror\,%m'
+    let errorformat = '%f\,%l\,\,%trror\,%m,' .
+        \ '%f\,%l\,%\\d%\\+\,%trror\,%m,' .
+        \ '%f\,%l\,%trror\,%m'
 
     return SyntasticMake({
         \ 'makeprg': makeprg,
