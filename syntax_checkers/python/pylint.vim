@@ -34,7 +34,14 @@ function! SyntaxCheckers_python_pylint_GetLocList()
         \ 'postprocess': ['sort'] })
 
     for n in range(len(loclist))
-        let loclist[n]['type'] = match(['R', 'C', 'W'], loclist[n]['text'][1]) >= 0 ? 'W' : 'E'
+        let type = loclist[n]['text'][1]
+        if type =~# '\m^[EF]'
+            let loclist[n]['type'] = 'E'
+        elseif type =~# '\m^[CRW]'
+            let loclist[n]['type'] = 'W'
+        else
+            let loclist[n]['valid'] = 0
+        endif
         let loclist[n]['vcol'] = 0
     endfor
 
