@@ -12,24 +12,28 @@
 " Specify additional options to csslint with this option. e.g. to disable
 " warnings:
 "
-"   let g:syntastic_csslint_options = "--warnings=none"
+"   let g:syntastic_csslint_options = '--warnings=none'
 
-if exists("g:loaded_syntastic_css_csslint_checker")
+if exists('g:loaded_syntastic_css_csslint_checker')
     finish
 endif
 let g:loaded_syntastic_css_csslint_checker=1
 
+if !exists('g:syntastic_csslint_exec')
+    let g:syntastic_csslint_exec = 'csslint'
+endif
+
 if !exists('g:syntastic_csslint_options')
-    let g:syntastic_csslint_options = ""
+    let g:syntastic_csslint_options = ''
 endif
 
 function! SyntaxCheckers_css_csslint_IsAvailable()
-    return executable('csslint')
+    return executable(expand(g:syntastic_csslint_exec))
 endfunction
 
 function! SyntaxCheckers_css_csslint_GetLocList()
     let makeprg = syntastic#makeprg#build({
-        \ 'exe': 'csslint',
+        \ 'exe': expand(g:syntastic_csslint_exec),
         \ 'args': '--format=compact ' . g:syntastic_csslint_options,
         \ 'filetype': 'css',
         \ 'subchecker': 'csslint' })
