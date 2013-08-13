@@ -397,7 +397,7 @@ function! SyntasticMake(options)
     endif
     lgetexpr err_lines
 
-    let errors = getloclist(0)
+    let errors = copy(getloclist(0))
 
     if has_key(a:options, 'cwd')
         exec 'lcd ' . fnameescape(old_cwd)
