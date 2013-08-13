@@ -26,9 +26,9 @@ function! SyntaxCheckers_coffee_coffeelint_GetLocList()
         \ 'subchecker': 'coffeelint' })
 
     let errorformat =
-        \ '%f\,%l\,%\d%\+\,%trror\,%m,' .
+        \ '%f\,%l\,%\d%#\,%trror\,%m,' .
         \ '%f\,%l\,%trror\,%m,' .
-        \ '%f\,%l\,%\d%\+\,%tarn\,%m,' .
+        \ '%f\,%l\,%\d%#\,%tarn\,%m,' .
         \ '%f\,%l\,%tarn\,%m'
 
     return SyntasticMake({
