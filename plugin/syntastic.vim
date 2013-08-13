@@ -64,6 +64,12 @@ if !exists("g:syntastic_full_redraws")
     let g:syntastic_full_redraws = !( has('gui_running') || has('gui_macvim'))
 endif
 
+" TODO: not documented
+if !exists("g:syntastic_reuse_loc_lists")
+    " a relevant bug has been fixed in one of the pre-releases of Vim 7.4
+    let g:syntastic_reuse_loc_lists = (v:version >= 704)
+endif
+
 let s:registry = g:SyntasticRegistry.Instance()
 let s:notifiers = g:SyntasticNotifiers.Instance()
 let s:modemap = g:SyntasticModeMap.Instance()
@@ -145,8 +151,10 @@ function! s:UpdateErrors(auto_invoked, ...)
 
     let loclist = g:SyntasticLoclist.current()
 
+    let w:syntastic_loclist_set = 0
     if g:syntastic_always_populate_loc_list || g:syntastic_auto_jump
         call setloclist(0, loclist.filteredRaw())
+        let w:syntastic_loclist_set = 1
         if run_checks && g:syntastic_auto_jump && loclist.hasErrorsOrWarningsToDisplay()
             silent! lrewind
         endif
@@ -356,7 +364,6 @@ endfunction
 function! SyntasticMake(options)
     call syntastic#util#debug('SyntasticMake: called with options: '. string(a:options))
 
-    let old_loclist = getloclist(0)
     let old_shell = &shell
     let old_shellredir = &shellredir
     let old_errorformat = &errorformat
@@ -396,7 +403,7 @@ function! SyntasticMake(options)
         exec 'lcd ' . fnameescape(old_cwd)
     endif
 
-    call setloclist(0, old_loclist)
+    silent! lolder
     let &errorformat = old_errorformat
     let &shellredir = old_shellredir
     let &shell=old_shell
