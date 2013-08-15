@@ -31,7 +31,7 @@ endfunction
 function! SyntaxCheckers_puppet_puppetlint_GetLocList()
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'puppet-lint',
-        \ 'post_args': '--log-format "\%{KIND} [\%{check}] \%{message} at \%{fullpath}:\%{linenumber}"',
+        \ 'post_args': '--log-format "%{KIND} [%{check}] %{message} at %{fullpath}:%{linenumber}"',
         \ 'filetype': 'puppet',
         \ 'subchecker': 'puppetlint' })
 
