@@ -17,13 +17,14 @@ endfunction
 function! SyntaxCheckers_typescript_tsc_GetLocList()
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'tsc',
+        \ 'args': '--module commonjs',
         \ 'post_args': '--out ' . syntastic#util#DevNull(),
         \ 'filetype': 'typescript',
         \ 'subchecker': 'tsc' })
 
     let errorformat =
-        \ '%f %#(%l\,%c): error %m,' .
-        \ '%f %#(%l\,%c): %m,' .
+        \ '%E%f %#(%l\,%c): error %m,' .
+        \ '%E%f %#(%l\,%c): %m,' .
         \ '%Eerror %m,' .
         \ '%C  %m'
 
