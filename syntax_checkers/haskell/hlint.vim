@@ -5,32 +5,30 @@
 "License:     BSD
 "============================================================================
 
-if exists("g:loaded_syntastic_haskell_hlint_checker")
+if exists('g:loaded_syntastic_haskell_hlint_checker')
     finish
 endif
-let g:loaded_syntastic_haskell_hlint_checker=1
+let g:loaded_syntastic_haskell_hlint_checker = 1
 
 function! SyntaxCheckers_haskell_hlint_IsAvailable()
     return executable('hlint')
 endfunction
 
 function! SyntaxCheckers_haskell_hlint_GetLocList()
-    let errorformat =
-        \ '%E%f:%l:%c: Error: %m,' .
-        \ '%W%f:%l:%c: Warning: %m,' .
-        \ '%C%m'
-
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'hlint',
         \ 'filetype': 'haskell',
         \ 'subchecker': 'hlint' })
 
-    let loclist = SyntasticMake({
+    let errorformat =
+        \ '%E%f:%l:%c: Error: %m,' .
+        \ '%W%f:%l:%c: Warning: %m,' .
+        \ '%C%m'
+
+    return SyntasticMake({
         \ 'makeprg': makeprg,
         \ 'errorformat': errorformat,
         \ 'postprocess': ['compressWhitespace'] })
-
-    return loclist
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({

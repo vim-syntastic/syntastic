@@ -10,16 +10,21 @@
 "
 "============================================================================
 
-if exists("g:loaded_syntastic_haskell_ghc_mod_checker")
+if exists('g:loaded_syntastic_haskell_ghc_mod_checker')
     finish
 endif
-let g:loaded_syntastic_haskell_ghc_mod_checker=1
+let g:loaded_syntastic_haskell_ghc_mod_checker = 1
 
 function! SyntaxCheckers_haskell_ghc_mod_IsAvailable()
     return executable('ghc-mod')
 endfunction
 
 function! SyntaxCheckers_haskell_ghc_mod_GetLocList()
+    let makeprg = syntastic#makeprg#build({
+        \ 'exe': 'ghc-mod check',
+        \ 'filetype': 'haskell',
+        \ 'subchecker': 'ghc_mod' })
+
     let errorformat =
         \ '%-G%\s%#,' .
         \ '%f:%l:%c:%trror: %m,' .
@@ -30,16 +35,10 @@ function! SyntaxCheckers_haskell_ghc_mod_GetLocList()
         \ '%E%f:%l:%c:,' .
         \ '%Z%m'
 
-    let makeprg = syntastic#makeprg#build({
-        \ 'exe': 'ghc-mod check',
-        \ 'filetype': 'haskell',
-        \ 'subchecker': 'ghc_mod' })
-
-    let loclist = SyntasticMake({
+    return SyntasticMake({
         \ 'makeprg': makeprg,
-        \ 'errorformat': errorformat })
-
-    return loclist
+        \ 'errorformat': errorformat,
+        \ 'postprocess': ['compressWhitespace'] })
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
