@@ -26,7 +26,7 @@ function! SyntaxCheckers_typescript_tsc_GetLocList()
         \ '%E%f %#(%l\,%c): error %m,' .
         \ '%E%f %#(%l\,%c): %m,' .
         \ '%Eerror %m,' .
-        \ '%C  %m'
+        \ '%C%\s%\+%m'
 
     return SyntasticMake({
         \ 'makeprg': makeprg,
