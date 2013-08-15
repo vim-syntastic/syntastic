@@ -157,11 +157,17 @@ function! g:SyntasticLoclist.show()
         endif
 
         " try to find the loclist window and set w:quickfix_title
+        let errors = getloclist(0)
         for buf in tabpagebuflist()
             if buflisted(buf) && bufloaded(buf) && getbufvar(buf, '&buftype') ==# 'quickfix'
                 let win = bufwinnr(buf)
                 let title = getwinvar(win, 'quickfix_title')
-                if title ==# ':setloclist()' || strpart(title, 0, 16) ==# ':SyntasticCheck '
+
+                " TODO: try to make sure we actually own this window; sadly,
+                " errors == getloclist(0) is the only somewhat safe way to
+                " achieve that
+                if strpart(title, 0, 16) ==# ':SyntasticCheck ' ||
+                            \ ( (title == '' || title ==# ':setloclist()') && errors == getloclist(0) )
                     call setwinvar(win, 'quickfix_title', ':SyntasticCheck ' . self._name)
                 endif
             endif
