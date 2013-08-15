@@ -143,7 +143,12 @@ endfunction
 
 "display the cached errors for this buf in the location list
 function! g:SyntasticLoclist.show()
-    call setloclist(0, self.filteredRaw())
+    if !exists('w:syntastic_loclist_set')
+        let w:syntastic_loclist_set = 0
+    endif
+    call setloclist(0, self.filteredRaw(), g:syntastic_reuse_loc_lists && w:syntastic_loclist_set ? 'r' : ' ')
+    let w:syntastic_loclist_set = 1
+
     if self.hasErrorsOrWarningsToDisplay()
         let num = winnr()
         exec "lopen " . g:syntastic_loc_list_height
