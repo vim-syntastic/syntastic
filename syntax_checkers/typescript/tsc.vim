@@ -1,6 +1,6 @@
 "============================================================================
 "File:        typescript.vim
-"Description: TypeScript syntax checker. For TypeScript v0.8.0
+"Description: TypeScript syntax checker
 "Maintainer:  Bill Casarin <bill@casarin.ca>
 "============================================================================
 
@@ -21,11 +21,17 @@ function! SyntaxCheckers_typescript_tsc_GetLocList()
         \ 'filetype': 'typescript',
         \ 'subchecker': 'tsc' })
 
-    let errorformat = '%f %#(%l\,%c): %m'
+    let errorformat =
+        \ '%f %#(%l\,%c): error %m,' .
+        \ '%f %#(%l\,%c): %m,' .
+        \ '%Eerror %m,' .
+        \ '%C  %m'
 
     return SyntasticMake({
         \ 'makeprg': makeprg,
-        \ 'errorformat': errorformat })
+        \ 'errorformat': errorformat,
+        \ 'defaults': {'bufnr': bufnr("")},
+        \ 'postprocess': ['sort'] })
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
