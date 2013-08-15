@@ -214,8 +214,8 @@ function! s:CacheErrors(...)
 
         if !empty(names)
             if len(syntastic#util#unique(map(copy(names), 'v:val[1]'))) == 1
-                let name = join(map(names, 'v:val[0]'), ', ')
                 let type = names[0][1]
+                let name = join(map(names, 'v:val[0]'), ', ')
                 call newLoclist.setName( name . ' ('. type . ')' )
             else
                 " checkers from mixed types
@@ -388,7 +388,7 @@ function! SyntasticMake(options)
 
     let $LC_MESSAGES = 'C'
     let $LC_ALL = ''
-    let err_lines = system(a:options['makeprg'])
+    let err_lines = split(system(a:options['makeprg']), "\n", 1)
     let $LC_ALL = old_lc_all
     let $LC_MESSAGES = old_lc_messages
 
