@@ -10,13 +10,13 @@
 "
 "============================================================================
 
-if exists("g:loaded_syntastic_tex_lacheck_checker")
+if exists('g:loaded_syntastic_tex_lacheck_checker')
     finish
 endif
 let g:loaded_syntastic_tex_lacheck_checker=1
 
 function! SyntaxCheckers_tex_lacheck_IsAvailable()
-    return executable("lacheck")
+    return executable('lacheck')
 endfunction
 
 function! SyntaxCheckers_tex_lacheck_GetLocList()
@@ -25,7 +25,9 @@ function! SyntaxCheckers_tex_lacheck_GetLocList()
         \ 'filetype': 'tex',
         \ 'subchecker': 'lacheck' })
 
-    let errorformat =  '%-G** %f:,%E"%f"\, line %l: %m'
+    let errorformat =
+        \ '%-G** %f:,' .
+        \ '%E"%f"\, line %l: %m'
 
     return SyntasticMake({
         \ 'makeprg': makeprg,
