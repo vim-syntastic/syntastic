@@ -23,7 +23,7 @@
 " - g:syntastic_tex_chktex_args (string; default: empty)
 "   command line options to pass to chktex
 
-if exists("g:loaded_syntastic_tex_chktex_checker")
+if exists('g:loaded_syntastic_tex_chktex_checker')
     finish
 endif
 let g:loaded_syntastic_tex_chktex_checker = 1
@@ -33,7 +33,7 @@ if !exists('g:syntastic_tex_chktex_showmsgs')
 endif
 
 function! SyntaxCheckers_tex_chktex_IsAvailable()
-    return executable("chktex")
+    return executable('chktex')
 endfunction
 
 function! SyntaxCheckers_tex_chktex_GetLocList()
@@ -44,10 +44,10 @@ function! SyntaxCheckers_tex_chktex_GetLocList()
         \ 'subchecker': 'chktex' })
 
     let errorformat =
-        \ '%EError\ %\\d%\\+\ in\ %f\ line\ %l:\ %m,' .
-        \ '%WWarning\ %\\d%\\+\ in\ %f\ line\ %l:\ %m,' .
-        \ (g:syntastic_tex_chktex_showmsgs ? '%WMessage\ %\\d%\\+\ in\ %f\ line %l:\ %m,' : '') .
-        \ '%+Z%p^,' .
+        \ '%EError %n in %f line %l: %m,' .
+        \ '%WWarning %n in %f line %l: %m,' .
+        \ (g:syntastic_tex_chktex_showmsgs ? '%WMessage %n in %f line %l: %m,' : '') .
+        \ '%Z%p^,' .
         \ '%-G%.%#'
 
     return SyntasticMake({
