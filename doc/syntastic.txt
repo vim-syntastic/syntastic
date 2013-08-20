@@ -177,6 +177,13 @@ variable to 0. >
     let g:syntastic_check_on_wq=0
 <
 
+                                               *'syntastic_check_on_bufwrite'*
+Default: 1
+Normally syntastic runs syntax checks whenever buffers are written to disk.
+If you want to skip these checks to do them manully set this variable to 0. >
+    let g:syntastic_check_on_bufwrite=0
+<
+
                                                 *'syntastic_aggregate_errors'*
 Default: 0
 When enabled, |:SyntasticCheck| runs all checkers that apply, then aggregates

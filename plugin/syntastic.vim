@@ -64,6 +64,10 @@ if !exists("g:syntastic_full_redraws")
     let g:syntastic_full_redraws = !( has('gui_running') || has('gui_macvim'))
 endif
 
+if !exists("g:syntastic_check_on_bufwrite")
+    let g:syntastic_check_on_bufwrite = 1
+endif
+
 " TODO: not documented
 if !exists("g:syntastic_reuse_loc_lists")
     " a relevant bug has been fixed in one of the pre-releases of Vim 7.4
@@ -149,7 +153,11 @@ function! s:UpdateErrors(auto_invoked, ...)
         endif
     end
 
-    let loclist = g:SyntasticLoclist.current()
+    if g:syntastic_check_on_bufwrite
+        let loclist = g:SyntasticLoclist.current()
+    else
+        let loclist = g:SyntasticLoclist.New([])
+    endif
 
     let w:syntastic_loclist_set = 0
     if g:syntastic_always_populate_loc_list || g:syntastic_auto_jump
