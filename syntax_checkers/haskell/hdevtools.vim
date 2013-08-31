@@ -28,6 +28,7 @@ function! SyntaxCheckers_haskell_hdevtools_GetLocList()
 
     let errorformat= '\%-Z\ %#,'.
         \ '%W%f:%l:%c:\ Warning:\ %m,'.
+        \ '%W%f:%l:%c:\ Warning:,'.
         \ '%E%f:%l:%c:\ %m,'.
         \ '%E%>%f:%l:%c:,'.
         \ '%+C\ \ %#%m,'.
