@@ -30,5 +30,7 @@ get_root([], Path) ->
     Path;
 get_root(["src" | Tail], _Path) ->
     lists:reverse(Tail);
+get_root(["test" | Tail], _Path) ->
+    lists:reverse(Tail);
 get_root([_ | Tail], Path) ->
     get_root(Tail, Path).
