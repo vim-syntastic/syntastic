@@ -44,6 +44,10 @@ if !exists("g:syntastic_check_on_wq")
     let g:syntastic_check_on_wq = 1
 endif
 
+if !exists("g:syntastic_aggregate_errors")
+    let g:syntastic_aggregate_errors = 0
+endif
+
 if !exists("g:syntastic_loc_list_height")
     let g:syntastic_loc_list_height = 10
 endif
@@ -58,6 +62,12 @@ endif
 
 if !exists("g:syntastic_full_redraws")
     let g:syntastic_full_redraws = !( has('gui_running') || has('gui_macvim'))
+endif
+
+" TODO: not documented
+if !exists("g:syntastic_reuse_loc_lists")
+    " a relevant bug has been fixed in one of the pre-releases of Vim 7.4
+    let g:syntastic_reuse_loc_lists = (v:version >= 704)
 endif
 
 let s:registry = g:SyntasticRegistry.Instance()
@@ -78,6 +88,7 @@ command! SyntasticToggleMode call s:ToggleMode()
 command! -nargs=? -complete=custom,s:CompleteCheckerName SyntasticCheck call s:UpdateErrors(0, <f-args>) <bar> call s:Redraw()
 command! Errors call s:ShowLocList()
 command! SyntasticInfo call s:registry.echoInfoFor(s:CurrentFiletypes())
+command! SyntasticReset call s:ClearCache() | call s:notifiers.refresh(g:SyntasticLoclist.New([]))
 
 highlight link SyntasticError SpellBad
 highlight link SyntasticWarning SpellCap
@@ -140,8 +151,10 @@ function! s:UpdateErrors(auto_invoked, ...)
 
     let loclist = g:SyntasticLoclist.current()
 
+    let w:syntastic_loclist_set = 0
     if g:syntastic_always_populate_loc_list || g:syntastic_auto_jump
         call setloclist(0, loclist.filteredRaw())
+        let w:syntastic_loclist_set = 1
         if run_checks && g:syntastic_auto_jump && loclist.hasErrorsOrWarningsToDisplay()
             silent! lrewind
         endif
@@ -167,6 +180,13 @@ function! s:CacheErrors(...)
 
     if !s:SkipFile()
         let active_checkers = 0
+        let names = []
+
+        call syntastic#util#debug("CacheErrors: g:syntastic_aggregate_errors = " . g:syntastic_aggregate_errors)
+        if exists('b:syntastic_aggregate_errors')
+            call syntastic#util#debug("CacheErrors: b:syntastic_aggregate_errors = " . b:syntastic_aggregate_errors)
+        endif
+
         for ft in s:CurrentFiletypes()
             if a:0
                 let checker = s:registry.getChecker(ft, a:1)
@@ -183,13 +203,25 @@ function! s:CacheErrors(...)
 
                 if !loclist.isEmpty()
                     let newLoclist = newLoclist.extend(loclist)
-                    call newLoclist.setName( checker.getName() . ' ('. checker.getFiletype() . ')' )
+                    call add(names, [checker.getName(), checker.getFiletype()])
 
-                    "only get errors from one checker at a time
-                    break
+                    if !(exists('b:syntastic_aggregate_errors') ? b:syntastic_aggregate_errors : g:syntastic_aggregate_errors)
+                        break
+                    endif
                 endif
             endfor
         endfor
+
+        if !empty(names)
+            if len(syntastic#util#unique(map(copy(names), 'v:val[1]'))) == 1
+                let type = names[0][1]
+                let name = join(map(names, 'v:val[0]'), ', ')
+                call newLoclist.setName( name . ' ('. type . ')' )
+            else
+                " checkers from mixed types
+                call newLoclist.setName(join(map(names, 'v:val[1] . "/" . v:val[0]'), ', '))
+            endif
+        endif
 
         if !active_checkers
             if a:0
@@ -216,9 +248,9 @@ function! s:ShowLocList()
     call loclist.show()
 endfunction
 
-"the script changes &shellpipe and &shell to stop the screen flicking when
+"the script changes &shellredir and &shell to stop the screen flicking when
 "shelling out to syntax checkers. Not all OSs support the hacks though
-function! s:OSSupportsShellpipeHack()
+function! s:OSSupportsShellredirHack()
     return !s:running_windows && executable('/bin/bash') && (s:uname() !~ "FreeBSD") && (s:uname() !~ "OpenBSD")
 endfunction
 
@@ -312,9 +344,8 @@ function! SyntasticStatuslineFlag()
     endif
 endfunction
 
-"A wrapper for the :lmake command. Sets up the make environment according to
-"the options given, runs make, resets the environment, returns the location
-"list
+"Emulates the :lmake command. Sets up the make environment according to the
+"options given, runs make, resets the environment, returns the location list
 "
 "a:options can contain the following keys:
 "    'makeprg'
@@ -326,53 +357,55 @@ endfunction
 "a:options may also contain:
 "   'defaults' - a dict containing default values for the returned errors
 "   'subtype' - all errors will be assigned the given subtype
+"   'preprocess' - a function to be applied to the error file before parsing errors
 "   'postprocess' - a list of functions to be applied to the error list
 "   'cwd' - change directory to the given path before running the checker
 "   'returns' - a list of valid exit codes for the checker
 function! SyntasticMake(options)
     call syntastic#util#debug('SyntasticMake: called with options: '. string(a:options))
 
-    let old_loclist = getloclist(0)
-    let old_makeprg = &l:makeprg
-    let old_shellpipe = &shellpipe
     let old_shell = &shell
-    let old_errorformat = &l:errorformat
+    let old_shellredir = &shellredir
+    let old_errorformat = &errorformat
     let old_cwd = getcwd()
+    let old_lc_messages = $LC_MESSAGES
     let old_lc_all = $LC_ALL
 
-    if s:OSSupportsShellpipeHack()
+    if s:OSSupportsShellredirHack()
         "this is a hack to stop the screen needing to be ':redraw'n when
         "when :lmake is run. Otherwise the screen flickers annoyingly
-        let &shellpipe='&>'
+        let &shellredir = '&>'
         let &shell = '/bin/bash'
     endif
 
-    if has_key(a:options, 'makeprg')
-        let &l:makeprg = a:options['makeprg']
-    endif
-
     if has_key(a:options, 'errorformat')
-        let &l:errorformat = a:options['errorformat']
+        let &errorformat = a:options['errorformat']
     endif
 
     if has_key(a:options, 'cwd')
         exec 'lcd ' . fnameescape(a:options['cwd'])
     endif
 
-    let $LC_ALL = 'C'
-    silent lmake!
+    let $LC_MESSAGES = 'C'
+    let $LC_ALL = ''
+    let err_lines = split(system(a:options['makeprg']), "\n", 1)
     let $LC_ALL = old_lc_all
+    let $LC_MESSAGES = old_lc_messages
 
-    let errors = getloclist(0)
+    if has_key(a:options, 'preprocess')
+        let err_lines = call(a:options['preprocess'], [err_lines])
+    endif
+    lgetexpr err_lines
+
+    let errors = copy(getloclist(0))
 
     if has_key(a:options, 'cwd')
         exec 'lcd ' . fnameescape(old_cwd)
     endif
 
-    call setloclist(0, old_loclist)
-    let &l:makeprg = old_makeprg
-    let &l:errorformat = old_errorformat
-    let &shellpipe=old_shellpipe
+    silent! lolder
+    let &errorformat = old_errorformat
+    let &shellredir = old_shellredir
     let &shell=old_shell
 
     if s:IsRedrawRequiredAfterMake()

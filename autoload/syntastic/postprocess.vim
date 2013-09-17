@@ -29,6 +29,7 @@ function syntastic#postprocess#compressWhitespace(errors)
     let llist = []
 
     for e in a:errors
+        let e['text'] = substitute(e['text'], "\001", '', 'g')
         let e['text'] = substitute(e['text'], '\n', ' ', 'g')
         let e['text'] = substitute(e['text'], '\s\{2,}', ' ', 'g')
         call add(llist, e)
@@ -49,6 +50,18 @@ function! syntastic#postprocess#cygwinRemoveCR(errors)
     else
         let llist = a:errors
     endif
+
+    return llist
+endfunction
+
+" decode XML entities
+function! syntastic#postprocess#decodeXMLEntities(errors)
+    let llist = []
+
+    for e in a:errors
+        let e['text'] = syntastic#util#decodeXMLEntities(e['text'])
+        call add(llist, e)
+    endfor
 
     return llist
 endfunction

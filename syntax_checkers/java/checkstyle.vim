@@ -27,9 +27,21 @@ function! SyntaxCheckers_java_checkstyle_IsAvailable()
     return executable('java')
 endfunction
 
+function! SyntaxCheckers_java_checkstyle_Preprocess(errors)
+    let out = copy(a:errors)
+    for n in range(len(out))
+        let parts = matchlist(out[n], '\(.*<file name="\)\([^"]\+\)\(">.*\)')
+        if len(parts) >= 4
+            let parts[2] = syntastic#util#decodeXMLEntities(parts[2])
+            let out[n] = join(parts[1:3], '')
+        endif
+    endfor
+    return out
+endfunction
+
 function! SyntaxCheckers_java_checkstyle_GetLocList()
 
-    let fname = fnameescape( expand('%:p:h') . '/' . expand('%:t') )
+    let fname = syntastic#util#shescape( expand('%:p:h') . '/' . expand('%:t') )
 
     if has('win32unix')
         let fname = substitute(system('cygpath -m ' . fname), '\%x00', '', 'g')
@@ -38,20 +50,27 @@ function! SyntaxCheckers_java_checkstyle_GetLocList()
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'java',
         \ 'args': '-cp ' . g:syntastic_java_checkstyle_classpath .
-        \         ' com.puppycrawl.tools.checkstyle.Main -c ' . g:syntastic_java_checkstyle_conf_file,
+        \         ' com.puppycrawl.tools.checkstyle.Main -c ' . g:syntastic_java_checkstyle_conf_file .
+        \         ' -f xml',
         \ 'fname': fname,
         \ 'filetype': 'java',
         \ 'subchecker': 'checkstyle' })
 
     let errorformat =
-        \ '%f:%l:%c:\ %m,' .
-        \ '%f:%l:\ %m'
+        \ '%P<file name="%f">,' .
+        \ '%Q</file>,' .
+        \ '%E<error line="%l" column="%c" severity="%trror" message="%m" source="%.%#"/>,' .
+        \ '%E<error line="%l" severity="%trror" message="%m" source="%.%#"/>,' .
+        \ '%E<error line="%l" column="%c" severity="%tarning" message="%m" source="%.%#"/>,' .
+        \ '%E<error line="%l" severity="%tarning" message="%m" source="%.%#"/>,' .
+        \ '%-G%.%#'
 
     return SyntasticMake({
         \ 'makeprg': makeprg,
         \ 'errorformat': errorformat,
         \ 'subtype': 'Style',
-        \ 'postprocess': ['cygwinRemoveCR'] })
+        \ 'preprocess': 'SyntaxCheckers_java_checkstyle_Preprocess',
+        \ 'postprocess': ['cygwinRemoveCR', 'decodeXMLEntities'] })
 
 endfunction
 

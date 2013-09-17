@@ -153,6 +153,10 @@ current filetype is set to passive. See |'syntastic_mode_map'| for more info.
 Output info about what checkers are available and in use for the current
 filetype.
 
+:SyntasticReset                                              *:SyntasticReset*
+
+Resets the list of errors and turns off all error notifiers.
+
 
 ==============================================================================
 4. Global Options                                   *syntastic-global-options*
@@ -171,6 +175,15 @@ Normally syntastic runs syntax checks whenever buffers are written to disk.
 If you want to skip these checks when you issue |:wq|, |:x|, and |:ZZ|, set this
 variable to 0. >
     let g:syntastic_check_on_wq=0
+<
+
+                                                *'syntastic_aggregate_errors'*
+Default: 0
+When enabled, |:SyntasticCheck| runs all checkers that apply, then aggregates
+errors found by all checkers and displays them.  When disabled,
+|:SyntasticCheck| runs each checker in turn, and stops to display the results
+the first time a checker finds any errors. >
+    let g:syntastic_aggregate_errors=1
 <
 
                                               *'syntastic_echo_current_error'*
@@ -291,7 +304,7 @@ The option should be set to something like: >
 "mode" can be mapped to one of two values - "active" or "passive". When set to
 active, syntastic does automatic checking whenever a buffer is saved or
 initially opened.  When set to "passive" syntastic only checks when the user
-calls :SyntasticCheck.
+calls |:SyntasticCheck|.
 
 The exceptions to these rules are defined with "active_filetypes" and
 "passive_filetypes". In passive mode, automatic checks are still done

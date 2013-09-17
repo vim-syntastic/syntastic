@@ -156,12 +156,23 @@ endfunction
 
 " A less noisy shellescape()
 function! syntastic#util#shescape(string)
-    return a:string =~ '\m^[A-Za-z0-9_/.-]\+$' ? a:string : shellescape(a:string, 1)
+    return a:string =~ '\m^[A-Za-z0-9_/.-]\+$' ? a:string : shellescape(a:string)
 endfunction
 
 " A less noisy shellescape(expand())
 function! syntastic#util#shexpand(string)
-    return syntastic#util#shescape(escape(expand(a:string), '|'))
+    return syntastic#util#shescape(expand(a:string))
+endfunction
+
+" decode XML entities
+function! syntastic#util#decodeXMLEntities(string)
+    let str = a:string
+    let str = substitute(str, '&lt;', '<', 'g')
+    let str = substitute(str, '&gt;', '>', 'g')
+    let str = substitute(str, '&quot;', '"', 'g')
+    let str = substitute(str, '&apos;', "'", 'g')
+    let str = substitute(str, '&amp;', '\&', 'g')
+    return str
 endfunction
 
 function! syntastic#util#debug(msg)
