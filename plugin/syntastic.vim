@@ -362,33 +362,13 @@ endfunction
 "   'cwd' - change directory to the given path before running the checker
 "   'returns' - a list of valid exit codes for the checker
 
-function! s:backup_option(option_name)
-  " backup option, checking whether to use global or local
-  let global_option = eval('&' . a:option_name)
-  let local_option = eval('&l:' . a:option_name)
-  if strlen(local_option)
-    return [1, local_option]
-  else
-    return [0, global_option]
-  endif
-endfunction
-
-function! s:restore_option(option_name, option_backup)
-  " restore option from output of s:backup_option
-  let [is_local, option_value] = a:option_backup
-  if is_local
-    execute 'let &l:' . a:option_name . ' = ' . string(option_value)
-  else
-    execute 'let &' . a:option_name . ' = ' . string(option_value)
-  endif
-endfunction
-
 function! SyntasticMake(options)
     call syntastic#util#debug('SyntasticMake: called with options: '. string(a:options))
 
-    let old_shell = s:backup_option('shell')
-    let old_shellredir = s:backup_option('shellredir')
-    let old_errorformat = s:backup_option('errorformat')
+    let old_shell = &shell
+    let old_shellredir = &shellredir
+    let old_global_errorformat = &errorformat
+    let old_local_errorformat = &l:errorformat
     let old_cwd = getcwd()
     let old_lc_messages = $LC_MESSAGES
     let old_lc_all = $LC_ALL
@@ -426,9 +406,12 @@ function! SyntasticMake(options)
     endif
 
     silent! lolder
-    call s:restore_option('shell', old_shell)
-    call s:restore_option('shellredir', old_shellredir)
-    call s:restore_option('errorformat', old_errorformat)
+    let &shell = old_shell
+    let &shellredir = old_shellredir
+    let &errorformat = old_global_errorformat
+    if strlen(old_local_errorformat)
+      let &l:errorformat = old_local_errorformat
+    endif
 
     if s:IsRedrawRequiredAfterMake()
         call s:Redraw()
