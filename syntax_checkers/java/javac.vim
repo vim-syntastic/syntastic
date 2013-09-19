@@ -17,6 +17,7 @@ endif
 let g:loaded_syntastic_java_javac_checker=1
 let g:syntastic_java_javac_maven_pom_tags = ["build", "properties"]
 let g:syntastic_java_javac_maven_pom_properties = {}
+let s:has_maven = 0
 
 " Global Options
 if !exists("g:syntastic_java_javac_executable")
@@ -158,7 +159,7 @@ endfunction
 function! s:GetMavenProperties()
     let mvn_properties = {}
     let pom = findfile("pom.xml", ".;")
-    if filereadable(pom)
+    if s:has_maven && filereadable(pom)
         if !has_key(g:syntastic_java_javac_maven_pom_properties, pom)
             let mvn_cmd = g:syntastic_java_maven_executable . ' -f ' . pom
             let mvn_is_managed_tag = 1
@@ -193,7 +194,7 @@ command! SyntasticJavacEditClasspath call s:EditClasspath()
 
 function! s:GetMavenClasspath()
     let pom = findfile("pom.xml", ".;")
-    if filereadable(pom)
+    if s:has_maven && filereadable(pom)
         if !has_key(g:syntastic_java_javac_maven_pom_ftime, pom) || g:syntastic_java_javac_maven_pom_ftime[pom] != getftime(pom)
             let mvn_cmd = g:syntastic_java_maven_executable . ' -f ' . pom
             let mvn_classpath_output = split(system(mvn_cmd . ' dependency:build-classpath'), "\n")
@@ -233,12 +234,13 @@ function! s:GetMavenClasspath()
 endfunction
 
 function! SyntaxCheckers_java_javac_IsAvailable()
+    let s:has_maven = executable(g:syntastic_java_maven_executable)
     return executable(g:syntastic_java_javac_executable)
 endfunction
 
 function! s:MavenOutputDirectory()
     let pom = findfile("pom.xml", ".;")
-    if filereadable(pom)
+    if s:has_maven && filereadable(pom)
         let mvn_properties = s:GetMavenProperties()
         let output_dir = getcwd()
         if has_key(mvn_properties, 'project.properties.build.dir')
@@ -262,6 +264,7 @@ function! s:MavenOutputDirectory()
         endif
         return output_dir
     endif
+    return '.'
 endfunction
 
 function! SyntaxCheckers_java_javac_GetLocList()
@@ -303,13 +306,11 @@ function! SyntaxCheckers_java_javac_GetLocList()
         endif
     endfor
 
-    if g:syntastic_java_javac_autoload_maven_classpath
+    if s:has_maven && g:syntastic_java_javac_autoload_maven_classpath
         if !g:syntastic_java_javac_delete_output
-            let maven_output_dir = s:MavenOutputDirectory()
-            let javac_opts .= ' -d ' . maven_output_dir
+            let javac_opts .= ' -d ' . s:MavenOutputDirectory()
         endif
-        let maven_classpath = s:GetMavenClasspath()
-        let javac_classpath = s:AddToClasspath(javac_classpath,maven_classpath)
+        let javac_classpath = s:AddToClasspath(javac_classpath, s:GetMavenClasspath())
     endif
 
     if javac_classpath != ''
