@@ -106,7 +106,7 @@ __Q. Recently some of my syntax checker options have stopped working...__
 
 A. The options are still there, they have just been renamed. Recently, almost all syntax checkers were refactored to use the new `syntastic#makeprg#build()` function. This made a lot of the old explicit options redundant - as they are now implied. The new implied options usually have slightly different names to the old options.
 
-e.g. Previously there was `g:syntastic_phpcs_conf`, now you must use `g:syntastic_php_phpcs_args`.
+e.g. Previously there was `g:syntastic_phpcs_conf`, now you must use `g:syntastic_php_phpcs_args`. This completely overrides the arguments of the checker, including any defaults, so you may need to look up the default arguments of the checker and add these in.
 
 See `:help syntastic-checker-options` for more information.
 
