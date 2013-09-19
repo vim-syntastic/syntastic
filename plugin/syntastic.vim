@@ -361,12 +361,14 @@ endfunction
 "   'postprocess' - a list of functions to be applied to the error list
 "   'cwd' - change directory to the given path before running the checker
 "   'returns' - a list of valid exit codes for the checker
+
 function! SyntasticMake(options)
     call syntastic#util#debug('SyntasticMake: called with options: '. string(a:options))
 
     let old_shell = &shell
     let old_shellredir = &shellredir
-    let old_errorformat = &errorformat
+    let old_global_errorformat = &errorformat
+    let old_local_errorformat = &l:errorformat
     let old_cwd = getcwd()
     let old_lc_messages = $LC_MESSAGES
     let old_lc_all = $LC_ALL
@@ -404,9 +406,12 @@ function! SyntasticMake(options)
     endif
 
     silent! lolder
-    let &errorformat = old_errorformat
+    let &shell = old_shell
     let &shellredir = old_shellredir
-    let &shell=old_shell
+    let &errorformat = old_global_errorformat
+    if strlen(old_local_errorformat)
+      let &l:errorformat = old_local_errorformat
+    endif
 
     if s:IsRedrawRequiredAfterMake()
         call s:Redraw()
