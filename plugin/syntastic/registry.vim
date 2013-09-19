@@ -26,7 +26,8 @@ let s:defaultCheckers = {
 
 let s:defaultFiletypeMap = {
         \ 'gentoo-metadata': 'xml',
-        \ 'lhaskell': 'haskell'
+        \ 'lhaskell': 'haskell',
+        \ 'litcoffee': 'coffee'
     \ }
 
 let g:SyntasticRegistry = {}
