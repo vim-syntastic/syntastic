@@ -49,8 +49,12 @@ function! SyntaxCheckers_python_pylint_GetLocList()
 endfunction
 
 function s:PylintNew()
-    let pylint_version = filter(split(system('pylint --version'), '\m, \|\n'), 'v:val =~# "^pylint"')[0]
-    return syntastic#util#versionIsAtLeast(syntastic#util#parseVersion(pylint_version), [1])
+    try
+        let pylint_version = filter(split(system('pylint --version'), '\m, \|\n'), 'v:val =~# "^pylint"')[0]
+        return syntastic#util#versionIsAtLeast(syntastic#util#parseVersion(pylint_version), [1])
+    catch /E684/
+        return 0
+    endtry
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
