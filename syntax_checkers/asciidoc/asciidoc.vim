@@ -22,7 +22,7 @@ endfunction
 function! SyntaxCheckers_asciidoc_asciidoc_GetLocList()
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'asciidoc',
-        \ 'args': syntastic#c#GetNullDevice(),
+        \ 'args': syntastic#c#NullOutput(),
         \ 'filetype': 'asciidoc',
         \ 'subchecker': 'asciidoc' })
 

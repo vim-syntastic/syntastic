@@ -21,7 +21,7 @@ endfunction
 function! SyntaxCheckers_llvm_llvm_GetLocList()
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'llc',
-        \ 'args': syntastic#c#GetNullDevice(),
+        \ 'args': syntastic#c#NullOutput(),
         \ 'filetype': 'llvm',
         \ 'subchecker': 'llvm' })
 
