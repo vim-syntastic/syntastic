@@ -19,6 +19,11 @@ function! syntastic#util#DevNull()
     return '/dev/null'
 endfunction
 
+" Get directory separator
+function! syntastic#util#Slash() abort
+    return !exists("+shellslash") || &shellslash ? '/' : '\'
+endfunction
+
 "search the first 5 lines of the file for a magic number and return a map
 "containing the args and the executable
 "

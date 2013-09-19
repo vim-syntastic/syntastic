@@ -7,14 +7,6 @@
 "             it and/or modify it under the terms of the Do What The Fuck You
 "             Want To Public License, Version 2, as published by Sam Hocevar.
 "             See http://sam.zoy.org/wtfpl/COPYING for more details.
-"Note:        This syntax checker uses gfortran with the option -fsyntax-only
-"             to check for errors and warnings. Additional flags may be
-"             supplied through both local and global variables,
-"               b:syntastic_fortran_flags,
-"               g:syntastic_fortran_flags.
-"             This is particularly useful when the source requires module files
-"             in order to compile (that is when it needs modules defined in
-"             separate files).
 "
 "============================================================================
 
@@ -23,41 +15,38 @@ if exists("g:loaded_syntastic_fortran_gfortran_checker")
 endif
 let g:loaded_syntastic_fortran_gfortran_checker=1
 
-if !exists('g:syntastic_fortran_flags')
-    let g:syntastic_fortran_flags = ''
+if !exists('g:syntastic_fortran_compiler')
+    let g:syntastic_fortran_compiler = 'gfortran'
 endif
 
 function! SyntaxCheckers_fortran_gfortran_IsAvailable()
-    return executable('gfortran')
+    return executable(g:syntastic_fortran_compiler)
 endfunction
+
+let s:save_cpo = &cpo
+set cpo&vim
+
+if !exists('g:syntastic_fortran_compiler_options')
+    let g:syntastic_fortran_compiler_options = ''
+endif
 
 function! SyntaxCheckers_fortran_gfortran_GetLocList()
-    let makeprg = syntastic#makeprg#build({
-        \ 'exe': 'gfortran',
-        \ 'args': s:args(),
-        \ 'filetype': 'fortran',
-        \ 'subchecker': 'gfortran' })
-
-    let errorformat =
-        \ '%-C %#,'.
-        \ '%-C  %#%.%#,'.
-        \ '%A%f:%l.%c:,'.
-        \ '%Z%m,'.
-        \ '%G%.%#'
-
-    return SyntasticMake({
-        \ 'makeprg': makeprg,
-        \ 'errorformat': errorformat })
-endfunction
-
-function s:args()
-    let rv  = '-fsyntax-only ' . g:syntastic_fortran_flags
-    if exists('b:syntastic_fortran_flags')
-        let rv .= " " . b:syntastic_fortran_flags
-    endif
-    return rv
+    return syntastic#c#GetLocList('fortran', 'gfortran', {
+        \ 'errorformat':
+        \     '%-C %#,'.
+        \     '%-C  %#%.%#,'.
+        \     '%A%f:%l.%c:,'.
+        \     '%Z%trror: %m,'.
+        \     '%Z%tarning: %m,'.
+        \     '%-G%.%#',
+        \ 'main_flags': '-fsyntax-only' })
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'fortran',
     \ 'name': 'gfortran'})
+
+let &cpo = s:save_cpo
+unlet s:save_cpo
+
+" vim: set et sts=4 sw=4:

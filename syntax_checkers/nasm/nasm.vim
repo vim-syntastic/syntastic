@@ -22,7 +22,7 @@ function! SyntaxCheckers_nasm_nasm_GetLocList()
     let wd = syntastic#util#shescape(expand("%:p:h") . "/")
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'nasm',
-        \ 'args': '-X gnu -f elf -I ' . wd . ' ' . syntastic#c#GetNullDevice()
+        \ 'args': '-X gnu -f elf -I ' . wd . ' ' . syntastic#c#NullOutput(),
         \ 'filetype': 'nasm',
         \ 'subchecker': 'nasm' })
 

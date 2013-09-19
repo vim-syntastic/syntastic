@@ -136,9 +136,9 @@ function s:GetOtherMakeprg()
         " ocamlyacc output can't be redirected, so use menhir
         let makeprg = "menhir --only-preprocess " . syntastic#util#shexpand('%') . " >" . syntastic#util#DevNull()
     elseif match(extension,'mll') >= 0 && executable("ocamllex")
-        let makeprg = "ocamllex -q " . syntastic#c#GetNullDevice() . " " . syntastic#util#shexpand('%')
+        let makeprg = "ocamllex -q " . syntastic#c#NullOutput() . " " . syntastic#util#shexpand('%')
     else
-        let makeprg = "camlp4o " . syntastic#c#GetNullDevice() . " " . syntastic#util#shexpand('%')
+        let makeprg = "camlp4o " . syntastic#c#NullOutput() . " " . syntastic#util#shexpand('%')
     endif
 
     return makeprg
