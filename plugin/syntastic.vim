@@ -366,6 +366,7 @@ function! SyntasticMake(options)
 
     let old_shell = &shell
     let old_shellredir = &shellredir
+    let old_local_errorformat = &l:errorformat
     let old_errorformat = &errorformat
     let old_cwd = getcwd()
     let old_lc_messages = $LC_MESSAGES
@@ -405,6 +406,7 @@ function! SyntasticMake(options)
 
     silent! lolder
     let &errorformat = old_errorformat
+    let &l:errorformat = old_local_errorformat
     let &shellredir = old_shellredir
     let &shell=old_shell
 
