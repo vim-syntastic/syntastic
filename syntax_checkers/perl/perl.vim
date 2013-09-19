@@ -48,8 +48,10 @@ endif
 function! SyntaxCheckers_perl_perl_GetLocList()
     let makeprg = exists("b:syntastic_perl_efm_program") ? b:syntastic_perl_efm_program : g:syntastic_perl_efm_program
     if exists("g:syntastic_perl_lib_path")
-        if type("g:syntastic_perl_lib_path") == type([])
-            let makeprg .= ' -I ' . g:syntastic_perl_lib_path
+        if type(g:syntastic_perl_lib_path) == type([])
+            for dir in g:syntastic_perl_lib_path
+              let makeprg .= ' -I ' . dir
+            endfor
         else
             echo "!!! syntastic_perl_lib_path should be a list -- see documentation"
             let makeprg .= ' -I ' . g:syntastic_perl_lib_path
