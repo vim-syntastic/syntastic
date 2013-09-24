@@ -20,6 +20,15 @@ runtime! plugin/syntastic/*.vim
 
 let s:running_windows = has("win16") || has("win32")
 
+if !s:running_windows && executable('uname')
+    try
+        let s:uname = system('uname')
+    catch /^Vim\%((\a\+)\)\=:E484/
+        call syntastic#util#error("your shell " . &shell . " doesn't use traditional UNIX syntax for redirections")
+        finish
+    endtry
+endif
+
 if !exists("g:syntastic_always_populate_loc_list")
     let g:syntastic_always_populate_loc_list = 0
 endif
