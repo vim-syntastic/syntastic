@@ -19,7 +19,7 @@ let g:loaded_syntastic_coffee_coffee_checker=1
 
 function! SyntaxCheckers_coffee_coffee_IsAvailable()
     return executable("coffee") &&
-        \ syntastic#util#versionIsAtLeast(syntastic#util#parseVersion('coffee --version 2>' . syntastic#util#DevNull()), [1,6,2])
+        \ syntastic#util#versionIsAtLeast(syntastic#util#getVersion('coffee --version 2>' . syntastic#util#DevNull()), [1,6,2])
 endfunction
 
 function! SyntaxCheckers_coffee_coffee_GetLocList()
