@@ -45,7 +45,7 @@ function! SyntaxCheckers_javascript_jshint_GetLocList()
 endfunction
 
 function s:JshintNew()
-    return syntastic#util#versionIsAtLeast(syntastic#util#parseVersion(expand(g:syntastic_jshint_exec) . ' --version'), [1, 1])
+    return syntastic#util#versionIsAtLeast(syntastic#util#getVersion(expand(g:syntastic_jshint_exec) . ' --version'), [1, 1])
 endfunction
 
 function s:Args()

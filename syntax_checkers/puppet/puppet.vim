@@ -21,7 +21,7 @@ endfunction
 
 function! SyntaxCheckers_puppet_puppet_GetLocList()
 
-    let ver = syntastic#util#parseVersion('puppet --version 2>' . syntastic#util#DevNull())
+    let ver = syntastic#util#getVersion('puppet --version 2>' . syntastic#util#DevNull())
 
     if syntastic#util#versionIsAtLeast(ver, [2,7,0])
         let args = 'parser validate --color=false'

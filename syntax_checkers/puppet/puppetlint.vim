@@ -24,7 +24,7 @@ function! SyntaxCheckers_puppet_puppetlint_IsAvailable()
     return
         \ executable("puppet") &&
         \ executable("puppet-lint") &&
-        \ syntastic#util#versionIsAtLeast(syntastic#util#parseVersion('puppet-lint --version 2>' .
+        \ syntastic#util#versionIsAtLeast(syntastic#util#getVersion('puppet-lint --version 2>' .
         \     syntastic#util#DevNull()), [0,1,10])
 endfunction
 

@@ -21,7 +21,7 @@ let g:loaded_syntastic_ruby_rubocop_checker=1
 function! SyntaxCheckers_ruby_rubocop_IsAvailable()
     return
         \ executable('rubocop') &&
-        \ syntastic#util#versionIsAtLeast(syntastic#util#parseVersion('rubocop --version'), [0,9,0])
+        \ syntastic#util#versionIsAtLeast(syntastic#util#getVersion('rubocop --version'), [0,9,0])
 endfunction
 
 function! SyntaxCheckers_ruby_rubocop_GetLocList()
