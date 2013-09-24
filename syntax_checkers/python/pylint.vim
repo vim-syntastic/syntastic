@@ -53,7 +53,7 @@ function s:PylintNew()
     try
         let pylint_version = filter(split(system('pylint --version'), '\m, \=\|\n'), 'v:val =~# "^pylint "')[0]
         let ret = syntastic#util#versionIsAtLeast(syntastic#util#parseVersion(pylint_version), [1])
-    catch /E684/
+    catch /^Vim\%((\a\+)\)\=:E684/
         call syntastic#util#error("checker python/pylint: can't parse version string (abnormal termination?)")
         let ret = -1
     endtry
