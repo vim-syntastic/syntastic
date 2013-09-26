@@ -23,7 +23,7 @@ endfunction
 function! SyntaxCheckers_tcl_nagelfar_GetLocList()
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'nagelfar',
-        \ 'args': '-H ' . g:syntastic_tcl_nagelfar_conf,
+        \ 'args': '-H',
         \ 'filetype': 'tcl',
         \ 'subchecker': 'nagelfar' })
 
