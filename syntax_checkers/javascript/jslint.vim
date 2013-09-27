@@ -25,7 +25,9 @@ endfunction
 
 function! SyntaxCheckers_javascript_jslint_HighlightTerm(error)
     let unexpected = matchstr(a:error['text'], 'Expected.*and instead saw \'\zs.*\ze\'')
-    if len(unexpected) < 1 | return '' | end
+    if len(unexpected) < 1i
+        return ''
+    endif
     return '\V'.split(unexpected, "'")[1]
 endfunction
 
