@@ -156,7 +156,7 @@ function! s:UpdateErrors(auto_invoked, ...)
         else
             call s:CacheErrors()
         endif
-    end
+    endif
 
     let loclist = g:SyntasticLoclist.current()
 
