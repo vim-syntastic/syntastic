@@ -54,7 +54,7 @@ function! SyntaxCheckers_go_go_GetLocList()
 
     let errorformat =
         \ '%E%f:%l:%c:%m,' .
-        \ '%E%f:%l%m,' .
+        \ '%E%f:%l:%m,' .
         \ '%C%\s%\+%m,' .
         \ '%-G#%.%#'
 
