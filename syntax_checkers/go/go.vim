@@ -53,8 +53,9 @@ function! SyntaxCheckers_go_go_GetLocList()
     endif
 
     let errorformat =
-        \ '%f:%l:%c:%m,' .
-        \ '%f:%l%m,' .
+        \ '%E%f:%l:%c:%m,' .
+        \ '%E%f:%l%m,' .
+        \ '%C%\s%\+%m,' .
         \ '%-G#%.%#'
 
     " The go compiler needs to either be run with an import path as an
