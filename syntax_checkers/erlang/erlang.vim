@@ -10,40 +10,49 @@
 "
 "============================================================================
 
-if exists("g:loaded_syntastic_erlang_erlang_checker")
+if exists('g:loaded_syntastic_erlang_erlang_checker')
     finish
 endif
-let g:loaded_syntastic_erlang_erlang_checker=1
+let g:loaded_syntastic_erlang_erlang_checker = 1
+
+if !exists('g:syntastic_erlc_include_path')
+    let g:syntastic_erlc_include_path = ''
+endif
 
 let s:check_file = expand('<sfile>:p:h') . '/erlang_check_file.erl'
-if !exists("g:syntastic_erlc_include_path")
-    let g:syntastic_erlc_include_path=""
-endif
 
 function! SyntaxCheckers_erlang_escript_IsAvailable()
     return executable('escript')
 endfunction
 
 function! SyntaxCheckers_erlang_escript_GetLocList()
-    let extension = expand('%:e')
-    if match(extension, 'hrl') >= 0
+    if expand('%:e') ==# 'hrl'
         return []
     endif
-    let shebang = getbufline(bufnr('%'), 1)[0]
-    if len(shebang) > 0
-        if match(shebang, 'escript') >= 0
-            let makeprg = 'escript -s ' . syntastic#util#shexpand('%:p')
-        else
-            let makeprg = 'escript ' . s:check_file . ' ' . syntastic#util#shexpand('%:p') . ' ' . g:syntastic_erlc_include_path
-        endif
-    else
-        let makeprg =  'escript ' . s:check_file . ' ' . syntastic#util#shexpand('%:p') . ' '. g:syntastic_erlc_include_path
-    endif
-    let errorformat =
-        \ '%f:%l:\ %tarning:\ %m,'.
-        \ '%E%f:%l:\ %m'
 
-    return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
+    let shebang = syntastic#util#parseShebang()
+    if shebang['exe'] ==# 'escript'
+        let args = '-s'
+        let post_args = ''
+    else
+        let args = s:check_file
+        let post_args = g:syntastic_erlc_include_path
+    endif
+    let makeprg = syntastic#makeprg#build({
+        \ 'exe': 'escript',
+        \ 'args': args,
+        \ 'fname': syntastic#util#shexpand('%:p'),
+        \ 'post_args': post_args,
+        \ 'filetype': 'erlang',
+        \ 'subchecker': 'escript' })
+
+    let errorformat =
+        \ '%W%f:%l: warning: %m,'.
+        \ '%E%f:%l: %m'
+
+    return SyntasticMake({
+        \ 'makeprg': makeprg,
+        \ 'errorformat': errorformat })
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
