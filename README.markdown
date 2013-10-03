@@ -162,7 +162,7 @@ If you use these commands a lot then you may want to add shortcut mappings to yo
 
 __Q. A syntax checker is giving me unwanted/strange style tips?__
 
-A. Some filetypes (e.g. php) have style checkers as well as syntax checkers. You can usually configure the options that are passed to the style checkers, or just disable them. Take a look at the [wiki](https://github.com/scrooloose/syntastic/wiki/Syntaxcheckers) to see what options are available.
+A. Some filetypes (e.g. php) have style checkers as well as syntax checkers. You can usually configure the options that are passed to the style checkers, or just disable them. Take a look at the [wiki](https://github.com/scrooloose/syntastic/wiki/Syntax-Checkers) to see what options are available.
 
 __Q. The error window is closed automatically when I :quit the current buffer but not when I :bdelete it?__
 
