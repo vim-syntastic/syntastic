@@ -51,8 +51,10 @@ endfunction
 
 function s:PylintNew()
     try
-        " On Windows the version is shown as "pylint-script.py 1.0.0"
-        let pylint_version = filter(split(system('pylint --version'), '\m, \=\|\n'), 'v:val =~# ''\m^pylint\(-script\.py\)\= ''')[0]
+        " On Windows the version is shown as "pylint-script.py 1.0.0".
+        " On Gentoo Linux it's "pylint-python2.7 0.28.0".  Oh, joy. :)
+        let pylint_version = filter(split(system('pylint --version'), '\m, \=\|\n'), 'v:val =~# ''\m^pylint\>''')[0]
+        let pylint_version = substitute(pylint_version, '\v^\S+\s+', '', '')
         let ret = syntastic#util#versionIsAtLeast(syntastic#util#parseVersion(pylint_version), [1])
     catch /^Vim\%((\a\+)\)\=:E684/
         call syntastic#util#error("checker python/pylint: can't parse version string (abnormal termination?)")
