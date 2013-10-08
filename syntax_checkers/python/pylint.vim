@@ -52,9 +52,9 @@ endfunction
 function s:PylintNew()
     try
         " On Windows the version is shown as "pylint-script.py 1.0.0" and on
-		" other systems it might be reported as "pylint-python2.7 1.0.0" etc.
-		" Instead of enumerating all the possibilities - "pylint<<something>><<space>>1.0.0"
-		" lets just search for the "pylint" - without the space
+        " other systems it might be reported as "pylint-python2.7 1.0.0" etc.
+        " Instead of enumerating all the possibilities - "pylint<<something>><<space>>1.0.0"
+        " lets just search for the "pylint" - without the space
         let pylint_version = filter(split(system('pylint --version'), '\m, \=\|\n'), 'v:val =~# ''\m^pylint''')[0]
         let ret = syntastic#util#versionIsAtLeast(syntastic#util#parseVersion(pylint_version), [1])
     catch /^Vim\%((\a\+)\)\=:E684/
