@@ -11,6 +11,10 @@ let g:loaded_syntastic_python_pylint_checker = 1
 
 let s:pylint_new = -1
 
+if !exists('g:syntastic_pylint_config_file')
+    let g:syntastic_pylint_config_file = expand('~') . '.pylintrc'
+endif
+
 function! SyntaxCheckers_python_pylint_IsAvailable()
     let s:pylint_new = executable('pylint') ? s:PylintNew() : -1
     return s:pylint_new >= 0
@@ -19,7 +23,7 @@ endfunction
 function! SyntaxCheckers_python_pylint_GetLocList()
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'pylint',
-        \ 'args': (s:pylint_new ? '--msg-template="{path}:{line}: [{msg_id}] {msg}" -r n' : '-f parseable -r n -i y'),
+        \ 'args': '--rcfile ' . g:syntastic_pylint_config_file . (s:pylint_new ? ' --msg-template="{path}:{line}: [{msg_id}] {msg}" -r n' : ' -f parseable -r n -i y'),
         \ 'filetype': 'python',
         \ 'subchecker': 'pylint' })
 
