@@ -166,7 +166,12 @@ endfunction
 
 " A less noisy shellescape()
 function! syntastic#util#shescape(string)
-    return a:string =~ '\m^[A-Za-z0-9_/.-]\+$' ? a:string : shellescape(a:string)
+    let old_shellslash = &shellslash
+    set noshellslash
+    let string = a:string =~ '\m^[A-Za-z0-9_/.-]\+$' 
+                \ ? a:string : shellescape(a:string)
+    let  &shellslash = old_shellslash
+    return string
 endfunction
 
 " A less noisy shellescape(expand())
