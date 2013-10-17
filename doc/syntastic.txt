@@ -365,8 +365,8 @@ If the buffer had 2 warnings, starting on line 5 then this would appear: >
 Default: 0 in GUI Vim and MacVim, 1 otherwise
 Controls whether syntastic calls |:redraw| or |:redraw!| for screen redraws.
 Changing it can in principle make screen redraws smoother, but it can also
-cause screen flicker, or ghost characters.  Leaving it to the default should
-be safe.
+cause screen to flicker, or cause ghost characters.  Leaving it to the default
+should be safe.
 
                                                            *'syntastic_debug'*
 Default: 0
