@@ -22,7 +22,8 @@ endfunction
 function! SyntaxCheckers_chef_foodcritic_GetLocList()
     let makeprg = syntastic#makeprg#build({
           \ 'exe': 'foodcritic',
-          \ 'args': '' })
+          \ 'filetype': 'chef',
+          \ 'subchecker': 'foodcritic' })
 
     " FC023: Prefer conditional attributes: ./recipes/config.rb:49
     let errorformat = 'FC%n: %m: %f:%l'
