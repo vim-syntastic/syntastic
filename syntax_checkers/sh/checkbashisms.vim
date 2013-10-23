@@ -36,10 +36,10 @@ function! SyntaxCheckers_sh_checkbashisms_GetLocList()
     return SyntasticMake({
         \ 'makeprg': makeprg,
         \ 'errorformat': errorformat,
-        \ 'subtype': 'Style'})
+        \ 'subtype': 'Style' })
 endfunction
 
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'sh',
-    \ 'name': 'checkbashisms'})
+    \ 'name': 'checkbashisms' })

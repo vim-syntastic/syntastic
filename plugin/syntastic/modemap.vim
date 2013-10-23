@@ -57,11 +57,11 @@ function! g:SyntasticModeMap._initModeMapFromGlobalOpts()
 endfunction
 
 function! g:SyntasticModeMap._isOneFiletypeActive(filetypes)
-    return !empty(filter(a:filetypes, 'index(self._activeFiletypes, v:val) != -1'))
+    return !empty(filter(copy(a:filetypes), 'index(self._activeFiletypes, v:val) != -1'))
 endfunction
 
 function! g:SyntasticModeMap._noFiletypesArePassive(filetypes)
-    return empty(filter(a:filetypes, 'index(self._passiveFiletypes, v:val) != -1'))
+    return empty(filter(copy(a:filetypes), 'index(self._passiveFiletypes, v:val) != -1'))
 endfunction
 
 " vim: set sw=4 sts=4 et fdm=marker:

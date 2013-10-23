@@ -44,14 +44,13 @@ function! SyntaxCheckers_c_make_GetLocList()
     endif
 
     " process makeprg
-    let errors = SyntasticMake({ 'makeprg': makeprg,
+    let errors = SyntasticMake({
+        \ 'makeprg': makeprg,
         \ 'errorformat': errorformat })
 
     " filter the processed errors if desired
-    if exists('g:syntastic_c_remove_include_errors') &&
-            \ g:syntastic_c_remove_include_errors != 0
-        return filter(errors,
-            \ 'has_key(v:val, "bufnr") && v:val["bufnr"]=='.bufnr(''))
+    if exists('g:syntastic_c_remove_include_errors') && g:syntastic_c_remove_include_errors != 0
+        return filter(errors, 'has_key(v:val, "bufnr") && v:val["bufnr"] == ' . bufnr(''))
     else
         return errors
     endif
