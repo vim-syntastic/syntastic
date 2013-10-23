@@ -69,15 +69,15 @@ function! SyntaxCheckers_sh_sh_GetLocList()
         \ 'exe': s:GetShell(),
         \ 'args': '-n',
         \ 'filetype': 'sh',
-        \ 'subchecker': 'sh'})
+        \ 'subchecker': 'sh' })
 
     let errorformat = '%f: line %l: %m'
 
     return SyntasticMake({
         \ 'makeprg': makeprg,
-        \ 'errorformat': errorformat})
+        \ 'errorformat': errorformat })
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'sh',
-    \ 'name': 'sh'})
+    \ 'name': 'sh' })

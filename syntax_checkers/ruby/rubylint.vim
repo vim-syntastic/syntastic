@@ -25,7 +25,7 @@ function! SyntaxCheckers_ruby_rubylint_GetLocList()
         \ 'exe': 'ruby-lint',
         \ 'args': 'analyze --presenter=syntastic',
         \ 'filetype': 'ruby',
-        \ 'subchecker': 'rubylint'})
+        \ 'subchecker': 'rubylint' })
 
     let errorformat = '%f:%t:%l:%c: %m'
 

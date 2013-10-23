@@ -56,13 +56,13 @@ function! SyntaxCheckers_perl_perl_GetLocList()
         call syntastic#util#deprecationWarn('variable g:syntastic_perl_lib_path should be a list')
         let includes = split(g:syntastic_perl_lib_path, ',')
     else
-        let includes = exists('b:syntastic_perl_lib_path') ? b:syntastic_perl_lib_path : g:syntastic_perl_lib_path
+        let includes = copy(exists('b:syntastic_perl_lib_path') ? b:syntastic_perl_lib_path : g:syntastic_perl_lib_path)
     endif
     let shebang = syntastic#util#parseShebang()
     let extra = join(map(includes, '"-I" . v:val')) .
         \ (index(shebang['args'], '-T') >= 0 ? ' -T' : '') .
         \ (index(shebang['args'], '-t') >= 0 ? ' -t' : '')
-    let errorformat =  '%f:%l:%m'
+    let errorformat = '%f:%l:%m'
 
     let makeprg = syntastic#makeprg#build({
         \ 'exe': g:syntastic_perl_interpreter,
