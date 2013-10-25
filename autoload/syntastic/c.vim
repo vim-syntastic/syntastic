@@ -38,15 +38,15 @@ function! syntastic#c#ReadConfig(file)
     call filter(lines, 'v:val !~ ''\v^(\s*#|$)''')
 
     " remove leading and trailing spaces
-    call map(lines, 'substitute(v:val, ''^\s\+'', "", "")')
-    call map(lines, 'substitute(v:val, ''\s\+$'', "", "")')
+    call map(lines, 'substitute(v:val, ''\m^\s\+'', "", "")')
+    call map(lines, 'substitute(v:val, ''\m\s\+$'', "", "")')
 
     let parameters = []
     for line in lines
-        let matches = matchlist(line, '\C^\s*-I\s*\(\S\+\)')
+        let matches = matchlist(line, '\m\C^\s*-I\s*\(\S\+\)')
         if matches != [] && matches[1] != ''
             " this one looks like an absolute path
-            if match(matches[1], '^\%(/\|\a:\)') != -1
+            if match(matches[1], '\m^\%(/\|\a:\)') != -1
                 call add(parameters, '-I' . matches[1])
             else
                 call add(parameters, '-I' . filepath . syntastic#util#Slash() . matches[1])
@@ -187,11 +187,11 @@ function! s:SearchHeaders()
     let includes = ''
     let files = []
     let found = []
-    let lines = filter(getline(1, 100), 'v:val =~# "^\s*#\s*include"')
+    let lines = filter(getline(1, 100), 'v:val =~# ''\m^\s*#\s*include''')
 
     " search current buffer
     for line in lines
-        let file = matchstr(line, '"\zs\S\+\ze"')
+        let file = matchstr(line, '\m"\zs\S\+\ze"')
         if file != ''
             call add(files, file)
             continue

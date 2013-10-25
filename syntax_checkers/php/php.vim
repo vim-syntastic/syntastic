@@ -20,7 +20,7 @@ function! SyntaxCheckers_php_php_IsAvailable()
 endfunction
 
 function! SyntaxCheckers_php_php_GetHighlightRegex(item)
-    let unexpected = matchstr(a:item['text'], "unexpected '[^']\\+'")
+    let unexpected = matchstr(a:item['text'], "\\munexpected '[^']\\+'")
     if len(unexpected) < 1
         return ''
     endif

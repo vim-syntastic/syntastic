@@ -23,37 +23,37 @@ function! SyntaxCheckers_php_phpmd_IsAvailable()
 endfunction
 
 function! SyntaxCheckers_php_phpmd_GetHighlightRegex(item)
-    let term = matchstr(a:item['text'], '\C^The \S\+ \w\+\(()\)\= \(has\|is not\|utilizes\)')
+    let term = matchstr(a:item['text'], '\m\C^The \S\+ \w\+\(()\)\= \(has\|is not\|utilizes\)')
     if term != ''
-        return '\V'.substitute(term, '\C^The \S\+ \(\w\+\)\(()\)\= .*', '\1', '')
+        return '\V'.substitute(term, '\m\C^The \S\+ \(\w\+\)\(()\)\= .*', '\1', '')
     endif
-    let term = matchstr(a:item['text'], '\C^Avoid \(variables with short\|excessively long variable\) names like \S\+\.')
+    let term = matchstr(a:item['text'], '\m\C^Avoid \(variables with short\|excessively long variable\) names like \S\+\.')
     if term != ''
-        return '\V'.substitute(term, '\C^Avoid \(variables with short\|excessively long variable\) names like \(\S\+\)\..*', '\2', '')
+        return '\V'.substitute(term, '\m\C^Avoid \(variables with short\|excessively long variable\) names like \(\S\+\)\..*', '\2', '')
     endif
-    let term = matchstr(a:item['text'], '\C^Avoid using short method names like \S\+::\S\+()\.')
+    let term = matchstr(a:item['text'], '\m\C^Avoid using short method names like \S\+::\S\+()\.')
     if term != ''
-        return '\V'.substitute(term, '\C^Avoid using short method names like \S\+::\(\S\+\)()\..*', '\1', '')
+        return '\V'.substitute(term, '\m\C^Avoid using short method names like \S\+::\(\S\+\)()\..*', '\1', '')
     endif
-    let term = matchstr(a:item['text'], '\C^\S\+ accesses the super-global variable ')
+    let term = matchstr(a:item['text'], '\m\C^\S\+ accesses the super-global variable ')
     if term != ''
-        return '\V'.substitute(term, '\C accesses the super-global variable .*$', '', '')
+        return '\V'.substitute(term, '\m\C accesses the super-global variable .*$', '', '')
     endif
-    let term = matchstr(a:item['text'], '\C^Constant \S\+ should be defined in uppercase')
+    let term = matchstr(a:item['text'], '\m\C^Constant \S\+ should be defined in uppercase')
     if term != ''
-        return '\V'.substitute(term, '\C^Constant \(\S\+\) should be defined in uppercase', '\1', '')
+        return '\V'.substitute(term, '\m\C^Constant \(\S\+\) should be defined in uppercase', '\1', '')
     endif
-    let term = matchstr(a:item['text'], "\\C^The '\\S\\+()' method which returns ")
+    let term = matchstr(a:item['text'], "\\m\\C^The '\\S\\+()' method which returns ")
     if term != ''
-        return '\V'.substitute(term, "\\C^The '\\(\\S\\+\\()' method which returns.*", '\1', '')
+        return '\V'.substitute(term, "\\m\\C^The '\\(\\S\\+\\()' method which returns.*", '\1', '')
     endif
-    let term = matchstr(a:item['text'], '\C variable \S\+ should begin with ')
+    let term = matchstr(a:item['text'], '\m\C variable \S\+ should begin with ')
     if term != ''
-        return '\V'.substitute(term, '\C.* variable \(\S\+\) should begin with .*', '\1', '')
+        return '\V'.substitute(term, '\m\C.* variable \(\S\+\) should begin with .*', '\1', '')
     endif
-    let term = matchstr(a:item['text'], "\\C^Avoid unused \\(private fields\\|local variables\\|private methods\\|parameters\\) such as '\\S\\+'")
+    let term = matchstr(a:item['text'], "\\m\\C^Avoid unused \\(private fields\\|local variables\\|private methods\\|parameters\\) such as '\\S\\+'")
     if term != ''
-        return '\V'.substitute(term, "\\C^Avoid unused \\(private fields\\|local variables\\|private methods\\|parameters\\) such as '\\(\\S\\+\\)'.*", '\2', '')
+        return '\V'.substitute(term, "\\m\\C^Avoid unused \\(private fields\\|local variables\\|private methods\\|parameters\\) such as '\\(\\S\\+\\)'.*", '\2', '')
     endif
     return ''
 endfunction

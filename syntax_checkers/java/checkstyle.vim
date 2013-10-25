@@ -30,7 +30,7 @@ endfunction
 function! SyntaxCheckers_java_checkstyle_Preprocess(errors)
     let out = copy(a:errors)
     for n in range(len(out))
-        let parts = matchlist(out[n], '\(.*<file name="\)\([^"]\+\)\(">.*\)')
+        let parts = matchlist(out[n], '\m\(.*<file name="\)\([^"]\+\)\(">.*\)')
         if len(parts) >= 4
             let parts[2] = syntastic#util#decodeXMLEntities(parts[2])
             let out[n] = join(parts[1:3], '')
@@ -44,7 +44,7 @@ function! SyntaxCheckers_java_checkstyle_GetLocList()
     let fname = syntastic#util#shescape( expand('%:p:h') . '/' . expand('%:t') )
 
     if has('win32unix')
-        let fname = substitute(system('cygpath -m ' . fname), '\%x00', '', 'g')
+        let fname = substitute(system('cygpath -m ' . fname), '\m\%x00', '', 'g')
     endif
 
     let makeprg = syntastic#makeprg#build({

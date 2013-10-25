@@ -41,7 +41,7 @@ if !exists("g:syntastic_java_javac_delete_output")
 endif
 
 function! s:CygwinPath(path)
-    return substitute(system("cygpath -m ".a:path), '\%x00', '', 'g')
+    return substitute(system("cygpath -m ".a:path), '\m\%x00', '', 'g')
 endfunction
 
 if !exists("g:syntastic_java_javac_temp_dir")
@@ -166,17 +166,17 @@ function! s:GetMavenProperties()
             let mvn_settings_output = split(system(mvn_cmd . ' help:effective-pom'), "\n")
             let current_path = 'project'
             for line in mvn_settings_output
-                let matches = matchlist(line, '^\s*<\([a-zA-Z0-9\-\.]\+\)>\s*$')
+                let matches = matchlist(line, '\m^\s*<\([a-zA-Z0-9\-\.]\+\)>\s*$')
                 if mvn_is_managed_tag && !empty(matches)
                     let mvn_is_managed_tag = index(g:syntastic_java_javac_maven_pom_tags, matches[1]) >= 0
                     let current_path .= '.' . matches[1]
                 else
-                    let matches = matchlist(line, '^\s*</\([a-zA-Z0-9\-\.]\+\)>\s*$')
+                    let matches = matchlist(line, '\m^\s*</\([a-zA-Z0-9\-\.]\+\)>\s*$')
                     if !empty(matches)
                         let mvn_is_managed_tag = index(g:syntastic_java_javac_maven_pom_tags, matches[1]) < 0
-                        let current_path  = substitute(current_path, '\.' . matches[1] . "$", '', '')
+                        let current_path  = substitute(current_path, '\m\.' . matches[1] . "$", '', '')
                     else
-                        let matches = matchlist(line, '^\s*<\([a-zA-Z0-9\-\.]\+\)>\(.\+\)</[a-zA-Z0-9\-\.]\+>\s*$')
+                        let matches = matchlist(line, '\m^\s*<\([a-zA-Z0-9\-\.]\+\)>\(.\+\)</[a-zA-Z0-9\-\.]\+>\s*$')
                         if mvn_is_managed_tag && !empty(matches)
                             let mvn_properties[current_path . '.' . matches[1]] = matches[2]
                         endif

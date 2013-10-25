@@ -32,8 +32,8 @@ function! SyntaxCheckers_vala_valac_IsAvailable()
 endfunction
 
 function! SyntaxCheckers_vala_valac_GetHighlightRegex(pos)
-    let strlength = strlen(matchstr(a:pos['text'], '\^\+$'))
-    return '\%>'.(a:pos.col-1).'c.*\%<'.(a:pos.col+strlength+1).'c'
+    let strlength = strlen(matchstr(a:pos['text'], '\m\^\+$'))
+    return '\%>' . (a:pos.col-1) . 'c.*\%<' . (a:pos.col+strlength+1) . 'c'
 endfunction
 
 function! s:GetValaModules()
