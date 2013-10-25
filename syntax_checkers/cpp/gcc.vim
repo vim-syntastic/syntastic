@@ -42,7 +42,7 @@ function! SyntaxCheckers_cpp_gcc_GetLocList()
         \     '%f:%l: %m',
         \ 'main_flags': '-x c++ -fsyntax-only',
         \ 'header_flags': '-x c++',
-        \ 'header_names': '\.\(h\|hpp\|hh\)$' })
+        \ 'header_names': '\m\.\(h\|hpp\|hh\)$' })
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({

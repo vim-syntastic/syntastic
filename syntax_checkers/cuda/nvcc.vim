@@ -53,7 +53,7 @@ function! SyntaxCheckers_cuda_nvcc_GetLocList()
         \ '%DMaking %*\a in %f,'.
         \ '%f|%l| %m'
 
-    if expand('%') =~? '\%(.h\|.hpp\|.cuh\)$'
+    if expand('%') =~? '\m\%(.h\|.hpp\|.cuh\)$'
         if exists('g:syntastic_cuda_check_header')
             let makeprg =
                 \ 'echo > .syntastic_dummy.cu ; ' .

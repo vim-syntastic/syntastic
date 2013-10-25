@@ -41,7 +41,7 @@ function! SyntaxCheckers_d_dmd_GetLocList()
         \     '%-G%f:%s:,%f(%l): %m,' .
         \     '%f:%l: %m',
         \ 'main_flags': '-c -of' . syntastic#util#DevNull(),
-        \ 'header_names': '\.di$' })
+        \ 'header_names': '\m\.di$' })
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
