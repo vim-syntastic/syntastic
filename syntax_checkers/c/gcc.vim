@@ -47,7 +47,7 @@ function! SyntaxCheckers_c_gcc_GetLocList()
         \     '%f:%l: %m',
         \ 'main_flags': '-x c -fsyntax-only',
         \ 'header_flags': '-x c',
-        \ 'header_names': '\.h$' })
+        \ 'header_names': '\m\.h$' })
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({

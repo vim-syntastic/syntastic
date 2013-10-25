@@ -217,7 +217,7 @@ function! s:SearchHeaders()
                 continue
             endtry
 
-            call filter(lines, 'v:val =~# "^\s*#\s*include"')
+            call filter(lines, 'v:val =~# ''\m^\s*#\s*include''')
 
             for handler in s:handlers
                 if index(found, handler["regex"]) != -1

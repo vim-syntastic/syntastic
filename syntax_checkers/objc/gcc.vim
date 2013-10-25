@@ -46,7 +46,7 @@ function! SyntaxCheckers_objc_gcc_GetLocList()
         \     '%f:%l: %m',
         \ 'main_flags': '-x objective-c -fsyntax-only',
         \ 'header_flags': '-x objective-c-header -lobjc',
-        \ 'header_names': '\.h$' })
+        \ 'header_names': '\m\.h$' })
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
