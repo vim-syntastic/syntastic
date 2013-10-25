@@ -25,7 +25,7 @@ function! SyntaxCheckers_css_prettycss_IsAvailable()
 endfunction
 
 function! SyntaxCheckers_css_prettycss_GetHighlightRegex(item)
-    let term = matchstr(a:item["text"], ' (\zs[^)]\+\ze)$')
+    let term = matchstr(a:item["text"], '\m (\zs[^)]\+\ze)$')
     if term != ''
         let term = '\V' . term
     endif

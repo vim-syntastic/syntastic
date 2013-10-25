@@ -39,8 +39,8 @@ function! syntastic#util#parseShebang()
         let line = getline(lnum)
 
         if line =~ '^#!'
-            let exe = matchstr(line, '^#!\s*\zs[^ \t]*')
-            let args = split(matchstr(line, '^#!\s*[^ \t]*\zs.*'))
+            let exe = matchstr(line, '\m^#!\s*\zs[^ \t]*')
+            let args = split(matchstr(line, '\m^#!\s*[^ \t]*\zs.*'))
             return {'exe': exe, 'args': args}
         endif
     endfor
@@ -50,7 +50,7 @@ endfunction
 
 " Parse a version string.  Return an array of version components.
 function! syntastic#util#parseVersion(version)
-    return split(matchstr( a:version, '\v^\D*\zs\d+(\.\d+)+\ze' ), '\.')
+    return split(matchstr( a:version, '\v^\D*\zs\d+(\.\d+)+\ze' ), '\m\.')
 endfunction
 
 " Run 'command' in a shell and parse output as a version string.
@@ -177,11 +177,11 @@ endfunction
 " decode XML entities
 function! syntastic#util#decodeXMLEntities(string)
     let str = a:string
-    let str = substitute(str, '&lt;', '<', 'g')
-    let str = substitute(str, '&gt;', '>', 'g')
-    let str = substitute(str, '&quot;', '"', 'g')
-    let str = substitute(str, '&apos;', "'", 'g')
-    let str = substitute(str, '&amp;', '\&', 'g')
+    let str = substitute(str, '\m&lt;', '<', 'g')
+    let str = substitute(str, '\m&gt;', '>', 'g')
+    let str = substitute(str, '\m&quot;', '"', 'g')
+    let str = substitute(str, '\m&apos;', "'", 'g')
+    let str = substitute(str, '\m&amp;', '\&', 'g')
     return str
 endfunction
 

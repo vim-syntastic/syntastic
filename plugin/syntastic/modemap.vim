@@ -17,7 +17,7 @@ function! g:SyntasticModeMap.Instance()
 endfunction
 
 function! g:SyntasticModeMap.allowsAutoChecking(filetype)
-    let fts = split(a:filetype, '\.')
+    let fts = split(a:filetype, '\m\.')
 
     if self.isPassive()
         return self._isOneFiletypeActive(fts)

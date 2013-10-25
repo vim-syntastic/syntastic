@@ -207,7 +207,7 @@ endfunction
 function! s:SyntasticRegistryNormaliseFiletype(ftalias)
     let ft = get(s:defaultFiletypeMap, a:ftalias, a:ftalias)
     let ft = get(g:syntastic_filetype_map, ft, ft)
-    let ft = substitute(ft, '-', '_', 'g')
+    let ft = substitute(ft, '\m-', '_', 'g')
     return ft
 endfunction
 

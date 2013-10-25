@@ -53,7 +53,7 @@ function! SyntaxCheckers_html_w3_GetLocList()
         \ 'returns': [0] })
 
     for n in range(len(loclist))
-        let loclist[n]['text'] = substitute(loclist[n]['text'], '\\\([\"]\)', '\1', 'g')
+        let loclist[n]['text'] = substitute(loclist[n]['text'], '\m\\\([\"]\)', '\1', 'g')
     endfor
 
     return loclist

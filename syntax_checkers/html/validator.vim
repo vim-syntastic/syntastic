@@ -56,8 +56,8 @@ function! SyntaxCheckers_html_validator_Preprocess(errors)
         if len(parts) >= 3
             " URL decode, except leave alone any "+"
             let parts[1] = substitute(parts[1], '\m%\(\x\x\)', '\=nr2char("0x".submatch(1))', 'g')
-            let parts[1] = substitute(parts[1], '\\"', '"', 'g')
-            let parts[1] = substitute(parts[1], '\\\\', '\\', 'g')
+            let parts[1] = substitute(parts[1], '\m\\"', '"', 'g')
+            let parts[1] = substitute(parts[1], '\m\\\\', '\\', 'g')
             call add(out, '"' . parts[1] . '"' . parts[2])
         endif
     endfor

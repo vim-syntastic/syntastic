@@ -179,7 +179,7 @@ function! s:ClearCache()
 endfunction
 
 function! s:CurrentFiletypes()
-    return split(&filetype, '\.')
+    return split(&filetype, '\m\.')
 endfunction
 
 "detect and cache all syntax errors in this buffer
@@ -324,28 +324,28 @@ function! SyntasticStatuslineFlag()
         let output = g:syntastic_stl_format
 
         "hide stuff wrapped in %E(...) unless there are errors
-        let output = substitute(output, '\C%E{\([^}]*\)}', num_errors ? '\1' : '' , 'g')
+        let output = substitute(output, '\m\C%E{\([^}]*\)}', num_errors ? '\1' : '' , 'g')
 
         "hide stuff wrapped in %W(...) unless there are warnings
-        let output = substitute(output, '\C%W{\([^}]*\)}', num_warnings ? '\1' : '' , 'g')
+        let output = substitute(output, '\m\C%W{\([^}]*\)}', num_warnings ? '\1' : '' , 'g')
 
         "hide stuff wrapped in %B(...) unless there are both errors and warnings
-        let output = substitute(output, '\C%B{\([^}]*\)}', (num_warnings && num_errors) ? '\1' : '' , 'g')
+        let output = substitute(output, '\m\C%B{\([^}]*\)}', (num_warnings && num_errors) ? '\1' : '' , 'g')
 
 
         "sub in the total errors/warnings/both
-        let output = substitute(output, '\C%w', num_warnings, 'g')
-        let output = substitute(output, '\C%e', num_errors, 'g')
-        let output = substitute(output, '\C%t', num_issues, 'g')
+        let output = substitute(output, '\m\C%w', num_warnings, 'g')
+        let output = substitute(output, '\m\C%e', num_errors, 'g')
+        let output = substitute(output, '\m\C%t', num_issues, 'g')
 
         "first error/warning line num
-        let output = substitute(output, '\C%F', num_issues ? issues[0]['lnum'] : '', 'g')
+        let output = substitute(output, '\m\C%F', num_issues ? issues[0]['lnum'] : '', 'g')
 
         "first error line num
-        let output = substitute(output, '\C%fe', num_errors ? errors[0]['lnum'] : '', 'g')
+        let output = substitute(output, '\m\C%fe', num_errors ? errors[0]['lnum'] : '', 'g')
 
         "first warning line num
-        let output = substitute(output, '\C%fw', num_warnings ? warnings[0]['lnum'] : '', 'g')
+        let output = substitute(output, '\m\C%fw', num_warnings ? warnings[0]['lnum'] : '', 'g')
 
         return output
     else

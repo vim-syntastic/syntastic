@@ -20,7 +20,7 @@ function! SyntaxCheckers_lua_luac_IsAvailable()
 endfunction
 
 function! SyntaxCheckers_lua_luac_GetHighlightRegex(pos)
-    let near = matchstr(a:pos['text'], "near '[^']\\+'")
+    let near = matchstr(a:pos['text'], "\\mnear '[^']\\+'")
     let result = ''
     if len(near) > 0
         let near = split(near, "'")[1]
@@ -32,7 +32,7 @@ function! SyntaxCheckers_lua_luac_GetHighlightRegex(pos)
         else
             let result = '\V'.near
         endif
-        let open = matchstr(a:pos['text'], "(to close '[^']\\+' at line [0-9]\\+)")
+        let open = matchstr(a:pos['text'], "\\m(to close '[^']\\+' at line [0-9]\\+)")
         if len(open) > 0
             let oline = split(open, "'")[1:2]
             let line = 0+strpart(oline[1], 9)
