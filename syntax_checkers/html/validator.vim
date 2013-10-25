@@ -45,10 +45,8 @@ if !exists('g:syntastic_html_validator_nsfilter')
     let g:syntastic_html_validator_nsfilter = ''
 endif
 
-let s:decoder = 'awk -f ' . syntastic#util#shescape(expand('<sfile>:p:h') . '/validator_decode.awk')
-
 function! SyntaxCheckers_html_validator_IsAvailable()
-    return executable('curl') && executable('awk')
+    return executable('curl')
 endfunction
 
 function! SyntaxCheckers_html_validator_Preprocess(errors)
