@@ -17,10 +17,6 @@ if exists("g:loaded_syntastic_python_pep8_checker")
 endif
 let g:loaded_syntastic_python_pep8_checker=1
 
-function! SyntaxCheckers_python_pep8_IsAvailable()
-    return executable('pep8')
-endfunction
-
 function! SyntaxCheckers_python_pep8_GetLocList() dict
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'pep8',

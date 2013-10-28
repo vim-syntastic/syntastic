@@ -17,22 +17,10 @@ if !exists("g:syntastic_javascript_jsl_conf")
     let g:syntastic_javascript_jsl_conf = ""
 endif
 
-function! s:ConfFlag()
-    if !empty(g:syntastic_javascript_jsl_conf)
-        return "-conf " . g:syntastic_javascript_jsl_conf
-    endif
-
-    return ""
-endfunction
-
-function! SyntaxCheckers_javascript_jsl_IsAvailable()
-    return executable('jsl')
-endfunction
-
 function! SyntaxCheckers_javascript_jsl_GetLocList() dict
     let makeprg = syntastic#makeprg#build({
-        \ 'exe': 'jsl',
-        \ 'args': s:ConfFlag() . " -nologo -nofilelisting -nosummary -nocontext -process",
+        \ 'args': (!empty(g:syntastic_javascript_jsl_conf) ? "-conf " . g:syntastic_javascript_jsl_conf : "") .
+        \       " -nologo -nofilelisting -nosummary -nocontext -process",
         \ 'checker': self })
 
     let errorformat =

@@ -12,10 +12,6 @@ if exists("g:loaded_syntastic_python_python_checker")
 endif
 let g:loaded_syntastic_python_python_checker=1
 
-function! SyntaxCheckers_python_python_IsAvailable()
-    return executable('python')
-endfunction
-
 function! SyntaxCheckers_python_python_GetLocList() dict
     let fname = "'" . escape(expand('%'), "\\'") . "'"
 

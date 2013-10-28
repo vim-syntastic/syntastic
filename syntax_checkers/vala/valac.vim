@@ -27,10 +27,6 @@ if exists("g:loaded_syntastic_vala_valac_checker")
 endif
 let g:loaded_syntastic_vala_valac_checker = 1
 
-function! SyntaxCheckers_vala_valac_IsAvailable()
-    return executable('valac')
-endfunction
-
 function! SyntaxCheckers_vala_valac_GetHighlightRegex(pos)
     let strlength = strlen(matchstr(a:pos['text'], '\m\^\+$'))
     return '\%>' . (a:pos.col-1) . 'c.*\%<' . (a:pos.col+strlength+1) . 'c'
@@ -55,9 +51,9 @@ endfunction
 function! SyntaxCheckers_vala_valac_GetLocList() dict
     let vala_pkg_args = join(map(s:GetValaModules(), '"--pkg ".v:val'), ' ')
     let makeprg = syntastic#makeprg#build({
-        \ 'exe': 'valac',
         \ 'args': '-C ' . vala_pkg_args,
         \ 'checker': self })
+
     let errorformat =
         \ '%A%f:%l.%c-%\d%\+.%\d%\+: %t%[a-z]%\+: %m,'.
         \ '%C%m,'.

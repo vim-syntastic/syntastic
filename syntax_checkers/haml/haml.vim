@@ -19,7 +19,7 @@ if !exists('g:syntastic_haml_interpreter')
     let g:syntastic_haml_interpreter = 'haml'
 endif
 
-function! SyntaxCheckers_haml_haml_IsAvailable()
+function! SyntaxCheckers_haml_haml_IsAvailable() dict
     return executable(expand(g:syntastic_haml_interpreter))
 endfunction
 

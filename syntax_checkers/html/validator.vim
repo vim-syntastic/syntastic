@@ -45,7 +45,7 @@ if !exists('g:syntastic_html_validator_nsfilter')
     let g:syntastic_html_validator_nsfilter = ''
 endif
 
-function! SyntaxCheckers_html_validator_IsAvailable()
+function! SyntaxCheckers_html_validator_IsAvailable() dict
     return executable('curl')
 endfunction
 

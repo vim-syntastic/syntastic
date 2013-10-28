@@ -10,10 +10,6 @@ if exists("g:loaded_syntastic_python_pep257_checker")
 endif
 let g:loaded_syntastic_python_pep257_checker = 1
 
-function! SyntaxCheckers_python_pep257_IsAvailable()
-    return executable('pep257')
-endfunction
-
 " sanity: kill empty lines here rather than munging errorformat
 function! SyntaxCheckers_python_pep257_Preprocess(errors)
     return filter(copy(a:errors), 'v:val != ""')

@@ -18,15 +18,15 @@ if exists("g:loaded_syntastic_ruby_rubocop_checker")
 endif
 let g:loaded_syntastic_ruby_rubocop_checker=1
 
-function! SyntaxCheckers_ruby_rubocop_IsAvailable()
+function! SyntaxCheckers_ruby_rubocop_IsAvailable() dict
+    let exe = self.getExec()
     return
-        \ executable('rubocop') &&
-        \ syntastic#util#versionIsAtLeast(syntastic#util#getVersion('rubocop --version'), [0,9,0])
+        \ executable(exe) &&
+        \ syntastic#util#versionIsAtLeast(syntastic#util#getVersion(exe . ' --version'), [0,9,0])
 endfunction
 
 function! SyntaxCheckers_ruby_rubocop_GetLocList() dict
     let makeprg = syntastic#makeprg#build({
-        \ 'exe': 'rubocop',
         \ 'args': '--format emacs --silent',
         \ 'checker': self })
 

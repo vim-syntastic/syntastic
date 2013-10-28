@@ -15,10 +15,6 @@ if exists("g:loaded_syntastic_lua_luac_checker")
 endif
 let g:loaded_syntastic_lua_luac_checker=1
 
-function! SyntaxCheckers_lua_luac_IsAvailable()
-    return executable('luac')
-endfunction
-
 function! SyntaxCheckers_lua_luac_GetHighlightRegex(pos)
     let near = matchstr(a:pos['text'], "\\mnear '[^']\\+'")
     let result = ''
@@ -42,10 +38,8 @@ function! SyntaxCheckers_lua_luac_GetHighlightRegex(pos)
     return result
 endfunction
 
-
 function! SyntaxCheckers_lua_luac_GetLocList() dict
     let makeprg = syntastic#makeprg#build({
-        \ 'exe': 'luac',
         \ 'args': '-p',
         \ 'checker': self })
 
@@ -55,7 +49,6 @@ function! SyntaxCheckers_lua_luac_GetLocList() dict
         \ 'makeprg': makeprg,
         \ 'errorformat': errorformat,
         \ 'defaults': { 'bufnr': bufnr(''), 'type': 'E' } })
-
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({

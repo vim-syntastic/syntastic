@@ -51,7 +51,7 @@ function! s:IsShellValid()
 endfunction
 
 
-function! SyntaxCheckers_sh_sh_IsAvailable()
+function! SyntaxCheckers_sh_sh_IsAvailable() dict
     return s:IsShellValid()
 endfunction
 

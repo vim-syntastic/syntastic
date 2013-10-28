@@ -24,10 +24,6 @@ if exists("g:loaded_syntastic_cuda_nvcc_checker")
 endif
 let g:loaded_syntastic_cuda_nvcc_checker=1
 
-function! SyntaxCheckers_cuda_nvcc_IsAvailable()
-    return executable('nvcc')
-endfunction
-
 function! SyntaxCheckers_cuda_nvcc_GetLocList() dict
     if exists('g:syntastic_cuda_arch')
         let arch_flag = '-arch=' . g:syntastic_cuda_arch
@@ -35,8 +31,9 @@ function! SyntaxCheckers_cuda_nvcc_GetLocList() dict
         let arch_flag = ''
     endif
     let makeprg =
-        \ 'nvcc ' . arch_flag . ' --cuda -O0 -I . -Xcompiler -fsyntax-only ' .
+        \ self.getExec() . ' ' . arch_flag . ' --cuda -O0 -I . -Xcompiler -fsyntax-only ' .
         \ syntastic#util#shexpand('%') . ' ' . syntastic#c#NullOutput()
+
     let errorformat =
         \ '%*[^"]"%f"%*\D%l: %m,'.
         \ '"%f"%*\D%l: %m,'.
@@ -57,7 +54,8 @@ function! SyntaxCheckers_cuda_nvcc_GetLocList() dict
         if exists('g:syntastic_cuda_check_header')
             let makeprg =
                 \ 'echo > .syntastic_dummy.cu ; ' .
-                \ 'nvcc ' . arch_flag . ' --cuda -O0 -I . .syntastic_dummy.cu -Xcompiler -fsyntax-only -include ' .
+                \ self.getExec() . ' ' . arch_flag .
+                \ ' --cuda -O0 -I . .syntastic_dummy.cu -Xcompiler -fsyntax-only -include ' .
                 \ syntastic#util#shexpand('%') . ' ' . syntastic#c#NullOutput()
         else
             return []

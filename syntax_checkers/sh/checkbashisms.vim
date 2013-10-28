@@ -11,15 +11,8 @@ if exists("g:loaded_syntastic_sh_checkbashisms_checker")
 endif
 let g:loaded_syntastic_sh_checkbashisms_checker=1
 
-
-function! SyntaxCheckers_sh_checkbashisms_IsAvailable()
-    return executable('checkbashisms')
-endfunction
-
-
 function! SyntaxCheckers_sh_checkbashisms_GetLocList() dict
     let makeprg = syntastic#makeprg#build({
-        \ 'exe': 'checkbashisms',
         \ 'args': '-fx',
         \ 'checker': self})
 

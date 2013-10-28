@@ -19,7 +19,7 @@ if !exists("g:syntastic_ruby_exec")
     let g:syntastic_ruby_exec = "ruby"
 endif
 
-function! SyntaxCheckers_eruby_ruby_IsAvailable()
+function! SyntaxCheckers_eruby_ruby_IsAvailable() dict
     return executable(expand(g:syntastic_ruby_exec))
 endfunction
 

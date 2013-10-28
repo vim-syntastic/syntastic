@@ -12,6 +12,7 @@ function! g:SyntasticChecker.New(args)
 
     let newObj._filetype = a:args['filetype']
     let newObj._name = a:args['name']
+    let newObj._exec = get(a:args, 'exec', newObj._name)
 
     if has_key(a:args, 'redirect')
         let [filetype, name] = split(a:args['redirect'], '/')
@@ -21,7 +22,12 @@ function! g:SyntasticChecker.New(args)
     endif
 
     let newObj._locListFunc = function(prefix . 'GetLocList')
-    let newObj._isAvailableFunc = function(prefix . 'IsAvailable')
+
+    if exists('*' . prefix . 'IsAvailable')
+        let newObj._isAvailableFunc = function(prefix . 'IsAvailable')
+    else
+        let newObj._isAvailableFunc = function('SyntasticCheckerIsAvailableDefault')
+    endif
 
     if exists('*' . prefix . 'GetHighlightRegex')
         let newObj._highlightRegexFunc = function(prefix. 'GetHighlightRegex')
@@ -38,6 +44,14 @@ endfunction
 
 function! g:SyntasticChecker.getName()
     return self._name
+endfunction
+
+function! g:SyntasticChecker.getExec()
+    if exists('g:syntastic_' . self._filetype . '_' . self._name . '_exec')
+        return expand(g:syntastic_{self._filetype}_{self._name}_exec)
+    endif
+
+    return self._exec
 endfunction
 
 function! g:SyntasticChecker.getLocList()
@@ -83,6 +97,11 @@ function! g:SyntasticChecker._populateHighlightRegexes(list)
         endfor
     endif
     return list
+endfunction
+
+" Non-method functions
+function! SyntasticCheckerIsAvailableDefault() dict
+    return executable(self.getExec())
 endfunction
 
 " vim: set sw=4 sts=4 et fdm=marker:

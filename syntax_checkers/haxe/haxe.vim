@@ -15,10 +15,6 @@ if exists("g:loaded_syntastic_haxe_haxe_checker")
 endif
 let g:loaded_syntastic_haxe_haxe_checker=1
 
-function! SyntaxCheckers_haxe_haxe_IsAvailable()
-    return executable('haxe')
-endfunction
-
 function! SyntaxCheckers_haxe_haxe_GetLocList() dict
     if exists('b:vaxe_hxml')
         let hxml = b:vaxe_hxml
@@ -31,7 +27,6 @@ function! SyntaxCheckers_haxe_haxe_GetLocList() dict
 
     if !empty(hxml)
         let makeprg = syntastic#makeprg#build({
-            \ 'exe': 'haxe',
             \ 'fname': syntastic#util#shescape(fnameescape(fnamemodify(hxml, ':t'))),
             \ 'checker': self })
 

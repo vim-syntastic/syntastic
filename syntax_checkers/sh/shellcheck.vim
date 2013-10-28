@@ -8,10 +8,6 @@ if exists("g:loaded_syntastic_sh_shellcheck_checker")
 endif
 let g:loaded_syntastic_sh_shellcheck_checker = 1
 
-function! SyntaxCheckers_sh_shellcheck_IsAvailable()
-    return executable('jsoncheck')
-endfunction
-
 function! SyntaxCheckers_sh_shellcheck_Preprocess(json)
     " A hat tip to Mark Weber for this trick
     " http://stackoverflow.com/a/19105763
@@ -22,7 +18,7 @@ function! SyntaxCheckers_sh_shellcheck_Preprocess(json)
 endfunction
 
 function! SyntaxCheckers_sh_shellcheck_GetLocList()
-    let makeprg = 'jsoncheck <' . syntastic#util#shexpand('%')
+    let makeprg = expand(self.getExec()) . ' < ' . syntastic#util#shexpand('%')
 
     let errorformat = '%t:%l:%v:%m'
 
@@ -45,4 +41,5 @@ endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'sh',
-    \ 'name': 'shellcheck' })
+    \ 'name': 'shellcheck',
+    \ 'exec': 'jsoncheck' })

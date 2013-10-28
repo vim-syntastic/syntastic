@@ -17,8 +17,8 @@ if exists("g:loaded_syntastic_go_go_checker")
 endif
 let g:loaded_syntastic_go_go_checker=1
 
-function! SyntaxCheckers_go_go_IsAvailable()
-    return executable('go')
+function! SyntaxCheckers_go_go_IsAvailable() dict
+    return executable('go') && executable('gofmt')
 endfunction
 
 function! SyntaxCheckers_go_go_GetLocList() dict

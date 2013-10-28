@@ -15,13 +15,8 @@ if exists("g:loaded_syntastic_matlab_mlint_checker")
 endif
 let g:loaded_syntastic_matlab_mlint_checker=1
 
-function! SyntaxCheckers_matlab_mlint_IsAvailable()
-    return executable("mlint")
-endfunction
-
 function! SyntaxCheckers_matlab_mlint_GetLocList() dict
     let makeprg = syntastic#makeprg#build({
-        \ 'exe': 'mlint',
         \ 'args': '-id $*',
         \ 'checker': self })
 

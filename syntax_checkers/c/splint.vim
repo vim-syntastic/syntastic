@@ -21,17 +21,12 @@ if exists("g:loaded_syntastic_c_splint_checker")
 endif
 let g:loaded_syntastic_c_splint_checker = 1
 
-function! SyntaxCheckers_c_splint_IsAvailable()
-    return executable("splint")
-endfunction
-
 if !exists('g:syntastic_splint_config_file')
     let g:syntastic_splint_config_file = '.syntastic_splint_config'
 endif
 
 function! SyntaxCheckers_c_splint_GetLocList() dict
     let makeprg = syntastic#makeprg#build({
-        \ 'exe': 'splint',
         \ 'post_args': '-showfunc -hints +quiet ' . syntastic#c#ReadConfig(g:syntastic_splint_config_file),
         \ 'checker': self })
 

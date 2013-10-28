@@ -18,13 +18,8 @@ if exists("g:loaded_syntastic_yaml_jsyaml_checker")
 endif
 let g:loaded_syntastic_yaml_jsyaml_checker=1
 
-function! SyntaxCheckers_yaml_jsyaml_IsAvailable()
-    return executable("js-yaml")
-endfunction
-
 function! SyntaxCheckers_yaml_jsyaml_GetLocList() dict
     let makeprg = syntastic#makeprg#build({
-        \ 'exe': 'js-yaml',
         \ 'args': '--compact',
         \ 'checker': self })
 
@@ -38,4 +33,5 @@ endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'yaml',
-    \ 'name': 'jsyaml'})
+    \ 'name': 'jsyaml',
+    \ 'exec': 'js-yaml'})

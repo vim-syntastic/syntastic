@@ -15,13 +15,8 @@ if exists("g:loaded_syntastic_hss_hss_checker")
 endif
 let g:loaded_syntastic_hss_hss_checker=1
 
-function! SyntaxCheckers_hss_hss_IsAvailable()
-    return executable('hss')
-endfunction
-
 function! SyntaxCheckers_hss_hss_GetLocList() dict
     let makeprg = syntastic#makeprg#build({
-	\ 'exe': 'hss',
 	\ 'args' : '-output ' . syntastic#util#DevNull(),
 	\ 'checker': self })
 

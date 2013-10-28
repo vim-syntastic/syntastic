@@ -9,7 +9,7 @@ let g:SyntasticMakeprgBuilder = {}
 
 function! g:SyntasticMakeprgBuilder.New(checker, exe, args, fname, post_args, tail)
     let newObj = copy(self)
-    let newObj._exe = a:exe
+    let newObj._exe = (a:exe == '' && has_key(a:checker, 'getExec')) ? a:checker.getExec() : a:exe
     let newObj._args = a:args
     let newObj._fname = a:fname
     let newObj._post_args = a:post_args

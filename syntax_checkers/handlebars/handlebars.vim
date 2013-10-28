@@ -13,13 +13,8 @@ if exists("g:loaded_syntastic_handlebars_handlebars_checker")
 endif
 let g:loaded_syntastic_handlebars_handlebars_checker=1
 
-function! SyntaxCheckers_handlebars_handlebars_IsAvailable()
-    return executable('handlebars')
-endfunction
-
 function! SyntaxCheckers_handlebars_handlebars_GetLocList() dict
     let makeprg = syntastic#makeprg#build({
-        \ 'exe': 'handlebars',
         \ 'args': '-f ' . syntastic#util#DevNull(),
         \ 'checker': self })
 

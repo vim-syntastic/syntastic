@@ -15,14 +15,8 @@ if exists('g:loaded_syntastic_tex_lacheck_checker')
 endif
 let g:loaded_syntastic_tex_lacheck_checker=1
 
-function! SyntaxCheckers_tex_lacheck_IsAvailable()
-    return executable('lacheck')
-endfunction
-
 function! SyntaxCheckers_tex_lacheck_GetLocList() dict
-    let makeprg = syntastic#makeprg#build({
-        \ 'exe': 'lacheck',
-        \ 'checker': self })
+    let makeprg = syntastic#makeprg#build({ 'checker': self })
 
     let errorformat =
         \ '%-G** %f:,' .

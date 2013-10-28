@@ -20,7 +20,7 @@ if exists("g:syntastic_puppet_lint_arguments")
     call syntastic#util#deprecationWarn("variable g:syntastic_puppet_lint_arguments is deprecated, please use g:syntastic_puppet_puppetlint_args instead")
 endif
 
-function! SyntaxCheckers_puppet_puppetlint_IsAvailable()
+function! SyntaxCheckers_puppet_puppetlint_IsAvailable() dict
     return
         \ executable("puppet") &&
         \ executable("puppet-lint") &&
@@ -43,4 +43,5 @@ endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'puppet',
-    \ 'name': 'puppetlint'})
+    \ 'name': 'puppetlint',
+    \ 'exec': 'puppet-lint'})

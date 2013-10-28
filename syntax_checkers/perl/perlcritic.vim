@@ -33,13 +33,8 @@ if !exists('g:syntastic_perl_perlcritic_thres')
     let g:syntastic_perl_perlcritic_thres = 5
 endif
 
-function! SyntaxCheckers_perl_perlcritic_IsAvailable()
-    return executable('perlcritic')
-endfunction
-
 function! SyntaxCheckers_perl_perlcritic_GetLocList() dict
     let makeprg = syntastic#makeprg#build({
-        \ 'exe': 'perlcritic',
         \ 'post_args': '--quiet --nocolor --verbose "\%s:\%f:\%l:\%c:(\%s) \%m (\%e)\n"',
         \ 'checker': self })
 

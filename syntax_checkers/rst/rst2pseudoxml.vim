@@ -18,8 +18,8 @@ if exists("g:loaded_syntastic_rst_rst2pseudoxml_checker")
 endif
 let g:loaded_syntastic_rst_rst2pseudoxml_checker=1
 
-function! SyntaxCheckers_rst_rst2pseudoxml_IsAvailable()
-    return executable("rst2pseudoxml.py") || executable("rst2pseudoxml")
+function! SyntaxCheckers_rst_rst2pseudoxml_IsAvailable() dict
+    return executable(s:exe())
 endfunction
 
 function! SyntaxCheckers_rst_rst2pseudoxml_GetLocList() dict

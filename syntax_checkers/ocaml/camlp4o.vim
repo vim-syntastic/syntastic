@@ -53,14 +53,13 @@ if exists("g:loaded_syntastic_ocaml_camlp4o_checker")
 endif
 let g:loaded_syntastic_ocaml_camlp4o_checker=1
 
-if exists('g:syntastic_ocaml_camlp4r') &&
-    \ g:syntastic_ocaml_camlp4r != 0
+if exists('g:syntastic_ocaml_camlp4r') && g:syntastic_ocaml_camlp4r != 0
     let s:ocamlpp="camlp4r"
 else
     let s:ocamlpp="camlp4o"
 endif
 
-function! SyntaxCheckers_ocaml_camlp4o_IsAvailable()
+function! SyntaxCheckers_ocaml_camlp4o_IsAvailable() dict
     return executable(s:ocamlpp)
 endfunction
 

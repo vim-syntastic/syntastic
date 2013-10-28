@@ -23,10 +23,6 @@ if !exists("g:syntastic_java_checkstyle_conf_file")
     let g:syntastic_java_checkstyle_conf_file = 'sun_checks.xml'
 endif
 
-function! SyntaxCheckers_java_checkstyle_IsAvailable()
-    return executable('java')
-endfunction
-
 function! SyntaxCheckers_java_checkstyle_Preprocess(errors)
     let out = copy(a:errors)
     for n in range(len(out))
@@ -48,7 +44,6 @@ function! SyntaxCheckers_java_checkstyle_GetLocList() dict
     endif
 
     let makeprg = syntastic#makeprg#build({
-        \ 'exe': 'java',
         \ 'args': '-cp ' . g:syntastic_java_checkstyle_classpath .
         \         ' com.puppycrawl.tools.checkstyle.Main -c ' . g:syntastic_java_checkstyle_conf_file .
         \         ' -f xml',
@@ -75,4 +70,5 @@ endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'java',
-    \ 'name': 'checkstyle'})
+    \ 'name': 'checkstyle',
+    \ 'exec': 'java'})

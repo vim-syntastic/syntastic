@@ -21,10 +21,6 @@ endif
 
 let s:check_file = expand('<sfile>:p:h') . '/erlang_check_file.erl'
 
-function! SyntaxCheckers_erlang_escript_IsAvailable()
-    return executable('escript')
-endfunction
-
 function! SyntaxCheckers_erlang_escript_GetLocList() dict
     if expand('%:e') ==# 'hrl'
         return []
@@ -39,7 +35,6 @@ function! SyntaxCheckers_erlang_escript_GetLocList() dict
         let post_args = g:syntastic_erlc_include_path
     endif
     let makeprg = syntastic#makeprg#build({
-        \ 'exe': 'escript',
         \ 'args': args,
         \ 'fname': syntastic#util#shexpand('%:p'),
         \ 'post_args': post_args,

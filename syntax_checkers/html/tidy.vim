@@ -42,10 +42,6 @@ if !exists('g:syntastic_html_tidy_empty_tags')
     let g:syntastic_html_tidy_empty_tags = []
 endif
 
-function! SyntaxCheckers_html_tidy_IsAvailable()
-    return executable('tidy')
-endfunction
-
 " TODO: join this with xhtml.vim for DRY's sake?
 function! s:TidyEncOptByFenc()
     let tidy_opts = {
@@ -141,7 +137,6 @@ endfunction
 
 function! SyntaxCheckers_html_tidy_GetLocList() dict
     let makeprg = syntastic#makeprg#build({
-        \ 'exe': 'tidy',
         \ 'args': s:Args(),
         \ 'tail': '2>&1',
         \ 'checker': self })

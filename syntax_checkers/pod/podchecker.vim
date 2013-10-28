@@ -14,14 +14,8 @@ if exists("g:loaded_syntastic_pod_podchecker_checker")
 endif
 let g:loaded_syntastic_pod_podchecker_checker=1
 
-function! SyntaxCheckers_pod_podchecker_IsAvailable()
-    return executable("podchecker")
-endfunction
-
 function! SyntaxCheckers_pod_podchecker_GetLocList() dict
-    let makeprg = syntastic#makeprg#build({
-        \ 'exe': 'podchecker',
-        \ 'checker': self })
+    let makeprg = syntastic#makeprg#build({ 'checker': self })
 
     let errorformat =
         \ '%W%[%#]%[%#]%[%#] WARNING: %m at line %l in file %f,' .

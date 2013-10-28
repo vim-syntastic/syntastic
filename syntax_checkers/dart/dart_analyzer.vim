@@ -17,10 +17,6 @@ if !exists("g:syntastic_dart_analyzer_conf")
     let g:syntastic_dart_analyzer_conf = ''
 endif
 
-function! SyntaxCheckers_dart_dart_analyzer_IsAvailable()
-    return executable("dart_analyzer")
-endfunction
-
 function! SyntaxCheckers_dart_dart_analyzer_GetHighlightRegex(error)
     let lcol = a:error['col'] - 1
     let rcol = a:error['nr'] + lcol + 1
@@ -29,11 +25,9 @@ function! SyntaxCheckers_dart_dart_analyzer_GetHighlightRegex(error)
 endfunction
 
 function! SyntaxCheckers_dart_dart_analyzer_GetLocList() dict
-    let args = !empty(g:syntastic_dart_analyzer_conf) ? ' ' . g:syntastic_dart_analyzer_conf : ''
     let makeprg = syntastic#makeprg#build({
-        \ 'exe': 'dart_analyzer',
         \ 'args': '--error_format machine',
-        \ 'post_args': args,
+        \ 'post_args': g:syntastic_dart_analyzer_conf,
         \ 'checker': self })
 
     " Machine readable format looks like:

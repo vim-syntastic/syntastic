@@ -161,7 +161,7 @@ function! s:GetMavenProperties()
     let pom = findfile("pom.xml", ".;")
     if s:has_maven && filereadable(pom)
         if !has_key(g:syntastic_java_javac_maven_pom_properties, pom)
-            let mvn_cmd = g:syntastic_java_maven_executable . ' -f ' . pom
+            let mvn_cmd = expand(g:syntastic_java_maven_executable) . ' -f ' . pom
             let mvn_is_managed_tag = 1
             let mvn_settings_output = split(system(mvn_cmd . ' help:effective-pom'), "\n")
             let current_path = 'project'
@@ -196,7 +196,7 @@ function! s:GetMavenClasspath()
     let pom = findfile("pom.xml", ".;")
     if s:has_maven && filereadable(pom)
         if !has_key(g:syntastic_java_javac_maven_pom_ftime, pom) || g:syntastic_java_javac_maven_pom_ftime[pom] != getftime(pom)
-            let mvn_cmd = g:syntastic_java_maven_executable . ' -f ' . pom
+            let mvn_cmd = expand(g:syntastic_java_maven_executable) . ' -f ' . pom
             let mvn_classpath_output = split(system(mvn_cmd . ' dependency:build-classpath'), "\n")
             let mvn_classpath = ''
             let class_path_next = 0
@@ -233,9 +233,9 @@ function! s:GetMavenClasspath()
     return ''
 endfunction
 
-function! SyntaxCheckers_java_javac_IsAvailable()
-    let s:has_maven = executable(g:syntastic_java_maven_executable)
-    return executable(g:syntastic_java_javac_executable)
+function! SyntaxCheckers_java_javac_IsAvailable() dict
+    let s:has_maven = executable(expand(g:syntastic_java_maven_executable))
+    return executable(expand(g:syntastic_java_javac_executable))
 endfunction
 
 function! s:MavenOutputDirectory()
@@ -331,7 +331,6 @@ function! SyntaxCheckers_java_javac_GetLocList() dict
     endif
 
     let makeprg = syntastic#makeprg#build({
-        \ 'exe': g:syntastic_java_javac_executable,
         \ 'args': javac_opts,
         \ 'fname': fname,
         \ 'tail': '2>&1',

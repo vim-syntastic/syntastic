@@ -449,14 +449,13 @@ Checkers that use 'syntastic#makeprg#build()' look like this: >
                 \ 'args': '-a -b -c',
                 \ 'post_args': '--more --args',
                 \ 'tail': '> /tmp/output',
-                \ 'filetype': 'ruby',
-                \ 'subchecker': 'mri' })
+                \ 'checker': self })
 <
 
-The 'filetype' and 'subchecker' parameters are mandatory.  All of the other
-parameters above are optional (well, you probably need at least 'exe'), and
-can be overriden by setting global variables - even parameters not specified
-in the call to syntastic#makeprg#build().
+The 'checker' argument is mandatory.  All other arguments above are optional,
+and can be overriden by setting global variables - even parameters not
+specified in the call to syntastic#makeprg#build().  If 'exe' is the same as
+the name of the checker, it may be omitted.
 
 E.g. To override the checker exe above, you could do this: >
     let g:syntastic_ruby_mri_exe="another_ruby_checker_exe.rb"

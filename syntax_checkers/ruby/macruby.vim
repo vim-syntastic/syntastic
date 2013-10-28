@@ -13,10 +13,6 @@ if exists("g:loaded_syntastic_ruby_macruby_checker")
 endif
 let g:loaded_syntastic_ruby_macruby_checker=1
 
-function! SyntaxCheckers_ruby_macruby_IsAvailable()
-    return executable('macruby')
-endfunction
-
 function! SyntaxCheckers_ruby_macruby_GetLocList() dict
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'RUBYOPT= macruby',
