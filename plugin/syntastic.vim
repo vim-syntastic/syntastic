@@ -1,8 +1,7 @@
 "============================================================================
 "File:        syntastic.vim
 "Description: Vim plugin for on the fly syntax checking.
-"Version:     3.0.0
-"Released On: 13 April, 2013
+"Version:     3.2.0-pre
 "License:     This program is free software. It comes without any warranty,
 "             to the extent permitted by applicable law. You can redistribute
 "             it and/or modify it under the terms of the Do What The Fuck You
