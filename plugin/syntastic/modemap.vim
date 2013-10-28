@@ -10,10 +10,22 @@ let g:SyntasticModeMap = {}
 function! g:SyntasticModeMap.Instance()
     if !exists('s:SyntasticModeMapInstance')
         let s:SyntasticModeMapInstance = copy(self)
-        call s:SyntasticModeMapInstance._initModeMapFromGlobalOpts()
+        call s:SyntasticModeMapInstance.synch()
     endif
 
     return s:SyntasticModeMapInstance
+endfunction
+
+function! g:SyntasticModeMap.synch()
+    if exists('g:syntastic_mode_map')
+        let self._mode = get(g:syntastic_mode_map, 'mode', 'active')
+        let self._activeFiletypes = get(g:syntastic_mode_map, 'active_filetypes', [])
+        let self._passiveFiletypes = get(g:syntastic_mode_map, 'passive_filetypes', [])
+    else
+        let self._mode = 'active'
+        let self._activeFiletypes = []
+        let self._passiveFiletypes = []
+    endif
 endfunction
 
 function! g:SyntasticModeMap.allowsAutoChecking(filetype)
@@ -27,15 +39,23 @@ function! g:SyntasticModeMap.allowsAutoChecking(filetype)
 endfunction
 
 function! g:SyntasticModeMap.isPassive()
-    return self._mode == "passive"
+    return self._mode == 'passive'
 endfunction
 
 function! g:SyntasticModeMap.toggleMode()
-    if self._mode == "active"
-        let self._mode = "passive"
+    call self.synch()
+
+    if self._mode == 'active'
+        let self._mode = 'passive'
     else
-        let self._mode = "active"
+        let self._mode = 'active'
     endif
+
+    "XXX Changing a global variable.  Tsk, tsk...
+    if !exists('g:syntastic_mode_map')
+        let g:syntastic_mode_map = {}
+    endif
+    let g:syntastic_mode_map['mode'] = self._mode
 endfunction
 
 function! g:SyntasticModeMap.echoMode()
@@ -43,18 +63,6 @@ function! g:SyntasticModeMap.echoMode()
 endfunction
 
 " Private methods {{{1
-
-function! g:SyntasticModeMap._initModeMapFromGlobalOpts()
-    let self._mode = "active"
-    let self._activeFiletypes = []
-    let self._passiveFiletypes = []
-
-    if exists("g:syntastic_mode_map")
-        let self._mode = get(g:syntastic_mode_map, 'mode', self._mode)
-        let self._activeFiletypes = get(g:syntastic_mode_map, 'active_filetypes', self._activeFiletypes)
-        let self._passiveFiletypes = get(g:syntastic_mode_map, 'passive_filetypes', self._passiveFiletypes)
-    endif
-endfunction
 
 function! g:SyntasticModeMap._isOneFiletypeActive(filetypes)
     return !empty(filter(copy(a:filetypes), 'index(self._activeFiletypes, v:val) != -1'))
