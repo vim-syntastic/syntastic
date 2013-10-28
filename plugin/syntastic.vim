@@ -95,7 +95,7 @@ endfunction
 command! SyntasticToggleMode call s:ToggleMode()
 command! -nargs=? -complete=custom,s:CompleteCheckerName SyntasticCheck call s:UpdateErrors(0, <f-args>) <bar> call s:Redraw()
 command! Errors call s:ShowLocList()
-command! SyntasticInfo call s:registry.echoInfoFor(s:CurrentFiletypes())
+command! SyntasticInfo call s:modemap.echoMode() | call s:registry.echoInfoFor(s:CurrentFiletypes())
 command! SyntasticReset call s:ClearCache() | call s:notifiers.refresh(g:SyntasticLoclist.New([]))
 
 highlight link SyntasticError SpellBad
@@ -148,6 +148,7 @@ function! s:UpdateErrors(auto_invoked, ...)
         return
     endif
 
+    call s:modemap.synch()
     let run_checks = !a:auto_invoked || s:modemap.allowsAutoChecking(&filetype)
     if run_checks
         if a:0 >= 1
