@@ -20,6 +20,7 @@ endfunction
 function! SyntaxCheckers_handlebars_handlebars_GetLocList()
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'handlebars',
+        \ 'args': '-f ' . syntastic#util#DevNull(),
         \ 'filetype': 'handlebars',
         \ 'subchecker': 'handlebars' })
 
