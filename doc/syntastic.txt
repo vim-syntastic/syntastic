@@ -29,6 +29,7 @@ CONTENTS                                                  *syntastic-contents*
     5.Checker Options..............................|syntastic-checker-options|
     6.Notes........................................|syntastic-notes|
         6.1.Handling of composite filetypes........|syntastic-composite|
+        6.2.Interaction with python-mode...........|syntastic-pymode|
     7.About........................................|syntastic-about|
     8.License......................................|syntastic-license|
 
@@ -454,7 +455,8 @@ The general form of the override options is: >
 For checkers that do not use the 'syntastic#makeprg#build()' function you
 will have to look at the source code of the checker in question. If there are
 specific options that can be set, these are usually documented in the wiki:
-https://github.com/scrooloose/syntastic/wiki/Syntaxcheckers
+
+    https://github.com/scrooloose/syntastic/wiki/Syntaxcheckers
 
 ==============================================================================
 6. Notes                                                     *syntastic-notes*
@@ -470,14 +472,28 @@ composite filetypes to a simple ones using |syntastic_filetype_map|, e.g.: >
     let g:syntastic_filetype_map = { 'handlebars.html': 'handlebars' }
 <
 
+------------------------------------------------------------------------------
+6.2 Interaction with python-mode                            *syntastic-pymode*
+
+Syntastic can be used along with the 'python-mode' Vim plugin (see
+https://github.com/klen/python-mode). However, they both run syntax checks by
+default when you save buffers to disk, and this is probably not what you want.
+To avoid both plugins opening error windows, you can either set passive mode
+for python in syntastic (see |syntastic_mode_map|), or disable lint checks in
+python-mode, by setting |pymode_lint_write| to 0. E.g.: >
+    let g:pymode_lint_write = 0
+<
+
 ==============================================================================
 7. About                                                     *syntastic-about*
 
 The core maintainers of syntastic are:
     Martin Grenfell (github: scrooloose)
     Gregor Uhlenheuer (github: kongo2002)
+    LCD 047 (github: lcd047)
 
 Find the latest version of syntastic here:
+
     http://github.com/scrooloose/syntastic
 
 ==============================================================================
