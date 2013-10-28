@@ -37,12 +37,11 @@ function! SyntaxCheckers_perl_perlcritic_IsAvailable()
     return executable('perlcritic')
 endfunction
 
-function! SyntaxCheckers_perl_perlcritic_GetLocList()
+function! SyntaxCheckers_perl_perlcritic_GetLocList() dict
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'perlcritic',
         \ 'post_args': '--quiet --nocolor --verbose "\%s:\%f:\%l:\%c:(\%s) \%m (\%e)\n"',
-        \ 'filetype': 'perl',
-        \ 'subchecker': 'perlcritic' })
+        \ 'checker': self })
 
     let errorformat = '%t:%f:%l:%c:%m'
 

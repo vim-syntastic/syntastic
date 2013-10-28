@@ -267,7 +267,7 @@ function! s:MavenOutputDirectory()
     return '.'
 endfunction
 
-function! SyntaxCheckers_java_javac_GetLocList()
+function! SyntaxCheckers_java_javac_GetLocList() dict
 
     let javac_opts = g:syntastic_java_javac_options
 
@@ -335,8 +335,7 @@ function! SyntaxCheckers_java_javac_GetLocList()
         \ 'args': javac_opts,
         \ 'fname': fname,
         \ 'tail': '2>&1',
-        \ 'filetype': 'java',
-        \ 'subchecker': 'javac' })
+        \ 'checker': self })
 
     " unashamedly stolen from *errorformat-javac* (quickfix.txt) and modified to include error types
     let errorformat =

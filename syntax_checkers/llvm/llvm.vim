@@ -18,12 +18,11 @@ function! SyntaxCheckers_llvm_llvm_IsAvailable()
     return executable("llc")
 endfunction
 
-function! SyntaxCheckers_llvm_llvm_GetLocList()
+function! SyntaxCheckers_llvm_llvm_GetLocList() dict
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'llc',
         \ 'args': syntastic#c#NullOutput(),
-        \ 'filetype': 'llvm',
-        \ 'subchecker': 'llvm' })
+        \ 'checker': self })
 
     let errorformat = 'llc: %f:%l:%c: %trror: %m'
 

@@ -58,12 +58,11 @@ function! SyntaxCheckers_php_phpmd_GetHighlightRegex(item)
     return ''
 endfunction
 
-function! SyntaxCheckers_php_phpmd_GetLocList()
+function! SyntaxCheckers_php_phpmd_GetLocList() dict
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'phpmd',
         \ 'post_args': 'text codesize,design,unusedcode,naming',
-        \ 'filetype': 'php',
-        \ 'subchecker': 'phpmd' })
+        \ 'checker': self })
 
     let errorformat = '%E%f:%l%\s%#%m'
 

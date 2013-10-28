@@ -23,7 +23,7 @@ function! SyntaxCheckers_eruby_ruby_IsAvailable()
     return executable(expand(g:syntastic_ruby_exec))
 endfunction
 
-function! SyntaxCheckers_eruby_ruby_GetLocList()
+function! SyntaxCheckers_eruby_ruby_GetLocList() dict
     let exe = expand(g:syntastic_ruby_exec)
     if !has('win32')
         let exe = 'RUBYOPT= ' . exe

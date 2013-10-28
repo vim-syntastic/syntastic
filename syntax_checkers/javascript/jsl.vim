@@ -29,12 +29,11 @@ function! SyntaxCheckers_javascript_jsl_IsAvailable()
     return executable('jsl')
 endfunction
 
-function! SyntaxCheckers_javascript_jsl_GetLocList()
+function! SyntaxCheckers_javascript_jsl_GetLocList() dict
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'jsl',
         \ 'args': s:ConfFlag() . " -nologo -nofilelisting -nosummary -nocontext -process",
-        \ 'filetype': 'javascript',
-        \ 'subchecker': 'jsl' })
+        \ 'checker': self })
 
     let errorformat =
         \ '%W%f(%l): lint warning: %m,'.

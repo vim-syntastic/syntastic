@@ -23,12 +23,11 @@ function! SyntaxCheckers_xml_xmllint_IsAvailable()
     return executable('xmllint')
 endfunction
 
-function! SyntaxCheckers_xml_xmllint_GetLocList()
+function! SyntaxCheckers_xml_xmllint_GetLocList() dict
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'xmllint',
         \ 'args': '--xinclude --noout --postvalid',
-        \ 'filetype': 'xml',
-        \ 'subchecker': 'xmllint' })
+        \ 'checker': self })
 
     let errorformat=
         \ '%E%f:%l: error : %m,' .

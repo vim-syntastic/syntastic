@@ -22,12 +22,11 @@ function! SyntaxCheckers_python_pylama_GetHighlightRegex(i)
     return SyntaxCheckers_python_pyflakes_GetHighlightRegex(a:i)
 endfunction
 
-function! SyntaxCheckers_python_pylama_GetLocList()
+function! SyntaxCheckers_python_pylama_GetLocList() dict
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'pylama',
         \ 'post_args': '-f pep8',
-        \ 'filetype': 'python',
-        \ 'subchecker': 'pylama' })
+        \ 'checker': self })
 
     " TODO: "WARNING:pylama:..." messages are probably a logging bug
     let errorformat =

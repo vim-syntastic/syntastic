@@ -17,12 +17,11 @@ function! SyntaxCheckers_sh_checkbashisms_IsAvailable()
 endfunction
 
 
-function! SyntaxCheckers_sh_checkbashisms_GetLocList()
+function! SyntaxCheckers_sh_checkbashisms_GetLocList() dict
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'checkbashisms',
         \ 'args': '-fx',
-        \ 'filetype': 'sh',
-        \ 'subchecker': 'checkbashisms'})
+        \ 'checker': self})
 
     let errorformat =
         \ '%-Gscript %f is already a bash script; skipping,' .

@@ -19,11 +19,10 @@ function! SyntaxCheckers_haskell_ghc_mod_IsAvailable()
     return executable('ghc-mod')
 endfunction
 
-function! SyntaxCheckers_haskell_ghc_mod_GetLocList()
+function! SyntaxCheckers_haskell_ghc_mod_GetLocList() dict
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'ghc-mod check',
-        \ 'filetype': 'haskell',
-        \ 'subchecker': 'ghc_mod' })
+        \ 'checker': self })
 
     let errorformat =
         \ '%-G%\s%#,' .

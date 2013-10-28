@@ -22,12 +22,11 @@ function! SyntaxCheckers_php_phpcs_IsAvailable()
     return executable('phpcs')
 endfunction
 
-function! SyntaxCheckers_php_phpcs_GetLocList()
+function! SyntaxCheckers_php_phpcs_GetLocList() dict
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'phpcs',
         \ 'args': '--report=csv',
-        \ 'filetype': 'php',
-        \ 'subchecker': 'phpcs' })
+        \ 'checker': self })
 
     let errorformat =
         \ '%-GFile\,Line\,Column\,Type\,Message\,Source\,Severity,'.

@@ -18,12 +18,11 @@ function! SyntaxCheckers_json_jsonval_IsAvailable()
     return executable('jsonval')
 endfunction
 
-function! SyntaxCheckers_json_jsonval_GetLocList()
+function! SyntaxCheckers_json_jsonval_GetLocList() dict
     " based on https://gist.github.com/1196345
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'jsonval',
-        \ 'filetype': 'json',
-        \ 'subchecker': 'jsonval' })
+        \ 'checker': self })
 
     let errorformat =
         \ '%E%f:\ %m\ at\ line\ %l,' .

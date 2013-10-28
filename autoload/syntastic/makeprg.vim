@@ -38,13 +38,12 @@ let g:loaded_syntastic_makeprg_autoload = 1
 "
 function! syntastic#makeprg#build(opts)
     let builder = g:SyntasticMakeprgBuilder.New(
+                \ get(a:opts, 'checker', {}),
                 \ get(a:opts, 'exe', ''),
                 \ get(a:opts, 'args', ''),
                 \ get(a:opts, 'fname', ''),
                 \ get(a:opts, 'post_args', ''),
-                \ get(a:opts, 'tail', ''),
-                \ get(a:opts, 'filetype', ''),
-                \ get(a:opts, 'subchecker', '') )
+                \ get(a:opts, 'tail', '') )
 
     return builder.makeprg()
 endfunction

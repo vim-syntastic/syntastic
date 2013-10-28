@@ -18,16 +18,9 @@ if exists("g:loaded_syntastic_css_phpcs_checker")
 endif
 let g:loaded_syntastic_css_phpcs_checker=1
 
-function! SyntaxCheckers_css_phpcs_IsAvailable()
-    return SyntaxCheckers_php_phpcs_IsAvailable()
-endfunction
-
-function! SyntaxCheckers_css_phpcs_GetLocList()
-    return SyntaxCheckers_php_phpcs_GetLocList()
-endfunction
+runtime! syntax_checkers/php/*.vim
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'css',
-    \ 'name': 'phpcs'})
-
-runtime! syntax_checkers/php/*.vim
+    \ 'name': 'phpcs',
+    \ 'redirect': 'php/phpcs'})

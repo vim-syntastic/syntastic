@@ -19,12 +19,11 @@ function! SyntaxCheckers_zsh_zsh_IsAvailable()
     return executable("zsh")
 endfunction
 
-function! SyntaxCheckers_zsh_zsh_GetLocList()
+function! SyntaxCheckers_zsh_zsh_GetLocList() dict
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'zsh',
         \ 'args': '-n',
-        \ 'filetype': 'zsh',
-        \ 'subchecker': 'zsh' })
+        \ 'checker': self })
 
     let errorformat = '%f:%l: %m'
 

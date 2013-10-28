@@ -34,12 +34,11 @@ function! SyntaxCheckers_applescript_osacompile_IsAvailable()
     return executable('osacompile')
 endfunction
 
-function! SyntaxCheckers_applescript_osacompile_GetLocList()
+function! SyntaxCheckers_applescript_osacompile_GetLocList() dict
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'osacompile',
         \ 'args': '-o ' . tempname() . '.scpt ',
-        \ 'filetype': 'applescript',
-        \ 'subchecker': 'osacompile' })
+        \ 'checker': self })
     let errorformat = '%f:%l:%m'
 
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })

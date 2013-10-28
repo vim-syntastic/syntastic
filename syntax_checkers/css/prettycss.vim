@@ -32,11 +32,10 @@ function! SyntaxCheckers_css_prettycss_GetHighlightRegex(item)
     return term
 endfunction
 
-function! SyntaxCheckers_css_prettycss_GetLocList()
+function! SyntaxCheckers_css_prettycss_GetLocList() dict
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'prettycss',
-        \ 'filetype': 'css',
-        \ 'subchecker': 'prettycss' })
+        \ 'checker': self })
 
     " Print CSS Lint's error/warning messages from compact format. Ignores blank lines.
     let errorformat =

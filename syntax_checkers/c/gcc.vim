@@ -31,7 +31,7 @@ if !exists('g:syntastic_c_compiler_options')
     let g:syntastic_c_compiler_options = '-std=gnu99'
 endif
 
-function! SyntaxCheckers_c_gcc_GetLocList()
+function! SyntaxCheckers_c_gcc_GetLocList() dict
     return syntastic#c#GetLocList('c', 'gcc', {
         \ 'errorformat':
         \     '%-G%f:%s:,' .

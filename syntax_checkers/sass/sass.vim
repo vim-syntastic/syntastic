@@ -34,7 +34,7 @@ if executable("compass")
     let s:imports = "--compass"
 endif
 
-function! SyntaxCheckers_sass_sass_GetLocList()
+function! SyntaxCheckers_sass_sass_GetLocList() dict
     if !g:syntastic_sass_check_partials && expand('%:t')[0] == '_'
         return []
     endif
@@ -42,8 +42,7 @@ function! SyntaxCheckers_sass_sass_GetLocList()
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'sass',
         \ 'args': '--cache-location ' . s:sass_cache_location . ' ' . s:imports . ' --check',
-        \ 'filetype': 'sass',
-        \ 'subchecker': 'sass' })
+        \ 'checker': self })
 
     let errorformat =
         \ '%ESyntax %trror: %m,' .

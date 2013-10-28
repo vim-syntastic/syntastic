@@ -19,11 +19,10 @@ function! SyntaxCheckers_tex_lacheck_IsAvailable()
     return executable('lacheck')
 endfunction
 
-function! SyntaxCheckers_tex_lacheck_GetLocList()
+function! SyntaxCheckers_tex_lacheck_GetLocList() dict
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'lacheck',
-        \ 'filetype': 'tex',
-        \ 'subchecker': 'lacheck' })
+        \ 'checker': self })
 
     let errorformat =
         \ '%-G** %f:,' .

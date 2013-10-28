@@ -32,7 +32,7 @@ function! SyntaxCheckers_ruby_mri_GetHighlightRegex(i)
     return ''
 endfunction
 
-function! SyntaxCheckers_ruby_mri_GetLocList()
+function! SyntaxCheckers_ruby_mri_GetLocList() dict
     let exe = expand(g:syntastic_ruby_exec)
     if !has('win32')
         let exe = 'RUBYOPT= ' . exe
@@ -41,8 +41,7 @@ function! SyntaxCheckers_ruby_mri_GetLocList()
     let makeprg = syntastic#makeprg#build({
         \ 'exe': exe,
         \ 'args': '-w -T1 -c',
-        \ 'filetype': 'ruby',
-        \ 'subchecker': 'mri' })
+        \ 'checker': self })
 
     "this is a hack to filter out a repeated useless warning in rspec files
     "containing lines like

@@ -19,11 +19,10 @@ function! SyntaxCheckers_python_pep257_Preprocess(errors)
     return filter(copy(a:errors), 'v:val != ""')
 endfunction
 
-function! SyntaxCheckers_python_pep257_GetLocList()
+function! SyntaxCheckers_python_pep257_GetLocList() dict
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'pep257',
-        \ 'filetype': 'python',
-        \ 'subchecker': 'pep257' })
+        \ 'checker': self })
 
     let errorformat =
         \ '%E%f:%l:%c%\%.%\%.%\d%\+:%\d%\+: %m,' .

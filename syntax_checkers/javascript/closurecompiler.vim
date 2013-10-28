@@ -34,7 +34,7 @@ function! SyntaxCheckers_javascript_closurecompiler_IsAvailable()
     return exists("g:syntastic_javascript_closure_compiler_path")
 endfunction
 
-function! SyntaxCheckers_javascript_closurecompiler_GetLocList()
+function! SyntaxCheckers_javascript_closurecompiler_GetLocList() dict
     if exists("g:syntastic_javascript_closure_compiler_file_list")
         let file_list = join(readfile(g:syntastic_javascript_closure_compiler_file_list), ' ')
     else
@@ -45,8 +45,7 @@ function! SyntaxCheckers_javascript_closurecompiler_GetLocList()
         \ 'exe': 'java -jar ' . g:syntastic_javascript_closure_compiler_path,
         \ 'args': g:syntastic_javascript_closure_compiler_options . ' --js' ,
         \ 'fname': file_list,
-        \ 'filetype': 'javascript',
-        \ 'subchecker': 'closurecompiler' })
+        \ 'checker': self })
 
     let errorformat =
         \ '%-GOK,'.

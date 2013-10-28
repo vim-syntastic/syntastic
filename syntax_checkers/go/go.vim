@@ -21,7 +21,7 @@ function! SyntaxCheckers_go_go_IsAvailable()
     return executable('go')
 endfunction
 
-function! SyntaxCheckers_go_go_GetLocList()
+function! SyntaxCheckers_go_go_GetLocList() dict
     " Check with gofmt first, since `go build` and `go test` might not report
     " syntax errors in the current file if another file with syntax error is
     " compiled first.
@@ -29,8 +29,7 @@ function! SyntaxCheckers_go_go_GetLocList()
         \ 'exe': 'gofmt',
         \ 'args': '-l',
         \ 'tail': '1>' . syntastic#util#DevNull(),
-        \ 'filetype': 'go',
-        \ 'subchecker': 'go' })
+        \ 'checker': self })
 
     let errorformat =
         \ '%f:%l:%c: %m,' .

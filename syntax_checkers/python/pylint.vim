@@ -16,12 +16,11 @@ function! SyntaxCheckers_python_pylint_IsAvailable()
     return s:pylint_new >= 0
 endfunction
 
-function! SyntaxCheckers_python_pylint_GetLocList()
+function! SyntaxCheckers_python_pylint_GetLocList() dict
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'pylint',
         \ 'args': (s:pylint_new ? '--msg-template="{path}:{line}: [{msg_id}] {msg}" -r n' : '-f parseable -r n -i y'),
-        \ 'filetype': 'python',
-        \ 'subchecker': 'pylint' })
+        \ 'checker': self })
 
     let errorformat =
         \ '%A%f:%l: %m,' .

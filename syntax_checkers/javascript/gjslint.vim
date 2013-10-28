@@ -21,12 +21,11 @@ function! SyntaxCheckers_javascript_gjslint_IsAvailable()
     return executable('gjslint')
 endfunction
 
-function! SyntaxCheckers_javascript_gjslint_GetLocList()
+function! SyntaxCheckers_javascript_gjslint_GetLocList() dict
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'gjslint',
         \ 'args': g:syntastic_javascript_gjslint_conf . " --nosummary --unix_mode --nodebug_indentation --nobeep",
-        \ 'filetype': 'javascript',
-        \ 'subchecker': 'gjslint' })
+        \ 'checker': self })
 
     let errorformat =
         \ "%f:%l:(New Error -%\\?\%n) %m," .

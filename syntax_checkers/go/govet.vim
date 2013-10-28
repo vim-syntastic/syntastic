@@ -18,7 +18,7 @@ function! SyntaxCheckers_go_govet_IsAvailable()
     return executable('go')
 endfunction
 
-function! SyntaxCheckers_go_govet_GetLocList()
+function! SyntaxCheckers_go_govet_GetLocList() dict
     let makeprg = 'go vet'
     let errorformat = '%Evet: %.%\+: %f:%l:%c: %m,%W%f:%l: %m,%-G%.%#'
 

@@ -19,7 +19,7 @@ function! SyntaxCheckers_haxe_haxe_IsAvailable()
     return executable('haxe')
 endfunction
 
-function! SyntaxCheckers_haxe_haxe_GetLocList()
+function! SyntaxCheckers_haxe_haxe_GetLocList() dict
     if exists('b:vaxe_hxml')
         let hxml = b:vaxe_hxml
     elseif exists('g:vaxe_hxml')
@@ -33,8 +33,7 @@ function! SyntaxCheckers_haxe_haxe_GetLocList()
         let makeprg = syntastic#makeprg#build({
             \ 'exe': 'haxe',
             \ 'fname': syntastic#util#shescape(fnameescape(fnamemodify(hxml, ':t'))),
-            \ 'filetype': 'haxe',
-            \ 'subchecker': 'haxe' })
+            \ 'checker': self })
 
         let errorformat = '%E%f:%l: characters %c-%*[0-9] : %m'
 

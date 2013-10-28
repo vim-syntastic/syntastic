@@ -56,13 +56,12 @@ function! s:IgnoreError(text)
     return 0
 endfunction
 
-function! SyntaxCheckers_xhtml_tidy_GetLocList()
+function! SyntaxCheckers_xhtml_tidy_GetLocList() dict
     let encopt = s:TidyEncOptByFenc()
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'tidy',
         \ 'args': encopt . ' -xml -e',
-        \ 'filetype': 'xhtml',
-        \ 'subchecker': 'tidy' })
+        \ 'checker': self })
 
     let errorformat=
         \ '%Wline %l column %v - Warning: %m,' .

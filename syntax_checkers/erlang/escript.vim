@@ -25,7 +25,7 @@ function! SyntaxCheckers_erlang_escript_IsAvailable()
     return executable('escript')
 endfunction
 
-function! SyntaxCheckers_erlang_escript_GetLocList()
+function! SyntaxCheckers_erlang_escript_GetLocList() dict
     if expand('%:e') ==# 'hrl'
         return []
     endif
@@ -43,8 +43,7 @@ function! SyntaxCheckers_erlang_escript_GetLocList()
         \ 'args': args,
         \ 'fname': syntastic#util#shexpand('%:p'),
         \ 'post_args': post_args,
-        \ 'filetype': 'erlang',
-        \ 'subchecker': 'escript' })
+        \ 'checker': self })
 
     let errorformat =
         \ '%W%f:%l: warning: %m,'.

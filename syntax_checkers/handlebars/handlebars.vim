@@ -17,12 +17,11 @@ function! SyntaxCheckers_handlebars_handlebars_IsAvailable()
     return executable('handlebars')
 endfunction
 
-function! SyntaxCheckers_handlebars_handlebars_GetLocList()
+function! SyntaxCheckers_handlebars_handlebars_GetLocList() dict
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'handlebars',
         \ 'args': '-f ' . syntastic#util#DevNull(),
-        \ 'filetype': 'handlebars',
-        \ 'subchecker': 'handlebars' })
+        \ 'checker': self })
 
     let errorformat =
         \ '%EError: %m on line %l:,'.

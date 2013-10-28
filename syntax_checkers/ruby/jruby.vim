@@ -18,12 +18,11 @@ function! SyntaxCheckers_ruby_jruby_IsAvailable()
     return executable('jruby')
 endfunction
 
-function! SyntaxCheckers_ruby_jruby_GetLocList()
+function! SyntaxCheckers_ruby_jruby_GetLocList() dict
     let makeprg = syntastic#makeprg#build({
         \ 'exe': s:exe(),
         \ 'args': s:args(),
-        \ 'filetype': 'ruby',
-        \ 'subchecker': 'jruby' })
+        \ 'checker': self })
 
     let errorformat =
         \ '%-GSyntax OK for %f,'.

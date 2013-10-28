@@ -20,12 +20,11 @@ function! SyntaxCheckers_ruby_rubylint_IsAvailable()
     return executable("ruby-lint")
 endfunction
 
-function! SyntaxCheckers_ruby_rubylint_GetLocList()
+function! SyntaxCheckers_ruby_rubylint_GetLocList() dict
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'ruby-lint',
         \ 'args': 'analyze --presenter=syntastic',
-        \ 'filetype': 'ruby',
-        \ 'subchecker': 'rubylint' })
+        \ 'checker': self })
 
     let errorformat = '%f:%t:%l:%c: %m'
 

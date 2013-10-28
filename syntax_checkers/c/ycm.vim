@@ -23,7 +23,7 @@ if !exists('g:loaded_youcompleteme')
     finish
 endif
 
-function! SyntaxCheckers_c_ycm_GetLocList()
+function! SyntaxCheckers_c_ycm_GetLocList() dict
     return youcompleteme#CurrentFileDiagnostics()
 endfunction
 

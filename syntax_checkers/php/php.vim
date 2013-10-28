@@ -27,12 +27,11 @@ function! SyntaxCheckers_php_php_GetHighlightRegex(item)
     return '\V'.split(unexpected, "'")[1]
 endfunction
 
-function! SyntaxCheckers_php_php_GetLocList()
+function! SyntaxCheckers_php_php_GetLocList() dict
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'php',
         \ 'args': '-l -d error_reporting=E_ALL -d display_errors=1 -d log_errors=0 -d xdebug.cli_color=0',
-        \ 'filetype': 'php',
-        \ 'subchecker': 'php' })
+        \ 'checker': self })
 
     let errorformat =
         \ '%-GNo syntax errors detected in%.%#,'.

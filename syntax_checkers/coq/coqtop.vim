@@ -19,12 +19,11 @@ function! SyntaxCheckers_coq_coqtop_IsAvailable()
     return executable('coqtop')
 endfunction
 
-function! SyntaxCheckers_coq_coqtop_GetLocList()
+function! SyntaxCheckers_coq_coqtop_GetLocList() dict
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'coqtop',
         \ 'args': '-noglob -batch -load-vernac-source',
-        \ 'filetype': 'coq',
-        \ 'subchecker': 'coqtop' })
+        \ 'checker': self })
 
     let errorformat =
         \ '%AFile \"%f\"\, line %l\, characters %c\-%.%#\:,'.

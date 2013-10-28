@@ -19,7 +19,7 @@ function! SyntaxCheckers_elixir_elixir_IsAvailable()
     return executable('elixir') && executable('mix')
 endfunction
 
-function! SyntaxCheckers_elixir_elixir_GetLocList()
+function! SyntaxCheckers_elixir_elixir_GetLocList() dict
 
     let make_options = {}
     let compile_command = 'elixir'
@@ -32,8 +32,7 @@ function! SyntaxCheckers_elixir_elixir_GetLocList()
 
     let make_options['makeprg'] = syntastic#makeprg#build({
         \ 'exe': compile_command,
-        \ 'filetype': 'elixir',
-        \ 'subchecker': 'elixir' })
+        \ 'checker': self })
 
     let make_options['errorformat'] = '** %*[^\ ] %f:%l: %m'
 

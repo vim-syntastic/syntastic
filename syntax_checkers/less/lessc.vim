@@ -40,13 +40,12 @@ function! SyntaxCheckers_less_lessc_IsAvailable()
     return executable('lessc')
 endfunction
 
-function! SyntaxCheckers_less_lessc_GetLocList()
+function! SyntaxCheckers_less_lessc_GetLocList() dict
     let makeprg = syntastic#makeprg#build({
         \ 'exe': s:check_file,
         \ 'args': g:syntastic_less_options,
         \ 'tail': syntastic#util#DevNull(),
-        \ 'filetype': 'less',
-        \ 'subchecker': 'lessc' })
+        \ 'checker': self })
 
     let errorformat = '%m in %f:%l:%c'
 

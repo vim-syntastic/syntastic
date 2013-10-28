@@ -51,7 +51,7 @@ function! SyntaxCheckers_perl_perl_Preprocess(errors)
     return syntastic#util#unique(out)
 endfunction
 
-function! SyntaxCheckers_perl_perl_GetLocList()
+function! SyntaxCheckers_perl_perl_GetLocList() dict
     if type(g:syntastic_perl_lib_path) == type('')
         call syntastic#util#deprecationWarn('variable g:syntastic_perl_lib_path should be a list')
         let includes = split(g:syntastic_perl_lib_path, ',')
@@ -67,8 +67,7 @@ function! SyntaxCheckers_perl_perl_GetLocList()
     let makeprg = syntastic#makeprg#build({
         \ 'exe': g:syntastic_perl_interpreter,
         \ 'args': '-c -X ' . extra,
-        \ 'filetype': 'perl',
-        \ 'subchecker': 'perl' })
+        \ 'checker': self })
 
     let errors = SyntasticMake({
         \ 'makeprg': makeprg,
@@ -82,8 +81,7 @@ function! SyntaxCheckers_perl_perl_GetLocList()
     let makeprg = syntastic#makeprg#build({
         \ 'exe': g:syntastic_perl_interpreter,
         \ 'args': '-c -Mwarnings ' . extra,
-        \ 'filetype': 'perl',
-        \ 'subchecker': 'perl' })
+        \ 'checker': self })
 
     return SyntasticMake({
         \ 'makeprg': makeprg,

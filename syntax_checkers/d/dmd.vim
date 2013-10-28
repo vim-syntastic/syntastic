@@ -35,7 +35,7 @@ if !exists('g:syntastic_d_compiler_options')
     let g:syntastic_d_compiler_options = ''
 endif
 
-function! SyntaxCheckers_d_dmd_GetLocList()
+function! SyntaxCheckers_d_dmd_GetLocList() dict
     return syntastic#c#GetLocList('d', 'dmd', {
         \ 'errorformat':
         \     '%-G%f:%s:,%f(%l): %m,' .

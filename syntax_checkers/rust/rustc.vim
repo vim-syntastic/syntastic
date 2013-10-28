@@ -19,12 +19,11 @@ function! SyntaxCheckers_rust_rustc_IsAvailable()
     return executable("rustc")
 endfunction
 
-function! SyntaxCheckers_rust_rustc_GetLocList()
+function! SyntaxCheckers_rust_rustc_GetLocList() dict
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'rustc',
         \ 'args': '--parse-only',
-        \ 'filetype': 'rust',
-        \ 'subchecker': 'rustc' })
+        \ 'checker': self })
 
     let errorformat  =
         \ '%E%f:%l:%c: \\d%#:\\d%# %.%\{-}error:%.%\{-} %m,'   .

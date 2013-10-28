@@ -18,11 +18,10 @@ function! SyntaxCheckers_python_flake8_GetHighlightRegex(i)
     return SyntaxCheckers_python_pyflakes_GetHighlightRegex(a:i)
 endfunction
 
-function! SyntaxCheckers_python_flake8_GetLocList()
+function! SyntaxCheckers_python_flake8_GetLocList() dict
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'flake8',
-        \ 'filetype': 'python',
-        \ 'subchecker': 'flake8' })
+        \ 'checker': self })
 
     let errorformat =
         \ '%E%f:%l: could not compile,%-Z%p^,' .

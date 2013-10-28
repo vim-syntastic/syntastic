@@ -29,13 +29,12 @@ if !exists('g:syntastic_oclint_config_file')
     let g:syntastic_oclint_config_file = '.syntastic_oclint_config'
 endif
 
-function! SyntaxCheckers_c_oclint_GetLocList()
+function! SyntaxCheckers_c_oclint_GetLocList() dict
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'oclint',
         \ 'args': '-text',
         \ 'post_args': '-- -c ' . syntastic#c#ReadConfig(g:syntastic_oclint_config_file),
-        \ 'filetype': 'c',
-        \ 'subchecker': 'oclint' })
+        \ 'checker': self })
 
     let errorformat =
         \ '%E%f:%l:%c: %m P1 ,' .
