@@ -179,7 +179,7 @@ function! s:ClearCache()
 endfunction
 
 function! s:CurrentFiletypes()
-    return split(&filetype, '\m\.')
+    return split( get(g:syntastic_filetype_map, &filetype, &filetype), '\m\.' )
 endfunction
 
 "detect and cache all syntax errors in this buffer

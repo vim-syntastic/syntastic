@@ -19,16 +19,18 @@
 ==============================================================================
 CONTENTS                                                  *syntastic-contents*
 
-    1.Intro...................................|syntastic-intro|
-    2.Functionality provided..................|syntastic-functionality|
-        2.1.The statusline flag...............|syntastic-statusline-flag|
-        2.2.Error signs.......................|syntastic-error-signs|
-        2.3.Error window......................|syntastic-error-window|
-    3.Commands................................|syntastic-commands|
-    4.Global Options..........................|syntastic-global-options|
-    5.Checker Options.........................|syntastic-checker-options|
-    6.About...................................|syntastic-about|
-    7.License.................................|syntastic-license|
+    1.Intro........................................|syntastic-intro|
+    2.Functionality provided.......................|syntastic-functionality|
+        2.1.The statusline flag....................|syntastic-statusline-flag|
+        2.2.Error signs............................|syntastic-error-signs|
+        2.3.Error window...........................|syntastic-error-window|
+    3.Commands.....................................|syntastic-commands|
+    4.Global Options...............................|syntastic-global-options|
+    5.Checker Options..............................|syntastic-checker-options|
+    6.Notes........................................|syntastic-notes|
+        6.1.Handling of composite filetypes........|syntastic-composite|
+    7.About........................................|syntastic-about|
+    8.License......................................|syntastic-license|
 
 
 ==============================================================================
@@ -286,6 +288,11 @@ non-standard filetypes: >
                                    \ 'gentoo-metadata': 'xml' }
 <
 
+Composite filetypes can also be mapped to simple types, which disables the
+default behaviour of running both checkers against the input file: >
+    let g:syntastic_filetype_map = { 'handlebars.html': 'handlebars' }
+<
+
                                                         *'syntastic_mode_map'*
 Default: { "mode": "active",
            "active_filetypes": [],
@@ -450,7 +457,21 @@ specific options that can be set, these are usually documented in the wiki:
 https://github.com/scrooloose/syntastic/wiki/Syntaxcheckers
 
 ==============================================================================
-6. About                                                     *syntastic-about*
+6. Notes                                                     *syntastic-notes*
+
+------------------------------------------------------------------------------
+6.1. Handling of composite filetypes                     *syntastic-composite*
+
+Some Vim plugins use composite filetypes, such as 'django.python' or
+'handlebars.html'. Normally, syntastic deals with this situation by splitting
+the filetype in its simple components, and calling all checkers that apply.
+If this behaviour is not desirable, you can disable it by mapping the
+composite filetypes to a simple ones using |syntastic_filetype_map|, e.g.: >
+    let g:syntastic_filetype_map = { 'handlebars.html': 'handlebars' }
+<
+
+==============================================================================
+7. About                                                     *syntastic-about*
 
 The core maintainers of syntastic are:
     Martin Grenfell (github: scrooloose)
@@ -460,7 +481,7 @@ Find the latest version of syntastic here:
     http://github.com/scrooloose/syntastic
 
 ==============================================================================
-7. License                                                 *syntastic-license*
+8. License                                                 *syntastic-license*
 
 Syntastic is released under the wtfpl.
 See http://sam.zoy.org/wtfpl/COPYING.
