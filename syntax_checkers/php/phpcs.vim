@@ -18,13 +18,8 @@ if exists("g:loaded_syntastic_php_phpcs_checker")
 endif
 let g:loaded_syntastic_php_phpcs_checker=1
 
-function! SyntaxCheckers_php_phpcs_IsAvailable()
-    return executable('phpcs')
-endfunction
-
 function! SyntaxCheckers_php_phpcs_GetLocList() dict
     let makeprg = syntastic#makeprg#build({
-        \ 'exe': 'phpcs',
         \ 'args': '--report=csv',
         \ 'checker': self })
 

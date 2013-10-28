@@ -14,10 +14,6 @@ if exists('g:loaded_syntastic_python_pylama_checker')
 endif
 let g:loaded_syntastic_python_pylama_checker = 1
 
-function! SyntaxCheckers_python_pylama_IsAvailable()
-    return executable('pylama')
-endfunction
-
 function! SyntaxCheckers_python_pylama_GetHighlightRegex(i)
     return SyntaxCheckers_python_pyflakes_GetHighlightRegex(a:i)
 endfunction
@@ -59,8 +55,8 @@ function! SyntaxCheckers_python_pylama_GetLocList() dict
     return loclist
 endfunction
 
+runtime! syntax_checkers/python/pyflakes.vim
+
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'python',
     \ 'name': 'pylama' })
-
-runtime! syntax_checkers/python/pyflakes.vim

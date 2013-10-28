@@ -15,13 +15,8 @@ if exists("g:loaded_syntastic_rust_rustc_checker")
 endif
 let g:loaded_syntastic_rust_rustc_checker=1
 
-function! SyntaxCheckers_rust_rustc_IsAvailable()
-    return executable("rustc")
-endfunction
-
 function! SyntaxCheckers_rust_rustc_GetLocList() dict
     let makeprg = syntastic#makeprg#build({
-        \ 'exe': 'rustc',
         \ 'args': '--parse-only',
         \ 'checker': self })
 

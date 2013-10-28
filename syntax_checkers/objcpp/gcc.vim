@@ -19,8 +19,8 @@ if !exists('g:syntastic_objcpp_compiler')
     let g:syntastic_objcpp_compiler = 'gcc'
 endif
 
-function! SyntaxCheckers_objcpp_gcc_IsAvailable()
-    return executable(g:syntastic_objcpp_compiler)
+function! SyntaxCheckers_objcpp_gcc_IsAvailable() dict
+    return executable(expand(g:syntastic_objcpp_compiler))
 endfunction
 
 let s:save_cpo = &cpo

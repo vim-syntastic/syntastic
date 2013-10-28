@@ -9,10 +9,6 @@ if exists("g:loaded_syntastic_python_py3kwarn_checker")
 endif
 let g:loaded_syntastic_python_py3kwarn_checker=1
 
-function! SyntaxCheckers_python_py3kwarn_IsAvailable()
-    return executable('py3kwarn')
-endfunction
-
 function! SyntaxCheckers_python_py3kwarn_GetLocList() dict
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'py3kwarn',

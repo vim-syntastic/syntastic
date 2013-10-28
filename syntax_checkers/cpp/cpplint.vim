@@ -35,14 +35,8 @@ if ! exists('g:syntastic_cpp_cpplint_args')
     let g:syntastic_cpp_cpplint_args = '--verbose=3'
 endif
 
-function! SyntaxCheckers_cpp_cpplint_IsAvailable()
-    return executable('cpplint.py')
-endfunction
-
 function! SyntaxCheckers_cpp_cpplint_GetLocList() dict
-    let makeprg = syntastic#makeprg#build({
-        \ 'exe': 'cpplint.py',
-        \ 'checker': self })
+    let makeprg = syntastic#makeprg#build({ 'checker': self })
 
     let errorformat = '%A%f:%l:  %m [%t],%-G%.%#'
 
@@ -61,4 +55,5 @@ endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'cpp',
-    \ 'name': 'cpplint'})
+    \ 'name': 'cpplint',
+    \ 'exec': 'cpplint.py'})

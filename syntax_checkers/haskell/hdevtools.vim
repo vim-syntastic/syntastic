@@ -15,13 +15,9 @@ if exists("g:loaded_syntastic_haskell_hdevtools_checker")
 endif
 let g:loaded_syntastic_haskell_hdevtools_checker=1
 
-function! SyntaxCheckers_haskell_hdevtools_IsAvailable()
-    return executable('hdevtools')
-endfunction
-
 function! SyntaxCheckers_haskell_hdevtools_GetLocList() dict
     let makeprg = syntastic#makeprg#build({
-        \ 'exe': 'hdevtools check',
+        \ 'exe': self.getExec() . ' check',
         \ 'args': get(g:, 'hdevtools_options', ''),
         \ 'checker': self })
 

@@ -15,13 +15,8 @@ if exists("g:loaded_syntastic_coq_coqtop_checker")
 endif
 let g:loaded_syntastic_coq_coqtop_checker=1
 
-function! SyntaxCheckers_coq_coqtop_IsAvailable()
-    return executable('coqtop')
-endfunction
-
 function! SyntaxCheckers_coq_coqtop_GetLocList() dict
     let makeprg = syntastic#makeprg#build({
-        \ 'exe': 'coqtop',
         \ 'args': '-noglob -batch -load-vernac-source',
         \ 'checker': self })
 

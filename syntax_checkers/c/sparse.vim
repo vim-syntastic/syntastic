@@ -21,17 +21,12 @@ if exists("g:loaded_syntastic_c_sparse_checker")
 endif
 let g:loaded_syntastic_c_sparse_checker = 1
 
-function! SyntaxCheckers_c_sparse_IsAvailable()
-    return executable("sparse")
-endfunction
-
 if !exists('g:syntastic_sparse_config_file')
     let g:syntastic_sparse_config_file = '.syntastic_sparse_config'
 endif
 
 function! SyntaxCheckers_c_sparse_GetLocList() dict
     let makeprg = syntastic#makeprg#build({
-        \ 'exe': 'sparse',
         \ 'args': '-ftabstop=' . &ts . ' ' . syntastic#c#ReadConfig(g:syntastic_sparse_config_file),
         \ 'checker': self })
 

@@ -15,13 +15,8 @@ if exists("g:loaded_syntastic_cs_mcs_checker")
 endif
 let g:loaded_syntastic_cs_mcs_checker=1
 
-function! SyntaxCheckers_cs_mcs_IsAvailable()
-    return executable('mcs')
-endfunction
-
 function! SyntaxCheckers_cs_mcs_GetLocList() dict
     let makeprg = syntastic#makeprg#build({
-        \ 'exe': 'mcs',
         \ 'args': '--parse',
         \ 'checker': self })
 

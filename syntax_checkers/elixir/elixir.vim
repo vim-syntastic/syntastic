@@ -15,7 +15,7 @@ endif
 let g:loaded_syntastic_elixir_elixir_checker=1
 
 " TODO: we should probably split this into separate checkers
-function! SyntaxCheckers_elixir_elixir_IsAvailable()
+function! SyntaxCheckers_elixir_elixir_IsAvailable() dict
     return executable('elixir') && executable('mix')
 endfunction
 

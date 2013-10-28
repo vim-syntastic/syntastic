@@ -26,7 +26,7 @@ if !exists('g:syntastic_html_w3_api')
     let g:syntastic_html_w3_api = 'http://validator.w3.org/check'
 endif
 
-function! SyntaxCheckers_html_w3_IsAvailable()
+function! SyntaxCheckers_html_w3_IsAvailable() dict
     return executable('curl')
 endfunction
 

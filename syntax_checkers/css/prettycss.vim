@@ -20,10 +20,6 @@ if exists("g:loaded_syntastic_css_prettycss_checker")
 endif
 let g:loaded_syntastic_css_prettycss_checker=1
 
-function! SyntaxCheckers_css_prettycss_IsAvailable()
-    return executable('prettycss')
-endfunction
-
 function! SyntaxCheckers_css_prettycss_GetHighlightRegex(item)
     let term = matchstr(a:item["text"], '\m (\zs[^)]\+\ze)$')
     if term != ''
@@ -33,9 +29,7 @@ function! SyntaxCheckers_css_prettycss_GetHighlightRegex(item)
 endfunction
 
 function! SyntaxCheckers_css_prettycss_GetLocList() dict
-    let makeprg = syntastic#makeprg#build({
-        \ 'exe': 'prettycss',
-        \ 'checker': self })
+    let makeprg = syntastic#makeprg#build({ 'checker': self })
 
     " Print CSS Lint's error/warning messages from compact format. Ignores blank lines.
     let errorformat =

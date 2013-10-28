@@ -19,13 +19,8 @@ if !executable("coco")
     finish
 endif
 
-function! SyntaxCheckers_co_coco_IsAvailable()
-    return executable('coco')
-endfunction
-
 function! SyntaxCheckers_co_coco_GetLocList() dict
     let makeprg = syntastic#makeprg#build({
-        \ 'exe': 'coco',
         \ 'args': '-c -o /tmp',
         \ 'checker': self })
 

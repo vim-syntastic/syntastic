@@ -30,8 +30,8 @@ if !exists("g:syntastic_javascript_closure_compiler_options")
     let g:syntastic_javascript_closure_compiler_options = ""
 endif
 
-function! SyntaxCheckers_javascript_closurecompiler_IsAvailable()
-    return exists("g:syntastic_javascript_closure_compiler_path")
+function! SyntaxCheckers_javascript_closurecompiler_IsAvailable() dict
+    return executable("java") && exists("g:syntastic_javascript_closure_compiler_path")
 endfunction
 
 function! SyntaxCheckers_javascript_closurecompiler_GetLocList() dict
@@ -61,5 +61,6 @@ endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'javascript',
-    \ 'name': 'closurecompiler'})
+    \ 'name': 'closurecompiler',
+    \ 'exec': 'java'})
 

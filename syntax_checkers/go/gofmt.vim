@@ -17,13 +17,8 @@ if exists("g:loaded_syntastic_go_gofmt_checker")
 endif
 let g:loaded_syntastic_go_gofmt_checker=1
 
-function! SyntaxCheckers_go_gofmt_IsAvailable()
-    return executable('gofmt')
-endfunction
-
 function! SyntaxCheckers_go_gofmt_GetLocList() dict
     let makeprg = syntastic#makeprg#build({
-        \ 'exe': 'gofmt',
         \ 'args': '-l',
         \ 'tail': '1>' . syntastic#util#DevNull(),
         \ 'checker': self })

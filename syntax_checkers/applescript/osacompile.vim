@@ -30,13 +30,8 @@ if exists("g:loaded_syntastic_applescript_osacompile_checker")
 endif
 let g:loaded_syntastic_applescript_osacompile_checker=1
 
-function! SyntaxCheckers_applescript_osacompile_IsAvailable()
-    return executable('osacompile')
-endfunction
-
 function! SyntaxCheckers_applescript_osacompile_GetLocList() dict
     let makeprg = syntastic#makeprg#build({
-        \ 'exe': 'osacompile',
         \ 'args': '-o ' . tempname() . '.scpt ',
         \ 'checker': self })
     let errorformat = '%f:%l:%m'

@@ -22,7 +22,7 @@ if !exists('g:syntastic_javascript_jshint_conf')
     let g:syntastic_javascript_jshint_conf = ''
 endif
 
-function! SyntaxCheckers_javascript_jshint_IsAvailable()
+function! SyntaxCheckers_javascript_jshint_IsAvailable() dict
     return executable(expand(g:syntastic_jshint_exec))
 endfunction
 

@@ -15,13 +15,9 @@ if exists('g:loaded_syntastic_haskell_ghc_mod_checker')
 endif
 let g:loaded_syntastic_haskell_ghc_mod_checker = 1
 
-function! SyntaxCheckers_haskell_ghc_mod_IsAvailable()
-    return executable('ghc-mod')
-endfunction
-
 function! SyntaxCheckers_haskell_ghc_mod_GetLocList() dict
     let makeprg = syntastic#makeprg#build({
-        \ 'exe': 'ghc-mod check',
+        \ 'exe': self.getExec() . ' check',
         \ 'checker': self })
 
     let errorformat =
@@ -42,4 +38,5 @@ endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'haskell',
-    \ 'name': 'ghc_mod'})
+    \ 'name': 'ghc_mod',
+    \ 'exec': 'ghc-mod'})

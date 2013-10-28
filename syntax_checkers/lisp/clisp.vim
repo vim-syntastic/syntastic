@@ -14,15 +14,10 @@ if exists("g:loaded_syntastic_lisp_clisp_checker")
 endif
 let g:loaded_syntastic_lisp_clisp_checker=1
 
-function! SyntaxCheckers_lisp_clisp_IsAvailable()
-    return executable("clisp")
-endfunction
-
 function! SyntaxCheckers_lisp_clisp_GetLocList() dict
     let makeprg = syntastic#makeprg#build({
-        \ 'exe': 'clisp',
         \ 'args': '-q -c',
-        \ 'tail': '-o /tmp/clisp-vim-compiled-file',
+        \ 'tail': syntastic#c#NullOutput(),
         \ 'checker': self })
 
     let errorformat  =

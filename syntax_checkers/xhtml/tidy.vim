@@ -24,10 +24,6 @@ if !exists('g:syntastic_xhtml_tidy_ignore_errors')
     let g:syntastic_xhtml_tidy_ignore_errors = []
 endif
 
-function! SyntaxCheckers_xhtml_tidy_IsAvailable()
-    return executable("tidy")
-endfunction
-
 " TODO: join this with html.vim DRY's sake?
 function! s:TidyEncOptByFenc()
     let tidy_opts = {
@@ -59,7 +55,6 @@ endfunction
 function! SyntaxCheckers_xhtml_tidy_GetLocList() dict
     let encopt = s:TidyEncOptByFenc()
     let makeprg = syntastic#makeprg#build({
-        \ 'exe': 'tidy',
         \ 'args': encopt . ' -xml -e',
         \ 'checker': self })
 

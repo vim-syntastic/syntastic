@@ -15,13 +15,8 @@ if exists("g:loaded_syntastic_zsh_zsh_checker")
 endif
 let g:loaded_syntastic_zsh_zsh_checker=1
 
-function! SyntaxCheckers_zsh_zsh_IsAvailable()
-    return executable("zsh")
-endfunction
-
 function! SyntaxCheckers_zsh_zsh_GetLocList() dict
     let makeprg = syntastic#makeprg#build({
-        \ 'exe': 'zsh',
         \ 'args': '-n',
         \ 'checker': self })
 

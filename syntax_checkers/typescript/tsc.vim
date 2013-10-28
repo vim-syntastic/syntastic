@@ -9,14 +9,8 @@ if exists("g:loaded_syntastic_typescript_tsc_checker")
 endif
 let g:loaded_syntastic_typescript_tsc_checker=1
 
-function! SyntaxCheckers_typescript_tsc_IsAvailable()
-    return executable("tsc")
-endfunction
-
-
 function! SyntaxCheckers_typescript_tsc_GetLocList() dict
     let makeprg = syntastic#makeprg#build({
-        \ 'exe': 'tsc',
         \ 'args': '--module commonjs',
         \ 'post_args': '--out ' . syntastic#util#DevNull(),
         \ 'checker': self })

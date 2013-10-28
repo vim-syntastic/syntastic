@@ -15,10 +15,6 @@ if exists("g:loaded_syntastic_text_atdtool_checker")
 endif
 let g:loaded_syntastic_text_atdtool_checker = 1
 
-function! SyntaxCheckers_text_atdtool_IsAvailable()
-    return executable('atdtool')
-endfunction
-
 function! SyntaxCheckers_text_atdtool_GetHighlightRegex(item)
     let term = matchstr(a:item['text'], '\m "\zs[^"]\+\ze"\($\| | suggestions:\)')
     if term != ''
@@ -30,7 +26,6 @@ endfunction
 
 function! SyntaxCheckers_text_atdtool_GetLocList() dict
     let makeprg = syntastic#makeprg#build({
-        \ 'exe': 'atdtool',
         \ 'tail': '2>' . syntastic#util#DevNull(),
         \ 'checker': self })
 
