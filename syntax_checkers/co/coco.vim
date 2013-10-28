@@ -19,7 +19,7 @@ if !executable("coco")
     finish
 endif
 
-function! SyntaxCheckers_co_coco_GetLocList()
+function! SyntaxCheckers_co_coco_IsAvailable()
     return executable('coco')
 endfunction
 
