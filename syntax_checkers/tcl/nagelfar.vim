@@ -20,12 +20,11 @@ function! SyntaxCheckers_tcl_nagelfar_IsAvailable()
     return executable('nagelfar')
 endfunction
 
-function! SyntaxCheckers_tcl_nagelfar_GetLocList()
+function! SyntaxCheckers_tcl_nagelfar_GetLocList() dict
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'nagelfar',
         \ 'args': '-H',
-        \ 'filetype': 'tcl',
-        \ 'subchecker': 'nagelfar' })
+        \ 'checker': self })
 
     let errorformat =
         \ '%I%f: %l: N %m,'.

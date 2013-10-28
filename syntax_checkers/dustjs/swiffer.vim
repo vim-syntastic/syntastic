@@ -19,11 +19,10 @@ function! SyntaxCheckers_dustjs_swiffer_IsAvailable()
     return executable('swiffer')
 endfunction
 
-function! SyntaxCheckers_dustjs_swiffer_GetLocList()
+function! SyntaxCheckers_dustjs_swiffer_GetLocList() dict
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'swiffer',
-        \ 'subchecker': 'swiffer',
-        \ 'filetype': 'dustjs' })
+        \ 'checker': self })
 
     let errorformat = '%E%f - Line %l\, Column %c: %m'
 

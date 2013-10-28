@@ -76,7 +76,7 @@ if !exists('g:syntastic_ocaml_use_ocamlbuild') || !executable("ocamlbuild")
     let g:syntastic_ocaml_use_ocamlbuild = 0
 endif
 
-function! SyntaxCheckers_ocaml_camlp4o_GetLocList()
+function! SyntaxCheckers_ocaml_camlp4o_GetLocList() dict
     let makeprg = s:GetMakeprg()
     if makeprg == ""
         return []

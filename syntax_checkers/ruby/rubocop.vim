@@ -24,12 +24,11 @@ function! SyntaxCheckers_ruby_rubocop_IsAvailable()
         \ syntastic#util#versionIsAtLeast(syntastic#util#getVersion('rubocop --version'), [0,9,0])
 endfunction
 
-function! SyntaxCheckers_ruby_rubocop_GetLocList()
+function! SyntaxCheckers_ruby_rubocop_GetLocList() dict
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'rubocop',
         \ 'args': '--format emacs --silent',
-        \ 'filetype': 'ruby',
-        \ 'subchecker': 'rubocop' })
+        \ 'checker': self })
 
     let errorformat = '%f:%l:%c: %t: %m'
 

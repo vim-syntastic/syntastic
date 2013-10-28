@@ -28,11 +28,10 @@ function! SyntaxCheckers_zpt_zptlint_IsAvailable()
     return executable("zptlint")
 endfunction
 
-function! SyntaxCheckers_zpt_zptlint_GetLocList()
+function! SyntaxCheckers_zpt_zptlint_GetLocList() dict
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'zptlint',
-        \ 'filetype': 'zpt',
-        \ 'subchecker': 'zptlint' })
+        \ 'checker': self })
 
     let errorformat=
         \ '%-P*** Error in: %f,'.

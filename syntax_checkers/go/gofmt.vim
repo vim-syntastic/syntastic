@@ -21,13 +21,12 @@ function! SyntaxCheckers_go_gofmt_IsAvailable()
     return executable('gofmt')
 endfunction
 
-function! SyntaxCheckers_go_gofmt_GetLocList()
+function! SyntaxCheckers_go_gofmt_GetLocList() dict
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'gofmt',
         \ 'args': '-l',
         \ 'tail': '1>' . syntastic#util#DevNull(),
-        \ 'filetype': 'go',
-        \ 'subchecker': 'gofmt' })
+        \ 'checker': self })
 
     let errorformat = '%f:%l:%c: %m,%-G%.%#'
 

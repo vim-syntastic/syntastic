@@ -31,12 +31,11 @@ function! SyntaxCheckers_javascript_jslint_HighlightTerm(error)
     return '\V'.split(unexpected, "'")[1]
 endfunction
 
-function! SyntaxCheckers_javascript_jslint_GetLocList()
+function! SyntaxCheckers_javascript_jslint_GetLocList() dict
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'jslint',
         \ 'args': g:syntastic_javascript_jslint_conf,
-        \ 'filetype': 'javascript',
-        \ 'subchecker': 'jslint' })
+        \ 'checker': self })
 
     let errorformat =
         \ '%E %##%n %m,'.

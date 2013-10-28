@@ -22,7 +22,7 @@ endfunction
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! SyntaxCheckers_c_make_GetLocList()
+function! SyntaxCheckers_c_make_GetLocList() dict
 
     let makeprg = 'make -sk'
 

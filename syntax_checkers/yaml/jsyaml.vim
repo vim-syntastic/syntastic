@@ -22,12 +22,11 @@ function! SyntaxCheckers_yaml_jsyaml_IsAvailable()
     return executable("js-yaml")
 endfunction
 
-function! SyntaxCheckers_yaml_jsyaml_GetLocList()
+function! SyntaxCheckers_yaml_jsyaml_GetLocList() dict
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'js-yaml',
         \ 'args': '--compact',
-        \ 'filetype': 'yaml',
-        \ 'subchecker': 'jsyaml' })
+        \ 'checker': self })
 
     let errorformat='Error on line %l\, col %c:%m,%-G%.%#'
 

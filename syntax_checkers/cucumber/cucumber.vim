@@ -19,12 +19,11 @@ function! SyntaxCheckers_cucumber_cucumber_IsAvailable()
     return executable('cucumber')
 endfunction
 
-function! SyntaxCheckers_cucumber_cucumber_GetLocList()
+function! SyntaxCheckers_cucumber_cucumber_GetLocList() dict
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'cucumber',
         \ 'args': '--dry-run --quiet --strict --format pretty',
-        \ 'filetype': 'cucumber',
-        \ 'subchecker': 'cucumber' })
+        \ 'checker': self })
 
     let errorformat =
         \ '%f:%l:%c:%m,' .

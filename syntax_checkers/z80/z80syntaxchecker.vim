@@ -23,11 +23,10 @@ function! SyntaxCheckers_z80_z80syntaxchecker_IsAvailable()
     return executable("z80_syntax_checker.py")
 endfunction
 
-function! SyntaxCheckers_z80_z80syntaxchecker_GetLocList()
+function! SyntaxCheckers_z80_z80syntaxchecker_GetLocList() dict
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'z80_syntax_checker.py',
-        \ 'filetype': 'z80',
-        \ 'subchecker': 'z80syntaxchecker' })
+        \ 'checker': self })
 
     let errorformat =  '%f:%l %m'
 

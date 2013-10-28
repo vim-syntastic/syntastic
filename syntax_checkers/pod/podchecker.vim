@@ -18,11 +18,10 @@ function! SyntaxCheckers_pod_podchecker_IsAvailable()
     return executable("podchecker")
 endfunction
 
-function! SyntaxCheckers_pod_podchecker_GetLocList()
+function! SyntaxCheckers_pod_podchecker_GetLocList() dict
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'podchecker',
-        \ 'filetype': 'pod',
-        \ 'subchecker': 'podchecker' })
+        \ 'checker': self })
 
     let errorformat =
         \ '%W%[%#]%[%#]%[%#] WARNING: %m at line %l in file %f,' .

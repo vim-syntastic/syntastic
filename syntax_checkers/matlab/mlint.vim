@@ -19,12 +19,11 @@ function! SyntaxCheckers_matlab_mlint_IsAvailable()
     return executable("mlint")
 endfunction
 
-function! SyntaxCheckers_matlab_mlint_GetLocList()
+function! SyntaxCheckers_matlab_mlint_GetLocList() dict
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'mlint',
         \ 'args': '-id $*',
-        \ 'filetype': 'matlab',
-        \ 'subchecker': 'mlint' })
+        \ 'checker': self })
 
     let errorformat =
         \ 'L %l (C %c): %*[a-zA-Z0-9]: %m,'.

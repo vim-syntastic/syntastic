@@ -31,7 +31,7 @@ if !exists('g:syntastic_cobol_compiler_options')
     let g:syntastic_cobol_compiler_options = ''
 endif
 
-function! SyntaxCheckers_cobol_cobc_GetLocList()
+function! SyntaxCheckers_cobol_cobc_GetLocList() dict
     return syntastic#c#GetLocList('cobol', 'cobc', {
         \ 'errorformat': '%f:%l: %trror: %m',
         \ 'main_flags': '-fsyntax-only' })

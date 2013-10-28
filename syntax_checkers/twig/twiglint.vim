@@ -24,12 +24,11 @@ function! SyntaxCheckers_twig_twiglint_IsAvailable()
     return executable('twig-lint')
 endfunction
 
-function! SyntaxCheckers_twig_twiglint_GetLocList()
+function! SyntaxCheckers_twig_twiglint_GetLocList() dict
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'twig-lint',
         \ 'args': 'lint --format=csv',
-        \ 'filetype': 'twig',
-        \ 'subchecker': 'twiglint' })
+        \ 'checker': self })
 
     let errorformat = '"%f"\,%l\,%m'
 

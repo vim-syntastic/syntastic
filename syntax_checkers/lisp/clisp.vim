@@ -18,13 +18,12 @@ function! SyntaxCheckers_lisp_clisp_IsAvailable()
     return executable("clisp")
 endfunction
 
-function! SyntaxCheckers_lisp_clisp_GetLocList()
+function! SyntaxCheckers_lisp_clisp_GetLocList() dict
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'clisp',
         \ 'args': '-q -c',
         \ 'tail': '-o /tmp/clisp-vim-compiled-file',
-        \ 'filetype': 'lisp',
-        \ 'subchecker': 'clisp' })
+        \ 'checker': self })
 
     let errorformat  =
         \ '%-G;%.%#,' .

@@ -139,13 +139,12 @@ function! s:Args()
     return args
 endfunction
 
-function! SyntaxCheckers_html_tidy_GetLocList()
+function! SyntaxCheckers_html_tidy_GetLocList() dict
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'tidy',
         \ 'args': s:Args(),
         \ 'tail': '2>&1',
-        \ 'filetype': 'html',
-        \ 'subchecker': 'tidy' })
+        \ 'checker': self })
 
     let errorformat =
         \ '%Wline %l column %v - Warning: %m,' .

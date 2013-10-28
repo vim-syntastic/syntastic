@@ -19,12 +19,11 @@ function! SyntaxCheckers_haskell_hdevtools_IsAvailable()
     return executable('hdevtools')
 endfunction
 
-function! SyntaxCheckers_haskell_hdevtools_GetLocList()
+function! SyntaxCheckers_haskell_hdevtools_GetLocList() dict
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'hdevtools check',
         \ 'args': get(g:, 'hdevtools_options', ''),
-        \ 'filetype': 'haskell',
-        \ 'subchecker': 'hdevtools' })
+        \ 'checker': self })
 
     let errorformat= '\%-Z\ %#,'.
         \ '%W%f:%l:%c:\ Warning:\ %m,'.

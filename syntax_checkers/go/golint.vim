@@ -18,11 +18,10 @@ function! SyntaxCheckers_go_golint_IsAvailable()
     return executable('golint')
 endfunction
 
-function! SyntaxCheckers_go_golint_GetLocList()
+function! SyntaxCheckers_go_golint_GetLocList() dict
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'golint',
-        \ 'filetype': 'go',
-        \ 'subchecker': 'golint' })
+        \ 'checker': self })
 
     let errorformat = '%f:%l:%c: %m,%-G%.%#'
 

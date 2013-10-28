@@ -23,7 +23,7 @@ if !exists('g:syntastic_scala_options')
     let g:syntastic_scala_options = ''
 endif
 
-function! SyntaxCheckers_scala_fsc_GetLocList()
+function! SyntaxCheckers_scala_fsc_GetLocList() dict
     " fsc has some serious problems with the
     " working directory changing after being started
     " that's why we better pass an absolute path
@@ -31,8 +31,7 @@ function! SyntaxCheckers_scala_fsc_GetLocList()
         \ 'exe': 'fsc',
         \ 'args': '-Ystop-after:parser ' . g:syntastic_scala_options,
         \ 'fname': syntastic#util#shexpand('%:p'),
-        \ 'filetype': 'scala',
-        \ 'subchecker': 'fsc' })
+        \ 'checker': self })
 
     let errorformat = '%f:%l: %trror: %m'
 

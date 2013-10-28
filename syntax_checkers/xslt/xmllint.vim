@@ -15,16 +15,9 @@ if exists("g:loaded_syntastic_xslt_xmllint_checker")
 endif
 let g:loaded_syntastic_xslt_xmllint_checker=1
 
-function! SyntaxCheckers_xslt_xmllint_IsAvailable()
-    return SyntaxCheckers_xml_xmllint_IsAvailable()
-endfunction
-
-function! SyntaxCheckers_xslt_xmllint_GetLocList()
-    return SyntaxCheckers_xml_xmllint_GetLocList()
-endfunction
+runtime! syntax_checkers/xml/*.vim
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'xslt',
-    \ 'name': 'xmllint'})
-
-runtime! syntax_checkers/xml/*.vim
+    \ 'name': 'xmllint',
+    \ 'redirect': 'xml/xmllint'})

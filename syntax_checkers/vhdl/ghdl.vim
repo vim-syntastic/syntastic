@@ -18,12 +18,11 @@ function! SyntaxCheckers_vhdl_ghdl_IsAvailable()
     return executable("ghdl")
 endfunction
 
-function! SyntaxCheckers_vhdl_ghdl_GetLocList()
+function! SyntaxCheckers_vhdl_ghdl_GetLocList() dict
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'ghdl',
         \ 'args': '-s',
-        \ 'filetype': 'vhdl',
-        \ 'subchecker': 'ghdl' })
+        \ 'checker': self })
 
     let errorformat =  '%f:%l:%c: %m'
 

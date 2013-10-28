@@ -30,7 +30,7 @@ if !exists('g:syntastic_objcpp_compiler_options')
     let g:syntastic_objcpp_compiler_options = '-std=gnu99'
 endif
 
-function! SyntaxCheckers_objcpp_gcc_GetLocList()
+function! SyntaxCheckers_objcpp_gcc_GetLocList() dict
     return syntastic#c#GetLocList('objcpp', 'gcc', {
         \ 'errorformat':
         \     '%-G%f:%s:,' .

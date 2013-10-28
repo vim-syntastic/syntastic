@@ -26,13 +26,12 @@ function! SyntaxCheckers_javascript_jshint_IsAvailable()
     return executable(expand(g:syntastic_jshint_exec))
 endfunction
 
-function! SyntaxCheckers_javascript_jshint_GetLocList()
+function! SyntaxCheckers_javascript_jshint_GetLocList() dict
     let jshint_new = s:JshintNew()
     let makeprg = syntastic#makeprg#build({
         \ 'exe': expand(g:syntastic_jshint_exec),
         \ 'post_args': (jshint_new ? ' --verbose ' : '') . s:Args(),
-        \ 'filetype': 'javascript',
-        \ 'subchecker': 'jshint' })
+        \ 'checker': self })
 
     let errorformat = jshint_new ?
         \ '%f: line %l\, col %c\, %m \(%t%*\d\)' :

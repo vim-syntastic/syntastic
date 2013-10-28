@@ -24,12 +24,11 @@ if !exists('g:syntastic_scala_options')
 endif
 
 
-function! SyntaxCheckers_scala_scalac_GetLocList()
+function! SyntaxCheckers_scala_scalac_GetLocList() dict
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'scalac',
         \ 'args': '-Ystop-after:parser ' . g:syntastic_scala_options,
-        \ 'filetype': 'scala',
-        \ 'subchecker': 'scalac' })
+        \ 'checker': self })
 
     let errorformat = '%f:%l: %trror: %m'
 

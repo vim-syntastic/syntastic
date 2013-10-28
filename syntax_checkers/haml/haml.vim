@@ -23,12 +23,11 @@ function! SyntaxCheckers_haml_haml_IsAvailable()
     return executable(expand(g:syntastic_haml_interpreter))
 endfunction
 
-function! SyntaxCheckers_haml_haml_GetLocList()
+function! SyntaxCheckers_haml_haml_GetLocList() dict
     let makeprg = syntastic#makeprg#build({
         \ 'exe': expand(g:syntastic_haml_interpreter),
         \ 'args': '-c',
-        \ 'filetype': 'haml',
-        \ 'subchecker': 'haml' })
+        \ 'checker': self })
 
     let errorformat =
         \ 'Haml error on line %l: %m,' .

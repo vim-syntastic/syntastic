@@ -39,11 +39,10 @@ function! SyntaxCheckers_cpp_cpplint_IsAvailable()
     return executable('cpplint.py')
 endfunction
 
-function! SyntaxCheckers_cpp_cpplint_GetLocList()
+function! SyntaxCheckers_cpp_cpplint_GetLocList() dict
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'cpplint.py',
-        \ 'filetype': 'cpp',
-        \ 'subchecker': 'cpplint' })
+        \ 'checker': self })
 
     let errorformat = '%A%f:%l:  %m [%t],%-G%.%#'
 

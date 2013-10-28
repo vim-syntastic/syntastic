@@ -30,7 +30,7 @@ if !exists('g:syntastic_fortran_compiler_options')
     let g:syntastic_fortran_compiler_options = ''
 endif
 
-function! SyntaxCheckers_fortran_gfortran_GetLocList()
+function! SyntaxCheckers_fortran_gfortran_GetLocList() dict
     return syntastic#c#GetLocList('fortran', 'gfortran', {
         \ 'errorformat':
         \     '%-C %#,'.

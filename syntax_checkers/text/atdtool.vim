@@ -28,12 +28,11 @@ function! SyntaxCheckers_text_atdtool_GetHighlightRegex(item)
     return term
 endfunction
 
-function! SyntaxCheckers_text_atdtool_GetLocList()
+function! SyntaxCheckers_text_atdtool_GetLocList() dict
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'atdtool',
         \ 'tail': '2>' . syntastic#util#DevNull(),
-        \ 'filetype': 'text',
-        \ 'subchecker': 'atdtool' })
+        \ 'checker': self })
 
     let errorformat =
         \ '%W%f:%l:%c: %m,'.

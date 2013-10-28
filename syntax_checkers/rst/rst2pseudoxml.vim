@@ -22,13 +22,12 @@ function! SyntaxCheckers_rst_rst2pseudoxml_IsAvailable()
     return executable("rst2pseudoxml.py") || executable("rst2pseudoxml")
 endfunction
 
-function! SyntaxCheckers_rst_rst2pseudoxml_GetLocList()
+function! SyntaxCheckers_rst_rst2pseudoxml_GetLocList() dict
     let makeprg = syntastic#makeprg#build({
         \ 'exe': s:exe(),
         \ 'args': '--report=2 --exit-status=1',
         \ 'tail': syntastic#util#DevNull(),
-        \ 'filetype': 'rst',
-        \ 'subchecker': 'rst2pseudoxml' })
+        \ 'checker': self })
 
     let errorformat =
         \ '%f:%l: (%tNFO/1) %m,'.

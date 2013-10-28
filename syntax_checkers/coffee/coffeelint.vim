@@ -18,12 +18,11 @@ function! SyntaxCheckers_coffee_coffeelint_IsAvailable()
     return executable('coffeelint')
 endfunction
 
-function! SyntaxCheckers_coffee_coffeelint_GetLocList()
+function! SyntaxCheckers_coffee_coffeelint_GetLocList() dict
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'coffeelint',
         \ 'args': '--csv',
-        \ 'filetype': 'coffee',
-        \ 'subchecker': 'coffeelint' })
+        \ 'checker': self })
 
     let errorformat =
         \ '%f\,%l\,%\d%#\,%trror\,%m,' .

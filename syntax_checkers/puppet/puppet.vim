@@ -19,7 +19,7 @@ function! SyntaxCheckers_puppet_puppet_IsAvailable()
     return executable("puppet")
 endfunction
 
-function! SyntaxCheckers_puppet_puppet_GetLocList()
+function! SyntaxCheckers_puppet_puppet_GetLocList() dict
 
     let ver = syntastic#util#getVersion('puppet --version 2>' . syntastic#util#DevNull())
 
@@ -32,8 +32,7 @@ function! SyntaxCheckers_puppet_puppet_GetLocList()
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'puppet',
         \ 'args': args,
-        \ 'filetype': 'puppet',
-        \ 'subchecker': 'puppet' })
+        \ 'checker': self })
 
     let errorformat =
         \ '%-Gerr: Try ''puppet help parser validate'' for usage,' .

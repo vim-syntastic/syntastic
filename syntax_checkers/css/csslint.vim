@@ -31,12 +31,11 @@ function! SyntaxCheckers_css_csslint_IsAvailable()
     return executable(expand(g:syntastic_csslint_exec))
 endfunction
 
-function! SyntaxCheckers_css_csslint_GetLocList()
+function! SyntaxCheckers_css_csslint_GetLocList() dict
     let makeprg = syntastic#makeprg#build({
         \ 'exe': expand(g:syntastic_csslint_exec),
         \ 'args': '--format=compact ' . g:syntastic_csslint_options,
-        \ 'filetype': 'css',
-        \ 'subchecker': 'csslint' })
+        \ 'checker': self })
 
     " Print CSS Lint's error/warning messages from compact format. Ignores blank lines.
     let errorformat =

@@ -39,7 +39,7 @@ function! SyntaxCheckers_java_checkstyle_Preprocess(errors)
     return out
 endfunction
 
-function! SyntaxCheckers_java_checkstyle_GetLocList()
+function! SyntaxCheckers_java_checkstyle_GetLocList() dict
 
     let fname = syntastic#util#shescape( expand('%:p:h') . '/' . expand('%:t') )
 
@@ -53,8 +53,7 @@ function! SyntaxCheckers_java_checkstyle_GetLocList()
         \         ' com.puppycrawl.tools.checkstyle.Main -c ' . g:syntastic_java_checkstyle_conf_file .
         \         ' -f xml',
         \ 'fname': fname,
-        \ 'filetype': 'java',
-        \ 'subchecker': 'checkstyle' })
+        \ 'checker': self })
 
     let errorformat =
         \ '%P<file name="%f">,' .

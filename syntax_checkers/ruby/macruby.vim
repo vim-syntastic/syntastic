@@ -17,12 +17,11 @@ function! SyntaxCheckers_ruby_macruby_IsAvailable()
     return executable('macruby')
 endfunction
 
-function! SyntaxCheckers_ruby_macruby_GetLocList()
+function! SyntaxCheckers_ruby_macruby_GetLocList() dict
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'RUBYOPT= macruby',
         \ 'args': '-W1 -c',
-        \ 'filetype': 'ruby',
-        \ 'subchecker': 'macruby' })
+        \ 'checker': self })
 
     let errorformat =
         \ '%-GSyntax OK,'.

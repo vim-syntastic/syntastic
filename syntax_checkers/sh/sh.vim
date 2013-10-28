@@ -39,13 +39,12 @@ endfunction
 function! s:ForwardToZshChecker()
     let registry = g:SyntasticRegistry.Instance()
     if registry.checkable('zsh')
-        return SyntaxCheckers_zsh_zsh_GetLocList()
+        return registry.getChecker('zsh', 'zsh').getLocListRaw()
     else
         return []
     endif
 
 endfunction
-
 
 function! s:IsShellValid()
     return len(s:GetShell()) > 0 && executable(s:GetShell())
@@ -56,7 +55,7 @@ function! SyntaxCheckers_sh_sh_IsAvailable()
     return s:IsShellValid()
 endfunction
 
-function! SyntaxCheckers_sh_sh_GetLocList()
+function! SyntaxCheckers_sh_sh_GetLocList() dict
     if s:GetShell() == 'zsh'
         return s:ForwardToZshChecker()
     endif
@@ -68,8 +67,7 @@ function! SyntaxCheckers_sh_sh_GetLocList()
     let makeprg = syntastic#makeprg#build({
         \ 'exe': s:GetShell(),
         \ 'args': '-n',
-        \ 'filetype': 'sh',
-        \ 'subchecker': 'sh' })
+        \ 'checker': self })
 
     let errorformat = '%f: line %l: %m'
 

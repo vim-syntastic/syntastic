@@ -28,14 +28,13 @@ function! SyntaxCheckers_dart_dart_analyzer_GetHighlightRegex(error)
     return '\%>'.lcol.'c\%<'.rcol.'c'
 endfunction
 
-function! SyntaxCheckers_dart_dart_analyzer_GetLocList()
+function! SyntaxCheckers_dart_dart_analyzer_GetLocList() dict
     let args = !empty(g:syntastic_dart_analyzer_conf) ? ' ' . g:syntastic_dart_analyzer_conf : ''
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'dart_analyzer',
         \ 'args': '--error_format machine',
         \ 'post_args': args,
-        \ 'filetype': 'dart',
-        \ 'subchecker': 'dart_analyzer' })
+        \ 'checker': self })
 
     " Machine readable format looks like:
     " SEVERITY|TYPE|ERROR_CODE|file:FILENAME|LINE_NUMBER|COLUMN|LENGTH|MESSAGE

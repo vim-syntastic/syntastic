@@ -28,12 +28,11 @@ function! SyntaxCheckers_puppet_puppetlint_IsAvailable()
         \     syntastic#util#DevNull()), [0,1,10])
 endfunction
 
-function! SyntaxCheckers_puppet_puppetlint_GetLocList()
+function! SyntaxCheckers_puppet_puppetlint_GetLocList() dict
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'puppet-lint',
         \ 'post_args': '--log-format "%{KIND} [%{check}] %{message} at %{fullpath}:%{linenumber}"',
-        \ 'filetype': 'puppet',
-        \ 'subchecker': 'puppetlint' })
+        \ 'checker': self })
 
     let errorformat = '%t%*[a-zA-Z] %m at %f:%l'
 

@@ -16,15 +16,14 @@ function! SyntaxCheckers_python_python_IsAvailable()
     return executable('python')
 endfunction
 
-function! SyntaxCheckers_python_python_GetLocList()
+function! SyntaxCheckers_python_python_GetLocList() dict
     let fname = "'" . escape(expand('%'), "\\'") . "'"
 
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'python',
         \ 'args': '-c',
         \ 'fname': syntastic#util#shescape("compile(open(" . fname . ").read(), " . fname . ", 'exec')"),
-        \ 'filetype': 'python',
-        \ 'subchecker': 'python' })
+        \ 'checker': self })
 
     let errorformat =
         \ '%E  File "%f"\, line %l,' .

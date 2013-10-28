@@ -14,11 +14,10 @@ function! SyntaxCheckers_haskell_hlint_IsAvailable()
     return executable('hlint')
 endfunction
 
-function! SyntaxCheckers_haskell_hlint_GetLocList()
+function! SyntaxCheckers_haskell_hlint_GetLocList() dict
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'hlint',
-        \ 'filetype': 'haskell',
-        \ 'subchecker': 'hlint' })
+        \ 'checker': self })
 
     let errorformat =
         \ '%E%f:%l:%c: Error: %m,' .

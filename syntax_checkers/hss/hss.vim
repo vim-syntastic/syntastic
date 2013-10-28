@@ -19,12 +19,11 @@ function! SyntaxCheckers_hss_hss_IsAvailable()
     return executable('hss')
 endfunction
 
-function! SyntaxCheckers_hss_hss_GetLocList()
+function! SyntaxCheckers_hss_hss_GetLocList() dict
     let makeprg = syntastic#makeprg#build({
 	\ 'exe': 'hss',
 	\ 'args' : '-output ' . syntastic#util#DevNull(),
-	\ 'filetype': 'hss',
-	\ 'subchecker': 'hss' })
+	\ 'checker': self })
 
     let errorformat = '%E%f:%l: %m'
 

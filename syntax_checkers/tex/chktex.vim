@@ -36,12 +36,11 @@ function! SyntaxCheckers_tex_chktex_IsAvailable()
     return executable('chktex')
 endfunction
 
-function! SyntaxCheckers_tex_chktex_GetLocList()
+function! SyntaxCheckers_tex_chktex_GetLocList() dict
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'chktex',
         \ 'post_args': '-q -v1',
-        \ 'filetype': 'tex',
-        \ 'subchecker': 'chktex' })
+        \ 'checker': self })
 
     let errorformat =
         \ '%EError %n in %f line %l: %m,' .

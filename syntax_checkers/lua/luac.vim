@@ -43,12 +43,11 @@ function! SyntaxCheckers_lua_luac_GetHighlightRegex(pos)
 endfunction
 
 
-function! SyntaxCheckers_lua_luac_GetLocList()
+function! SyntaxCheckers_lua_luac_GetLocList() dict
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'luac',
         \ 'args': '-p',
-        \ 'filetype': 'lua',
-        \ 'subchecker': 'luac' })
+        \ 'checker': self })
 
     let errorformat =  'luac: %#%f:%l: %m'
 

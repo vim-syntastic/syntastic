@@ -27,7 +27,7 @@ if !exists('g:syntastic_ada_compiler_options')
     let g:syntastic_ada_compiler_options = ''
 endif
 
-function! SyntaxCheckers_ada_gcc_GetLocList()
+function! SyntaxCheckers_ada_gcc_GetLocList() dict
     return syntastic#c#GetLocList('ada', 'gcc', {
         \ 'errorformat':
         \     '%-G%f:%s:,' .

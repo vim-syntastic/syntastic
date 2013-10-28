@@ -13,8 +13,13 @@ function! g:SyntasticChecker.New(args)
     let newObj._filetype = a:args['filetype']
     let newObj._name = a:args['name']
 
+    if has_key(a:args, 'redirect')
+        let [filetype, name] = split(a:args['redirect'], '/')
+        let prefix = 'SyntaxCheckers_' . filetype . '_' . name . '_'
+    else
+        let prefix = 'SyntaxCheckers_' . newObj._filetype . '_' . newObj._name . '_'
+    endif
 
-    let prefix = 'SyntaxCheckers_' . newObj._filetype . '_' . newObj._name . '_'
     let newObj._locListFunc = function(prefix . 'GetLocList')
     let newObj._isAvailableFunc = function(prefix . 'IsAvailable')
 
@@ -45,6 +50,10 @@ function! g:SyntasticChecker.getLocList()
     endtry
     call self._populateHighlightRegexes(list)
     return g:SyntasticLoclist.New(list)
+endfunction
+
+function! g:SyntasticChecker.getLocListRaw()
+    return self._locListFunc()
 endfunction
 
 function! g:SyntasticChecker.getHighlightRegexFor(error)

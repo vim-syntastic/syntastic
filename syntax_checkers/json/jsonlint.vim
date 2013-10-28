@@ -18,12 +18,11 @@ function! SyntaxCheckers_json_jsonlint_IsAvailable()
     return executable('jsonlint')
 endfunction
 
-function! SyntaxCheckers_json_jsonlint_GetLocList()
+function! SyntaxCheckers_json_jsonlint_GetLocList() dict
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'jsonlint',
         \ 'post_args': '--compact',
-        \ 'filetype': 'json',
-        \ 'subchecker': 'jsonlint' })
+        \ 'checker': self })
 
     let errorformat =
         \ '%ELine %l:%c,'.

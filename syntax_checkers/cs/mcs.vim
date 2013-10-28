@@ -19,12 +19,11 @@ function! SyntaxCheckers_cs_mcs_IsAvailable()
     return executable('mcs')
 endfunction
 
-function! SyntaxCheckers_cs_mcs_GetLocList()
+function! SyntaxCheckers_cs_mcs_GetLocList() dict
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'mcs',
         \ 'args': '--parse',
-        \ 'filetype': 'cs',
-        \ 'subchecker': 'mcs' })
+        \ 'checker': self })
 
     let errorformat = '%f(%l\,%c): %trror %m'
 

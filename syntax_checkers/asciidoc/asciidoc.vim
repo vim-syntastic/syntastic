@@ -19,12 +19,11 @@ function! SyntaxCheckers_asciidoc_asciidoc_IsAvailable()
     return executable("asciidoc")
 endfunction
 
-function! SyntaxCheckers_asciidoc_asciidoc_GetLocList()
+function! SyntaxCheckers_asciidoc_asciidoc_GetLocList() dict
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'asciidoc',
         \ 'args': syntastic#c#NullOutput(),
-        \ 'filetype': 'asciidoc',
-        \ 'subchecker': 'asciidoc' })
+        \ 'checker': self })
 
     let errorformat =
         \ '%Easciidoc: %tRROR: %f: line %l: %m,' .

@@ -30,7 +30,7 @@ if !exists('g:syntastic_cpp_compiler_options')
     let g:syntastic_cpp_compiler_options = ''
 endif
 
-function! SyntaxCheckers_cpp_gcc_GetLocList()
+function! SyntaxCheckers_cpp_gcc_GetLocList() dict
     return syntastic#c#GetLocList('cpp', 'gcc', {
         \ 'errorformat':
         \     '%-G%f:%s:,' .

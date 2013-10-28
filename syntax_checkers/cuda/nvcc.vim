@@ -28,7 +28,7 @@ function! SyntaxCheckers_cuda_nvcc_IsAvailable()
     return executable('nvcc')
 endfunction
 
-function! SyntaxCheckers_cuda_nvcc_GetLocList()
+function! SyntaxCheckers_cuda_nvcc_GetLocList() dict
     if exists('g:syntastic_cuda_arch')
         let arch_flag = '-arch=' . g:syntastic_cuda_arch
     else

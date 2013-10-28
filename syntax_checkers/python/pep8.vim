@@ -21,11 +21,10 @@ function! SyntaxCheckers_python_pep8_IsAvailable()
     return executable('pep8')
 endfunction
 
-function! SyntaxCheckers_python_pep8_GetLocList()
+function! SyntaxCheckers_python_pep8_GetLocList() dict
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'pep8',
-        \ 'filetype': 'python',
-        \ 'subchecker': 'pep8' })
+        \ 'checker': self })
 
     let errorformat = '%f:%l:%c: %m'
 
