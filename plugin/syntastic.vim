@@ -19,6 +19,13 @@ runtime! plugin/syntastic/*.vim
 
 let s:running_windows = has("win16") || has("win32")
 
+for feature in ['autocmd', 'eval', 'modify_fname', 'quickfix', 'user_commands']
+    if !has(feature)
+        call syntastic#util#error("need Vim compiled with feature " . feature)
+        finish
+    endif
+endfor
+
 if !s:running_windows && executable('uname')
     try
         let s:uname = system('uname')
