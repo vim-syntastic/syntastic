@@ -11,6 +11,19 @@ if !exists("g:syntastic_debug")
 endif
 
 let s:deprecationNoticesIssued = []
+let s:redraw_delayed = 0
+let s:redraw_full = 0
+
+if g:syntastic_delayed_redraws
+    " updatetime is 4000 ms by default
+    if &updatetime == 4000
+        let &updatetime = 500
+    endif
+
+    augroup syntastic
+        autocmd CursorHold,CursorHoldI * call syntastic#util#redrawHandler()
+    augroup END
+endif
 
 function! syntastic#util#DevNull()
     if has('win32')
@@ -102,7 +115,7 @@ function! syntastic#util#wideMsg(msg)
     let msg = substitute(msg, "\n", "", "g")
 
     set noruler noshowcmd
-    redraw
+    call syntastic#util#redraw(0)
 
     echo msg
 
@@ -183,6 +196,43 @@ function! syntastic#util#decodeXMLEntities(string)
     let str = substitute(str, '\m&apos;', "'", 'g')
     let str = substitute(str, '\m&amp;', '\&', 'g')
     return str
+endfunction
+
+"Redraw in a way that doesnt make the screen flicker or leave anomalies behind.
+"
+"Some terminal versions of vim require `redraw!` - otherwise there can be
+"random anomalies left behind.
+"
+"However, on some versions of gvim using `redraw!` causes the screen to
+"flicker - so use redraw.
+"
+"XXX On older Vim versions calling redraw while a popup is visible can make
+"Vim segfault, so move redraws to a CursorHold / CursorHoldI handler.
+function! syntastic#util#redraw(full)
+    if !g:syntastic_delayed_redraws || !pumvisible()
+        if a:full
+            redraw!
+        else
+            redraw
+        endif
+        let s:redraw_delayed = 0
+        let s:redraw_full = 0
+    else
+        let s:redraw_delayed = 1
+        let s:redraw_full = s:redraw_full || a:full
+    endif
+endfunction
+
+function! syntastic#util#redrawHandler()
+    if s:redraw_delayed && !pumvisible()
+        if s:redraw_full
+            redraw!
+        else
+            redraw
+        endif
+        let s:redraw_delayed = 0
+        let s:redraw_full = 0
+    endif
 endfunction
 
 function! syntastic#util#debug(msg)
