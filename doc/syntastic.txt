@@ -374,8 +374,15 @@ If the buffer had 2 warnings, starting on line 5 then this would appear: >
 Default: 0 in GUI Vim and MacVim, 1 otherwise
 Controls whether syntastic calls |:redraw| or |:redraw!| for screen redraws.
 Changing it can in principle make screen redraws smoother, but it can also
-cause screen to flicker, or cause ghost characters.  Leaving it to the default
+cause screen to flicker, or cause ghost characters. Leaving it to the default
 should be safe.
+
+                                                 *'syntastic_delayed_redraws'*
+Default: 0
+On older Vims, calling redraw when a popup menu is visible can cause Vim to
+segfault. If your version of Vim is affected, the solution is of course to
+upgrade Vim. If upgrading is not immediately feasible however, setting this
+variable to 1 might help, by delaying redraws until they are safe.
 
                                                            *'syntastic_debug'*
 Default: 0

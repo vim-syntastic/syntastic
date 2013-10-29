@@ -76,13 +76,19 @@ if !exists("g:syntastic_filetype_map")
 endif
 
 if !exists("g:syntastic_full_redraws")
-    let g:syntastic_full_redraws = !( has('gui_running') || has('gui_macvim'))
+    let g:syntastic_full_redraws = !(has('gui_running') || has('gui_macvim'))
 endif
 
 " TODO: not documented
 if !exists("g:syntastic_reuse_loc_lists")
     " a relevant bug has been fixed in one of the pre-releases of Vim 7.4
     let g:syntastic_reuse_loc_lists = (v:version >= 704)
+endif
+
+" XXX: Older Vim versions can crash if redraw is called while a popup is visible.
+" This variable enables a workaround, by delaying redraws to an idle moment.
+if !exists("g:syntastic_delayed_redraws")
+    let g:syntastic_delayed_redraws = 0
 endif
 
 let s:registry = g:SyntasticRegistry.Instance()
@@ -100,10 +106,16 @@ function! s:CompleteCheckerName(argLead, cmdLine, cursorPos)
 endfunction
 
 command! SyntasticToggleMode call s:ToggleMode()
-command! -nargs=? -complete=custom,s:CompleteCheckerName SyntasticCheck call s:UpdateErrors(0, <f-args>) <bar> call s:Redraw()
+command! -nargs=? -complete=custom,s:CompleteCheckerName SyntasticCheck
+            \ call s:UpdateErrors(0, <f-args>) <bar>
+            \ call syntastic#util#redraw(g:syntastic_full_redraws)
 command! Errors call s:ShowLocList()
-command! SyntasticInfo call s:modemap.echoMode() | call s:registry.echoInfoFor(s:CurrentFiletypes())
-command! SyntasticReset call s:ClearCache() | call s:notifiers.refresh(g:SyntasticLoclist.New([]))
+command! SyntasticInfo
+            \ call s:modemap.echoMode() |
+            \ call s:registry.echoInfoFor(s:CurrentFiletypes())
+command! SyntasticReset
+            \ call s:ClearCache() |
+            \ call s:notifiers.refresh(g:SyntasticLoclist.New([]))
 
 highlight link SyntasticError SpellBad
 highlight link SyntasticWarning SpellCap
@@ -142,7 +154,6 @@ function! s:BufEnterHook()
         call g:SyntasticLoclistHide()
     endif
 endfunction
-
 
 function! s:QuitPreHook()
     let b:syntastic_skip_checks = !g:syntastic_check_on_wq
@@ -272,21 +283,6 @@ endfunction
 
 function! s:IsRedrawRequiredAfterMake()
     return !s:running_windows && (s:uname() =~ "FreeBSD" || s:uname() =~ "OpenBSD")
-endfunction
-
-"Redraw in a way that doesnt make the screen flicker or leave anomalies behind.
-"
-"Some terminal versions of vim require `redraw!` - otherwise there can be
-"random anomalies left behind.
-"
-"However, on some versions of gvim using `redraw!` causes the screen to
-"flicker - so use redraw.
-function! s:Redraw()
-    if g:syntastic_full_redraws
-        redraw!
-    else
-        redraw
-    endif
 endfunction
 
 function! s:IgnoreFile(filename)
@@ -427,7 +423,7 @@ function! SyntasticMake(options)
     let &shell=old_shell
 
     if s:IsRedrawRequiredAfterMake()
-        call s:Redraw()
+        call syntastic#util#redraw(g:syntastic_full_redraws)
     endif
 
     if has_key(a:options, 'returns') && index(a:options['returns'], v:shell_error) == -1
