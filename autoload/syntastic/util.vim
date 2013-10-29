@@ -15,7 +15,9 @@ let s:redraw_delayed = 0
 let s:redraw_full = 0
 
 if g:syntastic_delayed_redraws
-    " updatetime is 4000 ms by default
+    " CursorHold / CursorHoldI events are triggered if user doesn't press a
+    " key for &updatetime ms.  We change it only if current value is the default
+    " value, that is 4000 ms.
     if &updatetime == 4000
         let &updatetime = 500
     endif
@@ -198,23 +200,11 @@ function! syntastic#util#decodeXMLEntities(string)
     return str
 endfunction
 
-"Redraw in a way that doesnt make the screen flicker or leave anomalies behind.
-"
-"Some terminal versions of vim require `redraw!` - otherwise there can be
-"random anomalies left behind.
-"
-"However, on some versions of gvim using `redraw!` causes the screen to
-"flicker - so use redraw.
-"
-"XXX On older Vim versions calling redraw while a popup is visible can make
-"Vim segfault, so move redraws to a CursorHold / CursorHoldI handler.
+" On older Vim versions calling redraw while a popup is visible can make
+" Vim segfault, so move redraws to a CursorHold / CursorHoldI handler.
 function! syntastic#util#redraw(full)
     if !g:syntastic_delayed_redraws || !pumvisible()
-        if a:full
-            redraw!
-        else
-            redraw
-        endif
+        call s:Redraw(a:full)
         let s:redraw_delayed = 0
         let s:redraw_full = 0
     else
@@ -225,11 +215,7 @@ endfunction
 
 function! syntastic#util#redrawHandler()
     if s:redraw_delayed && !pumvisible()
-        if s:redraw_full
-            redraw!
-        else
-            redraw
-        endif
+        call s:Redraw(s:redraw_full)
         let s:redraw_delayed = 0
         let s:redraw_full = 0
     endif
@@ -265,6 +251,21 @@ function! syntastic#util#deprecationWarn(msg)
 
     call add(s:deprecationNoticesIssued, a:msg)
     call syntastic#util#warn(a:msg)
+endfunction
+
+"Redraw in a way that doesnt make the screen flicker or leave anomalies behind.
+"
+"Some terminal versions of vim require `redraw!` - otherwise there can be
+"random anomalies left behind.
+"
+"However, on some versions of gvim using `redraw!` causes the screen to
+"flicker - so use redraw.
+function! s:Redraw(full)
+    if a:full
+        redraw!
+    else
+        redraw
+    endif
 endfunction
 
 let &cpo = s:save_cpo
