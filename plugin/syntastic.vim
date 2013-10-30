@@ -85,12 +85,6 @@ if !exists("g:syntastic_reuse_loc_lists")
     let g:syntastic_reuse_loc_lists = (v:version >= 704)
 endif
 
-" XXX: Older Vim versions can crash if redraw is called while a popup is visible.
-" This variable enables a workaround, by delaying redraws to an idle moment.
-if !exists("g:syntastic_delayed_redraws")
-    let g:syntastic_delayed_redraws = 0
-endif
-
 let s:registry = g:SyntasticRegistry.Instance()
 let s:notifiers = g:SyntasticNotifiers.Instance()
 let s:modemap = g:SyntasticModeMap.Instance()

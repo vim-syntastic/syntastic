@@ -10,6 +10,10 @@ if !exists("g:syntastic_debug")
     let g:syntastic_debug = 0
 endif
 
+if !exists("g:syntastic_delayed_redraws")
+    let g:syntastic_delayed_redraws = 0
+endif
+
 let s:deprecationNoticesIssued = []
 let s:redraw_delayed = 0
 let s:redraw_full = 0
