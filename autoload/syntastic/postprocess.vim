@@ -25,7 +25,7 @@ function! syntastic#postprocess#sort(errors)
     return sort(a:errors, 's:compareErrorItems')
 endfunction
 
-function syntastic#postprocess#compressWhitespace(errors)
+function! syntastic#postprocess#compressWhitespace(errors)
     let llist = []
 
     for e in a:errors

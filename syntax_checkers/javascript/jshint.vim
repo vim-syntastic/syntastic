@@ -44,11 +44,11 @@ function! SyntaxCheckers_javascript_jshint_GetLocList()
         \ 'defaults': {'bufnr': bufnr('')} })
 endfunction
 
-function s:JshintNew()
+function! s:JshintNew()
     return syntastic#util#versionIsAtLeast(syntastic#util#getVersion(expand(g:syntastic_jshint_exec) . ' --version'), [1, 1])
 endfunction
 
-function s:Args()
+function! s:Args()
     " node-jshint uses .jshintrc as config unless --config arg is present
     return !empty(g:syntastic_javascript_jshint_conf) ? ' --config ' . g:syntastic_javascript_jshint_conf : ''
 endfunction

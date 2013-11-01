@@ -120,7 +120,7 @@ function! g:SyntasticSignsNotifier._signErrors(loclist)
                 let sign_subtype = get(i, 'subtype', '')
                 let sign_type = 'Syntastic' . sign_subtype . sign_severity
 
-                exec "sign place " . s:next_sign_id . " line=" . i['lnum'] . " name=" . sign_type . " buffer=" . i['bufnr']
+                execute "sign place " . s:next_sign_id . " line=" . i['lnum'] . " name=" . sign_type . " buffer=" . i['bufnr']
                 call add(self._bufSignIds(), s:next_sign_id)
                 let s:next_sign_id += 1
             endif
@@ -132,7 +132,7 @@ endfunction
 function! g:SyntasticSignsNotifier._removeSigns(ids)
     if has('signs')
         for i in a:ids
-            exec "sign unplace " . i
+            execute "sign unplace " . i
             call remove(self._bufSignIds(), index(self._bufSignIds(), i))
         endfor
     endif

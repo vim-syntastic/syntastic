@@ -173,7 +173,7 @@ function! g:SyntasticRegistry._loadCheckers(filetype)
         return
     endif
 
-    exec "runtime! syntax_checkers/" . a:filetype . "/*.vim"
+    execute "runtime! syntax_checkers/" . a:filetype . "/*.vim"
 
     if !has_key(self._checkerMap, a:filetype)
         let self._checkerMap[a:filetype] = []

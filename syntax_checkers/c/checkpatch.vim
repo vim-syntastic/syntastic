@@ -20,7 +20,7 @@ elseif executable("./scripts/checkpatch.pl")
     let g:syntastic_c_checker_checkpatch_location = './scripts/checkpatch.pl'
 endif
 
-function SyntaxCheckers_c_checkpatch_IsAvailable()
+function! SyntaxCheckers_c_checkpatch_IsAvailable()
     return exists("g:syntastic_c_checker_checkpatch_location")
 endfunction
 

@@ -17,7 +17,7 @@ if !exists("g:syntastic_javascript_jsl_conf")
     let g:syntastic_javascript_jsl_conf = ""
 endif
 
-function s:ConfFlag()
+function! s:ConfFlag()
     if !empty(g:syntastic_javascript_jsl_conf)
         return "-conf " . g:syntastic_javascript_jsl_conf
     endif

@@ -130,7 +130,7 @@ function! s:NewTags(name)
     return syntastic#util#shescape(join( s:{a:name} + g:syntastic_html_tidy_{a:name}, ',' ))
 endfunction
 
-function s:Args()
+function! s:Args()
     let args = s:TidyEncOptByFenc() .
         \ ' --new-blocklevel-tags ' . s:NewTags('blocklevel_tags') .
         \ ' --new-inline-tags ' . s:NewTags('inline_tags') .

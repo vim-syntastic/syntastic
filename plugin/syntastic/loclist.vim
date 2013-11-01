@@ -151,7 +151,7 @@ function! g:SyntasticLoclist.show()
 
     if self.hasErrorsOrWarningsToDisplay()
         let num = winnr()
-        exec "lopen " . g:syntastic_loc_list_height
+        execute "lopen " . g:syntastic_loc_list_height
         if num != winnr()
             wincmd p
         endif
