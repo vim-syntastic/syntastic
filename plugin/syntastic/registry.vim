@@ -116,8 +116,8 @@ function! g:SyntasticRegistry.echoInfoFor(ftalias_list)
         call extend(active, self.getActiveCheckers(ftalias))
     endfor
 
-    echomsg "Available checkers: " . join(syntastic#util#unique(map(available, "v:val.getName()")))
-    echomsg "Currently active checker(s): " . join(syntastic#util#unique(map(active, "v:val.getName()")))
+    echomsg "Available checker(s): " . join(syntastic#util#unique(map(available, "v:val.getName()")))
+    echomsg "Currently enabled checker(s): " . join(syntastic#util#unique(map(active, "v:val.getName()")))
 endfunction
 
 " Private methods {{{1
