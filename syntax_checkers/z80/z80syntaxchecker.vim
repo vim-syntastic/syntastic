@@ -22,7 +22,7 @@ endif
 let g:loaded_syntastic_z80_z80syntaxchecker_checker=1
 
 function! SyntaxCheckers_z80_z80syntaxchecker_GetLocList() dict
-    let makeprg = syntastic#makeprg#build({ 'checker': self })
+    let makeprg = self.makeprgBuild({})
 
     let errorformat =  '%f:%l %m'
 

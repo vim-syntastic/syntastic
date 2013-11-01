@@ -25,10 +25,9 @@ function! SyntaxCheckers_dart_dart_analyzer_GetHighlightRegex(error)
 endfunction
 
 function! SyntaxCheckers_dart_dart_analyzer_GetLocList() dict
-    let makeprg = syntastic#makeprg#build({
+    let makeprg = self.makeprgBuild({
         \ 'args': '--error_format machine',
-        \ 'post_args': g:syntastic_dart_analyzer_conf,
-        \ 'checker': self })
+        \ 'post_args': g:syntastic_dart_analyzer_conf })
 
     " Machine readable format looks like:
     " SEVERITY|TYPE|ERROR_CODE|file:FILENAME|LINE_NUMBER|COLUMN|LENGTH|MESSAGE

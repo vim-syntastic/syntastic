@@ -20,9 +20,7 @@ if !executable("coco")
 endif
 
 function! SyntaxCheckers_co_coco_GetLocList() dict
-    let makeprg = syntastic#makeprg#build({
-        \ 'args': '-c -o /tmp',
-        \ 'checker': self })
+    let makeprg = self.makeprgBuild({ 'args': '-c -o /tmp' })
 
     let errorformat =
         \ '%EFailed at: %f,' .

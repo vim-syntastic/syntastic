@@ -26,9 +26,8 @@ if !exists('g:syntastic_splint_config_file')
 endif
 
 function! SyntaxCheckers_c_splint_GetLocList() dict
-    let makeprg = syntastic#makeprg#build({
-        \ 'post_args': '-showfunc -hints +quiet ' . syntastic#c#ReadConfig(g:syntastic_splint_config_file),
-        \ 'checker': self })
+    let makeprg = self.makeprgBuild({
+        \ 'post_args': '-showfunc -hints +quiet ' . syntastic#c#ReadConfig(g:syntastic_splint_config_file) })
 
     let errorformat =
         \ '%-G%f:%l:%v: %[%#]%[%#]%[%#] Internal Bug %.%#,' .

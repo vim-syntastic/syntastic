@@ -28,10 +28,9 @@ endfunction
 
 function! SyntaxCheckers_javascript_jshint_GetLocList() dict
     let jshint_new = s:JshintNew()
-    let makeprg = syntastic#makeprg#build({
+    let makeprg = self.makeprgBuild({
         \ 'exe': expand(g:syntastic_jshint_exec),
-        \ 'post_args': (jshint_new ? ' --verbose ' : '') . s:Args(),
-        \ 'checker': self })
+        \ 'post_args': (jshint_new ? ' --verbose ' : '') . s:Args() })
 
     let errorformat = jshint_new ?
         \ '%f: line %l\, col %c\, %m \(%t%*\d\)' :

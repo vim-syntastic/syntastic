@@ -24,9 +24,7 @@ function! SyntaxCheckers_coffee_coffee_IsAvailable() dict
 endfunction
 
 function! SyntaxCheckers_coffee_coffee_GetLocList() dict
-    let makeprg = syntastic#makeprg#build({
-        \ 'args': '-cp',
-        \ 'checker': self })
+    let makeprg = self.makeprgBuild({ 'args': '-cp' })
 
     let errorformat =
         \ '%E%f:%l:%c: %trror: %m,' .

@@ -36,9 +36,7 @@ function! SyntaxCheckers_python_pyflakes_GetHighlightRegex(i)
 endfunction
 
 function! SyntaxCheckers_python_pyflakes_GetLocList() dict
-    let makeprg = syntastic#makeprg#build({
-        \ 'exe': 'pyflakes',
-        \ 'checker': self })
+    let makeprg = self.makeprgBuild({})
 
     let errorformat =
         \ '%E%f:%l: could not compile,'.

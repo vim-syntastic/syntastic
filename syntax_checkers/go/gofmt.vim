@@ -18,10 +18,9 @@ endif
 let g:loaded_syntastic_go_gofmt_checker=1
 
 function! SyntaxCheckers_go_gofmt_GetLocList() dict
-    let makeprg = syntastic#makeprg#build({
+    let makeprg = self.makeprgBuild({
         \ 'args': '-l',
-        \ 'tail': '1>' . syntastic#util#DevNull(),
-        \ 'checker': self })
+        \ 'tail': '> ' . syntastic#util#DevNull() })
 
     let errorformat = '%f:%l:%c: %m,%-G%.%#'
 

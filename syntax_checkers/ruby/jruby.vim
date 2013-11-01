@@ -15,10 +15,9 @@ endif
 let g:loaded_syntastic_ruby_jruby_checker=1
 
 function! SyntaxCheckers_ruby_jruby_GetLocList() dict
-    let makeprg = syntastic#makeprg#build({
+    let makeprg = self.makeprgBuild({
         \ 'exe': s:exe(),
-        \ 'args': s:args(),
-        \ 'checker': self })
+        \ 'args': s:args() })
 
     let errorformat =
         \ '%-GSyntax OK for %f,'.

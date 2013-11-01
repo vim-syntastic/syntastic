@@ -15,9 +15,7 @@ function! SyntaxCheckers_python_flake8_GetHighlightRegex(i)
 endfunction
 
 function! SyntaxCheckers_python_flake8_GetLocList() dict
-    let makeprg = syntastic#makeprg#build({
-        \ 'exe': 'flake8',
-        \ 'checker': self })
+    let makeprg = self.makeprgBuild({})
 
     let errorformat =
         \ '%E%f:%l: could not compile,%-Z%p^,' .

@@ -18,10 +18,9 @@ if !exists("g:syntastic_javascript_jsl_conf")
 endif
 
 function! SyntaxCheckers_javascript_jsl_GetLocList() dict
-    let makeprg = syntastic#makeprg#build({
+    let makeprg = self.makeprgBuild({
         \ 'args': (!empty(g:syntastic_javascript_jsl_conf) ? "-conf " . g:syntastic_javascript_jsl_conf : "") .
-        \       " -nologo -nofilelisting -nosummary -nocontext -process",
-        \ 'checker': self })
+        \       " -nologo -nofilelisting -nosummary -nocontext -process" })
 
     let errorformat =
         \ '%W%f(%l): lint warning: %m,'.

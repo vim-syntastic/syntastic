@@ -20,9 +20,8 @@ if !exists('g:syntastic_scala_options')
 endif
 
 function! SyntaxCheckers_scala_scalac_GetLocList() dict
-    let makeprg = syntastic#makeprg#build({
-        \ 'args': '-Ystop-after:parser ' . g:syntastic_scala_options,
-        \ 'checker': self })
+    let makeprg = self.makeprgBuild({
+        \ 'args': '-Ystop-after:parser ' . g:syntastic_scala_options })
 
     let errorformat = '%f:%l: %trror: %m'
 

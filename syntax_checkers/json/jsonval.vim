@@ -16,7 +16,7 @@ let g:loaded_syntastic_json_jsonval_checker=1
 
 function! SyntaxCheckers_json_jsonval_GetLocList() dict
     " based on https://gist.github.com/1196345
-    let makeprg = syntastic#makeprg#build({ 'checker': self })
+    let makeprg = self.makeprgBuild({})
 
     let errorformat =
         \ '%E%f:\ %m\ at\ line\ %l,' .

@@ -15,9 +15,7 @@ endif
 let g:loaded_syntastic_json_jsonlint_checker=1
 
 function! SyntaxCheckers_json_jsonlint_GetLocList() dict
-    let makeprg = syntastic#makeprg#build({
-        \ 'post_args': '--compact',
-        \ 'checker': self })
+    let makeprg = self.makeprgBuild({ 'post_args': '--compact' })
 
     let errorformat =
         \ '%ELine %l:%c,'.

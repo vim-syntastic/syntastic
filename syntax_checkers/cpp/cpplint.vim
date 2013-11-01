@@ -36,7 +36,7 @@ if ! exists('g:syntastic_cpp_cpplint_args')
 endif
 
 function! SyntaxCheckers_cpp_cpplint_GetLocList() dict
-    let makeprg = syntastic#makeprg#build({ 'checker': self })
+    let makeprg = self.makeprgBuild({})
 
     let errorformat = '%A%f:%l:  %m [%t],%-G%.%#'
 

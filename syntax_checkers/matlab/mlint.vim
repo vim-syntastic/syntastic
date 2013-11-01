@@ -16,9 +16,7 @@ endif
 let g:loaded_syntastic_matlab_mlint_checker=1
 
 function! SyntaxCheckers_matlab_mlint_GetLocList() dict
-    let makeprg = syntastic#makeprg#build({
-        \ 'args': '-id $*',
-        \ 'checker': self })
+    let makeprg = self.makeprgBuild({ 'args': '-id $*' })
 
     let errorformat =
         \ 'L %l (C %c): %*[a-zA-Z0-9]: %m,'.

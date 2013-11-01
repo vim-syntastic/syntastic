@@ -26,9 +26,8 @@ function! SyntaxCheckers_haxe_haxe_GetLocList() dict
     let hxml = fnamemodify(hxml, ':p')
 
     if !empty(hxml)
-        let makeprg = syntastic#makeprg#build({
-            \ 'fname': syntastic#util#shescape(fnameescape(fnamemodify(hxml, ':t'))),
-            \ 'checker': self })
+        let makeprg = self.makeprgBuild({
+            \ 'fname': syntastic#util#shescape(fnameescape(fnamemodify(hxml, ':t'))) })
 
         let errorformat = '%E%f:%l: characters %c-%*[0-9] : %m'
 

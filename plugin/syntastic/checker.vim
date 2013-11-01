@@ -13,6 +13,7 @@ function! g:SyntasticChecker.New(args)
     let newObj._filetype = a:args['filetype']
     let newObj._name = a:args['name']
     let newObj._exec = get(a:args, 'exec', newObj._name)
+    let newObj._makeprgFunc = function('SyntasticCheckerMakeprgBuild')
 
     if has_key(a:args, 'redirect')
         let [filetype, name] = split(a:args['redirect'], '/')
@@ -78,6 +79,10 @@ function! g:SyntasticChecker.getHighlightRegexFor(error)
     return self._highlightRegexFunc(error)
 endfunction
 
+function! g:SyntasticChecker.makeprgBuild(opts)
+    return self._makeprgFunc(a:opts)
+endfunction
+
 function! g:SyntasticChecker.isAvailable()
     return self._isAvailableFunc()
 endfunction
@@ -102,6 +107,18 @@ endfunction
 " Non-method functions
 function! SyntasticCheckerIsAvailableDefault() dict
     return executable(self.getExec())
+endfunction
+
+function! SyntasticCheckerMakeprgBuild(opts) dict
+    let builder = g:SyntasticMakeprgBuilder.New(
+                \ get(a:opts, 'checker', self),
+                \ get(a:opts, 'exe', ''),
+                \ get(a:opts, 'args', ''),
+                \ get(a:opts, 'fname', ''),
+                \ get(a:opts, 'post_args', ''),
+                \ get(a:opts, 'tail', '') )
+
+    return builder.makeprg()
 endfunction
 
 " vim: set sw=4 sts=4 et fdm=marker:

@@ -20,9 +20,7 @@ let g:loaded_syntastic_xml_xmllint_checker=1
 " and http://www.xmlsoft.org/catalog.html for more information.
 
 function! SyntaxCheckers_xml_xmllint_GetLocList() dict
-    let makeprg = syntastic#makeprg#build({
-        \ 'args': '--xinclude --noout --postvalid',
-        \ 'checker': self })
+    let makeprg = self.makeprgBuild({ 'args': '--xinclude --noout --postvalid' })
 
     let errorformat=
         \ '%E%f:%l: error : %m,' .

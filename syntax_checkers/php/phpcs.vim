@@ -19,9 +19,7 @@ endif
 let g:loaded_syntastic_php_phpcs_checker=1
 
 function! SyntaxCheckers_php_phpcs_GetLocList() dict
-    let makeprg = syntastic#makeprg#build({
-        \ 'args': '--report=csv',
-        \ 'checker': self })
+    let makeprg = self.makeprgBuild({ 'args': '--report=csv' })
 
     let errorformat =
         \ '%-GFile\,Line\,Column\,Type\,Message\,Source\,Severity,'.

@@ -16,9 +16,7 @@ endif
 let g:loaded_syntastic_cs_mcs_checker=1
 
 function! SyntaxCheckers_cs_mcs_GetLocList() dict
-    let makeprg = syntastic#makeprg#build({
-        \ 'args': '--parse',
-        \ 'checker': self })
+    let makeprg = self.makeprgBuild({ 'args': '--parse' })
 
     let errorformat = '%f(%l\,%c): %trror %m'
 

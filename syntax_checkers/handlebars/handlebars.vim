@@ -14,9 +14,7 @@ endif
 let g:loaded_syntastic_handlebars_handlebars_checker=1
 
 function! SyntaxCheckers_handlebars_handlebars_GetLocList() dict
-    let makeprg = syntastic#makeprg#build({
-        \ 'args': '-f ' . syntastic#util#DevNull(),
-        \ 'checker': self })
+    let makeprg = self.makeprgBuild({ 'args': '-f ' . syntastic#util#DevNull() })
 
     let errorformat =
         \ '%EError: %m on line %l:,'.

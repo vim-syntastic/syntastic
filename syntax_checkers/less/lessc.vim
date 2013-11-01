@@ -41,11 +41,10 @@ function! SyntaxCheckers_less_lessc_IsAvailable() dict
 endfunction
 
 function! SyntaxCheckers_less_lessc_GetLocList() dict
-    let makeprg = syntastic#makeprg#build({
+    let makeprg = self.makeprgBuild({
         \ 'exe': s:check_file,
         \ 'args': g:syntastic_less_options,
-        \ 'tail': syntastic#util#DevNull(),
-        \ 'checker': self })
+        \ 'tail': syntastic#util#DevNull() })
 
     let errorformat = '%m in %f:%l:%c'
 

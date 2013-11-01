@@ -35,9 +35,8 @@ function! SyntaxCheckers_sass_sass_GetLocList() dict
         return []
     endif
 
-    let makeprg = syntastic#makeprg#build({
-        \ 'args': '--cache-location ' . s:sass_cache_location . ' ' . s:imports . ' --check',
-        \ 'checker': self })
+    let makeprg = self.makeprgBuild({
+        \ 'args': '--cache-location ' . s:sass_cache_location . ' ' . s:imports . ' --check' })
 
     let errorformat =
         \ '%ESyntax %trror: %m,' .

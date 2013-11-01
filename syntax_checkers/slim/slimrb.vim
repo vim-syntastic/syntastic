@@ -23,9 +23,7 @@ function! s:SlimrbVersion()
 endfunction
 
 function! SyntaxCheckers_slim_slimrb_GetLocList() dict
-    let makeprg = syntastic#makeprg#build({
-        \ 'args': '-c',
-        \ 'checker': self })
+    let makeprg = self.makeprgBuild({ 'args': '-c' })
 
     if syntastic#util#versionIsAtLeast(s:SlimrbVersion(), [1,3,1])
         let errorformat =

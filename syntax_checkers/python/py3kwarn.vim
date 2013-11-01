@@ -10,9 +10,7 @@ endif
 let g:loaded_syntastic_python_py3kwarn_checker=1
 
 function! SyntaxCheckers_python_py3kwarn_GetLocList() dict
-    let makeprg = syntastic#makeprg#build({
-        \ 'exe': 'py3kwarn',
-        \ 'checker': self })
+    let makeprg = self.makeprgBuild({})
 
     let errorformat = '%W%f:%l:%c: %m'
 

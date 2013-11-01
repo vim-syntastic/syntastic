@@ -16,7 +16,7 @@ endif
 let g:loaded_syntastic_tex_lacheck_checker=1
 
 function! SyntaxCheckers_tex_lacheck_GetLocList() dict
-    let makeprg = syntastic#makeprg#build({ 'checker': self })
+    let makeprg = self.makeprgBuild({})
 
     let errorformat =
         \ '%-G** %f:,' .

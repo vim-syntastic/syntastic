@@ -16,10 +16,9 @@ endif
 let g:loaded_syntastic_haskell_hdevtools_checker=1
 
 function! SyntaxCheckers_haskell_hdevtools_GetLocList() dict
-    let makeprg = syntastic#makeprg#build({
+    let makeprg = self.makeprgBuild({
         \ 'exe': self.getExec() . ' check',
-        \ 'args': get(g:, 'hdevtools_options', ''),
-        \ 'checker': self })
+        \ 'args': get(g:, 'hdevtools_options', '') })
 
     let errorformat= '\%-Z\ %#,'.
         \ '%W%f:%l:%c:\ Warning:\ %m,'.

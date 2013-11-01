@@ -11,7 +11,7 @@ endif
 let g:loaded_syntastic_haskell_hlint_checker = 1
 
 function! SyntaxCheckers_haskell_hlint_GetLocList() dict
-    let makeprg = syntastic#makeprg#build({ 'checker': self })
+    let makeprg = self.makeprgBuild({})
 
     let errorformat =
         \ '%E%f:%l:%c: Error: %m,' .

@@ -34,10 +34,9 @@ function! SyntaxCheckers_ruby_mri_GetLocList() dict
         let exe = 'RUBYOPT= ' . exe
     endif
 
-    let makeprg = syntastic#makeprg#build({
+    let makeprg = self.makeprgBuild({
         \ 'exe': exe,
-        \ 'args': '-w -T1 -c',
-        \ 'checker': self })
+        \ 'args': '-w -T1 -c' })
 
     "this is a hack to filter out a repeated useless warning in rspec files
     "containing lines like

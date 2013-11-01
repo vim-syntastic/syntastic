@@ -25,10 +25,9 @@ function! SyntaxCheckers_c_checkpatch_IsAvailable() dict
 endfunction
 
 function! SyntaxCheckers_c_checkpatch_GetLocList() dict
-    let makeprg = syntastic#makeprg#build({
+    let makeprg = self.makeprgBuild({
         \ 'exe': g:syntastic_c_checker_checkpatch_location,
-        \ 'args': '--no-summary --no-tree --terse --file',
-        \ 'checker': self })
+        \ 'args': '--no-summary --no-tree --terse --file' })
 
     let errorformat =
         \ '%f:%l: %tARNING: %m,' .

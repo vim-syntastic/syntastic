@@ -10,10 +10,9 @@ endif
 let g:loaded_syntastic_typescript_tsc_checker=1
 
 function! SyntaxCheckers_typescript_tsc_GetLocList() dict
-    let makeprg = syntastic#makeprg#build({
+    let makeprg = self.makeprgBuild({
         \ 'args': '--module commonjs',
-        \ 'post_args': '--out ' . syntastic#util#DevNull(),
-        \ 'checker': self })
+        \ 'post_args': '--out ' . syntastic#util#DevNull() })
 
     let errorformat =
         \ '%E%f %#(%l\,%c): error %m,' .

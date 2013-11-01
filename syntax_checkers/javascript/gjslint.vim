@@ -18,9 +18,8 @@ if !exists("g:syntastic_javascript_gjslint_conf")
 endif
 
 function! SyntaxCheckers_javascript_gjslint_GetLocList() dict
-    let makeprg = syntastic#makeprg#build({
-        \ 'args': g:syntastic_javascript_gjslint_conf . " --nosummary --unix_mode --nodebug_indentation --nobeep",
-        \ 'checker': self })
+    let makeprg = self.makeprgBuild({
+        \ 'args': g:syntastic_javascript_gjslint_conf . " --nosummary --unix_mode --nodebug_indentation --nobeep" })
 
     let errorformat =
         \ "%f:%l:(New Error -%\\?\%n) %m," .

@@ -26,10 +26,9 @@ if !exists('g:syntastic_oclint_config_file')
 endif
 
 function! SyntaxCheckers_c_oclint_GetLocList() dict
-    let makeprg = syntastic#makeprg#build({
+    let makeprg = self.makeprgBuild({
         \ 'args': '-text',
-        \ 'post_args': '-- -c ' . syntastic#c#ReadConfig(g:syntastic_oclint_config_file),
-        \ 'checker': self })
+        \ 'post_args': '-- -c ' . syntastic#c#ReadConfig(g:syntastic_oclint_config_file) })
 
     let errorformat =
         \ '%E%f:%l:%c: %m P1 ,' .

@@ -24,10 +24,9 @@ function! SyntaxCheckers_haml_haml_IsAvailable() dict
 endfunction
 
 function! SyntaxCheckers_haml_haml_GetLocList() dict
-    let makeprg = syntastic#makeprg#build({
+    let makeprg = self.makeprgBuild({
         \ 'exe': expand(g:syntastic_haml_interpreter),
-        \ 'args': '-c',
-        \ 'checker': self })
+        \ 'args': '-c' })
 
     let errorformat =
         \ 'Haml error on line %l: %m,' .

@@ -26,9 +26,7 @@ function! SyntaxCheckers_ruby_rubocop_IsAvailable() dict
 endfunction
 
 function! SyntaxCheckers_ruby_rubocop_GetLocList() dict
-    let makeprg = syntastic#makeprg#build({
-        \ 'args': '--format emacs --silent',
-        \ 'checker': self })
+    let makeprg = self.makeprgBuild({ 'args': '--format emacs --silent' })
 
     let errorformat = '%f:%l:%c: %t: %m'
 

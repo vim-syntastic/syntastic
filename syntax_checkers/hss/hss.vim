@@ -16,9 +16,7 @@ endif
 let g:loaded_syntastic_hss_hss_checker=1
 
 function! SyntaxCheckers_hss_hss_GetLocList() dict
-    let makeprg = syntastic#makeprg#build({
-	\ 'args' : '-output ' . syntastic#util#DevNull(),
-	\ 'checker': self })
+    let makeprg = self.makeprgBuild({ 'args' : '-output ' . syntastic#util#DevNull() })
 
     let errorformat = '%E%f:%l: %m'
 
