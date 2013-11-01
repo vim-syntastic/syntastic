@@ -49,7 +49,7 @@ endfunction
 
 " Private methods {{{1
 
-function g:SyntasticMakeprgBuilder._getOpt(name)
+function! g:SyntasticMakeprgBuilder._getOpt(name)
     if self._optExists(a:name)
         return {self._optName(a:name)}
     endif

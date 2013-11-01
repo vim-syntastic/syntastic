@@ -39,11 +39,11 @@ function! SyntaxCheckers_ruby_jruby_GetLocList()
         \ 'errorformat': errorformat })
 endfunction
 
-function s:args()
+function! s:args()
     return has('win32') ? '-W1 -T1 -c' : '-W1 -c'
 endfunction
 
-function s:exe()
+function! s:exe()
     return has('win32') ? 'jruby' : 'RUBYOPT= jruby'
 endfunction
 

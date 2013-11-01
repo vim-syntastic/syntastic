@@ -15,7 +15,7 @@ if exists('g:loaded_syntastic_c_make_checker')
 endif
 let g:loaded_syntastic_c_make_checker = 1
 
-function SyntaxCheckers_c_make_IsAvailable()
+function! SyntaxCheckers_c_make_IsAvailable()
     return executable('make')
 endfunction
 

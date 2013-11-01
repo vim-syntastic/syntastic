@@ -53,7 +53,7 @@ function! SyntaxCheckers_rst_rst2pseudoxml_GetLocList()
     return loclist
 endfunction
 
-function s:exe()
+function! s:exe()
     return executable("rst2pseudoxml.py") ? "rst2pseudoxml.py" : "rst2pseudoxml"
 endfunction
 

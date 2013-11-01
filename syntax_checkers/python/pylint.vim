@@ -49,7 +49,7 @@ function! SyntaxCheckers_python_pylint_GetLocList()
     return loclist
 endfunction
 
-function s:PylintNew()
+function! s:PylintNew()
     try
         " On Windows the version is shown as "pylint-script.py 1.0.0".
         " On Gentoo Linux it's "pylint-python2.7 0.28.0".  Oh, joy. :)

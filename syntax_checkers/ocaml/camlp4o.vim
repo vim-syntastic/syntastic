@@ -96,7 +96,7 @@ function! SyntaxCheckers_ocaml_camlp4o_GetLocList()
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 endfunction
 
-function s:GetMakeprg()
+function! s:GetMakeprg()
     if g:syntastic_ocaml_use_ocamlc
         return s:GetOcamlcMakeprg()
     endif
@@ -108,7 +108,7 @@ function s:GetMakeprg()
     return s:GetOtherMakeprg()
 endfunction
 
-function s:GetOcamlcMakeprg()
+function! s:GetOcamlcMakeprg()
     if g:syntastic_ocaml_use_janestreet_core
         let build_cmd = "ocamlc -I "
         let build_cmd .= expand(g:syntastic_ocaml_janestreet_core_dir)
@@ -119,12 +119,12 @@ function s:GetOcamlcMakeprg()
     endif
 endfunction
 
-function s:GetOcamlBuildMakeprg()
+function! s:GetOcamlBuildMakeprg()
     return "ocamlbuild -quiet -no-log -tag annot," . s:ocamlpp . " -no-links -no-hygiene -no-sanitize " .
                 \ syntastic#util#shexpand('%:r') . ".cmi"
 endfunction
 
-function s:GetOtherMakeprg()
+function! s:GetOtherMakeprg()
     "TODO: give this function a better name?
     "
     "TODO: should use throw/catch instead of returning an empty makeprg

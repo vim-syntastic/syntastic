@@ -390,7 +390,7 @@ function! SyntasticMake(options)
     endif
 
     if has_key(a:options, 'cwd')
-        exec 'lcd ' . fnameescape(a:options['cwd'])
+        execute 'lcd ' . fnameescape(a:options['cwd'])
     endif
 
     let $LC_MESSAGES = 'C'
@@ -407,7 +407,7 @@ function! SyntasticMake(options)
     let errors = copy(getloclist(0))
 
     if has_key(a:options, 'cwd')
-        exec 'lcd ' . fnameescape(old_cwd)
+        execute 'lcd ' . fnameescape(old_cwd)
     endif
 
     silent! lolder
