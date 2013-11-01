@@ -25,11 +25,10 @@ function! SyntaxCheckers_go_go_GetLocList() dict
     " Check with gofmt first, since `go build` and `go test` might not report
     " syntax errors in the current file if another file with syntax error is
     " compiled first.
-    let makeprg = syntastic#makeprg#build({
+    let makeprg = self.makeprgBuild({
         \ 'exe': 'gofmt',
         \ 'args': '-l',
-        \ 'tail': '1>' . syntastic#util#DevNull(),
-        \ 'checker': self })
+        \ 'tail': '> ' . syntastic#util#DevNull() })
 
     let errorformat =
         \ '%f:%l:%c: %m,' .

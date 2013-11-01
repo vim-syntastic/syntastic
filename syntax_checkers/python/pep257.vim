@@ -16,9 +16,7 @@ function! SyntaxCheckers_python_pep257_Preprocess(errors)
 endfunction
 
 function! SyntaxCheckers_python_pep257_GetLocList() dict
-    let makeprg = syntastic#makeprg#build({
-        \ 'exe': 'pep257',
-        \ 'checker': self })
+    let makeprg = self.makeprgBuild({})
 
     let errorformat =
         \ '%E%f:%l:%c%\%.%\%.%\d%\+:%\d%\+: %m,' .

@@ -30,9 +30,7 @@ function! SyntaxCheckers_elixir_elixir_GetLocList() dict
         let make_options['cwd'] = fnamemodify(mix_file, ':p:h')
     endif
 
-    let make_options['makeprg'] = syntastic#makeprg#build({
-        \ 'exe': compile_command,
-        \ 'checker': self })
+    let make_options['makeprg'] = self.makeprgBuild({ 'exe': compile_command })
 
     let make_options['errorformat'] = '** %*[^\ ] %f:%l: %m'
 

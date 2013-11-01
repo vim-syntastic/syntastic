@@ -16,11 +16,10 @@ let g:loaded_syntastic_nasm_nasm_checker=1
 
 function! SyntaxCheckers_nasm_nasm_GetLocList() dict
     let wd = syntastic#util#shescape(expand("%:p:h") . "/")
-    let makeprg = syntastic#makeprg#build({
+    let makeprg = self.makeprgBuild({
         \ 'args': '-X gnu -f elf' .
         \       ' -I ' . syntastic#util#shescape(expand("%:p:h") . "/") .
-        \       ' ' . syntastic#c#NullOutput(),
-        \ 'checker': self })
+        \       ' ' . syntastic#c#NullOutput() })
 
     let errorformat = '%f:%l: %t%*[^:]: %m'
 

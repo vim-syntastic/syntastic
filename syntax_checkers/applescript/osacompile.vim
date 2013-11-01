@@ -31,11 +31,8 @@ endif
 let g:loaded_syntastic_applescript_osacompile_checker=1
 
 function! SyntaxCheckers_applescript_osacompile_GetLocList() dict
-    let makeprg = syntastic#makeprg#build({
-        \ 'args': '-o ' . tempname() . '.scpt ',
-        \ 'checker': self })
+    let makeprg = self.makeprgBuild({ 'args': '-o ' . tempname() . '.scpt' })
     let errorformat = '%f:%l:%m'
-
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 endfunction
 

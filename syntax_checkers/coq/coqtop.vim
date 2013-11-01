@@ -16,9 +16,7 @@ endif
 let g:loaded_syntastic_coq_coqtop_checker=1
 
 function! SyntaxCheckers_coq_coqtop_GetLocList() dict
-    let makeprg = syntastic#makeprg#build({
-        \ 'args': '-noglob -batch -load-vernac-source',
-        \ 'checker': self })
+    let makeprg = self.makeprgBuild({ 'args': '-noglob -batch -load-vernac-source' })
 
     let errorformat =
         \ '%AFile \"%f\"\, line %l\, characters %c\-%.%#\:,'.

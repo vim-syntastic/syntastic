@@ -14,10 +14,9 @@ endif
 let g:loaded_syntastic_ruby_macruby_checker=1
 
 function! SyntaxCheckers_ruby_macruby_GetLocList() dict
-    let makeprg = syntastic#makeprg#build({
-        \ 'exe': 'RUBYOPT= macruby',
-        \ 'args': '-W1 -c',
-        \ 'checker': self })
+    let makeprg = self.makeprgBuild({
+        \ 'exe': 'RUBYOPT= ' . expand(self.getExec()),
+        \ 'args': '-W1 -c' })
 
     let errorformat =
         \ '%-GSyntax OK,'.

@@ -19,10 +19,7 @@ function! SyntaxCheckers_python_pylama_GetHighlightRegex(i)
 endfunction
 
 function! SyntaxCheckers_python_pylama_GetLocList() dict
-    let makeprg = syntastic#makeprg#build({
-        \ 'exe': 'pylama',
-        \ 'post_args': '-f pep8',
-        \ 'checker': self })
+    let makeprg = self.makeprgBuild({ 'post_args': '-f pep8' })
 
     " TODO: "WARNING:pylama:..." messages are probably a logging bug
     let errorformat =

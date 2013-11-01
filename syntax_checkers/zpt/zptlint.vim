@@ -25,7 +25,7 @@ endif
 let g:loaded_syntastic_zpt_zptlint_checker=1
 
 function! SyntaxCheckers_zpt_zptlint_GetLocList() dict
-    let makeprg = syntastic#makeprg#build({ 'checker': self })
+    let makeprg = self.makeprgBuild({})
 
     let errorformat=
         \ '%-P*** Error in: %f,'.

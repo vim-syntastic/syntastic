@@ -39,9 +39,7 @@ function! SyntaxCheckers_lua_luac_GetHighlightRegex(pos)
 endfunction
 
 function! SyntaxCheckers_lua_luac_GetLocList() dict
-    let makeprg = syntastic#makeprg#build({
-        \ 'args': '-p',
-        \ 'checker': self })
+    let makeprg = self.makeprgBuild({ 'args': '-p' })
 
     let errorformat =  'luac: %#%f:%l: %m'
 

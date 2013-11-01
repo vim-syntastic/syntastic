@@ -19,9 +19,7 @@ endif
 let g:loaded_syntastic_yaml_jsyaml_checker=1
 
 function! SyntaxCheckers_yaml_jsyaml_GetLocList() dict
-    let makeprg = syntastic#makeprg#build({
-        \ 'args': '--compact',
-        \ 'checker': self })
+    let makeprg = self.makeprgBuild({ 'args': '--compact' })
 
     let errorformat='Error on line %l\, col %c:%m,%-G%.%#'
 

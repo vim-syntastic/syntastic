@@ -15,10 +15,9 @@ endif
 let g:loaded_syntastic_lisp_clisp_checker=1
 
 function! SyntaxCheckers_lisp_clisp_GetLocList() dict
-    let makeprg = syntastic#makeprg#build({
+    let makeprg = self.makeprgBuild({
         \ 'args': '-q -c',
-        \ 'tail': syntastic#c#NullOutput(),
-        \ 'checker': self })
+        \ 'tail': syntastic#c#NullOutput() })
 
     let errorformat  =
         \ '%-G;%.%#,' .

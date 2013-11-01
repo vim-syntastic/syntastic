@@ -16,9 +16,7 @@ endif
 let g:loaded_syntastic_asciidoc_asciidoc_checker = 1
 
 function! SyntaxCheckers_asciidoc_asciidoc_GetLocList() dict
-    let makeprg = syntastic#makeprg#build({
-        \ 'args': syntastic#c#NullOutput(),
-        \ 'checker': self })
+    let makeprg = self.makeprgBuild({ 'args': syntastic#c#NullOutput() })
 
     let errorformat =
         \ '%Easciidoc: %tRROR: %f: line %l: %m,' .

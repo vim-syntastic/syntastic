@@ -15,7 +15,7 @@ endif
 let g:loaded_syntastic_go_golint_checker=1
 
 function! SyntaxCheckers_go_golint_GetLocList() dict
-    let makeprg = syntastic#makeprg#build({ 'checker': self })
+    let makeprg = self.makeprgBuild({})
 
     let errorformat = '%f:%l:%c: %m,%-G%.%#'
 

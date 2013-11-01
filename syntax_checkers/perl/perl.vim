@@ -65,10 +65,9 @@ function! SyntaxCheckers_perl_perl_GetLocList() dict
         \ (index(shebang['args'], '-t') >= 0 ? ' -t' : '')
     let errorformat = '%f:%l:%m'
 
-    let makeprg = syntastic#makeprg#build({
+    let makeprg = self.makeprgBuild({
         \ 'exe': exe,
-        \ 'args': '-c -X ' . extra,
-        \ 'checker': self })
+        \ 'args': '-c -X ' . extra })
 
     let errors = SyntasticMake({
         \ 'makeprg': makeprg,
@@ -79,10 +78,9 @@ function! SyntaxCheckers_perl_perl_GetLocList() dict
         return errors
     endif
 
-    let makeprg = syntastic#makeprg#build({
+    let makeprg = self.makeprgBuild({
         \ 'exe': exe,
-        \ 'args': '-c -Mwarnings ' . extra,
-        \ 'checker': self })
+        \ 'args': '-c -Mwarnings ' . extra })
 
     return SyntasticMake({
         \ 'makeprg': makeprg,

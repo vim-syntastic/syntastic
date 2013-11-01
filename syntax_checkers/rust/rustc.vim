@@ -16,9 +16,7 @@ endif
 let g:loaded_syntastic_rust_rustc_checker=1
 
 function! SyntaxCheckers_rust_rustc_GetLocList() dict
-    let makeprg = syntastic#makeprg#build({
-        \ 'args': '--parse-only',
-        \ 'checker': self })
+    let makeprg = self.makeprgBuild({ 'args': '--parse-only' })
 
     let errorformat  =
         \ '%E%f:%l:%c: \\d%#:\\d%# %.%\{-}error:%.%\{-} %m,'   .

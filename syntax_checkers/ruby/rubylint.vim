@@ -17,9 +17,7 @@ endif
 let g:loaded_syntastic_ruby_rubylint_checker = 1
 
 function! SyntaxCheckers_ruby_rubylint_GetLocList() dict
-    let makeprg = syntastic#makeprg#build({
-        \ 'args': 'analyze --presenter=syntastic',
-        \ 'checker': self })
+    let makeprg = self.makeprgBuild({ 'args': 'analyze --presenter=syntastic' })
 
     let errorformat = '%f:%t:%l:%c: %m'
 

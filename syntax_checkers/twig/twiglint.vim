@@ -21,9 +21,7 @@ function! SyntaxCheckers_twig_twiglint_GetHighlightRegex(item)
 endfunction
 
 function! SyntaxCheckers_twig_twiglint_GetLocList() dict
-    let makeprg = syntastic#makeprg#build({
-        \ 'args': 'lint --format=csv',
-        \ 'checker': self })
+    let makeprg = self.makeprgBuild({ 'args': 'lint --format=csv' })
 
     let errorformat = '"%f"\,%l\,%m'
 

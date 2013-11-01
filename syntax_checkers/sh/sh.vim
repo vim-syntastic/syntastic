@@ -64,10 +64,9 @@ function! SyntaxCheckers_sh_sh_GetLocList() dict
         return []
     endif
 
-    let makeprg = syntastic#makeprg#build({
+    let makeprg = self.makeprgBuild({
         \ 'exe': s:GetShell(),
-        \ 'args': '-n',
-        \ 'checker': self })
+        \ 'args': '-n' })
 
     let errorformat = '%f: line %l: %m'
 

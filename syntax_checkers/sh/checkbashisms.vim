@@ -12,9 +12,7 @@ endif
 let g:loaded_syntastic_sh_checkbashisms_checker=1
 
 function! SyntaxCheckers_sh_checkbashisms_GetLocList() dict
-    let makeprg = syntastic#makeprg#build({
-        \ 'args': '-fx',
-        \ 'checker': self})
+    let makeprg = self.makeprgBuild({ 'args': '-fx' })
 
     let errorformat =
         \ '%-Gscript %f is already a bash script; skipping,' .

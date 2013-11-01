@@ -15,9 +15,7 @@ endif
 let g:loaded_syntastic_nroff_mandoc_checker=1
 
 function! SyntaxCheckers_nroff_mandoc_GetLocList() dict
-    let makeprg = syntastic#makeprg#build({
-        \ 'args': '-Tlint',
-        \ 'checker': self })
+    let makeprg = self.makeprgBuild({ 'args': '-Tlint' })
 
     let errorformat =
         \ '%E%f:%l:%c: %tRROR: %m,' .

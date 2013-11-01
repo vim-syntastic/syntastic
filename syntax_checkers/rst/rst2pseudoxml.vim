@@ -23,11 +23,10 @@ function! SyntaxCheckers_rst_rst2pseudoxml_IsAvailable() dict
 endfunction
 
 function! SyntaxCheckers_rst_rst2pseudoxml_GetLocList() dict
-    let makeprg = syntastic#makeprg#build({
+    let makeprg = self.makeprgBuild({
         \ 'exe': s:exe(),
         \ 'args': '--report=2 --exit-status=1',
-        \ 'tail': syntastic#util#DevNull(),
-        \ 'checker': self })
+        \ 'tail': syntastic#util#DevNull() })
 
     let errorformat =
         \ '%f:%l: (%tNFO/1) %m,'.

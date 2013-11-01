@@ -15,9 +15,7 @@ endif
 let g:loaded_syntastic_vhdl_ghdl_checker = 1
 
 function! SyntaxCheckers_vhdl_ghdl_GetLocList() dict
-    let makeprg = syntastic#makeprg#build({
-        \ 'args': '-s',
-        \ 'checker': self })
+    let makeprg = self.makeprgBuild({ 'args': '-s' })
 
     let errorformat =  '%f:%l:%c: %m'
 

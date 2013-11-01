@@ -16,7 +16,7 @@ endif
 let g:loaded_syntastic_chef_foodcritic_checker=1
 
 function! SyntaxCheckers_chef_foodcritic_GetLocList() dict
-    let makeprg = syntastic#makeprg#build({ 'checker': self })
+    let makeprg = self.makeprgBuild({})
 
     " FC023: Prefer conditional attributes: ./recipes/config.rb:49
     let errorformat = 'FC%n: %m: %f:%l'

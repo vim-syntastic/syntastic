@@ -24,9 +24,8 @@ function! SyntaxCheckers_php_php_GetHighlightRegex(item)
 endfunction
 
 function! SyntaxCheckers_php_php_GetLocList() dict
-    let makeprg = syntastic#makeprg#build({
-        \ 'args': '-l -d error_reporting=E_ALL -d display_errors=1 -d log_errors=0 -d xdebug.cli_color=0',
-        \ 'checker': self })
+    let makeprg = self.makeprgBuild({
+        \ 'args': '-l -d error_reporting=E_ALL -d display_errors=1 -d log_errors=0 -d xdebug.cli_color=0' })
 
     let errorformat =
         \ '%-GNo syntax errors detected in%.%#,'.

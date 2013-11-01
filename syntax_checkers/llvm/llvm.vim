@@ -15,9 +15,7 @@ endif
 let g:loaded_syntastic_llvm_llvm_checker=1
 
 function! SyntaxCheckers_llvm_llvm_GetLocList() dict
-    let makeprg = syntastic#makeprg#build({
-        \ 'args': syntastic#c#NullOutput(),
-        \ 'checker': self })
+    let makeprg = self.makeprgBuild({ 'args': syntastic#c#NullOutput() })
 
     let errorformat = 'llc: %f:%l:%c: %trror: %m'
 

@@ -33,9 +33,7 @@ if !exists('g:syntastic_tex_chktex_showmsgs')
 endif
 
 function! SyntaxCheckers_tex_chktex_GetLocList() dict
-    let makeprg = syntastic#makeprg#build({
-        \ 'post_args': '-q -v1',
-        \ 'checker': self })
+    let makeprg = self.makeprgBuild({ 'post_args': '-q -v1' })
 
     let errorformat =
         \ '%EError %n in %f line %l: %m,' .

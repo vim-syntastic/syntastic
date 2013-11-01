@@ -50,9 +50,7 @@ endfunction
 
 function! SyntaxCheckers_vala_valac_GetLocList() dict
     let vala_pkg_args = join(map(s:GetValaModules(), '"--pkg ".v:val'), ' ')
-    let makeprg = syntastic#makeprg#build({
-        \ 'args': '-C ' . vala_pkg_args,
-        \ 'checker': self })
+    let makeprg = self.makeprgBuild({ 'args': '-C ' . vala_pkg_args })
 
     let errorformat =
         \ '%A%f:%l.%c-%\d%\+.%\d%\+: %t%[a-z]%\+: %m,'.

@@ -15,11 +15,9 @@ let g:loaded_syntastic_python_python_checker=1
 function! SyntaxCheckers_python_python_GetLocList() dict
     let fname = "'" . escape(expand('%'), "\\'") . "'"
 
-    let makeprg = syntastic#makeprg#build({
-        \ 'exe': 'python',
+    let makeprg = self.makeprgBuild({
         \ 'args': '-c',
-        \ 'fname': syntastic#util#shescape("compile(open(" . fname . ").read(), " . fname . ", 'exec')"),
-        \ 'checker': self })
+        \ 'fname': syntastic#util#shescape("compile(open(" . fname . ").read(), " . fname . ", 'exec')") })
 
     let errorformat =
         \ '%E  File "%f"\, line %l,' .

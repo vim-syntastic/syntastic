@@ -28,9 +28,7 @@ function! SyntaxCheckers_javascript_jslint_HighlightTerm(error)
 endfunction
 
 function! SyntaxCheckers_javascript_jslint_GetLocList() dict
-    let makeprg = syntastic#makeprg#build({
-        \ 'args': g:syntastic_javascript_jslint_conf,
-        \ 'checker': self })
+    let makeprg = self.makeprgBuild({ 'args': g:syntastic_javascript_jslint_conf })
 
     let errorformat =
         \ '%E %##%n %m,'.

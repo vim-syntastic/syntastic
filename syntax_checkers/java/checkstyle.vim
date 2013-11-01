@@ -43,12 +43,11 @@ function! SyntaxCheckers_java_checkstyle_GetLocList() dict
         let fname = substitute(system('cygpath -m ' . fname), '\m\%x00', '', 'g')
     endif
 
-    let makeprg = syntastic#makeprg#build({
+    let makeprg = self.makeprgBuild({
         \ 'args': '-cp ' . g:syntastic_java_checkstyle_classpath .
         \         ' com.puppycrawl.tools.checkstyle.Main -c ' . g:syntastic_java_checkstyle_conf_file .
         \         ' -f xml',
-        \ 'fname': fname,
-        \ 'checker': self })
+        \ 'fname': fname })
 
     let errorformat =
         \ '%P<file name="%f">,' .

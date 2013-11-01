@@ -26,9 +26,8 @@ if !exists('g:syntastic_sparse_config_file')
 endif
 
 function! SyntaxCheckers_c_sparse_GetLocList() dict
-    let makeprg = syntastic#makeprg#build({
-        \ 'args': '-ftabstop=' . &ts . ' ' . syntastic#c#ReadConfig(g:syntastic_sparse_config_file),
-        \ 'checker': self })
+    let makeprg = self.makeprgBuild({
+        \ 'args': '-ftabstop=' . &ts . ' ' . syntastic#c#ReadConfig(g:syntastic_sparse_config_file) })
 
     let errorformat = '%f:%l:%v: %trror: %m,%f:%l:%v: %tarning: %m,'
 

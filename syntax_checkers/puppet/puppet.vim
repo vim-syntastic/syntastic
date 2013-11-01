@@ -24,9 +24,7 @@ function! SyntaxCheckers_puppet_puppet_GetLocList() dict
         let args = '--color=false --parseonly'
     endif
 
-    let makeprg = syntastic#makeprg#build({
-        \ 'args': args,
-        \ 'checker': self })
+    let makeprg = self.makeprgBuild({ 'args': args })
 
     let errorformat =
         \ '%-Gerr: Try ''puppet help parser validate'' for usage,' .

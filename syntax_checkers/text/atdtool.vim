@@ -25,9 +25,7 @@ function! SyntaxCheckers_text_atdtool_GetHighlightRegex(item)
 endfunction
 
 function! SyntaxCheckers_text_atdtool_GetLocList() dict
-    let makeprg = syntastic#makeprg#build({
-        \ 'tail': '2>' . syntastic#util#DevNull(),
-        \ 'checker': self })
+    let makeprg = self.makeprgBuild({ 'tail': '2> ' . syntastic#util#DevNull() })
 
     let errorformat =
         \ '%W%f:%l:%c: %m,'.

@@ -15,9 +15,7 @@ endif
 let g:loaded_syntastic_coffee_coffeelint_checker=1
 
 function! SyntaxCheckers_coffee_coffeelint_GetLocList() dict
-    let makeprg = syntastic#makeprg#build({
-        \ 'args': '--csv',
-        \ 'checker': self })
+    let makeprg = self.makeprgBuild({ 'args': '--csv' })
 
     let errorformat =
         \ '%f\,%l\,%\d%#\,%trror\,%m,' .

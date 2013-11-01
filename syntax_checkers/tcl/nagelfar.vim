@@ -17,9 +17,7 @@ endif
 let g:loaded_syntastic_tcl_nagelfar_checker=1
 
 function! SyntaxCheckers_tcl_nagelfar_GetLocList() dict
-    let makeprg = syntastic#makeprg#build({
-        \ 'args': '-H',
-        \ 'checker': self })
+    let makeprg = self.makeprgBuild({ 'args': '-H' })
 
     let errorformat =
         \ '%I%f: %l: N %m,'.

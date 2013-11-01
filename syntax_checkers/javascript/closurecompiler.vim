@@ -41,11 +41,10 @@ function! SyntaxCheckers_javascript_closurecompiler_GetLocList() dict
         let file_list = syntastic#util#shexpand('%')
     endif
 
-    let makeprg = syntastic#makeprg#build({
+    let makeprg = self.makeprgBuild({
         \ 'exe': 'java -jar ' . g:syntastic_javascript_closure_compiler_path,
         \ 'args': g:syntastic_javascript_closure_compiler_options . ' --js' ,
-        \ 'fname': file_list,
-        \ 'checker': self })
+        \ 'fname': file_list })
 
     let errorformat =
         \ '%-GOK,'.

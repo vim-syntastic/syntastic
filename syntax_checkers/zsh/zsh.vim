@@ -16,9 +16,7 @@ endif
 let g:loaded_syntastic_zsh_zsh_checker=1
 
 function! SyntaxCheckers_zsh_zsh_GetLocList() dict
-    let makeprg = syntastic#makeprg#build({
-        \ 'args': '-n',
-        \ 'checker': self })
+    let makeprg = self.makeprgBuild({ 'args': '-n' })
 
     let errorformat = '%f:%l: %m'
 

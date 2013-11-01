@@ -16,9 +16,7 @@ endif
 let g:loaded_syntastic_haskell_ghc_mod_checker = 1
 
 function! SyntaxCheckers_haskell_ghc_mod_GetLocList() dict
-    let makeprg = syntastic#makeprg#build({
-        \ 'exe': self.getExec() . ' check',
-        \ 'checker': self })
+    let makeprg = self.makeprgBuild({ 'exe': self.getExec() . ' check' })
 
     let errorformat =
         \ '%-G%\s%#,' .

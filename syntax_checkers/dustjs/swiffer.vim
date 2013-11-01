@@ -20,7 +20,7 @@ function! SyntaxCheckers_dustjs_swiffer_IsAvailable() dict
 endfunction
 
 function! SyntaxCheckers_dustjs_swiffer_GetLocList() dict
-    let makeprg = syntastic#makeprg#build({ 'checker': self })
+    let makeprg = self.makeprgBuild({})
 
     let errorformat = '%E%f - Line %l\, Column %c: %m'
 

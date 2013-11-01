@@ -330,11 +330,10 @@ function! SyntaxCheckers_java_javac_GetLocList() dict
         let fname =  s:CygwinPath(fname)
     endif
 
-    let makeprg = syntastic#makeprg#build({
+    let makeprg = self.makeprgBuild({
         \ 'args': javac_opts,
         \ 'fname': fname,
-        \ 'tail': '2>&1',
-        \ 'checker': self })
+        \ 'tail': '2>&1' })
 
     " unashamedly stolen from *errorformat-javac* (quickfix.txt) and modified to include error types
     let errorformat =

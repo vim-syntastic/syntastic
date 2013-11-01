@@ -18,10 +18,8 @@ function! SyntaxCheckers_python_pylint_IsAvailable() dict
 endfunction
 
 function! SyntaxCheckers_python_pylint_GetLocList() dict
-    let makeprg = syntastic#makeprg#build({
-        \ 'exe': 'pylint',
-        \ 'args': (s:pylint_new ? '--msg-template="{path}:{line}: [{msg_id}] {msg}" -r n' : '-f parseable -r n -i y'),
-        \ 'checker': self })
+    let makeprg = self.makeprgBuild({
+        \ 'args': (s:pylint_new ? '--msg-template="{path}:{line}: [{msg_id}] {msg}" -r n' : '-f parseable -r n -i y') })
 
     let errorformat =
         \ '%A%f:%l: %m,' .

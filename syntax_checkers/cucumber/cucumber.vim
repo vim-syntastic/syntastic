@@ -16,9 +16,7 @@ endif
 let g:loaded_syntastic_cucumber_cucumber_checker=1
 
 function! SyntaxCheckers_cucumber_cucumber_GetLocList() dict
-    let makeprg = syntastic#makeprg#build({
-        \ 'args': '--dry-run --quiet --strict --format pretty',
-        \ 'checker': self })
+    let makeprg = self.makeprgBuild({ 'args': '--dry-run --quiet --strict --format pretty' })
 
     let errorformat =
         \ '%f:%l:%c:%m,' .

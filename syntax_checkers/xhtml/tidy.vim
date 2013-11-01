@@ -54,9 +54,7 @@ endfunction
 
 function! SyntaxCheckers_xhtml_tidy_GetLocList() dict
     let encopt = s:TidyEncOptByFenc()
-    let makeprg = syntastic#makeprg#build({
-        \ 'args': encopt . ' -xml -e',
-        \ 'checker': self })
+    let makeprg = self.makeprgBuild({ 'args': encopt . ' -xml -e' })
 
     let errorformat=
         \ '%Wline %l column %v - Warning: %m,' .
