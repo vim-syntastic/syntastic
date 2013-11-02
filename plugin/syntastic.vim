@@ -63,6 +63,10 @@ if !exists("g:syntastic_aggregate_errors")
     let g:syntastic_aggregate_errors = 0
 endif
 
+if !exists("g:syntastic_id_checkers")
+    let g:syntastic_id_checkers = 1
+endif
+
 if !exists("g:syntastic_loc_list_height")
     let g:syntastic_loc_list_height = 10
 endif
@@ -208,6 +212,11 @@ function! s:CacheErrors(...)
             call syntastic#util#debug("CacheErrors: b:syntastic_aggregate_errors = " . b:syntastic_aggregate_errors)
         endif
 
+        let aggregate_errors =
+            \ exists('b:syntastic_aggregate_errors') ? b:syntastic_aggregate_errors : g:syntastic_aggregate_errors
+        let decorate_errors = (aggregate_errors || len(s:CurrentFiletypes()) > 1) &&
+            \ (exists('b:syntastic_id_checkers') ? b:syntastic_id_checkers : g:syntastic_id_checkers)
+
         for ft in s:CurrentFiletypes()
             if a:0
                 let checker = s:registry.getChecker(ft, a:1)
@@ -223,10 +232,15 @@ function! s:CacheErrors(...)
                 let loclist = checker.getLocList()
 
                 if !loclist.isEmpty()
+                    if decorate_errors
+                        call loclist.decorate(checker.getName(), checker.getFiletype())
+                    endif
+
                     let newLoclist = newLoclist.extend(loclist)
+
                     call add(names, [checker.getName(), checker.getFiletype()])
 
-                    if !(exists('b:syntastic_aggregate_errors') ? b:syntastic_aggregate_errors : g:syntastic_aggregate_errors)
+                    if !aggregate_errors
                         break
                     endif
                 endif

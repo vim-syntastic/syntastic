@@ -69,6 +69,12 @@ function! g:SyntasticLoclist.setName(name)
     let self._name = a:name
 endfunction
 
+function! g:SyntasticLoclist.decorate(name, filetype)
+    for e in self._rawLoclist
+        let e['text'] .= ' [' . a:filetype . '/' . a:name . ']'
+    endfor
+endfunction
+
 function! g:SyntasticLoclist.hasErrorsOrWarningsToDisplay()
     if self._hasErrorsOrWarningsToDisplay >= 0
         return self._hasErrorsOrWarningsToDisplay

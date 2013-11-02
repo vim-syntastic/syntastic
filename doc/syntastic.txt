@@ -190,6 +190,16 @@ the first time a checker finds any errors. >
     let g:syntastic_aggregate_errors=1
 <
 
+                                                     *'syntastic_id_checkers'*
+Default: 1
+When results from multiple checkers are aggregated in a single error list
+(that is either when |syntastic_aggregate_errors| is enabled, or when checking
+a file with a composite filetype), it might not be immediately obvious which
+checker has produced a given error message. This variable instructs syntastic
+to label error messages with the names of the checkers that created them. >
+    let g:syntastic_id_checkers=0
+<
+
                                               *'syntastic_echo_current_error'*
 Default: 1
 If enabled, syntastic will echo the error associated with the current line to
