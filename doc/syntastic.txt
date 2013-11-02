@@ -20,6 +20,7 @@
 CONTENTS                                                  *syntastic-contents*
 
     1.Intro........................................|syntastic-intro|
+        1.1.Quick start............................|syntastic-quickstart|
     2.Functionality provided.......................|syntastic-functionality|
         2.1.The statusline flag....................|syntastic-statusline-flag|
         2.2.Error signs............................|syntastic-error-signs|
@@ -51,25 +52,42 @@ Checker Guide wiki page:
 
     https://github.com/scrooloose/syntastic/wiki/Syntax-Checker-Guide
 
+------------------------------------------------------------------------------
+1.1. Quick start                                        *syntastic-quickstart*
+
+Syntastic comes preconfigured with a default list of enabled checkers per
+filetype.  This list is kept reasonably short to prevent slowing down vim or
+trying to use conflicting checkers.
+
+You can see the list checkers available and enabled with the |:SyntasticInfo|
+command.
+
+If you want to override the configured list of checkers for a filetype then
+see |syntastic-checker-options| for details.  You can also change the
+arguments passed to a specific checker as well.
+
+Use |:SyntasticCheck| to manually check right now.  Use |:SyntasticToggleMode|
+to switch between active (checking on writting the buffer) and passive (manual)
+checking.
+
 ==============================================================================
 2. Functionality provided                            *syntastic-functionality*
 
-Syntax checking can be done automatically or on demand (see
-|'syntastic_mode_map'| for configuring this).
+Syntax checking can be done automatically when a buffer is saved or on demand
+with |:SyntasticCheck|.  See |:SyntasticToggleMode| and
+|'syntastic_mode_map'|.
 
-When syntax checking is done, the features below can be used to notify the
-user of errors. See |syntastic-options| for how to configure and
-activate/deactivate these features.
+When syntastic finds a problem, you can be notified in different ways. See
+|syntastic-options| for details on configuring and enabling these different
+notification methods.
 
-    * A statusline flag
-    * Signs beside lines with errors
-    * The |location-list| can be populated with the errors for the associated
-      buffer.
-    * Erroneous parts of lines can be highlighted (this functionality is only
-      provided by some syntax checkers).
-    * Balloons (if compiled in) can be used to display error messages for
-      erroneous lines when hovering the mouse over them.
-
+    * A statusline flag.
+    * Signs in the gutter/margin.
+    * The |location-list| can be used to get all the problems in a buffer.
+    * The problematic parts of lines can be highlighted (this is only
+      available for some syntax checkers).
+    * Balloons (if |balloon_eval| support is available) can be used to display
+      error messages when hovering the mouse over lines with problems.
 
 ------------------------------------------------------------------------------
 2.1. The statusline flag                           *syntastic-statusline-flag*
@@ -84,6 +102,7 @@ Something like this could be more useful: >
 <
 When syntax errors are detected a flag will be shown. The content of the flag
 is derived from the |syntastic_stl_format| option
+
 ------------------------------------------------------------------------------
 2.2. Error signs                                       *syntastic-error-signs*
 
@@ -515,7 +534,7 @@ The core maintainers of syntastic are:
     Gregor Uhlenheuer (github: kongo2002)
     LCD 047 (github: lcd047)
 
-Find the latest version of syntastic here:
+Find the latest version of syntastic at:
 
     http://github.com/scrooloose/syntastic
 
