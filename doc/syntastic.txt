@@ -38,25 +38,18 @@ CONTENTS                                                  *syntastic-contents*
 ==============================================================================
 1. Intro                                                     *syntastic-intro*
 
-Note: This doc only deals with using syntastic. To learn how to write syntax
-checker integrations, see the guide on the github wiki:
+Syntastic adds syntax and style checking and notification to vim.
+
+Syntastic works by running external syntax checkers either automatically (as
+files are saved) or manually.
+
+See https://github.com/scrooloose/syntastic/wiki/Syntax-Checkers for a list
+of syntax checkers and where to get the external program(s) needed.
+
+Note: To learn how to write syntax checker integrations see the Syntax
+Checker Guide wiki page:
 
     https://github.com/scrooloose/syntastic/wiki/Syntax-Checker-Guide
-
-Syntastic is a syntax checking plugin that runs files through external syntax
-checkers. This can be done on demand, or automatically as files are saved and
-opened.  If syntax errors are detected, the user is notified and is happy
-because they didn't have to compile their code or execute their script to find
-them.
-
-Syntastic comes in two parts: the syntax checker plugins, and the core. The
-syntax checker plugins are defined on a per-filetype basis where each one wraps
-up an external syntax checking program. The core script delegates off to these
-plugins and uses their output to provide the syntastic functionality.
-
-Take a look in the syntax_checkers directory for a list of supported filetypes
-and checkers.
-
 
 ==============================================================================
 2. Functionality provided                            *syntastic-functionality*
