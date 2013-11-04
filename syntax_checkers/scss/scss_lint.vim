@@ -14,26 +14,16 @@ if exists("g:loaded_syntastic_scss_scss_lint_checker")
 endif
 let g:loaded_syntastic_scss_scss_lint_checker=1
 
-function! SyntaxCheckers_scss_scss_lint_IsAvailable()
-    return executable('scss-lint')
-endfunction
-
 function! SyntaxCheckers_scss_scss_lint_GetLocList()
-    let makeprg = syntastic#makeprg#build({
-        \ 'exe': 'scss-lint',
-        \ 'filetype': 'scss',
-        \ 'subchecker': 'scss_lint' })
-
+    let makeprg = syntastic#makeprg#build({})
     let errorformat = '%f:%l [%t] %m'
-
-    let loclist = SyntasticMake({
+    return SyntasticMake({
         \ 'makeprg': makeprg,
         \ 'errorformat': errorformat,
         \ 'subtype': 'Style'})
-
-    return loclist
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'scss',
-    \ 'name': 'scss_lint'})
+    \ 'name': 'scss_lint',
+    \ 'exec': 'scss-lint' })
