@@ -18,7 +18,7 @@ function! SyntaxCheckers_sh_shellcheck_Preprocess(json)
 endfunction
 
 function! SyntaxCheckers_sh_shellcheck_GetLocList() dict
-    let makeprg = expand(self.getExec()) . ' < ' . syntastic#util#shexpand('%')
+    let makeprg = self.getExec() . ' < ' . syntastic#util#shexpand('%')
 
     let errorformat = '%t:%l:%v:%m'
 

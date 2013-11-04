@@ -28,8 +28,7 @@ function! SyntaxCheckers_pod_podchecker_GetLocList() dict
         \ 'errorformat': errorformat,
         \ 'returns': [0, 1, 2] })
 
-    for n in range(len(loclist))
-        let e = loclist[n]
+    for e in loclist
         if e['valid'] && e['lnum'] == 0
             let e['lnum'] = str2nr(matchstr(e['text'], '\m\<line \zs\d\+\ze'))
         endif

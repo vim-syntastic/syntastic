@@ -43,8 +43,8 @@ function! SyntaxCheckers_css_prettycss_GetLocList() dict
         \ 'defaults': {'bufnr': bufnr("")},
         \ 'postprocess': ['sort'] })
 
-    for n in range(len(loclist))
-        let loclist[n]["text"] .= ')'
+    for n in loclist
+        let e["text"] .= ')'
     endfor
 
     return loclist

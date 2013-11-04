@@ -67,9 +67,9 @@ function! SyntaxCheckers_xhtml_tidy_GetLocList() dict
         \ 'defaults': {'bufnr': bufnr("")},
         \ 'returns': [0, 1, 2] })
 
-    for n in range(len(loclist))
-        if loclist[n]['valid'] && s:IgnoreError(loclist[n]['text']) == 1
-            let loclist[n]['valid'] = 0
+    for e in loclist
+        if e['valid'] && s:IgnoreError(e['text']) == 1
+            let e['valid'] = 0
         endif
     endfor
 

@@ -39,12 +39,12 @@ function! SyntaxCheckers_rst_rst2pseudoxml_GetLocList() dict
         \ 'makeprg': makeprg,
         \ 'errorformat': errorformat })
 
-    for n in range(len(loclist))
-        if loclist[n]['type'] ==? 'S'
-            let loclist[n]['type'] = 'E'
-        elseif loclist[n]['type'] ==? 'I'
-            let loclist[n]['type'] = 'W'
-            let loclist[n]['subtype'] = 'Style'
+    for n in loclist
+        if e['type'] ==? 'S'
+            let e['type'] = 'E'
+        elseif e['type'] ==? 'I'
+            let e['type'] = 'W'
+            let e['subtype'] = 'Style'
         endif
     endfor
 

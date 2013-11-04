@@ -31,12 +31,8 @@ if !exists('g:syntastic_cpp_cpplint_thres')
     let g:syntastic_cpp_cpplint_thres = 5
 endif
 
-if ! exists('g:syntastic_cpp_cpplint_args')
-    let g:syntastic_cpp_cpplint_args = '--verbose=3'
-endif
-
 function! SyntaxCheckers_cpp_cpplint_GetLocList() dict
-    let makeprg = self.makeprgBuild({})
+    let makeprg = self.makeprgBuild({ 'args': '--verbose=3' })
 
     let errorformat = '%A%f:%l:  %m [%t],%-G%.%#'
 
@@ -46,8 +42,8 @@ function! SyntaxCheckers_cpp_cpplint_GetLocList() dict
         \ 'subtype': 'Style' })
 
     " change error types according to the prescribed threshold
-    for n in range(len(loclist))
-        let loclist[n]['type'] = loclist[n]['type'] < g:syntastic_cpp_cpplint_thres ? 'W' : 'E'
+    for e in loclist
+        let e['type'] = e['type'] < g:syntastic_cpp_cpplint_thres ? 'W' : 'E'
     endfor
 
     return loclist

@@ -46,8 +46,8 @@ function! SyntaxCheckers_perl_perlcritic_GetLocList() dict
         \ 'subtype': 'Style' })
 
     " change error types according to the prescribed threshold
-    for n in range(len(loclist))
-        let loclist[n]['type'] = loclist[n]['type'] < g:syntastic_perl_perlcritic_thres ? 'W' : 'E'
+    for e in loclist
+        let e['type'] = e['type'] < g:syntastic_perl_perlcritic_thres ? 'W' : 'E'
     endfor
 
     return loclist
