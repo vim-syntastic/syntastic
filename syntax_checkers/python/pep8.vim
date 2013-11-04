@@ -27,8 +27,8 @@ function! SyntaxCheckers_python_pep8_GetLocList() dict
         \ 'errorformat': errorformat,
         \ 'subtype': 'Style' })
 
-    for n in range(len(loclist))
-        let loclist[n]['type'] = loclist[n]['text'] =~? '^W' ? 'W' : 'E'
+    for n in loclist
+        let e['type'] = e['text'] =~? '^W' ? 'W' : 'E'
     endfor
 
     return loclist

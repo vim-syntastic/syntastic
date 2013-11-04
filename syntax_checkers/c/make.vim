@@ -19,7 +19,7 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 function! SyntaxCheckers_c_make_GetLocList() dict
-    let makeprg = expand(self.getExec()) . ' -sk'
+    let makeprg = self.getExec() . ' -sk'
 
     let errorformat =
         \ '%-G%f:%s:,' .

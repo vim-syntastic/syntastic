@@ -36,11 +36,11 @@ function! SyntaxCheckers_ruby_rubocop_GetLocList() dict
         \ 'subtype': 'Style'})
 
     " convert rubocop severities to error types recognized by syntastic
-    for n in range(len(loclist))
-        if loclist[n]['type'] == 'F'
-            let loclist[n]['type'] = 'E'
-        elseif loclist[n]['type'] != 'W' && loclist[n]['type'] != 'E'
-            let loclist[n]['type'] = 'W'
+    for e in loclist
+        if e['type'] == 'F'
+            let e['type'] = 'E'
+        elseif e['type'] != 'W' && e['type'] != 'E'
+            let e['type'] = 'W'
         endif
     endfor
 

@@ -15,7 +15,7 @@ let g:loaded_syntastic_ruby_macruby_checker=1
 
 function! SyntaxCheckers_ruby_macruby_GetLocList() dict
     let makeprg = self.makeprgBuild({
-        \ 'exe': 'RUBYOPT= ' . expand(self.getExec()),
+        \ 'exe': 'RUBYOPT= ' . self.getExec(),
         \ 'args': '-W1 -c' })
 
     let errorformat =
