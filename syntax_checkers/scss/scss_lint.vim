@@ -8,11 +8,6 @@
 "             Want To Public License, Version 2, as published by Sam Hocevar.
 "             See http://sam.zoy.org/wtfpl/COPYING for more details.
 "============================================================================
-"
-" Since scss-lint also checks your SCSS file syntax, you can replace the Sass
-" syntax checker using:
-"
-" let g:syntastic_scss_checkers = ['scss_lint']
 
 if exists("g:loaded_syntastic_scss_scss_lint_checker")
     finish
@@ -29,7 +24,7 @@ function! SyntaxCheckers_scss_scss_lint_GetLocList()
         \ 'filetype': 'scss',
         \ 'subchecker': 'scss_lint' })
 
-    let errorformat = '%f:%l\ [%t]\ %m'
+    let errorformat = '%f:%l [%t] %m'
 
     let loclist = SyntasticMake({
         \ 'makeprg': makeprg,
