@@ -48,7 +48,7 @@ function! SyntaxCheckers_less_lessc_GetLocList()
         \ 'filetype': 'less',
         \ 'subchecker': 'lessc' })
 
-    let errorformat = '%m in %f:%l:%c'
+    let errorformat = '%m in %f on line %l\, column %c:'
 
     return SyntasticMake({
         \ 'makeprg': makeprg,
