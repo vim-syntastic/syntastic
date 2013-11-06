@@ -392,7 +392,9 @@ Default: 0
 On older Vims, calling redraw when a popup menu is visible can cause Vim to
 segfault. If your version of Vim is affected, the solution is of course to
 upgrade Vim. If upgrading is not immediately feasible however, setting this
-variable to 1 might help, by delaying redraws until they are safe.
+variable to 1 might help, by delaying redraws until they are safe. Beware that
+there are functional and performance penalties involved, so only enable this
+if you actually need it.
 
                                                            *'syntastic_debug'*
 Default: 0
