@@ -46,7 +46,10 @@ function! SyntaxCheckers_less_lessc_GetLocList() dict
         \ 'args': g:syntastic_less_options,
         \ 'tail': syntastic#util#DevNull() })
 
-    let errorformat = '%m in %f:%l:%c'
+    let errorformat =
+        \ '%m in %f on line %l\, column %c:,' .
+        \ '%m in %f:%l:%c,' .
+        \ '%-G%.%#'
 
     return SyntasticMake({
         \ 'makeprg': makeprg,
