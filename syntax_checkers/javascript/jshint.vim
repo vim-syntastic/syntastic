@@ -36,7 +36,7 @@ function! SyntaxCheckers_javascript_jshint_GetLocList()
 
     let errorformat = jshint_new ?
         \ '%f: line %l\, col %c\, %m \(%t%*\d\)' :
-        \ '%E%f: line %l\, col %c\, %m'
+        \ '%E%f: line %l\, col %v\, %m'
 
     return SyntasticMake({
         \ 'makeprg': makeprg,
