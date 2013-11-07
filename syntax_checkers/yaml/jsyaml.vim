@@ -23,13 +23,20 @@ function! SyntaxCheckers_yaml_jsyaml_IsAvailable()
 endfunction
 
 function! SyntaxCheckers_yaml_jsyaml_GetLocList()
+    if !exists('s:js_yaml_new')
+        let s:js_yaml_new = syntastic#util#versionIsAtLeast(syntastic#util#getVersion('js-yaml --version'), [2])
+    endif
+
     let makeprg = syntastic#makeprg#build({
         \ 'exe': 'js-yaml',
-        \ 'args': '--compact',
+        \ 'args': s:js_yaml_new ? '' : '--compact',
         \ 'filetype': 'yaml',
         \ 'subchecker': 'jsyaml' })
 
-    let errorformat='Error on line %l\, col %c:%m,%-G%.%#'
+    let errorformat =
+        \ 'Error on line %l\, col %c:%m,' .
+        \ 'JS-YAML: %m at line %l\, column %c:,' .
+        \ '%-G%.%#'
 
     return SyntasticMake({
         \ 'makeprg': makeprg,
