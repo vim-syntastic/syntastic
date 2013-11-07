@@ -152,7 +152,7 @@ function! SyntaxCheckers_html_tidy_GetLocList() dict
         \ 'returns': [0, 1, 2] })
 
     " filter out valid HTML5 from the errors
-    for n in loclist
+    for e in loclist
         if e['valid'] && s:IgnoreError(e['text']) == 1
             let e['valid'] = 0
         endif
