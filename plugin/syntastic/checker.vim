@@ -19,7 +19,7 @@ function! g:SyntasticChecker.New(args)
     let newObj._isAvailableFunc = function(prefix . 'IsAvailable')
 
     if exists('*' . prefix . 'GetHighlightRegex')
-        let newObj._highlightRegexFunc = function(prefix. 'GetHighlightRegex')
+        let newObj._highlightRegexFunc = function(prefix . 'GetHighlightRegex')
     else
         let newObj._highlightRegexFunc = ''
     endif
@@ -48,11 +48,7 @@ function! g:SyntasticChecker.getLocList()
 endfunction
 
 function! g:SyntasticChecker.getHighlightRegexFor(error)
-    if empty(self._highlightRegexFunc)
-        return []
-    endif
-
-    return self._highlightRegexFunc(error)
+    return empty(self._highlightRegexFunc) ? [] : self._highlightRegexFunc(a:error)
 endfunction
 
 function! g:SyntasticChecker.isAvailable()
@@ -61,14 +57,14 @@ endfunction
 
 " Private methods {{{1
 
-function! g:SyntasticChecker._populateHighlightRegexes(list)
-    let list = a:list
+function! g:SyntasticChecker._populateHighlightRegexes(errors)
+    let list = a:errors
     if !empty(self._highlightRegexFunc)
-        for i in range(0, len(list)-1)
-            if list[i]['valid']
-                let term = self._highlightRegexFunc(list[i])
+        for e in list
+            if e['valid']
+                let term = self._highlightRegexFunc(e)
                 if len(term) > 0
-                    let list[i]['hl'] = term
+                    let e['hl'] = term
                 endif
             endif
         endfor
