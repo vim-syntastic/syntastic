@@ -78,7 +78,7 @@ let s:ignore_errors = [
                 \ "inserting missing 'title' element",
                 \ "attribute \"[+",
                 \ "unescaped & or unknown entity",
-                \ "<input> attribute \"type\" has invalid value \"search\""
+                \ "<input> attribute \"type\" has invalid value"
                 \ ]
 
 let s:blocklevel_tags = [
