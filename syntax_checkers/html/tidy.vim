@@ -86,7 +86,6 @@ let s:blocklevel_tags = [
                 \ "section",
                 \ "article",
                 \ "aside",
-                \ "hgroup",
                 \ "header",
                 \ "footer",
                 \ "nav",
