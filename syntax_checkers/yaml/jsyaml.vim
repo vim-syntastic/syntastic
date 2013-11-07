@@ -19,9 +19,17 @@ endif
 let g:loaded_syntastic_yaml_jsyaml_checker=1
 
 function! SyntaxCheckers_yaml_jsyaml_GetLocList() dict
-    let makeprg = self.makeprgBuild({ 'args': '--compact' })
+    if !exists('s:js_yaml_new')
+        let s:js_yaml_new =
+            \ syntastic#util#versionIsAtLeast(syntastic#util#getVersion(self.getExec() . ' --version'), [2])
+    endif
 
-    let errorformat='Error on line %l\, col %c:%m,%-G%.%#'
+    let makeprg = self.makeprgBuild({ 'args': s:js_yaml_new ? '' : '--compact' })
+
+    let errorformat =
+        \ 'Error on line %l\, col %c:%m,' .
+        \ 'JS-YAML: %m at line %l\, column %c:,' .
+        \ '%-G%.%#'
 
     return SyntasticMake({
         \ 'makeprg': makeprg,
