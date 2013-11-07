@@ -19,12 +19,12 @@ if !exists("g:syntastic_javascript_jslint_conf")
     let g:syntastic_javascript_jslint_conf = "--white --undef --nomen --regexp --plusplus --bitwise --newcap --sloppy --vars"
 endif
 
-function! SyntaxCheckers_javascript_jslint_HighlightTerm(error)
-    let unexpected = matchstr(a:error['text'], '\mExpected.*and instead saw \'\zs.*\ze\'')
-    if len(unexpected) < 1i
-        return ''
+function! SyntaxCheckers_javascript_jslint_GetHighlightRegex(item)
+    let term = matchstr(a:item['text'], '\mExpected .* and instead saw ''\zs.*\ze''')
+    if term != ''
+        let term = '\V' . term
     endif
-    return '\V'.split(unexpected, "'")[1]
+    return term
 endfunction
 
 function! SyntaxCheckers_javascript_jslint_GetLocList() dict
