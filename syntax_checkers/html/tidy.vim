@@ -64,7 +64,7 @@ endfunction
 let s:ignore_errors = [
                 \ "<table> lacks \"summary\" attribute",
                 \ "not approved by W3C",
-                \ "attribute \"placeholder\"",
+                \ "<input> proprietary attribute \"placeholder\"",
                 \ "<meta> proprietary attribute \"charset\"",
                 \ "<meta> lacks \"content\" attribute",
                 \ "inserting \"type\" attribute",
@@ -74,7 +74,7 @@ let s:ignore_errors = [
                 \ "inserting missing 'title' element",
                 \ "attribute \"[+",
                 \ "unescaped & or unknown entity",
-                \ "<input> attribute \"type\" has invalid value \"search\""
+                \ "<input> attribute \"type\" has invalid value"
                 \ ]
 
 let s:blocklevel_tags = [
