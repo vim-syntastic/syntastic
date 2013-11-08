@@ -31,7 +31,7 @@ function! SyntaxCheckers_python_pep257_GetLocList() dict
         \ 'postprocess': ['compressWhitespace'] })
 
     " pep257 outputs byte offsets rather than column numbers
-    for n in loclist
+    for e in loclist
         let e['col'] = get(e, 'col', 0) + 1
     endfor
 

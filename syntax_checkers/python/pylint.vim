@@ -32,7 +32,7 @@ function! SyntaxCheckers_python_pylint_GetLocList() dict
         \ 'errorformat': errorformat,
         \ 'postprocess': ['sort'] })
 
-    for n in loclist
+    for e in loclist
         let type = e['text'][1]
         if type =~# '\m^[EF]'
             let e['type'] = 'E'

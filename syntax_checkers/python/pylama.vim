@@ -32,7 +32,7 @@ function! SyntaxCheckers_python_pylama_GetLocList() dict
         \ 'postprocess': ['sort'] })
 
     " adjust for weirdness in each checker
-    for n in loclist
+    for e in loclist
         let e['type'] = match(['R', 'C', 'W'], e['text'][0]) >= 0 ? 'W' : 'E'
         if e['text'] =~# '\v\[%(mccabe|pep257|pylint)\]$'
             if has_key(e, 'col')
