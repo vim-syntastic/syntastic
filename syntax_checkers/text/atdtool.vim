@@ -37,7 +37,7 @@ function! SyntaxCheckers_text_atdtool_GetLocList() dict
         \ 'returns': [0],
         \ 'subtype': 'Style' })
 
-    for n in loclist
+    for e in loclist
         let e['text'] = substitute(e['text'], '\m\n\s\+', ' | ', 'g')
     endfor
 
