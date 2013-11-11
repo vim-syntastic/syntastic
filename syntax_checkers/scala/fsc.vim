@@ -27,7 +27,10 @@ function! SyntaxCheckers_scala_fsc_GetLocList() dict
         \ 'args': '-Ystop-after:parser ' . g:syntastic_scala_options,
         \ 'fname': syntastic#util#shexpand('%:p') })
 
-    let errorformat = '%f:%l: %trror: %m'
+    let errorformat =
+        \ '%E%f:%l: %trror: %m,' .
+        \ '%Z%p^,' .
+        \ '%-G%.%#'
 
     return SyntasticMake({
         \ 'makeprg': makeprg,
