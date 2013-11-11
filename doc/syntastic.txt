@@ -54,9 +54,9 @@ syntax checker plugins are defined on a per-filetype basis where each one wraps
 up an external syntax checking program. The core script delegates off to these
 plugins and uses their output to provide the syntastic functionality.
 
-Take a look in the syntax_checkers directory for a list of supported filetypes
-and checkers.
+Take a look at the wiki for a list of supported filetypes and checkers:
 
+    https://github.com/scrooloose/syntastic/wiki/Syntax-Checkers
 
 ==============================================================================
 2. Functionality provided                            *syntastic-functionality*
@@ -85,9 +85,9 @@ To use the statusline flag, this must appear in your |'statusline'| setting >
     %{SyntasticStatuslineFlag()}
 <
 Something like this could be more useful: >
-    set statusline+=%#warningmsg#
-    set statusline+=%{SyntasticStatuslineFlag()}
-    set statusline+=%*
+    set statusline += %#warningmsg#
+    set statusline += %{SyntasticStatuslineFlag()}
+    set statusline += %*
 <
 When syntax errors are detected a flag will be shown. The content of the flag
 is derived from the |syntastic_stl_format| option
@@ -170,7 +170,7 @@ Resets the list of errors and turns off all error notifiers.
 Default: 0
 If enabled, syntastic will do syntax checks when buffers are first loaded as
 well as on saving >
-    let g:syntastic_check_on_open=1
+    let g:syntastic_check_on_open = 1
 <
 
                                                      *'syntastic_check_on_wq'*
@@ -178,7 +178,7 @@ Default: 1
 Normally syntastic runs syntax checks whenever buffers are written to disk.
 If you want to skip these checks when you issue |:wq|, |:x|, and |:ZZ|, set this
 variable to 0. >
-    let g:syntastic_check_on_wq=0
+    let g:syntastic_check_on_wq = 0
 <
 
                                                 *'syntastic_aggregate_errors'*
@@ -187,7 +187,7 @@ When enabled, |:SyntasticCheck| runs all checkers that apply, then aggregates
 errors found by all checkers and displays them.  When disabled,
 |:SyntasticCheck| runs each checker in turn, and stops to display the results
 the first time a checker finds any errors. >
-    let g:syntastic_aggregate_errors=1
+    let g:syntastic_aggregate_errors = 1
 <
 
                                                      *'syntastic_id_checkers'*
@@ -197,21 +197,21 @@ When results from multiple checkers are aggregated in a single error list
 a file with a composite filetype), it might not be immediately obvious which
 checker has produced a given error message. This variable instructs syntastic
 to label error messages with the names of the checkers that created them. >
-    let g:syntastic_id_checkers=0
+    let g:syntastic_id_checkers = 0
 <
 
                                               *'syntastic_echo_current_error'*
 Default: 1
 If enabled, syntastic will echo the error associated with the current line to
 the command window. If multiple errors are found, the first will be used. >
-    let g:syntastic_echo_current_error=1
+    let g:syntastic_echo_current_error = 1
 <
 
                                                     *'syntastic_enable_signs'*
 Default: 1
 Use this option to tell syntastic whether to use the |:sign| interface to mark
 syntax errors: >
-    let g:syntastic_enable_signs=1
+    let g:syntastic_enable_signs = 1
 <
 
                      *'syntastic_error_symbol'* *'syntastic_style_error_symbol'*
@@ -224,8 +224,8 @@ error symobls can be customized:
     syntastic_style_warning_symbol - For style warnings, defaults to 'S>'
 
 Example: >
-    let g:syntastic_error_symbol='✗'
-    let g:syntastic_warning_symbol='⚠'
+    let g:syntastic_error_symbol = '✗'
+    let g:syntastic_warning_symbol = '⚠'
 <
 
                                                  *'syntastic_enable_balloons'*
@@ -247,13 +247,13 @@ errors (where possible). Highlighting can be turned off with the following >
 Default: 0
 Enable this option to tell syntastic to always stick any detected errors into
 the loclist: >
-    let g:syntastic_always_populate_loc_list=1
+    let g:syntastic_always_populate_loc_list = 1
 <
                                                        *'syntastic_auto_jump'*
 Default: 0
 Enable this option if you want the cursor to jump to the first detected error
 when saving or opening a file: >
-    let g:syntastic_auto_jump=1
+    let g:syntastic_auto_jump = 1
 <
 
                                                    *'syntastic_auto_loc_list'*
@@ -262,23 +262,23 @@ Use this option to tell syntastic to automatically open and/or close the
 |location-list| (see |syntastic-error-window|).
 
 When set to 0 the error window will not be opened or closed automatically. >
-    let g:syntastic_auto_loc_list=0
+    let g:syntastic_auto_loc_list = 0
 <
 
 When set to 1 the error window will be automatically opened when errors are
 detected, and closed when none are detected. >
-    let g:syntastic_auto_loc_list=1
+    let g:syntastic_auto_loc_list = 1
 <
 When set to 2 the error window will be automatically closed when no errors are
 detected, but not opened automatically. >
-    let g:syntastic_auto_loc_list=2
+    let g:syntastic_auto_loc_list = 2
 <
 
                                                  *'syntastic_loc_list_height'*
 Default: 10
 Use this option to specify the height of the location lists that syntastic
 opens. >
-    let g:syntastic_loc_list_height=5
+    let g:syntastic_loc_list_height = 5
 <
 
                                                     *'syntastic_ignore_files'*
@@ -288,7 +288,7 @@ include in error lists. It has to be a list of |regular-expression| patterns.
 The full paths of files (see |::p|) are matched against these patterns, and
 the matches are case sensitive. Use |\c| if you need case insensitive
 patterns. >
-    let g:syntastic_ignore_files=['^/usr/include/', '\c\.h$']
+    let g:syntastic_ignore_files = ['^/usr/include/', '\c\.h$']
 <
 
                                                     *'syntastic_filetype_map'*
@@ -347,7 +347,7 @@ this option has the following effects:
       there's at least one error, whereupon both errors and warnings are
       displayed
 >
-    let g:syntastic_quiet_warnings=1
+    let g:syntastic_quiet_warnings = 1
 <
 
                                                       *'syntastic_stl_format'*
@@ -433,7 +433,7 @@ native python checker.
 
 Some filetypes, like PHP, have style checkers as well as syntax checkers. These
 can be chained together like this: >
-    let g:syntastic_php_checkers=['php', 'phpcs', 'phpmd']`
+    let g:syntastic_php_checkers = ['php', 'phpcs', 'phpmd']
 <
 This is telling syntastic to run the 'php' checker first, and if no errors are
 found, run 'phpcs', and then 'phpmd'.
@@ -441,41 +441,42 @@ found, run 'phpcs', and then 'phpmd'.
 ------------------------------------------------------------------------------
 5.2 Configuring specific checkers                   *syntastic-config-makeprg*
 
-Most checkers use the 'syntastic#makeprg#build()' function and provide many
-options by default - in fact you can customise every part of the command
-that gets called.
+Most checkers use the 'makeprgBuild()' function and provide many options by
+default - in fact you can customise every part of the command that gets called.
 
-Checkers that use 'syntastic#makeprg#build()' look like this: >
-    let makeprg = syntastic#makeprg#build({
-                \ 'exe': 'ruby',
+Checkers that use 'makeprgBuild()' construct a 'makeprg' like this: >
+    let makeprg = self.makeprgBuild({
+                \ 'exe': self.getExec(),
                 \ 'args': '-a -b -c',
                 \ 'post_args': '--more --args',
-                \ 'tail': '> /tmp/output',
-                \ 'checker': self })
+                \ 'tail': '> /tmp/output' })
 <
 
-The 'checker' argument is mandatory.  All other arguments above are optional,
-and can be overriden by setting global variables - even parameters not
-specified in the call to syntastic#makeprg#build().  If 'exe' is the same as
-the name of the checker, it may be omitted.
+The result is a 'makeprg' of the form: >
+    <exe> <args> <filename> <post_args> <tail>
+<
+
+All arguments above are optional, and can be overriden by setting global
+variables - even parameters not specified in the call to makeprgBuild().  If
+'exe' is the same as the checker 'exec' attribute, it may be omitted.
 
 E.g. To override the checker exe above, you could do this: >
-    let g:syntastic_ruby_mri_exe="another_ruby_checker_exe.rb"
+    let g:syntastic_ruby_mri_exe = "another_ruby_checker_exe.rb"
 <
 To override the args and the tail: >
-    let g:syntastic_ruby_mri_args="--my --args --here"
-    let g:syntastic_ruby_mri_tail="> /tmp/my-output-file-biatch"
+    let g:syntastic_ruby_mri_args = "--my --args --here"
+    let g:syntastic_ruby_mri_tail = "> /tmp/my-output-file-biatch"
 <
 
 The general form of the override options is: >
-    syntastic_[filetype]_[subchecker]_[option-name]
+    syntastic_<filetype>_<subchecker>_<option-name>
 <
 
-For checkers that do not use the 'syntastic#makeprg#build()' function you
-will have to look at the source code of the checker in question. If there are
-specific options that can be set, these are usually documented in the wiki:
+For checkers that do not use the 'makeprgBuild()' function you will have to
+look at the source code of the checker in question. If there are specific
+options that can be set, these are usually documented in the wiki:
 
-    https://github.com/scrooloose/syntastic/wiki/Syntaxcheckers
+    https://github.com/scrooloose/syntastic/wiki/Syntax-Checkers
 
 ==============================================================================
 6. Notes                                                     *syntastic-notes*
@@ -523,7 +524,7 @@ The core maintainers of syntastic are:
     Gregor Uhlenheuer (github: kongo2002)
     LCD 047 (github: lcd047)
 
-Find the latest version of syntastic here:
+Find the latest version of syntastic at:
 
     http://github.com/scrooloose/syntastic
 
