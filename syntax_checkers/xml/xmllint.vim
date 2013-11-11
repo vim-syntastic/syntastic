@@ -19,16 +19,8 @@ let g:loaded_syntastic_xml_xmllint_checker=1
 " and allow you to validate XML data without network access, see xmlcatalog(1)
 " and http://www.xmlsoft.org/catalog.html for more information.
 
-function! SyntaxCheckers_xml_xmllint_IsAvailable()
-    return executable('xmllint')
-endfunction
-
-function! SyntaxCheckers_xml_xmllint_GetLocList()
-    let makeprg = syntastic#makeprg#build({
-        \ 'exe': 'xmllint',
-        \ 'args': '--xinclude --noout --postvalid',
-        \ 'filetype': 'xml',
-        \ 'subchecker': 'xmllint' })
+function! SyntaxCheckers_xml_xmllint_GetLocList() dict
+    let makeprg = self.makeprgBuild({ 'args': '--xinclude --noout --postvalid' })
 
     let errorformat=
         \ '%E%f:%l: error : %m,' .

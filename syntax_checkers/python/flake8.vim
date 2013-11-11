@@ -10,19 +10,12 @@ if exists("g:loaded_syntastic_python_flake8_checker")
 endif
 let g:loaded_syntastic_python_flake8_checker=1
 
-function! SyntaxCheckers_python_flake8_IsAvailable()
-    return executable('flake8')
-endfunction
-
 function! SyntaxCheckers_python_flake8_GetHighlightRegex(i)
     return SyntaxCheckers_python_pyflakes_GetHighlightRegex(a:i)
 endfunction
 
-function! SyntaxCheckers_python_flake8_GetLocList()
-    let makeprg = syntastic#makeprg#build({
-        \ 'exe': 'flake8',
-        \ 'filetype': 'python',
-        \ 'subchecker': 'flake8' })
+function! SyntaxCheckers_python_flake8_GetLocList() dict
+    let makeprg = self.makeprgBuild({})
 
     let errorformat =
         \ '%E%f:%l: could not compile,%-Z%p^,' .
@@ -37,8 +30,8 @@ function! SyntaxCheckers_python_flake8_GetLocList()
         \ 'errorformat': errorformat })
 endfunction
 
+runtime! syntax_checkers/python/pyflakes.vim
+
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'python',
     \ 'name': 'flake8'})
-
-runtime! syntax_checkers/python/pyflakes.vim

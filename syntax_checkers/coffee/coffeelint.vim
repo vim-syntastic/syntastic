@@ -14,16 +14,8 @@ if exists("g:loaded_syntastic_coffee_coffeelint_checker")
 endif
 let g:loaded_syntastic_coffee_coffeelint_checker=1
 
-function! SyntaxCheckers_coffee_coffeelint_IsAvailable()
-    return executable('coffeelint')
-endfunction
-
-function! SyntaxCheckers_coffee_coffeelint_GetLocList()
-    let makeprg = syntastic#makeprg#build({
-        \ 'exe': 'coffeelint',
-        \ 'args': '--csv',
-        \ 'filetype': 'coffee',
-        \ 'subchecker': 'coffeelint' })
+function! SyntaxCheckers_coffee_coffeelint_GetLocList() dict
+    let makeprg = self.makeprgBuild({ 'args': '--csv' })
 
     let errorformat =
         \ '%f\,%l\,%\d%#\,%trror\,%m,' .

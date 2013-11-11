@@ -15,15 +15,8 @@ if exists("g:loaded_syntastic_chef_foodcritic_checker")
 endif
 let g:loaded_syntastic_chef_foodcritic_checker=1
 
-function! SyntaxCheckers_chef_foodcritic_IsAvailable()
-    return executable('foodcritic')
-endfunction
-
-function! SyntaxCheckers_chef_foodcritic_GetLocList()
-    let makeprg = syntastic#makeprg#build({
-          \ 'exe': 'foodcritic',
-          \ 'filetype': 'chef',
-          \ 'subchecker': 'foodcritic' })
+function! SyntaxCheckers_chef_foodcritic_GetLocList() dict
+    let makeprg = self.makeprgBuild({})
 
     " FC023: Prefer conditional attributes: ./recipes/config.rb:49
     let errorformat = 'FC%n: %m: %f:%l'

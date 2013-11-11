@@ -19,10 +19,6 @@ if !exists("g:syntastic_javascript_jslint_conf")
     let g:syntastic_javascript_jslint_conf = "--white --undef --nomen --regexp --plusplus --bitwise --newcap --sloppy --vars"
 endif
 
-function! SyntaxCheckers_javascript_jslint_IsAvailable()
-    return executable('jslint')
-endfunction
-
 function! SyntaxCheckers_javascript_jslint_GetHighlightRegex(item)
     let term = matchstr(a:item['text'], '\mExpected .* and instead saw ''\zs.*\ze''')
     if term != ''
@@ -31,12 +27,8 @@ function! SyntaxCheckers_javascript_jslint_GetHighlightRegex(item)
     return term
 endfunction
 
-function! SyntaxCheckers_javascript_jslint_GetLocList()
-    let makeprg = syntastic#makeprg#build({
-        \ 'exe': 'jslint',
-        \ 'args': g:syntastic_javascript_jslint_conf,
-        \ 'filetype': 'javascript',
-        \ 'subchecker': 'jslint' })
+function! SyntaxCheckers_javascript_jslint_GetLocList() dict
+    let makeprg = self.makeprgBuild({ 'args': g:syntastic_javascript_jslint_conf })
 
     let errorformat =
         \ '%E %##%n %m,'.

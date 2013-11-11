@@ -16,16 +16,8 @@ endif
 
 let g:loaded_syntastic_ruby_rubylint_checker = 1
 
-function! SyntaxCheckers_ruby_rubylint_IsAvailable()
-    return executable("ruby-lint")
-endfunction
-
-function! SyntaxCheckers_ruby_rubylint_GetLocList()
-    let makeprg = syntastic#makeprg#build({
-        \ 'exe': 'ruby-lint',
-        \ 'args': 'analyze --presenter=syntastic',
-        \ 'filetype': 'ruby',
-        \ 'subchecker': 'rubylint' })
+function! SyntaxCheckers_ruby_rubylint_GetLocList() dict
+    let makeprg = self.makeprgBuild({ 'args': 'analyze --presenter=syntastic' })
 
     let errorformat = '%f:%t:%l:%c: %m'
 
@@ -36,6 +28,7 @@ endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'ruby',
-    \ 'name': 'rubylint' })
+    \ 'name': 'rubylint',
+    \ 'exec': 'ruby-lint'})
 
 " vim: set ts=4 sts=4 sw=4:

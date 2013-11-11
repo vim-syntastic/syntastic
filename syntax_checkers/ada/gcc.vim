@@ -16,8 +16,8 @@ if !exists('g:syntastic_ada_compiler')
     let g:syntastic_ada_compiler = 'gcc'
 endif
 
-function! SyntaxCheckers_ada_gcc_IsAvailable()
-    return executable(g:syntastic_ada_compiler)
+function! SyntaxCheckers_ada_gcc_IsAvailable() dict
+    return executable(expand(g:syntastic_ada_compiler))
 endfunction
 
 let s:save_cpo = &cpo
@@ -27,7 +27,7 @@ if !exists('g:syntastic_ada_compiler_options')
     let g:syntastic_ada_compiler_options = ''
 endif
 
-function! SyntaxCheckers_ada_gcc_GetLocList()
+function! SyntaxCheckers_ada_gcc_GetLocList() dict
     return syntastic#c#GetLocList('ada', 'gcc', {
         \ 'errorformat':
         \     '%-G%f:%s:,' .

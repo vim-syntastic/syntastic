@@ -15,16 +15,8 @@ if exists("g:loaded_syntastic_cs_mcs_checker")
 endif
 let g:loaded_syntastic_cs_mcs_checker=1
 
-function! SyntaxCheckers_cs_mcs_IsAvailable()
-    return executable('mcs')
-endfunction
-
-function! SyntaxCheckers_cs_mcs_GetLocList()
-    let makeprg = syntastic#makeprg#build({
-        \ 'exe': 'mcs',
-        \ 'args': '--parse',
-        \ 'filetype': 'cs',
-        \ 'subchecker': 'mcs' })
+function! SyntaxCheckers_cs_mcs_GetLocList() dict
+    let makeprg = self.makeprgBuild({ 'args': '--parse' })
 
     let errorformat = '%f(%l\,%c): %trror %m'
 

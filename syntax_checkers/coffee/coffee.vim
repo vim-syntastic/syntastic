@@ -17,17 +17,14 @@ if exists("g:loaded_syntastic_coffee_coffee_checker")
 endif
 let g:loaded_syntastic_coffee_coffee_checker=1
 
-function! SyntaxCheckers_coffee_coffee_IsAvailable()
-    return executable("coffee") &&
-        \ syntastic#util#versionIsAtLeast(syntastic#util#getVersion('coffee --version 2>' . syntastic#util#DevNull()), [1,6,2])
+function! SyntaxCheckers_coffee_coffee_IsAvailable() dict
+    let exe = self.getExec()
+    return executable(exe) &&
+        \ syntastic#util#versionIsAtLeast(syntastic#util#getVersion(exe . ' --version 2>' . syntastic#util#DevNull()), [1,6,2])
 endfunction
 
-function! SyntaxCheckers_coffee_coffee_GetLocList()
-    let makeprg = syntastic#makeprg#build({
-        \ 'exe': 'coffee',
-        \ 'args': '-cp',
-        \ 'filetype': 'coffee',
-        \ 'subchecker': 'coffee' })
+function! SyntaxCheckers_coffee_coffee_GetLocList() dict
+    let makeprg = self.makeprgBuild({ 'args': '-cp' })
 
     let errorformat =
         \ '%E%f:%l:%c: %trror: %m,' .

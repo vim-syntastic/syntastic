@@ -15,16 +15,11 @@ if exists('g:loaded_syntastic_c_make_checker')
 endif
 let g:loaded_syntastic_c_make_checker = 1
 
-function! SyntaxCheckers_c_make_IsAvailable()
-    return executable('make')
-endfunction
-
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! SyntaxCheckers_c_make_GetLocList()
-
-    let makeprg = 'make -sk'
+function! SyntaxCheckers_c_make_GetLocList() dict
+    let makeprg = self.getExec() . ' -sk'
 
     let errorformat =
         \ '%-G%f:%s:,' .

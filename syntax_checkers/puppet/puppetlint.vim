@@ -20,7 +20,7 @@ if exists("g:syntastic_puppet_lint_arguments")
     call syntastic#util#deprecationWarn("variable g:syntastic_puppet_lint_arguments is deprecated, please use g:syntastic_puppet_puppetlint_args instead")
 endif
 
-function! SyntaxCheckers_puppet_puppetlint_IsAvailable()
+function! SyntaxCheckers_puppet_puppetlint_IsAvailable() dict
     return
         \ executable("puppet") &&
         \ executable("puppet-lint") &&
@@ -28,12 +28,10 @@ function! SyntaxCheckers_puppet_puppetlint_IsAvailable()
         \     syntastic#util#DevNull()), [0,1,10])
 endfunction
 
-function! SyntaxCheckers_puppet_puppetlint_GetLocList()
-    let makeprg = syntastic#makeprg#build({
+function! SyntaxCheckers_puppet_puppetlint_GetLocList() dict
+    let makeprg = self.makeprgBuild({
         \ 'exe': 'puppet-lint',
-        \ 'post_args': '--log-format "%{KIND} [%{check}] %{message} at %{fullpath}:%{linenumber}"',
-        \ 'filetype': 'puppet',
-        \ 'subchecker': 'puppetlint' })
+        \ 'post_args': '--log-format "%{KIND} [%{check}] %{message} at %{fullpath}:%{linenumber}"' })
 
     let errorformat = '%t%*[a-zA-Z] %m at %f:%l'
 
@@ -44,4 +42,5 @@ endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'puppet',
-    \ 'name': 'puppetlint'})
+    \ 'name': 'puppetlint',
+    \ 'exec': 'puppet-lint'})

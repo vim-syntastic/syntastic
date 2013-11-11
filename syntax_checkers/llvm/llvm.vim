@@ -14,16 +14,8 @@ if exists("g:loaded_syntastic_llvm_llvm_checker")
 endif
 let g:loaded_syntastic_llvm_llvm_checker=1
 
-function! SyntaxCheckers_llvm_llvm_IsAvailable()
-    return executable("llc")
-endfunction
-
-function! SyntaxCheckers_llvm_llvm_GetLocList()
-    let makeprg = syntastic#makeprg#build({
-        \ 'exe': 'llc',
-        \ 'args': syntastic#c#NullOutput(),
-        \ 'filetype': 'llvm',
-        \ 'subchecker': 'llvm' })
+function! SyntaxCheckers_llvm_llvm_GetLocList() dict
+    let makeprg = self.makeprgBuild({ 'args': syntastic#c#NullOutput() })
 
     let errorformat = 'llc: %f:%l:%c: %trror: %m'
 
@@ -34,5 +26,6 @@ endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'llvm',
-    \ 'name': 'llvm'})
+    \ 'name': 'llvm',
+    \ 'exec': 'llc'})
 

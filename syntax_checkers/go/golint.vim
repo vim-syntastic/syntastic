@@ -14,15 +14,8 @@ if exists("g:loaded_syntastic_go_golint_checker")
 endif
 let g:loaded_syntastic_go_golint_checker=1
 
-function! SyntaxCheckers_go_golint_IsAvailable()
-    return executable('golint')
-endfunction
-
-function! SyntaxCheckers_go_golint_GetLocList()
-    let makeprg = syntastic#makeprg#build({
-        \ 'exe': 'golint',
-        \ 'filetype': 'go',
-        \ 'subchecker': 'golint' })
+function! SyntaxCheckers_go_golint_GetLocList() dict
+    let makeprg = self.makeprgBuild({})
 
     let errorformat = '%f:%l:%c: %m,%-G%.%#'
 

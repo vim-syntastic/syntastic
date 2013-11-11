@@ -17,10 +17,6 @@ if !exists("g:syntastic_dart_analyzer_conf")
     let g:syntastic_dart_analyzer_conf = ''
 endif
 
-function! SyntaxCheckers_dart_dart_analyzer_IsAvailable()
-    return executable("dart_analyzer")
-endfunction
-
 function! SyntaxCheckers_dart_dart_analyzer_GetHighlightRegex(error)
     let lcol = a:error['col'] - 1
     let rcol = a:error['nr'] + lcol + 1
@@ -28,14 +24,10 @@ function! SyntaxCheckers_dart_dart_analyzer_GetHighlightRegex(error)
     return '\%>'.lcol.'c\%<'.rcol.'c'
 endfunction
 
-function! SyntaxCheckers_dart_dart_analyzer_GetLocList()
-    let args = !empty(g:syntastic_dart_analyzer_conf) ? ' ' . g:syntastic_dart_analyzer_conf : ''
-    let makeprg = syntastic#makeprg#build({
-        \ 'exe': 'dart_analyzer',
+function! SyntaxCheckers_dart_dart_analyzer_GetLocList() dict
+    let makeprg = self.makeprgBuild({
         \ 'args': '--error_format machine',
-        \ 'post_args': args,
-        \ 'filetype': 'dart',
-        \ 'subchecker': 'dart_analyzer' })
+        \ 'post_args': g:syntastic_dart_analyzer_conf })
 
     " Machine readable format looks like:
     " SEVERITY|TYPE|ERROR_CODE|file:FILENAME|LINE_NUMBER|COLUMN|LENGTH|MESSAGE

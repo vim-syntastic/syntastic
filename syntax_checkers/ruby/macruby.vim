@@ -13,16 +13,10 @@ if exists("g:loaded_syntastic_ruby_macruby_checker")
 endif
 let g:loaded_syntastic_ruby_macruby_checker=1
 
-function! SyntaxCheckers_ruby_macruby_IsAvailable()
-    return executable('macruby')
-endfunction
-
-function! SyntaxCheckers_ruby_macruby_GetLocList()
-    let makeprg = syntastic#makeprg#build({
-        \ 'exe': 'RUBYOPT= macruby',
-        \ 'args': '-W1 -c',
-        \ 'filetype': 'ruby',
-        \ 'subchecker': 'macruby' })
+function! SyntaxCheckers_ruby_macruby_GetLocList() dict
+    let makeprg = self.makeprgBuild({
+        \ 'exe': 'RUBYOPT= ' . self.getExec(),
+        \ 'args': '-W1 -c' })
 
     let errorformat =
         \ '%-GSyntax OK,'.

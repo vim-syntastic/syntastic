@@ -9,25 +9,20 @@
 "             See http://sam.zoy.org/wtfpl/COPYING for more details.
 "
 "============================================================================
+"
+" To obtain this application there are two solutions:
+" - Install this python package:
+"   https://github.com/rgiot/pycpcdemotools
+" - Copy/paste this script in your search path:
+"   https://raw.github.com/rgiot/pycpcdemotools/master/cpcdemotools/source_checker/z80_syntax_checker.py
 
 if exists("g:loaded_syntastic_z80_z80syntaxchecker_checker")
     finish
 endif
 let g:loaded_syntastic_z80_z80syntaxchecker_checker=1
 
-"bail if the user doesnt have z80_syntax_checker.py installed
-"To obtain this application there are two solutions:
-" - Install this python package: https://github.com/rgiot/pycpcdemotools
-" - Copy/paste this script in your search path: https://raw.github.com/rgiot/pycpcdemotools/master/cpcdemotools/source_checker/z80_syntax_checker.py
-function! SyntaxCheckers_z80_z80syntaxchecker_IsAvailable()
-    return executable("z80_syntax_checker.py")
-endfunction
-
-function! SyntaxCheckers_z80_z80syntaxchecker_GetLocList()
-    let makeprg = syntastic#makeprg#build({
-        \ 'exe': 'z80_syntax_checker.py',
-        \ 'filetype': 'z80',
-        \ 'subchecker': 'z80syntaxchecker' })
+function! SyntaxCheckers_z80_z80syntaxchecker_GetLocList() dict
+    let makeprg = self.makeprgBuild({})
 
     let errorformat =  '%f:%l %m'
 
@@ -38,4 +33,5 @@ endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'z80',
-    \ 'name': 'z80syntaxchecker'})
+    \ 'name': 'z80syntaxchecker',
+    \ 'exec': 'z80_syntax_checker.py'})

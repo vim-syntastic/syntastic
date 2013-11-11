@@ -32,16 +32,8 @@ if !exists('g:syntastic_tex_chktex_showmsgs')
     let g:syntastic_tex_chktex_showmsgs = 1
 endif
 
-function! SyntaxCheckers_tex_chktex_IsAvailable()
-    return executable('chktex')
-endfunction
-
-function! SyntaxCheckers_tex_chktex_GetLocList()
-    let makeprg = syntastic#makeprg#build({
-        \ 'exe': 'chktex',
-        \ 'post_args': '-q -v1',
-        \ 'filetype': 'tex',
-        \ 'subchecker': 'chktex' })
+function! SyntaxCheckers_tex_chktex_GetLocList() dict
+    let makeprg = self.makeprgBuild({ 'post_args': '-q -v1' })
 
     let errorformat =
         \ '%EError %n in %f line %l: %m,' .

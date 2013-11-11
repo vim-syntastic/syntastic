@@ -9,15 +9,8 @@ if exists("g:loaded_syntastic_python_py3kwarn_checker")
 endif
 let g:loaded_syntastic_python_py3kwarn_checker=1
 
-function! SyntaxCheckers_python_py3kwarn_IsAvailable()
-    return executable('py3kwarn')
-endfunction
-
-function! SyntaxCheckers_python_py3kwarn_GetLocList()
-    let makeprg = syntastic#makeprg#build({
-        \ 'exe': 'py3kwarn',
-        \ 'filetype': 'python',
-        \ 'subchecker': 'py3kwarn' })
+function! SyntaxCheckers_python_py3kwarn_GetLocList() dict
+    let makeprg = self.makeprgBuild({})
 
     let errorformat = '%W%f:%l:%c: %m'
 

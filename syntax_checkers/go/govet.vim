@@ -14,11 +14,11 @@ if exists("g:loaded_syntastic_go_govet_checker")
 endif
 let g:loaded_syntastic_go_govet_checker=1
 
-function! SyntaxCheckers_go_govet_IsAvailable()
+function! SyntaxCheckers_go_govet_IsAvailable() dict
     return executable('go')
 endfunction
 
-function! SyntaxCheckers_go_govet_GetLocList()
+function! SyntaxCheckers_go_govet_GetLocList() dict
     let makeprg = 'go vet'
     let errorformat = '%Evet: %.%\+: %f:%l:%c: %m,%W%f:%l: %m,%-G%.%#'
 

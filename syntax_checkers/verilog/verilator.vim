@@ -16,15 +16,15 @@ endif
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! SyntaxCheckers_verilog_verilator_IsAvailable()
-    return executable(g:syntastic_verilog_compiler)
+function! SyntaxCheckers_verilog_verilator_IsAvailable() dict
+    return executable(expand(g:syntastic_verilog_compiler))
 endfunction
 
 if !exists('g:syntastic_verilog_compiler_options')
     let g:syntastic_verilog_compiler_options = '-Wall'
 endif
 
-function! SyntaxCheckers_verilog_verilator_GetLocList()
+function! SyntaxCheckers_verilog_verilator_GetLocList() dict
     return syntastic#c#GetLocList('verilog', 'verilator', {
         \ 'errorformat':
         \     '%%%trror-%\=%\w%#: %f:%l: %m,' .
