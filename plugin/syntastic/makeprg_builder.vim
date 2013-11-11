@@ -27,7 +27,7 @@ function! g:SyntasticMakeprgBuilder.New(checker, exe, args, fname, post_args, ta
 endfunction
 
 function! g:SyntasticMakeprgBuilder.makeprg()
-    return join([self.exe(), self.args(), self.fname(), self.post_args(), self.tail()])
+    return join(filter([self.exe(), self.args(), self.fname(), self.post_args(), self.tail()], '!empty(v:val)'))
 endfunction
 
 function! g:SyntasticMakeprgBuilder.exe()
