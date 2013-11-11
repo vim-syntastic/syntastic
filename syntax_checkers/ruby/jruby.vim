@@ -14,16 +14,10 @@ if exists("g:loaded_syntastic_ruby_jruby_checker")
 endif
 let g:loaded_syntastic_ruby_jruby_checker=1
 
-function! SyntaxCheckers_ruby_jruby_IsAvailable()
-    return executable('jruby')
-endfunction
-
-function! SyntaxCheckers_ruby_jruby_GetLocList()
-    let makeprg = syntastic#makeprg#build({
+function! SyntaxCheckers_ruby_jruby_GetLocList() dict
+    let makeprg = self.makeprgBuild({
         \ 'exe': s:exe(),
-        \ 'args': s:args(),
-        \ 'filetype': 'ruby',
-        \ 'subchecker': 'jruby' })
+        \ 'args': s:args() })
 
     let errorformat =
         \ '%-GSyntax OK for %f,'.

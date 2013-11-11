@@ -18,10 +18,6 @@ if exists("g:loaded_syntastic_php_phpmd_checker")
 endif
 let g:loaded_syntastic_php_phpmd_checker=1
 
-function! SyntaxCheckers_php_phpmd_IsAvailable()
-    return executable('phpmd')
-endfunction
-
 function! SyntaxCheckers_php_phpmd_GetHighlightRegex(item)
     let term = matchstr(a:item['text'], '\m\C^The \S\+ \w\+\(()\)\= \(has\|is not\|utilizes\)')
     if term != ''
@@ -58,12 +54,8 @@ function! SyntaxCheckers_php_phpmd_GetHighlightRegex(item)
     return ''
 endfunction
 
-function! SyntaxCheckers_php_phpmd_GetLocList()
-    let makeprg = syntastic#makeprg#build({
-        \ 'exe': 'phpmd',
-        \ 'post_args': 'text codesize,design,unusedcode,naming',
-        \ 'filetype': 'php',
-        \ 'subchecker': 'phpmd' })
+function! SyntaxCheckers_php_phpmd_GetLocList() dict
+    let makeprg = self.makeprgBuild({ 'post_args': 'text codesize,design,unusedcode,naming' })
 
     let errorformat = '%E%f:%l%\s%#%m'
 

@@ -15,10 +15,6 @@ if exists("g:loaded_syntastic_php_php_checker")
 endif
 let g:loaded_syntastic_php_php_checker=1
 
-function! SyntaxCheckers_php_php_IsAvailable()
-    return executable("php")
-endfunction
-
 function! SyntaxCheckers_php_php_GetHighlightRegex(item)
     let unexpected = matchstr(a:item['text'], "\\munexpected '[^']\\+'")
     if len(unexpected) < 1
@@ -27,12 +23,9 @@ function! SyntaxCheckers_php_php_GetHighlightRegex(item)
     return '\V'.split(unexpected, "'")[1]
 endfunction
 
-function! SyntaxCheckers_php_php_GetLocList()
-    let makeprg = syntastic#makeprg#build({
-        \ 'exe': 'php',
-        \ 'args': '-l -d error_reporting=E_ALL -d display_errors=1 -d log_errors=0 -d xdebug.cli_color=0',
-        \ 'filetype': 'php',
-        \ 'subchecker': 'php' })
+function! SyntaxCheckers_php_php_GetLocList() dict
+    let makeprg = self.makeprgBuild({
+        \ 'args': '-l -d error_reporting=E_ALL -d display_errors=1 -d log_errors=0 -d xdebug.cli_color=0' })
 
     let errorformat =
         \ '%-GNo syntax errors detected in%.%#,'.

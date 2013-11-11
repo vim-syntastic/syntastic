@@ -15,10 +15,6 @@ if exists("g:loaded_syntastic_slim_slimrb_checker")
 endif
 let g:loaded_syntastic_slim_slimrb_checker=1
 
-function! SyntaxCheckers_slim_slimrb_IsAvailable()
-    return executable("slimrb")
-endfunction
-
 function! s:SlimrbVersion()
     if !exists('s:slimrb_version')
         let s:slimrb_version = syntastic#util#getVersion('slimrb --version 2>' . syntastic#util#DevNull())
@@ -26,12 +22,8 @@ function! s:SlimrbVersion()
     return s:slimrb_version
 endfunction
 
-function! SyntaxCheckers_slim_slimrb_GetLocList()
-    let makeprg = syntastic#makeprg#build({
-        \ 'exe': 'slimrb',
-        \ 'args': '-c',
-        \ 'filetype': 'slim',
-        \ 'subchecker': 'slimrb' })
+function! SyntaxCheckers_slim_slimrb_GetLocList() dict
+    let makeprg = self.makeprgBuild({ 'args': '-c' })
 
     if syntastic#util#versionIsAtLeast(s:SlimrbVersion(), [1,3,1])
         let errorformat =

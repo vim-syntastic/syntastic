@@ -19,24 +19,12 @@ if exists('g:loaded_syntastic_css_csslint_checker')
 endif
 let g:loaded_syntastic_css_csslint_checker=1
 
-if !exists('g:syntastic_csslint_exec')
-    let g:syntastic_csslint_exec = 'csslint'
-endif
-
 if !exists('g:syntastic_csslint_options')
     let g:syntastic_csslint_options = ''
 endif
 
-function! SyntaxCheckers_css_csslint_IsAvailable()
-    return executable(expand(g:syntastic_csslint_exec))
-endfunction
-
-function! SyntaxCheckers_css_csslint_GetLocList()
-    let makeprg = syntastic#makeprg#build({
-        \ 'exe': expand(g:syntastic_csslint_exec),
-        \ 'args': '--format=compact ' . g:syntastic_csslint_options,
-        \ 'filetype': 'css',
-        \ 'subchecker': 'csslint' })
+function! SyntaxCheckers_css_csslint_GetLocList() dict
+    let makeprg = self.makeprgBuild({ 'args': '--format=compact ' . g:syntastic_csslint_options })
 
     " Print CSS Lint's error/warning messages from compact format. Ignores blank lines.
     let errorformat =

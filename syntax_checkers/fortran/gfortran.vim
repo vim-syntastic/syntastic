@@ -19,8 +19,8 @@ if !exists('g:syntastic_fortran_compiler')
     let g:syntastic_fortran_compiler = 'gfortran'
 endif
 
-function! SyntaxCheckers_fortran_gfortran_IsAvailable()
-    return executable(g:syntastic_fortran_compiler)
+function! SyntaxCheckers_fortran_gfortran_IsAvailable() dict
+    return executable(expand(g:syntastic_fortran_compiler))
 endfunction
 
 let s:save_cpo = &cpo
@@ -30,7 +30,7 @@ if !exists('g:syntastic_fortran_compiler_options')
     let g:syntastic_fortran_compiler_options = ''
 endif
 
-function! SyntaxCheckers_fortran_gfortran_GetLocList()
+function! SyntaxCheckers_fortran_gfortran_GetLocList() dict
     return syntastic#c#GetLocList('fortran', 'gfortran', {
         \ 'errorformat':
         \     '%-C %#,'.

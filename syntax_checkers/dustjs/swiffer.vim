@@ -15,15 +15,12 @@ endif
 
 let g:loaded_syntastic_dustjs_swiffer_checker = 1
 
-function! SyntaxCheckers_dustjs_swiffer_IsAvailable()
+function! SyntaxCheckers_dustjs_swiffer_IsAvailable() dict
     return executable('swiffer')
 endfunction
 
-function! SyntaxCheckers_dustjs_swiffer_GetLocList()
-    let makeprg = syntastic#makeprg#build({
-        \ 'exe': 'swiffer',
-        \ 'subchecker': 'swiffer',
-        \ 'filetype': 'dustjs' })
+function! SyntaxCheckers_dustjs_swiffer_GetLocList() dict
+    let makeprg = self.makeprgBuild({})
 
     let errorformat = '%E%f - Line %l\, Column %c: %m'
 

@@ -24,10 +24,6 @@ if !exists('g:syntastic_xhtml_tidy_ignore_errors')
     let g:syntastic_xhtml_tidy_ignore_errors = []
 endif
 
-function! SyntaxCheckers_xhtml_tidy_IsAvailable()
-    return executable("tidy")
-endfunction
-
 " TODO: join this with html.vim DRY's sake?
 function! s:TidyEncOptByFenc()
     let tidy_opts = {
@@ -56,13 +52,9 @@ function! s:IgnoreError(text)
     return 0
 endfunction
 
-function! SyntaxCheckers_xhtml_tidy_GetLocList()
+function! SyntaxCheckers_xhtml_tidy_GetLocList() dict
     let encopt = s:TidyEncOptByFenc()
-    let makeprg = syntastic#makeprg#build({
-        \ 'exe': 'tidy',
-        \ 'args': encopt . ' -xml -e',
-        \ 'filetype': 'xhtml',
-        \ 'subchecker': 'tidy' })
+    let makeprg = self.makeprgBuild({ 'args': encopt . ' -xml -e' })
 
     let errorformat=
         \ '%Wline %l column %v - Warning: %m,' .
@@ -75,9 +67,9 @@ function! SyntaxCheckers_xhtml_tidy_GetLocList()
         \ 'defaults': {'bufnr': bufnr("")},
         \ 'returns': [0, 1, 2] })
 
-    for n in range(len(loclist))
-        if loclist[n]['valid'] && s:IgnoreError(loclist[n]['text']) == 1
-            let loclist[n]['valid'] = 0
+    for e in loclist
+        if e['valid'] && s:IgnoreError(e['text']) == 1
+            let e['valid'] = 0
         endif
     endfor
 

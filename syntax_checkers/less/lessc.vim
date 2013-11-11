@@ -36,17 +36,15 @@ else
     let s:check_file = 'lessc'
 endif
 
-function! SyntaxCheckers_less_lessc_IsAvailable()
-    return executable('lessc')
+function! SyntaxCheckers_less_lessc_IsAvailable() dict
+    return g:syntastic_less_use_less_lint ? executable('node') : executable('lessc')
 endfunction
 
-function! SyntaxCheckers_less_lessc_GetLocList()
-    let makeprg = syntastic#makeprg#build({
+function! SyntaxCheckers_less_lessc_GetLocList() dict
+    let makeprg = self.makeprgBuild({
         \ 'exe': s:check_file,
         \ 'args': g:syntastic_less_options,
-        \ 'tail': syntastic#util#DevNull(),
-        \ 'filetype': 'less',
-        \ 'subchecker': 'lessc' })
+        \ 'tail': syntastic#util#DevNull() })
 
     let errorformat =
         \ '%m in %f on line %l\, column %c:,' .

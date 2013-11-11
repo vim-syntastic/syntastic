@@ -24,8 +24,8 @@ if !exists('g:syntastic_d_compiler')
     let g:syntastic_d_compiler = 'dmd'
 endif
 
-function! SyntaxCheckers_d_dmd_IsAvailable()
-    return executable(g:syntastic_d_compiler)
+function! SyntaxCheckers_d_dmd_IsAvailable() dict
+    return executable(expand(g:syntastic_d_compiler))
 endfunction
 
 let s:save_cpo = &cpo
@@ -35,7 +35,7 @@ if !exists('g:syntastic_d_compiler_options')
     let g:syntastic_d_compiler_options = ''
 endif
 
-function! SyntaxCheckers_d_dmd_GetLocList()
+function! SyntaxCheckers_d_dmd_GetLocList() dict
     return syntastic#c#GetLocList('d', 'dmd', {
         \ 'errorformat':
         \     '%-G%f:%s:,%f(%l): %m,' .

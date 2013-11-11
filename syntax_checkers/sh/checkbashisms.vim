@@ -11,18 +11,8 @@ if exists("g:loaded_syntastic_sh_checkbashisms_checker")
 endif
 let g:loaded_syntastic_sh_checkbashisms_checker=1
 
-
-function! SyntaxCheckers_sh_checkbashisms_IsAvailable()
-    return executable('checkbashisms')
-endfunction
-
-
-function! SyntaxCheckers_sh_checkbashisms_GetLocList()
-    let makeprg = syntastic#makeprg#build({
-        \ 'exe': 'checkbashisms',
-        \ 'args': '-fx',
-        \ 'filetype': 'sh',
-        \ 'subchecker': 'checkbashisms'})
+function! SyntaxCheckers_sh_checkbashisms_GetLocList() dict
+    let makeprg = self.makeprgBuild({ 'args': '-fx' })
 
     let errorformat =
         \ '%-Gscript %f is already a bash script; skipping,' .

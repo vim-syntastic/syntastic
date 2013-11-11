@@ -18,20 +18,13 @@ if exists("g:loaded_syntastic_yaml_jsyaml_checker")
 endif
 let g:loaded_syntastic_yaml_jsyaml_checker=1
 
-function! SyntaxCheckers_yaml_jsyaml_IsAvailable()
-    return executable("js-yaml")
-endfunction
-
-function! SyntaxCheckers_yaml_jsyaml_GetLocList()
+function! SyntaxCheckers_yaml_jsyaml_GetLocList() dict
     if !exists('s:js_yaml_new')
-        let s:js_yaml_new = syntastic#util#versionIsAtLeast(syntastic#util#getVersion('js-yaml --version'), [2])
+        let s:js_yaml_new =
+            \ syntastic#util#versionIsAtLeast(syntastic#util#getVersion(self.getExec() . ' --version'), [2])
     endif
 
-    let makeprg = syntastic#makeprg#build({
-        \ 'exe': 'js-yaml',
-        \ 'args': s:js_yaml_new ? '' : '--compact',
-        \ 'filetype': 'yaml',
-        \ 'subchecker': 'jsyaml' })
+    let makeprg = self.makeprgBuild({ 'args': s:js_yaml_new ? '' : '--compact' })
 
     let errorformat =
         \ 'Error on line %l\, col %c:%m,' .
@@ -46,4 +39,5 @@ endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'yaml',
-    \ 'name': 'jsyaml'})
+    \ 'name': 'jsyaml',
+    \ 'exec': 'js-yaml'})

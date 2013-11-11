@@ -15,13 +15,8 @@ if exists("g:loaded_syntastic_puppet_puppet_checker")
 endif
 let g:loaded_syntastic_puppet_puppet_checker=1
 
-function! SyntaxCheckers_puppet_puppet_IsAvailable()
-    return executable("puppet")
-endfunction
-
-function! SyntaxCheckers_puppet_puppet_GetLocList()
-
-    let ver = syntastic#util#getVersion('puppet --version 2>' . syntastic#util#DevNull())
+function! SyntaxCheckers_puppet_puppet_GetLocList() dict
+    let ver = syntastic#util#getVersion(self.getExec() . ' --version 2>' . syntastic#util#DevNull())
 
     if syntastic#util#versionIsAtLeast(ver, [2,7,0])
         let args = 'parser validate --color=false'
@@ -29,11 +24,7 @@ function! SyntaxCheckers_puppet_puppet_GetLocList()
         let args = '--color=false --parseonly'
     endif
 
-    let makeprg = syntastic#makeprg#build({
-        \ 'exe': 'puppet',
-        \ 'args': args,
-        \ 'filetype': 'puppet',
-        \ 'subchecker': 'puppet' })
+    let makeprg = self.makeprgBuild({ 'args': args })
 
     let errorformat =
         \ '%-Gerr: Try ''puppet help parser validate'' for usage,' .
@@ -44,7 +35,6 @@ function! SyntaxCheckers_puppet_puppet_GetLocList()
     return SyntasticMake({
         \ 'makeprg': makeprg,
         \ 'errorformat': errorformat })
-
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({

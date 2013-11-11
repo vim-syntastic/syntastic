@@ -19,16 +19,14 @@ if !exists('g:syntastic_haml_interpreter')
     let g:syntastic_haml_interpreter = 'haml'
 endif
 
-function! SyntaxCheckers_haml_haml_IsAvailable()
+function! SyntaxCheckers_haml_haml_IsAvailable() dict
     return executable(expand(g:syntastic_haml_interpreter))
 endfunction
 
-function! SyntaxCheckers_haml_haml_GetLocList()
-    let makeprg = syntastic#makeprg#build({
+function! SyntaxCheckers_haml_haml_GetLocList() dict
+    let makeprg = self.makeprgBuild({
         \ 'exe': expand(g:syntastic_haml_interpreter),
-        \ 'args': '-c',
-        \ 'filetype': 'haml',
-        \ 'subchecker': 'haml' })
+        \ 'args': '-c' })
 
     let errorformat =
         \ 'Haml error on line %l: %m,' .

@@ -11,10 +11,6 @@ if exists("g:loaded_syntastic_python_pyflakes_checker")
 endif
 let g:loaded_syntastic_python_pyflakes_checker=1
 
-function! SyntaxCheckers_python_pyflakes_IsAvailable()
-    return executable('pyflakes')
-endfunction
-
 function! SyntaxCheckers_python_pyflakes_GetHighlightRegex(i)
     if match(a:i['text'], 'is assigned to but never used') > -1
         \ || match(a:i['text'], 'imported but unused') > -1
@@ -39,11 +35,8 @@ function! SyntaxCheckers_python_pyflakes_GetHighlightRegex(i)
     return ''
 endfunction
 
-function! SyntaxCheckers_python_pyflakes_GetLocList()
-    let makeprg = syntastic#makeprg#build({
-        \ 'exe': 'pyflakes',
-        \ 'filetype': 'python',
-        \ 'subchecker': 'pyflakes' })
+function! SyntaxCheckers_python_pyflakes_GetLocList() dict
+    let makeprg = self.makeprgBuild({})
 
     let errorformat =
         \ '%E%f:%l: could not compile,'.

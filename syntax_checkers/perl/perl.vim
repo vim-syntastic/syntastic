@@ -34,8 +34,8 @@ if !exists('g:syntastic_perl_lib_path')
     let g:syntastic_perl_lib_path = []
 endif
 
-function! SyntaxCheckers_perl_perl_IsAvailable()
-    return executable(g:syntastic_perl_interpreter)
+function! SyntaxCheckers_perl_perl_IsAvailable() dict
+    return executable(expand(g:syntastic_perl_interpreter))
 endfunction
 
 function! SyntaxCheckers_perl_perl_Preprocess(errors)
@@ -51,7 +51,8 @@ function! SyntaxCheckers_perl_perl_Preprocess(errors)
     return syntastic#util#unique(out)
 endfunction
 
-function! SyntaxCheckers_perl_perl_GetLocList()
+function! SyntaxCheckers_perl_perl_GetLocList() dict
+    let exe = expand(g:syntastic_perl_interpreter)
     if type(g:syntastic_perl_lib_path) == type('')
         call syntastic#util#deprecationWarn('variable g:syntastic_perl_lib_path should be a list')
         let includes = split(g:syntastic_perl_lib_path, ',')
@@ -64,11 +65,9 @@ function! SyntaxCheckers_perl_perl_GetLocList()
         \ (index(shebang['args'], '-t') >= 0 ? ' -t' : '')
     let errorformat = '%f:%l:%m'
 
-    let makeprg = syntastic#makeprg#build({
-        \ 'exe': g:syntastic_perl_interpreter,
-        \ 'args': '-c -X ' . extra,
-        \ 'filetype': 'perl',
-        \ 'subchecker': 'perl' })
+    let makeprg = self.makeprgBuild({
+        \ 'exe': exe,
+        \ 'args': '-c -X ' . extra })
 
     let errors = SyntasticMake({
         \ 'makeprg': makeprg,
@@ -79,11 +78,9 @@ function! SyntaxCheckers_perl_perl_GetLocList()
         return errors
     endif
 
-    let makeprg = syntastic#makeprg#build({
-        \ 'exe': g:syntastic_perl_interpreter,
-        \ 'args': '-c -Mwarnings ' . extra,
-        \ 'filetype': 'perl',
-        \ 'subchecker': 'perl' })
+    let makeprg = self.makeprgBuild({
+        \ 'exe': exe,
+        \ 'args': '-c -Mwarnings ' . extra })
 
     return SyntasticMake({
         \ 'makeprg': makeprg,
