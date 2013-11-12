@@ -41,7 +41,7 @@ if !exists("g:syntastic_java_javac_delete_output")
 endif
 
 function! s:CygwinPath(path)
-    return substitute(system("cygpath -m ".a:path), '\m\%x00', '', 'g')
+    return substitute(system("cygpath -m " . a:path), '\n', '', 'g')
 endfunction
 
 if !exists("g:syntastic_java_javac_temp_dir")
