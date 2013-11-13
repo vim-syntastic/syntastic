@@ -18,7 +18,7 @@ function! SyntaxCheckers_sh_shellcheck_Preprocess(json)
 endfunction
 
 function! SyntaxCheckers_sh_shellcheck_GetLocList() dict
-    let makeprg = self.getExec() . ' < ' . syntastic#util#shexpand('%')
+    let makeprg = self.makeprgBuild({ 'args': '-f json' })
 
     let errorformat = '%t:%l:%v:%m'
 
@@ -27,7 +27,7 @@ function! SyntaxCheckers_sh_shellcheck_GetLocList() dict
         \ 'errorformat': errorformat,
         \ 'preprocess': 'SyntaxCheckers_sh_shellcheck_Preprocess',
         \ 'defaults': {'bufnr': bufnr("")},
-        \ 'returns': [0] })
+        \ 'returns': [0, 1] })
 
     for e in loclist
         if e['type'] ==? 's'
@@ -41,5 +41,4 @@ endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'sh',
-    \ 'name': 'shellcheck',
-    \ 'exec': 'jsoncheck' })
+    \ 'name': 'shellcheck' })
