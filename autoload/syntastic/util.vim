@@ -225,9 +225,60 @@ function! syntastic#util#redrawHandler()
     endif
 endfunction
 
-function! syntastic#util#debug(msg)
-    if g:syntastic_debug
-        echomsg "syntastic: debug: " . a:msg
+function! syntastic#util#debug(level, msg, ...)
+    " poor man's bit test for bit N, assuming a:level == 2**N
+    if (g:syntastic_debug / a:level) % 2
+        if has('reltime')
+            let leader = 'syntastic: ' . split(reltimestr(reltime(g:syntastic_start)))[0] . ': '
+        else
+            let leader = 'syntastic: debug: '
+        endif
+        if exists("g:syntastic_debug_file")
+            try
+                execute 'redir >> ' . fnameescape(expand(g:syntastic_debug_file))
+            catch /^Vim\%((\a\+)\)\=:/
+                unlet g:syntastic_debug_file
+                silent! redir END
+            endtry
+        endif
+
+        if a:0 > 0
+            " filter out dictionary functions
+            echomsg leader . a:msg .
+                \ strtrans(string(type(a:1) == type({}) || type(a:1) == type([]) ?
+                \ filter(copy(a:1), 'type(v:val) != type(function("tr"))') : a:1))
+        else
+            echomsg leader . a:msg
+        endif
+
+        if exists("g:syntastic_debug_file")
+            silent! redir END
+        endif
+    endif
+endfunction
+
+function! syntastic#util#showVariables(level, names)
+    let vlist = type(a:names) == type("") ? [a:names] : a:names
+    for name in vlist
+        let vals = []
+        if exists('g:' . name)
+            call add(vals, 'g:' . name . ' = ' . strtrans(string(g:{name})))
+        endif
+        if exists('b:' . name)
+            call add(vals, 'b:' . name . ' = ' . strtrans(string(b:{name})))
+        endif
+
+        if !empty(vals)
+            call syntastic#util#debug(a:level, join(vals, ', '))
+        endif
+    endfor
+endfunction
+
+function! syntastic#util#showOptions(level, names)
+    let vlist = type(a:names) == type("") ? [a:names] : a:names
+    if !empty(vlist)
+        call map(vlist, "'&' . v:val . ' = ' . strtrans(string(eval('&' . v:val)))")
+        call syntastic#util#debug(a:level, join(vlist, ', '))
     endif
 endfunction
 
