@@ -29,7 +29,7 @@ endfunction
 function! g:SyntasticHighlightingNotifier.refresh(loclist)
     if self.enabled()
         call self.reset(a:loclist)
-        call syntastic#util#debug(g:SyntasticDebugNotifications, 'highlighting: refresh')
+        call syntastic#log#debug(g:SyntasticDebugNotifications, 'highlighting: refresh')
         let buf = bufnr('')
         let issues = filter(a:loclist.filteredRaw(), 'v:val["bufnr"] == buf')
         for item in issues
@@ -56,7 +56,7 @@ endfunction
 " Remove all error highlights from the window
 function! g:SyntasticHighlightingNotifier.reset(loclist)
     if s:has_highlighting
-        call syntastic#util#debug(g:SyntasticDebugNotifications, 'highlighting: reset')
+        call syntastic#log#debug(g:SyntasticDebugNotifications, 'highlighting: reset')
         for match in getmatches()
             if stridx(match['group'], 'Syntastic') == 0
                 call matchdelete(match['id'])

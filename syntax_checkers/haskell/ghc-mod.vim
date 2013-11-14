@@ -49,7 +49,7 @@ function! s:GhcModNew(exe)
         let ghc_mod_version = filter(split(system(a:exe), '\n'), 'v:val =~# ''\m^ghc-mod version''')[0]
         let ret = syntastic#util#versionIsAtLeast(syntastic#util#parseVersion(ghc_mod_version), [2, 1, 2])
     catch /^Vim\%((\a\+)\)\=:E684/
-        call syntastic#util#error("checker haskell/ghc_mod: can't parse version string (abnormal termination?)")
+        call syntastic#log#error("checker haskell/ghc_mod: can't parse version string (abnormal termination?)")
         let ret = -1
     endtry
     return ret

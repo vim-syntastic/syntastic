@@ -25,7 +25,7 @@ let s:running_windows = has("win16") || has("win32")
 
 for feature in ['autocmd', 'eval', 'modify_fname', 'quickfix', 'user_commands']
     if !has(feature)
-        call syntastic#util#error("need Vim compiled with feature " . feature)
+        call syntastic#log#error("need Vim compiled with feature " . feature)
         finish
     endif
 endfor
@@ -34,7 +34,7 @@ if !s:running_windows && executable('uname')
     try
         let s:uname = system('uname')
     catch /^Vim\%((\a\+)\)\=:E484/
-        call syntastic#util#error("your shell " . &shell . " doesn't use traditional UNIX syntax for redirections")
+        call syntastic#log#error("your shell " . &shell . " doesn't use traditional UNIX syntax for redirections")
         finish
     endtry
 endif
@@ -150,20 +150,20 @@ endif
 
 function! s:BufReadPostHook()
     if g:syntastic_check_on_open
-        call syntastic#util#debug(g:SyntasticDebugAutocommands,
+        call syntastic#log#debug(g:SyntasticDebugAutocommands,
             \ 'autocmd: BufReadPost, buffer ' . bufnr("") . ' = ' . string(bufname(str2nr(bufnr("")))))
         call s:UpdateErrors(1)
     endif
 endfunction
 
 function! s:BufWritePostHook()
-    call syntastic#util#debug(g:SyntasticDebugAutocommands,
+    call syntastic#log#debug(g:SyntasticDebugAutocommands,
         \ 'autocmd: BufWritePost, buffer ' . bufnr("") . ' = ' . string(bufname(str2nr(bufnr("")))))
     call s:UpdateErrors(1)
 endfunction
 
 function! s:BufWinEnterHook()
-    call syntastic#util#debug(g:SyntasticDebugAutocommands,
+    call syntastic#log#debug(g:SyntasticDebugAutocommands,
         \ 'autocmd: BufWinEnter, buffer ' . bufnr("") . ' = ' . string(bufname(str2nr(bufnr("")))) .
         \ ', &buftype = ' . string(&buftype))
     if empty(&buftype)
@@ -173,7 +173,7 @@ function! s:BufWinEnterHook()
 endfunction
 
 function! s:BufEnterHook()
-    call syntastic#util#debug(g:SyntasticDebugAutocommands,
+    call syntastic#log#debug(g:SyntasticDebugAutocommands,
         \ 'autocmd: BufEnter, buffer ' . bufnr("") . ' = ' . string(bufname(str2nr(bufnr("")))) .
         \ ', &buftype = ' . string(&buftype))
     " TODO: at this point there is no b:syntastic_loclist
@@ -185,7 +185,7 @@ function! s:BufEnterHook()
 endfunction
 
 function! s:QuitPreHook()
-    call syntastic#util#debug(g:SyntasticDebugAutocommands,
+    call syntastic#log#debug(g:SyntasticDebugAutocommands,
         \ 'autocmd: QuitPre, buffer ' . bufnr("") . ' = ' . string(bufname(str2nr(bufnr("")))))
     let b:syntastic_skip_checks = !g:syntastic_check_on_wq
     call g:SyntasticLoclistHide()
@@ -240,9 +240,10 @@ function! s:CacheErrors(...)
         let active_checkers = 0
         let names = []
 
-        call syntastic#util#showOptions(g:SyntasticDebugTrace,
+        call syntastic#log#debugShowOptions(g:SyntasticDebugTrace,
             \ ['shell', 'shellcmdflag', 'shellxquote', 'shellredir', 'shellslash'])
-        call syntastic#util#showVariables(g:SyntasticDebugTrace, 'syntastic_aggregate_errors')
+        call syntastic#log#debugDump(g:SyntasticDebugVariables)
+        call syntastic#log#debugShowVariables(g:SyntasticDebugTrace, 'syntastic_aggregate_errors')
 
         let aggregate_errors =
             \ exists('b:syntastic_aggregate_errors') ? b:syntastic_aggregate_errors : g:syntastic_aggregate_errors
@@ -259,7 +260,7 @@ function! s:CacheErrors(...)
 
             for checker in checkers
                 let active_checkers += 1
-                call syntastic#util#debug(g:SyntasticDebugTrace, "CacheErrors: Invoking checker: " . checker.getName())
+                call syntastic#log#debug(g:SyntasticDebugTrace, "CacheErrors: Invoking checker: " . checker.getName())
 
                 let loclist = checker.getLocList()
 
@@ -292,13 +293,13 @@ function! s:CacheErrors(...)
 
         if !active_checkers
             if a:0
-                call syntastic#util#warn('checker ' . a:1 . ' is not active for filetype ' . &filetype)
+                call syntastic#log#warn('checker ' . a:1 . ' is not active for filetype ' . &filetype)
             else
-                call syntastic#util#debug(g:SyntasticDebugTrace, 'CacheErrors: no active checkers for filetype ' . &filetype)
+                call syntastic#log#debug(g:SyntasticDebugTrace, 'CacheErrors: no active checkers for filetype ' . &filetype)
             endif
         endif
 
-        call syntastic#util#debug(g:SyntasticDebugLoclist, "aggregated:", newLoclist)
+        call syntastic#log#debug(g:SyntasticDebugLoclist, "aggregated:", newLoclist)
     endif
 
     let b:syntastic_loclist = newLoclist
@@ -416,7 +417,7 @@ endfunction
 "   'cwd' - change directory to the given path before running the checker
 "   'returns' - a list of valid exit codes for the checker
 function! SyntasticMake(options)
-    call syntastic#util#debug(g:SyntasticDebugTrace, 'SyntasticMake: called with options:', a:options)
+    call syntastic#log#debug(g:SyntasticDebugTrace, 'SyntasticMake: called with options:', a:options)
 
     let old_shell = &shell
     let old_shellredir = &shellredir
@@ -447,11 +448,11 @@ function! SyntasticMake(options)
     let $LC_ALL = old_lc_all
     let $LC_MESSAGES = old_lc_messages
 
-    call syntastic#util#debug(g:SyntasticDebugLoclist, "checker output:", err_lines)
+    call syntastic#log#debug(g:SyntasticDebugLoclist, "checker output:", err_lines)
 
     if has_key(a:options, 'preprocess')
         let err_lines = call(a:options['preprocess'], [err_lines])
-        call syntastic#util#debug(g:SyntasticDebugLoclist, "preprocess:", err_lines)
+        call syntastic#log#debug(g:SyntasticDebugLoclist, "preprocess:", err_lines)
     endif
     lgetexpr err_lines
 
@@ -471,7 +472,7 @@ function! SyntasticMake(options)
         call syntastic#util#redraw(g:syntastic_full_redraws)
     endif
 
-    call syntastic#util#debug(g:SyntasticDebugLoclist, "raw loclist:", errors)
+    call syntastic#log#debug(g:SyntasticDebugLoclist, "raw loclist:", errors)
 
     if has_key(a:options, 'returns') && index(a:options['returns'], v:shell_error) == -1
         throw 'Syntastic: checker error'
@@ -490,7 +491,7 @@ function! SyntasticMake(options)
     endfor
     if do_ignore
         call filter(errors, '!ignored[v:val["bufnr"]]')
-        call syntastic#util#debug(g:SyntasticDebugLoclist, "filtered loclist:", errors)
+        call syntastic#log#debug(g:SyntasticDebugLoclist, "filtered loclist:", errors)
     endif
 
     " Add subtype info if present.
@@ -502,7 +503,7 @@ function! SyntasticMake(options)
         for rule in a:options['postprocess']
             let errors = call('syntastic#postprocess#' . rule, [errors])
         endfor
-        call syntastic#util#debug(g:SyntasticDebugLoclist, "postprocess:", errors)
+        call syntastic#log#debug(g:SyntasticDebugLoclist, "postprocess:", errors)
     endif
 
     return errors
