@@ -15,7 +15,7 @@ endif
 let g:loaded_syntastic_scss_scss_lint_checker=1
 
 function! SyntaxCheckers_scss_scss_lint_GetLocList()
-    let makeprg = syntastic#makeprg#build({})
+    let makeprg = self.makeprgBuild({})
     let errorformat = '%f:%l [%t] %m'
     return SyntasticMake({
         \ 'makeprg': makeprg,
