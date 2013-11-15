@@ -105,7 +105,7 @@ Another reason it could fail is that either the command line options or the erro
 
 __Q. Recently some of my syntax checker options have stopped working...__
 
-A. The options are still there, they have just been renamed. Recently, almost all syntax checkers were refactored to use the new `syntastic#makeprg#build()` function. This made a lot of the old explicit options redundant - as they are now implied. The new implied options usually have slightly different names to the old options.
+A. The options are still there, they have just been renamed. Recently, almost all syntax checkers were refactored to use the new `makeprgBuild()` function. This made a lot of the old explicit options redundant - as they are now implied. The new implied options usually have slightly different names to the old options.
 
 e.g. Previously there was `g:syntastic_phpcs_conf`, now you must use `g:syntastic_php_phpcs_args`. This completely overrides the arguments of the checker, including any defaults, so you may need to look up the default arguments of the checker and add these in.
 
@@ -120,7 +120,7 @@ let g:syntastic_always_populate_loc_list=1
 
 __Q. How can I pass additional arguments to a checker?__
 
-A. Almost all syntax checkers use the `syntastic#makeprg#build()` function. Those checkers that do can be configured using global variables. The general form of the global args variables are:
+A. Almost all syntax checkers use the `makeprgBuild()` function. Those checkers that do can be configured using global variables. The general form of the global args variables are:
 ```vim
 syntastic_<filetype>_<subchecker>_args
 ```
