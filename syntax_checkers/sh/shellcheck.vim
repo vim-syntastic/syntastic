@@ -12,9 +12,9 @@ function! SyntaxCheckers_sh_shellcheck_GetLocList() dict
     let makeprg = self.makeprgBuild({ 'args': '-f gcc' })
 
     let errorformat =
-        \ '%f:%l:%v: %trror: %m,' .
-        \ '%f:%l:%v: %tarning: %m,' .
-        \ '%f:%l:%v: %tote: %m'
+        \ '%f:%l:%c: %trror: %m,' .
+        \ '%f:%l:%c: %tarning: %m,' .
+        \ '%f:%l:%c: %tote: %m'
 
     let loclist = SyntasticMake({
         \ 'makeprg': makeprg,
