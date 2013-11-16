@@ -125,6 +125,7 @@ command! SyntasticInfo
 command! SyntasticReset
             \ call s:ClearCache() |
             \ call s:notifiers.refresh(g:SyntasticLoclist.New([]))
+command! SyntasticSetLoclist call g:SyntasticLoclist.current().setloclist()
 
 highlight link SyntasticError SpellBad
 highlight link SyntasticWarning SpellCap
@@ -211,9 +212,11 @@ function! s:UpdateErrors(auto_invoked, ...)
 
     let w:syntastic_loclist_set = 0
     if g:syntastic_always_populate_loc_list || g:syntastic_auto_jump
+        call syntastic#log#debug(g:SyntasticDebugNotifications, 'loclist: setloclist (new)')
         call setloclist(0, loclist.filteredRaw())
         let w:syntastic_loclist_set = 1
         if run_checks && g:syntastic_auto_jump && loclist.hasErrorsOrWarningsToDisplay()
+            call syntastic#log#debug(g:SyntasticDebugNotifications, 'loclist: jump')
             silent! lrewind
         endif
     endif
