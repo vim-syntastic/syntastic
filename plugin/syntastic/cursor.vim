@@ -22,6 +22,7 @@ endfunction
 
 function! g:SyntasticCursorNotifier.refresh(loclist)
     if self.enabled() && a:loclist.hasErrorsOrWarningsToDisplay()
+        call syntastic#log#debug(g:SyntasticDebugNotifications, 'cursor: refresh')
         let b:syntastic_messages = copy(a:loclist.messages(bufnr('')))
         let b:oldLine = -1
         autocmd! syntastic CursorMoved
@@ -30,6 +31,7 @@ function! g:SyntasticCursorNotifier.refresh(loclist)
 endfunction
 
 function! g:SyntasticCursorNotifier.reset(loclist)
+    call syntastic#log#debug(g:SyntasticDebugNotifications, 'cursor: reset')
     autocmd! syntastic CursorMoved
     unlet! b:syntastic_messages
     let b:oldLine = -1

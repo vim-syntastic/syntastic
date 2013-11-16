@@ -398,12 +398,27 @@ if you actually need it.
 
                                                            *'syntastic_debug'*
 Default: 0
-Set this to 1 to enable debugging: >
+Set this to the sum of one or more of the following flags to enable
+debugging:
+
+     1 - trace checker calls
+     2 - dump loclists
+     4 - trace notifiers
+     8 - trace autocommands
+    16 - dump variables
+
+Example: >
     let g:syntastic_debug = 1
 <
-Checkers will then add debugging messages to Vim's |message-history|. You can
+Syntastic will then add debugging messages to Vim's |message-history|. You can
 examine these messages with |:mes|.
 
+                                                      *'syntastic_debug_file'*
+Default: unset
+When set, debugging messages are written to the file named by its value, in
+addition to being added to Vim's |message-history|: >
+    let g:syntastic_debug_file = '~/syntastic.log'
+<
 
 ==============================================================================
 5. Checker Options                                 *syntastic-checker-options*

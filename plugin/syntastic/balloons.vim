@@ -30,6 +30,7 @@ endfunction
 function! g:SyntasticBalloonsNotifier.refresh(loclist)
     let b:syntastic_balloons = {}
     if self.enabled() && a:loclist.hasErrorsOrWarningsToDisplay()
+        call syntastic#log#debug(g:SyntasticDebugNotifications, 'balloons: refresh')
         let buf = bufnr('')
         let issues = filter(a:loclist.filteredRaw(), 'v:val["bufnr"] == buf')
         if !empty(issues)
@@ -48,6 +49,7 @@ endfunction
 " Reset the error balloons
 function! g:SyntasticBalloonsNotifier.reset(loclist)
     if has('balloon_eval')
+        call syntastic#log#debug(g:SyntasticDebugNotifications, 'balloons: reset')
         set nobeval
     endif
 endfunction
