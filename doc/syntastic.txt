@@ -161,6 +161,11 @@ filetype.
 
 Resets the list of errors and turns off all error notifiers.
 
+:SyntasticSetLoclist                                    *:SyntasticSetLoclist*
+
+Updates Vim's current loclist with the list of detected errors. This is only
+needed if |'syntastic_always_populate_loc_list'| is not set.
+
 
 ==============================================================================
 4. Global Options                                   *syntastic-global-options*
