@@ -54,7 +54,7 @@ endfunction
 function! SyntaxCheckers_perl_perl_GetLocList() dict
     let exe = expand(g:syntastic_perl_interpreter)
     if type(g:syntastic_perl_lib_path) == type('')
-        call syntastic#util#deprecationWarn('variable g:syntastic_perl_lib_path should be a list')
+        call syntastic#log#deprecationWarn('variable g:syntastic_perl_lib_path should be a list')
         let includes = split(g:syntastic_perl_lib_path, ',')
     else
         let includes = copy(exists('b:syntastic_perl_lib_path') ? b:syntastic_perl_lib_path : g:syntastic_perl_lib_path)

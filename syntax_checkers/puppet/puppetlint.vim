@@ -17,7 +17,7 @@ let g:loaded_syntastic_puppet_puppetlint_checker=1
 
 if exists("g:syntastic_puppet_lint_arguments")
     let g:syntastic_puppet_puppetlint_args = g:syntastic_puppet_lint_arguments
-    call syntastic#util#deprecationWarn("variable g:syntastic_puppet_lint_arguments is deprecated, please use g:syntastic_puppet_puppetlint_args instead")
+    call syntastic#log#deprecationWarn("variable g:syntastic_puppet_lint_arguments is deprecated, please use g:syntastic_puppet_puppetlint_args instead")
 endif
 
 function! SyntaxCheckers_puppet_puppetlint_IsAvailable() dict

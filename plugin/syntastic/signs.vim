@@ -54,6 +54,7 @@ function! g:SyntasticSignsNotifier.enabled()
 endfunction
 
 function! g:SyntasticSignsNotifier.refresh(loclist)
+    call syntastic#log#debug(g:SyntasticDebugNotifications, 'signs: refresh')
     let old_signs = copy(self._bufSignIds())
     if self.enabled()
         call self._signErrors(a:loclist)

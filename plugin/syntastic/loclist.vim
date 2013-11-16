@@ -149,6 +149,7 @@ endfunction
 
 "display the cached errors for this buf in the location list
 function! g:SyntasticLoclist.show()
+    call syntastic#log#debug(g:SyntasticDebugNotifications, 'loclist: show')
     if !exists('w:syntastic_loclist_set')
         let w:syntastic_loclist_set = 0
     endif
@@ -184,6 +185,7 @@ endfunction
 " Non-method functions {{{1
 
 function! g:SyntasticLoclistHide()
+    call syntastic#log#debug(g:SyntasticDebugNotifications, 'loclist: hide')
     silent! lclose
 endfunction
 

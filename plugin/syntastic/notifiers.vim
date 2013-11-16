@@ -19,6 +19,7 @@ function! g:SyntasticNotifiers.Instance()
 endfunction
 
 function! g:SyntasticNotifiers.refresh(loclist)
+    call syntastic#log#debug(g:SyntasticDebugNotifications, 'notifiers: refresh')
     for type in self._enabled_types
         let class = substitute(type, '\m.*', 'Syntastic\u&Notifier', '')
         if !has_key(g:{class}, 'enabled') || self._notifier[type].enabled()
@@ -28,6 +29,7 @@ function! g:SyntasticNotifiers.refresh(loclist)
 endfunction
 
 function! g:SyntasticNotifiers.reset(loclist)
+    call syntastic#log#debug(g:SyntasticDebugNotifications, 'notifiers: reset')
     for type in self._enabled_types
         let class = substitute(type, '\m.*', 'Syntastic\u&Notifier', '')
 
