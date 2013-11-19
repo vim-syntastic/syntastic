@@ -24,7 +24,12 @@ if !exists('g:loaded_youcompleteme')
 endif
 
 function! SyntaxCheckers_c_ycm_GetLocList() dict
-    return youcompleteme#CurrentFileDiagnostics()
+    let errors = youcompleteme#CurrentFileDiagnostics()
+    " filter the processed errors if desired
+    if exists('g:syntastic_c_remove_include_errors') && g:syntastic_c_remove_include_errors != 0
+        return filter(errors, 'has_key(v:val, "bufnr") && v:val["bufnr"] == ' . bufnr(''))
+    else
+        return errors
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
