@@ -10,6 +10,33 @@ if !exists("g:syntastic_debug")
     let g:syntastic_debug = 0
 endif
 
+let s:global_options = [
+    \ 'syntastic_aggregate_errors',
+    \ 'syntastic_always_populate_loc_list',
+    \ 'syntastic_auto_jump',
+    \ 'syntastic_auto_loc_list',
+    \ 'syntastic_check_on_open',
+    \ 'syntastic_check_on_wq',
+    \ 'syntastic_debug',
+    \ 'syntastic_delayed_redraws',
+    \ 'syntastic_echo_current_error',
+    \ 'syntastic_enable_balloons',
+    \ 'syntastic_enable_highlighting',
+    \ 'syntastic_enable_signs',
+    \ 'syntastic_error_symbol',
+    \ 'syntastic_filetype_map',
+    \ 'syntastic_full_redraws',
+    \ 'syntastic_id_checkers',
+    \ 'syntastic_ignore_files',
+    \ 'syntastic_loc_list_height',
+    \ 'syntastic_mode_map',
+    \ 'syntastic_quiet_warnings',
+    \ 'syntastic_reuse_loc_lists',
+    \ 'syntastic_stl_format',
+    \ 'syntastic_style_error_symbol',
+    \ 'syntastic_style_warning_symbol',
+    \ 'syntastic_warning_symbol' ]
+
 let s:deprecation_notices_issued = []
 
 " Public functions {{{1
@@ -97,34 +124,7 @@ function! syntastic#log#debugDump(level)
         return
     endif
 
-    let vars = [
-        \ 'syntastic_aggregate_errors',
-        \ 'syntastic_always_populate_loc_list',
-        \ 'syntastic_auto_jump',
-        \ 'syntastic_auto_loc_list',
-        \ 'syntastic_check_on_open',
-        \ 'syntastic_check_on_wq',
-        \ 'syntastic_debug',
-        \ 'syntastic_delayed_redraws',
-        \ 'syntastic_echo_current_error',
-        \ 'syntastic_enable_balloons',
-        \ 'syntastic_enable_highlighting',
-        \ 'syntastic_enable_signs',
-        \ 'syntastic_error_symbol',
-        \ 'syntastic_filetype_map',
-        \ 'syntastic_full_redraws',
-        \ 'syntastic_id_checkers',
-        \ 'syntastic_ignore_files',
-        \ 'syntastic_loc_list_height',
-        \ 'syntastic_mode_map',
-        \ 'syntastic_quiet_warnings',
-        \ 'syntastic_reuse_loc_lists',
-        \ 'syntastic_stl_format',
-        \ 'syntastic_style_error_symbol',
-        \ 'syntastic_style_warning_symbol',
-        \ 'syntastic_warning_symbol' ]
-
-    call syntastic#log#debugShowVariables(a:level, vars)
+    call syntastic#log#debugShowVariables(a:level, s:global_options)
 endfunction
 
 " Private functions {{{1

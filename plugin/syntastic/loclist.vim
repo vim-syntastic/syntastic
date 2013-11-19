@@ -11,8 +11,7 @@ function! g:SyntasticLoclist.New(rawLoclist)
     let newObj = copy(self)
     let newObj._quietWarnings = g:syntastic_quiet_warnings
 
-    let llist = copy(a:rawLoclist)
-    let llist = filter(llist, 'v:val["valid"] == 1')
+    let llist = filter(copy(a:rawLoclist), 'v:val["valid"] == 1')
 
     for e in llist
         if empty(e['type'])
@@ -131,10 +130,9 @@ function! g:SyntasticLoclist.filter(filters)
     let rv = []
 
     for error in self._rawLoclist
-
         let passes_filters = 1
         for key in keys(a:filters)
-            if error[key] !=? a:filters[key]
+            if get(error, key, '') !=? a:filters[key]
                 let passes_filters = 0
                 break
             endif
