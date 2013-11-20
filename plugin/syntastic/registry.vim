@@ -70,7 +70,7 @@ let s:defaultCheckers = {
         \ 'xhtml':       ['tidy'],
         \ 'xml':         ['xmllint'],
         \ 'xslt':        ['xmllint'],
-        \ 'yaml':        ['jsyaml'],
+        \ 'yaml':        ['jsyaml', 'perlyaml'],
         \ 'z80':         ['z80syntaxchecker'],
         \ 'zpt':         ['zptlint'],
         \ 'zsh':         ['zsh']
