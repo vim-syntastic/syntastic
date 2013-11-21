@@ -127,9 +127,6 @@ command! SyntasticReset
             \ call s:notifiers.refresh(g:SyntasticLoclist.New([]))
 command! SyntasticSetLoclist call g:SyntasticLoclist.current().setloclist()
 
-highlight link SyntasticError SpellBad
-highlight link SyntasticWarning SpellCap
-
 augroup syntastic
     autocmd BufReadPost * call s:BufReadPostHook()
     autocmd BufWritePost * call s:BufWritePostHook()

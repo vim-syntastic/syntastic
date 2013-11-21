@@ -24,6 +24,7 @@ CONTENTS                                                  *syntastic-contents*
         2.1.The statusline flag....................|syntastic-statusline-flag|
         2.2.Error signs............................|syntastic-error-signs|
         2.3.Error window...........................|syntastic-error-window|
+        2.4.Error highlighting.....................|syntastic-highlighting|
     3.Commands.....................................|syntastic-commands|
     4.Global Options...............................|syntastic-global-options|
     5.Checker Options..............................|syntastic-checker-options|
@@ -91,6 +92,7 @@ Something like this could be more useful: >
 <
 When syntax errors are detected a flag will be shown. The content of the flag
 is derived from the |syntastic_stl_format| option
+
 ------------------------------------------------------------------------------
 2.2. Error signs                                       *syntastic-error-signs*
 
@@ -121,7 +123,6 @@ following highlight groups:
 Example: >
     highlight SyntasticErrorLine guibg=#2f0000
 <
-
 ------------------------------------------------------------------------------
 2.3. The error window                       *:Errors* *syntastic-error-window*
 
@@ -131,6 +132,19 @@ in the |location-list|.
 Note that when you use :Errors, the current location list is overwritten with
 Syntastic's own location list.
 
+------------------------------------------------------------------------------
+2.4. Error highlighting                               *syntastic-highlighting*
+
+Some checkers provide enough information for syntastic to be able to highlight
+errors. By default the SpellBad syntax highlight group is used to color errors,
+and the SpellCap group is used for warnings. If you wish to customize the
+colors for highlighting you can use the following groups:
+    SyntasticError - Links to 'SpellBad' by default
+    SyntasticWarning - Links to 'SpellCap' by default
+
+Example: >
+    highlight SyntasticError guibg=#2f0000
+<
 
 ==============================================================================
 3. Commands                                               *syntastic-commands*

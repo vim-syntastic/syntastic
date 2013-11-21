@@ -12,10 +12,18 @@ endif
 
 let g:SyntasticHighlightingNotifier = {}
 
+let s:setup_done = 0
+
 " Public methods {{{1
 
 function! g:SyntasticHighlightingNotifier.New()
     let newObj = copy(self)
+
+    if !s:setup_done
+        call self._setup()
+        let s:setup_done = 1
+    endif
+
     return newObj
 endfunction
 
@@ -62,6 +70,21 @@ function! g:SyntasticHighlightingNotifier.reset(loclist)
                 call matchdelete(match['id'])
             endif
         endfor
+    endif
+endfunction
+
+" Private methods {{{1
+
+" One time setup: define our own highlighting
+function! g:SyntasticHighlightingNotifier._setup()
+    if s:has_highlighting
+        if !hlexists('SyntasticError')
+            highlight link SyntasticError SpellBad
+
+        endif
+        if !hlexists('SyntasticWarning')
+            highlight link SyntasticWarning SpellCap
+        endif
     endif
 endfunction
 
