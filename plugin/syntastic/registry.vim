@@ -29,7 +29,7 @@ let s:defaultCheckers = {
         \ 'go':          ['go'],
         \ 'haml':        ['haml'],
         \ 'handlebars':  ['handlebars'],
-        \ 'haskell':     ['ghc-mod', 'hdevtools', 'hlint'],
+        \ 'haskell':     ['ghc_mod', 'hdevtools', 'hlint'],
         \ 'haxe':        ['haxe'],
         \ 'hss':         ['hss'],
         \ 'html':        ['tidy'],
