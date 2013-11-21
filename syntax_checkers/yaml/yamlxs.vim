@@ -7,6 +7,7 @@
 "             it and/or modify it under the terms of the Do What The Fuck You
 "             Want To Public License, Version 2, as published by Sam Hocevar.
 "             See http://sam.zoy.org/wtfpl/COPYING for more details.
+"Installation: cpanm YAML::XS
 "
 "============================================================================
 
@@ -25,9 +26,6 @@ endif
 
 function! SyntaxCheckers_yaml_yamlxs_IsAvailable() dict
     let exe = s:Exe()
-    if !executable(exe)
-        return 0
-    endif
 
     call system(exe . ' ' . s:Modules() . ' -e ' . syntastic#util#shescape('exit(0)'))
     return v:shell_error == 0
