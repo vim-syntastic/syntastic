@@ -35,7 +35,10 @@ if !exists('g:syntastic_perl_lib_path')
 endif
 
 function! SyntaxCheckers_perl_perl_IsAvailable() dict
-    return executable(expand(g:syntastic_perl_interpreter))
+    " don't call executable() here, to allow things like
+    " let g:syntastic_perl_interpreter='/usr/bin/env perl'
+    silent! call system(expand(g:syntastic_perl_interpreter) . ' -e ' . syntastic#util#shescape('exit(0)'))
+    return v:shell_error == 0
 endfunction
 
 function! SyntaxCheckers_perl_perl_Preprocess(errors)
