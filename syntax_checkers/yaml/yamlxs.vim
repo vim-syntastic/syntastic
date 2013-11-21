@@ -25,9 +25,9 @@ if !exists('g:syntastic_perl_lib_path')
 endif
 
 function! SyntaxCheckers_yaml_yamlxs_IsAvailable() dict
-    let exe = s:Exe()
-
-    call system(exe . ' ' . s:Modules() . ' -e ' . syntastic#util#shescape('exit(0)'))
+    " don't call executable() here, to allow things like
+    " let g:syntastic_perl_interpreter='/usr/bin/env perl'
+    silent! call system(s:Exe() . ' ' . s:Modules() . ' -e ' . syntastic#util#shescape('exit(0)'))
     return v:shell_error == 0
 endfunction
 
