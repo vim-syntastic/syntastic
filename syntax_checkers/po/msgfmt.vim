@@ -15,17 +15,27 @@ if exists("g:loaded_syntastic_po_msgfmt_checker")
 endif
 let g:loaded_syntastic_po_msgfmt_checker=1
 
-function! SyntaxCheckers_po_msgfmt_GetLocList() dict
-    let makeprg = self.makeprgBuild({ 'args': '-c' })
 
-    let errorformat = 
+function! SyntaxCheckers_po_msgfmt_GetHighlightRegex(item)
+    let term = matchstr(a:item['text'], 'keyword "\zs[^"]\+\ze" unknown')
+    return !empty(term) ? '\V' . term : ''
+endfunction
+
+function! SyntaxCheckers_po_msgfmt_GetLocList() dict
+    let makeprg = self.makeprgBuild({ 'args': '-c ' . syntastic#c#NullOutput() })
+
+    let errorformat =
         \ '%W%f:%l: warning: %m,' .
-        \ '%E%f:%l:%n: %m,' .
+        \ '%E%f:%l:%v: %m,' .
         \ '%E%f:%l: %m,' .
+        \ '%+C %.%#,' .
         \ '%Z%p^,' .
         \ '%-G%.%#'
 
-    return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
+    return SyntasticMake({
+        \ 'makeprg': makeprg,
+        \ 'errorformat': errorformat,
+        \ 'postprocess': ['compressWhitespace'] })
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
