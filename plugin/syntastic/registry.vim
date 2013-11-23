@@ -48,6 +48,7 @@ let s:defaultCheckers = {
         \ 'ocaml':       ['camlp4o'],
         \ 'perl':        ['perl', 'perlcritic'],
         \ 'php':         ['php', 'phpcs', 'phpmd'],
+        \ 'po':          ['msgfmt'],
         \ 'pod':         ['podchecker'],
         \ 'puppet':      ['puppet', 'puppetlint'],
         \ 'python':      ['python', 'flake8', 'pylint'],
