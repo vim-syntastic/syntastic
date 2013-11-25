@@ -37,6 +37,7 @@ let s:defaultCheckers = {
         \ 'javascript':  ['jshint', 'jslint'],
         \ 'json':        ['jsonlint', 'jsonval'],
         \ 'less':        ['lessc'],
+        \ 'limbo':       ['limbo'],
         \ 'lisp':        ['clisp'],
         \ 'llvm':        ['llvm'],
         \ 'lua':         ['luac'],
