@@ -17,7 +17,7 @@ let g:loaded_syntastic_po_msgfmt_checker=1
 
 
 function! SyntaxCheckers_po_msgfmt_GetHighlightRegex(item)
-    let term = matchstr(a:item['text'], 'keyword "\zs[^"]\+\ze" unknown')
+    let term = matchstr(a:item['text'], '\mkeyword "\zs[^"]\+\ze" unknown')
     return !empty(term) ? '\V' . term : ''
 endfunction
 
