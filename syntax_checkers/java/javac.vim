@@ -206,7 +206,7 @@ function! s:GetMavenClasspath()
                     let mvn_classpath = s:RemoveCarriageReturn(line)
                     break
                 endif
-                if match(line,'Dependencies classpath:') >= 0
+                if stridx(line,'Dependencies classpath:') >= 0
                     let class_path_next = 1
                 endif
             endfor
@@ -246,13 +246,13 @@ function! s:MavenOutputDirectory()
         if has_key(mvn_properties, 'project.properties.build.dir')
             let output_dir = mvn_properties['project.properties.build.dir']
         endif
-        if match(expand( '%:p:h' ), "src.main.java") >= 0
+        if stridx(expand( '%:p:h' ), "src.main.java") >= 0
             let output_dir .= '/target/classes'
             if has_key(mvn_properties, 'project.build.outputDirectory')
                 let output_dir = mvn_properties['project.build.outputDirectory']
             endif
         endif
-        if match(expand( '%:p:h' ), "src.test.java") >= 0
+        if stridx(expand( '%:p:h' ), "src.test.java") >= 0
             let output_dir .= '/target/test-classes'
             if has_key(mvn_properties, 'project.build.testOutputDirectory')
                 let output_dir = mvn_properties['project.build.testOutputDirectory']

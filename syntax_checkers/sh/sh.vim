@@ -20,11 +20,11 @@ function! s:GetShell()
         let b:shell = ''
         let shebang = getbufline(bufnr('%'), 1)[0]
         if len(shebang) > 0
-            if match(shebang, 'bash') >= 0
+            if stridx(shebang, 'bash') >= 0
                 let b:shell = 'bash'
-            elseif match(shebang, 'zsh') >= 0
+            elseif stridx(shebang, 'zsh') >= 0
                 let b:shell = 'zsh'
-            elseif match(shebang, 'sh') >= 0
+            elseif stridx(shebang, 'sh') >= 0
                 let b:shell = 'sh'
             endif
         endif

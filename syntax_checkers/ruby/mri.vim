@@ -20,7 +20,7 @@ if !exists("g:syntastic_ruby_exec")
 endif
 
 function! SyntaxCheckers_ruby_mri_GetHighlightRegex(i)
-    if match(a:i['text'], 'assigned but unused variable') > -1
+    if stridx(a:i['text'], 'assigned but unused variable') >= 0
         let term = split(a:i['text'], ' - ')[1]
         return '\V\<'.term.'\>'
     endif
