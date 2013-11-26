@@ -131,10 +131,10 @@ function! s:GetOtherMakeprg()
     let extension = expand('%:e')
     let makeprg = ""
 
-    if match(extension, 'mly') >= 0 && executable("menhir")
+    if stridx(extension, 'mly') >= 0 && executable("menhir")
         " ocamlyacc output can't be redirected, so use menhir
         let makeprg = "menhir --only-preprocess " . syntastic#util#shexpand('%') . " >" . syntastic#util#DevNull()
-    elseif match(extension,'mll') >= 0 && executable("ocamllex")
+    elseif stridx(extension,'mll') >= 0 && executable("ocamllex")
         let makeprg = "ocamllex -q " . syntastic#c#NullOutput() . " " . syntastic#util#shexpand('%')
     else
         let makeprg = "camlp4o " . syntastic#c#NullOutput() . " " . syntastic#util#shexpand('%')
