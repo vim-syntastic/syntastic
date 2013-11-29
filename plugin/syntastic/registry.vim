@@ -146,7 +146,7 @@ endfunction
 
 function! g:SyntasticRegistry.getChecker(ftalias, name)
     for checker in self.availableCheckersFor(a:ftalias)
-        if checker.getName() == a:name
+        if checker.getName() ==# a:name
             return checker
         endif
     endfor
@@ -248,7 +248,7 @@ endfunction
 
 function! g:SyntasticRegistry._validateUniqueName(checker) abort
     for checker in self._allCheckersFor(a:checker.getFiletype())
-        if checker.getName() == a:checker.getName()
+        if checker.getName() ==# a:checker.getName()
             throw "Syntastic: Duplicate syntax checker name for: " . a:checker.getName()
         endif
     endfor
