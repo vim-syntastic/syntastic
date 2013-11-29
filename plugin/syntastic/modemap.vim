@@ -39,13 +39,13 @@ function! g:SyntasticModeMap.allowsAutoChecking(filetype)
 endfunction
 
 function! g:SyntasticModeMap.isPassive()
-    return self._mode == 'passive'
+    return self._mode ==# 'passive'
 endfunction
 
 function! g:SyntasticModeMap.toggleMode()
     call self.synch()
 
-    if self._mode == 'active'
+    if self._mode ==# 'active'
         let self._mode = 'passive'
     else
         let self._mode = 'active'

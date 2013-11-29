@@ -19,7 +19,7 @@ function! SyntaxCheckers_lua_luac_GetHighlightRegex(pos)
     let result = ''
     let near = matchstr(a:pos['text'], '\mnear ''\zs[^'']\+\ze''')
     if len(near) > 0
-        if near == '<eof>'
+        if near ==# '<eof>'
             let p = getpos('$')
             let a:pos['lnum'] = p[1]
             let a:pos['col'] = p[2]

@@ -37,9 +37,9 @@ function! SyntaxCheckers_ruby_rubocop_GetLocList() dict
 
     " convert rubocop severities to error types recognized by syntastic
     for e in loclist
-        if e['type'] == 'F'
+        if e['type'] ==# 'F'
             let e['type'] = 'E'
-        elseif e['type'] != 'W' && e['type'] != 'E'
+        elseif e['type'] !=# 'W' && e['type'] !=# 'E'
             let e['type'] = 'W'
         endif
     endfor

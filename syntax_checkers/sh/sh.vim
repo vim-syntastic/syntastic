@@ -56,7 +56,7 @@ function! SyntaxCheckers_sh_sh_IsAvailable() dict
 endfunction
 
 function! SyntaxCheckers_sh_sh_GetLocList() dict
-    if s:GetShell() == 'zsh'
+    if s:GetShell() ==# 'zsh'
         return s:ForwardToZshChecker()
     endif
 
