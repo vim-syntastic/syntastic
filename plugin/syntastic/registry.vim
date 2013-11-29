@@ -96,6 +96,7 @@ function! g:SyntasticRegistry.Instance()
     if !exists('s:SyntasticRegistryInstance')
         let s:SyntasticRegistryInstance = copy(self)
         let s:SyntasticRegistryInstance._checkerMap = {}
+        let s:SyntasticRegistryInstance._cachedCheckersFor = {}
     endif
 
     return s:SyntasticRegistryInstance
@@ -104,19 +105,7 @@ endfunction
 function! g:SyntasticRegistry.CreateAndRegisterChecker(args)
     let checker = g:SyntasticChecker.New(a:args)
     let registry = g:SyntasticRegistry.Instance()
-    call registry.registerChecker(checker)
-endfunction
-
-function! g:SyntasticRegistry.registerChecker(checker) abort
-    let ft = a:checker.getFiletype()
-
-    if !has_key(self._checkerMap, ft)
-        let self._checkerMap[ft] = []
-    endif
-
-    call self._validateUniqueName(a:checker)
-
-    call add(self._checkerMap[ft], a:checker)
+    call registry._registerChecker(checker)
 endfunction
 
 function! g:SyntasticRegistry.checkable(ftalias)
@@ -135,29 +124,21 @@ function! g:SyntasticRegistry.getActiveCheckers(ftalias)
         return self._filterCheckersByDefaultSettings(checkers, filetype)
     endif
 
-    let checkers = self.availableCheckersFor(filetype)
-
-    if !empty(checkers)
-        return [checkers[0]]
-    endif
-
-    return []
+    return checkers[0:0]
 endfunction
 
-function! g:SyntasticRegistry.getChecker(ftalias, name)
-    for checker in self.availableCheckersFor(a:ftalias)
-        if checker.getName() ==# a:name
-            return checker
-        endif
-    endfor
-
-    return {}
+function! g:SyntasticRegistry.getCheckers(ftalias, list)
+    return self._filterCheckersByName(self.availableCheckersFor(a:ftalias), a:list)
 endfunction
 
 function! g:SyntasticRegistry.availableCheckersFor(ftalias)
-    let filetype = s:SyntasticRegistryNormaliseFiletype(a:ftalias)
-    let checkers = copy(self._allCheckersFor(filetype))
-    return self._filterCheckersByAvailability(checkers)
+    if !has_key(self._cachedCheckersFor, a:ftalias)
+        let filetype = s:SyntasticRegistryNormaliseFiletype(a:ftalias)
+        let checkers = self._allCheckersFor(filetype)
+        let self._cachedCheckersFor[a:ftalias] = self._filterCheckersByAvailability(checkers)
+    endif
+
+    return self._cachedCheckersFor[a:ftalias]
 endfunction
 
 function! g:SyntasticRegistry.echoInfoFor(ftalias_list)
@@ -175,6 +156,18 @@ function! g:SyntasticRegistry.echoInfoFor(ftalias_list)
 endfunction
 
 " Private methods {{{1
+
+function! g:SyntasticRegistry._registerChecker(checker) abort
+    let ft = a:checker.getFiletype()
+
+    if !has_key(self._checkerMap, ft)
+        let self._checkerMap[ft] = []
+    endif
+
+    call self._validateUniqueName(a:checker)
+
+    call add(self._checkerMap[ft], a:checker)
+endfunction
 
 function! g:SyntasticRegistry._allCheckersFor(filetype)
     call self._loadCheckers(a:filetype)
