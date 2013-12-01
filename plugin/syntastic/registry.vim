@@ -53,6 +53,7 @@ let s:defaultCheckers = {
         \ 'pod':         ['podchecker'],
         \ 'puppet':      ['puppet', 'puppetlint'],
         \ 'python':      ['python', 'flake8', 'pylint'],
+        \ 'racket':      ['racket'],
         \ 'rst':         ['rst2pseudoxml'],
         \ 'ruby':        ['mri'],
         \ 'rust':        ['rustc'],

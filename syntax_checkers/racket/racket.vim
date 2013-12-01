@@ -19,29 +19,32 @@ let g:loaded_syntastic_racket_racket_checker=1
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! SyntaxCheckers_racket_racket_IsAvailable() dict
-    return executable(self.getExec())
-endfunction
-
 " at some point put in the GetHightlightRegex(item) callback
 
 function! SyntaxCheckers_racket_racket_GetLocList() dict
-    let makeprg = self.makeprgBuild({'args': ''})
+    let makeprg = self.makeprgBuild({})
 
     " example of error message
     "eval-apply.rkt:460:30: the-empty-environment: unbound identifier in module
     "  in: the-empty-environment
-    let errorformat = '%f:%l:%c: %m'
+    let errorformat = '%f:%l:%v: %m'
 
-    return SyntasticMake({
-                \ 'makeprg': makeprg,
-                \ 'errorformat': errorformat })
+    let loclist = SyntasticMake({
+        \ 'makeprg': makeprg,
+        \ 'errorformat': errorformat })
+
+    for e in loclist
+        if has_key(e, 'col')
+            let e['col'] += 1
+        endif
+    endfor
+
+    return loclist
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
-            \ 'filetype': 'racket',
-            \ 'exec': 'racket',
-            \ 'name': 'racket'})
+    \ 'filetype': 'racket',
+    \ 'name': 'racket'})
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
