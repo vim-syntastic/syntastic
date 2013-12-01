@@ -31,9 +31,9 @@ Coq, CSS, Cucumber, CUDA, D, Dart, DocBook, Dust, Elixir, Erlang, eRuby,
 Fortran, Gentoo metadata, Go, Haml, Haskell, Haxe, Handlebars, HSS, HTML, Java,
 JavaScript, JSON, LESS, Limbo, LISP, LLVM intermediate language, Lua, MATLAB,
 NASM, Objective-C, Objective-C++, OCaml, Perl, Perl POD, PHP, gettext Portable
-Object, Puppet, Python, reStructuredText, Ruby, Rust, SASS/SCSS, Scala, Slim,
-Tcl, TeX, Twig, TypeScript, Vala, Verilog, VHDL, xHtml, XML, XSLT, YAML, z80,
-Zope page templates, zsh.
+Object, Puppet, Python, Racket, reStructuredText, Ruby, Rust, SASS/SCSS, Scala,
+Slim, Tcl, TeX, Twig, TypeScript, Vala, Verilog, VHDL, xHtml, XML, XSLT, YAML,
+z80, Zope page templates, zsh.
 
 ## Screenshot
 
