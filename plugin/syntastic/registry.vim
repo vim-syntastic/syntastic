@@ -74,6 +74,7 @@ let s:defaultCheckers = {
         \ 'xhtml':       ['tidy'],
         \ 'xml':         ['xmllint'],
         \ 'xslt':        ['xmllint'],
+        \ 'yacc':        ['bison'],
         \ 'yaml':        ['jsyaml'],
         \ 'z80':         ['z80syntaxchecker'],
         \ 'zpt':         ['zptlint'],
