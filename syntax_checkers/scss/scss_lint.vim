@@ -14,8 +14,16 @@ if exists("g:loaded_syntastic_scss_scss_lint_checker")
 endif
 let g:loaded_syntastic_scss_scss_lint_checker=1
 
-function! SyntaxCheckers_scss_scss_lint_GetLocList()
-    let makeprg = self.makeprgBuild({})
+function! SyntaxCheckers_scss_scss_lint_IsAvailable() dict
+      return executable(expand('scss-lint'))
+    endfunction
+
+function! SyntaxCheckers_scss_scss_lint_GetLocList() dict
+    let makeprg = self.makeprgBuild({
+      \ 'exe': 'scss-lint',
+      \ 'args': '',
+      \ 'subchecker': ''})
+
     let errorformat = '%f:%l [%t] %m'
     return SyntasticMake({
         \ 'makeprg': makeprg,
@@ -25,5 +33,4 @@ endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'scss',
-    \ 'name': 'scss_lint',
-    \ 'exec': 'scss-lint' })
+    \ 'name': 'scss_lint'})
