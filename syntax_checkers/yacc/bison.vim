@@ -23,11 +23,11 @@ function! SyntaxCheckers_yacc_bison_GetLocList() dict
         \ 'exe': self.getExec() . ' ' . syntastic#c#NullOutput() })
 
     let errorformat =
-        \ '%E%f:%l%.%v-%.%\+: %trror: %m,' .
+        \ '%E%f:%l%.%v-%.%\{-}: %trror: %m,' .
         \ '%E%f:%l%.%v: %trror: %m,' .
-        \ '%W%f:%l%.%v-%.%\+: %tarning: %m,' .
+        \ '%W%f:%l%.%v-%.%\{-}: %tarning: %m,' .
         \ '%W%f:%l%.%v: %tarning: %m,' .
-        \ '%I%f:%l%.%v-%.%\+: %\s%\+%m,' .
+        \ '%I%f:%l%.%v-%.%\{-}: %\s%\+%m,' .
         \ '%I%f:%l%.%v: %\s%\+%m'
 
     let loclist = SyntasticMake({
