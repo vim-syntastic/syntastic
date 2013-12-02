@@ -28,12 +28,12 @@ execute their script to find them.
 At the time of this writing, syntax checking plugins exist for Ada,
 AppleScript, AsciiDoc, Bourne shell, C, C++, C#, Chef, CoffeeScript, Coco,
 Coq, CSS, Cucumber, CUDA, D, Dart, DocBook, Dust, Elixir, Erlang, eRuby,
-Fortran, Gentoo metadata, Go, Haml, Haskell, Haxe, Handlebars, HSS, HTML, Java,
-JavaScript, JSON, LESS, Limbo, LISP, LLVM intermediate language, Lua, MATLAB,
-NASM, Objective-C, Objective-C++, OCaml, Perl, Perl POD, PHP, gettext Portable
-Object, Puppet, Python, Racket, reStructuredText, Ruby, Rust, SASS/SCSS, Scala,
-Slim, Tcl, TeX, Twig, TypeScript, Vala, Verilog, VHDL, xHtml, XML, XSLT, YAML,
-z80, Zope page templates, zsh.
+Fortran, Gentoo metadata, Go, Haml, Haskell, Haxe, Handlebars, HSS, HTML,
+Java, JavaScript, JSON, LESS, Lex, Limbo, LISP, LLVM intermediate language,
+Lua, MATLAB, NASM, Objective-C, Objective-C++, OCaml, Perl, Perl POD, PHP,
+gettext Portable Object, Puppet, Python, Racket, reStructuredText, Ruby, Rust,
+SASS/SCSS, Scala, Slim, Tcl, TeX, Twig, TypeScript, Vala, Verilog, VHDL, xHtml,
+XML, XSLT, YAML, z80, Zope page templates, zsh.
 
 ## Screenshot
 
