@@ -23,7 +23,7 @@ function! SyntaxCheckers_lex_flex_GetHighlightRegex(item)
         \ '\m^\(unrecognized %option\|bad <start condition>\|bad character\( class expression\)\=\): \zs.*')
     if term == ''
         let term = matchstr(a:item['text'],
-            \ '\m^\(Definition value for\|undefined definition\) {\zs[^}]\+\ze}')
+            \ '\m^\(Definition value for\|undefined definition\) \zs{[^}]\+}\ze')
     endif
 
     return term != '' ? '\V' . term : ''
