@@ -25,7 +25,7 @@ endfunction
 
 function! SyntaxCheckers_eruby_ruby_GetLocList() dict
     let exe = expand(g:syntastic_ruby_exec)
-    if !has('win32')
+    if !syntastic#util#isRunningWindows()
         let exe = 'RUBYOPT= ' . exe
     endif
 

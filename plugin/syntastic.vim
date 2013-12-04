@@ -21,7 +21,7 @@ endif
 
 runtime! plugin/syntastic/*.vim
 
-let s:running_windows = has("win16") || has("win32")
+let s:running_windows = syntastic#util#isRunningWindows()
 
 for feature in ['autocmd', 'eval', 'modify_fname', 'quickfix', 'user_commands']
     if !has(feature)
