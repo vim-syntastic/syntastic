@@ -149,11 +149,7 @@ endfunction
 " finds a file matching a:what; return path to that file
 function! syntastic#util#findInParent(what, where)
     let here = fnamemodify(a:where, ':p')
-
-    let slash = syntastic#util#Slash()
-    if has('win32') || has('win64')
-        let slash = fnamemodify(slash, ':p')
-    end
+    let slash = fnamemodify(syntastic#util#Slash(), ':p')
 
     while !empty(here)
         let p = split(globpath(here, a:what), '\n')
