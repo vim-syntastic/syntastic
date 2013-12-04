@@ -211,6 +211,9 @@ function! s:UpdateErrors(auto_invoked, ...)
         if run_checks && g:syntastic_auto_jump && loclist.hasErrorsOrWarningsToDisplay()
             call syntastic#log#debug(g:SyntasticDebugNotifications, 'loclist: jump')
             silent! lrewind
+            if &ft == '' && exists('did_load_filetypes')
+                silent! filetype detect
+            endif
         endif
     endif
 
