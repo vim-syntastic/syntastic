@@ -28,8 +28,12 @@ endif
 
 " Public functions {{{1
 
+function! syntastic#util#isRunningWindows()
+    return has('win16') || has('win32') || has('win64')
+endfunction
+
 function! syntastic#util#DevNull()
-    if has('win32')
+    if syntastic#util#isRunningWindows()
         return 'NUL'
     endif
     return '/dev/null'
@@ -150,12 +154,20 @@ endfunction
 function! syntastic#util#findInParent(what, where)
     let here = fnamemodify(a:where, ':p')
 
+    let root = syntastic#util#Slash()
+    if syntastic#util#isRunningWindows() && here[1] == ':'
+        " The drive letter is an ever-green source of fun.  That's because
+        " we don't care about running syntastic on Amiga these days. ;)
+        let root = fnamemodify(root, ':p')
+        let root = here[0] . root[1:]
+    endif
+
     while !empty(here)
         let p = split(globpath(here, a:what), '\n')
 
         if !empty(p)
             return fnamemodify(p[0], ':p')
-        elseif here == '/'
+        elseif here ==? root
             break
         endif
 

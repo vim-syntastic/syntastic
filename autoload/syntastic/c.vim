@@ -11,7 +11,7 @@ set cpo&vim
 " convenience function to determine the 'null device' parameter
 " based on the current operating system
 function! syntastic#c#NullOutput()
-    let known_os = has('win32') || has('unix') || has('mac')
+    let known_os = has('unix') || has('mac') || syntastic#util#isRunningWindows()
     return known_os ? '-o ' . syntastic#util#DevNull() : ''
 endfunction
 
