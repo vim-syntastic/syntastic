@@ -211,6 +211,14 @@ function! s:UpdateErrors(auto_invoked, ...)
         if run_checks && g:syntastic_auto_jump && loclist.hasErrorsOrWarningsToDisplay()
             call syntastic#log#debug(g:SyntasticDebugNotifications, 'loclist: jump')
             silent! lrewind
+
+            " XXX: Vim doesn't call autocmd commands in a predictible
+            " order, which can lead to missing filetype when jumping
+            " to a new file; the following is a workaround for the
+            " resulting brain damage
+            if &filetype == ''
+                silent! filetype detect
+            endif
         endif
     endif
 
