@@ -490,7 +490,7 @@ The result is a 'makeprg' of the form: >
     <exe> <args> <filename> <post_args> <tail>
 <
 
-All arguments above are optional, and can be overriden by setting global
+All arguments above are optional, and can be overridden by setting global
 variables - even parameters not specified in the call to makeprgBuild().  If
 'exe' is the same as the checker 'exec' attribute, it may be omitted.
 
