@@ -236,7 +236,7 @@ syntax errors: >
                      *'syntastic_error_symbol'* *'syntastic_style_error_symbol'*
                  *'syntastic_warning_symbol'* *'syntastic_style_warning_symbol'*
 Use this option to control what the syntastic |:sign| text contains. Several
-error symobls can be customized:
+error symbols can be customized:
     syntastic_error_symbol - For syntax errors, defaults to '>>'
     syntastic_style_error_symbol - For style errors, defaults to 'S>'
     syntastic_warning_symbol - For syntax warnings, defaults to '>>'
