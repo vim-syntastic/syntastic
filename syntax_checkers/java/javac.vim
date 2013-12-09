@@ -36,6 +36,10 @@ if !exists("g:syntastic_java_javac_classpath")
     let g:syntastic_java_javac_classpath = ''
 endif
 
+if !exists("g:syntastic_java_javac_classpath_line")
+    let g:syntastic_java_javac_classpath_line = ''
+endif
+
 if !exists("g:syntastic_java_javac_delete_output")
     let g:syntastic_java_javac_delete_output = 1
 endif
@@ -312,6 +316,8 @@ function! SyntaxCheckers_java_javac_GetLocList() dict
         endif
         let javac_classpath = s:AddToClasspath(javac_classpath, s:GetMavenClasspath())
     endif
+
+    let g:syntastic_java_javac_classpath_line = fnameescape(javac_classpath)
 
     if javac_classpath != ''
         let javac_opts .= ' -cp "' . fnameescape(javac_classpath) . '"'
