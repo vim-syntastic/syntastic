@@ -30,7 +30,8 @@ function! SyntaxCheckers_python_pylint_GetLocList() dict
     let loclist=SyntasticMake({
         \ 'makeprg': makeprg,
         \ 'errorformat': errorformat,
-        \ 'postprocess': ['sort'] })
+        \ 'postprocess': ['sort'],
+        \ 'returns': range(32) })
 
     for e in loclist
         let type = e['text'][1]
