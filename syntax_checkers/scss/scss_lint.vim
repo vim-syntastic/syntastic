@@ -15,12 +15,18 @@ endif
 let g:loaded_syntastic_scss_scss_lint_checker=1
 
 function! SyntaxCheckers_scss_scss_lint_GetLocList() dict
-    let makeprg = self.makeprgBuild({})
+    let makeprg = self.makeprgBuild({
+      \ 'exe': 'scss-lint',
+      \ 'post_args': '' . s:Args() })
     let errorformat = '%f:%l [%t] %m'
     return SyntasticMake({
         \ 'makeprg': makeprg,
         \ 'errorformat': errorformat,
         \ 'subtype': 'Style'})
+endfunction
+
+function! s:Args()
+  return !empty(g:syntastic_scss_scss_lint_conf) ? '--config ' . g:syntastic_scss_scss_lint_conf : ''
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
