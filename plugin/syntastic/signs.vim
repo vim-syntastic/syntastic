@@ -107,9 +107,7 @@ function! g:SyntasticSignsNotifier._signErrors(loclist)
         " errors some first, so that they are not masked by warnings
         let buf = bufnr('')
         let issues = copy(loclist.errors())
-        if !loclist.quietWarnings()
-            call extend(issues, loclist.warnings())
-        endif
+        call extend(issues, loclist.warnings())
         call filter(issues, 'v:val["bufnr"] == buf')
         let seen = {}
 

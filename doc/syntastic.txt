@@ -189,9 +189,10 @@ the checker that generated it, but you can disable these labels by unsetting
 ------------------------------------------------------------------------------
 2.6 Filtering errors                              *syntastic-filtering-errors*
 
-You can selectively disable some of the errors found by checkers either by
-turning on |'syntastic_quiet_warnings'|, or by specifying a list of patterns
-in |'syntastic_ignore_files'|.
+You can selectively disable some of the errors found by checkers either
+using |'syntastic_quiet_messages'|, or by specifying a list of patterns in
+|'syntastic_ignore_files'|.
+'syntastic_<filetype>_<checker>_quiet_messages'
 
 ==============================================================================
 3. Commands                                               *syntastic-commands*
@@ -350,12 +351,11 @@ opens. >
 <
                                                     *'syntastic_ignore_files'*
 Default: []
-Use this option to specify files that syntastic should neither check, nor
-include in error lists. It has to be a list of |regular-expression| patterns.
-The full paths of files (see |::p|) are matched against these patterns, and
-the matches are case sensitive. Use |\c| if you need case insensitive
-patterns. >
-    let g:syntastic_ignore_files = ['^/usr/include/', '\c\.h$']
+Use this option to specify files that syntastic should never check.  It's a
+list of |regular-expression| patterns.  The full paths of files (see |::p|) are
+matched against these patterns, and the matches are case sensitive. Use |\c|
+to specify case insensitive patterns.  Example: >
+    let g:syntastic_ignore_files = ['\m^/usr/include/', '\m\c\.h$']
 <
                                                     *'syntastic_filetype_map'*
 Default: {}
@@ -400,18 +400,33 @@ active and passive mode.
 If any of "mode", "active_filetypes", or "passive_filetypes" are not specified
 then they will default to their default value as above.
 
-                                                  *'syntastic_quiet_warnings'*
-Default: 0
-Use this option if you only care about syntax errors, not warnings. When set,
-this option has the following effects:
-    * no |signs| appear unless there is at least one error, whereupon both
-      errors and warnings are displayed
-    * the |'syntastic_auto_loc_list'| option only pops up the error window if
-      there's at least one error, whereupon both errors and warnings are
-      displayed
->
-    let g:syntastic_quiet_warnings = 1
+                                                  *'syntastic_quiet_messages'*
+Default: {}
+
+Use this option to filter out some of the messages produced by checkers.  The
+option should be set to something like: >
+
+    let g:syntastic_quiet_messages = { "level": "warnings",
+                                     \ "type":  "style",
+                                     \ "regex": '\m\[C03\d\d\]',
+                                     \ "file":  ['\m^/usr/include/', '\m\c\.h$'] }
 <
+
+Each element turns off messages matching the patterns specified by the
+corresponding value. Values are lists, but if a list consist of a single
+element you can omit adding the brackets (e.g. you can write "style" instead of
+["style"]).
+
+    "level" - takes one of two values, "warnings" or "errors"
+    "type"  - can be either "syntax" or "style"
+    "regex" - is matched against the messages' text as a case insensitive
+              |regular-expression|
+    "file"  - is matched against the filename the error refers to, as a case
+              sensitive |regular-expression|.
+
+There are also checker-specific variants of this option, providing finer
+control. They are named |'syntastic_<filetype>_<checker>_quiet_messages'|.
+
                                                       *'syntastic_stl_format'*
 Default: [Syntax: line:%F (%t)]
 Use this option to control what the syntastic statusline text contains. Several
@@ -553,6 +568,15 @@ look at the source code of the checker in question. If there are specific
 options that can be set, these are usually documented in the wiki:
 
     https://github.com/scrooloose/syntastic/wiki/Syntax-Checkers
+
+                             *'syntastic_<filetype>_<checker>_quiet_messages'*
+In the same vein, 'g:syntastic_<filetype>_<checker-name>_quiet_messages' can
+be used to restrict message filters to messages produced by specific checkers.
+Example: >
+    let g:syntastic_python_pylama_quiet_messages = { "type":  "style",
+                                                   \ "regex": '\m\[C03\d\d\]' }
+<
+See |syntastic_quiet_messages| for the syntax.
 
 ==============================================================================
 6. Notes                                                     *syntastic-notes*

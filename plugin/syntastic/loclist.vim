@@ -9,7 +9,6 @@ let g:SyntasticLoclist = {}
 
 function! g:SyntasticLoclist.New(rawLoclist)
     let newObj = copy(self)
-    let newObj._quietWarnings = g:syntastic_quiet_warnings
 
     let llist = filter(copy(a:rawLoclist), 'v:val["valid"] == 1')
 
@@ -45,11 +44,7 @@ function! g:SyntasticLoclist.toRaw()
 endfunction
 
 function! g:SyntasticLoclist.filteredRaw()
-    return copy(self._quietWarnings ? self.errors() : self._rawLoclist)
-endfunction
-
-function! g:SyntasticLoclist.quietWarnings()
-    return self._quietWarnings
+    return self._rawLoclist
 endfunction
 
 function! g:SyntasticLoclist.isEmpty()
@@ -78,8 +73,12 @@ function! g:SyntasticLoclist.hasErrorsOrWarningsToDisplay()
     if self._hasErrorsOrWarningsToDisplay >= 0
         return self._hasErrorsOrWarningsToDisplay
     endif
-    let self._hasErrorsOrWarningsToDisplay = empty(self._rawLoclist) ? 0 : (!self._quietWarnings || len(self.errors()))
+    let self._hasErrorsOrWarningsToDisplay = !empty(self._rawLoclist)
     return self._hasErrorsOrWarningsToDisplay
+endfunction
+
+function! g:SyntasticLoclist.quietMessages(filters)
+    call syntastic#util#dictFilter(self._rawLoclist, a:filters)
 endfunction
 
 function! g:SyntasticLoclist.errors()
@@ -100,7 +99,7 @@ endfunction
 function! g:SyntasticLoclist.messages(buf)
     if !exists("self._cachedMessages")
         let self._cachedMessages = {}
-        let errors = self.errors() + (self._quietWarnings ? [] : self.warnings())
+        let errors = self.errors() + self.warnings()
 
         for e in errors
             let b = e['bufnr']

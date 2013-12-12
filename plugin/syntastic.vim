@@ -47,8 +47,8 @@ if !exists("g:syntastic_auto_jump")
     let g:syntastic_auto_jump = 0
 endif
 
-if !exists("g:syntastic_quiet_warnings")
-    let g:syntastic_quiet_warnings = 0
+if !exists("g:syntastic_quiet_messages")
+    let g:syntastic_quiet_messages = {}
 endif
 
 if !exists("g:syntastic_stl_format")
@@ -93,6 +93,19 @@ if !exists("g:syntastic_reuse_loc_lists")
     let g:syntastic_reuse_loc_lists = (v:version >= 704)
 endif
 
+if exists("g:syntastic_quiet_warnings")
+    call syntastic#log#deprecationWarn("variable g:syntastic_quiet_warnings is deprecated, please use let g:syntastic_quiet_messages = {'level': 'warnings'} instead")
+    if g:syntastic_quiet_warnings
+        let quiet_warnings = get(g:syntastic_quiet_messages, 'type', [])
+        if type(quiet_warnings) != type([])
+            let quiet_warnings = [quiet_warnings]
+        endif
+        call add(quiet_warnings, 'warnings')
+        let g:syntastic_quiet_messages['type'] = quiet_warnings
+    endif
+endif
+
+
 " debug constants
 let g:SyntasticDebugTrace         = 1
 let g:SyntasticDebugLoclist       = 2
@@ -103,6 +116,7 @@ let g:SyntasticDebugVariables     = 16
 let s:registry = g:SyntasticRegistry.Instance()
 let s:notifiers = g:SyntasticNotifiers.Instance()
 let s:modemap = g:SyntasticModeMap.Instance()
+
 
 function! s:CompleteCheckerName(argLead, cmdLine, cursorPos)
     let checker_names = []
@@ -276,10 +290,9 @@ function! s:CacheErrors(checkers)
                     if decorate_errors
                         call loclist.decorate(checker.getName(), checker.getFiletype())
                     endif
+                    call add(names, [checker.getName(), checker.getFiletype()])
 
                     let newLoclist = newLoclist.extend(loclist)
-
-                    call add(names, [checker.getName(), checker.getFiletype()])
 
                     if !aggregate_errors
                         break
@@ -312,6 +325,11 @@ function! s:CacheErrors(checkers)
         endif
 
         call syntastic#log#debug(g:SyntasticDebugLoclist, "aggregated:", newLoclist)
+
+        if type(g:syntastic_quiet_messages) == type({}) && !empty(g:syntastic_quiet_messages)
+            call newLoclist.quietMessages(g:syntastic_quiet_messages)
+            call syntastic#log#debug(g:SyntasticDebugLoclist, "filtered by g:syntastic_quiet_messages:", newLoclist)
+        endif
     endif
 
     let b:syntastic_loclist = newLoclist
@@ -492,18 +510,6 @@ function! SyntasticMake(options)
 
     if has_key(a:options, 'defaults')
         call SyntasticAddToErrors(errors, a:options['defaults'])
-    endif
-
-    " Apply ignore patterns
-    let ignored = {}
-    let do_ignore = 0
-    for buf in syntastic#util#unique(map(copy(errors), 'v:val["bufnr"]'))
-        let ignored[buf] = s:IgnoreFile(bufname(str2nr(buf)))
-        let do_ignore = do_ignore || ignored[buf]
-    endfor
-    if do_ignore
-        call filter(errors, '!ignored[v:val["bufnr"]]')
-        call syntastic#log#debug(g:SyntasticDebugLoclist, "filtered loclist:", errors)
     endif
 
     " Add subtype info if present.
