@@ -30,7 +30,7 @@ let s:global_options = [
     \ 'syntastic_ignore_files',
     \ 'syntastic_loc_list_height',
     \ 'syntastic_mode_map',
-    \ 'syntastic_quiet_warnings',
+    \ 'syntastic_quiet_messages',
     \ 'syntastic_reuse_loc_lists',
     \ 'syntastic_stl_format',
     \ 'syntastic_style_error_symbol',

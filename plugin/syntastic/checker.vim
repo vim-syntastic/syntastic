@@ -55,21 +55,23 @@ function! g:SyntasticChecker.getExec()
     return self._exec
 endfunction
 
-function! g:SyntasticChecker.getLocList()
+function! g:SyntasticChecker.getLocListRaw()
+    let name = self._filetype . '/' . self._name
     try
         let list = self._locListFunc()
-        call syntastic#log#debug(g:SyntasticDebugTrace,
-            \ 'getLocList: checker ' . self._filetype . '/' . self._name . ' returned ' . v:shell_error)
+        call syntastic#log#debug(g:SyntasticDebugTrace, 'getLocList: checker ' . name . ' returned ' . v:shell_error)
     catch /\m\C^Syntastic: checker error$/
         let list = []
-        call syntastic#log#error('checker ' . self._filetype . '/' . self._name . ' returned abnormal status ' . v:shell_error)
+        call syntastic#log#error('checker ' . name . ' returned abnormal status ' . v:shell_error)
     endtry
     call self._populateHighlightRegexes(list)
-    return g:SyntasticLoclist.New(list)
+    call syntastic#log#debug(g:SyntasticDebugLoclist, name . ' raw:', list)
+    call self._quietMessages(list)
+    return list
 endfunction
 
-function! g:SyntasticChecker.getLocListRaw()
-    return self._locListFunc()
+function! g:SyntasticChecker.getLocList()
+    return g:SyntasticLoclist.New(self.getLocListRaw())
 endfunction
 
 function! g:SyntasticChecker.getHighlightRegexFor(error)
@@ -86,10 +88,17 @@ endfunction
 
 " Private methods {{{1
 
+function! g:SyntasticChecker._quietMessages(errors)
+    let filter = 'g:syntastic_' . self._filetype . '_' . self._name . '_quiet_messages'
+    if exists(filter) && type({filter}) == type({}) && !empty({filter})
+        call syntastic#util#dictFilter(a:errors, {filter})
+        call syntastic#log#debug(g:SyntasticDebugLoclist, 'filtered by ' . filter . ':', a:errors)
+    endif
+endfunction
+
 function! g:SyntasticChecker._populateHighlightRegexes(errors)
-    let list = a:errors
     if !empty(self._highlightRegexFunc)
-        for e in list
+        for e in a:errors
             if e['valid']
                 let term = self._highlightRegexFunc(e)
                 if len(term) > 0
@@ -98,10 +107,10 @@ function! g:SyntasticChecker._populateHighlightRegexes(errors)
             endif
         endfor
     endif
-    return list
 endfunction
 
-" Non-method functions
+" Non-method functions {{{1
+
 function! SyntasticCheckerIsAvailableDefault() dict
     return executable(self.getExec())
 endfunction
