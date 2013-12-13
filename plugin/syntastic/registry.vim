@@ -19,7 +19,7 @@ let s:defaultCheckers = {
         \ 'cucumber':    ['cucumber'],
         \ 'cuda':        ['nvcc'],
         \ 'd':           ['dmd'],
-        \ 'dart':        ['dart_analyzer'],
+        \ 'dart':        ['dartanalyzer'],
         \ 'docbk':       ['xmllint'],
         \ 'dustjs':      ['swiffer'],
         \ 'elixir':      ['elixir'],
