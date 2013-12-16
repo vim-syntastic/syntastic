@@ -114,14 +114,18 @@ function! s:CompleteCheckerName(argLead, cmdLine, cursorPos)
     return join(checker_names, "\n")
 endfunction
 
+function! s:CompleteFiletypes(argLead, cmdLine, cursorPos)
+    return join(s:registry.knownFiletypes(), "\n")
+endfunction
+
 command! SyntasticToggleMode call s:ToggleMode()
 command! -nargs=* -complete=custom,s:CompleteCheckerName SyntasticCheck
             \ call s:UpdateErrors(0, <f-args>) <bar>
             \ call syntastic#util#redraw(g:syntastic_full_redraws)
 command! Errors call s:ShowLocList()
-command! SyntasticInfo
+command! -nargs=? -complete=custom,s:CompleteFiletypes SyntasticInfo
             \ call s:modemap.echoMode() |
-            \ call s:registry.echoInfoFor(s:CurrentFiletypes())
+            \ call s:registry.echoInfoFor(s:ResolveFiletypes(<f-args>))
 command! SyntasticReset
             \ call s:ClearCache() |
             \ call s:notifiers.refresh(g:SyntasticLoclist.New([]))
@@ -231,8 +235,13 @@ function! s:ClearCache()
     unlet! b:syntastic_loclist
 endfunction
 
+function! s:ResolveFiletypes(...)
+    let type = a:0 ? a:1 : &filetype
+    return split( get(g:syntastic_filetype_map, type, type), '\m\.' )
+endfunction
+
 function! s:CurrentFiletypes()
-    return split( get(g:syntastic_filetype_map, &filetype, &filetype), '\m\.' )
+    return s:ResolveFiletypes(&filetype)
 endfunction
 
 "detect and cache all syntax errors in this buffer
