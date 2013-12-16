@@ -144,6 +144,15 @@ function! g:SyntasticRegistry.availableCheckersFor(ftalias)
     return self._cachedCheckersFor[a:ftalias]
 endfunction
 
+function! g:SyntasticRegistry.knownFiletypes()
+    let types = keys(s:defaultCheckers)
+    call extend(types, keys(s:defaultFiletypeMap))
+    if exists('g:syntastic_filetype_map')
+        call extend(types, keys(g:syntastic_filetype_map))
+    endif
+    return syntastic#util#unique(types)
+endfunction
+
 function! g:SyntasticRegistry.echoInfoFor(ftalias_list)
     echomsg "Syntastic info for filetype: " . join(a:ftalias_list, '.')
 
