@@ -4,6 +4,7 @@ endif
 let g:loaded_syntastic_registry = 1
 
 let s:defaultCheckers = {
+        \ 'actionscript':['mxmlc'],
         \ 'ada':         ['gcc'],
         \ 'applescript': ['osacompile'],
         \ 'asciidoc':    ['asciidoc'],
