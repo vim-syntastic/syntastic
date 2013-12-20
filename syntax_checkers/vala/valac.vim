@@ -6,7 +6,7 @@
 "             "// modules: " and containing space delimited list of vala
 "             modules, used by the file, so this script can build correct
 "             --pkg arguments.
-"             Add another special camment line into your vala file starting
+"             Add another special comment line into your vala file starting
 "             with "// vapidirs: " followed by a space delimited list of
 "             the vapi directories so this script can build with the correct
 "             --vapidir arguments
