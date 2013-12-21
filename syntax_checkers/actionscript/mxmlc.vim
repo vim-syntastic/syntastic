@@ -24,39 +24,40 @@ endif
 function! SyntaxCheckers_actionscript_mxmlc_GetHighlightRegex(item)
     let term = ''
 
-    if match(a:item['text'], "variable '") > -1
-        let term = split(a:item['text'], "'")[1]
+    if match(a:item['text'], '\mvariable ''') > -1
+        let term = matchstr(a:item['text'], '\m''\zs[^'']\+\ze''')
 
     elseif match(a:item['text'], 'expected a definition keyword') > -1
-        let term = matchlist(a:item['text'], 'not \([^\.]\+\)\.')[1]
+        let term = matchstr(a:item['text'], '\mnot \zs[^.]\+\ze\.')
 
-    elseif match(a:item['text'], 'undefined \%(property\|method\)') > -1
-        let term = matchlist(a:item['text'], 'undefined \%(property\|method\) \([^\. ]\+\)')[1]
+    elseif match(a:item['text'], '\mundefined \%(property\|method\)') > -1
+        let term = matchstr(a:item['text'], '\mundefined \%(property\|method\) \zs[^. ]\+\ze')
 
     elseif match(a:item['text'], 'could not be found') > -1
-        let term = matchlist(a:item['text'], ' \([^ ]\+\) could not be found')[1]
+        let term = matchstr(a:item['text'], '\m \zs\S\+\ze could not be found')
 
     elseif match(a:item['text'], 'Type was not found') > -1
-        let term = matchlist(a:item['text'], ': \([^\.]\+\)\.')[1]
+        let term = matchstr(a:item['text'], '\m: \zs[^.]\+\zs\.')
 
     endif
 
-    return strlen(term) ? '\V\<'.term.'\>' : ''
+    return strlen(term) ? '\V\<' . term . '\>' : ''
 endfunction
 
 function! SyntaxCheckers_actionscript_mxmlc_GetLocList() dict
-    let output  = has("win32") ? 'NUL' : '/dev/null'
-    let makeprg = self.makeprgBuild({ 'args': '-output=' . output . s:Args() })
+    let makeprg = self.makeprgBuild({
+        \ 'args': '-output=' . syntastic#util#DevNull() .
+        \   !empty(g:syntastic_actionscript_mxmlc_conf) ?
+        \   ' -load-config+=' . g:syntastic_actionscript_mxmlc_conf : '' })
 
     let errorformat =
         \ '%f(%l): col: %c %trror: %m,' .
-        \ '%f(%l): col: %c %tarning: %m,'
+        \ '%f(%l): col: %c %tarning: %m,' .
+        \ '%-G%.%#'
 
-    return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
-endfunction
-
-function s:Args()
-    return !empty(g:syntastic_actionscript_mxmlc_conf) ? ' -load-config+=' . g:syntastic_actionscript_mxmlc_conf : ''
+    return SyntasticMake({
+        \ 'makeprg': makeprg,
+        \ 'errorformat': errorformat })
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
