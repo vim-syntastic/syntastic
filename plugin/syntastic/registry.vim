@@ -27,6 +27,7 @@ let s:defaultCheckers = {
         \ 'erlang':      ['escript'],
         \ 'eruby':       ['ruby'],
         \ 'fortran':     ['gfortran'],
+        \ 'glsl':        ['cgc'],
         \ 'go':          ['go'],
         \ 'haml':        ['haml'],
         \ 'handlebars':  ['handlebars'],
