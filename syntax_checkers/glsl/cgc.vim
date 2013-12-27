@@ -74,7 +74,6 @@ function! SyntaxCheckers_glsl_cgc_GetLocList() dict
     let makeprg = self.makeprgBuild({
         \'args': args })
 
-    echo makeprg
     let errorformat =
         \ "%E%f(%l) : error %m," .
         \ "%W%f(%l) : warning %m"
