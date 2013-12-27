@@ -7,6 +7,8 @@
 "             checking the file. The defalt behavior is to pick the profile
 "             based on the entries of dictionary g:syntastic_glsl_extensions
 "             or a default dictionary if that variable does not exist
+"             Use the variable g:syntastic_glsl_extra_args to specify extra
+"             arguments to pass to the cgc compiler
 "License:     This program is free software. It comes without any warranty,
 "             to the extent permitted by applicable law. You can redistribute
 "             it and/or modify it under the terms of the Do What The Fuck You
@@ -57,13 +59,22 @@ function! SyntaxCheckers_glsl_cgc_checker_GetProfile()
     endif
 endfunction!
 
+function! SyntaxCheckers_glsl_cgc_GetExtraArgs()
+    if exists('g:syntastic_glsl_extra_args')
+        return g:syntastic_glsl_extra_args
+    else
+        return ''
+    endif
+endfunction
+
 function! SyntaxCheckers_glsl_cgc_GetLocList() dict
     let profile = SyntaxCheckers_glsl_cgc_checker_GetProfile()
 
-    let args = printf("-oglsl -profile %s", profile)
+    let args = printf("-oglsl -profile %s %s", profile,SyntaxCheckers_glsl_cgc_GetExtraArgs())
     let makeprg = self.makeprgBuild({
         \'args': args })
 
+    echo makeprg
     let errorformat =
         \ "%E%f(%l) : error %m," .
         \ "%W%f(%l) : warning %m"
