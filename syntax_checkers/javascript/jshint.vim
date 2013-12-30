@@ -18,12 +18,12 @@ if !exists('g:syntastic_jshint_exec')
     let g:syntastic_jshint_exec = 'jshint'
 endif
 
-if !exists('g:syntastic_javascript_jshint_conf')
-    let g:syntastic_javascript_jshint_conf = ''
-endif
-
-function! SyntaxCheckers_javascript_jshint_IsAvailable() dict
-    return executable(expand(g:syntastic_jshint_exec))
+function! SyntaxCheckers_javascript_jshint_IsAvailable()
+		if exists("g:syntastic_javascript_jshint_exe")
+			return executable(g:syntastic_javascript_jshint_exe)
+		else
+			return executable('jshint')
+		endif
 endfunction
 
 function! SyntaxCheckers_javascript_jshint_GetLocList() dict
@@ -32,9 +32,13 @@ function! SyntaxCheckers_javascript_jshint_GetLocList() dict
         \ 'exe': expand(g:syntastic_jshint_exec),
         \ 'post_args': (jshint_new ? ' --verbose ' : '') . s:Args() })
 
-    let errorformat = jshint_new ?
-        \ '%A%f: line %l\, col %v\, %m \(%t%*\d\)' :
-        \ '%E%f: line %l\, col %v\, %m'
+		if exists("g:syntastic_javascript_jshint_errorformat")
+			let errorformat = g:syntastic_javascript_jshint_errorformat
+		else
+			let errorformat = jshint_new ?
+					\ '%f: line %l\, col %c\, %m \(%t%*\d\)' :
+					\ '%E%f: line %l\, col %c\, %m'
+		endif
 
     return SyntasticMake({
         \ 'makeprg': makeprg,
