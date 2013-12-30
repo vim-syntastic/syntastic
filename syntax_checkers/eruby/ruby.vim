@@ -19,20 +19,20 @@ if !exists("g:syntastic_ruby_exec")
     let g:syntastic_ruby_exec = "ruby"
 endif
 
-function! SyntaxCheckers_eruby_ruby_IsAvailable()
+function! SyntaxCheckers_eruby_ruby_IsAvailable() dict
     return executable(expand(g:syntastic_ruby_exec))
 endfunction
 
-function! SyntaxCheckers_eruby_ruby_GetLocList()
+function! SyntaxCheckers_eruby_ruby_GetLocList() dict
     let exe = expand(g:syntastic_ruby_exec)
-    if !has('win32')
+    if !syntastic#util#isRunningWindows()
         let exe = 'RUBYOPT= ' . exe
     endif
 
     let fname = "'" . escape(expand('%'), "\\'") . "'"
 
     " TODO: encodings became useful in ruby 1.9 :)
-    if syntastic#util#versionIsAtLeast(syntastic#util#parseVersion('ruby --version'), [1, 9])
+    if syntastic#util#versionIsAtLeast(syntastic#util#getVersion('ruby --version'), [1, 9])
         let enc = &fileencoding != '' ? &fileencoding : &encoding
         let encoding_spec = ', :encoding => "' . (enc ==? 'utf-8' ? 'UTF-8' : 'BINARY') . '"'
     else
@@ -44,8 +44,8 @@ function! SyntaxCheckers_eruby_ruby_GetLocList()
         \ exe . ' -rerb -e ' .
         \ syntastic#util#shescape('puts ERB.new(File.read(' .
         \     fname . encoding_spec .
-        \     ').gsub(''<\%='',''<\%''), nil, ''-'').src') .
-        \ ' \| ' . exe . ' -c'
+        \     ').gsub(''<%='',''<%''), nil, ''-'').src') .
+        \ ' | ' . exe . ' -c'
 
     let errorformat =
         \ '%-GSyntax OK,'.

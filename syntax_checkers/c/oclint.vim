@@ -21,21 +21,13 @@ if exists("g:loaded_syntastic_c_oclint_checker")
 endif
 let g:loaded_syntastic_c_oclint_checker = 1
 
-function! SyntaxCheckers_c_oclint_IsAvailable()
-    return executable("oclint")
-endfunction
-
 if !exists('g:syntastic_oclint_config_file')
     let g:syntastic_oclint_config_file = '.syntastic_oclint_config'
 endif
 
-function! SyntaxCheckers_c_oclint_GetLocList()
-    let makeprg = syntastic#makeprg#build({
-        \ 'exe': 'oclint',
-        \ 'args': '-text',
-        \ 'post_args': '-- -c ' . syntastic#c#ReadConfig(g:syntastic_oclint_config_file),
-        \ 'filetype': 'c',
-        \ 'subchecker': 'oclint' })
+function! SyntaxCheckers_c_oclint_GetLocList() dict
+    let makeprg = self.makeprgBuild({
+        \ 'post_args': '-- -c ' . syntastic#c#ReadConfig(g:syntastic_oclint_config_file) })
 
     let errorformat =
         \ '%E%f:%l:%c: %m P1 ,' .

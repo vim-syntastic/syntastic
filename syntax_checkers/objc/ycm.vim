@@ -17,18 +17,11 @@ let g:loaded_syntastic_objc_ycm_checker = 1
 
 runtime! syntax_checkers/c/*.vim
 
-function! SyntaxCheckers_objc_ycm_IsAvailable()
-    return SyntaxCheckers_c_ycm_IsAvailable()
-endfunction
-
 if !exists('g:loaded_youcompleteme')
     finish
 endif
 
-function! SyntaxCheckers_objc_ycm_GetLocList()
-    return SyntaxCheckers_c_ycm_GetLocList()
-endfunction
-
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'objc',
-    \ 'name': 'ycm'})
+    \ 'name': 'ycm',
+    \ 'redirect': 'c/ycm'})

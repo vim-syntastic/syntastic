@@ -9,45 +9,51 @@
 "             See http://sam.zoy.org/wtfpl/COPYING for more details.
 "
 "============================================================================
-if exists("g:loaded_syntastic_python_pylama_checker")
+if exists('g:loaded_syntastic_python_pylama_checker')
     finish
 endif
-let g:loaded_syntastic_python_pylama_checker=1
-
-function! SyntaxCheckers_python_pylama_IsAvailable()
-    return executable('pylama')
-endfunction
+let g:loaded_syntastic_python_pylama_checker = 1
 
 function! SyntaxCheckers_python_pylama_GetHighlightRegex(i)
     return SyntaxCheckers_python_pyflakes_GetHighlightRegex(a:i)
 endfunction
 
-function! SyntaxCheckers_python_pylama_GetLocList()
-    let makeprg = syntastic#makeprg#build({
-        \ 'exe': 'pylama',
-        \ 'post_args': ' -f pep8',
-        \ 'filetype': 'python',
-        \ 'subchecker': 'pylama' })
+function! SyntaxCheckers_python_pylama_GetLocList() dict
+    let makeprg = self.makeprgBuild({ 'post_args': '-f pep8' })
 
-    let errorformat = '%A%f:%l:%c: %m'
+    " TODO: "WARNING:pylama:..." messages are probably a logging bug
+    let errorformat =
+        \ '%-GWARNING:pylama:%.%#,' .
+        \ '%A%f:%l:%c: %m'
 
-    let loclist=SyntasticMake({
+    let loclist = SyntasticMake({
         \ 'makeprg': makeprg,
         \ 'errorformat': errorformat,
         \ 'postprocess': ['sort'] })
 
-    for n in range(len(loclist))
-        let loclist[n]['type'] = match(['R', 'C', 'W'], loclist[n]['text'][0]) >= 0 ? 'W' : 'E'
-        if loclist[n]['text'] =~# '\v\[%(pep8|pep257|mccabe)\]$'
-            let loclist[n]['subtype'] = 'Style'
+    " adjust for weirdness in each checker
+    for e in loclist
+        let e['type'] = e['text'] =~? '\m^[RCW]' ? 'W' : 'E'
+        if e['text'] =~# '\v\[%(mccabe|pep257|pylint)\]$'
+            if has_key(e, 'col')
+                let e['col'] += 1
+            endif
+        endif
+        if e['text'] =~# '\v\[pylint\]$'
+            if has_key(e, 'vcol')
+                let e['vcol'] = 0
+            endif
+        endif
+        if e['text'] =~# '\v\[%(mccabe|pep257|pep8)\]$'
+            let e['subtype'] = 'Style'
         endif
     endfor
 
     return loclist
 endfunction
 
+runtime! syntax_checkers/python/pyflakes.vim
+
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'python',
     \ 'name': 'pylama' })
-
-runtime! syntax_checkers/python/pyflakes.vim

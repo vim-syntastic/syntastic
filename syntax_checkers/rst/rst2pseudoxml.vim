@@ -18,17 +18,15 @@ if exists("g:loaded_syntastic_rst_rst2pseudoxml_checker")
 endif
 let g:loaded_syntastic_rst_rst2pseudoxml_checker=1
 
-function! SyntaxCheckers_rst_rst2pseudoxml_IsAvailable()
-    return executable("rst2pseudoxml.py") || executable("rst2pseudoxml")
+function! SyntaxCheckers_rst_rst2pseudoxml_IsAvailable() dict
+    return executable(s:exe())
 endfunction
 
-function! SyntaxCheckers_rst_rst2pseudoxml_GetLocList()
-    let makeprg = syntastic#makeprg#build({
+function! SyntaxCheckers_rst_rst2pseudoxml_GetLocList() dict
+    let makeprg = self.makeprgBuild({
         \ 'exe': s:exe(),
         \ 'args': '--report=2 --exit-status=1',
-        \ 'tail': syntastic#util#DevNull(),
-        \ 'filetype': 'rst',
-        \ 'subchecker': 'rst2pseudoxml' })
+        \ 'tail': syntastic#util#DevNull() })
 
     let errorformat =
         \ '%f:%l: (%tNFO/1) %m,'.
@@ -41,19 +39,19 @@ function! SyntaxCheckers_rst_rst2pseudoxml_GetLocList()
         \ 'makeprg': makeprg,
         \ 'errorformat': errorformat })
 
-    for n in range(len(loclist))
-        if loclist[n]['type'] ==? 'S'
-            let loclist[n]['type'] = 'E'
-        elseif loclist[n]['type'] ==? 'I'
-            let loclist[n]['type'] = 'W'
-            let loclist[n]['subtype'] = 'Style'
+    for e in loclist
+        if e['type'] ==? 'S'
+            let e['type'] = 'E'
+        elseif e['type'] ==? 'I'
+            let e['type'] = 'W'
+            let e['subtype'] = 'Style'
         endif
     endfor
 
     return loclist
 endfunction
 
-function s:exe()
+function! s:exe()
     return executable("rst2pseudoxml.py") ? "rst2pseudoxml.py" : "rst2pseudoxml"
 endfunction
 

@@ -19,8 +19,9 @@ function! g:SyntasticNotifiers.Instance()
 endfunction
 
 function! g:SyntasticNotifiers.refresh(loclist)
+    call syntastic#log#debug(g:SyntasticDebugNotifications, 'notifiers: refresh')
     for type in self._enabled_types
-        let class = substitute(type, '.*', 'Syntastic\u&Notifier', '')
+        let class = substitute(type, '\m.*', 'Syntastic\u&Notifier', '')
         if !has_key(g:{class}, 'enabled') || self._notifier[type].enabled()
             call self._notifier[type].refresh(a:loclist)
         endif
@@ -28,8 +29,9 @@ function! g:SyntasticNotifiers.refresh(loclist)
 endfunction
 
 function! g:SyntasticNotifiers.reset(loclist)
+    call syntastic#log#debug(g:SyntasticDebugNotifications, 'notifiers: reset')
     for type in self._enabled_types
-        let class = substitute(type, '.*', 'Syntastic\u&Notifier', '')
+        let class = substitute(type, '\m.*', 'Syntastic\u&Notifier', '')
 
         " reset notifiers regardless if they are enabled or not, since
         " the user might have disabled them since the last refresh();
@@ -45,7 +47,7 @@ endfunction
 function! g:SyntasticNotifiers._initNotifiers()
     let self._notifier = {}
     for type in s:notifier_types
-        let class = substitute(type, '.*', 'Syntastic\u&Notifier', '')
+        let class = substitute(type, '\m.*', 'Syntastic\u&Notifier', '')
         let self._notifier[type] = g:{class}.New()
     endfor
 

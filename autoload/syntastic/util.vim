@@ -6,17 +6,42 @@ let g:loaded_syntastic_util_autoload = 1
 let s:save_cpo = &cpo
 set cpo&vim
 
-if !exists("g:syntastic_debug")
-    let g:syntastic_debug = 0
+if !exists("g:syntastic_delayed_redraws")
+    let g:syntastic_delayed_redraws = 0
 endif
 
-let s:deprecationNoticesIssued = []
+let s:redraw_delayed = 0
+let s:redraw_full = 0
+
+if g:syntastic_delayed_redraws
+    " CursorHold / CursorHoldI events are triggered if user doesn't press a
+    " key for &updatetime ms.  We change it only if current value is the default
+    " value, that is 4000 ms.
+    if &updatetime == 4000
+        let &updatetime = 500
+    endif
+
+    augroup syntastic
+        autocmd CursorHold,CursorHoldI * call syntastic#util#redrawHandler()
+    augroup END
+endif
+
+" Public functions {{{1
+
+function! syntastic#util#isRunningWindows()
+    return has('win16') || has('win32') || has('win64')
+endfunction
 
 function! syntastic#util#DevNull()
-    if has('win32')
+    if syntastic#util#isRunningWindows()
         return 'NUL'
     endif
     return '/dev/null'
+endfunction
+
+" Get directory separator
+function! syntastic#util#Slash() abort
+    return !exists("+shellslash") || &shellslash ? '/' : '\'
 endfunction
 
 "search the first 5 lines of the file for a magic number and return a map
@@ -34,8 +59,8 @@ function! syntastic#util#parseShebang()
         let line = getline(lnum)
 
         if line =~ '^#!'
-            let exe = matchstr(line, '^#!\s*\zs[^ \t]*')
-            let args = split(matchstr(line, '^#!\s*[^ \t]*\zs.*'))
+            let exe = matchstr(line, '\m^#!\s*\zs[^ \t]*')
+            let args = split(matchstr(line, '\m^#!\s*[^ \t]*\zs.*'))
             return {'exe': exe, 'args': args}
         endif
     endfor
@@ -43,10 +68,15 @@ function! syntastic#util#parseShebang()
     return {'exe': '', 'args': []}
 endfunction
 
+" Parse a version string.  Return an array of version components.
+function! syntastic#util#parseVersion(version)
+    return split(matchstr( a:version, '\v^\D*\zs\d+(\.\d+)+\ze' ), '\m\.')
+endfunction
+
 " Run 'command' in a shell and parse output as a version string.
 " Returns an array of version components.
-function! syntastic#util#parseVersion(command)
-    return split(matchstr( system(a:command), '\v^\D*\zs\d+(\.\d+)+\ze' ), '\.')
+function! syntastic#util#getVersion(command)
+    return syntastic#util#parseVersion(system(a:command))
 endfunction
 
 " Verify that the 'installed' version is at least the 'required' version.
@@ -92,7 +122,7 @@ function! syntastic#util#wideMsg(msg)
     let msg = substitute(msg, "\n", "", "g")
 
     set noruler noshowcmd
-    redraw
+    call syntastic#util#redraw(0)
 
     echo msg
 
@@ -124,12 +154,20 @@ endfunction
 function! syntastic#util#findInParent(what, where)
     let here = fnamemodify(a:where, ':p')
 
+    let root = syntastic#util#Slash()
+    if syntastic#util#isRunningWindows() && here[1] == ':'
+        " The drive letter is an ever-green source of fun.  That's because
+        " we don't care about running syntastic on Amiga these days. ;)
+        let root = fnamemodify(root, ':p')
+        let root = here[0] . root[1:]
+    endif
+
     while !empty(here)
         let p = split(globpath(here, a:what), '\n')
 
         if !empty(p)
             return fnamemodify(p[0], ':p')
-        elseif here == '/'
+        elseif here ==? root
             break
         endif
 
@@ -156,46 +194,63 @@ endfunction
 
 " A less noisy shellescape()
 function! syntastic#util#shescape(string)
-    return a:string =~ '\m^[A-Za-z0-9_/.-]\+$' ? a:string : shellescape(a:string, 1)
+    return a:string =~ '\m^[A-Za-z0-9_/.-]\+$' ? a:string : shellescape(a:string)
 endfunction
 
 " A less noisy shellescape(expand())
 function! syntastic#util#shexpand(string)
-    return syntastic#util#shescape(escape(expand(a:string), '|'))
+    return syntastic#util#shescape(expand(a:string))
 endfunction
 
-function! syntastic#util#debug(msg)
-    if g:syntastic_debug
-        echomsg "syntastic: debug: " . a:msg
+" decode XML entities
+function! syntastic#util#decodeXMLEntities(string)
+    let str = a:string
+    let str = substitute(str, '\m&lt;', '<', 'g')
+    let str = substitute(str, '\m&gt;', '>', 'g')
+    let str = substitute(str, '\m&quot;', '"', 'g')
+    let str = substitute(str, '\m&apos;', "'", 'g')
+    let str = substitute(str, '\m&amp;', '\&', 'g')
+    return str
+endfunction
+
+" On older Vim versions calling redraw while a popup is visible can make
+" Vim segfault, so move redraws to a CursorHold / CursorHoldI handler.
+function! syntastic#util#redraw(full)
+    if !g:syntastic_delayed_redraws || !pumvisible()
+        call s:doRedraw(a:full)
+        let s:redraw_delayed = 0
+        let s:redraw_full = 0
+    else
+        let s:redraw_delayed = 1
+        let s:redraw_full = s:redraw_full || a:full
     endif
 endfunction
 
-function! syntastic#util#info(msg)
-    echomsg "syntastic: info: " . a:msg
-endfunction
-
-function! syntastic#util#warn(msg)
-    echohl WarningMsg
-    echomsg "syntastic: warning: " . a:msg
-    echohl None
-endfunction
-
-function! syntastic#util#error(msg)
-    execute "normal \<Esc>"
-    echohl ErrorMsg
-    echomsg "syntastic: error: " . a:msg
-    echohl None
-endfunction
-
-function! syntastic#util#deprecationWarn(msg)
-    if index(s:deprecationNoticesIssued, a:msg) >= 0
-        return
+function! syntastic#util#redrawHandler()
+    if s:redraw_delayed && !pumvisible()
+        call s:doRedraw(s:redraw_full)
+        let s:redraw_delayed = 0
+        let s:redraw_full = 0
     endif
+endfunction
 
-    call add(s:deprecationNoticesIssued, a:msg)
-    call syntastic#util#warn(a:msg)
+" Private functions {{{1
+
+"Redraw in a way that doesnt make the screen flicker or leave anomalies behind.
+"
+"Some terminal versions of vim require `redraw!` - otherwise there can be
+"random anomalies left behind.
+"
+"However, on some versions of gvim using `redraw!` causes the screen to
+"flicker - so use redraw.
+function! s:doRedraw(full)
+    if a:full
+        redraw!
+    else
+        redraw
+    endif
 endfunction
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
-" vim: set et sts=4 sw=4:
+" vim: set et sts=4 sw=4 fdm=marker:

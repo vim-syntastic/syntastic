@@ -15,20 +15,13 @@ if exists("g:loaded_syntastic_objcpp_ycm_checker")
 endif
 let g:loaded_syntastic_objcpp_ycm_checker = 1
 
-runtime! syntax_checkers/c/*.vim
-
-function! SyntaxCheckers_objcpp_ycm_IsAvailable()
-    return SyntaxCheckers_c_ycm_IsAvailable()
-endfunction
-
 if !exists('g:loaded_youcompleteme')
     finish
 endif
 
-function! SyntaxCheckers_objcpp_ycm_GetLocList()
-    return SyntaxCheckers_c_ycm_GetLocList()
-endfunction
+runtime! syntax_checkers/c/*.vim
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'objcpp',
-    \ 'name': 'ycm'})
+    \ 'name': 'ycm',
+    \ 'redirect': 'c/ycm'})

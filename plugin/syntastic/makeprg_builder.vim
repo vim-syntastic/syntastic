@@ -7,20 +7,27 @@ let g:SyntasticMakeprgBuilder = {}
 
 " Public methods {{{1
 
-function! g:SyntasticMakeprgBuilder.New(exe, args, fname, post_args, tail, filetype, subchecker)
+function! g:SyntasticMakeprgBuilder.New(checker, exe, args, fname, post_args, tail)
     let newObj = copy(self)
-    let newObj._exe = a:exe
+    let newObj._exe = (a:exe == '' && has_key(a:checker, 'getExec')) ? a:checker.getExec() : a:exe
     let newObj._args = a:args
     let newObj._fname = a:fname
     let newObj._post_args = a:post_args
     let newObj._tail = a:tail
-    let newObj._filetype = empty(a:filetype) ? &filetype : a:filetype
-    let newObj._subchecker = a:subchecker
+
+    if has_key(a:checker, 'getName')
+        let newObj._filetype = a:checker.getFiletype()
+        let newObj._subchecker = a:checker.getName()
+    else
+        let newObj._filetype = &filetype
+        let newObj._subchecker = ''
+    endif
+
     return newObj
 endfunction
 
 function! g:SyntasticMakeprgBuilder.makeprg()
-    return join([self.exe(), self.args(), self.fname(), self.post_args(), self.tail()])
+    return join(filter([self.exe(), self.args(), self.fname(), self.post_args(), self.tail()], '!empty(v:val)'))
 endfunction
 
 function! g:SyntasticMakeprgBuilder.exe()
@@ -49,7 +56,7 @@ endfunction
 
 " Private methods {{{1
 
-function g:SyntasticMakeprgBuilder._getOpt(name)
+function! g:SyntasticMakeprgBuilder._getOpt(name)
     if self._optExists(a:name)
         return {self._optName(a:name)}
     endif

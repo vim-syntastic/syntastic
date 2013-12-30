@@ -17,17 +17,10 @@ if exists("g:loaded_syntastic_go_gofmt_checker")
 endif
 let g:loaded_syntastic_go_gofmt_checker=1
 
-function! SyntaxCheckers_go_gofmt_IsAvailable()
-    return executable('gofmt')
-endfunction
-
-function! SyntaxCheckers_go_gofmt_GetLocList()
-    let makeprg = syntastic#makeprg#build({
-        \ 'exe': 'gofmt',
+function! SyntaxCheckers_go_gofmt_GetLocList() dict
+    let makeprg = self.makeprgBuild({
         \ 'args': '-l',
-        \ 'tail': '1>' . syntastic#util#DevNull(),
-        \ 'filetype': 'go',
-        \ 'subchecker': 'gofmt' })
+        \ 'tail': '> ' . syntastic#util#DevNull() })
 
     let errorformat = '%f:%l:%c: %m,%-G%.%#'
 

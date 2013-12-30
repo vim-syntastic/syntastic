@@ -9,13 +9,13 @@
 "             See http://sam.zoy.org/wtfpl/COPYING for more details.
 "============================================================================
 
-if exists("g:loaded_syntastic_javascript_jshint_checker")
+if exists('g:loaded_syntastic_javascript_jshint_checker')
     finish
 endif
 let g:loaded_syntastic_javascript_jshint_checker=1
 
-if !exists("g:syntastic_javascript_jshint_conf")
-    let g:syntastic_javascript_jshint_conf = ""
+if !exists('g:syntastic_jshint_exec')
+    let g:syntastic_jshint_exec = 'jshint'
 endif
 
 function! SyntaxCheckers_javascript_jshint_IsAvailable()
@@ -26,13 +26,11 @@ function! SyntaxCheckers_javascript_jshint_IsAvailable()
 		endif
 endfunction
 
-function! SyntaxCheckers_javascript_jshint_GetLocList()
+function! SyntaxCheckers_javascript_jshint_GetLocList() dict
     let jshint_new = s:JshintNew()
-    let makeprg = syntastic#makeprg#build({
-        \ 'exe': 'jshint',
-        \ 'post_args': (jshint_new ? ' --verbose ' : '') . s:Args(),
-        \ 'filetype': 'javascript',
-        \ 'subchecker': 'jshint' })
+    let makeprg = self.makeprgBuild({
+        \ 'exe': expand(g:syntastic_jshint_exec),
+        \ 'post_args': (jshint_new ? ' --verbose ' : '') . s:Args() })
 
 		if exists("g:syntastic_javascript_jshint_errorformat")
 			let errorformat = g:syntastic_javascript_jshint_errorformat
@@ -48,11 +46,11 @@ function! SyntaxCheckers_javascript_jshint_GetLocList()
         \ 'defaults': {'bufnr': bufnr('')} })
 endfunction
 
-function s:JshintNew()
-    return syntastic#util#versionIsAtLeast(syntastic#util#parseVersion('jshint --version'), [1, 1])
+function! s:JshintNew()
+    return syntastic#util#versionIsAtLeast(syntastic#util#getVersion(expand(g:syntastic_jshint_exec) . ' --version'), [1, 1])
 endfunction
 
-function s:Args()
+function! s:Args()
     " node-jshint uses .jshintrc as config unless --config arg is present
     return !empty(g:syntastic_javascript_jshint_conf) ? ' --config ' . g:syntastic_javascript_jshint_conf : ''
 endfunction

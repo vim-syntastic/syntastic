@@ -53,14 +53,13 @@ if exists("g:loaded_syntastic_ocaml_camlp4o_checker")
 endif
 let g:loaded_syntastic_ocaml_camlp4o_checker=1
 
-if exists('g:syntastic_ocaml_camlp4r') &&
-    \ g:syntastic_ocaml_camlp4r != 0
+if exists('g:syntastic_ocaml_camlp4r') && g:syntastic_ocaml_camlp4r != 0
     let s:ocamlpp="camlp4r"
 else
     let s:ocamlpp="camlp4o"
 endif
 
-function! SyntaxCheckers_ocaml_camlp4o_IsAvailable()
+function! SyntaxCheckers_ocaml_camlp4o_IsAvailable() dict
     return executable(s:ocamlpp)
 endfunction
 
@@ -76,7 +75,7 @@ if !exists('g:syntastic_ocaml_use_ocamlbuild') || !executable("ocamlbuild")
     let g:syntastic_ocaml_use_ocamlbuild = 0
 endif
 
-function! SyntaxCheckers_ocaml_camlp4o_GetLocList()
+function! SyntaxCheckers_ocaml_camlp4o_GetLocList() dict
     let makeprg = s:GetMakeprg()
     if makeprg == ""
         return []
@@ -96,7 +95,7 @@ function! SyntaxCheckers_ocaml_camlp4o_GetLocList()
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 endfunction
 
-function s:GetMakeprg()
+function! s:GetMakeprg()
     if g:syntastic_ocaml_use_ocamlc
         return s:GetOcamlcMakeprg()
     endif
@@ -108,7 +107,7 @@ function s:GetMakeprg()
     return s:GetOtherMakeprg()
 endfunction
 
-function s:GetOcamlcMakeprg()
+function! s:GetOcamlcMakeprg()
     if g:syntastic_ocaml_use_janestreet_core
         let build_cmd = "ocamlc -I "
         let build_cmd .= expand(g:syntastic_ocaml_janestreet_core_dir)
@@ -119,12 +118,12 @@ function s:GetOcamlcMakeprg()
     endif
 endfunction
 
-function s:GetOcamlBuildMakeprg()
+function! s:GetOcamlBuildMakeprg()
     return "ocamlbuild -quiet -no-log -tag annot," . s:ocamlpp . " -no-links -no-hygiene -no-sanitize " .
                 \ syntastic#util#shexpand('%:r') . ".cmi"
 endfunction
 
-function s:GetOtherMakeprg()
+function! s:GetOtherMakeprg()
     "TODO: give this function a better name?
     "
     "TODO: should use throw/catch instead of returning an empty makeprg
@@ -132,13 +131,13 @@ function s:GetOtherMakeprg()
     let extension = expand('%:e')
     let makeprg = ""
 
-    if match(extension, 'mly') >= 0 && executable("menhir")
+    if stridx(extension, 'mly') >= 0 && executable("menhir")
         " ocamlyacc output can't be redirected, so use menhir
         let makeprg = "menhir --only-preprocess " . syntastic#util#shexpand('%') . " >" . syntastic#util#DevNull()
-    elseif match(extension,'mll') >= 0 && executable("ocamllex")
-        let makeprg = "ocamllex -q " . syntastic#c#GetNullDevice() . " " . syntastic#util#shexpand('%')
+    elseif stridx(extension,'mll') >= 0 && executable("ocamllex")
+        let makeprg = "ocamllex -q " . syntastic#c#NullOutput() . " " . syntastic#util#shexpand('%')
     else
-        let makeprg = "camlp4o " . syntastic#c#GetNullDevice() . " " . syntastic#util#shexpand('%')
+        let makeprg = "camlp4o " . syntastic#c#NullOutput() . " " . syntastic#util#shexpand('%')
     endif
 
     return makeprg

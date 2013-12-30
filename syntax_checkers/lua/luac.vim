@@ -15,40 +15,34 @@ if exists("g:loaded_syntastic_lua_luac_checker")
 endif
 let g:loaded_syntastic_lua_luac_checker=1
 
-function! SyntaxCheckers_lua_luac_IsAvailable()
-    return executable('luac')
-endfunction
-
 function! SyntaxCheckers_lua_luac_GetHighlightRegex(pos)
-    let near = matchstr(a:pos['text'], "near '[^']\\+'")
     let result = ''
+    let near = matchstr(a:pos['text'], '\mnear ''\zs[^'']\+\ze''')
     if len(near) > 0
-        let near = split(near, "'")[1]
-        if near == '<eof>'
+        if near ==# '<eof>'
             let p = getpos('$')
             let a:pos['lnum'] = p[1]
             let a:pos['col'] = p[2]
-            let result = '\%'.p[2].'c'
+            let result = '\%' . p[2] . 'c'
         else
-            let result = '\V'.near
+            let result = '\V' . near
         endif
-        let open = matchstr(a:pos['text'], "(to close '[^']\\+' at line [0-9]\\+)")
-        if len(open) > 0
-            let oline = split(open, "'")[1:2]
-            let line = 0+strpart(oline[1], 9)
-            call matchadd('SpellCap', '\%'.line.'l\V'.oline[0])
-        endif
+
+        " XXX the following piece of code is evil, and is likely to break
+        " in future versions of syntastic; enable it at your own risk :)
+
+        "let open = matchstr(a:pos['text'], '\m(to close ''\zs[^'']\+\ze'' at line [0-9]\+)')
+        "if len(open) > 0
+        "    let line = str2nr(matchstr(a:pos['text'], '\m(to close ''[^'']\+'' at line \zs[0-9]\+\ze)'))
+        "    let group = a:pos['type'] ==? 'E' ? 'SyntasticError' : 'SyntasticWarning'
+        "    call matchadd(group, '\%' . line . 'l\V' . open)
+        "endif
     endif
     return result
 endfunction
 
-
-function! SyntaxCheckers_lua_luac_GetLocList()
-    let makeprg = syntastic#makeprg#build({
-        \ 'exe': 'luac',
-        \ 'args': '-p',
-        \ 'filetype': 'lua',
-        \ 'subchecker': 'luac' })
+function! SyntaxCheckers_lua_luac_GetLocList() dict
+    let makeprg = self.makeprgBuild({ 'args': '-p' })
 
     let errorformat =  'luac: %#%f:%l: %m'
 
@@ -56,7 +50,6 @@ function! SyntaxCheckers_lua_luac_GetLocList()
         \ 'makeprg': makeprg,
         \ 'errorformat': errorformat,
         \ 'defaults': { 'bufnr': bufnr(''), 'type': 'E' } })
-
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({

@@ -17,10 +17,12 @@ function! g:SyntasticAutoloclistNotifier.New()
 endfunction
 
 function! g:SyntasticAutoloclistNotifier.refresh(loclist)
+    call syntastic#log#debug(g:SyntasticDebugNotifications, 'autoloclist: refresh')
     call g:SyntasticAutoloclistNotifier.AutoToggle(a:loclist)
 endfunction
 
 function! g:SyntasticAutoloclistNotifier.AutoToggle(loclist)
+    call syntastic#log#debug(g:SyntasticDebugNotifications, 'autoloclist: toggle')
     if a:loclist.hasErrorsOrWarningsToDisplay()
         if g:syntastic_auto_loc_list == 1
             call a:loclist.show()

@@ -11,59 +11,85 @@
 "
 "============================================================================
 "
-" In order to add some custom lib directories that should be added to the
-" perl command line you can add those as a comma-separated list to the variable
-" g:syntastic_perl_lib_path.
+" Checker options:
 "
-"   let g:syntastic_perl_lib_path = './lib,./lib/auto'
+" - g:syntastic_perl_interpreter (string; default: 'perl')
+"   The perl interpreter to use.
 "
-" To use your own perl error output munger script, use the
-" g:syntastic_perl_efm_program option. Any command line parameters should be
-" included in the variable declaration. The program should expect a single
-" parameter; the fully qualified filename of the file to be checked.
+" - g:syntastic_perl_lib_path (list; default: [])
+"   List of include directories to be added to the perl command line. Example:
 "
-"   let g:syntastic_perl_efm_program = "foo.pl -o -m -g"
-"
+"       let g:syntastic_perl_lib_path = [ './lib', './lib/auto' ]
 
-if exists("g:loaded_syntastic_perl_perl_checker")
+if exists('g:loaded_syntastic_perl_perl_checker')
     finish
 endif
 let g:loaded_syntastic_perl_perl_checker=1
 
-if !exists("g:syntastic_perl_interpreter")
-    let g:syntastic_perl_interpreter = "perl"
+if !exists('g:syntastic_perl_interpreter')
+    let g:syntastic_perl_interpreter = 'perl'
 endif
 
-function! SyntaxCheckers_perl_perl_IsAvailable()
-    return executable(g:syntastic_perl_interpreter)
+if !exists('g:syntastic_perl_lib_path')
+    let g:syntastic_perl_lib_path = []
+endif
+
+function! SyntaxCheckers_perl_perl_IsAvailable() dict
+    " don't call executable() here, to allow things like
+    " let g:syntastic_perl_interpreter='/usr/bin/env perl'
+    silent! call system(expand(g:syntastic_perl_interpreter) . ' -e ' . syntastic#util#shescape('exit(0)'))
+    return v:shell_error == 0
 endfunction
 
-if !exists("g:syntastic_perl_efm_program")
-    let g:syntastic_perl_efm_program =
-        \ g:syntastic_perl_interpreter . ' ' .
-        \ syntastic#util#shescape(expand('<sfile>:p:h') . '/efm_perl.pl') .
-        \ ' -c -w'
-endif
+function! SyntaxCheckers_perl_perl_Preprocess(errors)
+    let out = []
 
-function! SyntaxCheckers_perl_perl_GetLocList()
-    let makeprg = exists("b:syntastic_perl_efm_program") ? b:syntastic_perl_efm_program : g:syntastic_perl_efm_program
-    if exists("g:syntastic_perl_lib_path")
-        let makeprg .= ' -I' . g:syntastic_perl_lib_path
+    for e in a:errors
+        let parts = matchlist(e, '\v^(.*)\sat\s(.*)\sline\s(\d+)(.*)$')
+        if !empty(parts)
+            call add(out, parts[2] . ':' . parts[3] . ':' . parts[1] . parts[4])
+        endif
+    endfor
+
+    return syntastic#util#unique(out)
+endfunction
+
+function! SyntaxCheckers_perl_perl_GetLocList() dict
+    let exe = expand(g:syntastic_perl_interpreter)
+    if type(g:syntastic_perl_lib_path) == type('')
+        call syntastic#log#deprecationWarn('variable g:syntastic_perl_lib_path should be a list')
+        let includes = split(g:syntastic_perl_lib_path, ',')
+    else
+        let includes = copy(exists('b:syntastic_perl_lib_path') ? b:syntastic_perl_lib_path : g:syntastic_perl_lib_path)
     endif
-    let makeprg .= ' ' . syntastic#util#shexpand('%') . s:ExtraMakeprgArgs()
-
-    let errorformat =  '%t:%f:%l:%m'
-
-    return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
-endfunction
-
-function! s:ExtraMakeprgArgs()
     let shebang = syntastic#util#parseShebang()
-    if index(shebang['args'], '-T') != -1
-        return ' -Tc'
+    let extra = join(map(includes, '"-I" . v:val')) .
+        \ (index(shebang['args'], '-T') >= 0 ? ' -T' : '') .
+        \ (index(shebang['args'], '-t') >= 0 ? ' -t' : '')
+    let errorformat = '%f:%l:%m'
+
+    let makeprg = self.makeprgBuild({
+        \ 'exe': exe,
+        \ 'args': '-c -X ' . extra })
+
+    let errors = SyntasticMake({
+        \ 'makeprg': makeprg,
+        \ 'errorformat': errorformat,
+        \ 'preprocess': 'SyntaxCheckers_perl_perl_Preprocess',
+        \ 'defaults': {'type': 'E'} })
+    if !empty(errors)
+        return errors
     endif
 
-    return ''
+    let makeprg = self.makeprgBuild({
+        \ 'exe': exe,
+        \ 'args': '-c -Mwarnings ' . extra })
+
+    return SyntasticMake({
+        \ 'makeprg': makeprg,
+        \ 'errorformat': errorformat,
+        \ 'preprocess': 'SyntaxCheckers_perl_perl_Preprocess',
+        \ 'defaults': {'type': 'W'} })
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({

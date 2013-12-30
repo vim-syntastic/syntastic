@@ -26,14 +26,14 @@ user is notified and is happy because they didn't have to compile their code or
 execute their script to find them.
 
 At the time of this writing, syntax checking plugins exist for Ada,
-AppleScript, Bourne shell, C, C++, C#, CoffeeScript, Coco, Coq, CSS,
-Cucumber, CUDA, D, Dart, DocBook, Elixir, Erlang, eRuby, Fortran,
-Gentoo metadata, Go, Haml, Haskell, Haxe, HSS, HTML, Java, JavaScript,
-JSON, LESS, LISP, LLVM intermediate language, Lua, MATLAB, NASM,
-Objective-C, Objective-C++, OCaml, Perl, Perl POD, PHP, Puppet, Python,
-reStructuredText, Ruby, Rust, SASS/SCSS, Scala, Slim, Tcl, TeX,
-Twig, TypeScript, Vala, VHDL, xHtml, XML, XSLT, YAML, z80, Zope page
-templates, zsh.
+AppleScript, AsciiDoc, Bourne shell, C, C++, C#, Chef, CoffeeScript, Coco,
+Coq, CSS, Cucumber, CUDA, D, Dart, DocBook, Dust, Elixir, Erlang, eRuby,
+Fortran, Gentoo metadata, Go, Haml, Haskell, Haxe, Handlebars, HSS, HTML,
+Java, JavaScript, JSON, LESS, Lex, Limbo, LISP, LLVM intermediate language,
+Lua, MATLAB, NASM, Objective-C, Objective-C++, OCaml, Perl, Perl POD, PHP,
+gettext Portable Object, Puppet, Python, Racket, reStructuredText, Ruby, Rust,
+SASS/SCSS, Scala, Slim, Tcl, TeX, Twig, TypeScript, Vala, Verilog, VHDL, xHtml,
+XML, XSLT, YACC, YAML, z80, Zope page templates, zsh.
 
 ## Screenshot
 
@@ -105,9 +105,9 @@ Another reason it could fail is that either the command line options or the erro
 
 __Q. Recently some of my syntax checker options have stopped working...__
 
-A. The options are still there, they have just been renamed. Recently, almost all syntax checkers were refactored to use the new `syntastic#makeprg#build()` function. This made a lot of the old explicit options redundant - as they are now implied. The new implied options usually have slightly different names to the old options.
+A. The options are still there, they have just been renamed. Recently, almost all syntax checkers were refactored to use the new `makeprgBuild()` function. This made a lot of the old explicit options redundant - as they are now implied. The new implied options usually have slightly different names to the old options.
 
-e.g. Previously there was `g:syntastic_phpcs_conf`, now you must use `g:syntastic_php_phpcs_args`.
+e.g. Previously there was `g:syntastic_phpcs_conf`, now you must use `g:syntastic_php_phpcs_args`. This completely overrides the arguments of the checker, including any defaults, so you may need to look up the default arguments of the checker and add these in.
 
 See `:help syntastic-checker-options` for more information.
 
@@ -120,7 +120,7 @@ let g:syntastic_always_populate_loc_list=1
 
 __Q. How can I pass additional arguments to a checker?__
 
-A. Almost all syntax checkers use the `syntastic#makeprg#build()` function. Those checkers that do can be configured using global variables. The general form of the global args variables are:
+A. Almost all syntax checkers use the `makeprgBuild()` function. Those checkers that do can be configured using global variables. The general form of the global args variables are:
 ```vim
 syntastic_<filetype>_<subchecker>_args
 ```
@@ -163,7 +163,7 @@ If you use these commands a lot then you may want to add shortcut mappings to yo
 
 __Q. A syntax checker is giving me unwanted/strange style tips?__
 
-A. Some filetypes (e.g. php) have style checkers as well as syntax checkers. You can usually configure the options that are passed to the style checkers, or just disable them. Take a look at the [wiki](https://github.com/scrooloose/syntastic/wiki/Syntaxcheckers) to see what options are available.
+A. Some filetypes (e.g. php) have style checkers as well as syntax checkers. You can usually configure the options that are passed to the style checkers, or just disable them. Take a look at the [wiki](https://github.com/scrooloose/syntastic/wiki/Syntax-Checkers) to see what options are available.
 
 __Q. The error window is closed automatically when I :quit the current buffer but not when I :bdelete it?__
 

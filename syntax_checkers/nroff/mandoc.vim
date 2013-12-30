@@ -14,16 +14,8 @@ if exists("g:loaded_syntastic_nroff_mandoc_checker")
 endif
 let g:loaded_syntastic_nroff_mandoc_checker=1
 
-function! SyntaxCheckers_nroff_mandoc_IsAvailable()
-    return executable("mandoc")
-endfunction
-
-function! SyntaxCheckers_nroff_mandoc_GetLocList()
-    let makeprg = syntastic#makeprg#build({
-        \ 'exe': 'mandoc',
-        \ 'args': '-Tlint',
-        \ 'filetype': 'nroff',
-        \ 'subchecker': 'mandoc' })
+function! SyntaxCheckers_nroff_mandoc_GetLocList() dict
+    let makeprg = self.makeprgBuild({ 'args': '-Tlint' })
 
     let errorformat =
         \ '%E%f:%l:%c: %tRROR: %m,' .
