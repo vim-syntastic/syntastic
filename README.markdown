@@ -25,9 +25,9 @@ demand, or automatically as files are saved. If syntax errors are detected, the
 user is notified and is happy because they didn't have to compile their code or
 execute their script to find them.
 
-At the time of this writing, syntax checking plugins exist for Ada,
-AppleScript, AsciiDoc, Bourne shell, C, C++, C#, Chef, CoffeeScript, Coco,
-Coq, CSS, Cucumber, CUDA, D, Dart, DocBook, Dust, Elixir, Erlang, eRuby,
+At the time of this writing, syntax checking plugins exist for ActionScript,
+Ada, AppleScript, AsciiDoc, Bourne shell, C, C++, C#, Chef, CoffeeScript,
+Coco, Coq, CSS, Cucumber, CUDA, D, Dart, DocBook, Dust, Elixir, Erlang, eRuby,
 Fortran, Gentoo metadata, Go, Haml, Haskell, Haxe, Handlebars, HSS, HTML,
 Java, JavaScript, JSON, LESS, Lex, Limbo, LISP, LLVM intermediate language,
 Lua, MATLAB, NASM, Objective-C, Objective-C++, OCaml, Perl, Perl POD, PHP,
