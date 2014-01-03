@@ -22,48 +22,38 @@ endfunction
 
 " natural sort
 function! syntastic#postprocess#sort(errors)
-    return sort(a:errors, 's:compareErrorItems')
+    return sort(copy(a:errors), 's:compareErrorItems')
 endfunction
 
+" merge consecutive blanks
 function! syntastic#postprocess#compressWhitespace(errors)
-    let llist = []
-
     for e in a:errors
         let e['text'] = substitute(e['text'], "\001", '', 'g')
         let e['text'] = substitute(e['text'], '\n', ' ', 'g')
         let e['text'] = substitute(e['text'], '\m\s\{2,}', ' ', 'g')
-        call add(llist, e)
     endfor
 
-    return llist
+    return a:errors
 endfunction
 
 " remove spurious CR under Cygwin
 function! syntastic#postprocess#cygwinRemoveCR(errors)
     if has('win32unix')
-        let llist = []
-
         for e in a:errors
             let e['text'] = substitute(e['text'], '\r', '', 'g')
-            call add(llist, e)
         endfor
-    else
-        let llist = a:errors
     endif
 
-    return llist
+    return a:errors
 endfunction
 
 " decode XML entities
 function! syntastic#postprocess#decodeXMLEntities(errors)
-    let llist = []
-
     for e in a:errors
         let e['text'] = syntastic#util#decodeXMLEntities(e['text'])
-        call add(llist, e)
     endfor
 
-    return llist
+    return a:errors
 endfunction
 
 " filter out errors referencing other files
@@ -73,4 +63,5 @@ endfunction
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
+
 " vim: set et sts=4 sw=4:
