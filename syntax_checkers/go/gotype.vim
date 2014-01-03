@@ -12,12 +12,17 @@
 if exists("g:loaded_syntastic_go_gotype_checker")
     finish
 endif
-let g:loaded_syntastic_go_gotype_checker=1
+let g:loaded_syntastic_go_gotype_checker = 1
+
+let s:save_cpo = &cpo
+set cpo&vim
 
 function! SyntaxCheckers_go_gotype_GetLocList() dict
     let makeprg = self.getExec() . ' .'
 
-    let errorformat = '%f:%l:%c: %m,%-G%.%#'
+    let errorformat =
+        \ '%f:%l:%c: %m,' .
+        \ '%-G%.%#'
 
     " gotype needs the full go package to test types properly. Just cwd to
     " the package for the same reasons specified in go.vim ("figuring out
@@ -35,3 +40,8 @@ endfunction
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'go',
     \ 'name': 'gotype'})
+
+let &cpo = s:save_cpo
+unlet s:save_cpo
+
+" vim: set et sts=4 sw=4:
