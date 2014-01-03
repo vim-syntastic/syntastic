@@ -126,22 +126,10 @@ endfunction
 "
 "Note that all comparisons are done with ==?
 function! g:SyntasticLoclist.filter(filters)
-    let rv = []
-
-    for error in self._rawLoclist
-        let passes_filters = 1
-        for key in keys(a:filters)
-            if get(error, key, '') !=? a:filters[key]
-                let passes_filters = 0
-                break
-            endif
-        endfor
-
-        if passes_filters
-            call add(rv, error)
-        endif
-    endfor
-    return rv
+    let conditions = values(map(copy(a:filters), 's:translate(v:key, v:val)'))
+    let filter = len(conditions) == 1 ?
+        \ conditions[0] : join(map(conditions, '"(" . v:val . ")"'), ' && ')
+    return filter(copy(self._rawLoclist), filter)
 endfunction
 
 function! g:SyntasticLoclist.setloclist()
@@ -190,6 +178,12 @@ endfunction
 function! g:SyntasticLoclistHide()
     call syntastic#log#debug(g:SyntasticDebugNotifications, 'loclist: hide')
     silent! lclose
+endfunction
+
+" Private functions {{{1
+
+function! s:translate(key, val)
+    return 'get(v:val, ' . string(a:key) . ', "") ==? ' . string(a:val)
 endfunction
 
 " vim: set sw=4 sts=4 et fdm=marker:
