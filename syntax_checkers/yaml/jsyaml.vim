@@ -16,7 +16,10 @@
 if exists("g:loaded_syntastic_yaml_jsyaml_checker")
     finish
 endif
-let g:loaded_syntastic_yaml_jsyaml_checker=1
+let g:loaded_syntastic_yaml_jsyaml_checker = 1
+
+let s:save_cpo = &cpo
+set cpo&vim
 
 function! SyntaxCheckers_yaml_jsyaml_GetLocList() dict
     if !exists('s:js_yaml_new')
@@ -41,3 +44,8 @@ call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'yaml',
     \ 'name': 'jsyaml',
     \ 'exec': 'js-yaml'})
+
+let &cpo = s:save_cpo
+unlet s:save_cpo
+
+" vim: set et sts=4 sw=4:

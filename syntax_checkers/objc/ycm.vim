@@ -25,3 +25,5 @@ call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'objc',
     \ 'name': 'ycm',
     \ 'redirect': 'c/ycm'})
+
+" vim: set et sts=4 sw=4:

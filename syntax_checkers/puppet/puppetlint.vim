@@ -13,7 +13,10 @@
 if exists("g:loaded_syntastic_puppet_puppetlint_checker")
     finish
 endif
-let g:loaded_syntastic_puppet_puppetlint_checker=1
+let g:loaded_syntastic_puppet_puppetlint_checker = 1
+
+let s:save_cpo = &cpo
+set cpo&vim
 
 if exists("g:syntastic_puppet_lint_arguments")
     let g:syntastic_puppet_puppetlint_args = g:syntastic_puppet_lint_arguments
@@ -44,3 +47,8 @@ call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'puppet',
     \ 'name': 'puppetlint',
     \ 'exec': 'puppet-lint'})
+
+let &cpo = s:save_cpo
+unlet s:save_cpo
+
+" vim: set et sts=4 sw=4:

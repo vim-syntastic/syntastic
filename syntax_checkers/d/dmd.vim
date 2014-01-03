@@ -24,12 +24,12 @@ if !exists('g:syntastic_d_compiler')
     let g:syntastic_d_compiler = 'dmd'
 endif
 
+let s:save_cpo = &cpo
+set cpo&vim
+
 function! SyntaxCheckers_d_dmd_IsAvailable() dict
     return executable(expand(g:syntastic_d_compiler))
 endfunction
-
-let s:save_cpo = &cpo
-set cpo&vim
 
 if !exists('g:syntastic_d_compiler_options')
     let g:syntastic_d_compiler_options = ''

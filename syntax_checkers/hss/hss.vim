@@ -13,7 +13,10 @@
 if exists("g:loaded_syntastic_hss_hss_checker")
     finish
 endif
-let g:loaded_syntastic_hss_hss_checker=1
+let g:loaded_syntastic_hss_hss_checker = 1
+
+let s:save_cpo = &cpo
+set cpo&vim
 
 function! SyntaxCheckers_hss_hss_GetLocList() dict
     let makeprg = self.makeprgBuild({ 'args' : '-output ' . syntastic#util#DevNull() })
@@ -28,3 +31,8 @@ endfunction
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'hss',
     \ 'name': 'hss'})
+
+let &cpo = s:save_cpo
+unlet s:save_cpo
+
+" vim: set et sts=4 sw=4:

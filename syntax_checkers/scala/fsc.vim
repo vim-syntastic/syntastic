@@ -19,6 +19,9 @@ if !exists('g:syntastic_scala_options')
     let g:syntastic_scala_options = ''
 endif
 
+let s:save_cpo = &cpo
+set cpo&vim
+
 function! SyntaxCheckers_scala_fsc_GetLocList() dict
     " fsc has some serious problems with the
     " working directory changing after being started
@@ -40,3 +43,8 @@ endfunction
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'scala',
     \ 'name': 'fsc'})
+
+let &cpo = s:save_cpo
+unlet s:save_cpo
+
+" vim: set et sts=4 sw=4:

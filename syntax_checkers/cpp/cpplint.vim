@@ -31,6 +31,9 @@ if !exists('g:syntastic_cpp_cpplint_thres')
     let g:syntastic_cpp_cpplint_thres = 5
 endif
 
+let s:save_cpo = &cpo
+set cpo&vim
+
 function! SyntaxCheckers_cpp_cpplint_GetLocList() dict
     let makeprg = self.makeprgBuild({ 'args': '--verbose=3' })
 
@@ -53,3 +56,8 @@ call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'cpp',
     \ 'name': 'cpplint',
     \ 'exec': 'cpplint.py'})
+
+let &cpo = s:save_cpo
+unlet s:save_cpo
+
+" vim: set et sts=4 sw=4:

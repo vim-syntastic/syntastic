@@ -17,6 +17,9 @@ let g:loaded_syntastic_haskell_ghc_mod_checker = 1
 
 let s:ghc_mod_new = -1
 
+let s:save_cpo = &cpo
+set cpo&vim
+
 function! SyntaxCheckers_haskell_ghc_mod_IsAvailable() dict
     " We need either a Vim version that can handle NULs in system() output,
     " or a ghc-mod version that has the --boundary option.
@@ -59,4 +62,9 @@ endfunction
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'haskell',
     \ 'name': 'ghc_mod',
-    \ 'exec': 'ghc-mod'})
+    \ 'exec': 'ghc-mod' })
+
+let &cpo = s:save_cpo
+unlet s:save_cpo
+
+" vim: set et sts=4 sw=4:

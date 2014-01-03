@@ -5,13 +5,17 @@
 "             kstep <me@kstep.me>
 "
 "============================================================================
+
 if exists("g:loaded_syntastic_python_flake8_checker")
     finish
 endif
-let g:loaded_syntastic_python_flake8_checker=1
+let g:loaded_syntastic_python_flake8_checker = 1
 
-function! SyntaxCheckers_python_flake8_GetHighlightRegex(i)
-    return SyntaxCheckers_python_pyflakes_GetHighlightRegex(a:i)
+let s:save_cpo = &cpo
+set cpo&vim
+
+function! SyntaxCheckers_python_flake8_GetHighlightRegex(item)
+    return SyntaxCheckers_python_pyflakes_GetHighlightRegex(a:item)
 endfunction
 
 function! SyntaxCheckers_python_flake8_GetLocList() dict
@@ -35,3 +39,8 @@ runtime! syntax_checkers/python/pyflakes.vim
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'python',
     \ 'name': 'flake8'})
+
+let &cpo = s:save_cpo
+unlet s:save_cpo
+
+" vim: set et sts=4 sw=4:

@@ -13,7 +13,10 @@
 if exists("g:loaded_syntastic_rust_rustc_checker")
     finish
 endif
-let g:loaded_syntastic_rust_rustc_checker=1
+let g:loaded_syntastic_rust_rustc_checker = 1
+
+let s:save_cpo = &cpo
+set cpo&vim
 
 function! SyntaxCheckers_rust_rustc_GetLocList() dict
     let makeprg = self.makeprgBuild({ 'args': '--parse-only' })
@@ -32,3 +35,8 @@ endfunction
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'rust',
     \ 'name': 'rustc'})
+
+let &cpo = s:save_cpo
+unlet s:save_cpo
+
+" vim: set et sts=4 sw=4:

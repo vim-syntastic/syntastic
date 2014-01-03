@@ -7,10 +7,14 @@
 " http://www.vim.org/scripts/download_script.php?src_id=1392
 "
 "============================================================================
+
 if exists("g:loaded_syntastic_python_python_checker")
     finish
 endif
-let g:loaded_syntastic_python_python_checker=1
+let g:loaded_syntastic_python_python_checker = 1
+
+let s:save_cpo = &cpo
+set cpo&vim
 
 function! SyntaxCheckers_python_python_GetLocList() dict
     let fname = "'" . escape(expand('%'), "\\'") . "'"
@@ -34,3 +38,8 @@ endfunction
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'python',
     \ 'name': 'python'})
+
+let &cpo = s:save_cpo
+unlet s:save_cpo
+
+" vim: set et sts=4 sw=4:

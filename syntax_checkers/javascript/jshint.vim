@@ -12,7 +12,7 @@
 if exists('g:loaded_syntastic_javascript_jshint_checker')
     finish
 endif
-let g:loaded_syntastic_javascript_jshint_checker=1
+let g:loaded_syntastic_javascript_jshint_checker = 1
 
 if !exists('g:syntastic_jshint_exec')
     let g:syntastic_jshint_exec = 'jshint'
@@ -21,6 +21,9 @@ endif
 if !exists('g:syntastic_javascript_jshint_conf')
     let g:syntastic_javascript_jshint_conf = ''
 endif
+
+let s:save_cpo = &cpo
+set cpo&vim
 
 function! SyntaxCheckers_javascript_jshint_IsAvailable() dict
     return executable(expand(g:syntastic_jshint_exec))
@@ -55,3 +58,7 @@ call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'javascript',
     \ 'name': 'jshint'})
 
+let &cpo = s:save_cpo
+unlet s:save_cpo
+
+" vim: set et sts=4 sw=4:

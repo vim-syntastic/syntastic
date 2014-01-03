@@ -9,10 +9,14 @@
 "             See http://sam.zoy.org/wtfpl/COPYING for more details.
 "
 "============================================================================
+
 if exists("g:loaded_syntastic_lisp_clisp_checker")
     finish
 endif
-let g:loaded_syntastic_lisp_clisp_checker=1
+let g:loaded_syntastic_lisp_clisp_checker = 1
+
+let s:save_cpo = &cpo
+set cpo&vim
 
 function! SyntaxCheckers_lisp_clisp_GetLocList() dict
     let makeprg = self.makeprgBuild({
@@ -38,3 +42,8 @@ endfunction
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'lisp',
     \ 'name': 'clisp'})
+
+let &cpo = s:save_cpo
+unlet s:save_cpo
+
+" vim: set et sts=4 sw=4:

@@ -26,6 +26,9 @@ if !exists('g:syntastic_html_w3_api')
     let g:syntastic_html_w3_api = 'http://validator.w3.org/check'
 endif
 
+let s:save_cpo = &cpo
+set cpo&vim
+
 function! SyntaxCheckers_html_w3_GetLocList() dict
     let makeprg = self.getExec() . ' -s -F output=json ' .
         \ '-F uploaded_file=@' . syntastic#util#shexpand('%:p') . '\;type=text/html ' .
@@ -60,3 +63,7 @@ call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'name': 'w3',
     \ 'exec': 'curl' })
 
+let &cpo = s:save_cpo
+unlet s:save_cpo
+
+" vim: set et sts=4 sw=4:

@@ -13,7 +13,11 @@
 if exists("g:loaded_syntastic_javascript_jslint_checker")
     finish
 endif
-let g:loaded_syntastic_javascript_jslint_checker=1
+
+let g:loaded_syntastic_javascript_jslint_checker = 1
+
+let s:save_cpo = &cpo
+set cpo&vim
 
 function! SyntaxCheckers_javascript_jslint_GetHighlightRegex(item)
     let term = matchstr(a:item['text'], '\mExpected .* and instead saw ''\zs.*\ze''')
@@ -41,3 +45,7 @@ call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'javascript',
     \ 'name': 'jslint'})
 
+let &cpo = s:save_cpo
+unlet s:save_cpo
+
+" vim: set et sts=4 sw=4:

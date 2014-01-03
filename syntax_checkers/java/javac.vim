@@ -40,6 +40,9 @@ if !exists("g:syntastic_java_javac_delete_output")
     let g:syntastic_java_javac_delete_output = 1
 endif
 
+let s:save_cpo = &cpo
+set cpo&vim
+
 function! s:CygwinPath(path)
     return substitute(system("cygpath -m " . a:path), '\n', '', 'g')
 endfunction
@@ -363,3 +366,7 @@ call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'java',
     \ 'name': 'javac'})
 
+let &cpo = s:save_cpo
+unlet s:save_cpo
+
+" vim: set et sts=4 sw=4:

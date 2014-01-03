@@ -13,7 +13,10 @@
 if exists("g:loaded_syntastic_chef_foodcritic_checker")
     finish
 endif
-let g:loaded_syntastic_chef_foodcritic_checker=1
+let g:loaded_syntastic_chef_foodcritic_checker = 1
+
+let s:save_cpo = &cpo
+set cpo&vim
 
 function! SyntaxCheckers_chef_foodcritic_GetLocList() dict
     let makeprg = self.makeprgBuild({})
@@ -21,9 +24,16 @@ function! SyntaxCheckers_chef_foodcritic_GetLocList() dict
     " FC023: Prefer conditional attributes: ./recipes/config.rb:49
     let errorformat = 'FC%n: %m: %f:%l'
 
-    return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
+    return SyntasticMake({
+        \ 'makeprg': makeprg,
+        \ 'errorformat': errorformat })
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
       \ 'filetype': 'chef',
       \ 'name': 'foodcritic'})
+
+let &cpo = s:save_cpo
+unlet s:save_cpo
+
+" vim: set et sts=4 sw=4:

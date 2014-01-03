@@ -9,10 +9,14 @@
 "             See http://sam.zoy.org/wtfpl/COPYING for more details.
 "
 "============================================================================
+
 if exists("g:loaded_syntastic_ruby_jruby_checker")
     finish
 endif
-let g:loaded_syntastic_ruby_jruby_checker=1
+let g:loaded_syntastic_ruby_jruby_checker = 1
+
+let s:save_cpo = &cpo
+set cpo&vim
 
 function! SyntaxCheckers_ruby_jruby_GetLocList() dict
     if syntastic#util#isRunningWindows()
@@ -42,3 +46,8 @@ endfunction
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'ruby',
     \ 'name': 'jruby'})
+
+let &cpo = s:save_cpo
+unlet s:save_cpo
+
+" vim: set et sts=4 sw=4:

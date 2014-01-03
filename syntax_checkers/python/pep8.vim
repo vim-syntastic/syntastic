@@ -15,7 +15,10 @@
 if exists("g:loaded_syntastic_python_pep8_checker")
     finish
 endif
-let g:loaded_syntastic_python_pep8_checker=1
+let g:loaded_syntastic_python_pep8_checker = 1
+
+let s:save_cpo = &cpo
+set cpo&vim
 
 function! SyntaxCheckers_python_pep8_GetLocList() dict
     let makeprg = self.makeprgBuild({})
@@ -37,3 +40,8 @@ endfunction
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'python',
     \ 'name': 'pep8'})
+
+let &cpo = s:save_cpo
+unlet s:save_cpo
+
+" vim: set et sts=4 sw=4:

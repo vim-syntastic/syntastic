@@ -25,6 +25,9 @@ if !exists('g:syntastic_cppcheck_config_file')
     let g:syntastic_cppcheck_config_file = '.syntastic_cppcheck_config'
 endif
 
+let s:save_cpo = &cpo
+set cpo&vim
+
 function! SyntaxCheckers_cpp_cppcheck_GetLocList() dict
     let makeprg = self.makeprgBuild({
         \ 'args': '-q ' . syntastic#c#ReadConfig(g:syntastic_cppcheck_config_file),
@@ -58,3 +61,8 @@ endfunction
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'cpp',
     \ 'name': 'cppcheck'})
+
+let &cpo = s:save_cpo
+unlet s:save_cpo
+
+" vim: set et sts=4 sw=4:

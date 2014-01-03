@@ -13,7 +13,6 @@
 if exists("g:loaded_syntastic_glsl_cgc_checker")
     finish
 endif
-
 let g:loaded_syntastic_glsl_cgc_checker = 1
 
 let s:glsl_extensions = {

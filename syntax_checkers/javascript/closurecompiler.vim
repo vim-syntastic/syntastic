@@ -24,14 +24,20 @@
 if exists("g:loaded_syntastic_javascript_closurecompiler_checker")
     finish
 endif
-let g:loaded_syntastic_javascript_closurecompiler_checker=1
+let g:loaded_syntastic_javascript_closurecompiler_checker = 1
 
 if !exists("g:syntastic_javascript_closure_compiler_options")
     let g:syntastic_javascript_closure_compiler_options = ""
 endif
 
+let s:save_cpo = &cpo
+set cpo&vim
+
 function! SyntaxCheckers_javascript_closurecompiler_IsAvailable() dict
-    return executable("java") && exists("g:syntastic_javascript_closure_compiler_path")
+    return
+        \ executable("java") &&
+        \ exists("g:syntastic_javascript_closure_compiler_path") &&
+        \ filereadable(g:syntastic_javascript_closure_compiler_path)
 endfunction
 
 function! SyntaxCheckers_javascript_closurecompiler_GetLocList() dict
@@ -63,3 +69,7 @@ call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'name': 'closurecompiler',
     \ 'exec': 'java'})
 
+let &cpo = s:save_cpo
+unlet s:save_cpo
+
+" vim: set et sts=4 sw=4:
