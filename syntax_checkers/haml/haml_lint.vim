@@ -12,7 +12,10 @@
 if exists("g:loaded_syntastic_haml_haml_lint_checker")
     finish
 endif
-let g:loaded_syntastic_haml_haml_lint_checker=1
+let g:loaded_syntastic_haml_haml_lint_checker = 1
+
+let s:save_cpo = &cpo
+set cpo&vim
 
 function! SyntaxCheckers_haml_haml_lint_GetLocList() dict
     let makeprg = self.makeprgBuild({})
@@ -27,3 +30,8 @@ call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'haml',
     \ 'name': 'haml_lint',
     \ 'exec': 'haml-lint' })
+
+let &cpo = s:save_cpo
+unlet s:save_cpo
+
+" vim: set et sts=4 sw=4:
