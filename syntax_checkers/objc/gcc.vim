@@ -16,7 +16,7 @@ endif
 let g:loaded_syntastic_objc_gcc_checker = 1
 
 if !exists('g:syntastic_objc_compiler')
-    let g:syntastic_objc_compiler = 'gcc'
+    let g:syntastic_objc_compiler = executable('gcc') ? 'gcc' : 'clang'
 endif
 
 function! SyntaxCheckers_objc_gcc_IsAvailable() dict
