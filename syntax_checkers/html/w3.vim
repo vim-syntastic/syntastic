@@ -26,12 +26,8 @@ if !exists('g:syntastic_html_w3_api')
     let g:syntastic_html_w3_api = 'http://validator.w3.org/check'
 endif
 
-function! SyntaxCheckers_html_w3_IsAvailable() dict
-    return executable('curl')
-endfunction
-
 function! SyntaxCheckers_html_w3_GetLocList() dict
-    let makeprg = 'curl -s -F output=json ' .
+    let makeprg = self.getExec() . ' -s -F output=json ' .
         \ '-F uploaded_file=@' . syntastic#util#shexpand('%:p') . '\;type=text/html ' .
         \ g:syntastic_html_w3_api
 
@@ -61,5 +57,6 @@ endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'html',
-    \ 'name': 'w3'})
+    \ 'name': 'w3',
+    \ 'exec': 'curl' })
 
