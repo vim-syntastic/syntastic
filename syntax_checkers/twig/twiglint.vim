@@ -18,11 +18,6 @@ let g:loaded_syntastic_twig_twiglint_checker = 1
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! SyntaxCheckers_twig_twiglint_GetHighlightRegex(item)
-    " Let's match the full line for now
-    return '\V'
-endfunction
-
 function! SyntaxCheckers_twig_twiglint_GetLocList() dict
     let makeprg = self.makeprgBuild({ 'args': 'lint --format=csv' })
 
