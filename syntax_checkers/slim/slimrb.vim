@@ -13,7 +13,10 @@
 if exists("g:loaded_syntastic_slim_slimrb_checker")
     finish
 endif
-let g:loaded_syntastic_slim_slimrb_checker=1
+let g:loaded_syntastic_slim_slimrb_checker = 1
+
+let s:save_cpo = &cpo
+set cpo&vim
 
 function! s:SlimrbVersion()
     if !exists('s:slimrb_version')
@@ -47,3 +50,8 @@ endfunction
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'slim',
     \ 'name': 'slimrb'})
+
+let &cpo = s:save_cpo
+unlet s:save_cpo
+
+" vim: set et sts=4 sw=4:

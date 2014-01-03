@@ -20,12 +20,12 @@ if !exists('g:syntastic_cobol_compiler')
     let g:syntastic_cobol_compiler = 'cobc'
 endif
 
+let s:save_cpo = &cpo
+set cpo&vim
+
 function! SyntaxCheckers_cobol_cobc_IsAvailable() dict
     return executable(expand(g:syntastic_cobol_compiler))
 endfunction
-
-let s:save_cpo = &cpo
-set cpo&vim
 
 if !exists('g:syntastic_cobol_compiler_options')
     let g:syntastic_cobol_compiler_options = ''

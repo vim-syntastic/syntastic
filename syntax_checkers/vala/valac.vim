@@ -32,6 +32,9 @@ if exists("g:loaded_syntastic_vala_valac_checker")
 endif
 let g:loaded_syntastic_vala_valac_checker = 1
 
+let s:save_cpo = &cpo
+set cpo&vim
+
 function! SyntaxCheckers_vala_valac_GetHighlightRegex(pos)
     let strlength = strlen(matchstr(a:pos['text'], '\m\^\+$'))
     return '\%>' . (a:pos.col-1) . 'c.*\%<' . (a:pos.col+strlength+1) . 'c'
@@ -87,3 +90,8 @@ endfunction
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'vala',
     \ 'name': 'valac'})
+
+let &cpo = s:save_cpo
+unlet s:save_cpo
+
+" vim: set et sts=4 sw=4:

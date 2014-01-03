@@ -9,15 +9,14 @@
 "             See http://sam.zoy.org/wtfpl/COPYING for more details.
 "
 "============================================================================
+
 if exists("g:loaded_syntastic_co_coco_checker")
     finish
 endif
-let g:loaded_syntastic_co_coco_checker=1
+let g:loaded_syntastic_co_coco_checker = 1
 
-"bail if the user doesnt have coco installed
-if !executable("coco")
-    finish
-endif
+let s:save_cpo = &cpo
+set cpo&vim
 
 function! SyntaxCheckers_co_coco_GetLocList() dict
     let makeprg = self.makeprgBuild({ 'args': '-c -o /tmp' })
@@ -28,9 +27,16 @@ function! SyntaxCheckers_co_coco_GetLocList() dict
         \ '%EFailed at: %f,'.
         \ '%Z%trror: Parse error on line %l: %m'
 
-    return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
+    return SyntasticMake({
+        \ 'makeprg': makeprg,
+        \ 'errorformat': errorformat })
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'co',
     \ 'name': 'coco'})
+
+let &cpo = s:save_cpo
+unlet s:save_cpo
+
+" vim: set et sts=4 sw=4:

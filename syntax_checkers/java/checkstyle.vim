@@ -10,10 +10,11 @@
 "
 " Tested with checkstyle 5.5
 "============================================================================
+
 if exists("g:loaded_syntastic_java_checkstyle_checker")
     finish
 endif
-let g:loaded_syntastic_java_checkstyle_checker=1
+let g:loaded_syntastic_java_checkstyle_checker = 1
 
 if !exists("g:syntastic_java_checkstyle_classpath")
     let g:syntastic_java_checkstyle_classpath = 'checkstyle-5.5-all.jar'
@@ -22,6 +23,9 @@ endif
 if !exists("g:syntastic_java_checkstyle_conf_file")
     let g:syntastic_java_checkstyle_conf_file = 'sun_checks.xml'
 endif
+
+let s:save_cpo = &cpo
+set cpo&vim
 
 function! SyntaxCheckers_java_checkstyle_Preprocess(errors)
     let out = copy(a:errors)
@@ -71,3 +75,8 @@ call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'java',
     \ 'name': 'checkstyle',
     \ 'exec': 'java'})
+
+let &cpo = s:save_cpo
+unlet s:save_cpo
+
+" vim: set et sts=4 sw=4:

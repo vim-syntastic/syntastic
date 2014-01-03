@@ -13,7 +13,7 @@
 if exists("g:loaded_syntastic_sass_sass_checker")
     finish
 endif
-let g:loaded_syntastic_sass_sass_checker=1
+let g:loaded_syntastic_sass_sass_checker = 1
 
 "sass caching for large files drastically speeds up the checking, but store it
 "in a temp location otherwise sass puts .sass_cache dirs in the users project
@@ -29,6 +29,9 @@ let s:imports = ""
 if executable("compass")
     let s:imports = "--compass"
 endif
+
+let s:save_cpo = &cpo
+set cpo&vim
 
 function! SyntaxCheckers_sass_sass_GetLocList() dict
     if !g:syntastic_sass_check_partials && expand('%:t')[0] == '_'
@@ -69,3 +72,8 @@ endfunction
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'sass',
     \ 'name': 'sass'})
+
+let &cpo = s:save_cpo
+unlet s:save_cpo
+
+" vim: set et sts=4 sw=4:

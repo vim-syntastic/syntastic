@@ -30,3 +30,5 @@ endfunction
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'c',
     \ 'name': 'ycm'})
+
+" vim: set et sts=4 sw=4:

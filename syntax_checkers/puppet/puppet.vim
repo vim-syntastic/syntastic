@@ -13,7 +13,10 @@
 if exists("g:loaded_syntastic_puppet_puppet_checker")
     finish
 endif
-let g:loaded_syntastic_puppet_puppet_checker=1
+let g:loaded_syntastic_puppet_puppet_checker = 1
+
+let s:save_cpo = &cpo
+set cpo&vim
 
 function! SyntaxCheckers_puppet_puppet_GetLocList() dict
     let ver = syntastic#util#getVersion(self.getExec() . ' --version 2>' . syntastic#util#DevNull())
@@ -40,3 +43,8 @@ endfunction
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'puppet',
     \ 'name': 'puppet'})
+
+let &cpo = s:save_cpo
+unlet s:save_cpo
+
+" vim: set et sts=4 sw=4:

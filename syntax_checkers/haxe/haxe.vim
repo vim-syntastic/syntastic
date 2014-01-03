@@ -13,7 +13,10 @@
 if exists("g:loaded_syntastic_haxe_haxe_checker")
     finish
 endif
-let g:loaded_syntastic_haxe_haxe_checker=1
+let g:loaded_syntastic_haxe_haxe_checker = 1
+
+let s:save_cpo = &cpo
+set cpo&vim
 
 function! SyntaxCheckers_haxe_haxe_GetLocList() dict
     if exists('b:vaxe_hxml')
@@ -43,3 +46,8 @@ endfunction
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'haxe',
     \ 'name': 'haxe'})
+
+let &cpo = s:save_cpo
+unlet s:save_cpo
+
+" vim: set et sts=4 sw=4:

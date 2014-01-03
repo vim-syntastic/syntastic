@@ -13,11 +13,14 @@
 if exists('g:loaded_syntastic_haml_haml_checker')
     finish
 endif
-let g:loaded_syntastic_haml_haml_checker=1
+let g:loaded_syntastic_haml_haml_checker = 1
 
 if !exists('g:syntastic_haml_interpreter')
     let g:syntastic_haml_interpreter = 'haml'
 endif
+
+let s:save_cpo = &cpo
+set cpo&vim
 
 function! SyntaxCheckers_haml_haml_IsAvailable() dict
     return executable(expand(g:syntastic_haml_interpreter))
@@ -41,3 +44,8 @@ endfunction
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'haml',
     \ 'name': 'haml'})
+
+let &cpo = s:save_cpo
+unlet s:save_cpo
+
+" vim: set et sts=4 sw=4:

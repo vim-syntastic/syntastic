@@ -13,11 +13,14 @@
 if exists("g:loaded_syntastic_scala_scalac_checker")
     finish
 endif
-let g:loaded_syntastic_scala_scalac_checker=1
+let g:loaded_syntastic_scala_scalac_checker = 1
 
 if !exists('g:syntastic_scala_options')
     let g:syntastic_scala_options = ''
 endif
+
+let s:save_cpo = &cpo
+set cpo&vim
 
 function! SyntaxCheckers_scala_scalac_GetLocList() dict
     let makeprg = self.makeprgBuild({
@@ -36,3 +39,8 @@ endfunction
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'scala',
     \ 'name': 'scalac'})
+
+let &cpo = s:save_cpo
+unlet s:save_cpo
+
+" vim: set et sts=4 sw=4:

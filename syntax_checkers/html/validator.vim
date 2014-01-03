@@ -45,6 +45,9 @@ if !exists('g:syntastic_html_validator_nsfilter')
     let g:syntastic_html_validator_nsfilter = ''
 endif
 
+let s:save_cpo = &cpo
+set cpo&vim
+
 function! SyntaxCheckers_html_validator_Preprocess(errors)
     let out = []
     for e in a:errors
@@ -92,3 +95,8 @@ call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'html',
     \ 'name': 'validator',
     \ 'exec': 'curl' })
+
+let &cpo = s:save_cpo
+unlet s:save_cpo
+
+" vim: set et sts=4 sw=4:

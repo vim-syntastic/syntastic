@@ -10,6 +10,9 @@ if exists("g:loaded_syntastic_python_pep257_checker")
 endif
 let g:loaded_syntastic_python_pep257_checker = 1
 
+let s:save_cpo = &cpo
+set cpo&vim
+
 " sanity: kill empty lines here rather than munging errorformat
 function! SyntaxCheckers_python_pep257_Preprocess(errors)
     return filter(copy(a:errors), 'v:val != ""')
@@ -41,3 +44,8 @@ endfunction
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'python',
     \ 'name': 'pep257'})
+
+let &cpo = s:save_cpo
+unlet s:save_cpo
+
+" vim: set et sts=4 sw=4:

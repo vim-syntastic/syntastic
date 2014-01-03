@@ -5,15 +5,13 @@
 "
 "============================================================================
 
-" https://github.com/myint/rstcheck
-"
-" To install rstcheck:
-"     $ pip install --upgrade rstcheck
-
 if exists("g:loaded_syntastic_rst_rstcheck_checker")
     finish
 endif
-let g:loaded_syntastic_rst_rstcheck_checker=1
+let g:loaded_syntastic_rst_rstcheck_checker = 1
+
+let s:save_cpo = &cpo
+set cpo&vim
 
 function! SyntaxCheckers_rst_rstcheck_GetLocList() dict
     let makeprg = self.makeprgBuild({})
@@ -44,3 +42,8 @@ endfunction
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'rst',
     \ 'name': 'rstcheck'})
+
+let &cpo = s:save_cpo
+unlet s:save_cpo
+
+" vim: set et sts=4 sw=4:

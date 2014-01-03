@@ -28,6 +28,9 @@ if exists('g:loaded_syntastic_tex_chktex_checker')
 endif
 let g:loaded_syntastic_tex_chktex_checker = 1
 
+let s:save_cpo = &cpo
+set cpo&vim
+
 if !exists('g:syntastic_tex_chktex_showmsgs')
     let g:syntastic_tex_chktex_showmsgs = 1
 endif
@@ -52,3 +55,8 @@ endfunction
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'tex',
     \ 'name': 'chktex'})
+
+let &cpo = s:save_cpo
+unlet s:save_cpo
+
+" vim: set et sts=4 sw=4:

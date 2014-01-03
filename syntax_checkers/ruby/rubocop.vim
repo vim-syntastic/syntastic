@@ -16,7 +16,10 @@
 if exists("g:loaded_syntastic_ruby_rubocop_checker")
     finish
 endif
-let g:loaded_syntastic_ruby_rubocop_checker=1
+let g:loaded_syntastic_ruby_rubocop_checker = 1
+
+let s:save_cpo = &cpo
+set cpo&vim
 
 function! SyntaxCheckers_ruby_rubocop_IsAvailable() dict
     let exe = self.getExec()
@@ -50,3 +53,8 @@ endfunction
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'ruby',
     \ 'name': 'rubocop'})
+
+let &cpo = s:save_cpo
+unlet s:save_cpo
+
+" vim: set et sts=4 sw=4:

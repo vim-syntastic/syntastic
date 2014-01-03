@@ -15,6 +15,9 @@ if exists("g:loaded_syntastic_limbo_limbo_checker")
 endif
 let g:loaded_syntastic_limbo_limbo_checker = 1
 
+let s:save_cpo = &cpo
+set cpo&vim
+
 function! SyntaxCheckers_limbo_limbo_GetLocList() dict
     let include = !empty($INFERNO_HOME) ? '-I$INFERNO_HOME ' : ''
     " don't generate .dis in current dir while checking syntax,
@@ -36,3 +39,8 @@ endfunction
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'limbo',
     \ 'name': 'limbo' })
+
+let &cpo = s:save_cpo
+unlet s:save_cpo
+
+" vim: set et sts=4 sw=4:

@@ -15,6 +15,9 @@ if exists("g:loaded_syntastic_asciidoc_asciidoc_checker")
 endif
 let g:loaded_syntastic_asciidoc_asciidoc_checker = 1
 
+let s:save_cpo = &cpo
+set cpo&vim
+
 function! SyntaxCheckers_asciidoc_asciidoc_GetLocList() dict
     let makeprg = self.makeprgBuild({ 'args': syntastic#c#NullOutput() })
 
@@ -37,3 +40,8 @@ endfunction
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'asciidoc',
     \ 'name': 'asciidoc'})
+
+let &cpo = s:save_cpo
+unlet s:save_cpo
+
+" vim: set et sts=4 sw=4:

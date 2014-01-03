@@ -13,7 +13,10 @@
 if exists("g:loaded_syntastic_twig_twiglint_checker")
     finish
 endif
-let g:loaded_syntastic_twig_twiglint_checker=1
+let g:loaded_syntastic_twig_twiglint_checker = 1
+
+let s:save_cpo = &cpo
+set cpo&vim
 
 function! SyntaxCheckers_twig_twiglint_GetHighlightRegex(item)
     " Let's match the full line for now
@@ -34,3 +37,8 @@ call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'twig',
     \ 'name': 'twiglint',
     \ 'exec': 'twig-lint'})
+
+let &cpo = s:save_cpo
+unlet s:save_cpo
+
+" vim: set et sts=4 sw=4:

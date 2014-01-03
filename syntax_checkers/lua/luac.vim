@@ -13,7 +13,10 @@
 if exists("g:loaded_syntastic_lua_luac_checker")
     finish
 endif
-let g:loaded_syntastic_lua_luac_checker=1
+let g:loaded_syntastic_lua_luac_checker = 1
+
+let s:save_cpo = &cpo
+set cpo&vim
 
 function! SyntaxCheckers_lua_luac_GetHighlightRegex(pos)
     let result = ''
@@ -55,3 +58,8 @@ endfunction
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'lua',
     \ 'name': 'luac'})
+
+let &cpo = s:save_cpo
+unlet s:save_cpo
+
+" vim: set et sts=4 sw=4:

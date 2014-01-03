@@ -51,13 +51,16 @@
 if exists("g:loaded_syntastic_ocaml_camlp4o_checker")
     finish
 endif
-let g:loaded_syntastic_ocaml_camlp4o_checker=1
+let g:loaded_syntastic_ocaml_camlp4o_checker = 1
 
 if exists('g:syntastic_ocaml_camlp4r') && g:syntastic_ocaml_camlp4r != 0
     let s:ocamlpp="camlp4r"
 else
     let s:ocamlpp="camlp4o"
 endif
+
+let s:save_cpo = &cpo
+set cpo&vim
 
 function! SyntaxCheckers_ocaml_camlp4o_IsAvailable() dict
     return executable(s:ocamlpp)
@@ -146,3 +149,8 @@ endfunction
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'ocaml',
     \ 'name': 'camlp4o'})
+
+let &cpo = s:save_cpo
+unlet s:save_cpo
+
+" vim: set et sts=4 sw=4:

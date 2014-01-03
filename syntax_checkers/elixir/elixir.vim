@@ -9,10 +9,14 @@
 "             See http://sam.zoy.org/wtfpl/COPYING for more details.
 "
 "============================================================================
+
 if exists("g:loaded_syntastic_elixir_elixir_checker")
     finish
 endif
-let g:loaded_syntastic_elixir_elixir_checker=1
+let g:loaded_syntastic_elixir_elixir_checker = 1
+
+let s:save_cpo = &cpo
+set cpo&vim
 
 " TODO: we should probably split this into separate checkers
 function! SyntaxCheckers_elixir_elixir_IsAvailable() dict
@@ -40,3 +44,8 @@ endfunction
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'elixir',
     \ 'name': 'elixir'})
+
+let &cpo = s:save_cpo
+unlet s:save_cpo
+
+" vim: set et sts=4 sw=4:

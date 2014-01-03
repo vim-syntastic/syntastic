@@ -19,12 +19,12 @@ if !exists('g:syntastic_fortran_compiler')
     let g:syntastic_fortran_compiler = 'gfortran'
 endif
 
+let s:save_cpo = &cpo
+set cpo&vim
+
 function! SyntaxCheckers_fortran_gfortran_IsAvailable() dict
     return executable(expand(g:syntastic_fortran_compiler))
 endfunction
-
-let s:save_cpo = &cpo
-set cpo&vim
 
 if !exists('g:syntastic_fortran_compiler_options')
     let g:syntastic_fortran_compiler_options = ''

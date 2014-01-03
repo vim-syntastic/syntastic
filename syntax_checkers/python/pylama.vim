@@ -9,13 +9,17 @@
 "             See http://sam.zoy.org/wtfpl/COPYING for more details.
 "
 "============================================================================
+
 if exists('g:loaded_syntastic_python_pylama_checker')
     finish
 endif
 let g:loaded_syntastic_python_pylama_checker = 1
 
-function! SyntaxCheckers_python_pylama_GetHighlightRegex(i)
-    return SyntaxCheckers_python_pyflakes_GetHighlightRegex(a:i)
+let s:save_cpo = &cpo
+set cpo&vim
+
+function! SyntaxCheckers_python_pylama_GetHighlightRegex(item)
+    return SyntaxCheckers_python_pyflakes_GetHighlightRegex(a:item)
 endfunction
 
 function! SyntaxCheckers_python_pylama_GetLocList() dict
@@ -57,3 +61,8 @@ runtime! syntax_checkers/python/pyflakes.vim
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'python',
     \ 'name': 'pylama' })
+
+let &cpo = s:save_cpo
+unlet s:save_cpo
+
+" vim: set et sts=4 sw=4:

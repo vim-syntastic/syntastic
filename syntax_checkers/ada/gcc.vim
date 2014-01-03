@@ -16,12 +16,12 @@ if !exists('g:syntastic_ada_compiler')
     let g:syntastic_ada_compiler = 'gcc'
 endif
 
+let s:save_cpo = &cpo
+set cpo&vim
+
 function! SyntaxCheckers_ada_gcc_IsAvailable() dict
     return executable(expand(g:syntastic_ada_compiler))
 endfunction
-
-let s:save_cpo = &cpo
-set cpo&vim
 
 if !exists('g:syntastic_ada_compiler_options')
     let g:syntastic_ada_compiler_options = ''

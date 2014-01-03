@@ -42,6 +42,9 @@ if !exists('g:syntastic_html_tidy_empty_tags')
     let g:syntastic_html_tidy_empty_tags = []
 endif
 
+let s:save_cpo = &cpo
+set cpo&vim
+
 " TODO: join this with xhtml.vim for DRY's sake?
 function! s:TidyEncOptByFenc()
     let tidy_opts = {
@@ -200,3 +203,7 @@ call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'html',
     \ 'name': 'tidy'})
 
+let &cpo = s:save_cpo
+unlet s:save_cpo
+
+" vim: set et sts=4 sw=4:

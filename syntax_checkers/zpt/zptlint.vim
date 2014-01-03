@@ -22,7 +22,10 @@
 if exists("g:loaded_syntastic_zpt_zptlint_checker")
     finish
 endif
-let g:loaded_syntastic_zpt_zptlint_checker=1
+let g:loaded_syntastic_zpt_zptlint_checker = 1
+
+let s:save_cpo = &cpo
+set cpo&vim
 
 function! SyntaxCheckers_zpt_zptlint_GetLocList() dict
     let makeprg = self.makeprgBuild({})
@@ -41,3 +44,8 @@ endfunction
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'zpt',
     \ 'name': 'zptlint'})
+
+let &cpo = s:save_cpo
+unlet s:save_cpo
+
+" vim: set et sts=4 sw=4:

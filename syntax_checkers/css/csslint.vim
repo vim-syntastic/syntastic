@@ -17,11 +17,14 @@
 if exists('g:loaded_syntastic_css_csslint_checker')
     finish
 endif
-let g:loaded_syntastic_css_csslint_checker=1
+let g:loaded_syntastic_css_csslint_checker = 1
 
 if !exists('g:syntastic_csslint_options')
     let g:syntastic_csslint_options = ''
 endif
+
+let s:save_cpo = &cpo
+set cpo&vim
 
 function! SyntaxCheckers_css_csslint_GetLocList() dict
     let makeprg = self.makeprgBuild({ 'args': '--format=compact ' . g:syntastic_csslint_options })
@@ -44,3 +47,8 @@ endfunction
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'css',
     \ 'name': 'csslint'})
+
+let &cpo = s:save_cpo
+unlet s:save_cpo
+
+" vim: set et sts=4 sw=4:

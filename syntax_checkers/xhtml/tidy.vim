@@ -18,11 +18,14 @@
 if exists("g:loaded_syntastic_xhtml_tidy_checker")
     finish
 endif
-let g:loaded_syntastic_xhtml_tidy_checker=1
+let g:loaded_syntastic_xhtml_tidy_checker = 1
 
 if !exists('g:syntastic_xhtml_tidy_ignore_errors')
     let g:syntastic_xhtml_tidy_ignore_errors = []
 endif
+
+let s:save_cpo = &cpo
+set cpo&vim
 
 " TODO: join this with html.vim DRY's sake?
 function! s:TidyEncOptByFenc()
@@ -79,3 +82,8 @@ endfunction
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'xhtml',
     \ 'name': 'tidy'})
+
+let &cpo = s:save_cpo
+unlet s:save_cpo
+
+" vim: set et sts=4 sw=4:

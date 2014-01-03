@@ -13,7 +13,7 @@
 if exists("g:loaded_syntastic_docbk_xmllint_checker")
     finish
 endif
-let g:loaded_syntastic_docbk_xmllint_checker=1
+let g:loaded_syntastic_docbk_xmllint_checker = 1
 
 runtime! syntax_checkers/xml/*.vim
 
@@ -21,3 +21,5 @@ call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'docbk',
     \ 'name': 'xmllint',
     \ 'redirect': 'xml/xmllint'})
+
+" vim: set et sts=4 sw=4:

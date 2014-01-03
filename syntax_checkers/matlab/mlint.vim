@@ -13,7 +13,10 @@
 if exists("g:loaded_syntastic_matlab_mlint_checker")
     finish
 endif
-let g:loaded_syntastic_matlab_mlint_checker=1
+let g:loaded_syntastic_matlab_mlint_checker = 1
+
+let s:save_cpo = &cpo
+set cpo&vim
 
 function! SyntaxCheckers_matlab_mlint_GetLocList() dict
     let makeprg = self.makeprgBuild({ 'args': '-id $*' })
@@ -31,3 +34,8 @@ endfunction
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'matlab',
     \ 'name': 'mlint'})
+
+let &cpo = s:save_cpo
+unlet s:save_cpo
+
+" vim: set et sts=4 sw=4:

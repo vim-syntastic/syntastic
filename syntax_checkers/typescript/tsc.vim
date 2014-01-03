@@ -7,7 +7,10 @@
 if exists("g:loaded_syntastic_typescript_tsc_checker")
     finish
 endif
-let g:loaded_syntastic_typescript_tsc_checker=1
+let g:loaded_syntastic_typescript_tsc_checker = 1
+
+let s:save_cpo = &cpo
+set cpo&vim
 
 function! SyntaxCheckers_typescript_tsc_GetLocList() dict
     let makeprg = self.makeprgBuild({
@@ -30,3 +33,8 @@ endfunction
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'typescript',
     \ 'name': 'tsc'})
+
+let &cpo = s:save_cpo
+unlet s:save_cpo
+
+" vim: set et sts=4 sw=4:

@@ -14,7 +14,7 @@
 if exists("g:loaded_syntastic_yaml_yamlxs_checker")
     finish
 endif
-let g:loaded_syntastic_yaml_yamlxs_checker=1
+let g:loaded_syntastic_yaml_yamlxs_checker = 1
 
 if !exists('g:syntastic_perl_interpreter')
     let g:syntastic_perl_interpreter = 'perl'
@@ -23,6 +23,9 @@ endif
 if !exists('g:syntastic_perl_lib_path')
     let g:syntastic_perl_lib_path = []
 endif
+
+let s:save_cpo = &cpo
+set cpo&vim
 
 function! SyntaxCheckers_yaml_yamlxs_IsAvailable() dict
     " don't call executable() here, to allow things like
@@ -67,3 +70,8 @@ endfunction
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'yaml',
     \ 'name': 'yamlxs' })
+
+let &cpo = s:save_cpo
+unlet s:save_cpo
+
+" vim: set et sts=4 sw=4:

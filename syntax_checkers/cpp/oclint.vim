@@ -27,3 +27,5 @@ call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'cpp',
     \ 'name': 'oclint',
     \ 'redirect': 'c/oclint'})
+
+" vim: set et sts=4 sw=4:

@@ -13,7 +13,7 @@
 if exists("g:loaded_syntastic_perl_podchecker_checker")
     finish
 endif
-let g:loaded_syntastic_perl_podchecker_checker=1
+let g:loaded_syntastic_perl_podchecker_checker = 1
 
 runtime! syntax_checkers/pod/*.vim
 
@@ -21,3 +21,5 @@ call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'perl',
     \ 'name': 'podchecker',
     \ 'redirect': 'pod/podchecker'})
+
+" vim: set et sts=4 sw=4:

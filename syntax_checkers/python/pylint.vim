@@ -4,12 +4,16 @@
 "Author:      Parantapa Bhattacharya <parantapa at gmail dot com>
 "
 "============================================================================
+
 if exists("g:loaded_syntastic_python_pylint_checker")
     finish
 endif
 let g:loaded_syntastic_python_pylint_checker = 1
 
 let s:pylint_new = -1
+
+let s:save_cpo = &cpo
+set cpo&vim
 
 function! SyntaxCheckers_python_pylint_IsAvailable() dict
     let exe = self.getExec()
@@ -65,3 +69,8 @@ endfunction
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'python',
     \ 'name': 'pylint' })
+
+let &cpo = s:save_cpo
+unlet s:save_cpo
+
+" vim: set et sts=4 sw=4:

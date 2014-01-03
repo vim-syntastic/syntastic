@@ -21,6 +21,9 @@ endif
 
 let s:check_file = expand('<sfile>:p:h') . '/erlang_check_file.erl'
 
+let s:save_cpo = &cpo
+set cpo&vim
+
 function! SyntaxCheckers_erlang_escript_GetLocList() dict
     if expand('%:e') ==# 'hrl'
         return []
@@ -51,3 +54,8 @@ endfunction
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'erlang',
     \ 'name': 'escript'})
+
+let &cpo = s:save_cpo
+unlet s:save_cpo
+
+" vim: set et sts=4 sw=4:

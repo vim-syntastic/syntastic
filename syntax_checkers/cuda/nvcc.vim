@@ -18,11 +18,13 @@
 "
 "   let g:syntastic_cuda_arch = "sm_20"
 
-
 if exists("g:loaded_syntastic_cuda_nvcc_checker")
     finish
 endif
-let g:loaded_syntastic_cuda_nvcc_checker=1
+let g:loaded_syntastic_cuda_nvcc_checker = 1
+
+let s:save_cpo = &cpo
+set cpo&vim
 
 function! SyntaxCheckers_cuda_nvcc_GetLocList() dict
     if exists('g:syntastic_cuda_arch')
@@ -68,3 +70,8 @@ endfunction
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'cuda',
     \ 'name': 'nvcc'})
+
+let &cpo = s:save_cpo
+unlet s:save_cpo
+
+" vim: set et sts=4 sw=4:
