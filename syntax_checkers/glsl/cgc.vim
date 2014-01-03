@@ -43,6 +43,7 @@ endfunction
 
 function! s:GetProfile()
     let save_cursor = getpos('.')
+    call cursor(1, 1)
     let magic = '\m\C^// profile:\s*'
     let line = search(magic, 'c')
     call setpos('.', save_cursor)
