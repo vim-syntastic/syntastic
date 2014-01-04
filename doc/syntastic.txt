@@ -192,7 +192,8 @@ the checker that generated it, but you can disable these labels by unsetting
 You can selectively disable some of the errors found by checkers either
 using |'syntastic_quiet_messages'|, or by specifying a list of patterns in
 |'syntastic_ignore_files'|.
-'syntastic_<filetype>_<checker>_quiet_messages'
+
+See also: |'syntastic_<filetype>_<checker>_quiet_messages'|.
 
 ==============================================================================
 3. Commands                                               *syntastic-commands*
