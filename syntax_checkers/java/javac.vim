@@ -68,6 +68,10 @@ if !exists('g:syntastic_java_javac_config_file')
     let g:syntastic_java_javac_config_file = '.syntastic_javac_config'
 endif
 
+if !exists('g:syntastic_java_javac_custom_classpath_command')
+    let g:syntastic_java_javac_custom_classpath_command = ''
+endif
+
 if !exists("g:syntastic_java_javac_maven_pom_ftime")
     let g:syntastic_java_javac_maven_pom_ftime = {}
 endif
@@ -371,6 +375,17 @@ function! SyntaxCheckers_java_javac_GetLocList() dict
             let javac_opts .= ' -d ' . s:MavenOutputDirectory()
         endif
         let javac_classpath = s:AddToClasspath(javac_classpath, s:GetMavenClasspath())
+    endif
+
+    " load custom classpath
+    if g:syntastic_java_javac_custom_classpath_command != ''
+        let lines = system(g:syntastic_java_javac_custom_classpath_command)
+        if has('win32') || has('win32unix') || has('win64')
+            let lines = substitute(lines,"\r\n","\n")
+        endif
+        for l in split(lines, "\n")
+            let javac_classpath = s:AddToClasspath(javac_classpath, l)
+        endfor
     endif
 
     if javac_classpath != ''
