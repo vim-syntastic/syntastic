@@ -42,11 +42,20 @@ function! SyntaxCheckers_glsl_cgc_GetLocList() dict
 endfunction
 
 function! s:GetProfile()
-    let save_cursor = getpos('.')
+    let save_view = winsaveview()
+    let old_foldenable = &foldenable
+    let old_lazyredraw = &lazyredraw
+
+    let &lazyredraw = 1
+    let &foldenable = 0
     call cursor(1, 1)
+
     let magic = '\m\C^// profile:\s*'
     let line = search(magic, 'c')
-    call setpos('.', save_cursor)
+
+    call winrestview(save_view)
+    let &foldenable = old_foldenable
+    let &lazyredraw = old_lazyredraw
 
     if line
         let profile = matchstr(getline(line), magic . '\zs.*')
