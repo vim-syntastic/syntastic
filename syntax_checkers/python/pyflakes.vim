@@ -45,14 +45,19 @@ function! SyntaxCheckers_python_pyflakes_GetLocList() dict
     let errorformat =
         \ '%E%f:%l: could not compile,'.
         \ '%-Z%p^,'.
-        \ '%E%f:%l:%c: %m,'.
         \ '%E%f:%l: %m,'.
         \ '%-G%.%#'
 
-    return SyntasticMake({
+    let loclist = SyntasticMake({
         \ 'makeprg': makeprg,
         \ 'errorformat': errorformat,
         \ 'defaults': {'text': "Syntax error"} })
+
+    for e in loclist
+        let e['vcol'] = 0
+    endfor
+
+    return loclist
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
