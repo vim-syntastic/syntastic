@@ -110,24 +110,23 @@ function! syntastic#util#wideMsg(msg)
     let old_ruler = &ruler
     let old_showcmd = &showcmd
 
-    "convert tabs to spaces so that the tabs count towards the window width
-    "as the proper amount of characters
-    let msg = substitute(a:msg, "\t", repeat(" ", &tabstop), "g")
-    let msg = strpart(msg, 0, winwidth(0)-1)
+    "This is here because it is possible for some error messages to
+    "begin with \n which will cause a "press enter" prompt.
+    let msg = substitute(a:msg, "\n", "", "g")
 
-    "This is here because it is possible for some error messages to begin with
-    "\n which will cause a "press enter" prompt. I have noticed this in the
-    "javascript:jshint checker and have been unable to figure out why it
-    "happens
-    let msg = substitute(msg, "\n", "", "g")
+    "convert tabs to spaces so that the tabs count towards the window
+    "width as the proper amount of characters
+    let chunks = split(msg, "\t", 1)
+    let msg = join(map(chunks[:-2], 'v:val . repeat(" ", &ts - len(v:val) % &ts)'), '') . chunks[-1]
+    let msg = strpart(msg, 0, winwidth(0) - 1)
 
     set noruler noshowcmd
     call syntastic#util#redraw(0)
 
     echo msg
 
-    let &ruler=old_ruler
-    let &showcmd=old_showcmd
+    let &ruler = old_ruler
+    let &showcmd = old_showcmd
 endfunction
 
 " Check whether a buffer is loaded, listed, and not hidden
