@@ -7,14 +7,13 @@
 "             to the extent permitted by applicable law. You can redistribute
 "             it and/or modify it under the terms of the Do What The Fuck You
 "             Want To Public License, Version 2, as published by Sam Hocevar.
-"             See http://sam.zoy.org/wtfpl/COPYING for more details.
-"
+"             See http://sam.zoy.org/wtfpl/COPYING for more details.  
 "============================================================================
 
 if exists("g:loaded_syntastic_java_javac_checker")
     finish
 endif
-let g:loaded_syntastic_java_javac_checker=1
+let g:loaded_syntastic_java_javac_checker = 1
 let g:syntastic_java_javac_maven_pom_tags = ["build", "properties"]
 let g:syntastic_java_javac_maven_pom_properties = {}
 let s:has_maven = 0
@@ -69,6 +68,10 @@ if !exists('g:syntastic_java_javac_config_file')
     let g:syntastic_java_javac_config_file = '.syntastic_javac_config'
 endif
 
+if !exists('g:syntastic_java_javac_custom_classpath_command')
+    let g:syntastic_java_javac_custom_classpath_command = ''
+endif
+
 if !exists("g:syntastic_java_javac_maven_pom_ftime")
     let g:syntastic_java_javac_maven_pom_ftime = {}
 endif
@@ -108,33 +111,53 @@ function! s:AddToClasspath(classpath,path)
     endif
 endfunction
 
-function! s:LoadClasspathFromConfigFile()
-    if filereadable(g:syntastic_java_javac_config_file)
-        let path = ''
-        let lines = readfile(g:syntastic_java_javac_config_file)
-        for l in lines
-            if l != ''
-                let path .= l . "\n"
-            endif
-        endfor
-        return path
+function! s:SplitClasspath(classpath)
+    if a:classpath == ''
+        return []
+    endif
+    if has('win32') || has('win32unix') || has('win64')
+        return split(a:classpath, ";")
     else
-        return ''
+        return split(a:classpath, ":")
+    endif
+endfunction
+
+function! s:LoadConfigFile()
+    if filereadable(g:syntastic_java_javac_config_file)
+        exe 'source '.g:syntastic_java_javac_config_file
     endif
 endfunction
 
 function! s:SaveClasspath()
+    " build classpath from lines
     let path = ''
     let lines = getline(1, line('$'))
+    for l in lines
+        let path = s:AddToClasspath(path,l)
+    endfor
     " save classpath to config file
     if g:syntastic_java_javac_config_file_enabled
+        if filereadable(g:syntastic_java_javac_config_file)
+            " load lines from config file
+            let lines = readfile(g:syntastic_java_javac_config_file)
+            " strip g:syntastic_java_javac_classpath options from config file lines
+            let i = 0
+            while i < len(lines)
+                if match(lines[i], 'g:syntastic_java_javac_classpath') != -1
+                    call remove(lines,i)  
+                    let i -= 1
+                endif
+                let i += 1
+            endwhile
+        else
+            let lines = []
+        endif
+        " add new g:syntastic_java_javac_classpath option to config
+        call add(lines,'let g:syntastic_java_javac_classpath = "'.path.'"')
+        " save config file lines
         call writefile(lines,g:syntastic_java_javac_config_file)
     endif
-    for l in lines
-        if l != ''
-            let path .= l . "\n"
-        endif
-    endfor
+    " set new classpath
     let g:syntastic_java_javac_classpath = path
     let &modified = 0
 endfunction
@@ -143,17 +166,56 @@ function! s:EditClasspath()
     let command = 'syntastic javac classpath'
     let winnr = bufwinnr('^' . command . '$')
     if winnr < 0
-        let pathlist = split(g:syntastic_java_javac_classpath,"\n")
-        execute (len(pathlist) + 5) . 'sp ' . fnameescape(command)
+        let path = []
+        let pathlines = split(g:syntastic_java_javac_classpath,"\n")
+        for p in pathlines
+            let path += s:SplitClasspath(p)
+        endfor
+        execute (len(path) + 5) . 'sp ' . fnameescape(command)
 
         augroup syntastic
             autocmd BufWriteCmd <buffer> call s:SaveClasspath() | bwipeout
         augroup END
 
         setlocal buftype=acwrite bufhidden=wipe nobuflisted noswapfile nowrap number
-        for p in pathlist
+        for p in path
             call append(line('$') - 1, p)
         endfor
+        let &modified = 0
+    else
+        execute winnr . 'wincmd w'
+    endif
+endfunction
+
+function! s:SaveConfig()
+    " get lines
+    let lines = getline(1, line('$'))
+    if g:syntastic_java_javac_config_file_enabled
+        " save config file lines
+        call writefile(lines,g:syntastic_java_javac_config_file)
+    endif
+    let &modified = 0
+endfunction
+
+function! s:EditConfig()
+    let command = 'syntastic javac config'
+    let winnr = bufwinnr('^' . command . '$')
+    if winnr < 0
+        let lines = []
+        if filereadable(g:syntastic_java_javac_config_file)
+            let lines = readfile(g:syntastic_java_javac_config_file)
+        endif
+        execute (len(lines) + 5) . 'sp ' . fnameescape(command)
+
+        augroup syntastic
+            autocmd BufWriteCmd <buffer> call s:SaveConfig() | bwipeout
+        augroup END
+
+        setlocal ft=vim buftype=acwrite bufhidden=wipe nobuflisted noswapfile nowrap number
+        for l in lines
+            call append(line('$') - 1, l)
+        endfor
+        let &modified = 0
     else
         execute winnr . 'wincmd w'
     endif
@@ -194,6 +256,10 @@ function! s:GetMavenProperties()
 endfunction
 
 command! SyntasticJavacEditClasspath call s:EditClasspath()
+
+if g:syntastic_java_javac_config_file_enabled
+    command! SyntasticJavacEditConfig call s:EditConfig()
+endif
 
 function! s:GetMavenClasspath()
     let pom = findfile("pom.xml", ".;")
@@ -281,10 +347,7 @@ function! SyntaxCheckers_java_javac_GetLocList() dict
 
     " load classpath from config file
     if g:syntastic_java_javac_config_file_enabled
-        let loaded_classpath = s:LoadClasspathFromConfigFile()
-        if loaded_classpath != ''
-            let g:syntastic_java_javac_classpath = loaded_classpath
-        endif
+        call s:LoadConfigFile()
     endif
 
     let javac_classpath = ''
@@ -299,9 +362,7 @@ function! SyntaxCheckers_java_javac_GetLocList() dict
             endtry
             if type(ps) == type([])
                 for p in ps
-                    if p != ''
-                        let javac_classpath = s:AddToClasspath(javac_classpath,p)
-                    endif
+                    let javac_classpath = s:AddToClasspath(javac_classpath,p)
                 endfor
             else
                 let javac_classpath = s:AddToClasspath(javac_classpath,ps)
@@ -314,6 +375,17 @@ function! SyntaxCheckers_java_javac_GetLocList() dict
             let javac_opts .= ' -d ' . s:MavenOutputDirectory()
         endif
         let javac_classpath = s:AddToClasspath(javac_classpath, s:GetMavenClasspath())
+    endif
+
+    " load custom classpath
+    if g:syntastic_java_javac_custom_classpath_command != ''
+        let lines = system(g:syntastic_java_javac_custom_classpath_command)
+        if has('win32') || has('win32unix') || has('win64')
+            let lines = substitute(lines,"\r\n","\n")
+        endif
+        for l in split(lines, "\n")
+            let javac_classpath = s:AddToClasspath(javac_classpath, l)
+        endfor
     endif
 
     if javac_classpath != ''
