@@ -1,10 +1,12 @@
 "============================================================================
 "File:        python.vim
 "Description: Syntax checking plugin for syntastic.vim
-"Author:      Artem Nezvigin <artem at artnez dot com>
-"
-" `errorformat` derived from:
-" http://www.vim.org/scripts/download_script.php?src_id=1392
+"Maintainer:  LCD 47 <lcd047 at gmail dot com>
+"License:     This program is free software. It comes without any warranty,
+"             to the extent permitted by applicable law. You can redistribute
+"             it and/or modify it under the terms of the Do What The Fuck You
+"             Want To Public License, Version 2, as published by Sam Hocevar.
+"             See http://sam.zoy.org/wtfpl/COPYING for more details.
 "
 "============================================================================
 
@@ -16,23 +18,23 @@ let g:loaded_syntastic_python_python_checker = 1
 let s:save_cpo = &cpo
 set cpo&vim
 
+let s:compiler = expand('<sfile>:p:h') . syntastic#util#Slash() . 'compile.py'
+
+function! SyntaxCheckers_python_python_IsAvailable() dict
+    let exe = self.getExec()
+    return executable(exe) &&
+        \ syntastic#util#versionIsAtLeast(syntastic#util#getVersion(exe . ' --version'), [2,6])
+endfunction
+
 function! SyntaxCheckers_python_python_GetLocList() dict
-    let fname = "'" . escape(expand('%'), "\\'") . "'"
+    let makeprg = self.makeprgBuild({ 'exe': self.getExec() . ' ' . s:compiler })
 
-    let makeprg = self.makeprgBuild({
-        \ 'args': '-c',
-        \ 'fname': syntastic#util#shescape("compile(open(" . fname . ").read(), " . fname . ", 'exec')") })
-
-    let errorformat =
-        \ '%E  File "%f"\, line %l,' .
-        \ '%C    %p^,' .
-        \ '%C    %.%#,' .
-        \ '%Z%m,' .
-        \ '%-G%.%#'
+    let errorformat = '%E%f:%l:%c: %m'
 
     return SyntasticMake({
         \ 'makeprg': makeprg,
-        \ 'errorformat': errorformat })
+        \ 'errorformat': errorformat,
+        \ 'returns': [0] })
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
