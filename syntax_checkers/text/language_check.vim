@@ -22,6 +22,7 @@ function! SyntaxCheckers_text_language_check_GetLocList() dict
     return SyntasticMake({
         \ 'makeprg': makeprg,
         \ 'errorformat': errorformat,
+        \ 'subtype': 'Style',
         \ 'returns': [0, 2] })
 endfunction
 
