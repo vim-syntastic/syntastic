@@ -129,10 +129,16 @@ endfunction
 
 " Private functions {{{1
 
-function! s:isDebugEnabled(level)
+function! s:isDebugEnabled_smart(level)
+    return and(g:syntastic_debug, a:level)
+endfunction
+
+function! s:isDebugEnabled_dumb(level)
     " poor man's bit test for bit N, assuming a:level == 2**N
     return (g:syntastic_debug / a:level) % 2
 endfunction
+
+let s:isDebugEnabled = function(exists('*and') ? 's:isDebugEnabled_smart' : 's:isDebugEnabled_dumb')
 
 function! s:logRedirect(on)
     if exists("g:syntastic_debug_file")
@@ -149,9 +155,15 @@ function! s:logRedirect(on)
     endif
 endfunction
 
-function! s:logTimestamp()
-    return 'syntastic: ' . ( has('reltime') ? split(reltimestr(reltime(g:syntastic_start)))[0] : 'debug' ) . ': '
+function! s:logTimestamp_smart()
+    return 'syntastic: ' . split(reltimestr(reltime(g:syntastic_start)))[0] . ': '
 endfunction
+
+function! s:logTimestamp_dumb()
+    return 'syntastic: debug: '
+endfunction
+
+let s:logTimestamp = function(has('reltime') ? 's:logTimestamp_smart' : 's:logTimestamp_dumb')
 
 function! s:formatVariable(name)
     let vals = []
