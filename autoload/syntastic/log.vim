@@ -130,7 +130,8 @@ endfunction
 " Private functions {{{1
 
 function! s:isDebugEnabled(level)
-    return and(g:syntastic_debug, a:level)
+    " poor man's bit test for bit N, assuming a:level == 2**N
+    return (g:syntastic_debug / a:level) % 2
 endfunction
 
 function! s:logRedirect(on)
