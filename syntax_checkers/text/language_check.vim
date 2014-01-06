@@ -19,11 +19,10 @@ function! SyntaxCheckers_text_language_check_GetLocList() dict
     let errorformat =
         \ '%f:%l:%c: %m'
 
-    let loclist = SyntasticMake({
+    return SyntasticMake({
         \ 'makeprg': makeprg,
-        \ 'errorformat': errorformat})
-
-    return loclist
+        \ 'errorformat': errorformat,
+        \ 'returns': [0, 2] })
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
