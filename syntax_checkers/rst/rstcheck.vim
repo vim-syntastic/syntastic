@@ -25,7 +25,8 @@ function! SyntaxCheckers_rst_rstcheck_GetLocList() dict
 
     let loclist = SyntasticMake({
         \ 'makeprg': makeprg,
-        \ 'errorformat': errorformat })
+        \ 'errorformat': errorformat,
+        \ 'returns': [0, 1] })
 
     for e in loclist
         if e['type'] ==? 'S'
