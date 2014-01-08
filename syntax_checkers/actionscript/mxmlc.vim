@@ -53,6 +53,7 @@ function! SyntaxCheckers_actionscript_mxmlc_GetLocList() dict
     let errorformat =
         \ '%f(%l): col: %c %trror: %m,' .
         \ '%f(%l): col: %c %tarning: %m,' .
+        \ '%f: %trror: %m,' .
         \ '%-G%.%#'
 
     return SyntasticMake({
