@@ -117,7 +117,7 @@ function! syntastic#util#wideMsg(msg)
     "convert tabs to spaces so that the tabs count towards the window
     "width as the proper amount of characters
     let chunks = split(msg, "\t", 1)
-    let msg = join(map(chunks[:-2], 'v:val . repeat(" ", &ts - len(v:val) % &ts)'), '') . chunks[-1]
+    let msg = join(map(chunks[:-2], 'v:val . repeat(" ", &ts - strwidth(v:val) % &ts)'), '') . chunks[-1]
     let msg = strpart(msg, 0, winwidth(0) - 1)
 
     set noruler noshowcmd

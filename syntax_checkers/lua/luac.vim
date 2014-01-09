@@ -21,7 +21,7 @@ set cpo&vim
 function! SyntaxCheckers_lua_luac_GetHighlightRegex(pos)
     let result = ''
     let near = matchstr(a:pos['text'], '\mnear ''\zs[^'']\+\ze''')
-    if len(near) > 0
+    if strlen(near) > 0
         if near ==# '<eof>'
             let p = getpos('$')
             let a:pos['lnum'] = p[1]
@@ -35,7 +35,7 @@ function! SyntaxCheckers_lua_luac_GetHighlightRegex(pos)
         " in future versions of syntastic; enable it at your own risk :)
 
         "let open = matchstr(a:pos['text'], '\m(to close ''\zs[^'']\+\ze'' at line [0-9]\+)')
-        "if len(open) > 0
+        "if strlen(open) > 0
         "    let line = str2nr(matchstr(a:pos['text'], '\m(to close ''[^'']\+'' at line \zs[0-9]\+\ze)'))
         "    let group = a:pos['type'] ==? 'E' ? 'SyntasticError' : 'SyntasticWarning'
         "    call matchadd(group, '\%' . line . 'l\V' . open)

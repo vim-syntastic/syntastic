@@ -22,7 +22,7 @@ function! s:GetShell()
     if !exists('b:shell') || b:shell == ''
         let b:shell = ''
         let shebang = getbufline(bufnr('%'), 1)[0]
-        if len(shebang) > 0
+        if strlen(shebang) > 0
             if stridx(shebang, 'bash') >= 0
                 let b:shell = 'bash'
             elseif stridx(shebang, 'zsh') >= 0
