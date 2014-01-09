@@ -1,4 +1,4 @@
-if exists("g:loaded_syntastic_util_autoload")
+if exists('g:loaded_syntastic_util_autoload')
     finish
 endif
 let g:loaded_syntastic_util_autoload = 1
@@ -6,9 +6,13 @@ let g:loaded_syntastic_util_autoload = 1
 let s:save_cpo = &cpo
 set cpo&vim
 
-if !exists("g:syntastic_delayed_redraws")
+if !exists('g:syntastic_delayed_redraws')
     let g:syntastic_delayed_redraws = 0
 endif
+
+" strwidth() was added in Vim 7.3; if it doesn't exist, we use strlen()
+" and hope for the best :)
+let s:width = function(exists('*strwidth') ? 'strwidth' : 'strlen')
 
 let s:redraw_delayed = 0
 let s:redraw_full = 0
@@ -117,7 +121,7 @@ function! syntastic#util#wideMsg(msg)
     "convert tabs to spaces so that the tabs count towards the window
     "width as the proper amount of characters
     let chunks = split(msg, "\t", 1)
-    let msg = join(map(chunks[:-2], 'v:val . repeat(" ", &ts - strwidth(v:val) % &ts)'), '') . chunks[-1]
+    let msg = join(map(chunks[:-2], 'v:val . repeat(" ", &ts - s:width(v:val) % &ts)'), '') . chunks[-1]
     let msg = strpart(msg, 0, winwidth(0) - 1)
 
     set noruler noshowcmd
