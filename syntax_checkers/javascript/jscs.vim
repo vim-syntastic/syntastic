@@ -17,6 +17,7 @@ let g:loaded_syntastic_javascript_jscs_checker = 1
 let s:save_cpo = &cpo
 set cpo&vim
 
+" we borrow SyntaxCheckers_java_checkstyle_Preprocess() from java/checkstyle
 runtime! syntax_checkers/java/*.vim
 
 function! SyntaxCheckers_javascript_jscs_GetLocList() dict
@@ -26,7 +27,9 @@ function! SyntaxCheckers_javascript_jscs_GetLocList() dict
         \ 'makeprg': makeprg,
         \ 'errorformat': errorformat,
         \ 'subtype': 'Style',
-        \ 'preprocess': 'SyntaxCheckers_java_checkstyle_Preprocess' })
+        \ 'preprocess': 'SyntaxCheckers_java_checkstyle_Preprocess',
+        \ 'postprocess': ['sort'],
+        \ 'returns': [0] })
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
