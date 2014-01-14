@@ -445,7 +445,7 @@ Several additional flags are available to hide text under certain conditions:
     %W{...} - hide the text in the brackets unless there are warnings
     %B{...} - hide the text in the brackets unless there are both warnings AND
               errors
-These flags cant be nested.
+These flags can't be nested.
 
 Example: >
     let g:syntastic_stl_format = '[%E{Err: %fe #%e}%B{, }%W{Warn: %fw #%w}]'
