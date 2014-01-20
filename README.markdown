@@ -19,7 +19,7 @@
 
 
 
-Syntastic is a syntax checking plugin that runs files through external syntax
+Syntastic is a syntax checking plugin for vim that runs files through external syntax
 checkers and displays any resulting errors to the user. This can be done on
 demand, or automatically as files are saved. If syntax errors are detected, the
 user is notified and is happy because they didn't have to compile their code or
