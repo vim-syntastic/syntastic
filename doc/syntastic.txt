@@ -534,7 +534,7 @@ Use |:SyntasticInfo| to see which checkers are available for a given filetype.
 The executable used by a checker is normally defined automatically, when the
 checkers is registered. You can however override it by setting the variable
 'g:syntastic_<filetype>_<subchecker>_exec': >
-    let g:syntastic_ruby_mri_exe = '~/bin/ruby2'
+    let g:syntastic_ruby_mri_exec = '~/bin/ruby2'
 <
 ------------------------------------------------------------------------------
 5.3 Configuring specific checkers                   *syntastic-config-makeprg*
