@@ -18,7 +18,6 @@ let s:global_options = [
     \ 'syntastic_check_on_open',
     \ 'syntastic_check_on_wq',
     \ 'syntastic_debug',
-    \ 'syntastic_delayed_redraws',
     \ 'syntastic_echo_current_error',
     \ 'syntastic_enable_balloons',
     \ 'syntastic_enable_highlighting',

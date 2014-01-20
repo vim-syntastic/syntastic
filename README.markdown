@@ -19,11 +19,11 @@
 
 
 
-Syntastic is a syntax checking plugin for vim that runs files through external syntax
-checkers and displays any resulting errors to the user. This can be done on
-demand, or automatically as files are saved. If syntax errors are detected, the
-user is notified and is happy because they didn't have to compile their code or
-execute their script to find them.
+Syntastic is a syntax checking plugin for Vim that runs files through external
+syntax checkers and displays any resulting errors to the user. This can be done
+on demand, or automatically as files are saved. If syntax errors are detected,
+the user is notified and is happy because they didn't have to compile their
+code or execute their script to find them.
 
 At the time of this writing, syntax checking plugins exist for ActionScript,
 Ada, AppleScript, AsciiDoc, Bourne shell, C, C++, C#, Chef, CoffeeScript,
@@ -41,7 +41,7 @@ Below is a screenshot showing the methods that Syntastic uses to display syntax
 errors.  Note that, in practise, you will only have a subset of these methods
 enabled.
 
-![Screenshot 1](https://github.com/scrooloose/syntastic/raw/master/_assets/screenshot_1.png)
+![Screenshot 1][0]
 
 1. Errors are loaded into the location list for the corresponding window.
 2. When the cursor is on a line containing an error, the error message is echoed in the command window.
@@ -57,9 +57,9 @@ have pathogen working then skip Step 1 and go to Step 2.
 
 ### Step 1: Install pathogen.vim
 
-First I'll show you how to install tpope's [pathogen.vim](https://github.com/tpope/vim-pathogen) so that 
-it's easy to install syntastic.  Do this in your Terminal so that you get the pathogen.vim file 
-and the directories it needs:
+First I'll show you how to install tpope's [pathogen.vim][1] so that it's
+easy to install syntastic.  Do this in your Terminal so that you get the
+pathogen.vim file and the directories it needs:
 
     mkdir -p ~/.vim/autoload ~/.vim/bundle; \
     curl -so ~/.vim/autoload/pathogen.vim \
@@ -90,86 +90,140 @@ step 1 and make sure you did the following:
 4. Have permissions to access all of these directories.
 
 
-## Google group
-
-To get information or make suggestions check out the [google group](https://groups.google.com/group/vim-syntastic).
-
-
 ## FAQ
 
 __Q. I installed syntastic but it isn't reporting any errors...__
 
-A. The most likely reason is that none of the syntax checkers that it requires is installed. For example: python requires either `flake8`, `pyflakes` or `pylint` to be installed and in `$PATH`. To see which executables are supported, just look in `syntax_checkers/<filetype>/*.vim`. Note that aliases do not work; the actual executable must be available in your `$PATH`. Symbolic links are okay.  You can see syntastic's idea of available checkers by running `:SyntasticInfo`.
+A. The most likely reason is that none of the syntax checkers that it requires
+is installed. For example: python requires either `flake8`, `pyflakes`
+or `pylint` to be installed and in `$PATH`. To see which executables are
+supported, just look in `syntax_checkers/<filetype>/*.vim`. Note that aliases
+do not work; the actual executable must be available in your `$PATH`. Symbolic
+links are okay.  You can see syntastic's idea of available checkers by running
+`:SyntasticInfo`.
 
-Another reason it could fail is that either the command line options or the error output for a syntax checker may have changed. In this case, make sure you have the latest version of the syntax checker installed. If it still fails then create an issue - or better yet, create a pull request.
+Another reason it could fail is that either the command line options or the
+error output for a syntax checker may have changed. In this case, make sure you
+have the latest version of the syntax checker installed. If it still fails then
+create an issue - or better yet, create a pull request.
 
 __Q. Recently some of my syntax checker options have stopped working...__
 
-A. The options are still there, they have just been renamed. Recently, almost all syntax checkers were refactored to use the new `makeprgBuild()` function. This made a lot of the old explicit options redundant - as they are now implied. The new implied options usually have slightly different names to the old options.
+A. The options are still there, they have just been renamed. Recently,
+almost all syntax checkers were refactored to use the new `makeprgBuild()`
+function. This made a lot of the old explicit options redundant - as they are
+now implied. The new implied options usually have slightly different names to
+the old options.
 
-e.g. Previously there was `g:syntastic_phpcs_conf`, now you must use `g:syntastic_php_phpcs_args`. This completely overrides the arguments of the checker, including any defaults, so you may need to look up the default arguments of the checker and add these in.
+e.g. Previously there was `g:syntastic_phpcs_conf`, now you must use
+`g:syntastic_php_phpcs_args`. This completely overrides the arguments of
+the checker, including any defaults, so you may need to look up the default
+arguments of the checker and add these in.
 
 See `:help syntastic-checker-options` for more information.
 
 __Q. I run a checker and the location list is not updated...__
 
-A. By default, the location list is changed only when you run the `:Errors` command, in order to minimise conflicts with other plugins.  If you want the location list to always be updated when you run the checkers, add this line to your vimrc:
+A. By default, the location list is changed only when you run the `:Errors`
+command, in order to minimise conflicts with other plugins.  If you want the
+location list to always be updated when you run the checkers, add this line to
+your vimrc:
 ```vim
 let g:syntastic_always_populate_loc_list=1
 ```
 
 __Q. How can I pass additional arguments to a checker?__
 
-A. Almost all syntax checkers use the `makeprgBuild()` function. Those checkers that do can be configured using global variables. The general form of the global args variables are:
+A. Almost all syntax checkers use the `makeprgBuild()` function. Those checkers
+that do can be configured using global variables. The general form of the
+global args variables are:
 ```vim
 syntastic_<filetype>_<subchecker>_args
 ```
 
-So, If you wanted to pass "--my --args --here" to the ruby mri checker you would add this line to your vimrc:
+So, If you wanted to pass "--my --args --here" to the ruby mri checker you
+would add this line to your vimrc:
 ```vim
 let g:syntastic_ruby_mri_args="--my --args --here"
 ```
 
 See `:help syntastic-checker-options` for more information.
 
-__Q. Syntastic supports several checkers for my filetype - how do I tell it which one(s) to use?__
+__Q. Syntastic supports several checkers for my filetype - how do I tell it
+which one(s) to use?__
 
 A. Stick a line like this in your vimrc:
 ```vim
 let g:syntastic_<filetype>_checkers=['<checker-name>']
 ```
 
-To see the list of checkers for your filetype, look in `syntax_checkers/<filetype>/`.
+To see the list of checkers for your filetype, look in
+`syntax_checkers/<filetype>/`.
 
-e.g. Python has the following checkers: `flake8`, `pyflakes`, `pylint` and a native `python` checker.
+e.g. Python has the following checkers: `flake8`, `pyflakes`, `pylint` and a
+native `python` checker.
 
 To tell syntastic to use `pylint`, you would use this setting:
 ```vim
 let g:syntastic_python_checkers=['pylint']
 ```
 
-Some filetypes, like PHP, have style checkers as well as syntax checkers. These can be chained together like this:
+Some filetypes, like PHP, have style checkers as well as syntax checkers. These
+can be chained together like this:
 ```vim
 let g:syntastic_php_checkers=['php', 'phpcs', 'phpmd']
 ```
 
-This is telling syntastic to run the `php` checker first, and if no errors are found, run `phpcs`, and then `phpmd`.
+This is telling syntastic to run the `php` checker first, and if no errors are
+found, run `phpcs`, and then `phpmd`.
 
-__Q. How can I jump between the different errors without using the location list at the bottom of the window?__
+__Q. How can I jump between the different errors without using the location
+list at the bottom of the window?__
 
-A. Vim provides several built in commands for this. See `:help :lnext` and `:help :lprev`.
+A. Vim provides several built in commands for this. See `:help :lnext` and
+`:help :lprev`.
 
-If you use these commands a lot then you may want to add shortcut mappings to your vimrc, or install something like [unimpaired](https://github.com/tpope/vim-unimpaired), which provides such mappings (among other things).
+If you use these commands a lot then you may want to add shortcut mappings to
+your vimrc, or install something like [unimpaired][2], which provides such
+mappings (among other things).
 
 __Q. A syntax checker is giving me unwanted/strange style tips?__
 
-A. Some filetypes (e.g. php) have style checkers as well as syntax checkers. You can usually configure the options that are passed to the style checkers, or just disable them. Take a look at the [wiki](https://github.com/scrooloose/syntastic/wiki/Syntax-Checkers) to see what options are available.
+A. Some filetypes (e.g. php) have style checkers as well as syntax
+checkers. You can usually configure the options that are passed to the style
+checkers, or just disable them. Take a look at the [wiki][3] to see what
+options are available.
 
-__Q. The error window is closed automatically when I :quit the current buffer but not when I :bdelete it?__
+__Q. The error window is closed automatically when I :quit the current buffer
+but not when I :bdelete it?__
 
-A. There is no safe way to handle that situation automatically, but you can work around it:
+A. There is no safe way to handle that situation automatically, but you can
+work around it:
 
 ```vim
 nnoremap <silent> <C-d> :lclose<CR>:bdelete<CR>
 cabbrev <silent> bd lclose\|bdelete
 ```
+
+
+## Other resources
+
+The preferred place for posting suggestions, reporting bugs, and general
+discussions related to syntastic is the [issue tracker at GitHub][4].  There
+are also a [google group][5], and a [syntastic tag at StackOverflow][6].
+
+Syntastic aims to provide a common interface to syntax checkers for as many
+languages as possible.  For particular languages, there are, of course, other
+plugins that provide more functionality than syntastic.  You might want to take
+a look at [jedi-vim][7], [python-mode][8], or [YouCompleteMe][9].
+
+[0]: https://github.com/scrooloose/syntastic/raw/master/_assets/screenshot_1.png
+[1]: https://github.com/tpope/vim-pathogen
+[2]: https://github.com/tpope/vim-unimpaired
+[3]: https://github.com/scrooloose/syntastic/wiki/Syntax-Checkers
+[4]: https://github.com/scrooloose/syntastic/issues
+[5]: https://groups.google.com/group/vim-syntastic
+[6]: http://stackoverflow.com/questions/tagged/syntastic
+[7]: https://github.com/davidhalter/jedi-vim
+[8]: https://github.com/klen/python-mode
+[9]: https://github.com/Valloric/YouCompleteMe
