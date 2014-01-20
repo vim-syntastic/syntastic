@@ -6,29 +6,9 @@ let g:loaded_syntastic_util_autoload = 1
 let s:save_cpo = &cpo
 set cpo&vim
 
-if !exists('g:syntastic_delayed_redraws')
-    let g:syntastic_delayed_redraws = 0
-endif
-
 " strwidth() was added in Vim 7.3; if it doesn't exist, we use strlen()
 " and hope for the best :)
 let s:width = function(exists('*strwidth') ? 'strwidth' : 'strlen')
-
-let s:redraw_delayed = 0
-let s:redraw_full = 0
-
-if g:syntastic_delayed_redraws
-    " CursorHold / CursorHoldI events are triggered if user doesn't press a
-    " key for &updatetime ms.  We change it only if current value is the default
-    " value, that is 4000 ms.
-    if &updatetime == 4000
-        let &updatetime = 500
-    endif
-
-    augroup syntastic
-        autocmd CursorHold,CursorHoldI * call syntastic#util#redrawHandler()
-    augroup END
-endif
 
 " Public functions {{{1
 
@@ -216,24 +196,11 @@ function! syntastic#util#decodeXMLEntities(string)
     return str
 endfunction
 
-" On older Vim versions calling redraw while a popup is visible can make
-" Vim segfault, so move redraws to a CursorHold / CursorHoldI handler.
 function! syntastic#util#redraw(full)
-    if !g:syntastic_delayed_redraws || !pumvisible()
-        call s:doRedraw(a:full)
-        let s:redraw_delayed = 0
-        let s:redraw_full = 0
+    if a:full
+        redraw!
     else
-        let s:redraw_delayed = 1
-        let s:redraw_full = s:redraw_full || a:full
-    endif
-endfunction
-
-function! syntastic#util#redrawHandler()
-    if s:redraw_delayed && !pumvisible()
-        call s:doRedraw(s:redraw_full)
-        let s:redraw_delayed = 0
-        let s:redraw_full = 0
+        redraw
     endif
 endfunction
 
@@ -249,21 +216,6 @@ function! syntastic#util#dictFilter(errors, filter)
 endfunction
 
 " Private functions {{{1
-
-"Redraw in a way that doesnt make the screen flicker or leave anomalies behind.
-"
-"Some terminal versions of vim require `redraw!` - otherwise there can be
-"random anomalies left behind.
-"
-"However, on some versions of gvim using `redraw!` causes the screen to
-"flicker - so use redraw.
-function! s:doRedraw(full)
-    if a:full
-        redraw!
-    else
-        redraw
-    endif
-endfunction
 
 function! s:translateFilter(filters)
     let conditions = []

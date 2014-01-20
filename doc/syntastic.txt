@@ -465,15 +465,6 @@ Changing it can in principle make screen redraws smoother, but it can also
 cause screen to flicker, or cause ghost characters. Leaving it to the default
 should be safe.
 
-                                                 *'syntastic_delayed_redraws'*
-Default: 0
-On older Vims, calling redraw when a popup menu is visible can cause Vim to
-segfault. If your version of Vim is affected, the solution is of course to
-upgrade Vim. If upgrading is not immediately feasible however, setting this
-variable to 1 might help, by delaying redraws until they are safe. Beware that
-there are functional and performance penalties involved, so only enable this
-if you actually need it.
-
                                                            *'syntastic_debug'*
 Default: 0
 Set this to the sum of one or more of the following flags to enable
