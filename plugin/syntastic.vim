@@ -224,9 +224,9 @@ function! s:UpdateErrors(auto_invoked, ...)
     let w:syntastic_loclist_set = 0
     if g:syntastic_always_populate_loc_list || g:syntastic_auto_jump
         call syntastic#log#debug(g:SyntasticDebugNotifications, 'loclist: setloclist (new)')
-        call setloclist(0, loclist.filteredRaw())
+        call setloclist(0, loclist.getRaw())
         let w:syntastic_loclist_set = 1
-        if run_checks && g:syntastic_auto_jump && loclist.hasErrorsOrWarningsToDisplay()
+        if run_checks && g:syntastic_auto_jump && !loclist.isEmpty()
             call syntastic#log#debug(g:SyntasticDebugNotifications, 'loclist: jump')
             silent! lrewind
 
@@ -388,9 +388,9 @@ endfunction
 "return '' if no errors are cached for the buffer
 function! SyntasticStatuslineFlag()
     let loclist = g:SyntasticLoclist.current()
-    let issues = loclist.filteredRaw()
+    let issues = loclist.getRaw()
     let num_issues = loclist.getLength()
-    if loclist.hasErrorsOrWarningsToDisplay()
+    if !loclist.isEmpty()
         let errors = loclist.errors()
         let warnings = loclist.warnings()
 

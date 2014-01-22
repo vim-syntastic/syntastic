@@ -23,7 +23,7 @@ endfunction
 
 function! g:SyntasticAutoloclistNotifier.AutoToggle(loclist)
     call syntastic#log#debug(g:SyntasticDebugNotifications, 'autoloclist: toggle')
-    if a:loclist.hasErrorsOrWarningsToDisplay()
+    if !a:loclist.isEmpty()
         if g:syntastic_auto_loc_list == 1
             call a:loclist.show()
         endif
