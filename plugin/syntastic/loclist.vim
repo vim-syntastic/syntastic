@@ -85,6 +85,11 @@ function! g:SyntasticLoclist.warnings()
     return self._cachedWarnings
 endfunction
 
+function! g:SyntasticLoclist.hasErrorsOrWarningsToDisplay()
+    call syntastic#log#deprecationWarn('function hasErrorsOrWarningsToDisplay() is deprecated, please use !isEmpty() instead')
+    return !self.isEmpty()
+endfunction
+
 " cache used by EchoCurrentError()
 function! g:SyntasticLoclist.messages(buf)
     if !exists("self._cachedMessages")
