@@ -85,8 +85,9 @@ function! g:SyntasticLoclist.warnings()
     return self._cachedWarnings
 endfunction
 
+" Legacy function.  Syntastic no longer calls it, but we keep it
+" around because other plugins (f.i. powerline) depend on it.
 function! g:SyntasticLoclist.hasErrorsOrWarningsToDisplay()
-    call syntastic#log#deprecationWarn('function hasErrorsOrWarningsToDisplay() is deprecated, please use !isEmpty() instead')
     return !self.isEmpty()
 endfunction
 
