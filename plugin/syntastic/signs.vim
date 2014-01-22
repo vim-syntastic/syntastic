@@ -102,7 +102,7 @@ endfunction
 " Place signs by all syntax errors in the buffer
 function! g:SyntasticSignsNotifier._signErrors(loclist)
     let loclist = a:loclist
-    if loclist.hasErrorsOrWarningsToDisplay()
+    if !loclist.isEmpty()
 
         " errors some first, so that they are not masked by warnings
         let buf = bufnr('')

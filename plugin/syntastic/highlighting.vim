@@ -39,7 +39,7 @@ function! g:SyntasticHighlightingNotifier.refresh(loclist)
         call self.reset(a:loclist)
         call syntastic#log#debug(g:SyntasticDebugNotifications, 'highlighting: refresh')
         let buf = bufnr('')
-        let issues = filter(a:loclist.filteredRaw(), 'v:val["bufnr"] == buf')
+        let issues = filter(a:loclist.copyRaw(), 'v:val["bufnr"] == buf')
         for item in issues
             let group = item['type'] ==? 'E' ? 'SyntasticError' : 'SyntasticWarning'
 

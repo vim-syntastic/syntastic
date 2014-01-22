@@ -19,8 +19,6 @@ function! g:SyntasticLoclist.New(rawLoclist)
     endfor
 
     let newObj._rawLoclist = llist
-    let newObj._hasErrorsOrWarningsToDisplay = -1
-
     let newObj._name = ''
 
     return newObj
@@ -34,21 +32,21 @@ function! g:SyntasticLoclist.current()
 endfunction
 
 function! g:SyntasticLoclist.extend(other)
-    let list = self.toRaw()
-    call extend(list, a:other.toRaw())
+    let list = self.copyRaw()
+    call extend(list, a:other.copyRaw())
     return g:SyntasticLoclist.New(list)
-endfunction
-
-function! g:SyntasticLoclist.toRaw()
-    return copy(self._rawLoclist)
-endfunction
-
-function! g:SyntasticLoclist.filteredRaw()
-    return self._rawLoclist
 endfunction
 
 function! g:SyntasticLoclist.isEmpty()
     return empty(self._rawLoclist)
+endfunction
+
+function! g:SyntasticLoclist.copyRaw()
+    return copy(self._rawLoclist)
+endfunction
+
+function! g:SyntasticLoclist.getRaw()
+    return self._rawLoclist
 endfunction
 
 function! g:SyntasticLoclist.getLength()
@@ -67,14 +65,6 @@ function! g:SyntasticLoclist.decorate(name, filetype)
     for e in self._rawLoclist
         let e['text'] .= ' [' . a:filetype . '/' . a:name . ']'
     endfor
-endfunction
-
-function! g:SyntasticLoclist.hasErrorsOrWarningsToDisplay()
-    if self._hasErrorsOrWarningsToDisplay >= 0
-        return self._hasErrorsOrWarningsToDisplay
-    endif
-    let self._hasErrorsOrWarningsToDisplay = !empty(self._rawLoclist)
-    return self._hasErrorsOrWarningsToDisplay
 endfunction
 
 function! g:SyntasticLoclist.quietMessages(filters)
@@ -138,7 +128,7 @@ function! g:SyntasticLoclist.setloclist()
     endif
     let replace = g:syntastic_reuse_loc_lists && w:syntastic_loclist_set
     call syntastic#log#debug(g:SyntasticDebugNotifications, 'loclist: setloclist ' . (replace ? '(replace)' : '(new)'))
-    call setloclist(0, self.filteredRaw(), replace ? 'r' : ' ')
+    call setloclist(0, self.getRaw(), replace ? 'r' : ' ')
     let w:syntastic_loclist_set = 1
 endfunction
 
@@ -147,7 +137,7 @@ function! g:SyntasticLoclist.show()
     call syntastic#log#debug(g:SyntasticDebugNotifications, 'loclist: show')
     call self.setloclist()
 
-    if self.hasErrorsOrWarningsToDisplay()
+    if !self.isEmpty()
         let num = winnr()
         execute "lopen " . g:syntastic_loc_list_height
         if num != winnr()

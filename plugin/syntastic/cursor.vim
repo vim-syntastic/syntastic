@@ -21,7 +21,7 @@ function! g:SyntasticCursorNotifier.enabled()
 endfunction
 
 function! g:SyntasticCursorNotifier.refresh(loclist)
-    if self.enabled() && a:loclist.hasErrorsOrWarningsToDisplay()
+    if self.enabled() && !a:loclist.isEmpty()
         call syntastic#log#debug(g:SyntasticDebugNotifications, 'cursor: refresh')
         let b:syntastic_messages = copy(a:loclist.messages(bufnr('')))
         let b:oldLine = -1
