@@ -23,9 +23,10 @@ endfunction
 
 function! SyntaxCheckers_python_pylint_GetLocList() dict
     let makeprg = self.makeprgBuild({
-        \ 'args': (s:pylint_new ? '--msg-template="{path}:{line}: [{msg_id}] {msg}" -r n' : '-f parseable -r n -i y') })
+        \ 'args': (s:pylint_new ? '--msg-template="{path}:{line}:{column}:{C}: [{symbol}] {msg}" -r n' : '-f parseable -r n -i y') })
 
     let errorformat =
+        \ '%A%f:%l:%c:%t: %m,' .
         \ '%A%f:%l: %m,' .
         \ '%A%f:(%l): %m,' .
         \ '%-Z%p^%.%#,' .
@@ -38,10 +39,13 @@ function! SyntaxCheckers_python_pylint_GetLocList() dict
         \ 'returns': range(32) })
 
     for e in loclist
-        let type = e['text'][1]
-        if type =~# '\m^[EF]'
+        if !s:pylint_new
+            let e['type'] = e['text'][1]
+        endif
+
+        if e['type'] =~? '\m^[EF]'
             let e['type'] = 'E'
-        elseif type =~# '\m^[CRW]'
+        elseif e['type'] =~? '\m^[CRW]'
             let e['type'] = 'W'
         else
             let e['valid'] = 0
