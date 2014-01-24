@@ -33,8 +33,8 @@ Haxe, Handlebars, HSS, HTML, Java, JavaScript, JSON, LESS, Lex, Limbo, LISP,
 LLVM intermediate language, Lua, MATLAB, NASM, Objective-C, Objective-C++,
 OCaml, Perl, Perl POD, PHP, gettext Portable Object, Puppet, Python, Racket,
 reStructuredText, Ruby, Rust, SASS/SCSS, Scala, Slim, Tcl, TeX, Twig,
-TypeScript, Vala, Verilog, VHDL, xHtml, XML, XSLT, YACC, YAML, z80, Zope page
-templates, zsh.
+TypeScript, Vala, Verilog, VHDL, VimL, xHtml, XML, XSLT, YACC, YAML, z80, Zope
+page templates, zsh.
 
 ## Screenshot
 
