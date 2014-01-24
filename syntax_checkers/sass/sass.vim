@@ -38,8 +38,19 @@ function! SyntaxCheckers_sass_sass_GetLocList() dict
         return []
     endif
 
+    " Pull in arguments from buffer and globals.
+    let extra_args = ""
+    if exists('g:syntastic_sass_extra_args')
+        let extra_args = g:syntastic_sass_extra_args
+    endif
+    if exists('b:syntastic_sass_extra_args')
+        let extra_args = extra_args . " " . b:syntastic_sass_extra_args
+    endif
+
     let makeprg = self.makeprgBuild({
-        \ 'args_before': '--cache-location ' . s:sass_cache_location . ' ' . s:imports . ' --check' })
+        \ 'args_before': '--cache-location ' . s:sass_cache_location . ' ' . s:imports . ' --check'
+        \ 'args_after' : extra_args
+        \ })
 
     let errorformat =
         \ '%ESyntax %trror: %m,' .
