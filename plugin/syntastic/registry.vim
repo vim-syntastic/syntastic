@@ -73,6 +73,7 @@ let s:defaultCheckers = {
         \ 'vala':        ['valac'],
         \ 'verilog':     ['verilator'],
         \ 'vhdl':        ['ghdl'],
+        \ 'vim':         ['vimlint'],
         \ 'xhtml':       ['tidy'],
         \ 'xml':         ['xmllint'],
         \ 'xslt':        ['xmllint'],
