@@ -8,6 +8,7 @@ let s:defaultCheckers = {
         \ 'ada':         ['gcc'],
         \ 'applescript': ['osacompile'],
         \ 'asciidoc':    ['asciidoc'],
+        \ 'bemhtml':     ['bemhtmllint'],
         \ 'c':           ['gcc'],
         \ 'chef':        ['foodcritic'],
         \ 'co':          ['coco'],
