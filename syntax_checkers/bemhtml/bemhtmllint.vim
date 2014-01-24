@@ -25,9 +25,9 @@ function SyntaxCheckers_bemhtml_bemhtmllint_GetLocList() dict
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
-            \ 'filetype': 'bemhtml',
-            \ 'name': 'bemhtmllint',
-            \ 'exec': 'bemhtml-lint' })
+    \ 'filetype': 'bemhtml',
+    \ 'name': 'bemhtmllint',
+    \ 'exec': 'bemhtml-lint' })
 
 
 let &cpo = s:save_cpo
