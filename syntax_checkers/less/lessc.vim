@@ -47,7 +47,7 @@ function! SyntaxCheckers_less_lessc_GetLocList() dict
     let makeprg = self.makeprgBuild({
         \ 'exe': s:check_file,
         \ 'args': g:syntastic_less_options,
-        \ 'tail': syntastic#util#DevNull() })
+        \ 'tail': '> ' . syntastic#util#DevNull() })
 
     let errorformat =
         \ '%m in %f on line %l\, column %c:,' .
