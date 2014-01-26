@@ -612,7 +612,7 @@ can't be used together with syntastic. You don't need to change your login
 shell to address this problem, but you do have to point Vim's 'shell' to a more
 traditional shell, such as 'zsh', 'bash', 'ksh', or even the original Bourne
 'sh': >
-    set shell = 'bash'
+    set shell=bash
 <
 
 ==============================================================================

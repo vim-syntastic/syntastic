@@ -60,16 +60,18 @@ function! SyntaxCheckers_vim_vimlint_GetLocList() dict
         \ 'EVL205': 3 })
 endfunction
 
+" @vimlint(EVL103, 1, a:filename)
 function! s:vimlintOutput(filename, pos, ev, eid, mes, obj)
-    let a:obj.error += [{
+    call add(a:obj.error, {
         \ 'bufnr': bufnr(''),
         \ 'lnum': a:pos.lnum,
         \ 'col': a:pos.col,
         \ 'vcol': 0,
         \ 'type': a:ev[0],
         \ 'text': '[' . a:eid . '] ' . a:mes,
-        \ 'valid': 1 }]
+        \ 'valid': 1 })
 endfunction
+" @vimlint(EVL103, 0, a:filename)
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'vim',

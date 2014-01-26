@@ -62,6 +62,7 @@ function! g:SyntasticHighlightingNotifier.refresh(loclist)
 endfunction
 
 " Remove all error highlights from the window
+" @vimlint(EVL103, 1, a:loclist)
 function! g:SyntasticHighlightingNotifier.reset(loclist)
     if s:has_highlighting
         call syntastic#log#debug(g:SyntasticDebugNotifications, 'highlighting: reset')
@@ -72,6 +73,7 @@ function! g:SyntasticHighlightingNotifier.reset(loclist)
         endfor
     endif
 endfunction
+" @vimlint(EVL103, 0, a:loclist)
 
 " Private methods {{{1
 
