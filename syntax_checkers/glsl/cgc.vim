@@ -65,7 +65,7 @@ function! s:GetProfile()
     endif
 
     return profile
-endfunction!
+endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \'filetype': 'glsl',

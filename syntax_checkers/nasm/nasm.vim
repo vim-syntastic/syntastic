@@ -19,7 +19,6 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 function! SyntaxCheckers_nasm_nasm_GetLocList() dict
-    let wd = syntastic#util#shescape(expand("%:p:h") . "/")
     let makeprg = self.makeprgBuild({
         \ 'args': '-X gnu -f elf' .
         \       ' -I ' . syntastic#util#shescape(expand("%:p:h") . "/") .

@@ -230,6 +230,7 @@ function! s:translateFilter(filters)
 endfunction
 
 function! s:translateElement(key, term)
+    let ret = "1"
     if a:key ==? 'level'
         let ret = 'v:val["type"] !=? ' . string(a:term[0])
     elseif a:key ==? 'type'

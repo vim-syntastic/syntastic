@@ -30,12 +30,14 @@ function! g:SyntasticCursorNotifier.refresh(loclist)
     endif
 endfunction
 
+" @vimlint(EVL103, 1, a:loclist)
 function! g:SyntasticCursorNotifier.reset(loclist)
     call syntastic#log#debug(g:SyntasticDebugNotifications, 'cursor: reset')
     autocmd! syntastic CursorMoved
     unlet! b:syntastic_messages
     let b:oldLine = -1
 endfunction
+" @vimlint(EVL103, 0, a:loclist)
 
 " Private methods {{{1
 

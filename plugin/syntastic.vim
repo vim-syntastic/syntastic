@@ -23,9 +23,9 @@ runtime! plugin/syntastic/*.vim
 
 let s:running_windows = syntastic#util#isRunningWindows()
 
-for feature in ['autocmd', 'eval', 'modify_fname', 'quickfix', 'user_commands']
-    if !has(feature)
-        call syntastic#log#error("need Vim compiled with feature " . feature)
+for s:feature in ['autocmd', 'eval', 'modify_fname', 'quickfix', 'user_commands']
+    if !has(s:feature)
+        call syntastic#log#error("need Vim compiled with feature " . s:feature)
         finish
     endif
 endfor
@@ -96,12 +96,12 @@ endif
 if exists("g:syntastic_quiet_warnings")
     call syntastic#log#deprecationWarn("variable g:syntastic_quiet_warnings is deprecated, please use let g:syntastic_quiet_messages = {'level': 'warnings'} instead")
     if g:syntastic_quiet_warnings
-        let quiet_warnings = get(g:syntastic_quiet_messages, 'type', [])
-        if type(quiet_warnings) != type([])
-            let quiet_warnings = [quiet_warnings]
+        let s:quiet_warnings = get(g:syntastic_quiet_messages, 'type', [])
+        if type(s:quiet_warnings) != type([])
+            let s:quiet_warnings = [s:quiet_warnings]
         endif
-        call add(quiet_warnings, 'warnings')
-        let g:syntastic_quiet_messages['type'] = quiet_warnings
+        call add(s:quiet_warnings, 'warnings')
+        let g:syntastic_quiet_messages['type'] = s:quiet_warnings
     endif
 endif
 
@@ -118,6 +118,9 @@ let s:notifiers = g:SyntasticNotifiers.Instance()
 let s:modemap = g:SyntasticModeMap.Instance()
 
 
+" @vimlint(EVL103, 1, a:cursorPos)
+" @vimlint(EVL103, 1, a:cmdLine)
+" @vimlint(EVL103, 1, a:argLead)
 function! s:CompleteCheckerName(argLead, cmdLine, cursorPos)
     let checker_names = []
     for ft in s:CurrentFiletypes()
@@ -127,10 +130,21 @@ function! s:CompleteCheckerName(argLead, cmdLine, cursorPos)
     endfor
     return join(checker_names, "\n")
 endfunction
+" @vimlint(EVL103, 0, a:cursorPos)
+" @vimlint(EVL103, 0, a:cmdLine)
+" @vimlint(EVL103, 0, a:argLead)
 
+
+" @vimlint(EVL103, 1, a:cursorPos)
+" @vimlint(EVL103, 1, a:cmdLine)
+" @vimlint(EVL103, 1, a:argLead)
 function! s:CompleteFiletypes(argLead, cmdLine, cursorPos)
     return join(s:registry.knownFiletypes(), "\n")
 endfunction
+" @vimlint(EVL103, 0, a:cursorPos)
+" @vimlint(EVL103, 0, a:cmdLine)
+" @vimlint(EVL103, 0, a:argLead)
+
 
 command! SyntasticToggleMode call s:ToggleMode()
 command! -nargs=* -complete=custom,s:CompleteCheckerName SyntasticCheck
