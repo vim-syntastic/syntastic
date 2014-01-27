@@ -498,7 +498,7 @@ addition to being added to Vim's |message-history|: >
                                            *'g:syntastic_<filetype>_checkers'*
 You can tell syntastic which checkers to run for a given filetype by setting a
 variable 'g:syntastic_<filetype>_checkers' to a list of checkers, e.g. >
-    let g:syntastic_python_checkers = ['php', 'phpcs', 'phpmd']
+    let g:syntastic_php_checkers = ['php', 'phpcs', 'phpmd']
 <
                                                       *'b:syntastic_checkers'*
 There is also a per-buffer version of this setting, 'b:syntastic_checkers'.
