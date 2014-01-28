@@ -401,46 +401,7 @@ endfunction
 "
 "return '' if no errors are cached for the buffer
 function! SyntasticStatuslineFlag()
-    let loclist = g:SyntasticLoclist.current()
-    let issues = loclist.getRaw()
-    let num_issues = loclist.getLength()
-    if !loclist.isEmpty()
-        let errors = loclist.errors()
-        let warnings = loclist.warnings()
-
-        let num_errors = len(errors)
-        let num_warnings = len(warnings)
-
-        let output = g:syntastic_stl_format
-
-        "hide stuff wrapped in %E(...) unless there are errors
-        let output = substitute(output, '\m\C%E{\([^}]*\)}', num_errors ? '\1' : '' , 'g')
-
-        "hide stuff wrapped in %W(...) unless there are warnings
-        let output = substitute(output, '\m\C%W{\([^}]*\)}', num_warnings ? '\1' : '' , 'g')
-
-        "hide stuff wrapped in %B(...) unless there are both errors and warnings
-        let output = substitute(output, '\m\C%B{\([^}]*\)}', (num_warnings && num_errors) ? '\1' : '' , 'g')
-
-
-        "sub in the total errors/warnings/both
-        let output = substitute(output, '\m\C%w', num_warnings, 'g')
-        let output = substitute(output, '\m\C%e', num_errors, 'g')
-        let output = substitute(output, '\m\C%t', num_issues, 'g')
-
-        "first error/warning line num
-        let output = substitute(output, '\m\C%F', num_issues ? issues[0]['lnum'] : '', 'g')
-
-        "first error line num
-        let output = substitute(output, '\m\C%fe', num_errors ? errors[0]['lnum'] : '', 'g')
-
-        "first warning line num
-        let output = substitute(output, '\m\C%fw', num_warnings ? warnings[0]['lnum'] : '', 'g')
-
-        return output
-    else
-        return ''
-    endif
+    return g:SyntasticLoclist.current().getStatuslineFlag()
 endfunction
 
 "Emulates the :lmake command. Sets up the make environment according to the
