@@ -29,7 +29,7 @@ endfunction
 function! SyntaxCheckers_haml_haml_GetLocList() dict
     let makeprg = self.makeprgBuild({
         \ 'exe': expand(g:syntastic_haml_interpreter),
-        \ 'args': '-c' })
+        \ 'args_after': '-c' })
 
     let errorformat =
         \ 'Haml error on line %l: %m,' .

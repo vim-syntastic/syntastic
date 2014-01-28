@@ -7,73 +7,51 @@ let g:SyntasticMakeprgBuilder = {}
 
 " Public methods {{{1
 
-function! g:SyntasticMakeprgBuilder.New(checker, exe, args, fname, post_args, tail)
-    let newObj = copy(self)
-    let newObj._exe = (a:exe == '' && has_key(a:checker, 'getExec')) ? a:checker.getExec() : a:exe
-    let newObj._args = a:args
-    let newObj._fname = a:fname
-    let newObj._post_args = a:post_args
-    let newObj._tail = a:tail
+function! g:SyntasticMakeprgBuilder.Instance()
+    if !exists('s:SyntasticMakeprgBuilderInstance')
+        let s:SyntasticMakeprgBuilderInstance = copy(self)
+    endif
+    return s:SyntasticMakeprgBuilderInstance
+endfunction
 
+function! g:SyntasticMakeprgBuilder.makeprg(checker, opts)
     if has_key(a:checker, 'getName')
-        let newObj._filetype = a:checker.getFiletype()
-        let newObj._subchecker = a:checker.getName()
+        let filetype = a:checker.getFiletype()
+        let subchecker = a:checker.getName()
     else
-        let newObj._filetype = &filetype
-        let newObj._subchecker = ''
+        let filetype = &filetype
+        let subchecker = ''
+    endif
+    let setting = 'g:syntastic_' . filetype
+    if strlen(subchecker)
+        let setting .= '_' . subchecker . '_'
     endif
 
-    return newObj
-endfunction
+    let parts = self._getOpt(a:opts, setting, 'exe', has_key(a:checker, 'getExec') ? a:checker.getExec() : '')
+    call extend(parts, self._getOpt(a:opts, setting, 'args', ''))
+    call extend(parts, self._getOpt(a:opts, setting, 'fname', syntastic#util#shexpand('%')))
+    call extend(parts, self._getOpt(a:opts, setting, 'post_args', ''))
+    call extend(parts, self._getOpt(a:opts, setting, 'tail', ''))
 
-function! g:SyntasticMakeprgBuilder.makeprg()
-    return join(filter([self.exe(), self.args(), self.fname(), self.post_args(), self.tail()], '!empty(v:val)'))
-endfunction
-
-function! g:SyntasticMakeprgBuilder.exe()
-    return self._getOpt('exe')
-endfunction
-
-function! g:SyntasticMakeprgBuilder.args()
-    return self._getOpt('args')
-endfunction
-
-function! g:SyntasticMakeprgBuilder.fname()
-    if empty(self._fname)
-        return syntastic#util#shexpand('%')
-    else
-        return self._fname
-    endif
-endfunction
-
-function! g:SyntasticMakeprgBuilder.post_args()
-    return self._getOpt('post_args')
-endfunction
-
-function! g:SyntasticMakeprgBuilder.tail()
-    return self._getOpt('tail')
+    return join(filter(parts, 'strlen(v:val)'))
 endfunction
 
 " Private methods {{{1
 
-function! g:SyntasticMakeprgBuilder._getOpt(name)
-    if self._optExists(a:name)
-        return {self._optName(a:name)}
-    endif
-
-    return self['_' . a:name]
+function! g:SyntasticMakeprgBuilder._getOpt(opts, setting, name, default)
+    return [
+        \ get(a:opts, a:name . '_before', ''),
+        \ self._getOptUser(a:opts, a:setting, a:name, a:default),
+        \ get(a:opts, a:name . '_after', '') ]
 endfunction
 
-function! g:SyntasticMakeprgBuilder._optExists(name)
-    return exists(self._optName(a:name))
-endfunction
-
-function! g:SyntasticMakeprgBuilder._optName(name)
-    let setting = "g:syntastic_" . self._filetype
-    if !empty(self._subchecker)
-        let setting .= '_' . self._subchecker
+function! g:SyntasticMakeprgBuilder._getOptUser(opts, setting, name, default)
+    let sname = a:setting . a:name
+    if exists(sname)
+        return {sname}
     endif
-    return setting . '_' . a:name
+
+    return get(a:opts, a:name, a:default)
 endfunction
 
 " vim: set sw=4 sts=4 et fdm=marker:

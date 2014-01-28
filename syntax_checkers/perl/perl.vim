@@ -73,7 +73,7 @@ function! SyntaxCheckers_perl_perl_GetLocList() dict
 
     let makeprg = self.makeprgBuild({
         \ 'exe': exe,
-        \ 'args': '-c -X ' . extra })
+        \ 'args_before': '-c -X ' . extra })
 
     let errors = SyntasticMake({
         \ 'makeprg': makeprg,
@@ -86,7 +86,7 @@ function! SyntaxCheckers_perl_perl_GetLocList() dict
 
     let makeprg = self.makeprgBuild({
         \ 'exe': exe,
-        \ 'args': '-c -Mwarnings ' . extra })
+        \ 'args_before': '-c -Mwarnings ' . extra })
 
     return SyntasticMake({
         \ 'makeprg': makeprg,

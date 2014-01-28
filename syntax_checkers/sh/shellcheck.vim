@@ -12,7 +12,7 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 function! SyntaxCheckers_sh_shellcheck_GetLocList() dict
-    let makeprg = self.makeprgBuild({ 'args': '-f gcc' })
+    let makeprg = self.makeprgBuild({ 'args_after': '-f gcc' })
 
     let errorformat =
         \ '%f:%l:%c: %trror: %m,' .

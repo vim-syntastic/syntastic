@@ -37,7 +37,7 @@ endfunction
 function! SyntaxCheckers_yaml_yamlxs_GetLocList() dict
     let makeprg = self.makeprgBuild({
         \ 'exe': s:Exe(),
-        \ 'args': s:Modules() . ' -e ' . syntastic#util#shescape('YAML::XS::LoadFile($ARGV[0])') })
+        \ 'args_before': s:Modules() . ' -e ' . syntastic#util#shescape('YAML::XS::LoadFile($ARGV[0])') })
 
     let errorformat =
         \ '%EYAML::XS::Load Error: The problem:,' .

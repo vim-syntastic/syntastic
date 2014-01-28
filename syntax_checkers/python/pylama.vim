@@ -23,7 +23,7 @@ function! SyntaxCheckers_python_pylama_GetHighlightRegex(item)
 endfunction
 
 function! SyntaxCheckers_python_pylama_GetLocList() dict
-    let makeprg = self.makeprgBuild({ 'post_args': '-f pep8' })
+    let makeprg = self.makeprgBuild({ 'args_after': '-f pep8' })
 
     " TODO: "WARNING:pylama:..." messages are probably a logging bug
     let errorformat =

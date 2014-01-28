@@ -21,7 +21,7 @@ set cpo&vim
 runtime! syntax_checkers/java/*.vim
 
 function! SyntaxCheckers_javascript_jscs_GetLocList() dict
-    let makeprg = self.makeprgBuild({ 'post_args': '--no-colors --reporter checkstyle' })
+    let makeprg = self.makeprgBuild({ 'args_after': '--no-colors --reporter checkstyle' })
     let errorformat = '%f:%t:%l:%c:%m'
     return SyntasticMake({
         \ 'makeprg': makeprg,

@@ -31,7 +31,7 @@ endfunction
 
 function! SyntaxCheckers_lex_flex_GetLocList() dict
     let makeprg = self.makeprgBuild({
-        \ 'exe': self.getExec() . ' ' . syntastic#c#NullOutput() })
+        \ 'args_after': syntastic#c#NullOutput() })
 
     let errorformat = '%f:%l: %m'
 

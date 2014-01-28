@@ -69,7 +69,7 @@ function! SyntaxCheckers_sh_sh_GetLocList() dict
 
     let makeprg = self.makeprgBuild({
         \ 'exe': s:GetShell(),
-        \ 'args': '-n' })
+        \ 'args_after': '-n' })
 
     let errorformat = '%f: line %l: %m'
 

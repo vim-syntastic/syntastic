@@ -23,7 +23,8 @@ set cpo&vim
 
 function! SyntaxCheckers_javascript_gjslint_GetLocList() dict
     let makeprg = self.makeprgBuild({
-        \ 'args': g:syntastic_javascript_gjslint_conf . " --nosummary --unix_mode --nodebug_indentation --nobeep" })
+        \ 'args': g:syntastic_javascript_gjslint_conf,
+        \ 'args_after': '--nosummary --unix_mode --nodebug_indentation --nobeep' })
 
     let errorformat =
         \ "%f:%l:(New Error -%\\?\%n) %m," .

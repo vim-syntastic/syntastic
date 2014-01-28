@@ -19,7 +19,7 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 function! SyntaxCheckers_nroff_mandoc_GetLocList() dict
-    let makeprg = self.makeprgBuild({ 'args': '-Tlint' })
+    let makeprg = self.makeprgBuild({ 'args_after': '-Tlint' })
 
     let errorformat =
         \ '%E%f:%l:%c: %tRROR: %m,' .
