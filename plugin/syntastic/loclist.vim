@@ -49,8 +49,57 @@ function! g:SyntasticLoclist.getRaw()
     return self._rawLoclist
 endfunction
 
-function! g:SyntasticLoclist.getLength()
-    return len(self._rawLoclist)
+function! g:SyntasticLoclist.getStatuslineFlag()
+    if !exists("self._stl_format")
+        let self._stl_format = ''
+    endif
+    if !exists("self._stl_flag")
+        let self._stl_flag = ''
+    endif
+
+    if g:syntastic_stl_format !=# self._stl_format
+        let self._stl_format = g:syntastic_stl_format
+
+        if !empty(self._rawLoclist)
+            let errors = self.errors()
+            let warnings = self.warnings()
+
+            let num_errors = len(errors)
+            let num_warnings = len(warnings)
+            let num_issues = len(self._rawLoclist)
+
+            let output = self._stl_format
+
+            "hide stuff wrapped in %E(...) unless there are errors
+            let output = substitute(output, '\m\C%E{\([^}]*\)}', num_errors ? '\1' : '' , 'g')
+
+            "hide stuff wrapped in %W(...) unless there are warnings
+            let output = substitute(output, '\m\C%W{\([^}]*\)}', num_warnings ? '\1' : '' , 'g')
+
+            "hide stuff wrapped in %B(...) unless there are both errors and warnings
+            let output = substitute(output, '\m\C%B{\([^}]*\)}', (num_warnings && num_errors) ? '\1' : '' , 'g')
+
+            "sub in the total errors/warnings/both
+            let output = substitute(output, '\m\C%w', num_warnings, 'g')
+            let output = substitute(output, '\m\C%e', num_errors, 'g')
+            let output = substitute(output, '\m\C%t', num_issues, 'g')
+
+            "first error/warning line num
+            let output = substitute(output, '\m\C%F', num_issues ? self._rawLoclist[0]['lnum'] : '', 'g')
+
+            "first error line num
+            let output = substitute(output, '\m\C%fe', num_errors ? errors[0]['lnum'] : '', 'g')
+
+            "first warning line num
+            let output = substitute(output, '\m\C%fw', num_warnings ? warnings[0]['lnum'] : '', 'g')
+
+            let self._stl_flag = output
+        else
+            let self._stl_flag = ''
+        endif
+    endif
+
+    return self._stl_flag
 endfunction
 
 function! g:SyntasticLoclist.getName()
