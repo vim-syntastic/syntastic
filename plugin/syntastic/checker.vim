@@ -78,7 +78,15 @@ function! g:SyntasticChecker.getHighlightRegexFor(error)
 endfunction
 
 function! g:SyntasticChecker.makeprgBuild(opts)
-    return g:SyntasticMakeprgBuilder.Instance().makeprg(self, a:opts)
+    let setting = 'g:syntastic_' . self._filetype . '_' . self._name . '_'
+
+    let parts = self._getOpt(a:opts, setting, 'exe', self.getExec())
+    call extend(parts, self._getOpt(a:opts, setting, 'args', ''))
+    call extend(parts, self._getOpt(a:opts, setting, 'fname', syntastic#util#shexpand('%')))
+    call extend(parts, self._getOpt(a:opts, setting, 'post_args', ''))
+    call extend(parts, self._getOpt(a:opts, setting, 'tail', ''))
+
+    return join(filter(parts, 'strlen(v:val)'))
 endfunction
 
 function! g:SyntasticChecker.isAvailable()
@@ -106,6 +114,22 @@ function! g:SyntasticChecker._populateHighlightRegexes(errors)
             endif
         endfor
     endif
+endfunction
+
+function! g:SyntasticChecker._getOpt(opts, setting, name, default)
+    return [
+        \ get(a:opts, a:name . '_before', ''),
+        \ self._getUserOpt(a:opts, a:setting, a:name, a:default),
+        \ get(a:opts, a:name . '_after', '') ]
+endfunction
+
+function! g:SyntasticChecker._getUserOpt(opts, setting, name, default)
+    let sname = a:setting . a:name
+    if exists(sname)
+        return {sname}
+    endif
+
+    return get(a:opts, a:name, a:default)
 endfunction
 
 " Non-method functions {{{1
