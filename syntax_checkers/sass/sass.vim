@@ -39,7 +39,7 @@ function! SyntaxCheckers_sass_sass_GetLocList() dict
     endif
 
     let makeprg = self.makeprgBuild({
-        \ 'args': '--cache-location ' . s:sass_cache_location . ' ' . s:imports . ' --check' })
+        \ 'args_before': '--cache-location ' . s:sass_cache_location . ' ' . s:imports . ' --check' })
 
     let errorformat =
         \ '%ESyntax %trror: %m,' .

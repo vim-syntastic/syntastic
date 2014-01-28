@@ -38,9 +38,9 @@ function! SyntaxCheckers_erlang_escript_GetLocList() dict
         let post_args = g:syntastic_erlc_include_path
     endif
     let makeprg = self.makeprgBuild({
-        \ 'args': args,
+        \ 'args_after': args,
         \ 'fname': syntastic#util#shexpand('%:p'),
-        \ 'post_args': post_args })
+        \ 'post_args_after': post_args })
 
     let errorformat =
         \ '%W%f:%l: warning: %m,'.

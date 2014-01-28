@@ -27,7 +27,7 @@ function! SyntaxCheckers_yaml_jsyaml_GetLocList() dict
             \ syntastic#util#versionIsAtLeast(syntastic#util#getVersion(self.getExec() . ' --version'), [2])
     endif
 
-    let makeprg = self.makeprgBuild({ 'args': s:js_yaml_new ? '' : '--compact' })
+    let makeprg = self.makeprgBuild({ 'args_after': (s:js_yaml_new ? '' : '--compact') })
 
     let errorformat =
         \ 'Error on line %l\, col %c:%m,' .

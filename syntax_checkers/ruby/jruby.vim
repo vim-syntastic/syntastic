@@ -21,13 +21,16 @@ set cpo&vim
 function! SyntaxCheckers_ruby_jruby_GetLocList() dict
     if syntastic#util#isRunningWindows()
         let exe = self.getExec()
-        let args = '-W1 -T1 -c'
+        let args = '-T1'
     else
         let exe = 'RUBYOPT= ' . self.getExec()
-        let args = '-W1 -c'
+        let args = ''
     endif
 
-    let makeprg = self.makeprgBuild({ 'exe': exe, 'args': args })
+    let makeprg = self.makeprgBuild({
+        \ 'exe': exe,
+        \ 'args': args,
+        \ 'args_after': '-W1 -c' })
 
     let errorformat =
         \ '%-GSyntax OK for %f,'.

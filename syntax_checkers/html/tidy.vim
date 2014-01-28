@@ -175,7 +175,7 @@ endfunction
 
 function! SyntaxCheckers_html_tidy_GetLocList() dict
     let makeprg = self.makeprgBuild({
-        \ 'args': s:Args(),
+        \ 'args_after': s:Args(),
         \ 'tail': '2>&1' })
 
     let errorformat =

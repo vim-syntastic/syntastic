@@ -19,7 +19,9 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 function! SyntaxCheckers_twig_twiglint_GetLocList() dict
-    let makeprg = self.makeprgBuild({ 'args': 'lint --format=csv' })
+    let makeprg = self.makeprgBuild({
+        \ 'args_before': 'lint',
+        \ 'args_after': '--format=csv' })
 
     let errorformat = '"%f"\,%l\,%m'
 

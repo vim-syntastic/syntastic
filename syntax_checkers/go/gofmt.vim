@@ -23,8 +23,8 @@ set cpo&vim
 
 function! SyntaxCheckers_go_gofmt_GetLocList() dict
     let makeprg = self.makeprgBuild({
-        \ 'args': '-l',
-        \ 'tail': '> ' . syntastic#util#DevNull() })
+        \ 'args_after': '-l',
+        \ 'tail_after': '> ' . syntastic#util#DevNull() })
 
     let errorformat = '%f:%l:%c: %m,%-G%.%#'
 
