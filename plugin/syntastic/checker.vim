@@ -13,7 +13,6 @@ function! g:SyntasticChecker.New(args)
     let newObj._filetype = a:args['filetype']
     let newObj._name = a:args['name']
     let newObj._exec = get(a:args, 'exec', newObj._name)
-    let newObj._makeprgFunc = function('SyntasticCheckerMakeprgBuild')
 
     if has_key(a:args, 'redirect')
         let [filetype, name] = split(a:args['redirect'], '/')
@@ -79,7 +78,15 @@ function! g:SyntasticChecker.getHighlightRegexFor(error)
 endfunction
 
 function! g:SyntasticChecker.makeprgBuild(opts)
-    return self._makeprgFunc(a:opts)
+    let setting = 'g:syntastic_' . self._filetype . '_' . self._name . '_'
+
+    let parts = self._getOpt(a:opts, setting, 'exe', self.getExec())
+    call extend(parts, self._getOpt(a:opts, setting, 'args', ''))
+    call extend(parts, self._getOpt(a:opts, setting, 'fname', syntastic#util#shexpand('%')))
+    call extend(parts, self._getOpt(a:opts, setting, 'post_args', ''))
+    call extend(parts, self._getOpt(a:opts, setting, 'tail', ''))
+
+    return join(filter(parts, 'strlen(v:val)'))
 endfunction
 
 function! g:SyntasticChecker.isAvailable()
@@ -109,22 +116,26 @@ function! g:SyntasticChecker._populateHighlightRegexes(errors)
     endif
 endfunction
 
+function! g:SyntasticChecker._getOpt(opts, setting, name, default)
+    return [
+        \ get(a:opts, a:name . '_before', ''),
+        \ self._getUserOpt(a:opts, a:setting, a:name, a:default),
+        \ get(a:opts, a:name . '_after', '') ]
+endfunction
+
+function! g:SyntasticChecker._getUserOpt(opts, setting, name, default)
+    let sname = a:setting . a:name
+    if exists(sname)
+        return {sname}
+    endif
+
+    return get(a:opts, a:name, a:default)
+endfunction
+
 " Non-method functions {{{1
 
 function! SyntasticCheckerIsAvailableDefault() dict
     return executable(self.getExec())
-endfunction
-
-function! SyntasticCheckerMakeprgBuild(opts) dict
-    let builder = g:SyntasticMakeprgBuilder.New(
-                \ get(a:opts, 'checker', self),
-                \ get(a:opts, 'exe', ''),
-                \ get(a:opts, 'args', ''),
-                \ get(a:opts, 'fname', ''),
-                \ get(a:opts, 'post_args', ''),
-                \ get(a:opts, 'tail', '') )
-
-    return builder.makeprg()
 endfunction
 
 " vim: set sw=4 sts=4 et fdm=marker:

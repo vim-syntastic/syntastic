@@ -19,7 +19,7 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 function! SyntaxCheckers_asciidoc_asciidoc_GetLocList() dict
-    let makeprg = self.makeprgBuild({ 'args': syntastic#c#NullOutput() })
+    let makeprg = self.makeprgBuild({ 'args_after': syntastic#c#NullOutput() })
 
     let errorformat =
         \ '%Easciidoc: %tRROR: %f: line %l: %m,' .

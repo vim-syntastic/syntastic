@@ -19,7 +19,7 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 function! SyntaxCheckers_coffee_coffeelint_GetLocList() dict
-    let makeprg = self.makeprgBuild({ 'args': '--csv' })
+    let makeprg = self.makeprgBuild({ 'args_after': '--csv' })
 
     let errorformat =
         \ '%f\,%l\,%\d%#\,%trror\,%m,' .

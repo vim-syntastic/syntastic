@@ -18,7 +18,7 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 function! SyntaxCheckers_handlebars_handlebars_GetLocList() dict
-    let makeprg = self.makeprgBuild({ 'args': '-f ' . syntastic#util#DevNull() })
+    let makeprg = self.makeprgBuild({ 'args_after': '-f ' . syntastic#util#DevNull() })
 
     let errorformat =
         \ '%EError: %m on line %l:,'.

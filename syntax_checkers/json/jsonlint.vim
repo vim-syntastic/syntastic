@@ -18,7 +18,7 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 function! SyntaxCheckers_json_jsonlint_GetLocList() dict
-    let makeprg = self.makeprgBuild({ 'post_args': '--compact' })
+    let makeprg = self.makeprgBuild({ 'post_args_after': '--compact' })
 
     let errorformat =
         \ '%ELine %l:%c,'.

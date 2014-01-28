@@ -15,7 +15,7 @@ set cpo&vim
 function! SyntaxCheckers_typescript_tsc_GetLocList() dict
     let makeprg = self.makeprgBuild({
         \ 'args': '--module commonjs',
-        \ 'post_args': '--out ' . syntastic#util#DevNull() })
+        \ 'args_after': '--out ' . syntastic#util#DevNull() })
 
     let errorformat =
         \ '%E%f %#(%l\,%c): error %m,' .

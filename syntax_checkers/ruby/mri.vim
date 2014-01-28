@@ -39,7 +39,7 @@ function! SyntaxCheckers_ruby_mri_GetLocList() dict
 
     let makeprg = self.makeprgBuild({
         \ 'exe': exe,
-        \ 'args': '-w -T1 -c' })
+        \ 'args_after': '-w -T1 -c' })
 
     "this is a hack to filter out a repeated useless warning in rspec files
     "containing lines like

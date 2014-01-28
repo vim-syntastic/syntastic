@@ -42,14 +42,15 @@ endfunction
 
 function! SyntaxCheckers_javascript_closurecompiler_GetLocList() dict
     if exists("g:syntastic_javascript_closure_compiler_file_list")
-        let file_list = join(readfile(g:syntastic_javascript_closure_compiler_file_list), ' ')
+        let file_list = join(readfile(g:syntastic_javascript_closure_compiler_file_list))
     else
         let file_list = syntastic#util#shexpand('%')
     endif
 
     let makeprg = self.makeprgBuild({
         \ 'exe': 'java -jar ' . g:syntastic_javascript_closure_compiler_path,
-        \ 'args': g:syntastic_javascript_closure_compiler_options . ' --js' ,
+        \ 'args': g:syntastic_javascript_closure_compiler_options,
+        \ 'args_after': '--js' ,
         \ 'fname': file_list })
 
     let errorformat =

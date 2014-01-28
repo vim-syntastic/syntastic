@@ -24,7 +24,7 @@ function! SyntaxCheckers_po_msgfmt_GetHighlightRegex(item)
 endfunction
 
 function! SyntaxCheckers_po_msgfmt_GetLocList() dict
-    let makeprg = self.makeprgBuild({ 'args': '-c ' . syntastic#c#NullOutput() })
+    let makeprg = self.makeprgBuild({ 'args_after': '-c ' . syntastic#c#NullOutput() })
 
     let errorformat =
         \ '%W%f:%l: warning: %m,' .

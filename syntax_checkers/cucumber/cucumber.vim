@@ -19,7 +19,7 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 function! SyntaxCheckers_cucumber_cucumber_GetLocList() dict
-    let makeprg = self.makeprgBuild({ 'args': '--dry-run --quiet --strict --format pretty' })
+    let makeprg = self.makeprgBuild({ 'args_after': '--dry-run --quiet --strict --format pretty' })
 
     let errorformat =
         \ '%f:%l:%c:%m,' .

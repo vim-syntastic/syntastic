@@ -22,7 +22,7 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 function! SyntaxCheckers_php_phpcs_GetLocList() dict
-    let makeprg = self.makeprgBuild({ 'args': '--report=csv' })
+    let makeprg = self.makeprgBuild({ 'args_after': '--report=csv' })
 
     let errorformat =
         \ '%-GFile\,Line\,Column\,Type\,Message\,Source\,Severity,'.

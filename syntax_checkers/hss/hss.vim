@@ -19,7 +19,7 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 function! SyntaxCheckers_hss_hss_GetLocList() dict
-    let makeprg = self.makeprgBuild({ 'args' : '-output ' . syntastic#util#DevNull() })
+    let makeprg = self.makeprgBuild({ 'args_after' : '-output ' . syntastic#util#DevNull() })
 
     let errorformat = '%E%f:%l: %m'
 

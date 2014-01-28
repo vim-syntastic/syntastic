@@ -29,8 +29,8 @@ set cpo&vim
 
 function! SyntaxCheckers_glsl_cgc_GetLocList() dict
     let makeprg = self.makeprgBuild({
-        \ 'args': '-oglsl -profile ' . s:GetProfile() .
-        \       (exists('g:syntastic_glsl_options') ? ' ' . g:syntastic_glsl_options : '') })
+        \ 'args_before': '-oglsl -profile ' . s:GetProfile(),
+        \ 'args': (exists('g:syntastic_glsl_options') ? ' ' . g:syntastic_glsl_options : '') })
 
     let errorformat =
         \ "%E%f(%l) : error %m," .
