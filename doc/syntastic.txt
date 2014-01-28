@@ -116,8 +116,17 @@ Something like this could be more useful: >
     set statusline+=%*
 <
 When syntax errors are detected a flag will be shown. The content of the flag
-is derived from the |syntastic_stl_format| option.
+is derived from the |syntastic_stl_format| option, or you can pass the format
+to SyntasticStatuslineFlag(format):
 
+<
+Something like this could be more useful: >
+    set statusline+=%#warningmsg#
+    set statusline+=%{SyntasticStatuslineFlag("%W{[Warn: %fw(%w)]}")}
+    set statusline+=%#errormsg#
+    set statusline+=%{SyntasticStatuslineFlag("%E{[Err: %fe(%e)]}")}
+    set statusline+=%*
+<
 ------------------------------------------------------------------------------
 2.2. Error signs                                       *syntastic-error-signs*
 

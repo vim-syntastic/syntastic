@@ -400,7 +400,7 @@ endfunction
 "g:syntastic_stl_format
 "
 "return '' if no errors are cached for the buffer
-function! SyntasticStatuslineFlag()
+function! SyntasticStatuslineFlag(...)
     let loclist = g:SyntasticLoclist.current()
     let issues = loclist.getRaw()
     let num_issues = loclist.getLength()
@@ -411,7 +411,11 @@ function! SyntasticStatuslineFlag()
         let num_errors = len(errors)
         let num_warnings = len(warnings)
 
-        let output = g:syntastic_stl_format
+        if a:0 > 0
+            let output = a:1
+        else
+            let output = g:syntastic_stl_format
+        endif
 
         "hide stuff wrapped in %E(...) unless there are errors
         let output = substitute(output, '\m\C%E{\([^}]*\)}', num_errors ? '\1' : '' , 'g')
