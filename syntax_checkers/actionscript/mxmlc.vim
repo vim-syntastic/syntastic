@@ -41,12 +41,12 @@ function! SyntaxCheckers_actionscript_mxmlc_GetHighlightRegex(item)
 
     endif
 
-    return strlen(term) ? '\V\<' . term . '\>' : ''
+    return term != '' ? '\V\<' . term . '\>' : ''
 endfunction
 
 function! SyntaxCheckers_actionscript_mxmlc_GetLocList() dict
     let makeprg = self.makeprgBuild({
-        \ 'args_before': (strlen(g:syntastic_actionscript_mxmlc_conf) ?
+        \ 'args_before': (g:syntastic_actionscript_mxmlc_conf != '' ?
         \   ' -load-config+=' . g:syntastic_actionscript_mxmlc_conf : ''),
         \ 'args_after': '-output=' . syntastic#util#DevNull() })
 

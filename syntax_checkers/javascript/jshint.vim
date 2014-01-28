@@ -37,7 +37,7 @@ function! SyntaxCheckers_javascript_jshint_GetLocList() dict
 
     let makeprg = self.makeprgBuild({
         \ 'exe': expand(g:syntastic_jshint_exec),
-        \ 'args': (strlen(g:syntastic_javascript_jshint_conf) ? '--config ' . g:syntastic_javascript_jshint_conf : ''),
+        \ 'args': (g:syntastic_javascript_jshint_conf != '' ? '--config ' . g:syntastic_javascript_jshint_conf : ''),
         \ 'args_after': (s:jshint_new ? '--verbose ' : '') })
 
     let errorformat = s:jshint_new ?
