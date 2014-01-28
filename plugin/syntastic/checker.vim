@@ -31,8 +31,6 @@ function! g:SyntasticChecker.New(args)
 
     if exists('*' . prefix . 'GetHighlightRegex')
         let newObj._highlightRegexFunc = function(prefix . 'GetHighlightRegex')
-    else
-        let newObj._highlightRegexFunc = ''
     endif
 
     return newObj
@@ -73,10 +71,6 @@ function! g:SyntasticChecker.getLocList()
     return g:SyntasticLoclist.New(self.getLocListRaw())
 endfunction
 
-function! g:SyntasticChecker.getHighlightRegexFor(error)
-    return empty(self._highlightRegexFunc) ? [] : self._highlightRegexFunc(a:error)
-endfunction
-
 function! g:SyntasticChecker.makeprgBuild(opts)
     let setting = 'g:syntastic_' . self._filetype . '_' . self._name . '_'
 
@@ -86,7 +80,7 @@ function! g:SyntasticChecker.makeprgBuild(opts)
     call extend(parts, self._getOpt(a:opts, setting, 'post_args', ''))
     call extend(parts, self._getOpt(a:opts, setting, 'tail', ''))
 
-    return join(filter(parts, 'strlen(v:val)'))
+    return join(filter(parts, 'v:val != ""'))
 endfunction
 
 function! g:SyntasticChecker.isAvailable()
@@ -104,7 +98,7 @@ function! g:SyntasticChecker._quietMessages(errors)
 endfunction
 
 function! g:SyntasticChecker._populateHighlightRegexes(errors)
-    if !empty(self._highlightRegexFunc)
+    if has_key(self, '_highlightRegexFunc')
         for e in a:errors
             if e['valid']
                 let term = self._highlightRegexFunc(e)

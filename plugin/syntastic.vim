@@ -165,7 +165,7 @@ augroup syntastic
 
     autocmd BufWinEnter * call s:BufWinEnterHook()
 
-    " TODO: the next autocmd should be "autocmd BufWinLeave * if empty(&buftype) | lclose | endif"
+    " TODO: the next autocmd should be "autocmd BufWinLeave * if &buftype == '' | lclose | endif"
     " but in recent versions of Vim lclose can no longer be called from BufWinLeave
     autocmd BufEnter * call s:BufEnterHook()
 augroup END
@@ -196,7 +196,7 @@ function! s:BufWinEnterHook()
     call syntastic#log#debug(g:SyntasticDebugAutocommands,
         \ 'autocmd: BufWinEnter, buffer ' . bufnr("") . ' = ' . string(bufname(str2nr(bufnr("")))) .
         \ ', &buftype = ' . string(&buftype))
-    if empty(&buftype)
+    if &buftype == ''
         let loclist = g:SyntasticLoclist.current()
         call s:notifiers.refresh(loclist)
     endif
@@ -386,7 +386,7 @@ endfunction
 function! s:SkipFile()
     let force_skip = exists('b:syntastic_skip_checks') ? b:syntastic_skip_checks : 0
     let fname = expand('%')
-    return force_skip || !empty(&buftype) || !filereadable(fname) || getwinvar(0, '&diff') || s:IgnoreFile(fname)
+    return force_skip || (&buftype != '') || !filereadable(fname) || getwinvar(0, '&diff') || s:IgnoreFile(fname)
 endfunction
 
 function! s:uname()

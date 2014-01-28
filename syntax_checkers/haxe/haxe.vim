@@ -28,7 +28,7 @@ function! SyntaxCheckers_haxe_haxe_GetLocList() dict
     endif
     let hxml = fnamemodify(hxml, ':p')
 
-    if !empty(hxml)
+    if hxml != ''
         let makeprg = self.makeprgBuild({
             \ 'fname': syntastic#util#shescape(fnameescape(fnamemodify(hxml, ':t'))) })
 
