@@ -354,7 +354,12 @@ function! SyntaxCheckers_java_javac_GetLocList() dict
     let javac_classpath = ''
 
     " add classpathes to javac_classpath
-    for path in split(g:syntastic_java_javac_classpath, "\n")
+    if has('win32') || has('win32unix') || has('win64')
+        let javac_classpath_split = ';'
+    else
+        let javac_classpath_split = ':'
+    endif
+    for path in split(g:syntastic_java_javac_classpath, javac_classpath_split)
         if path != ''
             try
                 let ps = glob(path, 0, 1)
