@@ -45,6 +45,7 @@ let s:defaultCheckers = {
         \ 'lisp':        ['clisp'],
         \ 'llvm':        ['llvm'],
         \ 'lua':         ['luac'],
+        \ 'make':        ['gnumake'],
         \ 'matlab':      ['mlint'],
         \ 'nasm':        ['nasm'],
         \ 'nroff':       ['mandoc'],
