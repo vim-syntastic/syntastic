@@ -289,7 +289,7 @@ function! s:CacheErrors(checkers)
         let names = []
 
         call syntastic#log#debugShowOptions(g:SyntasticDebugTrace,
-            \ ['shell', 'shellcmdflag', 'shellxquote', 'shellredir', 'shellslash'])
+            \ ['shell', 'shellcmdflag', 'shellquote', 'shellxquote', 'shellredir', 'shellslash'])
         call syntastic#log#debugDump(g:SyntasticDebugVariables)
         call syntastic#log#debugShowVariables(g:SyntasticDebugTrace, 'syntastic_aggregate_errors')
 
