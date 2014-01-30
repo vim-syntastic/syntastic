@@ -102,6 +102,10 @@ function! g:SyntasticLoclist.getStatuslineFlag()
     return self._stl_flag
 endfunction
 
+function! g:SyntasticLoclist.getFirstIssue()
+    return get(self._rawLoclist, 0, {})
+endfunction
+
 function! g:SyntasticLoclist.getName()
     return len(self._name)
 endfunction

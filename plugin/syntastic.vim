@@ -236,11 +236,18 @@ function! s:UpdateErrors(auto_invoked, ...)
     let loclist = g:SyntasticLoclist.current()
 
     let w:syntastic_loclist_set = 0
-    if g:syntastic_always_populate_loc_list || g:syntastic_auto_jump
+    let do_jump = g:syntastic_auto_jump
+    if g:syntastic_auto_jump == 2
+        let first = loclist.getFirstIssue()
+        let type = get(first, 'type', '')
+        let do_jump = type ==? 'E'
+    endif
+
+    if g:syntastic_always_populate_loc_list || do_jump
         call syntastic#log#debug(g:SyntasticDebugNotifications, 'loclist: setloclist (new)')
         call setloclist(0, loclist.getRaw())
         let w:syntastic_loclist_set = 1
-        if run_checks && g:syntastic_auto_jump && !loclist.isEmpty()
+        if run_checks && do_jump && !loclist.isEmpty()
             call syntastic#log#debug(g:SyntasticDebugNotifications, 'loclist: jump')
             silent! lrewind
 
