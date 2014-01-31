@@ -38,6 +38,7 @@ CONTENTS                                                  *syntastic-contents*
         6.1.Handling of composite filetypes........|syntastic-composite|
         6.2.Interaction with python-mode...........|syntastic-pymode|
         6.3.Interaction with the fish shell........|syntastic-fish|
+        6.4.Using syntastic with the fizsh shell...|syntastic-fizsh|
     7.About........................................|syntastic-about|
     8.License......................................|syntastic-license|
 
@@ -599,7 +600,6 @@ If this behaviour is not desirable, you can disable it by mapping the
 composite filetypes to a simple ones using |syntastic_filetype_map|, e.g.: >
     let g:syntastic_filetype_map = { 'handlebars.html': 'handlebars' }
 <
-
 ------------------------------------------------------------------------------
 6.2 Interaction with python-mode                            *syntastic-pymode*
 
@@ -611,7 +611,6 @@ for python in syntastic (see |syntastic_mode_map|), or disable lint checks in
 python-mode, by setting |pymode_lint_write| to 0. E.g.: >
     let g:pymode_lint_write = 0
 <
-
 ------------------------------------------------------------------------------
 6.3 Interaction with the fish shell                           *syntastic-fish*
 
@@ -623,7 +622,19 @@ traditional shell, such as 'zsh', 'bash', 'ksh', or even the original Bourne
 'sh': >
     set shell=bash
 <
+------------------------------------------------------------------------------
+6.4. Using syntastic with the fizsh shell                    *syntastic-fizsh*
 
+Using syntastic with the 'fizsh' shell (see https://github.com/zsh-users/fizsh)
+is possible, but potentially problematic. In order to do it you'll need to set
+'shellredir' like this: >
+    set shellredir=>%s\ 2>&1
+<
+Please keep in mind however that Vim can't take advantage of any of the
+interactive features of 'fizsh'. Using a more traditional shell such as 'zsh',
+'bash', 'ksh', or the original Bourne 'sh' might be a better choice: >
+    set shell=zsh
+<
 ==============================================================================
 7. About                                                     *syntastic-about*
 
