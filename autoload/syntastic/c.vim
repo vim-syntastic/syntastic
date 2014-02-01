@@ -88,21 +88,21 @@ function! s:Init()
     let s:handlers = []
     let s:cflags = {}
 
-    call s:RegHandler('cairo',     'syntastic#c#CheckPKG', ['cairo', 'cairo'])
-    call s:RegHandler('freetype',  'syntastic#c#CheckPKG', ['freetype', 'freetype2', 'freetype'])
-    call s:RegHandler('glade',     'syntastic#c#CheckPKG', ['glade', 'libglade-2.0', 'libglade'])
-    call s:RegHandler('glib',      'syntastic#c#CheckPKG', ['glib', 'glib-2.0', 'glib'])
-    call s:RegHandler('gtk',       'syntastic#c#CheckPKG', ['gtk', 'gtk+-2.0', 'gtk+', 'glib-2.0', 'glib'])
-    call s:RegHandler('libsoup',   'syntastic#c#CheckPKG', ['libsoup', 'libsoup-2.4', 'libsoup-2.2'])
-    call s:RegHandler('libxml',    'syntastic#c#CheckPKG', ['libxml', 'libxml-2.0', 'libxml'])
-    call s:RegHandler('pango',     'syntastic#c#CheckPKG', ['pango', 'pango'])
-    call s:RegHandler('SDL',       'syntastic#c#CheckPKG', ['sdl', 'sdl'])
-    call s:RegHandler('opengl',    'syntastic#c#CheckPKG', ['opengl', 'gl'])
-    call s:RegHandler('webkit',    'syntastic#c#CheckPKG', ['webkit', 'webkit-1.0'])
+    call s:RegHandler('\m\<cairo',       'syntastic#c#CheckPKG', ['cairo', 'cairo'])
+    call s:RegHandler('\m\<freetype',    'syntastic#c#CheckPKG', ['freetype', 'freetype2', 'freetype'])
+    call s:RegHandler('\m\<glade',       'syntastic#c#CheckPKG', ['glade', 'libglade-2.0', 'libglade'])
+    call s:RegHandler('\m\<glib',        'syntastic#c#CheckPKG', ['glib', 'glib-2.0', 'glib'])
+    call s:RegHandler('\m\<gtk',         'syntastic#c#CheckPKG', ['gtk', 'gtk+-2.0', 'gtk+', 'glib-2.0', 'glib'])
+    call s:RegHandler('\m\<libsoup',     'syntastic#c#CheckPKG', ['libsoup', 'libsoup-2.4', 'libsoup-2.2'])
+    call s:RegHandler('\m\<libxml',      'syntastic#c#CheckPKG', ['libxml', 'libxml-2.0', 'libxml'])
+    call s:RegHandler('\m\<pango',       'syntastic#c#CheckPKG', ['pango', 'pango'])
+    call s:RegHandler('\m\<SDL',         'syntastic#c#CheckPKG', ['sdl', 'sdl'])
+    call s:RegHandler('\m\<opengl',      'syntastic#c#CheckPKG', ['opengl', 'gl'])
+    call s:RegHandler('\m\<webkit',      'syntastic#c#CheckPKG', ['webkit', 'webkit-1.0'])
 
-    call s:RegHandler('php\.h',    'syntastic#c#CheckPhp',    [])
-    call s:RegHandler('Python\.h', 'syntastic#c#CheckPython', [])
-    call s:RegHandler('ruby',      'syntastic#c#CheckRuby',   [])
+    call s:RegHandler('\m\<php\.h\>',    'syntastic#c#CheckPhp',    [])
+    call s:RegHandler('\m\<Python\.h\>', 'syntastic#c#CheckPython', [])
+    call s:RegHandler('\m\<ruby',        'syntastic#c#CheckRuby',   [])
 endfunction
 
 " resolve checker-related user variables
