@@ -56,7 +56,7 @@ function! syntastic#c#ReadConfig(file)
         endif
     endfor
 
-    return join(map(parameters, 'syntastic#util#shescape(fnameescape(v:val))'))
+    return join(map(parameters, 'syntastic#util#shescape(v:val)'))
 endfunction
 
 " GetLocList() for C-like compilers
@@ -178,7 +178,7 @@ function! s:GetIncludeDirs(filetype)
         call extend(include_dirs, g:syntastic_{a:filetype}_include_dirs)
     endif
 
-    return join(map(syntastic#util#unique(include_dirs), 'syntastic#util#shescape(fnameescape("-I" . v:val))'))
+    return join(map(syntastic#util#unique(include_dirs), 'syntastic#util#shescape("-I" . v:val)'))
 endfunction
 
 " search the first 100 lines for include statements that are
