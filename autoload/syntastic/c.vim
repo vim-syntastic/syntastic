@@ -30,7 +30,7 @@ function! syntastic#c#ReadConfig(file)
     " try to read config file
     try
         let lines = readfile(config)
-    catch /^Vim\%((\a\+)\)\=:E484/
+    catch /^Vim\%((\a\+)\)\=:E48[45]/
         return ''
     endtry
 
@@ -43,13 +43,13 @@ function! syntastic#c#ReadConfig(file)
 
     let parameters = []
     for line in lines
-        let matches = matchlist(line, '\m\C^\s*-I\s*\(\S\+\)')
-        if matches != [] && matches[1] != ''
+        let matches = matchstr(line, '\m\C^\s*-I\s*\zs.\+')
+        if matches != ''
             " this one looks like an absolute path
-            if match(matches[1], '\m^\%(/\|\a:\)') != -1
-                call add(parameters, '-I' . matches[1])
+            if match(matches, '\m^\%(/\|\a:\)') != -1
+                call add(parameters, '-I' . matches)
             else
-                call add(parameters, '-I' . filepath . syntastic#util#Slash() . matches[1])
+                call add(parameters, '-I' . filepath . syntastic#util#Slash() . matches)
             endif
         else
             call add(parameters, line)
