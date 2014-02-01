@@ -16,7 +16,7 @@ function! s:compareErrorItems(a, b)
         " errors take precedence over warnings
         return a:a['type'] ==? 'e' ? -1 : 1
     else
-        return get(a:a, 'col') - get(a:b, 'col')
+        return get(a:a, 'col', 0) - get(a:b, 'col', 0)
     endif
 endfunction
 

@@ -123,7 +123,7 @@ let s:modemap = g:SyntasticModeMap.Instance()
 " @vimlint(EVL103, 1, a:argLead)
 function! s:CompleteCheckerName(argLead, cmdLine, cursorPos)
     let checker_names = []
-    for ft in s:CurrentFiletypes()
+    for ft in s:ResolveFiletypes()
         for checker in s:registry.availableCheckersFor(ft)
             call add(checker_names, checker.getName())
         endfor
@@ -197,8 +197,7 @@ function! s:BufWinEnterHook()
         \ 'autocmd: BufWinEnter, buffer ' . bufnr("") . ' = ' . string(bufname(str2nr(bufnr("")))) .
         \ ', &buftype = ' . string(&buftype))
     if &buftype == ''
-        let loclist = g:SyntasticLoclist.current()
-        call s:notifiers.refresh(loclist)
+        call s:notifiers.refresh(g:SyntasticLoclist.current())
     endif
 endfunction
 
@@ -275,10 +274,6 @@ function! s:ResolveFiletypes(...)
     return split( get(g:syntastic_filetype_map, type, type), '\m\.' )
 endfunction
 
-function! s:CurrentFiletypes()
-    return s:ResolveFiletypes(&filetype)
-endfunction
-
 "detect and cache all syntax errors in this buffer
 function! s:CacheErrors(checkers)
     call s:ClearCache()
@@ -294,12 +289,13 @@ function! s:CacheErrors(checkers)
         call syntastic#log#debugDump(g:SyntasticDebugVariables)
         call syntastic#log#debugShowVariables(g:SyntasticDebugTrace, 'syntastic_aggregate_errors')
 
+        let filetypes = s:ResolveFiletypes()
         let aggregate_errors =
             \ exists('b:syntastic_aggregate_errors') ? b:syntastic_aggregate_errors : g:syntastic_aggregate_errors
-        let decorate_errors = (aggregate_errors || len(s:CurrentFiletypes()) > 1) &&
+        let decorate_errors = (aggregate_errors || len(filetypes) > 1) &&
             \ (exists('b:syntastic_id_checkers') ? b:syntastic_id_checkers : g:syntastic_id_checkers)
 
-        for ft in s:CurrentFiletypes()
+        for ft in filetypes
             let clist = empty(a:checkers) ? s:registry.getActiveCheckers(ft) : s:registry.getCheckers(ft, a:checkers)
 
             for checker in clist
@@ -366,8 +362,7 @@ endfunction
 
 "display the cached errors for this buf in the location list
 function! s:ShowLocList()
-    let loclist = g:SyntasticLoclist.current()
-    call loclist.show()
+    call g:SyntasticLoclist.current().show()
 endfunction
 
 "the script changes &shellredir and &shell to stop the screen flicking when
@@ -382,8 +377,8 @@ endfunction
 
 function! s:IgnoreFile(filename)
     let fname = fnamemodify(a:filename, ':p')
-    for p in g:syntastic_ignore_files
-        if fname =~# p
+    for pattern in g:syntastic_ignore_files
+        if fname =~# pattern
             return 1
         endif
     endfor
@@ -479,7 +474,7 @@ function! SyntasticMake(options)
     let &errorformat = old_errorformat
     let &l:errorformat = old_local_errorformat
     let &shellredir = old_shellredir
-    let &shell=old_shell
+    let &shell = old_shell
 
     if s:IsRedrawRequiredAfterMake()
         call syntastic#util#redraw(g:syntastic_full_redraws)
@@ -497,7 +492,7 @@ function! SyntasticMake(options)
 
     " Add subtype info if present.
     if has_key(a:options, 'subtype')
-        call SyntasticAddToErrors(errors, {'subtype': a:options['subtype']})
+        call SyntasticAddToErrors(errors, { 'subtype': a:options['subtype'] })
     endif
 
     if has_key(a:options, 'postprocess') && !empty(a:options['postprocess'])
@@ -512,13 +507,14 @@ endfunction
 
 "take a list of errors and add default values to them from a:options
 function! SyntasticAddToErrors(errors, options)
-    for i in range(0, len(a:errors)-1)
+    for err in a:errors
         for key in keys(a:options)
-            if !has_key(a:errors[i], key) || empty(a:errors[i][key])
-                let a:errors[i][key] = a:options[key]
+            if !has_key(err, key) || empty(err[key])
+                let err[key] = a:options[key]
             endif
         endfor
     endfor
+
     return a:errors
 endfunction
 

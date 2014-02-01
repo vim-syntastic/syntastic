@@ -25,7 +25,7 @@ endfunction
 
 " Get directory separator
 function! syntastic#util#Slash() abort
-    return !exists("+shellslash") || &shellslash ? '/' : '\'
+    return (!exists("+shellslash") || &shellslash) ? '/' : '\'
 endfunction
 
 "search the first 5 lines of the file for a magic number and return a map
@@ -45,11 +45,11 @@ function! syntastic#util#parseShebang()
         if line =~ '^#!'
             let exe = matchstr(line, '\m^#!\s*\zs[^ \t]*')
             let args = split(matchstr(line, '\m^#!\s*[^ \t]*\zs.*'))
-            return {'exe': exe, 'args': args}
+            return { 'exe': exe, 'args': args }
         endif
     endfor
 
-    return {'exe': '', 'args': []}
+    return { 'exe': '', 'args': [] }
 endfunction
 
 " Parse a version string.  Return an array of version components.
@@ -70,17 +70,9 @@ endfunction
 "
 " See http://semver.org for info about version numbers.
 function! syntastic#util#versionIsAtLeast(installed, required)
-    for index in range(max([len(a:installed), len(a:required)]))
-        if len(a:installed) <= index
-            let installed_element = 0
-        else
-            let installed_element = a:installed[index]
-        endif
-        if len(a:required) <= index
-            let required_element = 0
-        else
-            let required_element = a:required[index]
-        endif
+    for idx in range(max([len(a:installed), len(a:required)]))
+        let installed_element = get(a:installed, idx, 0)
+        let required_element = get(a:required, idx, 0)
         if installed_element != required_element
             return installed_element > required_element
         endif
@@ -145,14 +137,17 @@ function! syntastic#util#findInParent(what, where)
         let root = here[0] . root[1:]
     endif
 
-    while !empty(here)
+    let old = ''
+    while here != ''
         let p = split(globpath(here, a:what), '\n')
 
         if !empty(p)
             return fnamemodify(p[0], ':p')
-        elseif here ==? root
+        elseif here ==? root || here ==? old
             break
         endif
+
+        let old = here
 
         " we use ':h:h' rather than ':h' since ':p' adds a trailing '/'
         " if 'here' is a directory
@@ -230,7 +225,6 @@ function! s:translateFilter(filters)
 endfunction
 
 function! s:translateElement(key, term)
-    let ret = "1"
     if a:key ==? 'level'
         let ret = 'v:val["type"] !=? ' . string(a:term[0])
     elseif a:key ==? 'type'
@@ -239,6 +233,8 @@ function! s:translateElement(key, term)
         let ret = 'v:val["text"] !~? ' . string(a:term)
     elseif a:key ==? 'file'
         let ret = 'bufname(str2nr(v:val["bufnr"])) !~# ' . string(a:term)
+    else
+        let ret = "1"
     endif
     return ret
 endfunction
