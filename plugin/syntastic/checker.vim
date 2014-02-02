@@ -74,13 +74,14 @@ endfunction
 function! g:SyntasticChecker.makeprgBuild(opts)
     let setting = 'g:syntastic_' . self._filetype . '_' . self._name . '_'
 
-    let parts = self._getOpt(a:opts, setting, 'exe', self.getExec())
+    let parts = []
+    call extend(parts, self._getOpt(a:opts, setting, 'exe', self.getExec()))
     call extend(parts, self._getOpt(a:opts, setting, 'args', ''))
     call extend(parts, self._getOpt(a:opts, setting, 'fname', syntastic#util#shexpand('%')))
     call extend(parts, self._getOpt(a:opts, setting, 'post_args', ''))
     call extend(parts, self._getOpt(a:opts, setting, 'tail', ''))
 
-    return join(filter(parts, 'v:val != ""'))
+    return join(parts)
 endfunction
 
 function! g:SyntasticChecker.isAvailable()
@@ -111,19 +112,23 @@ function! g:SyntasticChecker._populateHighlightRegexes(errors)
 endfunction
 
 function! g:SyntasticChecker._getOpt(opts, setting, name, default)
-    return [
-        \ get(a:opts, a:name . '_before', ''),
-        \ self._getUserOpt(a:opts, a:setting, a:name, a:default),
-        \ get(a:opts, a:name . '_after', '') ]
+    let sname = a:setting . a:name
+    let ret = []
+    call extend( ret, self._shescape(get(a:opts, a:name . '_before', '')) )
+    call extend( ret, self._shescape(exists(sname) ? {sname} : get(a:opts, a:name, a:default)) )
+    call extend( ret, self._shescape(get(a:opts, a:name . '_after', '')) )
+
+    return ret
 endfunction
 
-function! g:SyntasticChecker._getUserOpt(opts, setting, name, default)
-    let sname = a:setting . a:name
-    if exists(sname)
-        return {sname}
+function! g:SyntasticChecker._shescape(opt)
+    if type(a:opt) == type('') && a:opt != ''
+        return [a:opt]
+    elseif type(a:opt) == type([])
+        return map(a:opt, 'syntastic#util#shescape(v:val)')
     endif
 
-    return get(a:opts, a:name, a:default)
+    return []
 endfunction
 
 " Non-method functions {{{1
