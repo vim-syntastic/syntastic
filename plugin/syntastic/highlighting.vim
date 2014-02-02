@@ -47,13 +47,15 @@ function! g:SyntasticHighlightingNotifier.refresh(loclist)
             " used to override default highlighting.
             if has_key(item, 'hl')
                 call matchadd(group, '\%' . item['lnum'] . 'l' . item['hl'])
-            elseif get(item, 'col')
-                let lastcol = col([item['lnum'], '$'])
+            elseif get(item, 'col', 0)
+                if get(item, 'vcol', 0)
+                    let lastcol = virtcol([item['lnum'], '$'])
+                    let coltype = 'v'
+                else
+                    let lastcol = col([item['lnum'], '$'])
+                    let coltype = 'c'
+                endif
                 let lcol = min([lastcol, item['col']])
-
-                " a bug in vim can sometimes cause there to be no 'vcol' key,
-                " so check for its existence
-                let coltype = has_key(item, 'vcol') && item['vcol'] ? 'v' : 'c'
 
                 call matchadd(group, '\%' . item['lnum'] . 'l\%' . lcol . coltype)
             endif
