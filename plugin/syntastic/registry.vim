@@ -68,6 +68,7 @@ let s:defaultCheckers = {
         \ 'slim':        ['slimrb'],
         \ 'tcl':         ['nagelfar'],
         \ 'tex':         ['lacheck', 'chktex'],
+        \ 'texinfo':     ['makeinfo'],
         \ 'text':        ['atdtool'],
         \ 'twig':        ['twiglint'],
         \ 'typescript':  ['tsc'],
