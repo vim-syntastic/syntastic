@@ -17,7 +17,16 @@
                                        \_____________________________________________/
 
 
+- - -
+1\. [Introduction](#introduction)  
+2\. [Installation](#installation)  
+3\. [FAQ](#faq)  
+4\. [Other resources](#otherresources)  
+- - -
 
+<a name="introduction"></a>
+
+## 1\. Introduction
 
 Syntastic is a syntax checking plugin for Vim that runs files through external
 syntax checkers and displays any resulting errors to the user. This can be done
@@ -36,8 +45,6 @@ reStructuredText, Ruby, Rust, SASS/SCSS, Scala, Slim, Tcl, TeX, Texinfo, Twig,
 TypeScript, Vala, Verilog, VHDL, VimL, xHtml, XML, XSLT, YACC, YAML, z80, Zope
 page templates, zsh.
 
-## Screenshot
-
 Below is a screenshot showing the methods that Syntastic uses to display syntax
 errors.  Note that, in practise, you will only have a subset of these methods
 enabled.
@@ -51,12 +58,16 @@ enabled.
 5. Hover the mouse over a line containing an error and the error message is displayed as a balloon.
 6. (not shown) Highlighting errors with syntax highlighting. Erroneous parts of lines can be highlighted.
 
-## Installation
+<a name="installation"></a>
+
+## 2\. Installation
 
 Installing syntastic is easy but first you need to have the pathogen plugin installed.  If you already
 have pathogen working then skip Step 1 and go to Step 2.
 
-### Step 1: Install pathogen.vim
+<a name="step1"></a>
+
+### 2.1\. Step 1: Install pathogen.vim
 
 First I'll show you how to install tpope's [pathogen.vim][1] so that it's
 easy to install syntastic.  Do this in your Terminal so that you get the
@@ -70,7 +81,9 @@ Next you *need to add this* to your ~/.vimrc:
 
         execute pathogen#infect()
 
-### Step 2: Install syntastic as a pathogen bundle
+<a name="step2"></a>
+
+### 2.2\. Step 2: Install syntastic as a pathogen bundle
 
 You now have pathogen installed and can put syntastic into ~/.vim/bundle like this:
     
@@ -91,7 +104,9 @@ step 1 and make sure you did the following:
 4. Have permissions to access all of these directories.
 
 
-## FAQ
+<a name="faq"></a>
+
+## 3\. FAQ
 
 __Q. I installed syntastic but it isn't reporting any errors...__
 
@@ -207,7 +222,9 @@ cabbrev <silent> bd lclose\|bdelete
 ```
 
 
-## Other resources
+<a name="otherresources"></a>
+
+## 4\. Other resources
 
 The preferred place for posting suggestions, reporting bugs, and general
 discussions related to syntastic is the [issue tracker at GitHub][4].  There
