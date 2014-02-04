@@ -174,19 +174,19 @@ Example: >
 ------------------------------------------------------------------------------
 2.5. Aggregating errors                         *syntastic-aggregating-errors*
 
-By default (namely if |'syntastic_aggregate_errors'| is unset), syntastic runs
-in turn the checkers corresponding to the filetype of the current file, and
-stops as soon as a checker reports any errors. It then notifies you of the
-errors using the notification mechanisms above. In this mode error lists are
-always produced by a single checker, and, if you open the error window, the
-name of the checker that generated the errors is shown on the statusline of the
-error window.
+By default, namely if |'syntastic_aggregate_errors'| is unset, syntastic runs
+in turn the checkers corresponding to the filetype of the current file (see
+|syntastic-filetype-checkers|), and stops as soon as a checker reports any
+errors. It then notifies you of the errors using the notification mechanisms
+above. In this mode error lists are always produced by a single checker, and,
+if you open the error window, the name of the checker that generated the errors
+is shown on the statusline of the error window.
 
 If |'syntastic_aggregate_errors'| is set, syntastic runs all checkers that
-apply, then aggregates errors found by all checkers in a single list, and
-notifies you. In this mode each error message is labeled with the name of
-the checker that generated it, but you can disable these labels by unsetting
-'|syntastic_id_checkers|'.
+apply (still cf. |syntastic-filetype-checkers|), then aggregates errors found
+by all checkers in a single list, and notifies you. In this mode each error
+message is labeled with the name of the checker that generated it, but you can
+disable these labels by unsetting '|syntastic_id_checkers|'.
 
 ------------------------------------------------------------------------------
 2.6 Filtering errors                              *syntastic-filtering-errors*
