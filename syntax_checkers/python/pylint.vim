@@ -50,6 +50,8 @@ function! SyntaxCheckers_python_pylint_GetLocList() dict
         else
             let e['valid'] = 0
         endif
+
+        let e['col'] += 1
         let e['vcol'] = 0
     endfor
 
