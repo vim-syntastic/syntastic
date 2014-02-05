@@ -30,7 +30,8 @@ set cpo&vim
 
 function! SyntaxCheckers_c_oclint_GetLocList() dict
     let makeprg = self.makeprgBuild({
-        \ 'post_args_after': '-- -c ' . syntastic#c#ReadConfig(g:syntastic_oclint_config_file) })
+        \ 'args_after': '-text',
+        \ 'post_args_before': '-- -c ' . syntastic#c#ReadConfig(g:syntastic_oclint_config_file) })
 
     let errorformat =
         \ '%E%f:%l:%c: %m P1 ,' .
@@ -45,7 +46,8 @@ function! SyntaxCheckers_c_oclint_GetLocList() dict
         \ 'makeprg': makeprg,
         \ 'errorformat': errorformat,
         \ 'subtype': 'Style',
-        \ 'postprocess': ['compressWhitespace', 'sort'] })
+        \ 'postprocess': ['compressWhitespace', 'sort'],
+        \ 'returns': [0, 3, 5] })
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
