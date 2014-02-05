@@ -42,7 +42,8 @@ function! SyntaxCheckers_cpp_cpplint_GetLocList() dict
     let loclist = SyntasticMake({
         \ 'makeprg': makeprg,
         \ 'errorformat': errorformat,
-        \ 'subtype': 'Style' })
+        \ 'subtype': 'Style',
+        \ 'returns': [0, 1] })
 
     " change error types according to the prescribed threshold
     for e in loclist
