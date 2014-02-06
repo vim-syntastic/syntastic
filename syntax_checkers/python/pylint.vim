@@ -59,10 +59,11 @@ function! SyntaxCheckers_python_pylint_GetLocList() dict
 endfunction
 
 function! s:PylintNew(exe)
+    let exe = syntastic#util#shescape(a:exe)
     try
         " On Windows the version is shown as "pylint-script.py 1.0.0".
         " On Gentoo Linux it's "pylint-python2.7 0.28.0".  Oh, joy. :)
-        let pylint_version = filter(split(system(a:exe . ' --version'), '\m, \=\|\n'), 'v:val =~# ''\m^pylint\>''')[0]
+        let pylint_version = filter(split(system(exe . ' --version'), '\m, \=\|\n'), 'v:val =~# ''\m^pylint\>''')[0]
         let pylint_version = substitute(pylint_version, '\v^\S+\s+', '', '')
         let ret = syntastic#util#versionIsAtLeast(syntastic#util#parseVersion(pylint_version), [1])
     catch /^Vim\%((\a\+)\)\=:E684/

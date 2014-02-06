@@ -33,7 +33,8 @@ function! SyntaxCheckers_cuda_nvcc_GetLocList() dict
         let arch_flag = ''
     endif
     let makeprg =
-        \ self.getExec() . ' ' . arch_flag . ' --cuda -O0 -I . -Xcompiler -fsyntax-only ' .
+        \ syntastic#util#shescape(self.getExec()) . ' ' . arch_flag .
+        \ ' --cuda -O0 -I . -Xcompiler -fsyntax-only ' .
         \ syntastic#util#shexpand('%') . ' ' . syntastic#c#NullOutput()
 
     let errorformat =

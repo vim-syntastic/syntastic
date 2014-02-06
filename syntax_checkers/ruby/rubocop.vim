@@ -25,7 +25,8 @@ function! SyntaxCheckers_ruby_rubocop_IsAvailable() dict
     let exe = self.getExec()
     return
         \ executable(exe) &&
-        \ syntastic#util#versionIsAtLeast(syntastic#util#getVersion(exe . ' --version'), [0,9,0])
+        \ syntastic#util#versionIsAtLeast(syntastic#util#getVersion(
+        \       syntastic#util#shescape(exe) . ' --version'), [0, 9, 0])
 endfunction
 
 function! SyntaxCheckers_ruby_rubocop_GetLocList() dict

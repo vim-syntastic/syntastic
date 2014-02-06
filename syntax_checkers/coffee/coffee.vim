@@ -24,7 +24,8 @@ set cpo&vim
 function! SyntaxCheckers_coffee_coffee_IsAvailable() dict
     let exe = self.getExec()
     return executable(exe) &&
-        \ syntastic#util#versionIsAtLeast(syntastic#util#getVersion(exe . ' --version 2>' . syntastic#util#DevNull()), [1,6,2])
+        \ syntastic#util#versionIsAtLeast(syntastic#util#getVersion(
+        \ syntastic#util#shescape(exe) . ' --version 2>' . syntastic#util#DevNull()), [1,6,2])
 endfunction
 
 function! SyntaxCheckers_coffee_coffee_GetLocList() dict
