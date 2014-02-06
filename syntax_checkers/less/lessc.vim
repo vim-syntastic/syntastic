@@ -34,7 +34,7 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 if g:syntastic_less_use_less_lint
-    let s:check_file = 'node ' . expand('<sfile>:p:h') . syntastic#util#Slash() . 'less-lint.js'
+    let s:check_file = 'node ' . syntastic#util#shescape(expand('<sfile>:p:h') . syntastic#util#Slash() . 'less-lint.js')
 else
     let s:check_file = 'lessc'
 endif
