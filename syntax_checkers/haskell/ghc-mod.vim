@@ -29,7 +29,8 @@ endfunction
 
 function! SyntaxCheckers_haskell_ghc_mod_GetLocList() dict
     let makeprg = self.makeprgBuild({
-        \ 'exe': self.getExec() . ' check' . (s:ghc_mod_new ? ' --boundary=""' : '') })
+        \ 'exe': syntastic#util#shescape(self.getExec()) . ' check' .
+        \       (s:ghc_mod_new ? ' --boundary=""' : '') })
 
     let errorformat =
         \ '%-G%\s%#,' .
@@ -49,8 +50,9 @@ function! SyntaxCheckers_haskell_ghc_mod_GetLocList() dict
 endfunction
 
 function! s:GhcModNew(exe)
+    let exe = syntastic#util#shescape(a:exe)
     try
-        let ghc_mod_version = filter(split(system(a:exe), '\n'), 'v:val =~# ''\m^ghc-mod version''')[0]
+        let ghc_mod_version = filter(split(system(exe), '\n'), 'v:val =~# ''\m^ghc-mod version''')[0]
         let ret = syntastic#util#versionIsAtLeast(syntastic#util#parseVersion(ghc_mod_version), [2, 1, 2])
     catch /^Vim\%((\a\+)\)\=:E684/
         call syntastic#log#error("checker haskell/ghc_mod: can't parse version string (abnormal termination?)")

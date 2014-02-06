@@ -75,7 +75,7 @@ function! g:SyntasticChecker.makeprgBuild(opts)
     let setting = 'g:syntastic_' . self._filetype . '_' . self._name . '_'
 
     let parts = []
-    call extend(parts, self._getOpt(a:opts, setting, 'exe', self.getExec()))
+    call extend(parts, self._getOpt(a:opts, setting, 'exe', syntastic#util#shescape(self.getExec())))
     call extend(parts, self._getOpt(a:opts, setting, 'args', ''))
     call extend(parts, self._getOpt(a:opts, setting, 'fname', syntastic#util#shexpand('%')))
     call extend(parts, self._getOpt(a:opts, setting, 'post_args', ''))
@@ -125,7 +125,7 @@ function! g:SyntasticChecker._shescape(opt)
     if type(a:opt) == type('') && a:opt != ''
         return [a:opt]
     elseif type(a:opt) == type([])
-        return map(a:opt, 'syntastic#util#shescape(v:val)')
+        return map(copy(a:opt), 'syntastic#util#shescape(v:val)')
     endif
 
     return []

@@ -18,16 +18,17 @@ let g:loaded_syntastic_python_python_checker = 1
 let s:save_cpo = &cpo
 set cpo&vim
 
-let s:compiler = syntastic#util#shescape(expand('<sfile>:p:h') . syntastic#util#Slash() . 'compile.py')
+let s:compiler = expand('<sfile>:p:h') . syntastic#util#Slash() . 'compile.py'
 
 function! SyntaxCheckers_python_python_IsAvailable() dict
     let exe = self.getExec()
     return executable(exe) &&
-        \ syntastic#util#versionIsAtLeast(syntastic#util#getVersion(exe . ' --version'), [2,6])
+        \ syntastic#util#versionIsAtLeast(syntastic#util#getVersion(
+        \       syntastic#util#shescape(exe) . ' --version'), [2, 6])
 endfunction
 
 function! SyntaxCheckers_python_python_GetLocList() dict
-    let makeprg = self.makeprgBuild({ 'exe': self.getExec() . ' ' . s:compiler })
+    let makeprg = self.makeprgBuild({ 'exe': [self.getExec(), s:compiler] })
 
     let errorformat = '%E%f:%l:%c: %m'
 
