@@ -15,8 +15,8 @@ if exists('g:loaded_syntastic_c_avrgcc_checker')
 endif
 let g:loaded_syntastic_c_avrgcc_checker = 1
 
-if !exists('g:syntastic_avr_config_file')
-    let g:syntastic_avr_config_file = '.syntastic_avr_config'
+if !exists('g:syntastic_avrgcc_config_file')
+    let g:syntastic_avrgcc_config_file = '.syntastic_avrgcc_config'
 endif
 
 let s:save_cpo = &cpo
@@ -24,26 +24,26 @@ set cpo&vim
 
 function! SyntaxCheckers_c_avrgcc_GetLocList() dict
     let makeprg = self.makeprgBuild({
-        \ 'args': syntastic#c#ReadConfig(g:syntastic_avr_config_file),
+        \ 'args_before': syntastic#c#ReadConfig(g:syntastic_avrgcc_config_file),
         \ 'args_after': '-x c -fsyntax-only' })
 
     let errorformat =
-        \     '%-G%f:%s:,' .
-        \     '%-G%f:%l: %#error: %#(Each undeclared identifier is reported only%.%#,' .
-        \     '%-G%f:%l: %#error: %#for each function it appears%.%#,' .
-        \     '%-GIn file included%.%#,' .
-        \     '%-G %#from %f:%l\,,' .
-        \     '%f:%l:%c: %trror: %m,' .
-        \     '%f:%l:%c: %tarning: %m,' .
-        \     '%f:%l:%c: %m,' .
-        \     '%f:%l: %trror: %m,' .
-        \     '%f:%l: %tarning: %m,'.
-        \     '%f:%l: %m'
+        \ '%-G%f:%s:,' .
+        \ '%-G%f:%l: %#error: %#(Each undeclared identifier is reported only%.%#,' .
+        \ '%-G%f:%l: %#error: %#for each function it appears%.%#,' .
+        \ '%-GIn file included%.%#,' .
+        \ '%-G %#from %f:%l\,,' .
+        \ '%f:%l:%c: %trror: %m,' .
+        \ '%f:%l:%c: %tarning: %m,' .
+        \ '%f:%l:%c: %m,' .
+        \ '%f:%l: %trror: %m,' .
+        \ '%f:%l: %tarning: %m,'.
+        \ '%f:%l: %m'
 
     return SyntasticMake({
         \ 'makeprg': makeprg,
         \ 'errorformat': errorformat,
-        \ 'postprocess': ['compressWhitespace'],})
+        \ 'postprocess': ['compressWhitespace'] })
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
