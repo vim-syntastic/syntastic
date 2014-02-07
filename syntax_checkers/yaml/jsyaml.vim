@@ -24,8 +24,7 @@ set cpo&vim
 function! SyntaxCheckers_yaml_jsyaml_GetLocList() dict
     if !exists('s:js_yaml_new')
         let s:js_yaml_new =
-            \ syntastic#util#versionIsAtLeast(syntastic#util#getVersion(
-            \       syntastic#util#shescape(self.getExec()) . ' --version'), [2])
+            \ syntastic#util#versionIsAtLeast(syntastic#util#getVersion(self.getExecEscaped() . ' --version'), [2])
     endif
 
     let makeprg = self.makeprgBuild({ 'args_after': (s:js_yaml_new ? '' : '--compact') })
