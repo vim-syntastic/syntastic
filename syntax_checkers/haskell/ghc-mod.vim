@@ -23,14 +23,14 @@ set cpo&vim
 function! SyntaxCheckers_haskell_ghc_mod_IsAvailable() dict
     " We need either a Vim version that can handle NULs in system() output,
     " or a ghc-mod version that has the --boundary option.
-    let s:ghc_mod_new = executable(self.getExec()) ? s:GhcModNew(self.getExec()) : -1
+    let exe = self.getExec()
+    let s:ghc_mod_new = executable(exe) ? s:GhcModNew(exe) : -1
     return (s:ghc_mod_new >= 0) && (v:version >= 704 || s:ghc_mod_new)
 endfunction
 
 function! SyntaxCheckers_haskell_ghc_mod_GetLocList() dict
     let makeprg = self.makeprgBuild({
-        \ 'exe': syntastic#util#shescape(self.getExec()) . ' check' .
-        \       (s:ghc_mod_new ? ' --boundary=""' : '') })
+        \ 'exe': self.getExecEscaped() . ' check' . (s:ghc_mod_new ? ' --boundary=""' : '') })
 
     let errorformat =
         \ '%-G%\s%#,' .
