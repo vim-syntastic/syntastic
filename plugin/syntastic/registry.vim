@@ -155,6 +155,9 @@ function! g:SyntasticRegistry.knownFiletypes()
     if exists('g:syntastic_filetype_map')
         call extend(types, keys(g:syntastic_filetype_map))
     endif
+    if exists('g:syntastic_extra_filetypes') && type(g:syntastic_extra_filetypes) == type([])
+        call extend(g:syntastic_extra_filetypes)
+    endif
     return syntastic#util#unique(types)
 endfunction
 
