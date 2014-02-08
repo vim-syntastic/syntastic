@@ -9,20 +9,19 @@ if exists("g:loaded_syntastic_verilog_verilator_checker")
 endif
 let g:loaded_syntastic_verilog_verilator_checker = 1
 
-if !exists('g:syntastic_verilog_compiler')
-    let g:syntastic_verilog_compiler = 'verilator'
+if !exists('g:syntastic_verilog_compiler_options')
+    let g:syntastic_verilog_compiler_options = '-Wall'
 endif
 
 let s:save_cpo = &cpo
 set cpo&vim
 
 function! SyntaxCheckers_verilog_verilator_IsAvailable() dict
+    if !exists('g:syntastic_verilog_compiler')
+        let g:syntastic_verilog_compiler = self.getExec()
+    endif
     return executable(expand(g:syntastic_verilog_compiler))
 endfunction
-
-if !exists('g:syntastic_verilog_compiler_options')
-    let g:syntastic_verilog_compiler_options = '-Wall'
-endif
 
 function! SyntaxCheckers_verilog_verilator_GetLocList() dict
     return syntastic#c#GetLocList('verilog', 'verilator', {
@@ -34,7 +33,7 @@ endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'verilog',
-    \ 'name': 'verilator'})
+    \ 'name': 'verilator' })
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
