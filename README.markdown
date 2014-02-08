@@ -35,10 +35,10 @@ the user is notified and is happy because they didn't have to compile their
 code or execute their script to find them.
 
 At the time of this writing, syntax checking plugins exist for ActionScript,
-Ada, AppleScript, AsciiDoc, BEMHTML, Bourne shell, C, C++, C#, Chef,
-CoffeeScript, Coco, Coq, CSS, Cucumber, CUDA, D, Dart, DocBook, Dust,
-Elixir, Erlang, eRuby, Fortran, Gentoo metadata, GLSL, Go, Haml, Haskell,
-Haxe, Handlebars, HSS, HTML, Java, JavaScript, JSON, LESS, Lex, Limbo, LISP,
+Ada, AppleScript, AsciiDoc, ASM, BEMHTML, Bourne shell, C, C++, C#, Chef,
+CoffeeScript, Coco, Coq, CSS, Cucumber, CUDA, D, Dart, DocBook, Dust, Elixir,
+Erlang, eRuby, Fortran, Gentoo metadata, GLSL, Go, Haml, Haskell, Haxe,
+Handlebars, HSS, HTML, Java, JavaScript, JSON, LESS, Lex, Limbo, LISP,
 LLVM intermediate language, Lua, MATLAB, NASM, Objective-C, Objective-C++,
 OCaml, Perl, Perl POD, PHP, gettext Portable Object, Puppet, Python, Racket,
 reStructuredText, Ruby, Rust, SASS/SCSS, Scala, Slim, Tcl, TeX, Texinfo, Twig,
