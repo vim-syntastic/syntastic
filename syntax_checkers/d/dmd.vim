@@ -20,20 +20,19 @@ if exists('g:loaded_syntastic_d_dmd_checker')
 endif
 let g:loaded_syntastic_d_dmd_checker = 1
 
-if !exists('g:syntastic_d_compiler')
-    let g:syntastic_d_compiler = 'dmd'
+if !exists('g:syntastic_d_compiler_options')
+    let g:syntastic_d_compiler_options = ''
 endif
 
 let s:save_cpo = &cpo
 set cpo&vim
 
 function! SyntaxCheckers_d_dmd_IsAvailable() dict
+    if !exists('g:syntastic_d_compiler')
+        let g:syntastic_d_compiler = self.getExec()
+    endif
     return executable(expand(g:syntastic_d_compiler))
 endfunction
-
-if !exists('g:syntastic_d_compiler_options')
-    let g:syntastic_d_compiler_options = ''
-endif
 
 function! SyntaxCheckers_d_dmd_GetLocList() dict
     return syntastic#c#GetLocList('d', 'dmd', {
@@ -46,7 +45,7 @@ endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'd',
-    \ 'name': 'dmd'})
+    \ 'name': 'dmd' })
 
 let &cpo = s:save_cpo
 unlet s:save_cpo

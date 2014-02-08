@@ -19,16 +19,16 @@ if !exists('g:syntastic_cpp_compiler')
     let g:syntastic_cpp_compiler = executable('g++') ? 'g++' : 'clang++'
 endif
 
+if !exists('g:syntastic_cpp_compiler_options')
+    let g:syntastic_cpp_compiler_options = ''
+endif
+
 let s:save_cpo = &cpo
 set cpo&vim
 
 function! SyntaxCheckers_cpp_gcc_IsAvailable() dict
     return executable(expand(g:syntastic_cpp_compiler))
 endfunction
-
-if !exists('g:syntastic_cpp_compiler_options')
-    let g:syntastic_cpp_compiler_options = ''
-endif
 
 function! SyntaxCheckers_cpp_gcc_GetLocList() dict
     return syntastic#c#GetLocList('cpp', 'gcc', {
@@ -47,7 +47,7 @@ endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'cpp',
-    \ 'name': 'gcc'})
+    \ 'name': 'gcc' })
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
