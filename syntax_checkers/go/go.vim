@@ -51,7 +51,7 @@ function! SyntaxCheckers_go_go_GetLocList() dict
     if match(expand('%'), '\m_test\.go$') == -1
         let makeprg = 'go build ' . syntastic#c#NullOutput()
     else
-        let makeprg = 'go test -c ' . syntastic#c#NullOutput()
+        let makeprg = 'go test'
     endif
 
     let errorformat =
