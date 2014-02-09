@@ -50,8 +50,10 @@ function! SyntaxCheckers_go_go_GetLocList() dict
     " compiled by `go build`, therefore `go test` must be called for those.
     if match(expand('%'), '\m_test\.go$') == -1
         let makeprg = 'go build ' . syntastic#c#NullOutput()
+        let cleanup = 0
     else
         let makeprg = 'go test -c ' . syntastic#c#NullOutput()
+        let cleanup = 1
     endif
 
     let errorformat =
@@ -69,6 +71,10 @@ function! SyntaxCheckers_go_go_GetLocList() dict
         \ 'errorformat': errorformat,
         \ 'cwd': expand('%:p:h'),
         \ 'defaults': {'type': 'e'} })
+
+    if cleanup
+        call delete(expand('%:p:h') . syntastic#util#Slash() . expand('%:p:h:t') . '.test')
+    endif
 
     return errors
 endfunction
