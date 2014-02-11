@@ -498,6 +498,16 @@ When set, debugging messages are written to the file named by its value, in
 addition to being added to Vim's |message-history|: >
     let g:syntastic_debug_file = '~/syntastic.log'
 <
+                                                 *'syntastic_extra_filetypes'*
+Default: []
+List of filetypes handled by checkers external to syntastic.  If you have a Vim
+plugin that adds a checker for syntastic, and if the said checker deals with a
+filetype that is unknown to syntastic, you might consider adding that filetype
+to this list: >
+    let g:syntastic_extra_filetypes = [ 'make', 'gitcommit' ]
+<
+This will allow |:SyntasticInfo| to do proper tab completion for the new
+filetypes.
 
 ==============================================================================
 5. Checker Options                                 *syntastic-checker-options*
