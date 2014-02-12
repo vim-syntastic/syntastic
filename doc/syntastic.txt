@@ -567,7 +567,9 @@ The result is a 'makeprg' of the form: >
                                      *'syntastic_<filetype>_<subchecker>_exe'*
 All arguments above are optional, and can be overridden by setting global
 variables 'g:syntastic_<filetype>_<checker-name>_<option-name>' - even
-parameters not specified in the call to makeprgBuild().
+parameters not specified in the call to makeprgBuild(). These variables also
+have local versions 'b:syntastic_<filetype>_<checker-name>_<option-name>',
+which take precedence over the global ones in the corresponding buffers.
 
 The 'exe' is normally the same as the 'exec' attribute described above, in
 which case it may be omitted. However, you can use it to add environment
