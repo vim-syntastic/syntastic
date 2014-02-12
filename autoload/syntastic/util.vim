@@ -52,6 +52,13 @@ function! syntastic#util#parseShebang()
     return { 'exe': '', 'args': [] }
 endfunction
 
+" Get the value of a variable.  Allow local variables to override global ones.
+function! syntastic#util#var(name)
+    return
+        \ exists('b:syntastic_' . a:name) ? b:syntastic_{a:name} :
+        \ exists('g:syntastic_' . a:name) ? g:syntastic_{a:name} : ''
+endfunction
+
 " Parse a version string.  Return an array of version components.
 function! syntastic#util#parseVersion(version)
     return split(matchstr( a:version, '\v^\D*\zs\d+(\.\d+)+\ze' ), '\m\.')
