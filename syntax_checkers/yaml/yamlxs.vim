@@ -54,7 +54,7 @@ function! SyntaxCheckers_yaml_yamlxs_GetLocList() dict
 endfunction
 
 function! s:Exe()
-    return expand(g:syntastic_perl_interpreter)
+    return syntastic#util#shexpand(g:syntastic_perl_interpreter)
 endfunction
 
 function s:Modules()
@@ -62,7 +62,7 @@ function s:Modules()
         call syntastic#log#deprecationWarn('variable g:syntastic_perl_lib_path should be a list')
         let includes = split(g:syntastic_perl_lib_path, ',')
     else
-        let includes = copy(exists('b:syntastic_perl_lib_path') ? b:syntastic_perl_lib_path : g:syntastic_perl_lib_path)
+        let includes = copy(syntastic#util#var('perl_lib_path'))
     endif
     return join(map(includes, '"-I" . v:val') + ['-MYAML::XS'])
 endfunction

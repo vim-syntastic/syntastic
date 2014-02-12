@@ -290,10 +290,8 @@ function! s:CacheErrors(checkers)
         call syntastic#log#debugShowVariables(g:SyntasticDebugTrace, 'syntastic_aggregate_errors')
 
         let filetypes = s:ResolveFiletypes()
-        let aggregate_errors =
-            \ exists('b:syntastic_aggregate_errors') ? b:syntastic_aggregate_errors : g:syntastic_aggregate_errors
-        let decorate_errors = (aggregate_errors || len(filetypes) > 1) &&
-            \ (exists('b:syntastic_id_checkers') ? b:syntastic_id_checkers : g:syntastic_id_checkers)
+        let aggregate_errors = syntastic#util#var('aggregate_errors')
+        let decorate_errors = (aggregate_errors || len(filetypes) > 1) && syntastic#util#var('id_checkers')
 
         for ft in filetypes
             let clist = empty(a:checkers) ? s:registry.getActiveCheckers(ft) : s:registry.getCheckers(ft, a:checkers)
