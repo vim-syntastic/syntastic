@@ -23,7 +23,8 @@ function! SyntaxCheckers_scss_scss_lint_GetLocList() dict
     return SyntasticMake({
         \ 'makeprg': makeprg,
         \ 'errorformat': errorformat,
-        \ 'subtype': 'Style'})
+        \ 'subtype': 'Style',
+        \ 'returns': [0, 1, 65] })
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
