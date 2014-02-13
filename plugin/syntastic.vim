@@ -105,7 +105,7 @@ if exists("g:syntastic_quiet_warnings")
     endif
 endif
 
-let s:debug_dump_vars = [
+let s:debug_dump_options = [
         \ 'shell',
         \ 'shellcmdflag',
         \ 'shellpipe',
@@ -116,7 +116,7 @@ let s:debug_dump_vars = [
         \ 'shellxquote'
     \ ]
 if v:version > 703 || (v:version == 703 && has('patch446'))
-    call add(s:debug_dump_vars, 'shellxescape')
+    call add(s:debug_dump_options, 'shellxescape')
 endif
 
 
@@ -297,7 +297,7 @@ function! s:CacheErrors(checkers)
         let active_checkers = 0
         let names = []
 
-        call syntastic#log#debugShowOptions(g:SyntasticDebugTrace, s:debug_dump_vars)
+        call syntastic#log#debugShowOptions(g:SyntasticDebugTrace, s:debug_dump_options)
         call syntastic#log#debugDump(g:SyntasticDebugVariables)
         call syntastic#log#debugShowVariables(g:SyntasticDebugTrace, 'syntastic_aggregate_errors')
 
