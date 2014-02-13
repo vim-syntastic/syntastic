@@ -17,6 +17,13 @@ let g:loaded_syntastic_scss_scss_lint_checker = 1
 let s:save_cpo = &cpo
 set cpo&vim
 
+function! SyntaxCheckers_scss_scss_lint_IsAvailable() dict
+    return
+        \ executable(self.getExec()) &&
+        \ syntastic#util#versionIsAtLeast(syntastic#util#getVersion(
+        \       self.getExecEscaped() . ' --version'), [0, 12])
+endfunction
+
 function! SyntaxCheckers_scss_scss_lint_GetLocList() dict
     let makeprg = self.makeprgBuild({})
     let errorformat = '%f:%l [%t] %m'
