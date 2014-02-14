@@ -221,11 +221,11 @@ endfunction
 
 function! s:translateFilter(filters)
     let conditions = []
-    for [k, v] in items(a:filters)
-        if type(v) == type([])
-            call extend(conditions, map(copy(v), 's:translateElement(k, v:val)'))
+    for k in keys(a:filters)
+        if type(a:filters[k]) == type([])
+            call extend(conditions, map(copy(a:filters[k]), 's:translateElement(k, v:val)'))
         else
-            call add(conditions, s:translateElement(k, v))
+            call add(conditions, s:translateElement(k, a:filters[k]))
         endif
     endfor
     return len(conditions) == 1 ? conditions[0] : join(map(conditions, '"(" . v:val . ")"'), ' && ')
