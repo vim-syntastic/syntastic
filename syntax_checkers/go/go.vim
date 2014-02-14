@@ -56,7 +56,9 @@ function! SyntaxCheckers_go_go_GetLocList() dict
         let cleanup = 1
     endif
 
+    " The first pattern is for warnings from C compilers.
     let errorformat =
+        \ '%W%f:%l: warning: %m,' .
         \ '%E%f:%l:%c:%m,' .
         \ '%E%f:%l:%m,' .
         \ '%C%\s%\+%m,' .
