@@ -214,7 +214,8 @@ endfunction
 
 function! s:translateFilter(filters)
     let conditions = []
-    for [k, v] in items(a:filters)
+    for k in a:filters
+        let v = a:filters[k]
         if type(v) == type([])
             call extend(conditions, map(copy(v), 's:translateElement(k, v:val)'))
         else
