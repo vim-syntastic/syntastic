@@ -9,13 +9,21 @@ if exists("g:loaded_syntastic_typescript_tsc_checker")
 endif
 let g:loaded_syntastic_typescript_tsc_checker = 1
 
+if !exists('g:syntastic_typescript_args')
+    let g:syntastic_typescript_args = '--module commonjs'
+endif
+
+if !exists('g:syntastic_typescript_post_args')
+    let g:syntastic_typescript_post_args = '--out ' . syntastic#util#DevNull()
+endif
+
 let s:save_cpo = &cpo
 set cpo&vim
 
 function! SyntaxCheckers_typescript_tsc_GetLocList() dict
     let makeprg = self.makeprgBuild({
-        \ 'args': '--module commonjs',
-        \ 'args_after': '--out ' . syntastic#util#DevNull() })
+        \ 'args': g:syntastic_typescript_args,
+        \ 'post_args': g:syntastic_typescript_post_args })
 
     let errorformat =
         \ '%E%f %#(%l\,%c): error %m,' .
