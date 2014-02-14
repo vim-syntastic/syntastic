@@ -19,7 +19,7 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 function! SyntaxCheckers_go_gotype_GetLocList() dict
-    let makeprg = self.getExec() . ' .'
+    let makeprg = self.getExecEscaped() . ' .'
 
     let errorformat =
         \ '%f:%l:%c: %m,' .

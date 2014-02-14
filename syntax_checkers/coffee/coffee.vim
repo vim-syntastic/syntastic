@@ -22,9 +22,9 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 function! SyntaxCheckers_coffee_coffee_IsAvailable() dict
-    let exe = self.getExec()
-    return executable(exe) &&
-        \ syntastic#util#versionIsAtLeast(syntastic#util#getVersion(exe . ' --version 2>' . syntastic#util#DevNull()), [1,6,2])
+    return executable(self.getExec()) &&
+        \ syntastic#util#versionIsAtLeast(syntastic#util#getVersion(
+        \       self.getExecEscaped() . ' --version 2>' . syntastic#util#DevNull()), [1,6,2])
 endfunction
 
 function! SyntaxCheckers_coffee_coffee_GetLocList() dict

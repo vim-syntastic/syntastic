@@ -33,7 +33,8 @@ function! SyntaxCheckers_cuda_nvcc_GetLocList() dict
         let arch_flag = ''
     endif
     let makeprg =
-        \ self.getExec() . ' ' . arch_flag . ' --cuda -O0 -I . -Xcompiler -fsyntax-only ' .
+        \ self.getExecEscaped() . ' ' . arch_flag .
+        \ ' --cuda -O0 -I . -Xcompiler -fsyntax-only ' .
         \ syntastic#util#shexpand('%') . ' ' . syntastic#c#NullOutput()
 
     let errorformat =
@@ -56,7 +57,7 @@ function! SyntaxCheckers_cuda_nvcc_GetLocList() dict
         if exists('g:syntastic_cuda_check_header')
             let makeprg =
                 \ 'echo > .syntastic_dummy.cu ; ' .
-                \ self.getExec() . ' ' . arch_flag .
+                \ self.getExecEscaped() . ' ' . arch_flag .
                 \ ' --cuda -O0 -I . .syntastic_dummy.cu -Xcompiler -fsyntax-only -include ' .
                 \ syntastic#util#shexpand('%') . ' ' . syntastic#c#NullOutput()
         else

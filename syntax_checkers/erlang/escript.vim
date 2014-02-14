@@ -19,7 +19,7 @@ if !exists('g:syntastic_erlc_include_path')
     let g:syntastic_erlc_include_path = ''
 endif
 
-let s:check_file = expand('<sfile>:p:h') . syntastic#util#Slash() . 'erlang_check_file.erl'
+let s:check_file = syntastic#util#shescape(expand('<sfile>:p:h') . syntastic#util#Slash() . 'erlang_check_file.erl')
 
 let s:save_cpo = &cpo
 set cpo&vim

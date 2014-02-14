@@ -15,20 +15,19 @@ if exists('g:loaded_syntastic_c_gcc_checker')
 endif
 let g:loaded_syntastic_c_gcc_checker = 1
 
-if !exists('g:syntastic_c_compiler')
-    let g:syntastic_c_compiler = executable('gcc') ? 'gcc' : 'clang'
+if !exists('g:syntastic_c_compiler_options')
+    let g:syntastic_c_compiler_options = '-std=gnu99'
 endif
 
 let s:save_cpo = &cpo
 set cpo&vim
 
 function! SyntaxCheckers_c_gcc_IsAvailable() dict
+    if !exists('g:syntastic_c_compiler')
+        let g:syntastic_c_compiler = executable(self.getExec()) ? self.getExec() : 'clang'
+    endif
     return executable(expand(g:syntastic_c_compiler))
 endfunction
-
-if !exists('g:syntastic_c_compiler_options')
-    let g:syntastic_c_compiler_options = '-std=gnu99'
-endif
 
 function! SyntaxCheckers_c_gcc_GetLocList() dict
     return syntastic#c#GetLocList('c', 'gcc', {
@@ -51,7 +50,7 @@ endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'c',
-    \ 'name': 'gcc'})
+    \ 'name': 'gcc' })
 
 let &cpo = s:save_cpo
 unlet s:save_cpo

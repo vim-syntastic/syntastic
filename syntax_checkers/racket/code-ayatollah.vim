@@ -28,7 +28,7 @@ function! SyntaxCheckers_racket_code_ayatollah_IsAvailable() dict
 endfunction
 
 function! SyntaxCheckers_racket_code_ayatollah_GetLocList() dict
-    let makeprg = self.makeprgBuild({ 'exe': self.getExec() . ' ' . s:script })
+    let makeprg = self.makeprgBuild({ 'exe': [self.getExec(), s:script] })
 
     let errorformat =
         \ '  %l:%v: %m,' .

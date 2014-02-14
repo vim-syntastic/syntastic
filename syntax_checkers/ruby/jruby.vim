@@ -20,10 +20,10 @@ set cpo&vim
 
 function! SyntaxCheckers_ruby_jruby_GetLocList() dict
     if syntastic#util#isRunningWindows()
-        let exe = self.getExec()
+        let exe = self.getExecEscaped()
         let args = '-T1'
     else
-        let exe = 'RUBYOPT= ' . self.getExec()
+        let exe = 'RUBYOPT= ' . self.getExecEscaped()
         let args = ''
     endif
 

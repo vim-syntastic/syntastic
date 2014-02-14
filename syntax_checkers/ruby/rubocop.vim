@@ -22,10 +22,9 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 function! SyntaxCheckers_ruby_rubocop_IsAvailable() dict
-    let exe = self.getExec()
     return
-        \ executable(exe) &&
-        \ syntastic#util#versionIsAtLeast(syntastic#util#getVersion(exe . ' --version'), [0,9,0])
+        \ executable(self.getExec()) &&
+        \ syntastic#util#versionIsAtLeast(syntastic#util#getVersion(self.getExecEscaped() . ' --version'), [0, 9, 0])
 endfunction
 
 function! SyntaxCheckers_ruby_rubocop_GetLocList() dict

@@ -1,7 +1,7 @@
 "============================================================================
-"File:        make.vim
+"File:        avrgcc.vim
 "Description: Syntax checking plugin for syntastic.vim
-"Maintainer:  Gregor Uhlenheuer <kongo2002 at gmail dot com>
+"Maintainer:  Karel <karelishere at gmail dot com>
 "License:     This program is free software. It comes without any warranty,
 "             to the extent permitted by applicable law. You can redistribute
 "             it and/or modify it under the terms of the Do What The Fuck You
@@ -10,16 +10,22 @@
 "
 "============================================================================
 
-if exists('g:loaded_syntastic_c_make_checker')
+if exists('g:loaded_syntastic_c_avrgcc_checker')
     finish
 endif
-let g:loaded_syntastic_c_make_checker = 1
+let g:loaded_syntastic_c_avrgcc_checker = 1
+
+if !exists('g:syntastic_avrgcc_config_file')
+    let g:syntastic_avrgcc_config_file = '.syntastic_avrgcc_config'
+endif
 
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! SyntaxCheckers_c_make_GetLocList() dict
-    let makeprg = self.getExecEscaped() . ' -sk'
+function! SyntaxCheckers_c_avrgcc_GetLocList() dict
+    let makeprg = self.makeprgBuild({
+        \ 'args_before': syntastic#c#ReadConfig(g:syntastic_avrgcc_config_file),
+        \ 'args_after': '-x c -fsyntax-only' })
 
     let errorformat =
         \ '%-G%f:%s:,' .
@@ -34,28 +40,16 @@ function! SyntaxCheckers_c_make_GetLocList() dict
         \ '%f:%l: %tarning: %m,'.
         \ '%f:%l: %m'
 
-    if exists('g:syntastic_c_errorformat')
-        let errorformat = g:syntastic_c_errorformat
-    endif
-
-    " process makeprg
-    let errors = SyntasticMake({
+    return SyntasticMake({
         \ 'makeprg': makeprg,
-        \ 'errorformat': errorformat })
-
-    " filter the processed errors if desired
-    if exists('g:syntastic_c_remove_include_errors') && g:syntastic_c_remove_include_errors != 0
-        return filter(errors, 'has_key(v:val, "bufnr") && v:val["bufnr"] == ' . bufnr(''))
-    else
-        return errors
-    endif
+        \ 'errorformat': errorformat,
+        \ 'postprocess': ['compressWhitespace'] })
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'c',
-    \ 'name': 'make'})
+    \ 'name': 'avrgcc',
+    \ 'exec': 'avr-gcc'})
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
-
-" vim: set et sts=4 sw=4:

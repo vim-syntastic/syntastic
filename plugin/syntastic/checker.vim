@@ -52,6 +52,10 @@ function! g:SyntasticChecker.getExec()
     return self._exec
 endfunction
 
+function! g:SyntasticChecker.getExecEscaped()
+    return syntastic#util#shescape(self.getExec())
+endfunction
+
 function! g:SyntasticChecker.getLocListRaw()
     let name = self._filetype . '/' . self._name
     try
@@ -72,14 +76,14 @@ function! g:SyntasticChecker.getLocList()
 endfunction
 
 function! g:SyntasticChecker.makeprgBuild(opts)
-    let setting = 'g:syntastic_' . self._filetype . '_' . self._name . '_'
+    let basename = self._filetype . '_' . self._name . '_'
 
     let parts = []
-    call extend(parts, self._getOpt(a:opts, setting, 'exe', self.getExec()))
-    call extend(parts, self._getOpt(a:opts, setting, 'args', ''))
-    call extend(parts, self._getOpt(a:opts, setting, 'fname', syntastic#util#shexpand('%')))
-    call extend(parts, self._getOpt(a:opts, setting, 'post_args', ''))
-    call extend(parts, self._getOpt(a:opts, setting, 'tail', ''))
+    call extend(parts, self._getOpt(a:opts, basename, 'exe', self.getExecEscaped()))
+    call extend(parts, self._getOpt(a:opts, basename, 'args', ''))
+    call extend(parts, self._getOpt(a:opts, basename, 'fname', syntastic#util#shexpand('%')))
+    call extend(parts, self._getOpt(a:opts, basename, 'post_args', ''))
+    call extend(parts, self._getOpt(a:opts, basename, 'tail', ''))
 
     return join(parts)
 endfunction
@@ -111,11 +115,11 @@ function! g:SyntasticChecker._populateHighlightRegexes(errors)
     endif
 endfunction
 
-function! g:SyntasticChecker._getOpt(opts, setting, name, default)
-    let sname = a:setting . a:name
+function! g:SyntasticChecker._getOpt(opts, basename, name, default)
+    let user_val = syntastic#util#var(a:basename . a:name)
     let ret = []
     call extend( ret, self._shescape(get(a:opts, a:name . '_before', '')) )
-    call extend( ret, self._shescape(exists(sname) ? {sname} : get(a:opts, a:name, a:default)) )
+    call extend( ret, self._shescape(user_val != '' ? user_val : get(a:opts, a:name, a:default)) )
     call extend( ret, self._shescape(get(a:opts, a:name . '_after', '')) )
 
     return ret
@@ -125,7 +129,7 @@ function! g:SyntasticChecker._shescape(opt)
     if type(a:opt) == type('') && a:opt != ''
         return [a:opt]
     elseif type(a:opt) == type([])
-        return map(a:opt, 'syntastic#util#shescape(v:val)')
+        return map(copy(a:opt), 'syntastic#util#shescape(v:val)')
     endif
 
     return []

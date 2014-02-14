@@ -22,6 +22,13 @@ function! SyntaxCheckers_vim_vimlint_GetHighlightRegex(item)
     let term = matchstr(a:item['text'], '\m `\zs[^`]\+\ze`')
     if term != ''
         let col = get(a:item, 'col', 0)
+
+        if col && term[0:1] ==# 'l:'
+            if getline(a:item.lnum)[col-1:col] !=# 'l:'
+                let term = term[2:]
+            endif
+        endif
+
         return '\V' . (col ? '\%' . col . 'c' : '') . term
     endif
 
@@ -73,7 +80,7 @@ function! s:vimlintOutput(filename, pos, ev, eid, mes, obj)
         \ 'vcol': 0,
         \ 'type': a:ev[0],
         \ 'text': '[' . a:eid . '] ' . a:mes,
-        \ 'valid': 1 })
+        \ 'valid': a:pos.lnum > 0 })
 endfunction
 " @vimlint(EVL103, 0, a:filename)
 
