@@ -138,9 +138,7 @@ let s:modemap = g:SyntasticModeMap.Instance()
 function! s:CompleteCheckerName(argLead, cmdLine, cursorPos)
     let checker_names = []
     for ft in s:ResolveFiletypes()
-        for checker in s:registry.availableCheckersFor(ft)
-            call add(checker_names, checker.getName())
-        endfor
+        call extend( checker_names, keys(s:registry.getCheckersMap(ft)) )
     endfor
     return join(checker_names, "\n")
 endfunction
@@ -153,7 +151,7 @@ endfunction
 " @vimlint(EVL103, 1, a:cmdLine)
 " @vimlint(EVL103, 1, a:argLead)
 function! s:CompleteFiletypes(argLead, cmdLine, cursorPos)
-    return join(s:registry.knownFiletypes(), "\n")
+    return join(s:registry.getKnownFiletypes(), "\n")
 endfunction
 " @vimlint(EVL103, 0, a:cursorPos)
 " @vimlint(EVL103, 0, a:cmdLine)
@@ -294,7 +292,6 @@ function! s:CacheErrors(checkers)
     let newLoclist = g:SyntasticLoclist.New([])
 
     if !s:SkipFile()
-        let active_checkers = 0
         let names = []
 
         call syntastic#log#debugShowOptions(g:SyntasticDebugTrace, s:debug_dump_options)
@@ -307,10 +304,9 @@ function! s:CacheErrors(checkers)
         let decorate_errors = (aggregate_errors || len(filetypes) > 1) && syntastic#util#var('id_checkers')
 
         for ft in filetypes
-            let clist = empty(a:checkers) ? s:registry.getActiveCheckers(ft) : s:registry.getCheckers(ft, a:checkers)
+            let clist = s:registry.getCheckers(ft, a:checkers)
 
             for checker in clist
-                let active_checkers += 1
                 call syntastic#log#debug(g:SyntasticDebugTrace, 'CacheErrors: Invoking checker: ' . checker.getName())
 
                 let loclist = checker.getLocList()
@@ -341,7 +337,7 @@ function! s:CacheErrors(checkers)
             endif
         endif
 
-        if !active_checkers
+        if empty(clist)
             if !empty(a:checkers)
                 if len(a:checkers) == 1
                     call syntastic#log#warn('checker ' . a:checkers[0] . ' is not active for filetype ' . &filetype)
