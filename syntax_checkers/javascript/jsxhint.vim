@@ -12,29 +12,28 @@
 if exists('g:loaded_syntastic_javascript_jsxhint_checker')
     finish
 endif
-let g:loaded_syntastic_javascript_jsxhint_checker=1
+let g:loaded_syntastic_javascript_jsxhint_checker = 1
 
-if !exists('g:syntastic_jsxhint_exec')
-    let g:syntastic_jsxhint_exec = 'jsxhint'
-endif
-
-if !exists('g:syntastic_javascript_jsxhint_conf')
-    let g:syntastic_javascript_jsxhint_conf = ''
-endif
+let s:save_cpo = &cpo
+set cpo&vim
 
 function! SyntaxCheckers_javascript_jsxhint_IsAvailable() dict
-    return executable(expand(g:syntastic_jsxhint_exec))
+    if !executable('jshint') || !syntastic#util#versionIsAtLeast(syntastic#util#getVersion('jshint --version'), [1, 1])
+        return 0
+    endif
+
+    let jsxhint_version = system(self.getExecEscaped() . ' --version')
+    return
+        \ v:shell_error == 0 &&
+        \ jsxhint_version =~# '\m^JSXHint\>' &&
+        \ syntastic#util#versionIsAtLeast(syntastic#util#parseVersion(jsxhint_version), [0, 4, 1])
 endfunction
 
 function! SyntaxCheckers_javascript_jsxhint_GetLocList() dict
-    let jsxhint_new = s:JsxhintNew()
     let makeprg = self.makeprgBuild({
-        \ 'exe': expand(g:syntastic_jsxhint_exec),
-        \ 'post_args': (jsxhint_new ? ' --verbose ' : '') . s:Args() })
+        \ 'args_after': '--verbose' })
 
-    let errorformat = jsxhint_new ?
-        \ '%A%f: line %l\, col %v\, %m \(%t%*\d\)' :
-        \ '%E%f: line %l\, col %v\, %m'
+    let errorformat = '%A%f: line %l\, col %v\, %m \(%t%*\d\)'
 
     return SyntasticMake({
         \ 'makeprg': makeprg,
@@ -42,16 +41,11 @@ function! SyntaxCheckers_javascript_jsxhint_GetLocList() dict
         \ 'defaults': {'bufnr': bufnr('')} })
 endfunction
 
-function! s:JsxhintNew()
-    return syntastic#util#versionIsAtLeast(syntastic#util#getVersion(expand(g:syntastic_jsxhint_exec) . ' --version'), [1, 1])
-endfunction
-
-function! s:Args()
-    " jsxhint uses .jshintrc as config unless --config arg is present
-    return !empty(g:syntastic_javascript_jsxhint_conf) ? ' --config ' . g:syntastic_javascript_jsxhint_conf : ''
-endfunction
-
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'javascript',
     \ 'name': 'jsxhint'})
 
+let &cpo = s:save_cpo
+unlet s:save_cpo
+
+" vim: set et sts=4 sw=4:
