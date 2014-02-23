@@ -7,17 +7,17 @@ let g:SyntasticAutoloclistNotifier = {}
 
 " Public methods {{{1
 "
-function! g:SyntasticAutoloclistNotifier.New()
+function! g:SyntasticAutoloclistNotifier.New() " {{{2
     let newObj = copy(self)
     return newObj
-endfunction
+endfunction " }}}2
 
-function! g:SyntasticAutoloclistNotifier.refresh(loclist)
+function! g:SyntasticAutoloclistNotifier.refresh(loclist) " {{{2
     call syntastic#log#debug(g:SyntasticDebugNotifications, 'autoloclist: refresh')
     call g:SyntasticAutoloclistNotifier.AutoToggle(a:loclist)
-endfunction
+endfunction " }}}2
 
-function! g:SyntasticAutoloclistNotifier.AutoToggle(loclist)
+function! g:SyntasticAutoloclistNotifier.AutoToggle(loclist) " {{{2
     call syntastic#log#debug(g:SyntasticDebugNotifications, 'autoloclist: toggle')
     if !a:loclist.isEmpty()
         if g:syntastic_auto_loc_list == 1
@@ -31,6 +31,8 @@ function! g:SyntasticAutoloclistNotifier.AutoToggle(loclist)
             lclose
         endif
     endif
-endfunction
+endfunction " }}}2
+
+" }}}1
 
 " vim: set sw=4 sts=4 et fdm=marker:
