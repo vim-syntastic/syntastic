@@ -10,33 +10,33 @@ let s:deprecation_notices_issued = []
 
 " Public functions {{{1
 
-function! syntastic#log#info(msg)
+function! syntastic#log#info(msg) " {{{2
     echomsg "syntastic: info: " . a:msg
-endfunction
+endfunction " }}}2
 
-function! syntastic#log#warn(msg)
+function! syntastic#log#warn(msg) " {{{2
     echohl WarningMsg
     echomsg "syntastic: warning: " . a:msg
     echohl None
-endfunction
+endfunction " }}}2
 
-function! syntastic#log#error(msg)
+function! syntastic#log#error(msg) " {{{2
     execute "normal \<Esc>"
     echohl ErrorMsg
     echomsg "syntastic: error: " . a:msg
     echohl None
-endfunction
+endfunction " }}}2
 
-function! syntastic#log#deprecationWarn(msg)
+function! syntastic#log#deprecationWarn(msg) " {{{2
     if index(s:deprecation_notices_issued, a:msg) >= 0
         return
     endif
 
     call add(s:deprecation_notices_issued, a:msg)
     call syntastic#log#warn(a:msg)
-endfunction
+endfunction " }}}2
 
-function! syntastic#log#debug(level, msg, ...)
+function! syntastic#log#debug(level, msg, ...) " {{{2
     if !s:isDebugEnabled(a:level)
         return
     endif
@@ -54,9 +54,9 @@ function! syntastic#log#debug(level, msg, ...)
     endif
 
     call s:logRedirect(0)
-endfunction
+endfunction " }}}2
 
-function! syntastic#log#debugShowOptions(level, names)
+function! syntastic#log#debugShowOptions(level, names) " {{{2
     if !s:isDebugEnabled(a:level)
         return
     endif
@@ -70,9 +70,9 @@ function! syntastic#log#debugShowOptions(level, names)
         echomsg leader . join(vlist, ', ')
     endif
     call s:logRedirect(0)
-endfunction
+endfunction " }}}2
 
-function! syntastic#log#debugShowVariables(level, names)
+function! syntastic#log#debugShowVariables(level, names) " {{{2
     if !s:isDebugEnabled(a:level)
         return
     endif
@@ -89,30 +89,32 @@ function! syntastic#log#debugShowVariables(level, names)
     endfor
 
     call s:logRedirect(0)
-endfunction
+endfunction " }}}2
 
-function! syntastic#log#debugDump(level)
+function! syntastic#log#debugDump(level) " {{{2
     if !s:isDebugEnabled(a:level)
         return
     endif
 
     call syntastic#log#debugShowVariables( a:level, sort(keys(g:syntastic_defaults)) )
-endfunction
+endfunction " }}}2
+
+" }}}1
 
 " Private functions {{{1
 
-function! s:isDebugEnabled_smart(level)
+function! s:isDebugEnabled_smart(level) " {{{2
     return and(g:syntastic_debug, a:level)
-endfunction
+endfunction " }}}2
 
-function! s:isDebugEnabled_dumb(level)
+function! s:isDebugEnabled_dumb(level) " {{{2
     " poor man's bit test for bit N, assuming a:level == 2**N
     return (g:syntastic_debug / a:level) % 2
-endfunction
+endfunction " }}}2
 
 let s:isDebugEnabled = function(exists('*and') ? 's:isDebugEnabled_smart' : 's:isDebugEnabled_dumb')
 
-function! s:logRedirect(on)
+function! s:logRedirect(on) " {{{2
     if exists("g:syntastic_debug_file")
         if a:on
             try
@@ -125,19 +127,19 @@ function! s:logRedirect(on)
             silent! redir END
         endif
     endif
-endfunction
+endfunction " }}}2
 
-function! s:logTimestamp_smart()
+function! s:logTimestamp_smart() " {{{2
     return 'syntastic: ' . split(reltimestr(reltime(g:syntastic_start)))[0] . ': '
-endfunction
+endfunction " }}}2
 
-function! s:logTimestamp_dumb()
+function! s:logTimestamp_dumb() " {{{2
     return 'syntastic: debug: '
-endfunction
+endfunction " }}}2
 
 let s:logTimestamp = function(has('reltime') ? 's:logTimestamp_smart' : 's:logTimestamp_dumb')
 
-function! s:formatVariable(name)
+function! s:formatVariable(name) " {{{2
     let vals = []
     if exists('g:syntastic_' . a:name)
         call add(vals, 'g:syntastic_' . a:name . ' = ' . strtrans(string(g:syntastic_{a:name})))
@@ -147,7 +149,9 @@ function! s:formatVariable(name)
     endif
 
     return join(vals, ', ')
-endfunction
+endfunction " }}}2
+
+" }}}1
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
