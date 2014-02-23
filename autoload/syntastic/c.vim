@@ -30,7 +30,7 @@ function! syntastic#c#ReadConfig(file) " {{{2
     " try to read config file
     try
         let lines = readfile(config)
-    catch /^Vim\%((\a\+)\)\=:E48[45]/
+    catch /\m^Vim\%((\a\+)\)\=:E48[45]/
         return ''
     endtry
 
@@ -225,7 +225,7 @@ function! s:searchHeaders() " {{{2
 
             try
                 let lines = readfile(filename, '', 100)
-            catch /^Vim\%((\a\+)\)\=:E484/
+            catch /\m^Vim\%((\a\+)\)\=:E484/
                 continue
             endtry
 

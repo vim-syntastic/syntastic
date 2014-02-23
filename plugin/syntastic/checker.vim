@@ -97,10 +97,27 @@ endfunction " }}}2
 " Private methods {{{1
 
 function! g:SyntasticChecker._quietMessages(errors) " {{{2
-    let filter = 'g:syntastic_' . self._filetype . '_' . self._name . '_quiet_messages'
-    if exists(filter) && type({filter}) == type({}) && !empty({filter})
-        call syntastic#util#dictFilter(a:errors, {filter})
-        call syntastic#log#debug(g:SyntasticDebugLoclist, 'filtered by ' . filter . ':', a:errors)
+    " wildcard quiet_messages
+    let quiet_filters = copy(syntastic#util#var('quiet_messages', {}))
+    if type(quiet_filters) != type({})
+        call syntastic#log#warn('ignoring invalid syntastic_quiet_messages')
+        unlet quiet_filters
+        let quiet_filters = {}
+    endif
+
+    " per checker quiet_messages
+    let name = self._filetype . '_' . self._name
+    try
+        call extend( quiet_filters, copy(syntastic#util#var(name . '_quiet_messages', {})), 'force' )
+    catch /\m^Vim\%((\a\+)\)\=:E712/
+        call syntastic#log#warn('ignoring invalid syntastic_' . name . '_quiet_messages')
+    endtry
+
+    call syntastic#log#debug(g:SyntasticDebugLoclist, 'quiet_messages filter:', quiet_filters)
+
+    if !empty(quiet_filters)
+        call syntastic#util#dictFilter(a:errors, quiet_filters)
+        call syntastic#log#debug(g:SyntasticDebugLoclist, 'filtered by quiet_messages:', a:errors)
     endif
 endfunction " }}}2
 

@@ -32,7 +32,7 @@ let s:running_windows = syntastic#util#isRunningWindows()
 if !s:running_windows && executable('uname')
     try
         let s:uname = system('uname')
-    catch /^Vim\%((\a\+)\)\=:E484/
+    catch /\m^Vim\%((\a\+)\)\=:E484/
         call syntastic#log#error("your shell " . &shell . " doesn't use traditional UNIX syntax for redirections")
         finish
     endtry
@@ -128,7 +128,7 @@ let s:modemap = g:SyntasticModeMap.Instance()
 function! s:CompleteCheckerName(argLead, cmdLine, cursorPos) " {{{2
     let checker_names = []
     for ft in s:resolveFiletypes()
-        call extend( checker_names, keys(s:registry.getCheckersMap(ft)) )
+        call extend(checker_names, keys(s:registry.getCheckersMap(ft)))
     endfor
     return join(checker_names, "\n")
 endfunction " }}}2
@@ -242,15 +242,16 @@ function! s:UpdateErrors(auto_invoked, ...) " {{{2
 
     let loclist = g:SyntasticLoclist.current()
 
-    let w:syntastic_loclist_set = 0
-    let do_jump = g:syntastic_auto_jump
-    if g:syntastic_auto_jump == 2
+    " populate loclist and jump {{{3
+    let do_jump = syntastic#util#var('auto_jump')
+    if do_jump == 2
         let first = loclist.getFirstIssue()
         let type = get(first, 'type', '')
         let do_jump = type ==? 'E'
     endif
 
-    if g:syntastic_always_populate_loc_list || do_jump
+    let w:syntastic_loclist_set = 0
+    if syntastic#util#var('always_populate_loc_list') || do_jump
         call syntastic#log#debug(g:SyntasticDebugNotifications, 'loclist: setloclist (new)')
         call setloclist(0, loclist.getRaw())
         let w:syntastic_loclist_set = 1
@@ -267,6 +268,7 @@ function! s:UpdateErrors(auto_invoked, ...) " {{{2
             endif
         endif
     endif
+    " }}}3
 
     call s:notifiers.refresh(loclist)
 endfunction " }}}2
@@ -283,8 +285,6 @@ function! s:CacheErrors(checkers) " {{{2
     let newLoclist = g:SyntasticLoclist.New([])
 
     if !s:skipFile()
-        let names = []
-
         " debug logging {{{3
         call syntastic#log#debugShowOptions(g:SyntasticDebugTrace, s:debug_dump_options)
         call syntastic#log#debugDump(g:SyntasticDebugVariables)
@@ -301,6 +301,7 @@ function! s:CacheErrors(checkers) " {{{2
             call extend(clist, s:registry.getCheckers(ft, a:checkers))
         endfor
 
+        let names = []
         for checker in clist
             call syntastic#log#debug(g:SyntasticDebugTrace, 'CacheErrors: Invoking checker: ' . checker.getName())
 
@@ -308,9 +309,9 @@ function! s:CacheErrors(checkers) " {{{2
 
             if !loclist.isEmpty()
                 if decorate_errors
-                    call loclist.decorate(checker.getName(), checker.getFiletype())
+                    call loclist.decorate(checker.getFiletype(), checker.getName())
                 endif
-                call add(names, [checker.getName(), checker.getFiletype()])
+                call add(names, [checker.getFiletype(), checker.getName()])
 
                 let newLoclist = newLoclist.extend(loclist)
 
@@ -322,13 +323,13 @@ function! s:CacheErrors(checkers) " {{{2
 
         " set names {{{3
         if !empty(names)
-            if len(syntastic#util#unique(map(copy(names), 'v:val[1]'))) == 1
-                let type = names[0][1]
-                let name = join(map(names, 'v:val[0]'), ', ')
+            if len(syntastic#util#unique(map(copy(names), 'v:val[0]'))) == 1
+                let type = names[0][0]
+                let name = join(map(names, 'v:val[1]'), ', ')
                 call newLoclist.setName( name . ' ('. type . ')' )
             else
                 " checkers from mixed types
-                call newLoclist.setName(join(map(names, 'v:val[1] . "/" . v:val[0]'), ', '))
+                call newLoclist.setName(join(map(names, 'v:val[0] . "/" . v:val[1]'), ', '))
             endif
         endif
         " }}}3
@@ -348,11 +349,6 @@ function! s:CacheErrors(checkers) " {{{2
         " }}}3
 
         call syntastic#log#debug(g:SyntasticDebugLoclist, 'aggregated:', newLoclist)
-
-        if type(g:syntastic_quiet_messages) == type({}) && !empty(g:syntastic_quiet_messages)
-            call newLoclist.quietMessages(g:syntastic_quiet_messages)
-            call syntastic#log#debug(g:SyntasticDebugLoclist, 'filtered by g:syntastic_quiet_messages:', newLoclist)
-        endif
     endif
 
     let b:syntastic_loclist = newLoclist

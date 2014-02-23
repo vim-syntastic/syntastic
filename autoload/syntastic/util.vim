@@ -49,10 +49,11 @@ function! syntastic#util#parseShebang() " {{{2
 endfunction " }}}2
 
 " Get the value of a variable.  Allow local variables to override global ones.
-function! syntastic#util#var(name) " {{{2
+function! syntastic#util#var(name, ...) " {{{2
     return
         \ exists('b:syntastic_' . a:name) ? b:syntastic_{a:name} :
-        \ exists('g:syntastic_' . a:name) ? g:syntastic_{a:name} : ''
+        \ exists('g:syntastic_' . a:name) ? g:syntastic_{a:name} :
+        \ a:0 > 0 ? a:1 : ''
 endfunction " }}}2
 
 " Parse a version string.  Return an array of version components.
@@ -230,6 +231,10 @@ function! s:translateFilter(filters) " {{{2
             call add(conditions, s:translateElement(k, a:filters[k]))
         endif
     endfor
+
+    if conditions == []
+        let conditions = ["1"]
+    endif
     return len(conditions) == 1 ? conditions[0] : join(map(conditions, '"(" . v:val . ")"'), ' && ')
 endfunction " }}}2
 
@@ -243,6 +248,7 @@ function! s:translateElement(key, term) " {{{2
     elseif a:key ==? 'file'
         let ret = 'bufname(str2nr(v:val["bufnr"])) !~# ' . string(a:term)
     else
+        call syntastic#log#warn('quiet_messages: ignoring invalid key ' . strtrans(string(a:key)))
         let ret = "1"
     endif
     return ret
