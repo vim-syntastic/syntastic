@@ -96,8 +96,8 @@ function! syntastic#log#debugShowOptions(level, names)
 
     let vlist = type(a:names) == type("") ? [a:names] : a:names
     if !empty(vlist)
-        call map(copy(vlist), "'&' . v:val . ' = ' . strtrans(string(eval('&' . v:val)))")
-        echomsg leader . join(vlist, ', ')
+        let vals = map(copy(vlist), "'&' . v:val . ' = ' . strtrans(string(eval('&' . v:val)))")
+        echomsg leader . join(vals, ', ')
     endif
     call s:logRedirect(0)
 endfunction
