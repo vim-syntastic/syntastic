@@ -1,4 +1,4 @@
-if exists("g:loaded_syntastic_registry")
+if exists("g:loaded_syntastic_registry") || !exists("g:loaded_syntastic_plugin")
     finish
 endif
 let g:loaded_syntastic_registry = 1

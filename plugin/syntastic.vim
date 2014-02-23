@@ -19,8 +19,6 @@ if has('reltime')
     let g:syntastic_start = reltime()
 endif
 
-runtime! plugin/syntastic/*.vim
-
 let s:running_windows = syntastic#util#isRunningWindows()
 
 for s:feature in ['autocmd', 'eval', 'modify_fname', 'quickfix', 'user_commands']
@@ -39,59 +37,38 @@ if !s:running_windows && executable('uname')
     endtry
 endif
 
-if !exists("g:syntastic_always_populate_loc_list")
-    let g:syntastic_always_populate_loc_list = 0
-endif
+let g:syntastic_defaults = {
+        \ 'aggregate_errors':         0,
+        \ 'always_populate_loc_list': 0,
+        \ 'auto_jump':                0,
+        \ 'auto_loc_list':            2,
+        \ 'bash_hack':                1,
+        \ 'check_on_open':            0,
+        \ 'check_on_wq':              1,
+        \ 'debug':                    0,
+        \ 'echo_current_error':       1,
+        \ 'enable_balloons':          1,
+        \ 'enable_highlighting':      1,
+        \ 'enable_signs':             1,
+        \ 'error_symbol':             '>>',
+        \ 'filetype_map':             {},
+        \ 'full_redraws':             !(has('gui_running') || has('gui_macvim')),
+        \ 'id_checkers':              1,
+        \ 'ignore_files':             [],
+        \ 'loc_list_height':          10,
+        \ 'quiet_messages':           {},
+        \ 'reuse_loc_lists':          (v:version >= 704),
+        \ 'stl_format':               '[Syntax: line:%F (%t)]',
+        \ 'style_error_symbol':       'S>',
+        \ 'style_warning_symbol':     'S>',
+        \ 'warning_symbol':           '>>',
+    \ }
 
-if !exists("g:syntastic_auto_jump")
-    let g:syntastic_auto_jump = 0
-endif
-
-if !exists("g:syntastic_quiet_messages")
-    let g:syntastic_quiet_messages = {}
-endif
-
-if !exists("g:syntastic_stl_format")
-    let g:syntastic_stl_format = '[Syntax: line:%F (%t)]'
-endif
-
-if !exists("g:syntastic_check_on_open")
-    let g:syntastic_check_on_open = 0
-endif
-
-if !exists("g:syntastic_check_on_wq")
-    let g:syntastic_check_on_wq = 1
-endif
-
-if !exists("g:syntastic_aggregate_errors")
-    let g:syntastic_aggregate_errors = 0
-endif
-
-if !exists("g:syntastic_id_checkers")
-    let g:syntastic_id_checkers = 1
-endif
-
-if !exists("g:syntastic_loc_list_height")
-    let g:syntastic_loc_list_height = 10
-endif
-
-if !exists("g:syntastic_ignore_files")
-    let g:syntastic_ignore_files = []
-endif
-
-if !exists("g:syntastic_filetype_map")
-    let g:syntastic_filetype_map = {}
-endif
-
-if !exists("g:syntastic_full_redraws")
-    let g:syntastic_full_redraws = !(has('gui_running') || has('gui_macvim'))
-endif
-
-" TODO: not documented
-if !exists("g:syntastic_reuse_loc_lists")
-    " a relevant bug has been fixed in one of the pre-releases of Vim 7.4
-    let g:syntastic_reuse_loc_lists = (v:version >= 704)
-endif
+for s:key in keys(g:syntastic_defaults)
+    if !exists('g:syntastic_' . s:key)
+        let g:syntastic_{s:key} = g:syntastic_defaults[s:key]
+    endif
+endfor
 
 if exists("g:syntastic_quiet_warnings")
     call syntastic#log#deprecationWarn("variable g:syntastic_quiet_warnings is deprecated, please use let g:syntastic_quiet_messages = {'level': 'warnings'} instead")
@@ -118,6 +95,8 @@ let s:debug_dump_options = [
 if v:version > 703 || (v:version == 703 && has('patch446'))
     call add(s:debug_dump_options, 'shellxescape')
 endif
+
+runtime! plugin/syntastic/*.vim
 
 
 " debug constants
@@ -296,13 +275,14 @@ function! s:CacheErrors(checkers)
 
         call syntastic#log#debugShowOptions(g:SyntasticDebugTrace, s:debug_dump_options)
         call syntastic#log#debugDump(g:SyntasticDebugVariables)
-        call syntastic#log#debugShowVariables(g:SyntasticDebugTrace, 'syntastic_aggregate_errors')
+        call syntastic#log#debugShowVariables(g:SyntasticDebugTrace, 'aggregate_errors')
         call syntastic#log#debug(g:SyntasticDebugTrace, 'getcwd() = ' . getcwd())
 
         let filetypes = s:ResolveFiletypes()
         let aggregate_errors = syntastic#util#var('aggregate_errors')
         let decorate_errors = (aggregate_errors || len(filetypes) > 1) && syntastic#util#var('id_checkers')
 
+        let clist = []
         for ft in filetypes
             let clist = s:registry.getCheckers(ft, a:checkers)
 
@@ -372,16 +352,6 @@ function! s:ShowLocList()
     call g:SyntasticLoclist.current().show()
 endfunction
 
-"the script changes &shellredir and &shell to stop the screen flicking when
-"shelling out to syntax checkers. Not all OSs support the hacks though
-function! s:OSSupportsShellredirHack()
-    return !s:running_windows && executable('/bin/bash') && (s:uname() !~ "FreeBSD") && (s:uname() !~ "OpenBSD")
-endfunction
-
-function! s:IsRedrawRequiredAfterMake()
-    return !s:running_windows && (s:uname() =~ "FreeBSD" || s:uname() =~ "OpenBSD")
-endfunction
-
 function! s:IgnoreFile(filename)
     let fname = fnamemodify(a:filename, ':p')
     for pattern in g:syntastic_ignore_files
@@ -442,12 +412,7 @@ function! SyntasticMake(options)
     let old_lc_messages = $LC_MESSAGES
     let old_lc_all = $LC_ALL
 
-    if s:OSSupportsShellredirHack()
-        "this is a hack to stop the screen needing to be ':redraw'n when
-        "when :lmake is run. Otherwise the screen flickers annoyingly
-        let &shellredir = '&>'
-        let &shell = '/bin/bash'
-    endif
+    call s:bashHack()
 
     if has_key(a:options, 'errorformat')
         let &errorformat = a:options['errorformat']
@@ -483,7 +448,7 @@ function! SyntasticMake(options)
     let &shellredir = old_shellredir
     let &shell = old_shell
 
-    if s:IsRedrawRequiredAfterMake()
+    if !s:running_windows && (s:uname() =~ "FreeBSD" || s:uname() =~ "OpenBSD")
         call syntastic#util#redraw(g:syntastic_full_redraws)
     endif
 
@@ -494,12 +459,12 @@ function! SyntasticMake(options)
     endif
 
     if has_key(a:options, 'defaults')
-        call SyntasticAddToErrors(errors, a:options['defaults'])
+        call s:addToErrors(errors, a:options['defaults'])
     endif
 
     " Add subtype info if present.
     if has_key(a:options, 'subtype')
-        call SyntasticAddToErrors(errors, { 'subtype': a:options['subtype'] })
+        call s:addToErrors(errors, { 'subtype': a:options['subtype'] })
     endif
 
     if has_key(a:options, 'postprocess') && !empty(a:options['postprocess'])
@@ -512,8 +477,8 @@ function! SyntasticMake(options)
     return errors
 endfunction
 
-"take a list of errors and add default values to them from a:options
-function! SyntasticAddToErrors(errors, options)
+" Take a list of errors and add default values to them from a:options
+function! s:addToErrors(errors, options)
     for err in a:errors
         for key in keys(a:options)
             if !has_key(err, key) || empty(err[key])
@@ -525,4 +490,23 @@ function! SyntasticAddToErrors(errors, options)
     return a:errors
 endfunction
 
-" vim: set et sts=4 sw=4:
+" The script changes &shellredir and &shell to stop the screen flicking when
+" shelling out to syntax checkers. Not all OSs support the hacks though.
+function! s:bashHack()
+    if !exists('s:bash')
+        if !s:running_windows && (s:uname() !~# "FreeBSD") && (s:uname() !~# "OpenBSD")
+            let s:bash =
+                \ executable('/usr/local/bin/bash') ? '/usr/local/bin/bash' :
+                \ executable('/bin/bash') ? '/bin/bash' : ''
+        else
+            let s:bash = ''
+        endif
+    endif
+
+    if g:syntastic_bash_hack && s:bash != ''
+        let &shell = s:bash
+        let &shellredir = '&>'
+    endif
+endfunction
+
+" vim: set sw=4 sts=4 et fdm=marker:

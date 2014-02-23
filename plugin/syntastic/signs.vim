@@ -1,28 +1,7 @@
-if exists("g:loaded_syntastic_notifier_signs")
+if exists("g:loaded_syntastic_notifier_signs") || !exists("g:loaded_syntastic_plugin")
     finish
 endif
 let g:loaded_syntastic_notifier_signs = 1
-
-if !exists("g:syntastic_enable_signs")
-    let g:syntastic_enable_signs = 1
-endif
-
-if !exists("g:syntastic_error_symbol")
-    let g:syntastic_error_symbol = '>>'
-endif
-
-if !exists("g:syntastic_warning_symbol")
-    let g:syntastic_warning_symbol = '>>'
-endif
-
-if !exists("g:syntastic_style_error_symbol")
-    let g:syntastic_style_error_symbol = 'S>'
-endif
-
-if !exists("g:syntastic_style_warning_symbol")
-    let g:syntastic_style_warning_symbol = 'S>'
-endif
-
 
 " start counting sign ids at 5000, start here to hopefully avoid conflicting
 " with any other code that places signs (not sure if this precaution is

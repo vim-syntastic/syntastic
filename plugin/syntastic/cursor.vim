@@ -1,11 +1,7 @@
-if exists("g:loaded_syntastic_notifier_cursor")
+if exists("g:loaded_syntastic_notifier_cursor") || !exists("g:loaded_syntastic_plugin")
     finish
 endif
 let g:loaded_syntastic_notifier_cursor = 1
-
-if !exists('g:syntastic_echo_current_error')
-    let g:syntastic_echo_current_error = 1
-endif
 
 let g:SyntasticCursorNotifier = {}
 

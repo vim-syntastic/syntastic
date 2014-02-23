@@ -1,11 +1,7 @@
-if exists("g:loaded_syntastic_notifier_autoloclist")
+if exists("g:loaded_syntastic_notifier_autoloclist") || !exists("g:loaded_syntastic_plugin")
     finish
 endif
 let g:loaded_syntastic_notifier_autoloclist = 1
-
-if !exists("g:syntastic_auto_loc_list")
-    let g:syntastic_auto_loc_list = 2
-endif
 
 let g:SyntasticAutoloclistNotifier = {}
 

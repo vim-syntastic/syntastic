@@ -1,4 +1,4 @@
-if exists("g:loaded_syntastic_postprocess_autoload")
+if exists("g:loaded_syntastic_postprocess_autoload") || !exists("g:loaded_syntastic_plugin")
     finish
 endif
 let g:loaded_syntastic_postprocess_autoload = 1
@@ -64,4 +64,4 @@ endfunction
 let &cpo = s:save_cpo
 unlet s:save_cpo
 
-" vim: set et sts=4 sw=4:
+" vim: set sw=4 sts=4 et fdm=marker:

@@ -1,40 +1,10 @@
-if exists("g:loaded_syntastic_log_autoload")
+if exists("g:loaded_syntastic_log_autoload") || !exists("g:loaded_syntastic_plugin")
     finish
 endif
 let g:loaded_syntastic_log_autoload = 1
 
 let s:save_cpo = &cpo
 set cpo&vim
-
-if !exists("g:syntastic_debug")
-    let g:syntastic_debug = 0
-endif
-
-let s:global_options = [
-    \ 'syntastic_aggregate_errors',
-    \ 'syntastic_always_populate_loc_list',
-    \ 'syntastic_auto_jump',
-    \ 'syntastic_auto_loc_list',
-    \ 'syntastic_check_on_open',
-    \ 'syntastic_check_on_wq',
-    \ 'syntastic_debug',
-    \ 'syntastic_echo_current_error',
-    \ 'syntastic_enable_balloons',
-    \ 'syntastic_enable_highlighting',
-    \ 'syntastic_enable_signs',
-    \ 'syntastic_error_symbol',
-    \ 'syntastic_filetype_map',
-    \ 'syntastic_full_redraws',
-    \ 'syntastic_id_checkers',
-    \ 'syntastic_ignore_files',
-    \ 'syntastic_loc_list_height',
-    \ 'syntastic_mode_map',
-    \ 'syntastic_quiet_messages',
-    \ 'syntastic_reuse_loc_lists',
-    \ 'syntastic_stl_format',
-    \ 'syntastic_style_error_symbol',
-    \ 'syntastic_style_warning_symbol',
-    \ 'syntastic_warning_symbol' ]
 
 let s:deprecation_notices_issued = []
 
@@ -94,10 +64,10 @@ function! syntastic#log#debugShowOptions(level, names)
     let leader = s:logTimestamp()
     call s:logRedirect(1)
 
-    let vlist = type(a:names) == type("") ? [a:names] : a:names
+    let vlist = copy(type(a:names) == type("") ? [a:names] : a:names)
     if !empty(vlist)
-        let vals = map(copy(vlist), "'&' . v:val . ' = ' . strtrans(string(eval('&' . v:val)))")
-        echomsg leader . join(vals, ', ')
+        call map(vlist, "'&' . v:val . ' = ' . strtrans(string(eval('&' . v:val)))")
+        echomsg leader . join(vlist, ', ')
     endif
     call s:logRedirect(0)
 endfunction
@@ -112,7 +82,10 @@ function! syntastic#log#debugShowVariables(level, names)
 
     let vlist = type(a:names) == type("") ? [a:names] : a:names
     for name in vlist
-        echomsg leader . s:formatVariable(name)
+        let msg = s:formatVariable(name)
+        if msg != ''
+            echomsg leader . msg
+        endif
     endfor
 
     call s:logRedirect(0)
@@ -123,7 +96,7 @@ function! syntastic#log#debugDump(level)
         return
     endif
 
-    call syntastic#log#debugShowVariables(a:level, s:global_options)
+    call syntastic#log#debugShowVariables( a:level, sort(keys(g:syntastic_defaults)) )
 endfunction
 
 " Private functions {{{1
@@ -166,11 +139,11 @@ let s:logTimestamp = function(has('reltime') ? 's:logTimestamp_smart' : 's:logTi
 
 function! s:formatVariable(name)
     let vals = []
-    if exists('g:' . a:name)
-        call add(vals, 'g:' . a:name . ' = ' . strtrans(string(g:{a:name})))
+    if exists('g:syntastic_' . a:name)
+        call add(vals, 'g:syntastic_' . a:name . ' = ' . strtrans(string(g:syntastic_{a:name})))
     endif
-    if exists('b:' . a:name)
-        call add(vals, 'b:' . a:name . ' = ' . strtrans(string(b:{a:name})))
+    if exists('b:syntastic_' . a:name)
+        call add(vals, 'b:syntastic_' . a:name . ' = ' . strtrans(string(b:syntastic_{a:name})))
     endif
 
     return join(vals, ', ')
@@ -178,4 +151,5 @@ endfunction
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
-" vim: set et sts=4 sw=4 fdm=marker:
+
+" vim: set sw=4 sts=4 et fdm=marker:
