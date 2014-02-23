@@ -101,7 +101,7 @@ function! syntastic#util#wideMsg(msg)
     "width as the proper amount of characters
     let chunks = split(msg, "\t", 1)
     let msg = join(map(chunks[:-2], 'v:val . repeat(" ", &ts - s:width(v:val) % &ts)'), '') . chunks[-1]
-    let msg = strpart(msg, 0, winwidth(0) - 1)
+    let msg = strpart(msg, 0, &columns - 1)
 
     set noruler noshowcmd
     call syntastic#util#redraw(0)
