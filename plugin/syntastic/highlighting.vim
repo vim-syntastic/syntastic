@@ -1,14 +1,10 @@
-if exists("g:loaded_syntastic_notifier_highlighting")
+if exists("g:loaded_syntastic_notifier_highlighting") || !exists("g:loaded_syntastic_plugin")
     finish
 endif
 let g:loaded_syntastic_notifier_highlighting = 1
 
 " Highlighting requires getmatches introduced in 7.1.040
 let s:has_highlighting = v:version > 701 || (v:version == 701 && has('patch040'))
-
-if !exists("g:syntastic_enable_highlighting")
-    let g:syntastic_enable_highlighting = 1
-endif
 
 let g:SyntasticHighlightingNotifier = {}
 

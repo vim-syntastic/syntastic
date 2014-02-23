@@ -1,4 +1,4 @@
-if exists("g:loaded_syntastic_loclist")
+if exists("g:loaded_syntastic_loclist") || !exists("g:loaded_syntastic_plugin")
     finish
 endif
 let g:loaded_syntastic_loclist = 1

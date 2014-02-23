@@ -1,4 +1,4 @@
-if exists("g:loaded_syntastic_checker")
+if exists("g:loaded_syntastic_checker") || !exists("g:loaded_syntastic_plugin")
     finish
 endif
 let g:loaded_syntastic_checker = 1

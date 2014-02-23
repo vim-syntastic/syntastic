@@ -1,11 +1,7 @@
-if exists("g:loaded_syntastic_notifier_balloons")
+if exists("g:loaded_syntastic_notifier_balloons") || !exists("g:loaded_syntastic_plugin")
     finish
 endif
 let g:loaded_syntastic_notifier_balloons = 1
-
-if !exists("g:syntastic_enable_balloons")
-    let g:syntastic_enable_balloons = 1
-endif
 
 if !has('balloon_eval')
     let g:syntastic_enable_balloons = 0

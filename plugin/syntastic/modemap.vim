@@ -1,4 +1,4 @@
-if exists("g:loaded_syntastic_modemap")
+if exists("g:loaded_syntastic_modemap") || !exists("g:loaded_syntastic_plugin")
     finish
 endif
 let g:loaded_syntastic_modemap = 1
