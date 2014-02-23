@@ -285,10 +285,12 @@ function! s:CacheErrors(checkers) " {{{2
     if !s:skipFile()
         let names = []
 
+        " debug logging {{{3
         call syntastic#log#debugShowOptions(g:SyntasticDebugTrace, s:debug_dump_options)
         call syntastic#log#debugDump(g:SyntasticDebugVariables)
         call syntastic#log#debugShowVariables(g:SyntasticDebugTrace, 'aggregate_errors')
         call syntastic#log#debug(g:SyntasticDebugTrace, 'getcwd() = ' . getcwd())
+        " }}}3
 
         let filetypes = s:resolveFiletypes()
         let aggregate_errors = syntastic#util#var('aggregate_errors')
@@ -296,28 +298,29 @@ function! s:CacheErrors(checkers) " {{{2
 
         let clist = []
         for ft in filetypes
-            let clist = s:registry.getCheckers(ft, a:checkers)
-
-            for checker in clist
-                call syntastic#log#debug(g:SyntasticDebugTrace, 'CacheErrors: Invoking checker: ' . checker.getName())
-
-                let loclist = checker.getLocList()
-
-                if !loclist.isEmpty()
-                    if decorate_errors
-                        call loclist.decorate(checker.getName(), checker.getFiletype())
-                    endif
-                    call add(names, [checker.getName(), checker.getFiletype()])
-
-                    let newLoclist = newLoclist.extend(loclist)
-
-                    if !aggregate_errors
-                        break
-                    endif
-                endif
-            endfor
+            call extend(clist, s:registry.getCheckers(ft, a:checkers))
         endfor
 
+        for checker in clist
+            call syntastic#log#debug(g:SyntasticDebugTrace, 'CacheErrors: Invoking checker: ' . checker.getName())
+
+            let loclist = checker.getLocList()
+
+            if !loclist.isEmpty()
+                if decorate_errors
+                    call loclist.decorate(checker.getName(), checker.getFiletype())
+                endif
+                call add(names, [checker.getName(), checker.getFiletype()])
+
+                let newLoclist = newLoclist.extend(loclist)
+
+                if !aggregate_errors
+                    break
+                endif
+            endif
+        endfor
+
+        " set names {{{3
         if !empty(names)
             if len(syntastic#util#unique(map(copy(names), 'v:val[1]'))) == 1
                 let type = names[0][1]
@@ -328,7 +331,9 @@ function! s:CacheErrors(checkers) " {{{2
                 call newLoclist.setName(join(map(names, 'v:val[1] . "/" . v:val[0]'), ', '))
             endif
         endif
+        " }}}3
 
+        " issue warning about no active checkers {{{3
         if empty(clist)
             if !empty(a:checkers)
                 if len(a:checkers) == 1
@@ -340,6 +345,7 @@ function! s:CacheErrors(checkers) " {{{2
                 call syntastic#log#debug(g:SyntasticDebugTrace, 'CacheErrors: no active checkers for filetype ' . &filetype)
             endif
         endif
+        " }}}3
 
         call syntastic#log#debug(g:SyntasticDebugLoclist, 'aggregated:', newLoclist)
 
@@ -384,6 +390,7 @@ endfunction " }}}2
 function! SyntasticMake(options) " {{{2
     call syntastic#log#debug(g:SyntasticDebugTrace, 'SyntasticMake: called with options:', a:options)
 
+    " save options and locale env variables {{{3
     let old_shell = &shell
     let old_shellredir = &shellredir
     let old_local_errorformat = &l:errorformat
@@ -391,6 +398,7 @@ function! SyntasticMake(options) " {{{2
     let old_cwd = getcwd()
     let old_lc_messages = $LC_MESSAGES
     let old_lc_all = $LC_ALL
+    " }}}3
 
     call s:bashHack()
 
@@ -423,10 +431,13 @@ function! SyntasticMake(options) " {{{2
     endif
 
     silent! lolder
+
+    " restore options {{{3
     let &errorformat = old_errorformat
     let &l:errorformat = old_local_errorformat
     let &shellredir = old_shellredir
     let &shell = old_shell
+    " }}}3
 
     if !s:running_windows && (s:uname() =~ "FreeBSD" || s:uname() =~ "OpenBSD")
         call syntastic#util#redraw(g:syntastic_full_redraws)
