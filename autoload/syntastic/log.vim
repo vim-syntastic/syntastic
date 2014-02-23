@@ -119,7 +119,7 @@ function! s:logRedirect(on) " {{{2
         if a:on
             try
                 execute 'redir >> ' . fnameescape(expand(g:syntastic_debug_file))
-            catch /^Vim\%((\a\+)\)\=:/
+            catch /\m^Vim\%((\a\+)\)\=:/
                 silent! redir END
                 unlet g:syntastic_debug_file
             endtry

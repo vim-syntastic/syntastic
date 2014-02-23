@@ -114,14 +114,10 @@ function! g:SyntasticLoclist.setName(name) " {{{2
     let self._name = a:name
 endfunction " }}}2
 
-function! g:SyntasticLoclist.decorate(name, filetype) " {{{2
+function! g:SyntasticLoclist.decorate(filetype, name) " {{{2
     for e in self._rawLoclist
         let e['text'] .= ' [' . a:filetype . '/' . a:name . ']'
     endfor
-endfunction " }}}2
-
-function! g:SyntasticLoclist.quietMessages(filters) " {{{2
-    call syntastic#util#dictFilter(self._rawLoclist, a:filters)
 endfunction " }}}2
 
 function! g:SyntasticLoclist.errors() " {{{2
