@@ -66,7 +66,7 @@ let g:syntastic_defaults = {
         \ 'stl_format':               '[Syntax: line:%F (%t)]',
         \ 'style_error_symbol':       'S>',
         \ 'style_warning_symbol':     'S>',
-        \ 'warning_symbol':           '>>',
+        \ 'warning_symbol':           '>>'
     \ }
 
 for s:key in keys(g:syntastic_defaults)
@@ -280,7 +280,7 @@ function! s:ClearCache() " {{{2
 endfunction " }}}2
 
 "detect and cache all syntax errors in this buffer
-function! s:CacheErrors(checkers) " {{{2
+function! s:CacheErrors(checker_names) " {{{2
     call s:ClearCache()
     let newLoclist = g:SyntasticLoclist.New([])
 
@@ -297,21 +297,23 @@ function! s:CacheErrors(checkers) " {{{2
         let decorate_errors = (aggregate_errors || len(filetypes) > 1) && syntastic#util#var('id_checkers')
 
         let clist = []
-        for ft in filetypes
-            call extend(clist, s:registry.getCheckers(ft, a:checkers))
+        for type in filetypes
+            call extend(clist, s:registry.getCheckers(type, a:checker_names))
         endfor
 
         let names = []
         for checker in clist
-            call syntastic#log#debug(g:SyntasticDebugTrace, 'CacheErrors: Invoking checker: ' . checker.getName())
+            let type = checker.getFiletype()
+            let name = checker.getName()
+            call syntastic#log#debug(g:SyntasticDebugTrace, 'CacheErrors: Invoking checker: ' . type . '/' . name)
 
             let loclist = checker.getLocList()
 
             if !loclist.isEmpty()
                 if decorate_errors
-                    call loclist.decorate(checker.getFiletype(), checker.getName())
+                    call loclist.decorate(type, name)
                 endif
-                call add(names, [checker.getFiletype(), checker.getName()])
+                call add(names, [type, name])
 
                 let newLoclist = newLoclist.extend(loclist)
 
@@ -323,7 +325,7 @@ function! s:CacheErrors(checkers) " {{{2
 
         " set names {{{3
         if !empty(names)
-            if len(syntastic#util#unique(map(copy(names), 'v:val[0]'))) == 1
+            if len(syntastic#util#unique(map( copy(names), 'v:val[0]' ))) == 1
                 let type = names[0][0]
                 let name = join(map(names, 'v:val[1]'), ', ')
                 call newLoclist.setName( name . ' ('. type . ')' )
@@ -336,14 +338,14 @@ function! s:CacheErrors(checkers) " {{{2
 
         " issue warning about no active checkers {{{3
         if empty(clist)
-            if !empty(a:checkers)
-                if len(a:checkers) == 1
-                    call syntastic#log#warn('checker ' . a:checkers[0] . ' is not active for filetype ' . &filetype)
+            if !empty(a:checker_names)
+                if len(a:checker_names) == 1
+                    call syntastic#log#warn('checker ' . a:checker_names[0] . ' is not available')
                 else
-                    call syntastic#log#warn('checkers ' . join(a:checkers, ', ') . ' are not active for filetype ' . &filetype)
+                    call syntastic#log#warn('checkers ' . join(a:checker_names, ', ') . ' are not available')
                 endif
             else
-                call syntastic#log#debug(g:SyntasticDebugTrace, 'CacheErrors: no active checkers for filetype ' . &filetype)
+                call syntastic#log#debug(g:SyntasticDebugTrace, 'CacheErrors: no checkers available for ' . &filetype)
             endif
         endif
         " }}}3
