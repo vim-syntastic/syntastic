@@ -171,17 +171,17 @@ endfunction " }}}2
 function! g:SyntasticRegistry.echoInfoFor(ftalias_list) " {{{2
     echomsg "Syntastic info for filetype: " . join(a:ftalias_list, '.')
 
-    if len(a:ftalias_list) != 1
+    let ft_list = syntastic#util#unique(map( copy(a:ftalias_list), 's:normaliseFiletype(v:val)' ))
+    if len(ft_list) != 1
         let available = []
         let active = []
 
-        for ftalias in a:ftalias_list
-            let ft = s:normaliseFiletype(ftalias)
-            call extend(available, map( keys(self.getCheckersMap(ftalias)), 'ft . "/" . v:val' ))
-            call extend(active, map( self.getCheckers(ftalias, []), 'ft . "/" . v:val.getName()' ))
+        for ft in ft_list
+            call extend(available, map( keys(self.getCheckersMap(ft)), 'ft . "/" . v:val' ))
+            call extend(active, map( self.getCheckers(ft, []), 'ft . "/" . v:val.getName()' ))
         endfor
     else
-        let ft = a:ftalias_list[0]
+        let ft = ft_list[0]
         let available = keys(self.getCheckersMap(ft))
         let active = map(self.getCheckers(ft, []), 'v:val.getName()')
     endif
