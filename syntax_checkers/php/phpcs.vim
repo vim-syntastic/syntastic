@@ -21,9 +21,17 @@ let g:loaded_syntastic_php_phpcs_checker = 1
 let s:save_cpo = &cpo
 set cpo&vim
 
+function! GetPhpcsStandardArgs()
+    if exists("g:php_phpcs_checker_standard")
+        return ' --standard=' . g:php_phpcs_checker_standard
+    else
+        return ''
+    endif
+endfunction
+
 function! SyntaxCheckers_php_phpcs_GetLocList() dict
     let makeprg = self.makeprgBuild({
-        \ 'args': '--tab-width=' . &tabstop,
+        \ 'args': '--tab-width=' . &tabstop . GetPhpcsStandardArgs(),
         \ 'args_after': '--report=csv' })
 
     let errorformat =
