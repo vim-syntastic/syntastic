@@ -68,7 +68,7 @@ function! s:PylintNew(exe)
         let pylint_version = filter(split(system(exe . ' --version'), '\m, \=\|\n'), 'v:val =~# ''\m^\.\=pylint\>''')[0]
         let pylint_version = substitute(pylint_version, '\v^\S+\s+', '', '')
         let ret = syntastic#util#versionIsAtLeast(syntastic#util#parseVersion(pylint_version), [1])
-    catch /^Vim\%((\a\+)\)\=:E684/
+    catch /\m^Vim\%((\a\+)\)\=:E684/
         call syntastic#log#error("checker python/pylint: can't parse version string (abnormal termination?)")
         let ret = -1
     endtry
