@@ -29,7 +29,7 @@ function! SyntaxCheckers_javascript_jscs_GetLocList() dict
         \ 'subtype': 'Style',
         \ 'preprocess': 'SyntaxCheckers_java_checkstyle_Preprocess',
         \ 'postprocess': ['sort'],
-        \ 'returns': [0] })
+        \ 'returns': [0, 2] })
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
