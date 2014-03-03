@@ -54,7 +54,7 @@ let s:defaultCheckers = {
         \ 'objc':        ['gcc'],
         \ 'objcpp':      ['gcc'],
         \ 'ocaml':       ['camlp4o'],
-        \ 'perl':        ['perl', 'perlcritic'],
+        \ 'perl':        ['perlcritic'],
         \ 'php':         ['php', 'phpcs', 'phpmd'],
         \ 'po':          ['msgfmt'],
         \ 'pod':         ['podchecker'],
