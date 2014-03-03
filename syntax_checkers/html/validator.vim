@@ -72,7 +72,7 @@ function! SyntaxCheckers_html_validator_GetLocList() dict
     return SyntasticMake({
         \ 'makeprg': makeprg,
         \ 'errorformat': errorformat,
-        \ 'preprocess': 'validator',
+        \ 'preprocess': 'syntastic#preprocess#validator',
         \ 'returns': [0] })
 endfunction
 

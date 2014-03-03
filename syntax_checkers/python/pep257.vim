@@ -25,7 +25,7 @@ function! SyntaxCheckers_python_pep257_GetLocList() dict
         \ 'makeprg': makeprg,
         \ 'errorformat': errorformat,
         \ 'subtype': 'Style',
-        \ 'preprocess': 'killEmpty',
+        \ 'preprocess': 'syntastic#preprocess#killEmpty',
         \ 'postprocess': ['compressWhitespace'] })
 
     " pep257 outputs byte offsets rather than column numbers

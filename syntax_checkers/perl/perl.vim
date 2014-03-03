@@ -86,7 +86,7 @@ function! SyntaxCheckers_perl_perl_GetLocList() dict
     let errors = SyntasticMake({
         \ 'makeprg': makeprg,
         \ 'errorformat': errorformat,
-        \ 'preprocess': 'perl',
+        \ 'preprocess': 'syntastic#preprocess#perl',
         \ 'defaults': {'type': 'E'} })
     if !empty(errors)
         return errors
@@ -99,7 +99,7 @@ function! SyntaxCheckers_perl_perl_GetLocList() dict
     return SyntasticMake({
         \ 'makeprg': makeprg,
         \ 'errorformat': errorformat,
-        \ 'preprocess': 'perl',
+        \ 'preprocess': 'syntastic#preprocess#perl',
         \ 'defaults': {'type': 'W'} })
 endfunction
 
