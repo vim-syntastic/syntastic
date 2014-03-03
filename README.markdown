@@ -123,20 +123,18 @@ error output for a syntax checker may have changed. In this case, make sure you
 have the latest version of the syntax checker installed. If it still fails then
 create an issue - or better yet, create a pull request.
 
-__Q. Recently some of my syntax checker options have stopped working...__
+__Q. The `perl` checker has stopped working...__
 
-A. The options are still there, they have just been renamed. Recently,
-almost all syntax checkers were refactored to use the new `makeprgBuild()`
-function. This made a lot of the old explicit options redundant - as they are
-now implied. The new implied options usually have slightly different names to
-the old options.
-
-e.g. Previously there was `g:syntastic_phpcs_conf`, now you must use
-`g:syntastic_php_phpcs_args`. This completely overrides the arguments of
-the checker, including any defaults, so you may need to look up the default
-arguments of the checker and add these in.
-
-See `:help syntastic-checker-options` for more information.
+A. The `perl` checker runs `perl -c` against your file, which in turn
+__executes__ any `BEGIN`, `UNITCHECK`, and `CHECK` blocks, and any `use`
+statements in your file (cf. [perlrun][10]).  This is probably fine if you
+wrote the file yourself, but it's a security hazard if you're checking third
+party files.  Since there is currently no way to disable this behaviour while
+still producing useful results, the checker is now disabled by default.  To
+(re-)enable it, set `g:syntastic_enable_perl_checker` to 1 in your vimrc:
+```vim
+  let g:syntastic_enable_perl_checker = 1
+```
 
 __Q. I run a checker and the location list is not updated...__
 
@@ -245,3 +243,4 @@ a look at [jedi-vim][7], [python-mode][8], or [YouCompleteMe][9].
 [7]: https://github.com/davidhalter/jedi-vim
 [8]: https://github.com/klen/python-mode
 [9]: https://github.com/Valloric/YouCompleteMe
+[10]: http://perldoc.perl.org/perlrun.html#*-c*
