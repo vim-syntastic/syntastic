@@ -114,7 +114,7 @@ If you get an error when you do this, then you probably didn't install
 __Q. I installed syntastic but it isn't reporting any errors...__
 
 A. The most likely reason is that none of the syntax checkers that it requires
-is installed. For example: python requires either `flake8`, `pyflakes` or
+is installed. For example: by default, python requires either `flake8` or
 `pylint` to be installed and in your `$PATH`. To see which executables are
 supported, look at the [wiki][3]. Note that aliases do not work; the actual
 executables must be available in your `$PATH`. Symbolic links are okay though.
