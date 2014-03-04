@@ -1,7 +1,7 @@
 "============================================================================
 "File:        syntastic.vim
 "Description: Vim plugin for on the fly syntax checking.
-"Version:     3.4.0-pre
+"Version:     3.3.0-113
 "License:     This program is free software. It comes without any warranty,
 "             to the extent permitted by applicable law. You can redistribute
 "             it and/or modify it under the terms of the Do What The Fuck You
@@ -416,7 +416,10 @@ function! SyntasticMake(options) " {{{2
 
     call syntastic#log#debug(g:SyntasticDebugLoclist, 'checker output:', err_lines)
 
-    if has_key(a:options, 'preprocess')
+    if has_key(a:options, 'Preprocess')
+        let err_lines = call(a:options['Preprocess'], [err_lines])
+        call syntastic#log#debug(g:SyntasticDebugLoclist, 'preprocess (external):', err_lines)
+    elseif has_key(a:options, 'preprocess')
         let err_lines = call('syntastic#preprocess#' . a:options['preprocess'], [err_lines])
         call syntastic#log#debug(g:SyntasticDebugLoclist, 'preprocess:', err_lines)
     endif
@@ -456,7 +459,12 @@ function! SyntasticMake(options) " {{{2
         call s:addToErrors(errors, { 'subtype': a:options['subtype'] })
     endif
 
-    if has_key(a:options, 'postprocess') && !empty(a:options['postprocess'])
+    if has_key(a:options, 'Postprocess') && !empty(a:options['Postprocess'])
+        for rule in a:options['Postprocess']
+            let errors = call(rule, [errors])
+        endfor
+        call syntastic#log#debug(g:SyntasticDebugLoclist, 'postprocess (external):', errors)
+    elseif has_key(a:options, 'postprocess') && !empty(a:options['postprocess'])
         for rule in a:options['postprocess']
             let errors = call('syntastic#postprocess#' . rule, [errors])
         endfor
