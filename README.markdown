@@ -114,7 +114,7 @@ If you get an error when you do this, then you probably didn't install
 __Q. I installed syntastic but it isn't reporting any errors...__
 
 A. The most likely reason is that none of the syntax checkers that it requires
-is installed. For example: python requires either `flake8`, `pyflakes` or
+is installed. For example: python requires either `flake8`, `pyflakes`, `frosted` or
 `pylint` to be installed and in your `$PATH`. To see which executables are
 supported, look at the [wiki][3]. Note that aliases do not work; the actual
 executables must be available in your `$PATH`. Symbolic links are okay though.
@@ -174,7 +174,7 @@ To see the list of supported checkers for your filetype look at the
 [wiki][3].
 
 e.g. Python has the following checkers, among others: `flake8`, `pyflakes`,
-`pylint` and a native `python` checker.
+`frosted`, `pylint` and a native `python` checker.
 
 To tell syntastic to use `pylint`, you would use this setting:
 ```vim
