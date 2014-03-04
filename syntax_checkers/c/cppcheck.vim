@@ -46,7 +46,7 @@ function! SyntaxCheckers_c_cppcheck_GetLocList() dict
     let loclist = SyntasticMake({
         \ 'makeprg': makeprg,
         \ 'errorformat': errorformat,
-        \ 'preprocess': 'cppcheck',
+        \ 'preprocess': 'syntastic#preprocess#cppcheck',
         \ 'returns': [0] })
 
     for e in loclist

@@ -24,7 +24,7 @@ function! SyntaxCheckers_javascript_jscs_GetLocList() dict
         \ 'makeprg': makeprg,
         \ 'errorformat': errorformat,
         \ 'subtype': 'Style',
-        \ 'preprocess': 'checkstyle',
+        \ 'preprocess': 'syntastic#preprocess#checkstyle',
         \ 'postprocess': ['sort'],
         \ 'returns': [0, 2] })
 endfunction

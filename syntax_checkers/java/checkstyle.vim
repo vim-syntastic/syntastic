@@ -46,7 +46,7 @@ function! SyntaxCheckers_java_checkstyle_GetLocList() dict
     return SyntasticMake({
         \ 'makeprg': makeprg,
         \ 'errorformat': errorformat,
-        \ 'preprocess': 'checkstyle',
+        \ 'preprocess': 'syntastic#preprocess#checkstyle',
         \ 'subtype': 'Style' })
 endfunction
 

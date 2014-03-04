@@ -417,7 +417,7 @@ function! SyntasticMake(options) " {{{2
     call syntastic#log#debug(g:SyntasticDebugLoclist, 'checker output:', err_lines)
 
     if has_key(a:options, 'preprocess')
-        let err_lines = call('syntastic#preprocess#' . a:options['preprocess'], [err_lines])
+        let err_lines = call(a:options['preprocess'], [err_lines])
         call syntastic#log#debug(g:SyntasticDebugLoclist, 'preprocess:', err_lines)
     endif
     lgetexpr err_lines
