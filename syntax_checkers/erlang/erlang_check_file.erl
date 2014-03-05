@@ -2,7 +2,7 @@
 -export([main/1]).
 
 main([FileName]) ->
-    LibDirs = (["include", "src", "test"] ++
+    LibDirs = (["ebin", "include", "src", "test"] ++
                filelib:wildcard("{apps,deps,lib}/*/{ebin,include}")),
     compile(FileName, LibDirs);
 
