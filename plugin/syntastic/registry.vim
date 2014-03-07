@@ -40,7 +40,7 @@ let s:defaultCheckers = {
         \ 'hss':         ['hss'],
         \ 'html':        ['tidy'],
         \ 'java':        ['javac'],
-        \ 'javascript':  ['jshint', 'jslint'],
+        \ 'javascript':  ['jsxhint', 'jshint', 'jslint'],
         \ 'json':        ['jsonlint', 'jsonval'],
         \ 'less':        ['lessc'],
         \ 'lex':         ['flex'],
