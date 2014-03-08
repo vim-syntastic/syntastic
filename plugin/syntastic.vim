@@ -1,7 +1,6 @@
 "============================================================================
 "File:        syntastic.vim
 "Description: Vim plugin for on the fly syntax checking.
-"Version:     3.3.0-113
 "License:     This program is free software. It comes without any warranty,
 "             to the extent permitted by applicable law. You can redistribute
 "             it and/or modify it under the terms of the Do What The Fuck You
@@ -18,6 +17,8 @@ let g:loaded_syntastic_plugin = 1
 if has('reltime')
     let g:syntastic_start = reltime()
 endif
+
+let g:syntastic_version = '3.3.0-114'
 
 " Sanity checks {{{1
 
@@ -286,6 +287,7 @@ function! s:CacheErrors(checker_names) " {{{2
 
     if !s:skipFile()
         " debug logging {{{3
+        call syntastic#log#debugShowVariables(g:SyntasticDebugTrace, 'version')
         call syntastic#log#debugShowOptions(g:SyntasticDebugTrace, s:debug_dump_options)
         call syntastic#log#debugDump(g:SyntasticDebugVariables)
         call syntastic#log#debugShowVariables(g:SyntasticDebugTrace, 'aggregate_errors')
