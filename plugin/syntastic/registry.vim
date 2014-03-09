@@ -20,7 +20,7 @@ let s:defaultCheckers = {
         \ 'coq':         ['coqtop'],
         \ 'cpp':         ['gcc'],
         \ 'cs':          ['mcs'],
-        \ 'css':         ['csslint', 'phpcs'],
+        \ 'css':         ['csslint'],
         \ 'cucumber':    ['cucumber'],
         \ 'cuda':        ['nvcc'],
         \ 'd':           ['dmd'],
