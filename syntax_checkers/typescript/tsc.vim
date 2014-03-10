@@ -12,10 +12,14 @@ let g:loaded_syntastic_typescript_tsc_checker = 1
 let s:save_cpo = &cpo
 set cpo&vim
 
+if !exists('g:syntastic_typescript_compiler_options')
+    let g:syntastic_typescript_compiler_options = ''
+endif
+
 function! SyntaxCheckers_typescript_tsc_GetLocList() dict
     let makeprg = self.makeprgBuild({
-        \ 'args': '--module commonjs',
-        \ 'args_after': '--out ' . syntastic#util#DevNull() })
+        \ 'args': '--module commonjs ' . g:syntastic_typescript_compiler_options,
+        \ 'post_args': '--out ' . syntastic#util#DevNull() })
 
     let errorformat =
         \ '%E%f %#(%l\,%c): error %m,' .
