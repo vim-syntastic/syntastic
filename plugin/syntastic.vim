@@ -18,7 +18,7 @@ if has('reltime')
     let g:syntastic_start = reltime()
 endif
 
-let g:syntastic_version = '3.3.0-121'
+let g:syntastic_version = '3.3.0-122'
 
 " Sanity checks {{{1
 
@@ -305,17 +305,16 @@ function! s:CacheErrors(checker_names) " {{{2
 
         let names = []
         for checker in clist
-            let type = checker.getFiletype()
-            let name = checker.getName()
-            call syntastic#log#debug(g:SyntasticDebugTrace, 'CacheErrors: Invoking checker: ' . type . '/' . name)
+            let cname = checker.getFiletype() . '/' . checker.getName()
+            call syntastic#log#debug(g:SyntasticDebugTrace, 'CacheErrors: Invoking checker: ' . cname)
 
             let loclist = checker.getLocList()
 
             if !loclist.isEmpty()
                 if decorate_errors
-                    call loclist.decorate(type, name)
+                    call loclist.decorate(cname)
                 endif
-                call add(names, [type, name])
+                call add(names, cname)
 
                 let newLoclist = newLoclist.extend(loclist)
 
@@ -327,13 +326,13 @@ function! s:CacheErrors(checker_names) " {{{2
 
         " set names {{{3
         if !empty(names)
-            if len(syntastic#util#unique(map( copy(names), 'v:val[0]' ))) == 1
-                let type = names[0][0]
-                let name = join(map(names, 'v:val[1]'), ', ')
+            if len(syntastic#util#unique(map( copy(names), 'substitute(v:val, "\\m/.*", "", "")' ))) == 1
+                let type = substitute(names[0], '\m/.*', '', '')
+                let name = join(map( names, 'substitute(v:val, "\\m.\\{-}/", "", "")' ), ', ')
                 call newLoclist.setName( name . ' ('. type . ')' )
             else
                 " checkers from mixed types
-                call newLoclist.setName(join(map(names, 'v:val[0] . "/" . v:val[1]'), ', '))
+                call newLoclist.setName(join(names, ', '))
             endif
         endif
         " }}}3
@@ -427,7 +426,7 @@ function! SyntasticMake(options) " {{{2
     endif
     lgetexpr err_lines
 
-    let errors = copy(getloclist(0))
+    let errors = deepcopy(getloclist(0))
 
     if has_key(a:options, 'cwd')
         execute 'lcd ' . fnameescape(old_cwd)
