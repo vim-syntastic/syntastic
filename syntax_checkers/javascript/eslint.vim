@@ -23,6 +23,7 @@ set cpo&vim
 
 function! SyntaxCheckers_javascript_eslint_GetLocList() dict
     let makeprg = self.makeprgBuild({
+        \ 'args_before': '-f compact',
         \ 'args': (g:syntastic_javascript_eslint_conf != '' ? '--config ' . g:syntastic_javascript_eslint_conf : '') })
 
     let errorformat =
