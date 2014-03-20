@@ -21,10 +21,17 @@ endif
 let s:save_cpo = &cpo
 set cpo&vim
 
+function! SyntaxCheckers_javascript_eslint_IsAvailable() dict
+    return
+        \ executable('eslint') &&
+        \ syntastic#util#versionIsAtLeast(syntastic#util#getVersion('eslint --version'), [0, 1])
+endfunction
+
 function! SyntaxCheckers_javascript_eslint_GetLocList() dict
     let makeprg = self.makeprgBuild({
         \ 'args_before': '-f compact',
-        \ 'args': (g:syntastic_javascript_eslint_conf != '' ? '--config ' . g:syntastic_javascript_eslint_conf : '') })
+        \ 'args': (g:syntastic_javascript_eslint_conf != '' ?
+        \       '--config ' . syntastic#util#shexpand(g:syntastic_javascript_eslint_conf) : '') })
 
     let errorformat =
         \ '%E%f: line %l\, col %c\, Error - %m'
