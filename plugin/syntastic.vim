@@ -506,7 +506,7 @@ endfunction " }}}2
 function! s:skipFile() " {{{2
     let force_skip = exists('b:syntastic_skip_checks') ? b:syntastic_skip_checks : 0
     let fname = expand('%')
-    return force_skip || (&buftype != '') || !filereadable(fname) || getwinvar(0, '&diff') || s:ignoreFile(fname)
+    return force_skip || (&buftype != '') || getwinvar(0, '&diff') || s:ignoreFile(fname)
 endfunction " }}}2
 
 " Take a list of errors and add default values to them from a:options
