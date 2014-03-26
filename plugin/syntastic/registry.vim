@@ -11,6 +11,7 @@ let s:defaultCheckers = {
         \ 'applescript': ['osacompile'],
         \ 'asciidoc':    ['asciidoc'],
         \ 'asm':         ['gcc'],
+        \ 'bro':         ['bro'],
         \ 'bemhtml':     ['bemhtmllint'],
         \ 'c':           ['gcc'],
         \ 'chef':        ['foodcritic'],
