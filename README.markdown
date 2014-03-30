@@ -248,5 +248,5 @@ a look at [jedi-vim][7], [python-mode][8], or [YouCompleteMe][9].
 [6]: http://stackoverflow.com/questions/tagged/syntastic
 [7]: https://github.com/davidhalter/jedi-vim
 [8]: https://github.com/klen/python-mode
-[9]: https://github.com/Valloric/YouCompleteMe
+[9]: http://valloric.github.io/YouCompleteMe/
 [10]: http://perldoc.perl.org/perlrun.html#*-c*
