@@ -187,7 +187,7 @@ If |'syntastic_aggregate_errors'| is set, syntastic runs all checkers that
 apply (still cf. |syntastic-filetype-checkers|), then aggregates errors found
 by all checkers in a single list, and notifies you. In this mode each error
 message is labeled with the name of the checker that generated it, but you can
-disable these labels by unsetting '|syntastic_id_checkers|'.
+disable generation of these labels by turning off '|syntastic_id_checkers|'.
 
 ------------------------------------------------------------------------------
 2.6 Filtering errors                              *syntastic-filtering-errors*
