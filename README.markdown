@@ -43,7 +43,8 @@ LLVM intermediate language, Lua, MATLAB, NASM, Objective-C, Objective-C++,
 OCaml, Perl, Perl POD, PHP, gettext Portable Object, Puppet, Python, Racket,
 reStructuredText, Ruby, Rust, SASS/SCSS, Scala, Slim, Tcl, TeX, Texinfo, Twig,
 TypeScript, Vala, Verilog, VHDL, VimL, xHtml, XML, XSLT, YACC, YAML, z80, Zope
-page templates, and zsh.
+page templates, and zsh.  See the [wiki][3] for details about the corresponding
+supported checkers.
 
 Below is a screenshot showing the methods that Syntastic uses to display syntax
 errors.  Note that, in practise, you will only have a subset of these methods
