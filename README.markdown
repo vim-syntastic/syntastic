@@ -112,6 +112,8 @@ If you get an error when you do this, then you probably didn't install
 
 ## 3\. FAQ
 
+<a name="faqinfo"></a>
+
 __Q. I installed syntastic but it isn't reporting any errors...__
 
 A. The most likely reason is that none of the syntax checkers that it requires
@@ -126,6 +128,8 @@ error output for a syntax checker may have changed. In this case, make sure you
 have the latest version of the syntax checker installed. If it still fails then
 create an issue - or better yet, create a pull request.
 
+<a name="faqperl"></a>
+
 __Q. The `perl` checker has stopped working...__
 
 A. The `perl` checker runs `perl -c` against your file, which in turn
@@ -139,6 +143,8 @@ still producing useful results, the checker is now disabled by default.  To
 let g:syntastic_enable_perl_checker = 1
 ```
 
+<a name="faqloclist"></a>
+
 __Q. I run a checker and the location list is not updated...__
 
 A. By default the location list is changed only when you run the `:Errors`
@@ -148,6 +154,8 @@ your vimrc:
 ```vim
 let g:syntastic_always_populate_loc_list = 1
 ```
+
+<a name="faqargs"></a>
 
 __Q. How can I pass additional arguments to a checker?__
 
@@ -162,6 +170,8 @@ let g:syntastic_ruby_mri_args = "--my --args --here"
 ```
 
 See `:help syntastic-checker-options` for more information.
+
+<a name="faqcheckers"></a>
 
 __Q. Syntastic supports several checkers for my filetype - how do I tell it
 which one(s) to use?__
@@ -191,6 +201,8 @@ let g:syntastic_php_checkers = ['php', 'phpcs', 'phpmd']
 This is telling syntastic to run the `php` checker first, and if no errors are
 found, run `phpcs`, and then `phpmd`.
 
+<a name="faqlnext"></a>
+
 __Q. How can I jump between the different errors without using the location
 list at the bottom of the window?__
 
@@ -200,6 +212,8 @@ A. Vim provides several built in commands for this. See `:help :lnext` and
 If you use these commands a lot then you may want to add shortcut mappings to
 your vimrc, or install something like [unimpaired][2], which provides such
 mappings (among other things).
+
+<a name="faqstyle"></a>
 
 __Q. A syntax checker is giving me unwanted/strange style tips?__
 
@@ -214,6 +228,8 @@ messages you don't want to see. e.g. To turn off all style messages:
 let g:syntastic_quiet_messages = { "type": "style" }
 ```
 See `:help syntastic_quiet_messages` for details.
+
+<a name="faqbdelete"></a>
 
 __Q. The error window is closed automatically when I :quit the current buffer
 but not when I :bdelete it?__
