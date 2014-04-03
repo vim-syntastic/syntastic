@@ -40,7 +40,7 @@ CoffeeScript, Coco, Coq, CSS, Cucumber, CUDA, D, Dart, DocBook, Dust, Elixir,
 Erlang, eRuby, Fortran, Gentoo metadata, GLSL, Go, Haml, Haskell, Haxe,
 Handlebars, HSS, HTML, Java, JavaScript, JSON, JSX, LESS, Lex, Limbo, LISP,
 LLVM intermediate language, Lua, MATLAB, NASM, Objective-C, Objective-C++,
-OCaml, Perl, Perl POD, PHP, gettext Portable Object, Puppet, Python, Racket,
+OCaml, Perl, Perl POD, PHP, gettext Portable Object, Puppet, Python, Racket, R,
 reStructuredText, Ruby, Rust, SASS/SCSS, Scala, Slim, Tcl, TeX, Texinfo, Twig,
 TypeScript, Vala, Verilog, VHDL, VimL, xHtml, XML, XSLT, YACC, YAML, z80, Zope
 page templates, and zsh.  See the [wiki][3] for details about the corresponding
