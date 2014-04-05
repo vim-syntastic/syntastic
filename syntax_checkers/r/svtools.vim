@@ -9,6 +9,16 @@
 "             See http://sam.zoy.org/wtfpl/COPYING for more details.
 "
 "============================================================================
+"
+" Security:
+"
+" This checker runs the code in your file.  This is probably fine if you
+" wrote the file yourself, but it can be a problem if you're trying to
+" check third party files.  If you are 100% willing to let Vim run the
+" code in your file, set g:syntastic_enable_r_svtools_checker to 1 in
+" your vimrc to enable this checker:
+"
+"   let g:syntastic_enable_r_svtools_checker = 1
 
 if exists("g:loaded_syntastic_r_svtools_checker")
     finish
@@ -36,6 +46,11 @@ function! SyntaxCheckers_r_svtools_IsAvailable() dict
 endfunction
 
 function! SyntaxCheckers_r_svtools_GetLocList() dict
+    if !exists('g:syntastic_enable_r_svtools_checker') || !g:syntastic_enable_r_svtools_checker
+        call syntastic#log#error('checker r/svtools: checks disabled for security reasons; set g:syntastic_enable_r_svtools_checker to 1 to override')
+        return []
+    endif
+
     let makeprg = self.getExecEscaped() . ' --slave --restore --no-save' .
         \ ' -e ' . syntastic#util#shescape('library(svTools); ' .
         \       'try(lint(commandArgs(TRUE), filename = commandArgs(TRUE), type = "flat", sep = ":"))') .
