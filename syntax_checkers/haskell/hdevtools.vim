@@ -21,6 +21,7 @@ set cpo&vim
 function! SyntaxCheckers_haskell_hdevtools_GetLocList() dict
     let makeprg = self.makeprgBuild({
         \ 'exe': self.getExecEscaped() . ' check',
+        \ 'fname': syntastic#util#shexpand('%:p'),
         \ 'args': get(g:, 'hdevtools_options', '') })
 
     let errorformat= '\%-Z\ %#,'.
