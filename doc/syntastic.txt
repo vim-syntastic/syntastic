@@ -40,6 +40,7 @@ CONTENTS                                                  *syntastic-contents*
         6.3.Interaction with the fish shell........|syntastic-fish|
         6.4.Using syntastic with the fizsh shell...|syntastic-fizsh|
         6.5.Interaction with Eclim.................|syntastic-eclim|
+        6.6.Interaction with vim-virtualenv........|syntastic-vim-virtualenv|
     7.About........................................|syntastic-about|
     8.License......................................|syntastic-license|
 
@@ -672,6 +673,14 @@ with the 'Eclim' Vim plugin (see http://eclim.org/). However, at the time of
 this writing there are several reports that 'Eclim' triggers a bug in Vim that
 makes syntastic forget some of its configuration parameters. No solutions or
 workarounds are known for now.
+
+------------------------------------------------------------------------------
+6.6. Interaction with vim-virtualenv                *syntastic-vim-virtualenv*
+
+At the time of this writing, syntastic can't run checkers installed
+in Python virtual environments activated by 'vim-virtualenv' (see
+https://github.com/jmcantrell/vim-virtualenv).  This is a limitation of
+'vim-virtualenv'.
 
 ==============================================================================
 7. About                                                     *syntastic-about*
