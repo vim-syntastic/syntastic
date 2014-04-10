@@ -18,13 +18,14 @@ function! SyntaxCheckers_haskell_hlint_GetLocList() dict
         \ 'fname': syntastic#util#shexpand('%:p')})
 
     let errorformat =
-        \ '%E%f:%l:%c: Error: %m,' .
-        \ '%W%f:%l:%c: Warning: %m,' .
+        \ '%E%f:%l:%v: Error: %m,' .
+        \ '%W%f:%l:%v: Warning: %m,' .
         \ '%C%m'
 
     return SyntasticMake({
         \ 'makeprg': makeprg,
         \ 'errorformat': errorformat,
+        \ 'defaults': {'vcol': 1},
         \ 'postprocess': ['compressWhitespace'] })
 endfunction
 
