@@ -21,6 +21,8 @@
 "
 " - g:syntastic_cpp_cpplint_args (string; default: '--verbose=3')
 "   command line options to pass to cpplint
+" - g:syntastic_cpp_cpplint (string; default: 'cpplint.py')
+"   command to execute cpplinter
 
 if exists("g:loaded_syntastic_cpp_cpplint_checker")
     finish
@@ -31,8 +33,16 @@ if !exists('g:syntastic_cpp_cpplint_thres')
     let g:syntastic_cpp_cpplint_thres = 5
 endif
 
+if !exists('g:syntastic_cpp_cpplint')
+    let g:syntastic_cpp_cpplint = 'cpplint.py'
+endif
+
 let s:save_cpo = &cpo
 set cpo&vim
+
+function! SyntaxCheckers_cpp_cpplint_IsAvailable() dict
+    return executable(expand(g:syntastic_cpp_cpplint))
+endfunction
 
 function! SyntaxCheckers_cpp_cpplint_GetLocList() dict
     let makeprg = self.makeprgBuild({ 'args': '--verbose=3' })
@@ -56,7 +66,7 @@ endfunction
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'cpp',
     \ 'name': 'cpplint',
-    \ 'exec': 'cpplint.py'})
+    \ 'exec': g:syntastic_cpp_cpplint})
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
