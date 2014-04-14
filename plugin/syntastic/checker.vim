@@ -77,15 +77,18 @@ endfunction " }}}2
 
 function! g:SyntasticChecker.makeprgBuild(opts) " {{{2
     let basename = self._filetype . '_' . self._name . '_'
+    let tempfile = tempname()
+    silent execute ": w " . tempfile
 
     let parts = []
     call extend(parts, self._getOpt(a:opts, basename, 'exe', self.getExecEscaped()))
     call extend(parts, self._getOpt(a:opts, basename, 'args', ''))
-    call extend(parts, self._getOpt(a:opts, basename, 'fname', syntastic#util#shexpand('%')))
+    call extend(parts, self._getOpt(a:opts, basename, 'fname', tempfile))
     call extend(parts, self._getOpt(a:opts, basename, 'post_args', ''))
     call extend(parts, self._getOpt(a:opts, basename, 'tail', ''))
 
-    return join(parts)
+
+    return join(parts) . "|perl -pe 's#^" . tempfile . '#' . expand('%') . "#'"
 endfunction " }}}2
 
 function! g:SyntasticChecker.isAvailable() " {{{2
