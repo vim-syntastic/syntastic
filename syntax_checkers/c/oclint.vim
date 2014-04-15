@@ -30,7 +30,6 @@ set cpo&vim
 
 function! SyntaxCheckers_c_oclint_GetLocList() dict
     let makeprg = self.makeprgBuild({
-        \ 'args_after': '-text',
         \ 'post_args_before': '-- -c ' . syntastic#c#ReadConfig(g:syntastic_oclint_config_file) })
 
     let errorformat =
