@@ -38,12 +38,13 @@ function! SyntaxCheckers_javascript_eslint_GetLocList() dict
 
     let loclist = SyntasticMake({
         \ 'makeprg': makeprg,
-        \ 'errorformat': errorformat,
-        \ 'postprocess': ['sort'] })
+        \ 'errorformat': errorformat })
 
     for e in loclist
         let e['col'] += 1
     endfor
+
+    call self.setWantSort(1)
 
     return loclist
 endfunction

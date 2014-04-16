@@ -52,7 +52,6 @@ function! SyntaxCheckers_r_lint_GetLocList() dict
         \ 'errorformat': errorformat,
         \ 'subtype': 'Style',
         \ 'preprocess': 'rparse',
-        \ 'postprocess': ['sort'],
         \ 'returns': [0] })
 
     for e in loclist
@@ -62,6 +61,8 @@ function! SyntaxCheckers_r_lint_GetLocList() dict
             call remove(e, 'subtype')
         endif
     endfor
+
+    call self.setWantSort(1)
 
     return loclist
 endfunction

@@ -23,11 +23,14 @@ function! SyntaxCheckers_haskell_scan_GetLocList() dict
 
     let errorformat = '%f:%l:%v: %m'
 
-    return SyntasticMake({
+    let loclist = SyntasticMake({
         \ 'makeprg': makeprg,
         \ 'errorformat': errorformat,
-        \ 'subtype': 'Style',
-        \ 'postprocess': ['sort'] })
+        \ 'subtype': 'Style' })
+
+    call self.setWantSort(1)
+
+    return loclist
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
