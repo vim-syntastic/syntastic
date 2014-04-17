@@ -10,7 +10,15 @@
 "
 "============================================================================
 "
-" Checker option:
+" Note: if you need to check HTML5 sources, you might consider installing a
+" fork of HTML Tidy, named "HTML Tidy for HTML5":
+"
+"   http://w3c.github.io/tidy-html5/
+"
+" HTML Tidy for HTML5 can be used without changes by this checker, just install
+" it and point g:syntastic_html_tidy_exec to the executable.
+"
+" Checker options:
 "
 " - g:syntastic_html_tidy_ignore_errors (list; default: [])
 "   list of errors to ignore
