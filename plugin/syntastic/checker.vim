@@ -132,7 +132,8 @@ function! g:SyntasticChecker._quietMessages(errors) " {{{2
 endfunction " }}}2
 
 function! g:SyntasticChecker._sortMessages(errors) " {{{2
-    if self._sort
+    " don't sort now if we're going to sort the aggregated list later
+    if self._sort && !(syntastic#util#var('aggregate_errors') && syntastic#util#var('sort_aggregated_errors'))
         call syntastic#util#sortLoclist(a:errors)
         call syntastic#log#debug(g:SyntasticDebugLoclist, 'sorted:', a:errors)
     endif

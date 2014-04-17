@@ -190,6 +190,11 @@ by all checkers in a single list, and notifies you. In this mode each error
 message is labeled with the name of the checker that generated it, but you can
 disable generation of these labels by turning off '|syntastic_id_checkers|'.
 
+If |'syntastic_sort_aggregated_errors'| is set (which is the default), messages
+in the aggregated list are grouped by file, then sorted by line number, then
+type, then column number.  Otherwise messages produced by the same checker are
+grouped together.
+
 ------------------------------------------------------------------------------
 2.6 Filtering errors                              *syntastic-filtering-errors*
 
@@ -280,6 +285,14 @@ a file with a composite filetype), it might not be immediately obvious which
 checker has produced a given error message. This variable instructs syntastic
 to label error messages with the names of the checkers that created them. >
     let g:syntastic_id_checkers = 0
+<
+                                          *'syntastic_sort_aggregated_errors'*
+Default: 1
+By default, when |syntastic_aggregate_errors| is enabled, errors are grouped
+by file, then sorted by line number, then grouped by type (namely, errors take
+precedence over warnings), then they are sorted by column number.  If you want
+to leave messages grouped by checker output, set this variable to 0. >
+    let g:syntastic_sort_aggregated_errors = 0
 <
                                               *'syntastic_echo_current_error'*
 Default: 1
