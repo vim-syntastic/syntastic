@@ -18,7 +18,7 @@ if has('reltime')
     let g:syntastic_start = reltime()
 endif
 
-let g:syntastic_version = '3.4.0-35'
+let g:syntastic_version = '3.4.0-36'
 
 " Sanity checks {{{1
 
