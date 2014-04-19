@@ -18,7 +18,7 @@ if has('reltime')
     let g:syntastic_start = reltime()
 endif
 
-let g:syntastic_version = '3.4.0-34'
+let g:syntastic_version = '3.4.0-35'
 
 " Sanity checks {{{1
 
@@ -296,8 +296,8 @@ function! s:CacheErrors(checker_names) " {{{2
         " }}}3
 
         let filetypes = s:resolveFiletypes()
-        let aggregate_errors = syntastic#util#var('aggregate_errors')
-        let decorate_errors = (aggregate_errors || len(filetypes) > 1) && syntastic#util#var('id_checkers')
+        let aggregate_errors = syntastic#util#var('aggregate_errors') || len(filetypes) > 1
+        let decorate_errors = aggregate_errors && syntastic#util#var('id_checkers')
         let sort_aggregated_errors = aggregate_errors && syntastic#util#var('sort_aggregated_errors')
 
         let clist = []
@@ -317,6 +317,10 @@ function! s:CacheErrors(checker_names) " {{{2
                     call loclist.decorate(cname)
                 endif
                 call add(names, cname)
+                if checker.getWantSort() && !sort_aggregated_errors
+                    call loclist.sort()
+                    call syntastic#log#debug(g:SyntasticDebugLoclist, 'sorted:', loclist)
+                endif
 
                 let newLoclist = newLoclist.extend(loclist)
 

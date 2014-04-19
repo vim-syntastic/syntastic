@@ -288,10 +288,12 @@ to label error messages with the names of the checkers that created them. >
 <
                                           *'syntastic_sort_aggregated_errors'*
 Default: 1
-By default, when |syntastic_aggregate_errors| is enabled, errors are grouped
-by file, then sorted by line number, then grouped by type (namely, errors take
-precedence over warnings), then they are sorted by column number.  If you want
-to leave messages grouped by checker output, set this variable to 0. >
+By default, when results from multiple checkers are aggregated in a single
+error list (that is either when |syntastic_aggregate_errors| is enabled, or
+when checking a file with a composite filetype), errors are grouped by file,
+then sorted by line number, then grouped by type (namely errors take precedence
+over warnings), then they are sorted by column number.  If you want to leave
+messages grouped by checker output, set this variable to 0. >
     let g:syntastic_sort_aggregated_errors = 0
 <
                                               *'syntastic_echo_current_error'*
