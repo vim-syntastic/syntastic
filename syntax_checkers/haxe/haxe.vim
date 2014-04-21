@@ -40,7 +40,7 @@ function! SyntaxCheckers_haxe_haxe_GetLocList() dict
             \ 'cwd': fnamemodify(hxml, ':h') })
 
         for e in loclist
-            let e['hl'] = '\%>' . e['col'] . 'c\%<' . (e['nr'] + 1) . 'c'
+            let e['hl'] = '\%>' . e['col'] . 'c.*\%<' . (e['nr'] + 1) . 'c'
             let e['col'] += 1
             let e['nr'] = 0
         endfor

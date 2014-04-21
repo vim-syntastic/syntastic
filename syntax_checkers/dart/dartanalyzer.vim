@@ -21,7 +21,7 @@ function! SyntaxCheckers_dart_dartanalyzer_GetHighlightRegex(error)
     if a:error['len']
         let lcol = a:error['col'] - 1
         let rcol = a:error['col'] + a:error['len']
-        let ret = '\%>' . lcol . 'c\%<' . rcol . 'c'
+        let ret = '\%>' . lcol . 'c.*\%<' . rcol . 'c'
     else
         let ret = ''
     endif
