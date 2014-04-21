@@ -12,18 +12,24 @@ let g:loaded_syntastic_typescript_tslint_checker = 1
 let s:save_cpo = &cpo
 set cpo&vim
 
+function! SyntaxCheckers_typescript_tslint_GetHighlightRegex(item)
+    let term = matchstr(a:item['text'], "\\m\\s'\\zs.\\{-}\\ze'\\s")
+    return term != '' ? '\V' . escape(term, '\') : ''
+endfunction
+
 function! SyntaxCheckers_typescript_tslint_GetLocList() dict
     let makeprg = self.makeprgBuild({
-        \ 'args': '--format prose',
-        \ 'args_after': ' -f' })
+        \ 'args_after': '--format verbose',
+        \ 'fname_before': '-f' })
 
-    " Eg. ts/app.ts[12, 36]: comment must start with lowercase letter
+    " (comment-format) ts/app.ts[12, 36]: comment must start with lowercase letter
     let errorformat = '%f[%l\, %c]: %m'
 
     let loclist = SyntasticMake({
         \ 'makeprg': makeprg,
         \ 'errorformat': errorformat,
-        \ 'defaults': {'bufnr': bufnr("")} })
+        \ 'preprocess': 'tslint',
+        \ 'returns': [0, 2] })
 
     call self.setWantSort(1)
 
