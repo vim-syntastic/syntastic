@@ -95,6 +95,10 @@ function! syntastic#preprocess#rparse(errors) " {{{2
     return out
 endfunction " }}}2
 
+function! syntastic#preprocess#tslint(errors) " {{{2
+    return map(copy(a:errors), 'substitute(v:val, ''\m^\(([^)]\+)\)\s\(.\+\)$'', ''\2 \1'', "")')
+endfunction " }}}2
+
 function! syntastic#preprocess#validator(errors) " {{{2
     let out = []
     for e in a:errors
