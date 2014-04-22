@@ -18,7 +18,7 @@ if has('reltime')
     let g:syntastic_start = reltime()
 endif
 
-let g:syntastic_version = '3.4.0-42'
+let g:syntastic_version = '3.4.0-43'
 
 " Sanity checks {{{1
 
@@ -215,7 +215,7 @@ function! s:BufEnterHook() " {{{2
     let loclist = filter(getloclist(0), 'v:val["valid"] == 1')
     let buffers = syntastic#util#unique(map( loclist, 'v:val["bufnr"]' ))
     if &buftype == 'quickfix' && !empty(loclist) && empty(filter( buffers, 'syntastic#util#bufIsActive(v:val)' ))
-        call g:SyntasticLoclistHide()
+        call SyntasticLoclistHide()
     endif
 endfunction " }}}2
 
@@ -223,7 +223,7 @@ function! s:QuitPreHook() " {{{2
     call syntastic#log#debug(g:SyntasticDebugAutocommands,
         \ 'autocmd: QuitPre, buffer ' . bufnr("") . ' = ' . string(bufname(str2nr(bufnr("")))))
     let b:syntastic_skip_checks = !g:syntastic_check_on_wq
-    call g:SyntasticLoclistHide()
+    call SyntasticLoclistHide()
 endfunction " }}}2
 
 " }}}1
