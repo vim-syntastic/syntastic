@@ -113,6 +113,7 @@ function! s:isDebugEnabled_dumb(level) " {{{2
 endfunction " }}}2
 
 let s:isDebugEnabled = function(exists('*and') ? 's:isDebugEnabled_smart' : 's:isDebugEnabled_dumb')
+lockvar s:isDebugEnabled
 
 function! s:logRedirect(on) " {{{2
     if exists("g:syntastic_debug_file")
@@ -138,6 +139,7 @@ function! s:logTimestamp_dumb() " {{{2
 endfunction " }}}2
 
 let s:logTimestamp = function(has('reltime') ? 's:logTimestamp_smart' : 's:logTimestamp_dumb')
+lockvar s:logTimestamp
 
 function! s:formatVariable(name) " {{{2
     let vals = []

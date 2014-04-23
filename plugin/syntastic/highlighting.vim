@@ -5,6 +5,7 @@ let g:loaded_syntastic_notifier_highlighting = 1
 
 " Highlighting requires getmatches introduced in 7.1.040
 let s:has_highlighting = v:version > 701 || (v:version == 701 && has('patch040'))
+lockvar s:has_highlighting
 
 let g:SyntasticHighlightingNotifier = {}
 
@@ -18,6 +19,7 @@ function! g:SyntasticHighlightingNotifier.New() " {{{2
     if !s:setup_done
         call self._setup()
         let s:setup_done = 1
+        lockvar s:setup_done
     endif
 
     return newObj
