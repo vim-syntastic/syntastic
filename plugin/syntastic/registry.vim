@@ -89,12 +89,14 @@ let s:defaultCheckers = {
         \ 'zpt':         ['zptlint'],
         \ 'zsh':         ['zsh', 'shellcheck']
     \ }
+lockvar! s:defaultCheckers
 
 let s:defaultFiletypeMap = {
         \ 'gentoo-metadata': 'xml',
         \ 'lhaskell': 'haskell',
         \ 'litcoffee': 'coffee'
     \ }
+lockvar! s:defaultFiletypeMap
 
 let g:SyntasticRegistry = {}
 

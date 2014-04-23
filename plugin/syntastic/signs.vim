@@ -25,6 +25,7 @@ function! g:SyntasticSignsNotifier.New() " {{{2
     if !s:setup_done
         call self._setup()
         let s:setup_done = 1
+        lockvar s:setup_done
     endif
 
     return newObj
@@ -41,7 +42,7 @@ function! g:SyntasticSignsNotifier.refresh(loclist) " {{{2
         call self._signErrors(a:loclist)
     endif
     call self._removeSigns(old_signs)
-    let s:first_sign_id = s:next_sign_id
+    let s:first_sign_id = exists('s:next_sign_id') ? s:next_sign_id : 5000
 endfunction " }}}2
 
 " }}}1
