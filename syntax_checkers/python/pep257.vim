@@ -14,7 +14,8 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 function! SyntaxCheckers_python_pep257_GetLocList() dict
-    let makeprg = self.makeprgBuild({})
+    let makeprg = self.makeprgBuild({
+        \ 'exe_before': (syntastic#util#isRunningWindows() ? '' : 'TERM=dumb') })
 
     let errorformat =
         \ '%E%f:%l:%c%\%.%\%.%\d%\+:%\d%\+: %m,' .
