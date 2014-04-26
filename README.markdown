@@ -77,7 +77,7 @@ install syntastic.  Do this in your terminal so that you get the `pathogen.vim`
 file and the directories it needs:
 ```sh
 mkdir -p ~/.vim/autoload ~/.vim/bundle; \
-curl -so ~/.vim/autoload/pathogen.vim \
+curl -LSso ~/.vim/autoload/pathogen.vim \
     https://raw.github.com/tpope/vim-pathogen/master/autoload/pathogen.vim
 ```
 Next you *need* to add this to your `~/.vimrc`:
@@ -272,8 +272,10 @@ cabbrev <silent> bd lclose\|bdelete
 ## 4\. Other resources
 
 The preferred place for posting suggestions, reporting bugs, and general
-discussions related to syntastic is the [issue tracker at GitHub][4].  There
-are also a [google group][5], and a [syntastic tag at StackOverflow][6].
+discussions related to syntastic is the [issue tracker at GitHub][4].
+A guide for writing syntax checkers can be found in the [wiki][11].
+There are also a dedicated [google group][5], and a
+[syntastic tag at StackOverflow][6].
 
 Syntastic aims to provide a common interface to syntax checkers for as many
 languages as possible.  For particular languages, there are, of course, other
@@ -291,3 +293,4 @@ a look at [jedi-vim][7], [python-mode][8], or [YouCompleteMe][9].
 [8]: https://github.com/klen/python-mode
 [9]: http://valloric.github.io/YouCompleteMe/
 [10]: http://perldoc.perl.org/perlrun.html#*-c*
+[11]: https://github.com/scrooloose/syntastic/wiki/Syntax-Checker-Guide
