@@ -19,7 +19,7 @@ if has('reltime')
     lockvar! g:syntastic_start
 endif
 
-let g:syntastic_version = '3.4.0-53'
+let g:syntastic_version = '3.4.0-54'
 lockvar g:syntastic_version
 
 " Sanity checks {{{1
@@ -224,8 +224,9 @@ function! s:BufEnterHook() " {{{2
         \ 'autocmd: BufEnter, buffer ' . bufnr("") . ' = ' . string(bufname(str2nr(bufnr("")))) .
         \ ', &buftype = ' . string(&buftype))
     " TODO: at this point there is no b:syntastic_loclist
-    let loclist = filter(getloclist(0), 'v:val["valid"] == 1')
-    let buffers = syntastic#util#unique(map( loclist, 'v:val["bufnr"]' ))
+    let loclist = filter(copy(getloclist(0)), 'v:val["valid"] == 1')
+    let owner = str2nr(getbufvar(bufnr(""), 'syntastic_owner_buffer'))
+    let buffers = syntastic#util#unique(map(loclist, 'v:val["bufnr"]') + (owner ? [owner] : []))
     if &buftype == 'quickfix' && !empty(loclist) && empty(filter( buffers, 'syntastic#util#bufIsActive(v:val)' ))
         call SyntasticLoclistHide()
     endif
@@ -290,7 +291,7 @@ endfunction " }}}2
 "clear the loc list for the buffer
 function! s:ClearCache() " {{{2
     call s:notifiers.reset(g:SyntasticLoclist.current())
-    unlet! b:syntastic_loclist
+    call b:syntastic_loclist.destroy()
 endfunction " }}}2
 
 "detect and cache all syntax errors in this buffer
@@ -376,7 +377,8 @@ function! s:CacheErrors(checker_names) " {{{2
         endif
     endif
 
-    let b:syntastic_loclist = newLoclist
+    call newLoclist.setOwner(bufnr(''))
+    call newLoclist.deploy()
 endfunction " }}}2
 
 function! s:ToggleMode() " {{{2
