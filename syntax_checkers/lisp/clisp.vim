@@ -20,7 +20,9 @@ set cpo&vim
 
 function! SyntaxCheckers_lisp_clisp_GetLocList() dict
     let makeprg = self.makeprgBuild({
-        \ 'args_after': '-q -c ' . syntastic#c#NullOutput() })
+        \ 'args_after': '-q',
+        \ 'fname_before': '-c',
+        \ 'fname_after': syntastic#c#NullOutput() })
 
     let errorformat  =
         \ '%-G;%.%#,' .
