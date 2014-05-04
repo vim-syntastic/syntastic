@@ -1,4 +1,14 @@
-# Bug reports / GitHub issues
+# CONTRIBUTING
+- - -
+1\. [Bug reports / GitHub issues](#bugreps)  
+2\. [Submitting a patch](#patches)  
+3\. [General style notes](#generalstyle)  
+4\. [Syntax checker notes](#checkerstyle)  
+- - -
+
+<a name="bugreps"></a>
+
+## 1. Bug reports / GitHub issues
 
 Please note that the preferred channel for posting bug reports is the
 [issue tracker at GitHub][0].  Reports posted elsewhere are less likely
@@ -16,15 +26,17 @@ When creating a new issue be sure to state the following:
 * the version of syntastic you are using (see `:SyntasticInfo`).
 
 For syntax checker bugs also state the version of the checker executable
-that you are using.  Additional debugging information is typically
-useful too:
+that you are using.  Adding debugging information is typically useful
+too:
 
 * open a file handled by your checker;
 * set `g:syntastic_debug` to 1 or 3;
 * run the checker;
-* look at the output of `:mes`.
+* copy the output of `:mes`.
 
-# Submitting a patch
+<a name="patches"></a>
+
+## 2. Submitting a patch
 
 Before you consider adding features to syntastic, _please_ spend a few
 minutes (re-)reading the latest version of the [manual][1].  Syntastic
@@ -45,7 +57,9 @@ Create an issue and explain your plan and see what we say.
 Also make sure to update the manual whenever applicable.  Nobody can use
 features that aren't documented.
 
-# General style notes
+<a name="generalstyle"></a>
+
+## 3. General style notes
 
 Follow the coding conventions/styles used in the syntastic core:
 
@@ -58,7 +72,9 @@ almost never);
 lines longer and have (for example) some [explaining variables][4] to
 aid readability.
 
-# Syntax checker notes
+<a name="checkerstyle"></a>
+
+## 4. Syntax checker notes
 
 Make sure to read the [guide][5] if you plan to add new syntax checkers.
 
