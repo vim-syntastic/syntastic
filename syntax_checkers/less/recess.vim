@@ -16,12 +16,16 @@ if exists('g:loaded_syntastic_less_recess_checker')
 endif
 let g:loaded_syntastic_less_recess_checker = 1
 
+if !exists('g:syntastic_less_recess_args')
+    let g:syntastic_less_recess_args = '--format=compact --stripColors'
+endif
+
 let s:save_cpo = &cpo
 set cpo&vim
 
 function! SyntaxCheckers_less_recess_GetLocList() dict
     let makeprg = self.makeprgBuild({
-        \ 'post_args_after': '--format=compact --stripColors' })
+        \ 'post_args_after': g:syntastic_less_recess_args })
 
     let errorformat =
         \ '%E%m in %f,' .
