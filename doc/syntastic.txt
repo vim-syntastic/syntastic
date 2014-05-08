@@ -94,7 +94,7 @@ Syntax checking can be done automatically or on demand (see
 |'syntastic_mode_map'| and |:SyntasticToggleMode| for configuring this).
 
 When syntax checking is done, the features below can be used to notify the
-user of errors. See |syntastic-options| for how to configure and
+user of errors. See |syntastic-global-options| for how to configure and
 activate/deactivate these features.
 
     * A statusline flag
