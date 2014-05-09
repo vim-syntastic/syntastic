@@ -19,18 +19,20 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 function! SyntaxCheckers_bro_bro_IsAvailable() dict
-    return system('bro --help') =~ '--parse-only'
+    return system(self.getExecEscaped() . ' --help') =~# '--parse-only'
 endfunction
 
 function! SyntaxCheckers_bro_bro_GetLocList() dict
-    let makeprg = self.makeprgBuild({ 'exe': 'bro', 'args_before': '--parse-only' })
+    let makeprg = self.makeprgBuild({ 'args_before': '--parse-only' })
 
     "example: error in ./foo.bro, line 3: unknown identifier banana, at or "near "banana"
-    let errorformat = '%Eerror in %f\, line %l: %m,' .
-                    \ '%Wwarning in %f\, line %l: %m'
+    let errorformat =
+        \ '%trror in %f\, line %l: %m,' .
+        \ '%tarning in %f\, line %l: %m'
 
-
-    return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
+    return SyntasticMake({
+        \ 'makeprg': makeprg,
+        \ 'errorformat': errorformat })
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
