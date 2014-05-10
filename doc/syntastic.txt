@@ -84,7 +84,7 @@ see |syntastic-checker-options| for details. You can also change the arguments
 passed to a specific checker as well.
 
 Use |:SyntasticCheck| to manually check right now. Use |:SyntasticToggleMode|
-to switch between active (checking on writting the buffer) and passive (manual)
+to switch between active (checking on writing the buffer) and passive (manual)
 checking.
 
 ==============================================================================
