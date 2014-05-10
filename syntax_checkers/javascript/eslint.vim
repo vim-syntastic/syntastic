@@ -23,8 +23,8 @@ set cpo&vim
 
 function! SyntaxCheckers_javascript_eslint_IsAvailable() dict
     return
-        \ executable('eslint') &&
-        \ syntastic#util#versionIsAtLeast(syntastic#util#getVersion('eslint --version'), [0, 1])
+        \ executable(self.getExec()) &&
+        \ syntastic#util#versionIsAtLeast(syntastic#util#getVersion(self.getExecEscaped() . ' --version'), [0, 1])
 endfunction
 
 function! SyntaxCheckers_javascript_eslint_GetLocList() dict
