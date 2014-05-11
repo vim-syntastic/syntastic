@@ -170,6 +170,8 @@ and the SpellCap group is used for warnings. If you wish to customize the
 colors for highlighting you can use the following groups:
     SyntasticError - Links to 'SpellBad' by default
     SyntasticWarning - Links to 'SpellCap' by default
+    SyntasticStyleError - Links to SyntasticError by default
+    SyntasticStyleWarning - Links to SyntasticWarning by default
 
 Example: >
     highlight SyntasticError guibg=#2f0000
