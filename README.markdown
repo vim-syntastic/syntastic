@@ -76,9 +76,8 @@ First I'll show you how to install Tim Pope's [pathogen][1] so that it's easy to
 install syntastic.  Do this in your terminal so that you get the `pathogen.vim`
 file and the directories it needs:
 ```sh
-mkdir -p ~/.vim/autoload ~/.vim/bundle; \
-curl -LSso ~/.vim/autoload/pathogen.vim \
-    https://raw.githubusercontent.com/tpope/vim-pathogen/master/autoload/pathogen.vim
+mkdir -p ~/.vim/autoload ~/.vim/bundle && \
+curl -LSso ~/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim
 ```
 Next you *need* to add this to your `~/.vimrc`:
 ```vim
@@ -92,7 +91,7 @@ execute pathogen#infect()
 You now have pathogen installed and can put syntastic into `~/.vim/bundle` like
 this:
 ```sh
-cd ~/.vim/bundle
+cd ~/.vim/bundle && \
 git clone https://github.com/scrooloose/syntastic.git
 ```
 Quit vim and start it back up to reload it, then type:
