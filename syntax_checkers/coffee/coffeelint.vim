@@ -15,6 +15,10 @@ if exists("g:loaded_syntastic_coffee_coffeelint_checker")
 endif
 let g:loaded_syntastic_coffee_coffeelint_checker = 1
 
+if !exists('g:syntastic_coffeelint_conf')
+    let g:syntastic_coffeelint_conf = ''
+endif
+
 let s:save_cpo = &cpo
 set cpo&vim
 
@@ -23,7 +27,10 @@ function! SyntaxCheckers_coffee_coffeelint_GetLocList() dict
         let s:coffeelint_new = syntastic#util#versionIsAtLeast(syntastic#util#getVersion(
             \ self.getExecEscaped() . ' --version'), [1, 4])
     endif
-    let makeprg = self.makeprgBuild({ 'args_after': (s:coffeelint_new ? '--reporter csv' : '--csv') })
+    let makeprg = self.makeprgBuild({
+                \ 'args': (g:syntastic_coffeelint_conf != '' ?
+                \       '--file ' . syntastic#util#shexpand(g:syntastic_coffeelint_conf) : ''),
+                \ 'args_after': (s:coffeelint_new ? '--reporter csv' : '--csv') })
 
     let errorformat =
         \ '%f\,%l\,%\d%#\,%trror\,%m,' .
