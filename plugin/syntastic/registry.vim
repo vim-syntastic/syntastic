@@ -14,6 +14,7 @@ let s:defaultCheckers = {
         \ 'bro':         ['bro'],
         \ 'bemhtml':     ['bemhtmllint'],
         \ 'c':           ['gcc'],
+        \ 'cabal':       ['cabal'],
         \ 'chef':        ['foodcritic'],
         \ 'co':          ['coco'],
         \ 'cobol':       ['cobc'],

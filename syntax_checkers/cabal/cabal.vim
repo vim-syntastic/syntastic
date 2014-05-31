@@ -1,5 +1,5 @@
 "============================================================================
-"File:        check.vim
+"File:        cabal.vim
 "Description: Haskell package description (.cabal file) linting and syntax
 "             validation via 'cabal check'
 "Maintainer: Ian D. Bollinger <ian.bollinger@gmail.com>
@@ -10,41 +10,44 @@
 "            See http://sam.zoy.org/wtfpl/COPYING for more details.
 "============================================================================
 
-if exists('g:loaded_syntastic_cabal_check_checker')
+if exists('g:loaded_syntastic_cabal_cabal_checker')
     finish
 endif
-let g:loaded_syntastic_cabal_check_checker = 1
+let g:loaded_syntastic_cabal_cabal_checker = 1
 
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! SyntaxCheckers_cabal_check_GetHighlightRegex(item)
+function! SyntaxCheckers_cabal_cabal_GetHighlightRegex(item)
     let field = matchstr(a:item['text'], "\\vParse of field '\\zs[^']+")
     if field != ''
         return '\v\c^\s*' . field . '\s*:\s*\zs.*$'
     endif
+    let field = matchstr(a:item['text'], "\\v(^|\\s)'\\zs[^']+\\ze'")
+    if field != ''
+        return '\V\c\<' . escape(field, '\') . '\>'
+    endif
     return ''
 endfunction
 
-function! SyntaxCheckers_cabal_check_GetLocList() dict
-    let makeprg = self.makeprgBuild({'exe_after': 'check', 'fname': ''})
+function! SyntaxCheckers_cabal_cabal_GetLocList() dict
+    let makeprg = self.getExecEscaped() . ' check'
+
     let errorformat =
         \ '%Ecabal: %f:%l: %m,' .
-        \ '%W* %m,'
-    let old_pwd = getcwd()
-    execute 'cd ' . syntastic#util#shexpand('%:h')
-    let loclist = SyntasticMake({
+        \ '%W* %m'
+
+    return SyntasticMake({
         \ 'makeprg': makeprg,
         \ 'errorformat': errorformat,
-        \ 'defaults': {'bufnr': bufnr('%'), 'lnum': 1}})
-    execute 'cd ' . old_pwd
-    return loclist
+        \ 'cwd': expand('%:p:h'),
+        \ 'preprocess': 'cabal',
+        \ 'defaults': {'bufnr': bufnr('')} })
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'cabal',
-    \ 'name': 'check',
-    \ 'exec': 'cabal'})
+    \ 'name': 'cabal'})
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
