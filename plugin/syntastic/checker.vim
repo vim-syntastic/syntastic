@@ -98,7 +98,10 @@ function! g:SyntasticChecker.makeprgBuild(opts) " {{{2
 endfunction " }}}2
 
 function! g:SyntasticChecker.isAvailable() " {{{2
-    return self._isAvailableFunc()
+    if !has_key(self, '_available')
+        let self._available = self._isAvailableFunc()
+    endif
+    return self._available
 endfunction " }}}2
 
 " }}}1
