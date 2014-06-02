@@ -19,7 +19,7 @@ if has('reltime')
     lockvar! g:syntastic_start
 endif
 
-let g:syntastic_version = '3.4.0-75'
+let g:syntastic_version = '3.4.0-76'
 lockvar g:syntastic_version
 
 " Sanity checks {{{1
@@ -142,7 +142,7 @@ let s:modemap = g:SyntasticModeMap.Instance()
 function! s:CompleteCheckerName(argLead, cmdLine, cursorPos) " {{{2
     let checker_names = []
     for ft in s:resolveFiletypes()
-        call extend(checker_names, keys(s:registry.getCheckersMap(ft)))
+        call extend(checker_names, s:registry.getNamesOfAvailableCheckers(ft))
     endfor
     return join(checker_names, "\n")
 endfunction " }}}2
@@ -319,8 +319,15 @@ function! s:CacheErrors(checker_names) " {{{2
         endfor
 
         let names = []
+        let unavailable_checkers = 0
         for checker in clist
             let cname = checker.getFiletype() . '/' . checker.getName()
+            if !checker.isAvailable()
+                call syntastic#log#debug(g:SyntasticDebugTrace, 'CacheErrors: Checker ' . cname . ' is not available')
+                let unavailable_checkers += 1
+                continue
+            endif
+
             call syntastic#log#debug(g:SyntasticDebugTrace, 'CacheErrors: Invoking checker: ' . cname)
 
             let loclist = checker.getLocList()
@@ -357,7 +364,7 @@ function! s:CacheErrors(checker_names) " {{{2
         " }}}3
 
         " issue warning about no active checkers {{{3
-        if empty(clist)
+        if len(clist) == unavailable_checkers
             if !empty(a:checker_names)
                 if len(a:checker_names) == 1
                     call syntastic#log#warn('checker ' . a:checker_names[0] . ' is not available')
