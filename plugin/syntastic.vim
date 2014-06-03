@@ -398,6 +398,7 @@ endfunction " }}}2
 "
 "a:options can contain the following keys:
 "    'makeprg'
+"    'makeoutput'
 "    'errorformat'
 "
 "The corresponding options are set for the duration of the function call. They
@@ -433,11 +434,15 @@ function! SyntasticMake(options) " {{{2
         execute 'lcd ' . fnameescape(a:options['cwd'])
     endif
 
-    let $LC_MESSAGES = 'C'
-    let $LC_ALL = ''
-    let err_lines = split(system(a:options['makeprg']), "\n", 1)
-    let $LC_ALL = old_lc_all
-    let $LC_MESSAGES = old_lc_messages
+    if has_key(a:options, 'makeoutput')
+        let err_lines = a:options['makeoutput']
+    else
+        let $LC_MESSAGES = 'C'
+        let $LC_ALL = ''
+        let err_lines = split(system(a:options['makeprg']), "\n", 1)
+        let $LC_ALL = old_lc_all
+        let $LC_MESSAGES = old_lc_messages
+    endif
 
     call syntastic#log#debug(g:SyntasticDebugLoclist, 'checker output:', err_lines)
 
