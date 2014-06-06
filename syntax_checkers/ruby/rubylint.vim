@@ -20,7 +20,7 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 function! SyntaxCheckers_ruby_rubylint_GetLocList() dict
-    if !exists(s:rubylint_new)
+    if !exists('s:rubylint_new')
         let s:rubylint_new = syntastic#util#versionIsAtLeast(syntastic#util#getVersion(
             \ self.getExecEscaped() . ' --version'), [2])
     endif
