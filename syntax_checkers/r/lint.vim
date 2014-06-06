@@ -41,7 +41,7 @@ endfunction
 function! SyntaxCheckers_r_lint_GetLocList() dict
     let makeprg = self.getExecEscaped() . ' --slave --restore --no-save' .
         \ ' -e ' . syntastic#util#shescape('library(lint); try(lint(commandArgs(TRUE), ' . g:syntastic_r_lint_styles . '))') .
-        \ ' --args ' . syntastic#util#shexpand('%')
+        \ ' --args ' . syntastic#util#shexpand('%:p')
 
     let errorformat =
         \ '%t:%f:%l:%v: %m,' .

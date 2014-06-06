@@ -54,7 +54,7 @@ function! SyntaxCheckers_r_svtools_GetLocList() dict
     let makeprg = self.getExecEscaped() . ' --slave --restore --no-save' .
         \ ' -e ' . syntastic#util#shescape('library(svTools); ' .
         \       'try(lint(commandArgs(TRUE), filename = commandArgs(TRUE), type = "flat", sep = ":"))') .
-        \ ' --args ' . syntastic#util#shexpand('%')
+        \ ' --args ' . syntastic#util#shexpand('%:p')
 
     let errorformat =
         \ '%trror:%f:%\s%#%l:%\s%#%v:%m,' .
