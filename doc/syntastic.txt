@@ -598,7 +598,7 @@ Checkers that use 'makeprgBuild()' construct a 'makeprg' like this: >
                 \ 'tail': '> /tmp/output' })
 <
 The result is a 'makeprg' of the form: >
-    <exe> <args> <filename> <post_args> <tail>
+    <exe> <args> <fname> <post_args> <tail>
 <
                                         *'syntastic_<filetype>_<checker>_exe'*
 All arguments above are optional, and can be overridden by setting global
