@@ -142,6 +142,18 @@ still producing useful results, the checker is now disabled by default.  To
 let g:syntastic_enable_perl_checker = 1
 ```
 
+<a name="faqrust"></a>
+
+__Q. What happened to the `rustc` checker?__
+
+A. Sadly, it had to be [removed](https://github.com/scrooloose/syntastic/commit/1383c0f),
+since maintaining it in syntastic generated too much
+[controversy](https://github.com/scrooloose/syntastic/pull/1114#issuecomment-45945696).
+If you'd like to take over its maintenance as an external checker please read the
+[relevant section](https://github.com/scrooloose/syntastic/wiki/Syntax-Checker-Guide#external)
+in the wiki, and feel free to contact syntastic maintainers if you need
+further help.
+
 <a name="faqloclist"></a>
 
 __Q. I run a checker and the location list is not updated...__
