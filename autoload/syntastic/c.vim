@@ -17,7 +17,10 @@ endfunction " }}}2
 
 " read additional compiler flags from the given configuration file
 " the file format and its parsing mechanism is inspired by clang_complete
-function! syntastic#c#ReadConfig(file) " {{{2
+function! syntastic#c#ReadConfig(file, ...) " {{{2
+    " receive additional argument specifying flag
+    let flag = (a:0 > 0) ? a:1 : '-I'
+
     " search in the current file's directory upwards
     let config = findfile(a:file, '.;')
     if config == '' || !filereadable(config)
@@ -43,13 +46,13 @@ function! syntastic#c#ReadConfig(file) " {{{2
 
     let parameters = []
     for line in lines
-        let matches = matchstr(line, '\m\C^\s*-I\s*\zs.\+')
+        let matches = matchstr(line, '\m\C^\s*'.flag.'\s*\zs.\+')
         if matches != ''
             " this one looks like an absolute path
             if match(matches, '\m^\%(/\|\a:\)') != -1
-                call add(parameters, '-I' . matches)
+                call add(parameters, flag . matches)
             else
-                call add(parameters, '-I' . filepath . syntastic#util#Slash() . matches)
+                call add(parameters, flag . filepath . syntastic#util#Slash() . matches)
             endif
         else
             call add(parameters, line)

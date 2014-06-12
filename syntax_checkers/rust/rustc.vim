@@ -18,8 +18,14 @@ let g:loaded_syntastic_rust_rustc_checker = 1
 let s:save_cpo = &cpo
 set cpo&vim
 
+if !exists('g:syntastic_rustc_config_file')
+    let g:syntastic_rustc_config_file = '.syntastic_rustc_config'
+endif
+
 function! SyntaxCheckers_rust_rustc_GetLocList() dict
-    let makeprg = self.makeprgBuild({ 'args_after': '--no-trans' })
+    let makeprg = self.makeprgBuild({
+        \ 'args': syntastic#c#ReadConfig(g:syntastic_rustc_config_file, '-L'),
+        \ 'args_after': '--no-trans' })
 
     let errorformat  =
         \ '%E%f:%l:%c: %\d%#:%\d%# %.%\{-}error:%.%\{-} %m,'   .
