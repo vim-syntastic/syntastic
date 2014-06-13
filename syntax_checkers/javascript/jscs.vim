@@ -14,11 +14,18 @@ if exists("g:loaded_syntastic_javascript_jscs_checker")
 endif
 let g:loaded_syntastic_javascript_jscs_checker = 1
 
+if !exists('g:syntastic_javascript_jscs_conf')
+    let g:syntastic_javascript_jscs_conf = ''
+endif
+
 let s:save_cpo = &cpo
 set cpo&vim
 
 function! SyntaxCheckers_javascript_jscs_GetLocList() dict
-    let makeprg = self.makeprgBuild({ 'args_after': '--no-colors --reporter checkstyle' })
+    let makeprg = self.makeprgBuild({
+                \ 'args': (g:syntastic_javascript_jscs_conf != '' ?
+                \       '--config ' . syntastic#util#shexpand(g:syntastic_javascript_jscs_conf) : ''),
+                \ 'args_after': '--no-colors --reporter checkstyle' })
 
     let errorformat = '%f:%t:%l:%c:%m'
 
