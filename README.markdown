@@ -146,13 +146,9 @@ let g:syntastic_enable_perl_checker = 1
 
 __Q. What happened to the `rustc` checker?__
 
-A. Sadly, it had to be [removed](https://github.com/scrooloose/syntastic/commit/1383c0f),
-since maintaining it in syntastic generated too much
-[controversy](https://github.com/scrooloose/syntastic/pull/1114#issuecomment-45945696).
-If you'd like to take over its maintenance as an external checker please read the
-[relevant section](https://github.com/scrooloose/syntastic/wiki/Syntax-Checker-Guide#external)
-in the wiki, and feel free to contact syntastic maintainers if you need
-further help.
+A. It has been included in the [Rust compiler package][12].  If you have
+a recent version of the Rust compiler, the checker should be picked up
+automatically by syntastic.
 
 <a name="faqloclist"></a>
 
@@ -305,3 +301,4 @@ a look at [jedi-vim][7], [python-mode][8], or [YouCompleteMe][9].
 [9]: http://valloric.github.io/YouCompleteMe/
 [10]: http://perldoc.perl.org/perlrun.html#*-c*
 [11]: https://github.com/scrooloose/syntastic/wiki/Syntax-Checker-Guide
+[12]: https://github.com/rust-lang/rust/
