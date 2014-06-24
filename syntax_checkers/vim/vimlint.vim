@@ -81,7 +81,8 @@ endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'vim',
-    \ 'name': 'vimlint'})
+    \ 'name': 'vimlint',
+    \ 'exec': 'vim' })
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
