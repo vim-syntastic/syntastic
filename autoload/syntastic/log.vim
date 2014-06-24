@@ -6,7 +6,7 @@ let g:loaded_syntastic_log_autoload = 1
 let s:save_cpo = &cpo
 set cpo&vim
 
-let s:deprecation_notices_issued = []
+let s:one_time_notices_issued = []
 
 " Public functions {{{1
 
@@ -27,13 +27,35 @@ function! syntastic#log#error(msg) " {{{2
     echohl None
 endfunction " }}}2
 
-function! syntastic#log#deprecationWarn(msg) " {{{2
-    if index(s:deprecation_notices_issued, a:msg) >= 0
+function! syntastic#log#oneTimeWarn(msg) " {{{2
+    if index(s:one_time_notices_issued, a:msg) >= 0
         return
     endif
 
-    call add(s:deprecation_notices_issued, a:msg)
+    call add(s:one_time_notices_issued, a:msg)
     call syntastic#log#warn(a:msg)
+endfunction " }}}2
+
+function! syntastic#log#deprecationWarn(old, new, ...) " {{{2
+    if exists('g:syntastic_' . a:old) && !exists('g:syntastic_' . a:new)
+        let msg = 'variable g:syntastic_' . a:old . ' is deprecated, please use '
+
+        if a:0
+            let OLD_VAR = g:syntastic_{a:old}
+            try
+                let NEW_VAR = eval(a:1)
+                let msg .= 'in its stead: let g:syntastic_' . a:new . ' = ' . string(NEW_VAR)
+                let g:syntastic_{a:new} = NEW_VAR
+            catch
+                let msg .= 'g:syntastic_' . a:new . ' instead'
+            endtry
+        else
+            let msg .= 'g:syntastic_' . a:new . ' instead'
+            let g:syntastic_{a:new} = g:syntastic_{a:old}
+        endif
+
+        call syntastic#log#oneTimeWarn(msg)
+    endif
 endfunction " }}}2
 
 function! syntastic#log#debug(level, msg, ...) " {{{2

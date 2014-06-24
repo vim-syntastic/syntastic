@@ -19,7 +19,7 @@ if has('reltime')
     lockvar! g:syntastic_start
 endif
 
-let g:syntastic_version = '3.4.0-87'
+let g:syntastic_version = '3.4.0-88'
 lockvar g:syntastic_version
 
 " Sanity checks {{{1
@@ -84,7 +84,7 @@ for s:key in keys(g:syntastic_defaults)
 endfor
 
 if exists("g:syntastic_quiet_warnings")
-    call syntastic#log#deprecationWarn("variable g:syntastic_quiet_warnings is deprecated, please use let g:syntastic_quiet_messages = {'level': 'warnings'} instead")
+    call syntastic#log#oneTimeWarn("variable g:syntastic_quiet_warnings is deprecated, please use let g:syntastic_quiet_messages = {'level': 'warnings'} instead")
     if g:syntastic_quiet_warnings
         let s:quiet_warnings = get(g:syntastic_quiet_messages, 'type', [])
         if type(s:quiet_warnings) != type([])
