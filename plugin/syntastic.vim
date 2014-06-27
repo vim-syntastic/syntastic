@@ -19,7 +19,7 @@ if has('reltime')
     lockvar! g:syntastic_start
 endif
 
-let g:syntastic_version = '3.4.0-88'
+let g:syntastic_version = '3.4.0-89'
 lockvar g:syntastic_version
 
 " Sanity checks {{{1
@@ -181,11 +181,6 @@ command! SyntasticSetLoclist call g:SyntasticLoclist.current().setloclist()
 augroup syntastic
     autocmd BufReadPost * call s:BufReadPostHook()
     autocmd BufWritePost * call s:BufWritePostHook()
-
-    autocmd BufWinEnter * call s:BufWinEnterHook()
-
-    " TODO: the next autocmd should be "autocmd BufWinLeave * if &buftype == '' | lclose | endif"
-    " but in recent versions of Vim lclose can no longer be called from BufWinLeave
     autocmd BufEnter * call s:BufEnterHook()
 augroup END
 
@@ -210,25 +205,22 @@ function! s:BufWritePostHook() " {{{2
     call s:UpdateErrors(1)
 endfunction " }}}2
 
-function! s:BufWinEnterHook() " {{{2
-    call syntastic#log#debug(g:SyntasticDebugAutocommands,
-        \ 'autocmd: BufWinEnter, buffer ' . bufnr("") . ' = ' . string(bufname(str2nr(bufnr("")))) .
-        \ ', &buftype = ' . string(&buftype))
-    if &buftype == ''
-        call s:notifiers.refresh(g:SyntasticLoclist.current())
-    endif
-endfunction " }}}2
-
 function! s:BufEnterHook() " {{{2
     call syntastic#log#debug(g:SyntasticDebugAutocommands,
         \ 'autocmd: BufEnter, buffer ' . bufnr("") . ' = ' . string(bufname(str2nr(bufnr("")))) .
         \ ', &buftype = ' . string(&buftype))
-    " TODO: at this point there is no b:syntastic_loclist
-    let loclist = filter(copy(getloclist(0)), 'v:val["valid"] == 1')
-    let owner = str2nr(getbufvar(bufnr(""), 'syntastic_owner_buffer'))
-    let buffers = syntastic#util#unique(map(loclist, 'v:val["bufnr"]') + (owner ? [owner] : []))
-    if &buftype == 'quickfix' && !empty(loclist) && empty(filter( buffers, 'syntastic#util#bufIsActive(v:val)' ))
-        call SyntasticLoclistHide()
+    if &buftype == ''
+        call s:notifiers.refresh(g:SyntasticLoclist.current())
+    elseif &buftype == 'quickfix'
+        " TODO: this is needed because in recent versions of Vim lclose
+        " can no longer be called from BufWinLeave
+        " TODO: at this point there is no b:syntastic_loclist
+        let loclist = filter(copy(getloclist(0)), 'v:val["valid"] == 1')
+        let owner = str2nr(getbufvar(bufnr(""), 'syntastic_owner_buffer'))
+        let buffers = syntastic#util#unique(map(loclist, 'v:val["bufnr"]') + (owner ? [owner] : []))
+        if !empty(loclist) && empty(filter( buffers, 'syntastic#util#bufIsActive(v:val)' ))
+            call SyntasticLoclistHide()
+        endif
     endif
 endfunction " }}}2
 
