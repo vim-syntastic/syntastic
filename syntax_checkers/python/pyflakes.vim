@@ -26,14 +26,14 @@ function! SyntaxCheckers_python_pyflakes_GetHighlightRegex(i)
         \ || stridx(a:i['text'], 'shadowed by loop variable') >= 0
 
         " fun with Python's %r: try "..." first, then '...'
-        let terms =  split(a:i['text'], '"', 1)
-        if len(terms) > 2
-            return terms[1]
+        let term = matchstr(a:i['text'], '\m^.\{-}"\zs.\{-1,}\ze"')
+        if term != ''
+            return '\V\<' . escape(term, '\') . '\>'
         endif
 
-        let terms =  split(a:i['text'], "'", 1)
-        if len(terms) > 2
-            return terms[1]
+        let term = matchstr(a:i['text'], '\m^.\{-}''\zs.\{-1,}\ze''')
+        if term != ''
+            return '\V\<' . escape(term, '\') . '\>'
         endif
     endif
     return ''
