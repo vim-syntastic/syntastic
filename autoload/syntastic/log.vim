@@ -36,6 +36,7 @@ function! syntastic#log#oneTimeWarn(msg) " {{{2
     call syntastic#log#warn(a:msg)
 endfunction " }}}2
 
+" @vimlint(EVL102, 1, l:OLD_VAR)
 function! syntastic#log#deprecationWarn(old, new, ...) " {{{2
     if exists('g:syntastic_' . a:old) && !exists('g:syntastic_' . a:new)
         let msg = 'variable g:syntastic_' . a:old . ' is deprecated, please use '
@@ -57,6 +58,7 @@ function! syntastic#log#deprecationWarn(old, new, ...) " {{{2
         call syntastic#log#oneTimeWarn(msg)
     endif
 endfunction " }}}2
+" @vimlint(EVL102, 0, l:OLD_VAR)
 
 function! syntastic#log#debug(level, msg, ...) " {{{2
     if !s:isDebugEnabled(a:level)

@@ -29,7 +29,7 @@ function! SyntaxCheckers_vim_vimlint_GetHighlightRegex(item)
             endif
         endif
 
-        return '\V' . (col ? '\%' . col . 'c' : '') . escape(term, '\')
+        return col ? '\%>' . (col - 1) . 'c\%<' . (col + strlen(term)) . 'c' : '\V' . escape(term, '\')
     endif
 
     return ''

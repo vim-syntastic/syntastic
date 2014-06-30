@@ -138,7 +138,7 @@ function! g:SyntasticChecker._populateHighlightRegexes(errors) " {{{2
         for e in a:errors
             if e['valid']
                 let term = self._highlightRegexFunc(e)
-                if len(term) > 0
+                if term != ''
                     let e['hl'] = term
                 endif
             endif
