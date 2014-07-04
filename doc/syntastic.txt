@@ -36,12 +36,13 @@ CONTENTS                                                  *syntastic-contents*
         5.3.Configuring specific checkers..........|syntastic-config-makeprg|
     6.Notes........................................|syntastic-notes|
         6.1.Handling of composite filetypes........|syntastic-composite|
-        6.2.Interaction with python-mode...........|syntastic-pymode|
-        6.3.Interaction with the fish shell........|syntastic-fish|
-        6.4.Interaction with PowerShell............|syntastic-powershell|
-        6.5.Using syntastic with the fizsh shell...|syntastic-fizsh|
-        6.6.Interaction with Eclim.................|syntastic-eclim|
-        6.7.Interaction with vim-virtualenv........|syntastic-vim-virtualenv|
+        6.2.Editing files over network.............|syntastic-netrw|
+        6.3.Interaction with python-mode...........|syntastic-pymode|
+        6.4.Interaction with the fish shell........|syntastic-fish|
+        6.5.Interaction with PowerShell............|syntastic-powershell|
+        6.6.Using syntastic with the fizsh shell...|syntastic-fizsh|
+        6.7.Interaction with Eclim.................|syntastic-eclim|
+        6.8.Interaction with vim-virtualenv........|syntastic-vim-virtualenv|
     7.About........................................|syntastic-about|
     8.License......................................|syntastic-license|
 
@@ -649,7 +650,15 @@ composite filetypes to a simple ones using |syntastic_filetype_map|, e.g.: >
     let g:syntastic_filetype_map = { 'handlebars.html': 'handlebars' }
 <
 ------------------------------------------------------------------------------
-6.2 Interaction with python-mode                            *syntastic-pymode*
+6.2 Editing files over network                               *syntastic-netrw*
+
+The standard plugin |netrw| allows Vim to transparently edit files over
+network and inside archives.  Currently syntastic doesn't support this mode
+of operation.  It can only check files that can be accessed directly by local
+checkers, without any translation or conversion.
+
+------------------------------------------------------------------------------
+6.3 Interaction with python-mode                            *syntastic-pymode*
 
 Syntastic can be used along with the 'python-mode' Vim plugin (see
 https://github.com/klen/python-mode). However, they both run syntax checks by
@@ -660,7 +669,7 @@ python-mode, by setting |pymode_lint_write| to 0. E.g.: >
     let g:pymode_lint_write = 0
 <
 ------------------------------------------------------------------------------
-6.3 Interaction with the fish shell                           *syntastic-fish*
+6.4 Interaction with the fish shell                           *syntastic-fish*
 
 At the time of this writing the 'fish' shell (see http://fishshell.com/)
 doesn't support the standard UNIX syntax for file redirections, and thus it
@@ -671,7 +680,7 @@ traditional shell, such as 'zsh', 'bash', 'ksh', or even the original Bourne
     set shell=bash
 <
 ------------------------------------------------------------------------------
-6.4. Interaction with PowerShell                        *syntastic-powershell*
+6.5. Interaction with PowerShell                        *syntastic-powershell*
 
 At the time of this writing, syntastic is not compatible with using 'Windows
 PowerShell' (http://technet.microsoft.com/en-us/library/bb978526.aspx) as Vim's
@@ -680,7 +689,7 @@ Vim's 'shell' to a more traditional program, such as 'cmd.exe': >
     set shell=cmd.exe
 <
 ------------------------------------------------------------------------------
-6.5. Using syntastic with the fizsh shell                    *syntastic-fizsh*
+6.6. Using syntastic with the fizsh shell                    *syntastic-fizsh*
 
 Using syntastic with the 'fizsh' shell (see https://github.com/zsh-users/fizsh)
 is possible, but potentially problematic. In order to do it you'll need to set
@@ -693,7 +702,7 @@ interactive features of 'fizsh'. Using a more traditional shell such as 'zsh',
     set shell=zsh
 <
 ------------------------------------------------------------------------------
-6.6. Interaction with Eclim                                  *syntastic-eclim*
+6.7. Interaction with Eclim                                  *syntastic-eclim*
 
 As far as syntastic is concerned there shouldn't be any compatibility problems
 with the 'Eclim' Vim plugin (see http://eclim.org/). However, at the time of
@@ -702,7 +711,7 @@ makes syntastic forget some of its configuration parameters. No solutions or
 workarounds are known for now.
 
 ------------------------------------------------------------------------------
-6.7. Interaction with vim-virtualenv                *syntastic-vim-virtualenv*
+6.8. Interaction with vim-virtualenv                *syntastic-vim-virtualenv*
 
 At the time of this writing, syntastic can't run checkers installed
 in Python virtual environments activated by 'vim-virtualenv' (see
