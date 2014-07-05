@@ -40,7 +40,12 @@ function! syntastic#util#parseShebang() " {{{2
 
         if line =~ '^#!'
             let exe = matchstr(line, '\m^#!\s*\zs[^ \t]*')
-            let args = split(matchstr(line, '\m^#!\s*[^ \t]*\zs.*'))
+            if exe !~ '/env$'
+                let args = split(matchstr(line, '\m^#!\s*[^ \t]*\zs.*'))
+            else
+                let exe = matchstr(line, '\m^#!\s*\zs[^ \t]*\s*[^ \t]*')
+                let args = split(matchstr(line, '\m^#!\s*[^ \t]*\s*[^ \t]*\zs.*'))
+            endif
             return { 'exe': exe, 'args': args }
         endif
     endfor
