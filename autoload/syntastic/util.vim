@@ -35,12 +35,12 @@ endfunction " }}}2
 "
 "{'exe': '/usr/bin/perl', 'args': ['-f', '-bar']}
 function! syntastic#util#parseShebang() " {{{2
-    for lnum in range(1,5)
+    for lnum in range(1, 5)
         let line = getline(lnum)
-
         if line =~ '^#!'
-            let exe = matchstr(line, '\m^#!\s*\zs[^ \t]*')
-            let args = split(matchstr(line, '\m^#!\s*[^ \t]*\zs.*'))
+            let line = substitute(line, '\v^#!\s*(\S+/env(\s+-\S+)*\s+)?', '', '')
+            let exe = matchstr(line, '\m^\S*\ze')
+            let args = split(matchstr(line, '\m^\S*\zs.*'))
             return { 'exe': exe, 'args': args }
         endif
     endfor
