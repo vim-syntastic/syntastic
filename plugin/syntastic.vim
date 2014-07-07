@@ -19,7 +19,7 @@ if has('reltime')
     lockvar! g:syntastic_start
 endif
 
-let g:syntastic_version = '3.4.0-92'
+let g:syntastic_version = '3.4.0-93'
 lockvar g:syntastic_version
 
 " Sanity checks {{{1
@@ -408,7 +408,9 @@ endfunction " }}}2
 "   'preprocess' - a function to be applied to the error file before parsing errors
 "   'postprocess' - a list of functions to be applied to the error list
 "   'cwd' - change directory to the given path before running the checker
+"   'env' - environment variables to set before running the checker
 "   'returns' - a list of valid exit codes for the checker
+" @vimlint(EVL102, 1, l:env_save)
 function! SyntasticMake(options) " {{{2
     call syntastic#log#debug(g:SyntasticDebugTrace, 'SyntasticMake: called with options:', a:options)
 
@@ -432,11 +434,31 @@ function! SyntasticMake(options) " {{{2
         execute 'lcd ' . fnameescape(a:options['cwd'])
     endif
 
+    " set environment variables {{{3
+    let env_save = {}
+    if has_key(a:options, 'env') && len(a:options['env'])
+        for key in keys(a:options['env'])
+            if key =~? '\m^[a-z_]\+$'
+                exec 'let env_save[' . string(key) . '] = $' . key
+                exec 'let $' . key . ' = ' . string(a:options['env'][key])
+            endif
+        endfor
+    endif
     let $LC_MESSAGES = 'C'
     let $LC_ALL = ''
+    " }}}3
+
     let err_lines = split(system(a:options['makeprg']), "\n", 1)
+
+    " restore environment variables {{{3
     let $LC_ALL = old_lc_all
     let $LC_MESSAGES = old_lc_messages
+    if len(env_save)
+        for key in keys(env_save)
+            exec 'let $' . key . ' = ' . string(env_save[key])
+        endfor
+    endif
+    " }}}3
 
     call syntastic#log#debug(g:SyntasticDebugLoclist, 'checker output:', err_lines)
 
@@ -497,6 +519,7 @@ function! SyntasticMake(options) " {{{2
 
     return errors
 endfunction " }}}2
+" @vimlint(EVL102, 0, l:env_save)
 
 "return a string representing the state of buffer according to
 "g:syntastic_stl_format
