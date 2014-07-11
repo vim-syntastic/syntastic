@@ -137,7 +137,8 @@ statements in your file (cf. [perlrun][10]).  This is probably fine if you
 wrote the file yourself, but it's a security problem if you're checking third
 party files.  Since there is currently no way to disable this behaviour while
 still producing useful results, the checker is now disabled by default.  To
-(re-)enable it, set `g:syntastic_enable_perl_checker` to 1 in your vimrc:
+(re-)enable it, make sure the `g:syntastic_perl_checkers` list includes `perl`,
+and set `g:syntastic_enable_perl_checker` to 1 in your vimrc:
 ```vim
 let g:syntastic_enable_perl_checker = 1
 ```
