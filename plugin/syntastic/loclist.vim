@@ -46,6 +46,13 @@ function! g:SyntasticLoclist.isEmpty() " {{{2
     return empty(self._rawLoclist)
 endfunction " }}}2
 
+function! g:SyntasticLoclist.isNewer(stamp) " {{{2
+    if !exists("self._stamp")
+        let self._stamp = -1.0
+    endif
+    return self._stamp > a:stamp
+endfunction " }}}2
+
 function! g:SyntasticLoclist.copyRaw() " {{{2
     return copy(self._rawLoclist)
 endfunction " }}}2
@@ -132,6 +139,8 @@ function! g:SyntasticLoclist.setOwner(buffer) " {{{2
 endfunction " }}}2
 
 function! g:SyntasticLoclist.deploy() " {{{2
+    call self.setOwner(bufnr(''))
+    let self._stamp = syntastic#util#timestamp()
     for buf in self.getBuffers()
         call setbufvar(buf, 'syntastic_loclist', self)
     endfor

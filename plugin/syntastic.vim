@@ -19,12 +19,12 @@ if has('reltime')
     lockvar! g:syntastic_start
 endif
 
-let g:syntastic_version = '3.4.0-95'
+let g:syntastic_version = '3.4.0-96'
 lockvar g:syntastic_version
 
 " Sanity checks {{{1
 
-for s:feature in ['autocmd', 'eval', 'modify_fname', 'quickfix', 'user_commands']
+for s:feature in ['autocmd', 'eval', 'modify_fname', 'quickfix', 'reltime', 'user_commands']
     if !has(s:feature)
         call syntastic#log#error("need Vim compiled with feature " . s:feature)
         finish
@@ -376,7 +376,6 @@ function! s:CacheErrors(checker_names) " {{{2
         endif
     endif
 
-    call newLoclist.setOwner(bufnr(''))
     call newLoclist.deploy()
 endfunction " }}}2
 

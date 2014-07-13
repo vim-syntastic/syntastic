@@ -226,6 +226,12 @@ function! syntastic#util#sortLoclist(errors) " {{{2
     call sort(a:errors, 's:compareErrorItems')
 endfunction " }}}2
 
+" Return a floating point number, representing the time
+" (hopefully high resolution) since program start
+function! syntastic#util#timestamp() " {{{2
+    return str2float(reltimestr(reltime(g:syntastic_start)))
+endfunction " }}}2
+
 " }}}1
 
 " Private functions {{{1
