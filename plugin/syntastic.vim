@@ -19,7 +19,7 @@ if has('reltime')
     lockvar! g:syntastic_start
 endif
 
-let g:syntastic_version = '3.4.0-96'
+let g:syntastic_version = '3.4.0-97'
 lockvar g:syntastic_version
 
 " Sanity checks {{{1
@@ -65,6 +65,7 @@ let g:syntastic_defaults = {
         \ 'filetype_map':             {},
         \ 'full_redraws':             !(has('gui_running') || has('gui_macvim')),
         \ 'id_checkers':              1,
+        \ 'ignore_extensions':        '\c\v^([gx]?z|lzma|bz2)$',
         \ 'ignore_files':             [],
         \ 'loc_list_height':          10,
         \ 'quiet_messages':           {},
@@ -551,7 +552,8 @@ endfunction " }}}2
 function! s:skipFile() " {{{2
     let force_skip = exists('b:syntastic_skip_checks') ? b:syntastic_skip_checks : 0
     let fname = expand('%')
-    return force_skip || (&buftype != '') || !filereadable(fname) || getwinvar(0, '&diff') || s:ignoreFile(fname)
+    return force_skip || (&buftype != '') || !filereadable(fname) || getwinvar(0, '&diff') ||
+        \ s:ignoreFile(fname) || fnamemodify(fname, ':e') =~? g:syntastic_ignore_extensions
 endfunction " }}}2
 
 " Take a list of errors and add default values to them from a:options
