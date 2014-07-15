@@ -19,7 +19,7 @@ if has('reltime')
     lockvar! g:syntastic_start
 endif
 
-let g:syntastic_version = '3.4.0-99'
+let g:syntastic_version = '3.4.0-100'
 lockvar g:syntastic_version
 
 " Sanity checks {{{1
@@ -168,7 +168,7 @@ command! -nargs=* -complete=custom,s:CompleteCheckerName SyntasticCheck
             \ call syntastic#util#redraw(g:syntastic_full_redraws)
 command! Errors call s:ShowLocList()
 command! -nargs=? -complete=custom,s:CompleteFiletypes SyntasticInfo
-            \ call s:modemap.echoMode() |
+            \ call s:modemap.modeInfo(<f-args>) |
             \ call s:registry.echoInfoFor(s:resolveFiletypes(<f-args>))
 command! SyntasticReset
             \ call s:ClearCache() |
