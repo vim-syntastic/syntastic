@@ -62,6 +62,27 @@ function! g:SyntasticModeMap.echoMode() " {{{2
     echo "Syntastic: " . self._mode . " mode enabled"
 endfunction " }}}2
 
+function! g:SyntasticModeMap.modeInfo(...) " {{{2
+    echomsg 'Syntastic version: ' . g:syntastic_version
+    let type = a:0 ? a:1 : &filetype
+    echomsg 'Info for filetype: ' . type
+
+    call self.synch()
+    echomsg 'Mode: ' . self._mode
+    if self._mode ==# 'active'
+        if len(self._passiveFiletypes)
+            let plural = len(self._passiveFiletypes) != 1 ? 's' : ''
+            echomsg 'Passive filetype' . plural . ': ' . join(sort(copy(self._passiveFiletypes)))
+        endif
+    else
+        if len(self._activeFiletypes)
+            let plural = len(self._activeFiletypes) != 1 ? 's' : ''
+            echomsg 'Active filetype' . plural . ': ' . join(sort(copy(self._activeFiletypes)))
+        endif
+    endif
+    echomsg 'Current filetype is ' . (self.allowsAutoChecking(type) ? 'active' : 'passive')
+endfunction " }}}2
+
 " }}}1
 
 " Private methods {{{1
