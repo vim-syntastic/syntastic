@@ -74,15 +74,21 @@ endfunction " }}}2
 "
 " See http://semver.org for info about version numbers.
 function! syntastic#util#versionIsAtLeast(installed, required) " {{{2
-    for idx in range(max([len(a:installed), len(a:required)]))
-        let installed_element = get(a:installed, idx, 0)
-        let required_element = get(a:required, idx, 0)
-        if installed_element != required_element
-            return installed_element > required_element
+    return syntastic#util#compareLexi(a:installed, a:required) >= 0
+endfunction " }}}2
+
+" Almost lexicographic comparison of two lists of integers. :) If lists
+" have different lengths, the "missing" elements are assumed to be 0.
+function! syntastic#util#compareLexi(a, b) " {{{2
+    for idx in range(max([len(a:a), len(a:b)]))
+        let a_element = get(a:a, idx, 0)
+        let b_element = get(a:b, idx, 0)
+        if a_element != b_element
+            return a_element > b_element ? 1 : -1
         endif
     endfor
     " Everything matched, so it is at least the required version.
-    return 1
+    return 0
 endfunction " }}}2
 
 " strwidth() was added in Vim 7.3; if it doesn't exist, we use strlen()
@@ -226,10 +232,11 @@ function! syntastic#util#sortLoclist(errors) " {{{2
     call sort(a:errors, 's:compareErrorItems')
 endfunction " }}}2
 
-" Return a floating point number, representing the time
+" Return a [high, low] list of integers, representing the time
 " (hopefully high resolution) since program start
-function! syntastic#util#timestamp() " {{{2
-    return str2float(reltimestr(reltime(g:syntastic_start)))
+" TODO: This assumes reltime() returns a list of integers.
+function! syntastic#util#stamp() " {{{2
+    return reltime(g:syntastic_start)
 endfunction " }}}2
 
 " }}}1

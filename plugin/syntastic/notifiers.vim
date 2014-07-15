@@ -23,7 +23,7 @@ function! g:SyntasticNotifiers.Instance() " {{{2
 endfunction " }}}2
 
 function! g:SyntasticNotifiers.refresh(loclist) " {{{2
-    if !a:loclist.isEmpty() && !a:loclist.isNewer(0.0)
+    if !a:loclist.isEmpty() && !a:loclist.isNewerThan([])
         " loclist not fully constructed yet
         return
     endif
@@ -34,12 +34,12 @@ function! g:SyntasticNotifiers.refresh(loclist) " {{{2
         if !has_key(g:{class}, 'enabled') || self._notifier[type].enabled()
             if index(s:persistent_notifiers, type) > -1
                 " refresh only if loclist has changed since last call
-                if !exists('b:syntastic_' . type . '_timestamp')
-                    let b:syntastic_{type}_timestamp = -1.0
+                if !exists('b:syntastic_' . type . '_stamp')
+                    let b:syntastic_{type}_stamp = []
                 endif
-                if a:loclist.isNewer(b:syntastic_{type}_timestamp)
+                if a:loclist.isNewerThan(b:syntastic_{type}_stamp)
                     call self._notifier[type].refresh(a:loclist)
-                    let b:syntastic_{type}_timestamp = syntastic#util#timestamp()
+                    let b:syntastic_{type}_stamp = syntastic#util#stamp()
                 endif
             else
                 call self._notifier[type].refresh(a:loclist)
@@ -60,9 +60,9 @@ function! g:SyntasticNotifiers.reset(loclist) " {{{2
             call self._notifier[type].reset(a:loclist)
         endif
 
-        " also reset timestamps
+        " also reset stamps
         if index(s:persistent_notifiers, type) > -1
-            let b:syntastic_{type}_timestamp = -1.0
+            let b:syntastic_{type}_stamp = []
         endif
     endfor
 endfunction " }}}2
