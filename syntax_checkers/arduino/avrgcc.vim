@@ -20,7 +20,7 @@ runtime! syntax_checkers/c/*.vim
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'c',
     \ 'name': 'avrgcc',
-    \ 'exec': 'avr-gcc'
+    \ 'exec': 'avr-gcc',
     \ 'redirect': 'c/avrgcc'})
 
 " vim: set et sts=4 sw=4:
