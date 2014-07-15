@@ -80,7 +80,7 @@ function! g:SyntasticModeMap.modeInfo(...) " {{{2
             echomsg 'Active filetype' . plural . ': ' . join(sort(copy(self._activeFiletypes)))
         endif
     endif
-    echomsg 'Current filetype is ' . (self.allowsAutoChecking(type) ? 'active' : 'passive')
+    echomsg 'Filetype ' . type . ' is ' . (self.allowsAutoChecking(type) ? 'active' : 'passive')
 endfunction " }}}2
 
 " }}}1
