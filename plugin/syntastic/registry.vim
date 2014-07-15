@@ -9,6 +9,7 @@ let s:defaultCheckers = {
         \ 'actionscript':['mxmlc'],
         \ 'ada':         ['gcc'],
         \ 'applescript': ['osacompile'],
+        \ 'arduino':     ['avrgcc'],
         \ 'asciidoc':    ['asciidoc'],
         \ 'asm':         ['gcc'],
         \ 'bro':         ['bro'],
