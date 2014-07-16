@@ -49,6 +49,7 @@ endfunction " }}}2
 function! g:SyntasticLoclist.isNewerThan(stamp) " {{{2
     if !exists("self._stamp")
         let self._stamp = []
+        return 0
     endif
     return syntastic#util#compareLexi(self._stamp, a:stamp) > 0
 endfunction " }}}2

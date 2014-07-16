@@ -30,7 +30,7 @@ let s:defaultCheckers = {
         \ 'dart':        ['dartanalyzer'],
         \ 'docbk':       ['xmllint'],
         \ 'dustjs':      ['swiffer'],
-        \ 'elixir':      ['elixir'],
+        \ 'elixir':      [],
         \ 'erlang':      ['escript'],
         \ 'eruby':       ['ruby'],
         \ 'fortran':     ['gfortran'],
