@@ -42,7 +42,6 @@ function! g:SyntasticSignsNotifier.refresh(loclist) " {{{2
         call self._signErrors(a:loclist)
     endif
     call self._removeSigns(old_signs)
-    let s:first_sign_id = exists('s:next_sign_id') ? s:next_sign_id : 5000
 endfunction " }}}2
 
 " }}}1
@@ -96,18 +95,27 @@ function! g:SyntasticSignsNotifier._signErrors(loclist) " {{{2
         let seen = {}
 
         for i in issues
-            if !has_key(seen, i['lnum'])
+            if i['lnum'] > 0 && !has_key(seen, i['lnum'])
                 let seen[i['lnum']] = 1
 
-                if i['lnum'] > 0
-                    let sign_severity = i['type'] ==? 'W' ? 'Warning' : 'Error'
-                    let sign_subtype = get(i, 'subtype', '')
-                    let sign_type = 'Syntastic' . sign_subtype . sign_severity
+                let sign_severity = i['type'] ==? 'W' ? 'Warning' : 'Error'
+                let sign_subtype = get(i, 'subtype', '')
+                let sign_type = 'Syntastic' . sign_subtype . sign_severity
+                let where = " line=" . i['lnum'] . " name=" . sign_type . " buffer=" . i['bufnr']
 
-                    execute "sign place " . s:next_sign_id . " line=" . i['lnum'] . " name=" . sign_type . " buffer=" . i['bufnr']
-                    call add(self._bufSignIds(), s:next_sign_id)
-                    let s:next_sign_id += 1
-                endif
+                " try to find a free ID
+                " XXX: this can turn into an infinite loop
+                let done = 0
+                while !done
+                    try
+                        execute "sign place " . s:next_sign_id . where
+                        call add(self._bufSignIds(), s:next_sign_id)
+                        let s:next_sign_id += 1
+                        let done = 1
+                    catch  /\m^Vim\%((\a\+)\)\=:E885/
+                        let s:next_sign_id += 500
+                    endtry
+                endwhile
             endif
         endfor
     endif
