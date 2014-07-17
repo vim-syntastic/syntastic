@@ -87,8 +87,13 @@ function! g:SyntasticSignsNotifier._signErrors(loclist) " {{{2
     let loclist = a:loclist
     if !loclist.isEmpty()
 
-        " errors some first, so that they are not masked by warnings
         let buf = bufnr('')
+        if !bufloaded(buf)
+            " signs can be placed only in loaded buffers
+            return
+        endif
+
+        " errors come first, so that they are not masked by warnings
         let issues = copy(loclist.errors())
         call extend(issues, loclist.warnings())
         call filter(issues, 'v:val["bufnr"] == buf')
@@ -101,21 +106,10 @@ function! g:SyntasticSignsNotifier._signErrors(loclist) " {{{2
                 let sign_severity = i['type'] ==? 'W' ? 'Warning' : 'Error'
                 let sign_subtype = get(i, 'subtype', '')
                 let sign_type = 'Syntastic' . sign_subtype . sign_severity
-                let where = " line=" . i['lnum'] . " name=" . sign_type . " buffer=" . i['bufnr']
 
-                " try to find a free ID
-                " XXX: this can turn into an infinite loop
-                let done = 0
-                while !done
-                    try
-                        execute "sign place " . s:next_sign_id . where
-                        call add(self._bufSignIds(), s:next_sign_id)
-                        let s:next_sign_id += 1
-                        let done = 1
-                    catch  /\m^Vim\%((\a\+)\)\=:E885/
-                        let s:next_sign_id += 500
-                    endtry
-                endwhile
+                execute "sign place " . s:next_sign_id . " line=" . i['lnum'] . " name=" . sign_type . " buffer=" . i['bufnr']
+                call add(self._bufSignIds(), s:next_sign_id)
+                let s:next_sign_id += 1
             endif
         endfor
     endif
