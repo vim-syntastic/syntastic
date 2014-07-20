@@ -19,7 +19,7 @@ if has('reltime')
     lockvar! g:syntastic_start
 endif
 
-let g:syntastic_version = '3.4.0-110'
+let g:syntastic_version = '3.4.0-111'
 lockvar g:syntastic_version
 
 " Sanity checks {{{1
@@ -69,7 +69,7 @@ let g:syntastic_defaults = {
         \ 'ignore_files':             [],
         \ 'loc_list_height':          10,
         \ 'quiet_messages':           {},
-        \ 'reuse_loc_lists':          (v:version >= 704),
+        \ 'reuse_loc_lists':          0,
         \ 'sort_aggregated_errors':   1,
         \ 'stl_format':               '[Syntax: line:%F (%t)]',
         \ 'style_error_symbol':       'S>',
