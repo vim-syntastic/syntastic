@@ -58,7 +58,7 @@ endfunction " }}}2
 
 " Parse a version string.  Return an array of version components.
 function! syntastic#util#parseVersion(version) " {{{2
-    return split(matchstr( a:version, '\v^\D*\zs\d+(\.\d+)+\ze' ), '\m\.')
+    return map(split(matchstr( a:version, '\v^\D*\zs\d+(\.\d+)+\ze' ), '\m\.'), 'str2nr(v:val)')
 endfunction " }}}2
 
 " Run 'command' in a shell and parse output as a version string.
@@ -81,8 +81,8 @@ endfunction " }}}2
 " have different lengths, the "missing" elements are assumed to be 0.
 function! syntastic#util#compareLexi(a, b) " {{{2
     for idx in range(max([len(a:a), len(a:b)]))
-        let a_element = get(a:a, idx, 0)
-        let b_element = get(a:b, idx, 0)
+        let a_element = str2nr(get(a:a, idx, 0))
+        let b_element = str2nr(get(a:b, idx, 0))
         if a_element != b_element
             return a_element > b_element ? 1 : -1
         endif
