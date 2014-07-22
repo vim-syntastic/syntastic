@@ -19,8 +19,8 @@ endfunction " }}}2
 function! g:SyntasticModeMap.synch() " {{{2
     if exists('g:syntastic_mode_map')
         let self._mode = get(g:syntastic_mode_map, 'mode', 'active')
-        let self._activeFiletypes = get(g:syntastic_mode_map, 'active_filetypes', [])
-        let self._passiveFiletypes = get(g:syntastic_mode_map, 'passive_filetypes', [])
+        let self._activeFiletypes = copy(get(g:syntastic_mode_map, 'active_filetypes', []))
+        let self._passiveFiletypes = copy(get(g:syntastic_mode_map, 'passive_filetypes', []))
     else
         let self._mode = 'active'
         let self._activeFiletypes = []
