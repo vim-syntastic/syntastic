@@ -19,7 +19,7 @@ if has('reltime')
     lockvar! g:syntastic_start
 endif
 
-let g:syntastic_version = '3.4.0-114'
+let g:syntastic_version = '3.4.0-115'
 lockvar g:syntastic_version
 
 " Sanity checks {{{1
@@ -561,6 +561,7 @@ function! s:skipFile() " {{{2
     if skip
         call syntastic#log#debug(g:SyntasticDebugTrace, 'skipFile: skipping')
     endif
+    return skip
 endfunction " }}}2
 
 " Take a list of errors and add default values to them from a:options
