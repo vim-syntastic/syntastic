@@ -19,7 +19,7 @@ if has('reltime')
     lockvar! g:syntastic_start
 endif
 
-let g:syntastic_version = '3.4.0-111'
+let g:syntastic_version = '3.4.0-112'
 lockvar g:syntastic_version
 
 " Sanity checks {{{1
@@ -238,6 +238,11 @@ endfunction " }}}2
 
 "refresh and redraw all the error info for this buf when saving or reading
 function! s:UpdateErrors(auto_invoked, ...) " {{{2
+    call syntastic#log#debugShowVariables(g:SyntasticDebugTrace, 'version')
+    call syntastic#log#debugShowOptions(g:SyntasticDebugTrace, s:debug_dump_options)
+    call syntastic#log#debugDump(g:SyntasticDebugVariables)
+    call syntastic#log#debug(g:SyntasticDebugTrace, 'UpdateErrors' . (a:auto_invoked ? ' (auto)' : '') .
+        \ ': ' . (a:0 ? join(a:000) : 'default checkers'))
     if s:skipFile()
         return
     endif
@@ -289,14 +294,13 @@ endfunction " }}}2
 
 "detect and cache all syntax errors in this buffer
 function! s:CacheErrors(checker_names) " {{{2
+    call syntastic#log#debug(g:SyntasticDebugTrace, 'CacheErrors: ' .
+        \ (len(a:checker_names) ? join(a:checker_names) : 'default checkers'))
     call s:ClearCache()
     let newLoclist = g:SyntasticLoclist.New([])
 
     if !s:skipFile()
         " debug logging {{{3
-        call syntastic#log#debugShowVariables(g:SyntasticDebugTrace, 'version')
-        call syntastic#log#debugShowOptions(g:SyntasticDebugTrace, s:debug_dump_options)
-        call syntastic#log#debugDump(g:SyntasticDebugVariables)
         call syntastic#log#debugShowVariables(g:SyntasticDebugTrace, 'aggregate_errors')
         call syntastic#log#debug(g:SyntasticDebugTrace, 'getcwd() = ' . getcwd())
         " }}}3
@@ -550,10 +554,13 @@ endfunction " }}}2
 
 " Skip running in special buffers
 function! s:skipFile() " {{{2
-    let force_skip = exists('b:syntastic_skip_checks') ? b:syntastic_skip_checks : 0
     let fname = expand('%')
-    return force_skip || (&buftype != '') || !filereadable(fname) || getwinvar(0, '&diff') ||
+    let skip = (exists('b:syntastic_skip_checks') ? b:syntastic_skip_checks : 0) ||
+        \ (&buftype != '') || !filereadable(fname) || getwinvar(0, '&diff') ||
         \ s:ignoreFile(fname) || fnamemodify(fname, ':e') =~? g:syntastic_ignore_extensions
+    if skip
+        call syntastic#log#debug(g:SyntasticDebugTrace, 'skipFile: skipping')
+    endif
 endfunction " }}}2
 
 " Take a list of errors and add default values to them from a:options
