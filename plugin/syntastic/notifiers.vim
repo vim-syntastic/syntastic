@@ -37,7 +37,7 @@ function! g:SyntasticNotifiers.refresh(loclist) " {{{2
                 if !exists('b:syntastic_' . type . '_stamp')
                     let b:syntastic_{type}_stamp = []
                 endif
-                if a:loclist.isNewerThan(b:syntastic_{type}_stamp)
+                if a:loclist.isNewerThan(b:syntastic_{type}_stamp) || a:loclist.isEmpty()
                     call self._notifier[type].refresh(a:loclist)
                     let b:syntastic_{type}_stamp = syntastic#util#stamp()
                 endif
