@@ -56,6 +56,7 @@ let g:syntastic_defaults = {
         \ 'bash_hack':                1,
         \ 'check_on_open':            0,
         \ 'check_on_wq':              1,
+        \ 'cursor_columns':           1,
         \ 'debug':                    0,
         \ 'echo_current_error':       1,
         \ 'enable_balloons':          1,

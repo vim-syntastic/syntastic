@@ -303,9 +303,22 @@ messages grouped by checker output, set this variable to 0. >
 <
                                               *'syntastic_echo_current_error'*
 Default: 1
-If enabled, syntastic will echo the error associated with the current line to
-the command window. If multiple errors are found, the first will be used. >
+If enabled, syntastic will echo current error to the command window. If
+multiple errors are found on the same line, |syntastic_cursor_columns| is used
+to decide which one is shown. >
     let g:syntastic_echo_current_error = 1
+<
+                                                  *'syntastic_cursor_columns'*
+Default: 1
+This option controls which errors are echoed to the command window if
+|syntastic_echo_current_error| is set and multiple errors are found on the same
+line. When the option is enabled, the first error corresponding to the current
+column is show. Otherwise, the first error on the current line is echoed,
+regardless of the cursor position on the current line.
+
+When dealing with very large lists of errors, disabling this option can speed
+up navigation significantly: >
+    let g:syntastic_cursor_column = 0
 <
                                                     *'syntastic_enable_signs'*
 Default: 1
