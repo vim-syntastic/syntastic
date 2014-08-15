@@ -51,8 +51,8 @@ function! SyntaxCheckers_c_oclint_GetLocList() dict
             let e['type'] = 'W'
         endif
 
-        let e['text'] = substitute(e['text'], '\m P[1-3]$', '', '')
-        let e['text'] = substitute(e['text'], ' P[1-3] ', ': ', '')
+        let e['text'] = substitute(e['text'], '\m\C P[1-3]$', '', '')
+        let e['text'] = substitute(e['text'], '\m\C P[1-3] ', ': ', '')
     endfor
 
     call self.setWantSort(1)
