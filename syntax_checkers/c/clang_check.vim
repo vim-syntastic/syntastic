@@ -29,7 +29,7 @@ function! SyntaxCheckers_c_clang_check_GetLocList() dict
     let makeprg = self.makeprgBuild({
         \ 'post_args':
         \   '-- ' .
-        \   syntastic#c#ReadConfig(g:syntastic_clang_check_config_file) .
+        \   syntastic#c#ReadConfig(g:syntastic_clang_check_config_file) . ' ' .
         \   '-fshow-column ' .
         \   '-fshow-source-location ' .
         \   '-fno-caret-diagnostics ' .
