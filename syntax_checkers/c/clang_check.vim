@@ -46,7 +46,8 @@ function! SyntaxCheckers_c_clang_check_GetLocList() dict
     let loclist = SyntasticMake({
         \ 'makeprg': makeprg,
         \ 'errorformat': errorformat,
-        \ 'defaults': {'bufnr': bufnr('')} })
+        \ 'defaults': {'bufnr': bufnr('')},
+        \ 'returns': [0, 1] })
 
     call self.setWantSort(1)
 
