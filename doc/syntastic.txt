@@ -622,11 +622,9 @@ have local versions 'b:syntastic_<filetype>_<checker-name>_<option-name>',
 which take precedence over the global ones in the corresponding buffers.
 
 If one of these variables has a non-empty default and you want it to be empty,
-you can set it to a space, e.g.: >
-    let g:syntastic_javascript_jslint_args = " "
+you can set it to an empty string, e.g.: >
+    let g:syntastic_javascript_jslint_args = ""
 <
-(setting it to an empty string doesn't work, for implementation reasons).
-
                                         *'syntastic_<filetype>_<checker>_exe'*
 The 'exe' is normally the same as the 'exec' attribute described above, in
 which case it may be omitted. However, you can use it to add environment

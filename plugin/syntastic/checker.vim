@@ -147,10 +147,9 @@ function! g:SyntasticChecker._populateHighlightRegexes(errors) " {{{2
 endfunction " }}}2
 
 function! g:SyntasticChecker._getOpt(opts, basename, name, default) " {{{2
-    let user_val = syntastic#util#var(a:basename . a:name)
     let ret = []
     call extend( ret, self._shescape(get(a:opts, a:name . '_before', '')) )
-    call extend( ret, self._shescape(user_val != '' ? user_val : get(a:opts, a:name, a:default)) )
+    call extend( ret, self._shescape(syntastic#util#var( a:basename . a:name, get(a:opts, a:name, a:default) )) )
     call extend( ret, self._shescape(get(a:opts, a:name . '_after', '')) )
 
     return ret
