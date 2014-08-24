@@ -131,7 +131,7 @@ create an issue - or better yet, create a pull request.
 
 __Q. The `python` checker complains about syntactically valid Python 3 constructs...__
 
-A. Configure the `python` checker to calls a Python 3 interpreter rather than
+A. Configure the `python` checker to call a Python 3 interpreter rather than
 Python 2, e.g:
 ```vim
 let g:syntastic_python_python_exec = '/path/to/python3'
