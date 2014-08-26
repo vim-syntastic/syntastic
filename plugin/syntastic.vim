@@ -34,16 +34,6 @@ endfor
 let s:running_windows = syntastic#util#isRunningWindows()
 lockvar s:running_windows
 
-if !s:running_windows && executable('uname')
-    try
-        let s:uname = system('uname')
-    catch /\m^Vim\%((\a\+)\)\=:E484/
-        call syntastic#log#error("your shell " . &shell . " doesn't use traditional UNIX syntax for redirections")
-        finish
-    endtry
-    lockvar s:uname
-endif
-
 " }}}1
 
 " Defaults {{{1
@@ -599,7 +589,12 @@ endfunction " }}}2
 
 function! s:uname() " {{{2
     if !exists('s:uname')
-        let s:uname = system('uname')
+        try
+            let s:uname = system('uname')
+        catch /\m^Vim\%((\a\+)\)\=:E484/
+            call syntastic#log#error("your shell " . &shell . " doesn't use traditional UNIX syntax for redirections")
+            let s:uname = 'UNKNOWN'
+        endtry
         lockvar s:uname
     endif
     return s:uname
