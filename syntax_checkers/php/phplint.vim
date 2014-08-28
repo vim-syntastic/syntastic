@@ -21,32 +21,30 @@ set cpo&vim
 function! SyntaxCheckers_php_phplint_GetHighlightRegex(item)
     let term = matchstr(a:item['text'], '\munresolved function \zs\S\+\ze')
     if term != ''
-        return term != '' ? '\V' . escape(term, '\') : ''
+        return '\V' . escape(term, '\')
     endif
     let term = matchstr(a:item['text'], '\m\(class\|function\|method\) \zs\S\+\ze was declared as')
     if term != ''
-        return term != '' ? '\V' . escape(term, '\') : ''
+        return '\V' . escape(term, '\')
     endif
     let term = matchstr(a:item['text'], '\maccess forbidden to \(private\|protected\) \(class\|constant\|method\|variable\|\(private\|protected\) property\) \zs\S\+\ze')
     if term != ''
-        return term != '' ? '\V' . escape(term, '\') : ''
+        return '\V' . escape(term, '\')
     endif
     let term = matchstr(a:item['text'], '\musing deprecated \(class\|constant\|method\|property\|variable\) \zs\S\+\ze')
     if term != ''
-        return term != '' ? '\V' . escape(term, '\') : ''
+        return '\V' . escape(term, '\')
     endif
     let term = matchstr(a:item['text'], '\munresolved function \zs\S\+\ze')
     if term != ''
-        return term != '' ? '\V' . escape(term, '\') : ''
+        return '\V' . escape(term, '\')
     endif
     let term = matchstr(a:item['text'], '\munresolved function \zs\S\+\ze')
     if term != ''
-        return term != '' ? '\V' . escape(term, '\') : ''
+        return '\V' . escape(term, '\')
     endif
     let term = matchstr(a:item['text'], '\munresolved function \zs\S\+\ze')
-    if term != ''
-        return term != '' ? '\V' . escape(term, '\') : ''
-    endif
+    return term != '' ? '\V' . escape(term, '\') : ''
 endfunction
 
 function! SyntaxCheckers_php_phplint_GetLocList() dict
