@@ -6,7 +6,7 @@ let g:loaded_syntastic_registry = 1
 " Initialisation {{{1
 
 let s:defaultCheckers = {
-        \ 'actionscript':['mxmlc'],
+        \ 'actionscript':['fcshctl_mxmlc', 'mxmlc'],
         \ 'ada':         ['gcc'],
         \ 'applescript': ['osacompile'],
         \ 'arduino':     ['avrgcc'],
