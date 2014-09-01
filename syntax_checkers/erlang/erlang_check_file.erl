@@ -45,7 +45,12 @@ compile(FileName, LibDirs) ->
                   warn_export_vars,
                   strong_validation,
                   report] ++
-                 [{i, filename:join(Root, I)} || I <- LibDirs]).
+                 [{i, filename:join(Root, I)} || I <- LibDirs] ++
+                 case lists:member("deps/pmod_transform/include", LibDirs) of
+                     true -> [{parse_transform, pmod_pt}];
+                     _    -> []
+                 end
+                ).
 
 get_root(Dir) ->
     Path = filename:split(filename:absname(Dir)),
