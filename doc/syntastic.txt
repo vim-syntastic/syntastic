@@ -526,6 +526,13 @@ Changing it can in principle make screen redraws smoother, but it can also
 cause screen to flicker, or cause ghost characters. Leaving it to the default
 should be safe.
 
+                                                     *'syntastic_exit_checks'*
+Default: 0 when running under "cmd.exe" on Windows, 1 otherwise
+Syntastic attempts to catch abnormal termination conditions from checkers by
+looking at their exit codes. The "cmd.exe" shell on Windows make these checks
+meaningless, by returning 1 to Vim when the checkers exit with non-zero codes.
+The above variable can be used to disable exit code checks in syntastic.
+
                                                            *'syntastic_debug'*
 Default: 0
 Set this to the sum of one or more of the following flags to enable
