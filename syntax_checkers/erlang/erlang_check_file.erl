@@ -32,7 +32,7 @@ main([FileName, "-rebar", Path, LibDirs]) ->
     %io:format("~p~n", [LibDirs1]),
     compile(FileName, LibDirs1);
 
-main([FileName, LibDirs]) ->
+main([FileName | LibDirs]) ->
     compile(FileName, LibDirs).
 
 compile(FileName, LibDirs) ->
