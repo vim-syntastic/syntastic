@@ -557,9 +557,9 @@ endfunction " }}}2
 " Skip running in special buffers
 function! s:skipFile() " {{{2
     let fname = expand('%')
-    let skip = (exists('b:syntastic_skip_checks') ? b:syntastic_skip_checks : 0) ||
-        \ (&buftype != '') || !filereadable(fname) || getwinvar(0, '&diff') ||
-        \ s:ignoreFile(fname) || fnamemodify(fname, ':e') =~? g:syntastic_ignore_extensions
+    let skip = (exists('b:syntastic_skip_checks') ? b:syntastic_skip_checks : 0)
+        \ || (&buftype != '') || !filereadable(fname) || s:ignoreFile(fname)
+        \ || fnamemodify(fname, ':e') =~? g:syntastic_ignore_extensions
     if skip
         call syntastic#log#debug(g:SyntasticDebugTrace, 'skipFile: skipping')
     endif
