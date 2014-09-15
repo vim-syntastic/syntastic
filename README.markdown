@@ -233,7 +233,7 @@ current filetype is `php`).
 
 <a name="faqaggregate"></a>
 
-__Q. How can I display together the errors found by all checkers enabled for
+__Q. How can I display the errors together found by all checkers enabled for
 the current file?__
 
 A. Set `g:syntastic_aggregate_errors` to 1 in your vimrc:
