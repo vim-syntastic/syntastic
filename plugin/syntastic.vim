@@ -19,7 +19,7 @@ if has('reltime')
     lockvar! g:syntastic_start
 endif
 
-let g:syntastic_version = '3.5.0-7'
+let g:syntastic_version = '3.5.0-10'
 lockvar g:syntastic_version
 
 " Sanity checks {{{1
@@ -230,7 +230,7 @@ endfunction " }}}2
 function! s:QuitPreHook() " {{{2
     call syntastic#log#debug(g:SyntasticDebugAutocommands,
         \ 'autocmd: QuitPre, buffer ' . bufnr("") . ' = ' . string(bufname(str2nr(bufnr("")))))
-    let b:syntastic_skip_checks = !g:syntastic_check_on_wq
+    let b:syntastic_skip_checks = get(b:, 'syntastic_skip_checks', 0) || !syntastic#util#var('check_on_wq')
     call SyntasticLoclistHide()
 endfunction " }}}2
 
@@ -557,9 +557,9 @@ endfunction " }}}2
 " Skip running in special buffers
 function! s:skipFile() " {{{2
     let fname = expand('%')
-    let skip = (exists('b:syntastic_skip_checks') ? b:syntastic_skip_checks : 0) ||
-        \ (&buftype != '') || !filereadable(fname) || getwinvar(0, '&diff') ||
-        \ s:ignoreFile(fname) || fnamemodify(fname, ':e') =~? g:syntastic_ignore_extensions
+    let skip = get(b:, 'syntastic_skip_checks', 0) || (&buftype != '') ||
+        \ !filereadable(fname) || getwinvar(0, '&diff') || s:ignoreFile(fname) ||
+        \ fnamemodify(fname, ':e') =~? g:syntastic_ignore_extensions
     if skip
         call syntastic#log#debug(g:SyntasticDebugTrace, 'skipFile: skipping')
     endif

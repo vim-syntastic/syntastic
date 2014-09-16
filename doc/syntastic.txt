@@ -239,7 +239,7 @@ the order specified.  The rules of |syntastic_aggregate_errors| still apply.
 Example: >
     :SyntasticCheck flake8 pylint
 <
-:SyntasticInfo                                               *:SyntasticInfo*
+:SyntasticInfo                                                *:SyntasticInfo*
 
 The command takes an optional argument, and outputs information about the
 checkers available for the filetype named by said argument, or for the current
@@ -518,6 +518,12 @@ statusline: >
 <
 If the buffer had 2 warnings, starting on line 5 then this would appear: >
     [Warn: 5 #2]
+<
+                                                   *'b:syntastic_skip_checks'*
+Default: unset
+Only the local form |'b:syntastic_skip_checks'| is used. When set to a true
+value, no checks are run against the corresponding buffer. Example: >
+    let b:syntastic_skip_checks = 1
 <
                                                     *'syntastic_full_redraws'*
 Default: 0 in GUI Vim and MacVim, 1 otherwise
