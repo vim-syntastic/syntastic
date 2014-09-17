@@ -234,7 +234,7 @@ filetype of the current file is `php`).
 
 __Q. What is the difference between syntax checkers and style checkers?__
 
-A. The errors and warnings they produce are highlighted differently, and can
+A. The errors and warnings they produce are highlighted differently and can
 be filtered by different rules, but otherwise the distinction is pretty much
 arbitrary. There is no guarantee that a style checker wouldn't produce messages
 for syntax errors, nor that a syntax checker wouldn't give you style hints.
