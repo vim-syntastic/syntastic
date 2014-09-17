@@ -210,8 +210,7 @@ To tell syntastic to use `pylint`, you would use this setting:
 let g:syntastic_python_checkers = ['pylint']
 ```
 
-Some filetypes, like PHP, have style checkers as well as syntax checkers. These
-can be chained together like this:
+Checkers can be chained together like this:
 ```vim
 let g:syntastic_php_checkers = ['php', 'phpcs', 'phpmd']
 ```
@@ -229,7 +228,32 @@ e.g. to run `phpcs` and `phpmd`:
 This works for any checkers available for the current filetype, even if they
 aren't listed in `g:syntastic_<filetype>_checkers`.  You can't run checkers for
 "foreign" filetypes though (e.g. you can't run, say, a Python checker if the
-current filetype is `php`).
+filetype of the current file is `php`).
+
+<a name="faqstyle"></a>
+
+__Q. What is the difference between syntax checkers and style checkers?__
+
+A. The errors and warnings they produce are highlighted differently, and can
+be filtered by different rules, but otherwise the distinction is pretty much
+arbitrary. There is no guarantee that a style checker wouldn't produce messages
+for syntax errors, nor that a syntax checker wouldn't give you style hints.
+There is also no guarantee that messages marked as "style" are somehow less
+severe than the ones marked as "syntax". There are even a few Frankenstein
+checkers (for example `flake8` and `pylama`), that produce both kinds of
+messages.
+
+In fact, since the distinction between syntax and style is orthogonal to the
+distinction between errors and warnings, the main use for this is to give you
+more flexibility when filtering unwanted messages, rather than as an indication
+of severity levels. You can thus turn off messages based on level, on type, or
+both.
+
+e.g. To turn off all style messages:
+```vim
+let g:syntastic_quiet_messages = { "type": "style" }
+```
+See `:help syntastic_quiet_messages` for details.
 
 <a name="faqaggregate"></a>
 
@@ -254,22 +278,6 @@ A. Vim provides several built in commands for this. See `:help :lnext` and
 If you use these commands a lot then you may want to add shortcut mappings to
 your vimrc, or install something like [unimpaired][2], which provides such
 mappings (among other things).
-
-<a name="faqstyle"></a>
-
-__Q. A syntax checker is giving me unwanted/strange style tips?__
-
-A. Some filetypes (e.g. php) have style checkers as well as syntax
-checkers. You can usually configure the options that are passed to the style
-checkers, or just disable them. Take a look at the [wiki][3] to see what
-options are available.
-
-Alternatively, you can use `g:syntastic_quiet_messages` to filter out the
-messages you don't want to see. e.g. To turn off all style messages:
-```vim
-let g:syntastic_quiet_messages = { "type": "style" }
-```
-See `:help syntastic_quiet_messages` for details.
 
 <a name="faqbdelete"></a>
 
