@@ -420,7 +420,6 @@ default behaviour of running both checkers against the input file: >
 Default: { "mode": "active",
            "active_filetypes": [],
            "passive_filetypes": [] }
-
 Use this option to fine tune when automatic syntax checking is done (or not
 done).
 
@@ -449,7 +448,6 @@ active and passive modes.
 
                                                   *'syntastic_quiet_messages'*
 Default: {}
-
 Use this option to filter out some of the messages produced by checkers.  The
 option should be set to something like: >
     let g:syntastic_quiet_messages = { "level": "warnings",
