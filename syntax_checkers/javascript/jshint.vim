@@ -36,7 +36,7 @@ function! SyntaxCheckers_javascript_jshint_GetLocList() dict
 
     let makeprg = self.makeprgBuild({ 'args_after': (s:jshint_new ? '--verbose ' : '') })
 
-    let errorformat = '%-G%\\d%\\+ error,' .
+    let errorformat = '%-G%\\d%\\+ error%\(s%\)%\?,' .
         \ '%-G,'
 
     let errorformat .= s:jshint_new ?
