@@ -40,8 +40,6 @@ function! SyntaxCheckers_html_jshint_GetLocList() dict
         \ '%A%f: line %l\, col %v\, %m \(%t%*\d\)' :
         \ '%E%f: line %l\, col %v\, %m'
 
-    echo errorformat
-
     call self.setWantSort(1)
 
     return SyntasticMake({
