@@ -36,13 +36,22 @@ function! SyntaxCheckers_c_pc_lint_GetLocList() dict
     let errorformat =
         \ '%E%f:%l:%v:Error:%n:%m,' .
         \ '%W%f:%l:%v:Warning:%n:%m,' .
-        \ '%W%f:%l:%v:Info:%n:%m,' .
+        \ '%I%f:%l:%v:Info:%n:%m,' .
         \ '%-G%.%#'
 
-    return SyntasticMake({
+    let loclist = SyntasticMake({
         \ 'makeprg': makeprg,
         \ 'errorformat': errorformat,
         \ 'postprocess': ['cygwinRemoveCR'] })
+
+    for e in loclist
+        if e['type'] ==? 'I'
+            let e['type'] = 'W'
+            let e['subtype'] = 'Style'
+        endif
+    endfor
+
+    return loclist
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
