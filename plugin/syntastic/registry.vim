@@ -75,7 +75,7 @@ let s:defaultCheckers = {
         \ 'tcl':         ['nagelfar'],
         \ 'tex':         ['lacheck', 'chktex'],
         \ 'texinfo':     ['makeinfo'],
-        \ 'text':        ['atdtool'],
+        \ 'text':        [],
         \ 'twig':        ['twiglint'],
         \ 'typescript':  ['tsc'],
         \ 'vala':        ['valac'],
@@ -96,7 +96,8 @@ lockvar! s:defaultCheckers
 let s:defaultFiletypeMap = {
         \ 'gentoo-metadata': 'xml',
         \ 'lhaskell': 'haskell',
-        \ 'litcoffee': 'coffee'
+        \ 'litcoffee': 'coffee',
+        \ 'mail': 'text'
     \ }
 lockvar! s:defaultFiletypeMap
 
