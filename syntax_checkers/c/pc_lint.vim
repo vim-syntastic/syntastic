@@ -25,21 +25,24 @@ endif
 function! SyntaxCheckers_c_pc_lint_GetLocList() dict
     let config = findfile(g:syntastic_pc_lint_config_file, '.;')
 
-    " -hF1          - show filename, try to make message 1 line
+    " -hFs1         - show filename, add space after messages, try to make message 1 line
     " -width(0,0)   - make sure there are no line breaks
+    " -t            - set tab size
+    " -v            - turn off verbosity
     let makeprg = self.makeprgBuild({
         \ 'args': (filereadable(config) ? syntastic#util#shescape(fnamemodify(config, ':p')) : ''),
-        \ 'args_after': ['-hF1', '-width(0,0)'] })
+        \ 'args_after': ['-hFs1', '-width(0,0)', '-t' . &tabstop, '-format=%f:%l:%C:%t:%n:%m'] })
 
     let errorformat =
-        \ '%E%f  %l  Error %n: %m,' .
-        \ '%W%f  %l  Warning %n: %m,' .
-        \ '%W%f  %l  Info %n: %m,' .
+        \ '%E%f:%l:%v:Error:%n:%m,' .
+        \ '%W%f:%l:%v:Warning:%n:%m,' .
+        \ '%W%f:%l:%v:Info:%n:%m,' .
         \ '%-G%.%#'
 
     return SyntasticMake({
         \ 'makeprg': makeprg,
-        \ 'errorformat': errorformat })
+        \ 'errorformat': errorformat,
+        \ 'postprocess': ['cygwinRemoveCR'] })
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
