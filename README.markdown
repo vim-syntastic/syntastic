@@ -236,20 +236,25 @@ __Q. What is the difference between syntax checkers and style checkers?__
 
 A. The errors and warnings they produce are highlighted differently and can
 be filtered by different rules, but otherwise the distinction is pretty much
-arbitrary. There is no guarantee that a style checker wouldn't produce messages
-for syntax errors, nor that a syntax checker wouldn't give you style hints.
-There is also no guarantee that messages marked as "style" are somehow less
-severe than the ones marked as "syntax". There are even a few Frankenstein
-checkers (for example `flake8` and `pylama`), that produce both kinds of
-messages.
+arbitrary. There is an ongoing effort to keep things consistent, so you can
+_generally_ expect messages produced by syntax checkers to be _mostly_ related
+to syntax, and messages produced by style checkers to be _mostly_ about style.
+But there can be no formal guarantee that, say, a style checker that runs into
+a syntax error wouldn't die with a fatal message, nor that a syntax checker
+wouldn't give you warnings against using some constructs as being bad practice.
+There is also no guarantee that messages marked as "style" are less severe than
+the ones marked as "syntax" (whatever that might mean). And there are even a
+few Frankenstein checkers (for example `flake8` and `pylama`) that, by their
+nature, produce both kinds of messages. Syntastic is not smart enough to be
+able to sort out these things by itself.
 
-In fact, since the distinction between syntax and style is orthogonal to the
-distinction between errors and warnings, the main use for this is to give you
-more flexibility when filtering unwanted messages, rather than as an indication
-of severity levels. You can thus turn off messages based on level, on type, or
-both.
+In fact it's more useful to look at this from the perspective of filtering
+unwanted messages, rather than as an indicator of severity levels.  The
+distinction between syntax and style is orthogonal to the distinction between
+errors and warnings, and thus you can turn off messages based on level, on
+type, or both.
 
-e.g. To turn off all style messages:
+e.g. To disable all style messages:
 ```vim
 let g:syntastic_quiet_messages = { "type": "style" }
 ```
@@ -272,7 +277,7 @@ See `:help syntastic-aggregating-errors` for more details.
 __Q. How can I jump between the different errors without using the location
 list at the bottom of the window?__
 
-A. Vim provides several built in commands for this. See `:help :lnext` and
+A. Vim provides several built-in commands for this. See `:help :lnext` and
 `:help :lprev`.
 
 If you use these commands a lot then you may want to add shortcut mappings to
@@ -321,3 +326,7 @@ a look at [jedi-vim][7], [python-mode][8], or [YouCompleteMe][9].
 [10]: http://perldoc.perl.org/perlrun.html#*-c*
 [11]: https://github.com/scrooloose/syntastic/wiki/Syntax-Checker-Guide
 [12]: https://github.com/rust-lang/rust/
+
+<!--
+vim:tw=79:sw=4:
+-->
