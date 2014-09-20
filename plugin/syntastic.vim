@@ -19,7 +19,7 @@ if has('reltime')
     lockvar! g:syntastic_start
 endif
 
-let g:syntastic_version = '3.5.0-26'
+let g:syntastic_version = '3.5.0-27'
 lockvar g:syntastic_version
 
 " Sanity checks {{{1
@@ -483,7 +483,15 @@ function! SyntasticMake(options) " {{{2
         execute 'lcd ' . fnameescape(old_cwd)
     endif
 
-    silent! lolder
+    try
+        silent lolder
+    catch /\m^Vim\%((\a\+)\)\=:E380/
+        " E380: At bottom of quickfix stack
+        call setloclist(0, [], 'r')
+    catch /\m^Vim\%((\a\+)\)\=:E776/
+        " E776: No location list
+        " do nothing
+    endtry
 
     " restore options {{{3
     let &errorformat = old_errorformat
