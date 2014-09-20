@@ -67,7 +67,7 @@ Take a look at the wiki for a list of supported filetypes and checkers:
     https://github.com/scrooloose/syntastic/wiki/Syntax-Checkers
 
 Note: This doc only deals with using syntastic. To learn how to write syntax
-checker integrations, see the guide on the github wiki:
+checker integrations, see the guide on the GitHub wiki:
 
     https://github.com/scrooloose/syntastic/wiki/Syntax-Checker-Guide
 
@@ -78,16 +78,17 @@ Syntastic comes preconfigured with a default list of enabled checkers per
 filetype. This list is kept reasonably short to prevent slowing down Vim or
 trying to use conflicting checkers.
 
-You can see the list checkers available for the current filetype with the
+You can see the list of checkers available for the current filetype with the
 |:SyntasticInfo| command.
 
-If you want to override the configured list of checkers for a filetype then
-see |syntastic-checker-options| for details. You can also change the arguments
-passed to a specific checker as well.
+You probably want to override the configured list of checkers for the
+filetypes you use, and also change the arguments passed to specific checkers
+to suit your needs. See |syntastic-checker-options| for details.
 
-Use |:SyntasticCheck| to manually check right now. Use |:SyntasticToggleMode|
-to switch between active (checking on writing the buffer) and passive (manual)
-checking.
+Use |:SyntasticCheck| to manually check right now. Use |:Errors| to open the
+|location-list| window, and |:lclose| to close it. You can clear the error
+list with |:SyntasticReset|, and you can use |:SyntasticToggleMode| to switch
+between active (checking on writing the buffer) and passive (manual) checking.
 
 ==============================================================================
 2. Functionality provided                            *syntastic-functionality*
@@ -155,13 +156,21 @@ Example: >
     highlight SyntasticErrorLine guibg=#2f0000
 <
 ------------------------------------------------------------------------------
-2.3. The error window                         *:Errors* *syntastic-error-window*
+2.3. The error window                                   *syntastic-error-window*
 
-You can use the :Errors command to display the errors for the current buffer
+You can use the |:Errors| command to display the errors for the current buffer
 in the |location-list|.
 
-Note that when you use :Errors, the current location list is overwritten with
-Syntastic's own location list.
+Note that when you use |:Errors|, the current location list is overwritten
+with Syntastic's own location list.
+
+By default syntastic doesn't fill the |location-list| with the errors found by
+the checkers, in order to reduce clashes with other plugins. Consequently, if
+you run |:lopen| or |:lwindow| rather than |:Errors| to open the error window you
+wouldn't see syntastic's list of errors. If you insist on using |:lopen| or
+|:lwindow| you should either run |:SyntasticSetLoclist| after running the checks,
+or set |syntastic_always_populate_loc_list| which tells syntastic to update the
+|location-list| automatically.
 
 ------------------------------------------------------------------------------
 2.4. Error highlighting                               *syntastic-highlighting*
@@ -212,10 +221,13 @@ See also: |'syntastic_<filetype>_<checker>_quiet_messages'|.
 ==============================================================================
 3. Commands                                               *syntastic-commands*
 
-:Errors                                                     *:SyntasticErrors*
+:Errors                                                              *:Errors*
 
 When errors have been detected, use this command to pop up the |location-list|
 and display the error messages.
+
+Please note that the |:Errors| command overwrites the current location list with
+syntastic's own location list.
 
 :SyntasticToggleMode                                    *:SyntasticToggleMode*
 
@@ -762,9 +774,9 @@ https://github.com/jmcantrell/vim-virtualenv).  This is a limitation of
 7. About                                                     *syntastic-about*
 
 The core maintainers of syntastic are:
-    Martin Grenfell (github: scrooloose)
-    Gregor Uhlenheuer (github: kongo2002)
-    LCD 047 (github: lcd047)
+    Martin Grenfell (GitHub: scrooloose)
+    Gregor Uhlenheuer (GitHub: kongo2002)
+    LCD 047 (GitHub: lcd047)
 
 Find the latest version of syntastic at:
 
