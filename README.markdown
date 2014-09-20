@@ -163,7 +163,8 @@ automatically by syntastic.
 
 <a name="faqloclist"></a>
 
-__Q. I run a checker and the location list is not updated...__
+__Q. I run a checker and the location list is not updated...__  
+__Q. I run`:lopen` or `:lwindow` and the error window is empty...__
 
 A. By default the location list is changed only when you run the `:Errors`
 command, in order to minimise conflicts with other plugins.  If you want the
