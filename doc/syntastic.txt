@@ -616,11 +616,19 @@ Use |:SyntasticInfo| to see which checkers are available for a given filetype.
 5.2 Choosing the executable                            *syntastic-config-exec*
 
                                        *'syntastic_<filetype>_<checker>_exec'*
-The executable used by a checker is normally defined automatically, when the
-checkers is registered. You can however override it by setting the variable
+The executable run by a checker is normally defined automatically, when the
+checker is registered. You can however override it, by setting the variable
 'g:syntastic_<filetype>_<checker>_exec': >
     let g:syntastic_ruby_mri_exec = '~/bin/ruby2'
 <
+This variable has a local version, 'b:syntastic_<filetype>_<checker>_exec',
+which takes precedence over the global one in the corresponding buffer.
+
+                                                *'b:syntastic_<checker>_exec'*
+And there is also a local variable named 'b:syntastic_<checker>_exec', which
+takes precedence over both 'b:syntastic_<filetype>_<checker>_exec' and
+'g:syntastic_<filetype>_<checker>_exec' in the buffers where it is defined.
+
 ------------------------------------------------------------------------------
 5.3 Configuring specific checkers                   *syntastic-config-makeprg*
 
@@ -651,13 +659,14 @@ you can set it to an empty string, e.g.: >
                                         *'syntastic_<filetype>_<checker>_exe'*
 The 'exe' is normally the same as the 'exec' attribute described above, in
 which case it may be omitted. However, you can use it to add environment
-variables or additional parameters, e.g. to tell the mri checker to use KANJI
-encoding you could do something like this: >
-    let g:syntastic_ruby_mri_exe = 'RUBYOPT="-Ke" ruby'
+variables, or to change the way the checker is run. For example this setup
+allows you to run PC-Lint under Wine emulation on Linux: >
+    let  g:syntastic_c_pc_lint_exec = "wine"
+    let  g:syntastic_c_pc_lint_exe = "wine c:/path/to/lint-nt.exe"
 <
 To override the args and the tail: >
-    let g:syntastic_ruby_mri_args = "--my --args --here"
-    let g:syntastic_ruby_mri_tail = "> /tmp/my-output-file-biatch"
+    let g:syntastic_c_pc_lint_args = "-w5 -Iz:/usr/include/linux"
+    let g:syntastic_c_pc_lint_tail = "2>/dev/null"
 <
 The general form of the override options is: >
     syntastic_<filetype>_<checker>_<option-name>
