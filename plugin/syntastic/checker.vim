@@ -46,11 +46,9 @@ function! g:SyntasticChecker.getName() " {{{2
 endfunction " }}}2
 
 function! g:SyntasticChecker.getExec() " {{{2
-    if exists('g:syntastic_' . self._filetype . '_' . self._name . '_exec')
-        return expand(g:syntastic_{self._filetype}_{self._name}_exec)
-    endif
-
-    return self._exec
+    return
+        \ exists('b:syntastic_' . self._name . '_exec') ? b:syntastic_{self._name}_exec :
+        \ expand(syntastic#util#var(self._filetype . '_' . self._name . '_exec', self._exec))
 endfunction " }}}2
 
 function! g:SyntasticChecker.getExecEscaped() " {{{2
