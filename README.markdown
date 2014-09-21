@@ -137,6 +137,9 @@ Python 2, e.g:
 let g:syntastic_python_python_exec = '/path/to/python3'
 ```
 
+See [this gist][13] for how to automatically switch to the syntax checker from
+Python 2 to Python 3 when an appropriate shebang line is present.
+
 <a name="faqperl"></a>
 
 __Q. The `perl` checker has stopped working...__
@@ -327,6 +330,7 @@ a look at [jedi-vim][7], [python-mode][8], or [YouCompleteMe][9].
 [10]: http://perldoc.perl.org/perlrun.html#*-c*
 [11]: https://github.com/scrooloose/syntastic/wiki/Syntax-Checker-Guide
 [12]: https://github.com/rust-lang/rust/
+[13]: https://gist.github.com/eddieantonio/c096c780cf09c938e031
 
 <!--
 vim:tw=79:sw=4:
