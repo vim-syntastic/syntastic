@@ -40,7 +40,7 @@ function! SyntaxCheckers_c_clang_check_GetLocList() dict
         \ '%E%f:%l:%c: fatal error: %m,' .
         \ '%E%f:%l:%c: error: %m,' .
         \ '%W%f:%l:%c: warning: %m,' .
-        \ '%-G%\m%\(LLVM ERROR:%\|No compilation database found%\)%\@!%.%#,' .
+        \ '%-G%\m%\%%(LLVM ERROR:%\|No compilation database found%\)%\@!%.%#,' .
         \ '%E%m'
 
     let loclist = SyntasticMake({
