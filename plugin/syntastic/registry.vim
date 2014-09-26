@@ -72,6 +72,7 @@ let s:defaultCheckers = {
         \ 'scss':        ['sass', 'scss_lint'],
         \ 'sh':          ['sh', 'shellcheck'],
         \ 'slim':        ['slimrb'],
+        \ 'spec':        ['rpmlint'],
         \ 'tcl':         ['nagelfar'],
         \ 'tex':         ['lacheck', 'chktex'],
         \ 'texinfo':     ['makeinfo'],
