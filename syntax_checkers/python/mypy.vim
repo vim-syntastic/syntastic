@@ -10,27 +10,26 @@ if exists("g:loaded_syntastic_python_mypy_checker")
 endif
 let g:loaded_syntastic_python_mypy_checker = 1
 
-function! SyntaxCheckers_python_mypy_IsAvailable() dict
-    return executable(self.getExec())
-endfunction
+let s:save_cpo = &cpo
+set cpo&vim
 
 function! SyntaxCheckers_python_mypy_GetLocList() dict
-    let makeprg = self.makeprgBuild({
-                    \ 'args': '',
-                    \ 'args_after': '' })
+    let makeprg = self.makeprgBuild({})
 
     let errorformat = '%f\, line %l: %m'
 
     return SyntasticMake({
         \ 'makeprg': makeprg,
         \ 'errorformat': errorformat,
-        \ 'returns': [0,1] })
+        \ 'defaults': { 'type': 'E' },
+        \ 'returns': [0, 1] })
 endfunction
-
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'python',
     \ 'name': 'mypy'})
 
+let &cpo = s:save_cpo
+unlet s:save_cpo
 
-
+" vim: set et sts=4 sw=4:
