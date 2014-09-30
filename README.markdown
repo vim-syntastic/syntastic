@@ -264,8 +264,8 @@ See `:help syntastic_quiet_messages` for details.
 
 <a name="faqaggregate"></a>
 
-__Q. How can I display together the errors found by all checkers enabled for
-the current file?__
+__Q. I have enabled multiple checkers for the current filetype.  How can I
+display all of the errors from all of the checkers together?__
 
 A. Set `g:syntastic_aggregate_errors` to 1 in your vimrc:
 ```vim
