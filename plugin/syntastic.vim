@@ -19,12 +19,20 @@ if has('reltime')
     lockvar! g:syntastic_start
 endif
 
-let g:syntastic_version = '3.5.0-40'
+let g:syntastic_version = '3.5.0-41'
 lockvar g:syntastic_version
 
 " Sanity checks {{{1
 
-for s:feature in ['autocmd', 'eval', 'modify_fname', 'quickfix', 'reltime', 'user_commands']
+for s:feature in [
+            \ 'autocmd',
+            \ 'eval',
+            \ 'file_in_path',
+            \ 'modify_fname',
+            \ 'quickfix',
+            \ 'reltime',
+            \ 'user_commands'
+        \ ]
     if !has(s:feature)
         call syntastic#log#error("need Vim compiled with feature " . s:feature)
         finish

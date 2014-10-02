@@ -25,7 +25,7 @@ endfunction
 function! SyntaxCheckers_bro_bro_GetLocList() dict
     let makeprg = self.makeprgBuild({ 'args_before': '--parse-only' })
 
-    "example: error in ./foo.bro, line 3: unknown identifier banana, at or "near "banana"
+    "example: error in ./foo.bro, line 3: unknown identifier banana, at or near "banana"
     let errorformat =
         \ '%trror in %f\, line %l: %m,' .
         \ '%tarning in %f\, line %l: %m'
