@@ -1,6 +1,6 @@
 # File:        syntastic.py
-# Description: Syntax checking plugin for docutil's reStructuredText files
-# Maintainer:  James Rowe <jnrowe at gmail dot com>
+# Description: Dummy builder  for Sphinx
+# Maintainer:  LCD 47 <lcd047 at gmail dot com>
 # License:     This program is free software. It comes without any warranty,
 #              to the extent permitted by applicable law. You can redistribute
 #              it and/or modify it under the terms of the Do What The Fuck You
