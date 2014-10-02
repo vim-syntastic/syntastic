@@ -24,6 +24,47 @@ function! syntastic#util#Slash() abort " {{{2
     return (!exists("+shellslash") || &shellslash) ? '/' : '\'
 endfunction " }}}2
 
+" Create a temporary directory
+function! syntastic#util#tmpdir() " {{{2
+    let tempdir = ''
+
+    if (has('unix') || has('mac')) && executable('mktemp')
+        " TODO: option "-t" to mktemp(1) is not portable
+        let tmp = $TMPDIR != '' ? $TMPDIR : $TMP != '' ? $TMP : '/tmp'
+        let out = split(system('mktemp -q -d ' . tmp . '/vim-syntastic-' . getpid() . '-XXXXXXXX'), "\n")
+        if v:shell_error == 0 && len(out) == 1
+            let tempdir = out[0]
+        endif
+    endif
+
+    if tempdir == ''
+        if has('win32') || has('win64')
+            let tempdir = $TEMP . syntastic#util#Slash() . 'vim-syntastic-' . getpid()
+        elseif has('win32unix')
+            let tempdir = s:CygwinPath('/tmp/vim-syntastic-'  . getpid())
+        elseif $TMPDIR != ''
+            let tempdir = $TMPDIR . '/vim-syntastic-' . getpid()
+        else
+            let tempdir = '/tmp/vim-syntastic-' . getpid()
+        endif
+    endif
+
+    return tempdir
+endfunction " }}}2
+
+" Recursively remove a directory
+function! syntastic#util#rmdir(dir) " {{{2
+    let rmdir = syntastic#util#shescape(get(g:, 'netrw_localrmdir', 'rmdir'))
+    if isdirectory(a:dir)
+        for f in split(globpath(a:dir, '*'), "\n")
+            call syntastic#util#rmdir(f)
+        endfor
+        silent! call system(rmdir . ' ' . syntastic#util#shescape(a:dir))
+    else
+        silent! call delete(a:dir)
+    endif
+endfunction " }}}2
+
 "search the first 5 lines of the file for a magic number and return a map
 "containing the args and the executable
 "
