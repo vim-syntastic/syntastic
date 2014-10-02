@@ -21,7 +21,7 @@ let s:sass_cache_location = syntastic#util#tmpdir()
 lockvar s:sass_cache_location
 
 augroup syntastic
-    autocmd VimLeave * call syntastic#util#rmdir(s:sass_cache_location)
+    autocmd VimLeave * call syntastic#util#rmrf(s:sass_cache_location)
 augroup END
 
 "By default do not check partials as unknown variables are a syntax error

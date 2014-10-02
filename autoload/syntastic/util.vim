@@ -53,15 +53,22 @@ function! syntastic#util#tmpdir() " {{{2
 endfunction " }}}2
 
 " Recursively remove a directory
-function! syntastic#util#rmdir(dir) " {{{2
-    let rmdir = syntastic#util#shescape(get(g:, 'netrw_localrmdir', 'rmdir'))
-    if isdirectory(a:dir)
-        for f in split(globpath(a:dir, '*'), "\n")
-            call syntastic#util#rmdir(f)
-        endfor
-        silent! call system(rmdir . ' ' . syntastic#util#shescape(a:dir))
+function! syntastic#util#rmrf(what) " {{{2
+    if  getftype(a:what) ==# 'dir'
+        if !exists('s:rmrf')
+            let s:rmrf =
+                \ has('unix') || has('mac') ? 'rm -rf' :
+                \ has('win32') || has('win64') ? 'rmdir /S /Q' :
+                \ has('win16') || has('win95') || has('dos16') || has('dos32') ? 'deltree /Y' : ''
+        endif
+
+        if s:rmrf != ''
+            silent! call system(s:rmrf . ' ' . syntastic#util#shescape(a:what))
+        else
+            call s:_rmrf(a:what)
+        endif
     else
-        silent! call delete(a:dir)
+        silent! call delete(a:what)
     endif
 endfunction " }}}2
 
@@ -317,6 +324,21 @@ function! s:_translateElement(key, term) " {{{2
         let ret = "1"
     endif
     return ret
+endfunction " }}}2
+
+function! s:_rmrf(what) " {{{2
+    if !exists('s:rmdir')
+        let s:rmdir = syntastic#util#shescape(get(g:, 'netrw_localrmdir', 'rmdir'))
+    endif
+
+    if getftype(a:what) ==# 'dir'
+        for f in split(globpath(a:what, '*'), "\n")
+            call s:_rmrf(f)
+        endfor
+        silent! call system(s:rmdir . ' ' . syntastic#util#shescape(a:what))
+    else
+        silent! call delete(a:what)
+    endif
 endfunction " }}}2
 
 " }}}1

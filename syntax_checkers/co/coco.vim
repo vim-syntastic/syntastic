@@ -32,7 +32,7 @@ function! SyntaxCheckers_co_coco_GetLocList() dict
         \ 'makeprg': makeprg,
         \ 'errorformat': errorformat })
 
-    call syntastic#util#rmdir(tmpdir)
+    call syntastic#util#rmrf(tmpdir)
 
     return loclist
 endfunction
