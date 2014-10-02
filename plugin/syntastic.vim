@@ -19,7 +19,7 @@ if has('reltime')
     lockvar! g:syntastic_start
 endif
 
-let g:syntastic_version = '3.5.0-42'
+let g:syntastic_version = '3.5.0-43'
 lockvar g:syntastic_version
 
 " Sanity checks {{{1
@@ -397,7 +397,7 @@ endfunction " }}}2
 function! s:ToggleMode() " {{{2
     call s:modemap.toggleMode()
     call s:ClearCache()
-    call s:UpdateErrors(1)
+    call s:notifiers.refresh(g:SyntasticLoclist.New([]))
     call s:modemap.echoMode()
 endfunction " }}}2
 
