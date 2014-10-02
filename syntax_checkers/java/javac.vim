@@ -399,7 +399,7 @@ function! SyntaxCheckers_java_javac_GetLocList() dict
         \ 'postprocess': ['cygwinRemoveCR'] })
 
     if g:syntastic_java_javac_delete_output
-        call syntastic#util#rmdir(output_dir)
+        call syntastic#util#rmrf(output_dir)
     endif
     return errors
 
