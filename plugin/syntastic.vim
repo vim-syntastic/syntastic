@@ -193,6 +193,7 @@ augroup syntastic
     autocmd BufReadPost * call s:BufReadPostHook()
     autocmd BufWritePost * call s:BufWritePostHook()
     autocmd BufEnter * call s:BufEnterHook()
+    autocmd BufDelete * call s:BufDeleteHook(expand('<afile>'), expand('<abuf>'))
 augroup END
 
 if v:version > 703 || (v:version == 703 && has('patch544'))
@@ -240,6 +241,21 @@ function! s:QuitPreHook() " {{{2
         \ 'autocmd: QuitPre, buffer ' . bufnr("") . ' = ' . string(bufname(str2nr(bufnr("")))))
     let b:syntastic_skip_checks = get(b:, 'syntastic_skip_checks', 0) || !syntastic#util#var('check_on_wq')
     call SyntasticLoclistHide()
+endfunction " }}}2
+
+function! s:BufDeleteHook(afile, abuf) " {{{2
+    let buf = str2nr(a:abuf)
+    if a:afile == '' && getbufvar(buf, '&buftype') ==# 'quickfix'
+        call syntastic#log#debug(g:SyntasticDebugAutocommands,
+            \ 'autocmd: BufDelete, buffer ' . a:abuf . ' = ' . string(a:afile))
+        let owner = str2nr(getbufvar(buf, 'syntastic_owner_buffer'))
+        if owner
+            let loclist = getbufvar(owner, 'syntastic_loclist')
+            if type(loclist) ==# type({}) && !empty(loclist)
+                call loclist.setState(0)
+            endif
+        endif
+    endif
 endfunction " }}}2
 
 " }}}1
@@ -403,7 +419,9 @@ endfunction " }}}2
 
 "display the cached errors for this buf in the location list
 function! s:ShowLocList() " {{{2
-    call g:SyntasticLoclist.current().show()
+    let loclist = g:SyntasticLoclist.current()
+    call loclist.setState(-1)
+    call loclist.show()
 endfunction " }}}2
 
 "Emulates the :lmake command. Sets up the make environment according to the

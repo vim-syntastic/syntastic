@@ -21,10 +21,15 @@ function! g:SyntasticAutoloclistNotifier.AutoToggle(loclist) " {{{2
     call syntastic#log#debug(g:SyntasticDebugNotifications, 'autoloclist: toggle')
     if !a:loclist.isEmpty()
         if syntastic#util#var('auto_loc_list') == 1
-            call a:loclist.show()
+            if a:loclist.getState()
+                call a:loclist.show()
+            else
+                lclose
+            endif
         endif
     else
         if syntastic#util#var('auto_loc_list') > 0
+            call a:loclist.setState(0)
 
             "TODO: this will close the loc list window if one was opened by
             "something other than syntastic

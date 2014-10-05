@@ -22,6 +22,7 @@ function! g:SyntasticLoclist.New(rawLoclist) " {{{2
     let newObj._name = ''
     let newObj._owner = bufnr('')
     let newObj._sorted = 0
+    let newObj._state = -1
     let newObj._columns = g:syntastic_cursor_columns
 
     return newObj
@@ -153,6 +154,14 @@ function! g:SyntasticLoclist.setOwner(buffer) " {{{2
     let self._owner = type(a:buffer) == type(0) ? a:buffer : str2nr(a:buffer)
 endfunction " }}}2
 
+function! g:SyntasticLoclist.getState() " {{{2
+    return self._state
+endfunction " }}}2
+
+function! g:SyntasticLoclist.setState(state) " {{{2
+    let self._state = a:state
+endfunction " }}}2
+
 function! g:SyntasticLoclist.deploy() " {{{2
     call self.setOwner(bufnr(''))
     let self._stamp = syntastic#util#stamp()
@@ -274,6 +283,7 @@ function! g:SyntasticLoclist.show() " {{{2
         if num != winnr()
             wincmd p
         endif
+        let self._state = 1
 
         " try to find the loclist window and set w:quickfix_title
         let errors = getloclist(0)
