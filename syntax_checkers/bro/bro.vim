@@ -18,6 +18,11 @@ let g:loaded_syntastic_bro_bro_checker = 1
 let s:save_cpo = &cpo
 set cpo&vim
 
+function! SyntaxCheckers_bro_bro_GetHighlightRegex(item)
+    let term = matchstr(a:item['text'], '\m at or near "\zs[^"]\+\ze"')
+    return term != '' ? '\V\<' . escape(term, '\') . '\>' : ''
+endfunction
+
 function! SyntaxCheckers_bro_bro_IsAvailable() dict
     return system(self.getExecEscaped() . ' --help') =~# '--parse-only'
 endfunction
@@ -27,6 +32,7 @@ function! SyntaxCheckers_bro_bro_GetLocList() dict
 
     "example: error in ./foo.bro, line 3: unknown identifier banana, at or near "banana"
     let errorformat =
+        \ 'fatal %trror in %f\, line %l: %m,' .
         \ '%trror in %f\, line %l: %m,' .
         \ '%tarning in %f\, line %l: %m'
 
