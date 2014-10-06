@@ -24,7 +24,16 @@ function! SyntaxCheckers_bro_bro_GetHighlightRegex(item)
 endfunction
 
 function! SyntaxCheckers_bro_bro_IsAvailable() dict
-    return system(self.getExecEscaped() . ' --help') =~# '--parse-only'
+    if !executable(self.getExec())
+        return 0
+    endif
+
+    if system(self.getExecEscaped() . ' --help') !~# '--parse-only'
+        call self.log('unknown option "--parse-only"')
+        return 0
+    endif
+
+    return 1
 endfunction
 
 function! SyntaxCheckers_bro_bro_GetLocList() dict
