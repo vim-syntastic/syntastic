@@ -1,7 +1,7 @@
 "============================================================================
 "File:        mdl.vim
-"Description: Checks Markdown source code using mdl
-"Maintainer:  Charles Beynon <etothepiipower@gmail.com>
+"Description: Syntax checking plugin for syntastic.vim
+"Maintainer:  Charles Beynon <etothepiipower at gmail dot com>
 "License:     This program is free software. It comes without any warranty,
 "             to the extent permitted by applicable law. You can redistribute
 "             it and/or modify it under the terms of the Do What The Fuck You
@@ -10,30 +10,34 @@
 "
 "============================================================================
 
-if exists("g:loaded_syntastic_mkd_mdl_checker")
+if exists("g:loaded_syntastic_markdown_mdl_checker")
     finish
 endif
-let g:loaded_syntastic_mkd_mdl_checker = 1
+let g:loaded_syntastic_markdown_mdl_checker = 1
 
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! SyntaxCheckers_mkd_mdl_GetLocList() dict
+function! SyntaxCheckers_markdown_mdl_GetLocList() dict
     let makeprg = self.makeprgBuild({ 'args': '--warnings' })
 
     let errorformat =
-        \ '%W%f:%l: %m,'.
-        \ '%E%f: Kramdown Warning: %m found on line %l'
+        \ '%E%f:%l: %m,'.
+        \ '%W%f: Kramdown Warning: %m found on line %l'
 
-    return SyntasticMake({
+    let loclist = SyntasticMake({
         \ 'makeprg': makeprg,
-        \ 'errorformat': errorformat })
+        \ 'errorformat': errorformat,
+        \ 'subtype': 'Style' })
+
+    call self.setWantSort(1)
+
+    return loclist
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
-    \ 'filetype': 'mkd',
-    \ 'name': 'mdl',
-    \ 'exec': 'mdl'})
+    \ 'filetype': 'markdown',
+    \ 'name': 'mdl'})
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
