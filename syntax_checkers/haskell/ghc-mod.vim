@@ -21,10 +21,22 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 function! SyntaxCheckers_haskell_ghc_mod_IsAvailable() dict
+    if !executable(self.getExec())
+        return 0
+    endif
+
     " We need either a Vim version that can handle NULs in system() output,
-    " or a ghc-mod version that has the --boundary option.
-    let exe = self.getExec()
-    let s:ghc_mod_new = executable(exe) ? s:GhcModNew(exe) : -1
+    " or a ghc-mod version that has the "--boundary" option.
+    try
+        let ver = filter(split(system(self.getExecEscaped()), '\n'), 'v:val =~# ''\m^ghc-mod version''')[0]
+        let parsed_ver = syntastic#util#parseVersion(ver)
+        call self.log(self.getExec() . ' version =', parsed_ver)
+        let s:ghc_mod_new = syntastic#util#versionIsAtLeast(parsed_ver, [2, 1, 2])
+    catch /\m^Vim\%((\a\+)\)\=:E684/
+        call syntastic#log#error("checker haskell/ghc_mod: can't parse version string (abnormal termination?)")
+        let s:ghc_mod_new = -1
+    endtry
+
     return (s:ghc_mod_new >= 0) && (v:version >= 704 || s:ghc_mod_new)
 endfunction
 
@@ -47,18 +59,6 @@ function! SyntaxCheckers_haskell_ghc_mod_GetLocList() dict
         \ 'errorformat': errorformat,
         \ 'postprocess': ['compressWhitespace'],
         \ 'returns': [0] })
-endfunction
-
-function! s:GhcModNew(exe)
-    let exe = syntastic#util#shescape(a:exe)
-    try
-        let ghc_mod_version = filter(split(system(exe), '\n'), 'v:val =~# ''\m^ghc-mod version''')[0]
-        let ret = syntastic#util#versionIsAtLeast(syntastic#util#parseVersion(ghc_mod_version), [2, 1, 2])
-    catch /\m^Vim\%((\a\+)\)\=:E684/
-        call syntastic#log#error("checker haskell/ghc_mod: can't parse version string (abnormal termination?)")
-        let ret = -1
-    endtry
-    return ret
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
