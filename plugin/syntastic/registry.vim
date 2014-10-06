@@ -99,7 +99,8 @@ let s:defaultFiletypeMap = {
         \ 'gentoo-metadata': 'xml',
         \ 'lhaskell': 'haskell',
         \ 'litcoffee': 'coffee',
-        \ 'mail': 'text'
+        \ 'mail': 'text',
+        \ 'mkd': 'markdown'
     \ }
 lockvar! s:defaultFiletypeMap
 
