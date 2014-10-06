@@ -1,5 +1,5 @@
 "============================================================================
-"File:        mdchecker.vim
+"File:        mdl.vim
 "Description: Checks Markdown source code using mdl
 "Maintainer:  Charles Beynon <etothepiipower@gmail.com>
 "License:     This program is free software. It comes without any warranty,
@@ -10,19 +10,20 @@
 "
 "============================================================================
 
-if exists("g:loaded_syntastic_mkd_mdchecker_checker")
+if exists("g:loaded_syntastic_mkd_mdl_checker")
     finish
 endif
-let g:loaded_syntastic_mkd_mdchecker_checker = 1
+let g:loaded_syntastic_mkd_mdl_checker = 1
 
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! SyntaxCheckers_mkd_mdchecker_GetLocList() dict
-    let makeprg = self.makeprgBuild({})
+function! SyntaxCheckers_mkd_mdl_GetLocList() dict
+    let makeprg = self.makeprgBuild({ 'args': '--warnings' })
 
-
-    let errorformat = '%f:%l: %m'
+    let errorformat =
+        \ '%W%f:%l: %m,'.
+        \ '%E%f: Kramdown Warning: %m found on line %l'
 
     return SyntasticMake({
         \ 'makeprg': makeprg,
@@ -31,7 +32,7 @@ endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'mkd',
-    \ 'name': 'mdchecker',
+    \ 'name': 'mdl',
     \ 'exec': 'mdl'})
 
 let &cpo = s:save_cpo
