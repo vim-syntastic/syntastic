@@ -97,6 +97,7 @@ lockvar! s:defaultCheckers
 
 let s:defaultFiletypeMap = {
         \ 'gentoo-metadata': 'xml',
+        \ 'groff': 'nroff',
         \ 'lhaskell': 'haskell',
         \ 'litcoffee': 'coffee',
         \ 'mail': 'text',
