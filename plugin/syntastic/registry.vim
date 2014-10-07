@@ -101,7 +101,9 @@ let s:defaultFiletypeMap = {
         \ 'lhaskell': 'haskell',
         \ 'litcoffee': 'coffee',
         \ 'mail': 'text',
-        \ 'mkd': 'markdown'
+        \ 'mkd': 'markdown',
+        \ 'sgml': 'docbk',
+        \ 'sgmllnx': 'docbk',
     \ }
 lockvar! s:defaultFiletypeMap
 
