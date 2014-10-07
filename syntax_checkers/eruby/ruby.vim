@@ -21,8 +21,8 @@ set cpo&vim
 function! SyntaxCheckers_eruby_ruby_IsAvailable() dict
     if !exists('g:syntastic_eruby_ruby_exec') && exists('g:syntastic_ruby_exec')
         let g:syntastic_eruby_ruby_exec = g:syntastic_ruby_exec
+        call self.log('g:syntastic_eruby_ruby_exec =', g:syntastic_eruby_ruby_exec)
     endif
-    call self.log('g:syntastic_eruby_ruby_exec =', g:syntastic_eruby_ruby_exec)
     return executable(self.getExec())
 endfunction
 
