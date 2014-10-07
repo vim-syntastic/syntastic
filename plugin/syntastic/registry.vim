@@ -66,6 +66,7 @@ let s:defaultCheckers = {
         \ 'python':      ['python', 'flake8', 'pylint'],
         \ 'r':           [],
         \ 'racket':      ['racket'],
+        \ 'rnc':         ['rnv'],
         \ 'rst':         ['rst2pseudoxml'],
         \ 'ruby':        ['mri'],
         \ 'sass':        ['sass'],
