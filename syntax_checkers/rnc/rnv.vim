@@ -29,8 +29,8 @@ function! SyntaxCheckers_rnc_rnv_GetLocList() dict
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
-        \ 'filetype': 'rnc',
-        \ 'name': 'rnv'})
+    \ 'filetype': 'rnc',
+    \ 'name': 'rnv'})
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
