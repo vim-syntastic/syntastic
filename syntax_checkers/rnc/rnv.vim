@@ -6,7 +6,7 @@
 "============================================================================
 
 if exists("g:loaded_syntastic_rnc_rnv_checker")
-        finish
+    finish
 endif
 let g:loaded_syntastic_rnc_rnv_checker = 1
 
@@ -16,8 +16,8 @@ set cpo&vim
 function! SyntaxCheckers_rnc_rnv_GetLocList() dict
     let makeprg = self.makeprgBuild({ 'args': '-c' })
 
-    let errorformat=
-        \ '%f:%l:%c: error: %m'
+    let errorformat =
+        \ '%f:%l:%c: %trror: %m'
 
     return SyntasticMake({
         \ 'makeprg': makeprg,
