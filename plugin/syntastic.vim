@@ -19,7 +19,7 @@ if has('reltime')
     lockvar! g:syntastic_start
 endif
 
-let g:syntastic_version = '3.5.0-63'
+let g:syntastic_version = '3.5.0-64'
 lockvar g:syntastic_version
 
 " Sanity checks {{{1
@@ -46,7 +46,7 @@ if !s:running_windows && executable('uname')
     try
         let s:uname = system('uname')
     catch /\m^Vim\%((\a\+)\)\=:E484/
-        call syntastic#log#error("your shell " . &shell . " doesn't use traditional UNIX syntax for redirections")
+        call syntastic#log#error("your shell " . &shell . " can't handle traditional UNIX syntax for redirections")
         finish
     endtry
     lockvar s:uname
@@ -431,7 +431,6 @@ function! SyntasticMake(options) " {{{2
     call syntastic#log#debug(g:SyntasticDebugTrace, 'SyntasticMake: called with options:', a:options)
 
     " save options and locale env variables {{{3
-    let old_shell = &shell
     let old_shellredir = &shellredir
     let old_local_errorformat = &l:errorformat
     let old_errorformat = &errorformat
@@ -507,7 +506,6 @@ function! SyntasticMake(options) " {{{2
     let &errorformat = old_errorformat
     let &l:errorformat = old_local_errorformat
     let &shellredir = old_shellredir
-    let &shell = old_shell
     " }}}3
 
     if !s:running_windows && (s:uname() =~ "FreeBSD" || s:uname() =~ "OpenBSD")
@@ -597,22 +595,21 @@ function! s:addToErrors(errors, options) " {{{2
     return a:errors
 endfunction " }}}2
 
-" The script changes &shellredir and &shell to stop the screen flicking when
-" shelling out to syntax checkers. Not all OSs support the hacks though.
+" XXX: Is this still needed?
+" The script changes &shellredir to stop the screen
+" flicking when shelling out to syntax checkers.
 function! s:bashHack() " {{{2
-    if !exists('s:bash')
-        if !s:running_windows && (s:uname() !~# "FreeBSD") && (s:uname() !~# "OpenBSD")
-            let s:bash =
-                \ executable('/usr/local/bin/bash') ? '/usr/local/bin/bash' :
-                \ executable('/bin/bash') ? '/bin/bash' : ''
-        else
-            let s:bash = ''
+    if g:syntastic_bash_hack
+        if !exists('s:shell_is_bash')
+            let s:shell_is_bash =
+                \ !s:running_windows &&
+                \ (s:uname() !~# "FreeBSD") && (s:uname() !~# "OpenBSD") &&
+                \ &shell =~# '\m\<bash$'
         endif
-    endif
 
-    if g:syntastic_bash_hack && s:bash != ''
-        let &shell = s:bash
-        let &shellredir = '&>'
+        if s:shell_is_bash
+            let &shellredir = '&>'
+        endif
     endif
 endfunction " }}}2
 
