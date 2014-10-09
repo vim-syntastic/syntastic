@@ -19,7 +19,7 @@ if has('reltime')
     lockvar! g:syntastic_start
 endif
 
-let g:syntastic_version = '3.5.0-64'
+let g:syntastic_version = '3.5.0-65'
 lockvar g:syntastic_version
 
 " Sanity checks {{{1
@@ -90,7 +90,7 @@ lockvar! g:syntastic_defaults
 
 for s:key in keys(g:syntastic_defaults)
     if !exists('g:syntastic_' . s:key)
-        let g:syntastic_{s:key} = g:syntastic_defaults[s:key]
+        let g:syntastic_{s:key} = copy(g:syntastic_defaults[s:key])
     endif
 endfor
 
