@@ -38,7 +38,7 @@ At the time of this writing, syntax checking plugins exist for ActionScript,
 Ada, AppleScript, Arduino, AsciiDoc, ASM, BEMHTML, Bro, Bourne shell, C,
 C++, C#, Cabal, Chef, CoffeeScript, Coco, Coq, CSS, Cucumber, CUDA, D, Dart,
 DocBook, Dust, Elixir, Erlang, eRuby, Fortran, Gentoo metadata, GLSL, Go,
-Haml, Haskell, Haxe, Handlebars, HSS, HTML, Java, JavaScript, JSON, JSX, LESS,
+Haml, Haskell, Haxe, Handlebars, HSS, HTML, Idris, Java, JavaScript, JSON, JSX, LESS,
 Lex, Limbo, LISP, LLVM intermediate language, Lua, Markdown, MATLAB, NASM,
 Objective-C, Objective-C++, OCaml, Perl, Perl POD, PHP, gettext Portable
 Object, OS X and iOS property lists, Puppet, Python, R, Racket, Relax NG,

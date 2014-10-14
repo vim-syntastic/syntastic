@@ -42,6 +42,7 @@ let s:defaultCheckers = {
         \ 'haxe':        ['haxe'],
         \ 'hss':         ['hss'],
         \ 'html':        ['tidy'],
+        \ 'idris':       [],
         \ 'java':        ['javac'],
         \ 'javascript':  ['jshint', 'jslint'],
         \ 'json':        ['jsonlint', 'jsonval'],
