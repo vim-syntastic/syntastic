@@ -72,19 +72,19 @@ Syntastic itself has rather relaxed requirements: it doesn't have any external
 dependencies, and it needs a version of [Vim][13] compiled with a few common
 features: `autocmd`, `eval`, `file_in_path`, `modify_fname`, `quickfix`,
 `reltime`, and `user_commands`. Not all possible combinations of features that
-include the ones above make equal sense on all operating systems, but [Vim][13]
+include the ones above make equal sense on all operating systems, but Vim
 version 7 or later with the "normal", "big", or "huge" feature sets should be
 fine.
 
-Syntastic can also be used with all modern plugin managers, such as
+Syntastic should work with any modern plugin managers for Vim, such as
 [NeoBundle][14], [Pathogen][1], [Vim-Addon-Manager][15], [Vim-Plug][16], or
 [Vundle][17]. Instructions for installing syntastic with [Pathogen][1] are
 included below for completeness.
 
 Last but not least: syntastic doesn't know how to do any syntax checks by
-itself. You need to install external checkers corresponding to the types of
-files you want to check. Please consult the [wiki][3] for a list of supported
-checkers.
+itself. In order to get meaningful results you need to install external
+checkers corresponding to the types of files you use. Please consult the
+[wiki][3] for a list of supported checkers.
 
 <a name="installpathogen"></a>
 
