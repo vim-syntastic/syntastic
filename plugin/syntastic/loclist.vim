@@ -173,6 +173,29 @@ function! g:SyntasticLoclist.decorate(tag) " {{{2
     endfor
 endfunction " }}}2
 
+function! g:SyntasticLoclist.balloons() " {{{2
+    if !exists("self._cachedBalloons")
+        let sep = has("balloon_multiline") ? "\n" : ' | '
+
+        let self._cachedBalloons = {}
+        for e in self._rawLoclist
+            let buf = e['bufnr']
+
+            if !has_key(self._cachedBalloons, buf)
+                let self._cachedBalloons[buf] = {}
+            endif
+
+            if has_key(self._cachedBalloons[buf], e['lnum'])
+                let self._cachedBalloons[buf][e['lnum']] .= sep . e['text']
+            else
+                let self._cachedBalloons[buf][e['lnum']] = e['text']
+            endif
+        endfor
+    endif
+
+    return get(self._cachedBalloons, bufnr(''), {})
+endfunction " }}}2
+
 function! g:SyntasticLoclist.errors() " {{{2
     if !exists("self._cachedErrors")
         let self._cachedErrors = self.filter({'type': "E"})
