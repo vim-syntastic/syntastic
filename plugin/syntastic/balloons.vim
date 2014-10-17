@@ -36,7 +36,7 @@ endfunction " }}}2
 function! g:SyntasticBalloonsNotifier.reset(loclist) " {{{2
     let b:syntastic_balloons = {}
     if has('balloon_eval')
-        call syntastic#log#debug(g:SyntasticDebugNotifications, 'balloons: reset')
+        call syntastic#log#debug(g:SYNTASTIC_DEBUG_NOTIFICATIONS, 'balloons: reset')
         unlet! b:syntastic_balloons
         set noballooneval
     endif
