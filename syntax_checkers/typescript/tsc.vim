@@ -13,9 +13,15 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 function! SyntaxCheckers_typescript_tsc_GetLocList() dict
+    if syntastic#util#isRunningWindows()
+        let out = tempname()
+    elseif
+        let out = syntastic#util#DevNull()
+    endif
+
     let makeprg = self.makeprgBuild({
         \ 'args': '--module commonjs',
-        \ 'args_after': '--out ' . syntastic#util#DevNull() })
+        \ 'args_after': '--out ' . out })
 
     let errorformat =
         \ '%E%f %#(%l\,%c): error %m,' .
@@ -27,6 +33,10 @@ function! SyntaxCheckers_typescript_tsc_GetLocList() dict
         \ 'makeprg': makeprg,
         \ 'errorformat': errorformat,
         \ 'defaults': {'bufnr': bufnr("")} })
+
+    if syntastic#util#isRunningWindows()
+        call delete(out)
+    endif
 
     call self.setWantSort(1)
 
