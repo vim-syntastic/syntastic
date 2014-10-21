@@ -76,6 +76,39 @@ function! syntastic#preprocess#perl(errors) " {{{2
     return syntastic#util#unique(out)
 endfunction " }}}2
 
+function! syntastic#preprocess#prospector(errors) " {{{2
+    let true = 1
+    let false = 0
+    let null = ''
+    let errs = eval(join(a:errors, ''))
+
+    let out = []
+    let warn_issued = 0
+    if type(errs) == type({}) && has_key(errs, 'messages') && type(errs['messages']) == type([])
+        for e in errs['messages']
+            if type(e) == type({})
+                try
+                    let msg =
+                        \ e['locaton']['path'] . ':' .
+                        \ e['location']['line'] . ':' .
+                        \ (e['location']['character'] + 1) . ': ' .
+                        \ e['code'] . ' ' .
+                        \ e['message'] . ' ' .
+                        \ '[' . e['source'] . ']'
+                    call add(out, msg)
+                catch /\m^Vim\%((\a\+)\)\=:E716/
+                    if !warn_issued
+                        call add(out, '.:0:0: unknown error format')
+                        let warn_issued = 1
+                    endif
+                endtry
+            endif
+        endfor
+    endif
+
+    return out
+endfunction " }}}2
+
 function! syntastic#preprocess#rparse(errors) " {{{2
     let errlist = copy(a:errors)
 
