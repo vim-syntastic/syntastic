@@ -27,13 +27,14 @@ function! SyntaxCheckers_python_prospector_GetLocList() dict
             let init = findfile('__init__.py', base . ';')
         endif
         if init != ''
-            let base = fnamemodify(init, '%:p:h')
+            let base = fnamemodify(init, ':p:h')
         endif
+        call self.log('base =', base)
     endif
 
     let makeprg = self.makeprgBuild({
         \ 'args': '--external-config merge',
-        \ 'args_after': '--messages-only --absolute-paths --die-on-tool-error --output-format json',
+        \ 'args_after': '--messages-only --absolute-paths --die-on-tool-error --zero-exit --output-format json',
         \ 'fname': syntastic#util#shescape(base) })
 
     let errorformat = '%f:%l:%c: %m'
@@ -45,7 +46,7 @@ function! SyntaxCheckers_python_prospector_GetLocList() dict
         \ 'errorformat': errorformat,
         \ 'env': env,
         \ 'preprocess': 'prospector',
-        \ 'returns': [0, 1] })
+        \ 'returns': [0] })
 
     for e in loclist
         if e['text'] =~# '\v\[%(dodgy|mccabe|pep8|pep257|pyroma)\]$'
