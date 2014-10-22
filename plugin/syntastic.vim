@@ -478,30 +478,38 @@ function! SyntasticMake(options) " {{{2
 
     call syntastic#log#debug(g:_SYNTASTIC_DEBUG_LOCLIST, 'checker output:', err_lines)
 
-    if has_key(a:options, 'Preprocess')
-        let err_lines = call(a:options['Preprocess'], [err_lines])
-        call syntastic#log#debug(g:_SYNTASTIC_DEBUG_LOCLIST, 'preprocess (external):', err_lines)
-    elseif has_key(a:options, 'preprocess')
-        let err_lines = call('syntastic#preprocess#' . a:options['preprocess'], [err_lines])
-        call syntastic#log#debug(g:_SYNTASTIC_DEBUG_LOCLIST, 'preprocess:', err_lines)
+    " Does it still make sense to go on?
+    let bailout =
+        \ syntastic#util#var('exit_checks') &&
+        \ has_key(a:options, 'returns') &&
+        \ index(a:options['returns'], v:shell_error) == -1
+
+    if !bailout
+        if has_key(a:options, 'Preprocess')
+            let err_lines = call(a:options['Preprocess'], [err_lines])
+            call syntastic#log#debug(g:_SYNTASTIC_DEBUG_LOCLIST, 'preprocess (external):', err_lines)
+        elseif has_key(a:options, 'preprocess')
+            let err_lines = call('syntastic#preprocess#' . a:options['preprocess'], [err_lines])
+            call syntastic#log#debug(g:_SYNTASTIC_DEBUG_LOCLIST, 'preprocess:', err_lines)
+        endif
+        lgetexpr err_lines
+
+        let errors = deepcopy(getloclist(0))
+
+        if has_key(a:options, 'cwd')
+            execute 'lcd ' . fnameescape(old_cwd)
+        endif
+
+        try
+            silent lolder
+        catch /\m^Vim\%((\a\+)\)\=:E380/
+            " E380: At bottom of quickfix stack
+            call setloclist(0, [], 'r')
+        catch /\m^Vim\%((\a\+)\)\=:E776/
+            " E776: No location list
+            " do nothing
+        endtry
     endif
-    lgetexpr err_lines
-
-    let errors = deepcopy(getloclist(0))
-
-    if has_key(a:options, 'cwd')
-        execute 'lcd ' . fnameescape(old_cwd)
-    endif
-
-    try
-        silent lolder
-    catch /\m^Vim\%((\a\+)\)\=:E380/
-        " E380: At bottom of quickfix stack
-        call setloclist(0, [], 'r')
-    catch /\m^Vim\%((\a\+)\)\=:E776/
-        " E776: No location list
-        " do nothing
-    endtry
 
     " restore options {{{3
     let &errorformat = old_errorformat
@@ -513,11 +521,11 @@ function! SyntasticMake(options) " {{{2
         call syntastic#util#redraw(g:syntastic_full_redraws)
     endif
 
-    call syntastic#log#debug(g:_SYNTASTIC_DEBUG_LOCLIST, 'raw loclist:', errors)
-
-    if syntastic#util#var('exit_checks') && has_key(a:options, 'returns') && index(a:options['returns'], v:shell_error) == -1
+    if bailout
         throw 'Syntastic: checker error'
     endif
+
+    call syntastic#log#debug(g:_SYNTASTIC_DEBUG_LOCLIST, 'raw loclist:', errors)
 
     if has_key(a:options, 'defaults')
         call s:addToErrors(errors, a:options['defaults'])
