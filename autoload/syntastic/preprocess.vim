@@ -89,7 +89,7 @@ function! syntastic#preprocess#prospector(errors) " {{{2
             if type(e) == type({})
                 try
                     let msg =
-                        \ e['locaton']['path'] . ':' .
+                        \ e['location']['path'] . ':' .
                         \ e['location']['line'] . ':' .
                         \ (e['location']['character'] + 1) . ': ' .
                         \ e['code'] . ' ' .
