@@ -88,10 +88,14 @@ function! syntastic#preprocess#prospector(errors) " {{{2
         for e in errs['messages']
             if type(e) == type({})
                 try
+                    if e['source'] ==# 'pylint'
+                        let e['location']['character'] += 1
+                    endif
+
                     let msg =
                         \ e['location']['path'] . ':' .
                         \ e['location']['line'] . ':' .
-                        \ (e['location']['character'] + 1) . ': ' .
+                        \ e['location']['character'] . ': ' .
                         \ e['code'] . ' ' .
                         \ e['message'] . ' ' .
                         \ '[' . e['source'] . ']'
