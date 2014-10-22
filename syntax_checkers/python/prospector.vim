@@ -18,24 +18,21 @@ let g:loaded_syntastic_python_prospector_checker = 1
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! SyntaxCheckers_python_prospector_GetLocList() dict
-    let base = syntastic#util#var('prospector_base_dir')
-    if base == ''
-        let base = expand('%:p:h')
-        let init = findfile('setup.py', base . ';')
-        if init == ''
-            let init = findfile('__init__.py', base . ';')
-        endif
-        if init != ''
-            let base = fnamemodify(init, ':p:h')
-        endif
-        call self.log('base =', base)
+function! SyntaxCheckers_python_prospector_IsAvailable() dict
+    if !executable(self.getExec())
+        return 0
     endif
 
+    let ver = syntastic#util#getVersion(self.getExecEscaped() . ' --version')
+    call self.log(self.getExec() . ' version =', ver)
+
+    return syntastic#util#versionIsAtLeast(ver, [0, 7])
+endfunction
+
+function! SyntaxCheckers_python_prospector_GetLocList() dict
     let makeprg = self.makeprgBuild({
         \ 'args': '--external-config merge',
-        \ 'args_after': '--messages-only --absolute-paths --die-on-tool-error --zero-exit --output-format json',
-        \ 'fname': syntastic#util#shescape(base) })
+        \ 'args_after': '--messages-only --absolute-paths --die-on-tool-error --zero-exit --output-format json' })
 
     let errorformat = '%f:%l:%c: %m'
 
