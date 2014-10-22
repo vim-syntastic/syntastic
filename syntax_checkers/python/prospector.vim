@@ -61,6 +61,8 @@ function! SyntaxCheckers_python_prospector_GetLocList() dict
         endif
     endfor
 
+    call self.setWantSort(1)
+
     return loclist
 endfunction
 
