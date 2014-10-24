@@ -15,6 +15,10 @@ if exists("g:loaded_syntastic_python_prospector_checker")
 endif
 let g:loaded_syntastic_python_prospector_checker = 1
 
+if !exists('g:syntastic_python_prospector_sort')
+    let g:syntastic_python_prospector_sort = 1
+endif
+
 let s:save_cpo = &cpo
 set cpo&vim
 
@@ -60,8 +64,6 @@ function! SyntaxCheckers_python_prospector_GetLocList() dict
             let e['type'] = 'E'
         endif
     endfor
-
-    call self.setWantSort(1)
 
     return loclist
 endfunction

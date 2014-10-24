@@ -34,6 +34,7 @@ CONTENTS                                                  *syntastic-contents*
         5.1.Choosing which checkers to use.........|syntastic-filetype-checkers|
         5.2.Choosing the executable................|syntastic-config-exec|
         5.3.Configuring specific checkers..........|syntastic-config-makeprg|
+        5.4.Sorting errors.........................|syntastic-config-sort|
     6.Notes........................................|syntastic-notes|
         6.1.Handling of composite filetypes........|syntastic-composite|
         6.2.Editing files over network.............|syntastic-netrw|
@@ -208,7 +209,8 @@ disable generation of these labels by turning off '|syntastic_id_checkers|'.
 If |'syntastic_sort_aggregated_errors'| is set (which is the default), messages
 in the aggregated list are grouped by file, then sorted by line number, then
 type, then column number.  Otherwise messages produced by the same checker are
-grouped together.
+grouped together, and sorting within each group is decided by the variables
+|'syntastic_<filetype>_<checker>_sort'|.
 
 ------------------------------------------------------------------------------
 2.6 Filtering errors                              *syntastic-filtering-errors*
@@ -687,6 +689,25 @@ Example: >
                                                    \ "regex": '\m\[C03\d\d\]' }
 <
 See |syntastic_quiet_messages| for the syntax.
+
+------------------------------------------------------------------------------
+5.4 Sorting errors                                     *syntastic-config-sort*
+
+                                       *'syntastic_<filetype>_<checker>_sort'*
+Syntastic may decide to group the errors produced by some checkers by file,
+then sort them by line number, then by type, then by column number. If you'd
+prefer to see the errors in the order in which they are output by the external
+checker you can set the variable |'g:syntastic_<filetype>_<checker>_sort'| to 0.
+
+Alternatively, if syntastic doesn't reorder the errors produced by a checker
+but you'd like it to sort them, you can set the same variable to 1.
+
+There is also a local version |'b:syntastic_<filetype>_<checker>_sort'| of
+this variable, that takes precedence over it in the buffers where it is
+defined.
+
+For aggregated lists (see |syntastic-aggregating-errors|) these variables are
+ignored if |syntastic_sort_aggregated_errors| is set (which is the default).
 
 ==============================================================================
 6. Notes                                                     *syntastic-notes*

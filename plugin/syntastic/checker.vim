@@ -13,11 +13,14 @@ function! g:SyntasticChecker.New(args) " {{{2
     let newObj._filetype = a:args['filetype']
     let newObj._name = a:args['name']
     let newObj._exec = get(a:args, 'exec', newObj._name)
-    let newObj._sort = 0
 
     if has_key(a:args, 'redirect')
         let [filetype, name] = split(a:args['redirect'], '/')
         let prefix = 'SyntaxCheckers_' . filetype . '_' . name . '_'
+
+        if exists('g:syntastic_' . filetype . '_' . name . '_sort') && !exists('g:syntastic_' . newObj._filetype . '_' . newObj._name . '_sort')
+            let g:syntastic_{newObj._filetype}_{newObj._name}_sort = g:syntastic_{filetype}_{name}_sort
+        endif
     else
         let prefix = 'SyntaxCheckers_' . newObj._filetype . '_' . newObj._name . '_'
     endif
@@ -74,14 +77,6 @@ function! g:SyntasticChecker.getLocList() " {{{2
     return g:SyntasticLoclist.New(self.getLocListRaw())
 endfunction " }}}2
 
-function! g:SyntasticChecker.getWantSort() " {{{2
-    return self._sort
-endfunction " }}}2
-
-function! g:SyntasticChecker.setWantSort(val) " {{{2
-    let self._sort = a:val
-endfunction " }}}2
-
 function! g:SyntasticChecker.log(msg, ...) " {{{2
     let leader = self._filetype . '/' . self._name . ': '
     if a:0 > 0
@@ -109,6 +104,10 @@ function! g:SyntasticChecker.isAvailable() " {{{2
         let self._available = self._isAvailableFunc()
     endif
     return self._available
+endfunction " }}}2
+
+function! g:SyntasticChecker.wantSort() " {{{2
+    return syntastic#util#var(self._filetype . '_' . self._name . '_sort', 0)
 endfunction " }}}2
 
 " }}}1
