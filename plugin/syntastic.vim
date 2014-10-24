@@ -347,7 +347,7 @@ function! s:CacheErrors(checker_names) " {{{2
                     call loclist.decorate(cname)
                 endif
                 call add(names, cname)
-                if checker.getWantSort() && !sort_aggregated_errors
+                if checker.wantSort() && !sort_aggregated_errors
                     call loclist.sort()
                     call syntastic#log#debug(g:_SYNTASTIC_DEBUG_LOCLIST, 'sorted:', loclist)
                 endif
@@ -509,6 +509,8 @@ function! SyntasticMake(options) " {{{2
             " E776: No location list
             " do nothing
         endtry
+    else
+        let errors = []
     endif
 
     " restore options {{{3
