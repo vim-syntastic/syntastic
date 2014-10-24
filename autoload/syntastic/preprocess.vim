@@ -77,13 +77,20 @@ function! syntastic#preprocess#perl(errors) " {{{2
 endfunction " }}}2
 
 function! syntastic#preprocess#prospector(errors) " {{{2
+    " JSON artifacts
     let true = 1
     let false = 0
     let null = ''
-    let errs = eval(join(a:errors, ''))
+
+    " A hat tip to Marc Weber for this trick
+    " http://stackoverflow.com/questions/17751186/iterating-over-a-string-in-vimscript-or-parse-a-json-file/19105763#19105763
+    try
+        let errs = eval(join(a:errors, ''))
+    catch
+        let errs = {}
+    endtry
 
     let out = []
-    let warn_issued = 0
     if type(errs) == type({}) && has_key(errs, 'messages') && type(errs['messages']) == type([])
         for e in errs['messages']
             if type(e) == type({})
@@ -99,15 +106,21 @@ function! syntastic#preprocess#prospector(errors) " {{{2
                         \ e['code'] . ' ' .
                         \ e['message'] . ' ' .
                         \ '[' . e['source'] . ']'
+
                     call add(out, msg)
                 catch /\m^Vim\%((\a\+)\)\=:E716/
-                    if !warn_issued
-                        call add(out, '.:0:0: unknown error format')
-                        let warn_issued = 1
-                    endif
+                    call syntastic#log#warn('checker python/prospector: unknown error format')
+                    let out = []
+                    break
                 endtry
+            else
+                call syntastic#log#warn('checker python/prospector: unknown error format')
+                let out = []
+                break
             endif
         endfor
+    else
+        call syntastic#log#warn('checker python/prospector: unknown error format')
     endif
 
     return out
