@@ -110,6 +110,14 @@ function! g:SyntasticChecker.wantSort() " {{{2
     return syntastic#util#var(self._filetype . '_' . self._name . '_sort', 0)
 endfunction " }}}2
 
+" This method is no longer used by syntastic.  It's here only to maintain
+" backwards compatibility with external checkers which might depend on it.
+function! g:SyntasticChecker.setWantSort(val) " {{{2
+    if !exists('g:syntastic_' . self._filetype . '_' . self._name . '_sort')
+        let g:syntastic_{self._filetype}_{self._name}_sort = a:val
+    endif
+endfunction " }}}2
+
 " }}}1
 
 " Private methods {{{1
