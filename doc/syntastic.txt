@@ -788,11 +788,15 @@ interactive features of 'fizsh'. Using a more traditional shell such as "zsh",
 ------------------------------------------------------------------------------
 6.8. Interaction with Eclim                                  *syntastic-eclim*
 
-As far as syntastic is concerned there shouldn't be any compatibility problems
-with the 'Eclim' Vim plugin (see http://eclim.org/). However, at the time of
-this writing there are several reports that 'Eclim' triggers a bug in Vim that
-makes syntastic forget some of its configuration parameters. No solutions or
-workarounds are known for now.
+Syntastic can be used together with 'Eclim' (see http://eclim.org/). However,
+by default Eclim disables syntastic's checks for the filetypes it supports, in
+order to run its own validation. If you'd prefer to use Eclim but still run
+syntastic's checks, set |g:EclimFileTypeValidate| to 0: >
+    let g:EclimFileTypeValidate = 0
+<
+It is also possible to re-enable syntastic checks only for some filetypes, and
+run Eclim's validation for others. Please consult Eclim's documentation for
+details.
 
 ------------------------------------------------------------------------------
 6.9. Interaction with vim-virtualenv                *syntastic-vim-virtualenv*
