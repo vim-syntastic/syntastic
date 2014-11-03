@@ -154,7 +154,7 @@ let s:modemap = g:SyntasticModeMap.Instance()
 " @vimlint(EVL103, 1, a:argLead)
 function! s:CompleteCheckerName(argLead, cmdLine, cursorPos) " {{{2
     let checker_names = []
-    for ft in s:resolveFiletypes()
+    for ft in s:_resolve_filetypes()
         call extend(checker_names, s:registry.getNamesOfAvailableCheckers(ft))
     endfor
     return join(checker_names, "\n")
@@ -181,8 +181,8 @@ command! -nargs=* -complete=custom,s:CompleteCheckerName SyntasticCheck
 command! Errors call s:ShowLocList()
 command! -nargs=? -complete=custom,s:CompleteFiletypes SyntasticInfo
             \ call s:modemap.modeInfo(<f-args>) <bar>
-            \ call s:registry.echoInfoFor(s:resolveFiletypes(<f-args>)) <bar>
-            \ call s:explainSkip(<f-args>)
+            \ call s:registry.echoInfoFor(s:_resolve_filetypes(<f-args>)) <bar>
+            \ call s:_explain_skip(<f-args>)
 command! SyntasticReset
             \ call s:ClearCache() <bar>
             \ call s:notifiers.refresh(g:SyntasticLoclist.New([]))
@@ -256,7 +256,7 @@ function! s:UpdateErrors(auto_invoked, ...) " {{{2
     call syntastic#log#debugDump(g:_SYNTASTIC_DEBUG_VARIABLES)
     call syntastic#log#debug(g:_SYNTASTIC_DEBUG_TRACE, 'UpdateErrors' . (a:auto_invoked ? ' (auto)' : '') .
         \ ': ' . (a:0 ? join(a:000) : 'default checkers'))
-    if s:skipFile()
+    if s:_skip_file()
         return
     endif
 
@@ -312,13 +312,13 @@ function! s:CacheErrors(checker_names) " {{{2
     call s:ClearCache()
     let newLoclist = g:SyntasticLoclist.New([])
 
-    if !s:skipFile()
+    if !s:_skip_file()
         " debug logging {{{3
         call syntastic#log#debugShowVariables(g:_SYNTASTIC_DEBUG_TRACE, 'aggregate_errors')
         call syntastic#log#debug(g:_SYNTASTIC_DEBUG_TRACE, 'getcwd() = ' . getcwd())
         " }}}3
 
-        let filetypes = s:resolveFiletypes()
+        let filetypes = s:_resolve_filetypes()
         let aggregate_errors = syntastic#util#var('aggregate_errors') || len(filetypes) > 1
         let decorate_errors = aggregate_errors && syntastic#util#var('id_checkers')
         let sort_aggregated_errors = aggregate_errors && syntastic#util#var('sort_aggregated_errors')
@@ -440,7 +440,7 @@ function! SyntasticMake(options) " {{{2
     let old_lc_all = $LC_ALL
     " }}}3
 
-    call s:bashHack()
+    call s:_bash_hack()
 
     if has_key(a:options, 'errorformat')
         let &errorformat = a:options['errorformat']
@@ -519,7 +519,7 @@ function! SyntasticMake(options) " {{{2
     let &shellredir = old_shellredir
     " }}}3
 
-    if !s:_running_windows && (s:uname() =~ "FreeBSD" || s:uname() =~ "OpenBSD")
+    if !s:_running_windows && (s:_os_name() =~ "FreeBSD" || s:_os_name() =~ "OpenBSD")
         call syntastic#util#redraw(g:syntastic_full_redraws)
     endif
 
@@ -530,12 +530,12 @@ function! SyntasticMake(options) " {{{2
     call syntastic#log#debug(g:_SYNTASTIC_DEBUG_LOCLIST, 'raw loclist:', errors)
 
     if has_key(a:options, 'defaults')
-        call s:addToErrors(errors, a:options['defaults'])
+        call s:_add_to_errors(errors, a:options['defaults'])
     endif
 
     " Add subtype info if present.
     if has_key(a:options, 'subtype')
-        call s:addToErrors(errors, { 'subtype': a:options['subtype'] })
+        call s:_add_to_errors(errors, { 'subtype': a:options['subtype'] })
     endif
 
     if has_key(a:options, 'Postprocess') && !empty(a:options['Postprocess'])
@@ -566,12 +566,12 @@ endfunction " }}}2
 
 " Utilities {{{1
 
-function! s:resolveFiletypes(...) " {{{2
+function! s:_resolve_filetypes(...) " {{{2
     let type = a:0 ? a:1 : &filetype
     return split( get(g:syntastic_filetype_map, type, type), '\m\.' )
 endfunction " }}}2
 
-function! s:ignoreFile(filename) " {{{2
+function! s:_ignore_file(filename) " {{{2
     let fname = fnamemodify(a:filename, ':p')
     for pattern in g:syntastic_ignore_files
         if fname =~# pattern
@@ -582,20 +582,20 @@ function! s:ignoreFile(filename) " {{{2
 endfunction " }}}2
 
 " Skip running in special buffers
-function! s:skipFile() " {{{2
+function! s:_skip_file() " {{{2
     let fname = expand('%')
     let skip = get(b:, 'syntastic_skip_checks', 0) || (&buftype != '') ||
-        \ !filereadable(fname) || getwinvar(0, '&diff') || s:ignoreFile(fname) ||
+        \ !filereadable(fname) || getwinvar(0, '&diff') || s:_ignore_file(fname) ||
         \ fnamemodify(fname, ':e') =~? g:syntastic_ignore_extensions
     if skip
-        call syntastic#log#debug(g:_SYNTASTIC_DEBUG_TRACE, 'skipFile: skipping')
+        call syntastic#log#debug(g:_SYNTASTIC_DEBUG_TRACE, '_skip_file: skipping checks')
     endif
     return skip
 endfunction " }}}2
 
 " Explain why checks will be skipped for the current file
-function! s:explainSkip(...) " {{{2
-    if !a:0 && s:skipFile()
+function! s:_explain_skip(...) " {{{2
+    if !a:0 && s:_skip_file()
         let why = []
         let fname = expand('%')
 
@@ -611,7 +611,7 @@ function! s:explainSkip(...) " {{{2
         if getwinvar(0, '&diff')
             call add(why, 'diff mode')
         endif
-        if s:ignoreFile(fname)
+        if s:_ignore_file(fname)
             call add(why, 'filename matching g:syntastic_ignore_files')
         endif
         if fnamemodify(fname, ':e') =~? g:syntastic_ignore_extensions
@@ -623,7 +623,7 @@ function! s:explainSkip(...) " {{{2
 endfunction " }}}2
 
 " Take a list of errors and add default values to them from a:options
-function! s:addToErrors(errors, options) " {{{2
+function! s:_add_to_errors(errors, options) " {{{2
     for err in a:errors
         for key in keys(a:options)
             if !has_key(err, key) || empty(err[key])
@@ -638,12 +638,12 @@ endfunction " }}}2
 " XXX: Is this still needed?
 " The script changes &shellredir to stop the screen
 " flicking when shelling out to syntax checkers.
-function! s:bashHack() " {{{2
+function! s:_bash_hack() " {{{2
     if g:syntastic_bash_hack
         if !exists('s:shell_is_bash')
             let s:shell_is_bash =
                 \ !s:_running_windows &&
-                \ (s:uname() !~# "FreeBSD") && (s:uname() !~# "OpenBSD") &&
+                \ (s:_os_name() !~# "FreeBSD") && (s:_os_name() !~# "OpenBSD") &&
                 \ &shell =~# '\m\<bash$'
         endif
 
@@ -653,7 +653,7 @@ function! s:bashHack() " {{{2
     endif
 endfunction " }}}2
 
-function! s:uname() " {{{2
+function! s:_os_name() " {{{2
     if !exists('s:_uname')
         let s:_uname = system('uname')
         lockvar s:_uname

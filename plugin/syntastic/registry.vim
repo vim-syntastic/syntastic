@@ -138,7 +138,7 @@ endfunction " }}}2
 " not checked for availability (that is, the corresponding IsAvailable() are
 " not run).
 function! g:SyntasticRegistry.getCheckers(ftalias, hints_list) " {{{2
-    let ft = s:_normaliseFiletype(a:ftalias)
+    let ft = s:_normalise_filetype(a:ftalias)
     call self._loadCheckersFor(ft)
 
     let checkers_map = self._checkerMap[ft]
@@ -181,13 +181,13 @@ function! g:SyntasticRegistry.getKnownFiletypes() " {{{2
 endfunction " }}}2
 
 function! g:SyntasticRegistry.getNamesOfAvailableCheckers(ftalias) " {{{2
-    let ft = s:_normaliseFiletype(a:ftalias)
+    let ft = s:_normalise_filetype(a:ftalias)
     call self._loadCheckersFor(ft)
     return keys(filter( copy(self._checkerMap[ft]), 'v:val.isAvailable()' ))
 endfunction " }}}2
 
 function! g:SyntasticRegistry.echoInfoFor(ftalias_list) " {{{2
-    let ft_list = syntastic#util#unique(map( copy(a:ftalias_list), 's:_normaliseFiletype(v:val)' ))
+    let ft_list = syntastic#util#unique(map( copy(a:ftalias_list), 's:_normalise_filetype(v:val)' ))
     if len(ft_list) != 1
         let available = []
         let active = []
@@ -257,11 +257,11 @@ endfunction " }}}2
 
 " }}}1
 
-" Private functions {{{1
+" Utilities {{{1
 
 "resolve filetype aliases, and replace - with _ otherwise we cant name
 "syntax checker functions legally for filetypes like "gentoo-metadata"
-function! s:_normaliseFiletype(ftalias) " {{{2
+function! s:_normalise_filetype(ftalias) " {{{2
     let ft = get(s:_DEFAULT_FILETYPE_MAP, a:ftalias, a:ftalias)
     let ft = get(g:syntastic_filetype_map, ft, ft)
     let ft = substitute(ft, '\m-', '_', 'g')

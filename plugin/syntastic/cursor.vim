@@ -38,7 +38,7 @@ endfunction " }}}2
 
 " }}}1
 
-" Private methods {{{1
+" Private functions {{{1
 
 function! SyntasticRefreshCursor() " {{{2
     if !exists('b:syntastic_messages') || empty(b:syntastic_messages)
@@ -62,14 +62,14 @@ function! SyntasticRefreshCursor() " {{{2
             let b:syntastic_idx = -1
         endif
 
-        if s:_isSameIndex(l, b:syntastic_line, c, b:syntastic_idx, current_messages)
+        if s:_is_same_index(l, b:syntastic_line, c, b:syntastic_idx, current_messages)
             return
         else
             let b:syntastic_line = l
         endif
 
         if !empty(current_messages)
-            let b:syntastic_idx = s:_findIndex(c, current_messages)
+            let b:syntastic_idx = s:_find_index(c, current_messages)
             call syntastic#util#wideMsg(current_messages[b:syntastic_idx].text)
         else
             let b:syntastic_idx = -1
@@ -91,9 +91,9 @@ endfunction " }}}2
 
 " }}}1
 
-" Private functions {{{1
+" Utilities {{{1
 
-function! s:_isSameIndex(line, old_line, column, idx, messages) " {{{2
+function! s:_is_same_index(line, old_line, column, idx, messages) " {{{2
     if a:old_line >= 0 && a:line == a:old_line && a:idx >= 0
         if len(a:messages) <= 1
             return 1
@@ -113,7 +113,7 @@ function! s:_isSameIndex(line, old_line, column, idx, messages) " {{{2
     endif
 endfunction " }}}2
 
-function! s:_findIndex(column, messages) " {{{2
+function! s:_find_index(column, messages) " {{{2
     let max = len(a:messages) - 1
     if max == 0
         return 0
