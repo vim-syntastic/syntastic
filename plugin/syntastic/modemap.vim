@@ -62,9 +62,9 @@ function! g:SyntasticModeMap.echoMode() " {{{2
     echo "Syntastic: " . self._mode . " mode enabled"
 endfunction " }}}2
 
-function! g:SyntasticModeMap.modeInfo(...) " {{{2
+function! g:SyntasticModeMap.modeInfo(filetypes) " {{{2
     echomsg 'Syntastic version: ' . g:_SYNTASTIC_VERSION
-    let type = a:0 ? a:1 : &filetype
+    let type = len(a:filetypes) ? a:filetypes[0] : &filetype
     echomsg 'Info for filetype: ' . type
 
     call self.synch()
