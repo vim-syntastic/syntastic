@@ -30,7 +30,7 @@ function! g:SyntasticChecker.New(args) " {{{2
     if exists('*' . prefix . 'IsAvailable')
         let newObj._isAvailableFunc = function(prefix . 'IsAvailable')
     else
-        let newObj._isAvailableFunc = function('SyntasticCheckerIsAvailableDefault')
+        let newObj._isAvailableFunc = function('s:_isAvailableDefault')
     endif
 
     if exists('*' . prefix . 'GetHighlightRegex')
@@ -181,9 +181,9 @@ endfunction " }}}2
 
 " }}}1
 
-" Non-method functions {{{1
+" Private functions {{{1
 
-function! SyntasticCheckerIsAvailableDefault() dict " {{{2
+function! s:_isAvailableDefault() dict " {{{2
     return executable(self.getExec())
 endfunction " }}}2
 

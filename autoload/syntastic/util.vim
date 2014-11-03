@@ -141,14 +141,14 @@ endfunction " }}}2
 
 " strwidth() was added in Vim 7.3; if it doesn't exist, we use strlen()
 " and hope for the best :)
-let s:width = function(exists('*strwidth') ? 'strwidth' : 'strlen')
-lockvar s:width
+let s:_width = function(exists('*strwidth') ? 'strwidth' : 'strlen')
+lockvar s:_width
 
 function! syntastic#util#screenWidth(str, tabstop) " {{{2
     let chunks = split(a:str, "\t", 1)
-    let width = s:width(chunks[-1])
+    let width = s:_width(chunks[-1])
     for c in chunks[:-2]
-        let cwidth = s:width(c)
+        let cwidth = s:_width(c)
         let width += cwidth + a:tabstop - cwidth % a:tabstop
     endfor
     return width
@@ -166,7 +166,7 @@ function! syntastic#util#wideMsg(msg) " {{{2
     "convert tabs to spaces so that the tabs count towards the window
     "width as the proper amount of characters
     let chunks = split(msg, "\t", 1)
-    let msg = join(map(chunks[:-2], 'v:val . repeat(" ", &tabstop - s:width(v:val) % &tabstop)'), '') . chunks[-1]
+    let msg = join(map(chunks[:-2], 'v:val . repeat(" ", &tabstop - s:_width(v:val) % &tabstop)'), '') . chunks[-1]
     let msg = strpart(msg, 0, &columns - 1)
 
     set noruler noshowcmd
