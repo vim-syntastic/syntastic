@@ -174,47 +174,51 @@ endfunction " }}}2
 " @vimlint(EVL103, 0, a:cmdLine)
 " @vimlint(EVL103, 0, a:argLead)
 
-command! -nargs=* -complete=custom,s:CompleteCheckerName SyntasticCheck call s:Check(<f-args>)
-command! -nargs=? -complete=custom,s:CompleteFiletypes   SyntasticInfo  call s:Info(<f-args>)
-command! Errors              call s:Errors()
-command! SyntasticReset      call s:Reset()
-command! SyntasticToggleMode call s:ToggleMode()
-command! SyntasticSetLoclist call s:SetLoclist()
+command! -nargs=* -complete=custom,s:CompleteCheckerName SyntasticCheck call SyntasticCheck(<f-args>)
+command! -nargs=? -complete=custom,s:CompleteFiletypes   SyntasticInfo  call SyntasticInfo(<f-args>)
+command! Errors              call SyntasticErrors()
+command! SyntasticReset      call SyntasticReset()
+command! SyntasticToggleMode call SyntasticToggleMode()
+command! SyntasticSetLoclist call SyntasticSetLoclist()
 
-function! s:Check(...) " {{{2
+" }}}1
+
+" Public API {{{1
+
+function! SyntasticCheck(...) " {{{2
     call s:UpdateErrors(0, a:000)
     call syntastic#util#redraw(g:syntastic_full_redraws)
 endfunction " }}}2
 
-function! s:Info(...) " {{{2
+function! SyntasticInfo(...) " {{{2
     call s:modemap.modeInfo(a:000)
     call s:registry.echoInfoFor(s:_resolve_filetypes(a:000))
     call s:_explain_skip(a:000)
 endfunction " }}}2
 
-function! s:Errors() " {{{2
+function! SyntasticErrors() " {{{2
     call g:SyntasticLoclist.current().show()
 endfunction " }}}2
 
-function! s:Reset() " {{{2
+function! SyntasticReset() " {{{2
     call s:ClearCache()
     call s:notifiers.refresh(g:SyntasticLoclist.New([]))
 endfunction " }}}2
 
-function! s:ToggleMode() " {{{2
+function! SyntasticToggleMode() " {{{2
     call s:modemap.toggleMode()
     call s:ClearCache()
     call s:notifiers.refresh(g:SyntasticLoclist.New([]))
     call s:modemap.echoMode()
 endfunction " }}}2
 
-function! s:SetLoclist() " {{{2
+function! SyntasticSetLoclist() " {{{2
     call g:SyntasticLoclist.current().setloclist()
 endfunction " }}}2
 
 " }}}1
 
-" Autocommands and hooks {{{1
+" Autocommands {{{1
 
 augroup syntastic
     autocmd BufReadPost  * call s:BufReadPostHook()
@@ -291,6 +295,10 @@ function! s:UpdateErrors(auto_invoked, checker_names) " {{{2
     endif
 
     let loclist = g:SyntasticLoclist.current()
+
+    if exists('*SyntasticCheckHook')
+        call SyntasticCheckHook(loclist.getRaw())
+    endif
 
     " populate loclist and jump {{{3
     let do_jump = syntastic#util#var('auto_jump')
