@@ -119,6 +119,14 @@ let s:_ECLIM_TYPES = [
     \ ]
 lockvar! s:_ECLIM_TYPES
 
+let s:_YCM_TYPES = [
+        \ 'c',
+        \ 'cpp',
+        \ 'objc',
+        \ 'objcpp',
+    \ ]
+lockvar! s:_YCM_TYPES
+
 let g:SyntasticRegistry = {}
 
 " }}}1
@@ -232,6 +240,16 @@ function! g:SyntasticRegistry.echoInfoFor(ftalias_list) " {{{2
             echomsg 'Filetype' . plural . ' with checkers possibly disabled by Eclim: ' . cklist
         endif
     endif
+
+    if exists('g:loaded_youcompleteme') && get(g:, 'ycm_show_diagnostics_ui', get(g:, 'ycm_register_as_syntastic_checker', 1))
+        let disabled = filter(copy(ft_list), 's:_disabled_by_ycm(v:val)')
+        let cnt = len(disabled)
+        if cnt
+            let plural = cnt != 1 ? 's' : ''
+            let cklist = join(disabled, ', ')
+            echomsg 'Filetype' . plural . ' with checkers possibly disabled by YouCompleteMe: ' . cklist
+        endif
+    endif
 endfunction " }}}2
 
 " }}}1
@@ -297,6 +315,10 @@ function! s:_disabled_by_eclim(filetype) " {{{2
     endif
 
     return 0
+endfunction " }}}2
+
+function! s:_disabled_by_ycm(filetype) " {{{2
+    return index(s:_YCM_TYPES, a:filetype) >= 0
 endfunction " }}}2
 
 " }}}1
