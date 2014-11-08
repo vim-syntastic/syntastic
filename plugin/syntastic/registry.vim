@@ -231,25 +231,29 @@ function! g:SyntasticRegistry.echoInfoFor(ftalias_list) " {{{2
     let cklist = cnt ? join(active) : '-'
     echomsg 'Currently enabled checker' . plural . ': ' . cklist
 
+    " Eclim feels entitled to mess with syntastic's variables {{{3
     if exists(':EclimValidate') && get(g:, 'EclimFileTypeValidate', 1)
         let disabled = filter(copy(ft_list), 's:_disabled_by_eclim(v:val)')
         let cnt = len(disabled)
         if cnt
             let plural = cnt != 1 ? 's' : ''
             let cklist = join(disabled, ', ')
-            echomsg 'Filetype' . plural . ' with checkers possibly disabled by Eclim: ' . cklist
+            echomsg 'Checkers for filetype' . plural . ' ' . cklist . ' possibly disabled by Eclim'
         endif
     endif
+    " }}}3
 
+    " So does YouCompleteMe {{{3
     if exists('g:loaded_youcompleteme') && get(g:, 'ycm_show_diagnostics_ui', get(g:, 'ycm_register_as_syntastic_checker', 1))
         let disabled = filter(copy(ft_list), 's:_disabled_by_ycm(v:val)')
         let cnt = len(disabled)
         if cnt
             let plural = cnt != 1 ? 's' : ''
             let cklist = join(disabled, ', ')
-            echomsg 'Filetype' . plural . ' with checkers possibly disabled by YouCompleteMe: ' . cklist
+            echomsg 'Checkers for filetype' . plural . ' ' . cklist . ' possibly disabled by YouCompleteMe'
         endif
     endif
+    " }}}3
 endfunction " }}}2
 
 " }}}1
