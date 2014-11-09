@@ -47,6 +47,13 @@ function! syntastic#util#tmpdir() " {{{2
         else
             let tempdir = '/tmp/vim-syntastic-' . getpid()
         endif
+
+        try
+            call mkdir(tempdir, 'p', 0700)
+        catch /\m^Vim\%((\a\+)\)\=:E739/
+            call syntastic#log#error(v:exception)
+            let tempdir = '.'
+        endtry
     endif
 
     return tempdir
@@ -54,6 +61,10 @@ endfunction " }}}2
 
 " Recursively remove a directory
 function! syntastic#util#rmrf(what) " {{{2
+    if a:what == '.'
+        return
+    endif
+
     if  getftype(a:what) ==# 'dir'
         if !exists('s:rmrf')
             let s:rmrf =
