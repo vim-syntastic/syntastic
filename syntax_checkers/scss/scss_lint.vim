@@ -31,11 +31,21 @@ endfunction
 function! SyntaxCheckers_scss_scss_lint_GetLocList() dict
     let makeprg = self.makeprgBuild({})
     let errorformat = '%f:%l [%t] %m'
-    return SyntasticMake({
+
+    let loclist = SyntasticMake({
         \ 'makeprg': makeprg,
         \ 'errorformat': errorformat,
         \ 'subtype': 'Style',
         \ 'returns': [0, 1, 2, 65, 66] })
+
+    " Categorize syntax errors with syntax subtype instead of style
+    for e in loclist
+        if e['text'] =~ '^Syntax Error:'
+          let e['subtype'] = 'Syntax'
+        endif
+    endfor
+
+    return loclist
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
