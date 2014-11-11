@@ -30,12 +30,24 @@ endfunction
 
 function! SyntaxCheckers_scss_scss_lint_GetLocList() dict
     let makeprg = self.makeprgBuild({})
+
     let errorformat = '%f:%l [%t] %m'
-    return SyntasticMake({
+
+    let loclist = SyntasticMake({
         \ 'makeprg': makeprg,
         \ 'errorformat': errorformat,
-        \ 'subtype': 'Style',
         \ 'returns': [0, 1, 2, 65, 66] })
+
+    let cutoff = strlen('Syntax Error: ')
+    for e in loclist
+        if e['text'][: cutoff-1] ==# 'Syntax Error: '
+            let e['text'] = e['text'][cutoff :]
+        else
+            let e['subtype'] = 'Style'
+        endif
+    endfor
+
+    return loclist
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
