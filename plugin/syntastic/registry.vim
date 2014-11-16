@@ -9,7 +9,6 @@ let s:_DEFAULT_CHECKERS = {
         \ 'actionscript':['mxmlc'],
         \ 'ada':         ['gcc'],
         \ 'applescript': ['osacompile'],
-        \ 'arduino':     ['avrgcc'],
         \ 'asciidoc':    ['asciidoc'],
         \ 'asm':         ['gcc'],
         \ 'bro':         ['bro'],
