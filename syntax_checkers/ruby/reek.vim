@@ -32,15 +32,18 @@ endfunction
 function! SyntaxCheckers_ruby_reek_GetLocList() dict
     let makeprg = self.makeprgBuild({ 'args_before': '--no-color --quiet --line-number --single-line' })
 
-    let errorformat = '%f:%l: %m'
+    let errorformat =
+        \ '%E%.%#: Racc::ParseError: %f:%l :: %m,' .
+        \ '%W%f:%l: %m'
 
     let loclist = SyntasticMake({
         \ 'makeprg': makeprg,
-        \ 'errorformat': errorformat,
-        \ 'subtype': 'Style'})
+        \ 'errorformat': errorformat })
 
     for e in loclist
-        let e['type'] = 'W'
+        if e['type'] ==? 'W'
+            let e['subtype'] = 'Style'
+        endif
     endfor
 
     return loclist
