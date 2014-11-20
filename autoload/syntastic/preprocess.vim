@@ -76,6 +76,9 @@ function! syntastic#preprocess#perl(errors) " {{{2
     return syntastic#util#unique(out)
 endfunction " }}}2
 
+" @vimlint(EVL102, 1, l:true)
+" @vimlint(EVL102, 1, l:false)
+" @vimlint(EVL102, 1, l:null)
 function! syntastic#preprocess#prospector(errors) " {{{2
     " JSON artifacts
     let true = 1
@@ -125,6 +128,9 @@ function! syntastic#preprocess#prospector(errors) " {{{2
 
     return out
 endfunction " }}}2
+" @vimlint(EVL102, 0, l:true)
+" @vimlint(EVL102, 0, l:false)
+" @vimlint(EVL102, 0, l:null)
 
 function! syntastic#preprocess#rparse(errors) " {{{2
     let errlist = copy(a:errors)
