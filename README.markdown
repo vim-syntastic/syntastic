@@ -165,7 +165,7 @@ let g:syntastic_python_python_exec = '/path/to/python3'
 
 <a name="faqhtml5"></a>
 
-__Q. Is there any local checker for HTML5 that I can use with syntastic?__
+__Q. Are there any local checkers for HTML5 that I can use with syntastic?__
 
 [HTML Tidy][18] has a fork named [HTML Tidy for HTML5][19].  It's a drop
 in replacement, and syntastic can use it without changes.  Just install it
