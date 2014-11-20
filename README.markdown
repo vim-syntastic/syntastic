@@ -163,6 +163,19 @@ Python 2, e.g:
 let g:syntastic_python_python_exec = '/path/to/python3'
 ```
 
+<a name="faqhtml5"></a>
+
+__Q. Is there any local checker for HTML5 that I can use with syntastic?__
+
+[HTML Tidy][18] has a fork named [HTML Tidy for HTML5][19].  It's a drop
+in replacement, and syntastic can use it without changes.  Just install it
+somewhere and point `g:syntastic_html_tidy_exec` to its executable.
+
+Alternatively, you can install [validator][20] from [sources][21] and
+[configure][22] syntastic to use it.  The installation might seem a little
+scary (for one, the final directory takes more than 600+ MB on disk), but in
+our experience the process is, in fact, painless.
+
 <a name="faqperl"></a>
 
 __Q. The `perl` checker has stopped working...__
@@ -324,7 +337,6 @@ nnoremap <silent> <C-d> :lclose<CR>:bdelete<CR>
 cabbrev <silent> bd lclose\|bdelete
 ```
 
-
 <a name="otherresources"></a>
 
 ## 4\. Other resources
@@ -358,6 +370,11 @@ a look at [jedi-vim][7], [python-mode][8], or [YouCompleteMe][9].
 [15]: https://github.com/MarcWeber/vim-addon-manager
 [16]: https://github.com/junegunn/vim-plug/
 [17]: https://github.com/gmarik/Vundle.vim
+[18]: http://tidy.sourceforge.net/
+[19]: http://w3c.github.io/tidy-html5/
+[20]: http://about.validator.nu/
+[21]: http://about.validator.nu/#src
+[22]: https://github.com/scrooloose/syntastic/wiki/HTML%3A---validator
 
 <!--
 vim:tw=79:sw=4:
