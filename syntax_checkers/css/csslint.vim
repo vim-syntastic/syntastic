@@ -8,11 +8,6 @@
 "             Want To Public License, Version 2, as published by Sam Hocevar.
 "             See http://sam.zoy.org/wtfpl/COPYING for more details.
 "============================================================================
-"
-" Specify additional options to csslint with this option. e.g. to disable
-" warnings:
-"
-"   let g:syntastic_csslint_options = '--warnings=none'
 
 if exists('g:loaded_syntastic_css_csslint_checker')
     finish

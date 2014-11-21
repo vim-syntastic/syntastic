@@ -9,13 +9,6 @@
 "             See http://sam.zoy.org/wtfpl/COPYING for more details.
 "
 "============================================================================
-"
-" Checker option:
-"
-" - g:syntastic_html_w3_api (string; default: 'http://validator.w3.org/check')
-"   URL of the service to use for checking; leave it to the default to run the
-"   checks against http://validator.w3.org/, or set it to
-"   'http://localhost/w3c-validator/check' if you're running a local service
 
 if exists("g:loaded_syntastic_html_w3_checker")
     finish
