@@ -2,8 +2,6 @@
 "File:        pep257.vim
 "Description: Docstring style checking plugin for syntastic.vim
 "============================================================================
-"
-" For details about pep257 see: https://github.com/GreenSteam/pep257
 
 if exists('g:loaded_syntastic_python_pep257_checker')
     finish

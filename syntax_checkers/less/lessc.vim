@@ -10,13 +10,6 @@
 "
 "============================================================================
 
-" To send additional options to less use the variable g:syntastic_less_options.
-" The default is
-"   let g:syntastic_less_options = "--no-color"
-"
-" To use less-lint instead of less set the variable
-" g:syntastic_less_use_less_lint.
-
 if exists("g:loaded_syntastic_less_lessc_checker")
     finish
 endif

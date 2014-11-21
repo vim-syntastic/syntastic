@@ -9,9 +9,6 @@
 "             See http://sam.zoy.org/wtfpl/COPYING for more details.
 "
 "============================================================================
-"
-" See here for details of phpcs
-"    - phpcs (see http://pear.php.net/package/PHP_CodeSniffer)
 
 if exists("g:loaded_syntastic_php_phpcs_checker")
     finish

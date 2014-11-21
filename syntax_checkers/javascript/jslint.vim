@@ -8,8 +8,8 @@
 "             Want To Public License, Version 2, as published by Sam Hocevar.
 "             See http://sam.zoy.org/wtfpl/COPYING for more details.
 "
-"Tested with jslint 0.1.4.
 "============================================================================
+
 if exists("g:loaded_syntastic_javascript_jslint_checker")
     finish
 endif

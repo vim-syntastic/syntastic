@@ -8,10 +8,11 @@
 "             Want To Public License, Version 2, as published by Sam Hocevar.
 "             See http://sam.zoy.org/wtfpl/COPYING for more details.
 "
+"============================================================================
+"
 " This syntax checker does not reformat your source code.
 " Use a BufWritePre autocommand to that end:
 "   autocmd FileType go autocmd BufWritePre <buffer> Fmt
-"============================================================================
 
 if exists("g:loaded_syntastic_go_go_checker")
     finish

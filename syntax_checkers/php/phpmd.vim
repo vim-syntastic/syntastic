@@ -9,9 +9,6 @@
 "             See http://sam.zoy.org/wtfpl/COPYING for more details.
 "
 "============================================================================
-"
-" See here for details of phpmd
-"   - phpmd (see http://phpmd.org)
 
 if exists("g:loaded_syntastic_php_phpmd_checker")
     finish

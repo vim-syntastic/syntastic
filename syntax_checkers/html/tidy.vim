@@ -17,17 +17,6 @@
 "
 " HTML Tidy for HTML5 can be used without changes by this checker, just install
 " it and point g:syntastic_html_tidy_exec to the executable.
-"
-" Checker options:
-"
-" - g:syntastic_html_tidy_ignore_errors (list; default: [])
-"   list of errors to ignore
-" - g:syntastic_html_tidy_blocklevel_tags (list; default: [])
-"   list of additional blocklevel tags, to be added to "--new-blocklevel-tags"
-" - g:syntastic_html_tidy_inline_tags (list; default: [])
-"   list of additional inline tags, to be added to "--new-inline-tags"
-" - g:syntastic_html_tidy_empty_tags (list; default: [])
-"   list of additional empty tags, to be added to "--new-empty-tags"
 
 if exists("g:loaded_syntastic_html_tidy_checker")
     finish
