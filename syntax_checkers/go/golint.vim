@@ -28,6 +28,7 @@ function! SyntaxCheckers_go_golint_GetLocList() dict
     return SyntasticMake({
         \ 'makeprg': makeprg,
         \ 'errorformat': errorformat,
+        \ 'defaults': {'type': 'w'},
         \ 'subtype': 'Style' })
 endfunction
 
