@@ -31,7 +31,7 @@ function! SyntaxCheckers_javascript_jscs_GetLocList() dict
         \ 'errorformat': errorformat,
         \ 'subtype': 'Style',
         \ 'preprocess': 'checkstyle',
-        \ 'returns': [0, 2] })
+        \ 'returns': [0, 1, 2] })
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
