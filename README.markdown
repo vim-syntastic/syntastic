@@ -171,10 +171,15 @@ __Q. Are there any local checkers for HTML5 that I can use with syntastic?__
 in replacement, and syntastic can use it without changes.  Just install it
 somewhere and point `g:syntastic_html_tidy_exec` to its executable.
 
-Alternatively, you can install [validator][20] from [sources][21] and
-[configure][22] syntastic to use it.  The installation might seem a little
-scary (for one, the final directory takes more than 600+ MB on disk), but in
-our experience the process is, in fact, painless.
+Alternatively, you can install [vnu.jar][21] from the [validator.nu][20]
+project and run it as a [HTTP server][23]:
+```sh
+$ java -Xss512k -cp /path/to/vnu.jar nu.validator.servlet.Main 8888
+```
+Then you can [configure][22] syntastic to use it:
+```vim
+let g:syntastic_html_validator_api = 'http://localhost:8888/'
+```
 
 <a name="faqperl"></a>
 
@@ -373,8 +378,9 @@ a look at [jedi-vim][7], [python-mode][8], or [YouCompleteMe][9].
 [18]: http://tidy.sourceforge.net/
 [19]: http://w3c.github.io/tidy-html5/
 [20]: http://about.validator.nu/
-[21]: http://about.validator.nu/#src
+[21]: https://github.com/validator/validator/releases/latest
 [22]: https://github.com/scrooloose/syntastic/wiki/HTML%3A---validator
+[23]: http://validator.github.io/validator/#standalone
 
 <!--
 vim:tw=79:sw=4:
