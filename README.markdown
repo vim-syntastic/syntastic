@@ -155,7 +155,7 @@ following:
 
 <a name="faqinfo"></a>
 
-__3.1.\ Q. I installed syntastic but it isn't reporting any errors...__
+__3.1. Q. I installed syntastic but it isn't reporting any errors...__
 
 A. The most likely reason is that none of the syntax checkers that it requires
 is installed. For example: by default, python requires either `flake8` or
@@ -171,7 +171,7 @@ create an issue - or better yet, create a pull request.
 
 <a name="faqpython3"></a>
 
-__3.2.\ Q. The `python` checker complains about syntactically valid Python 3 constructs...__
+__3.2. Q. The `python` checker complains about syntactically valid Python 3 constructs...__
 
 A. Configure the `python` checker to call a Python 3 interpreter rather than
 Python 2, e.g:
@@ -181,7 +181,7 @@ let g:syntastic_python_python_exec = '/path/to/python3'
 
 <a name="faqhtml5"></a>
 
-__3.3.\ Q. Are there any local checkers for HTML5 that I can use with syntastic?__
+__3.3. Q. Are there any local checkers for HTML5 that I can use with syntastic?__
 
 [HTML Tidy][18] has a fork named [HTML Tidy for HTML5][19].  It's a drop
 in replacement, and syntastic can use it without changes.  Just install it
@@ -199,7 +199,7 @@ let g:syntastic_html_validator_api = 'http://localhost:8888/'
 
 <a name="faqperl"></a>
 
-__3.4.\ Q. The `perl` checker has stopped working...__
+__3.4. Q. The `perl` checker has stopped working...__
 
 A. The `perl` checker runs `perl -c` against your file, which in turn
 __executes__ any `BEGIN`, `UNITCHECK`, and `CHECK` blocks, and any `use`
@@ -215,7 +215,7 @@ let g:syntastic_enable_perl_checker = 1
 
 <a name="faqrust"></a>
 
-__3.5.\ Q. What happened to the `rustc` checker?__
+__3.5. Q. What happened to the `rustc` checker?__
 
 A. It has been included in the [Rust compiler package][12].  If you have
 a recent version of the Rust compiler, the checker should be picked up
@@ -223,8 +223,8 @@ automatically by syntastic.
 
 <a name="faqloclist"></a>
 
-__3.6.\ Q. I run a checker and the location list is not updated...__  
-__3.6.\ Q. I run`:lopen` or `:lwindow` and the error window is empty...__
+__3.6. Q. I run a checker and the location list is not updated...__  
+__3.6. Q. I run`:lopen` or `:lwindow` and the error window is empty...__
 
 A. By default the location list is changed only when you run the `:Errors`
 command, in order to minimise conflicts with other plugins.  If you want the
@@ -236,7 +236,7 @@ let g:syntastic_always_populate_loc_list = 1
 
 <a name="faqargs"></a>
 
-__3.7.\ Q. How can I pass additional arguments to a checker?__
+__3.7. Q. How can I pass additional arguments to a checker?__
 
 A. Almost all syntax checkers use the `makeprgBuild()` function. Those checkers
 that do can be configured using global variables. The general form of the
@@ -252,7 +252,7 @@ See `:help syntastic-checker-options` for more information.
 
 <a name="faqcheckers"></a>
 
-__3.8.\ Q. Syntastic supports several checkers for my filetype - how do I tell it
+__3.8. Q. Syntastic supports several checkers for my filetype - how do I tell it
 which one(s) to use?__
 
 A. Stick a line like this in your vimrc:
@@ -293,7 +293,7 @@ filetype of the current file is `php`).
 
 <a name="faqstyle"></a>
 
-__3.9.\ Q. What is the difference between syntax checkers and style checkers?__
+__3.9. Q. What is the difference between syntax checkers and style checkers?__
 
 A. The errors and warnings they produce are highlighted differently and can
 be filtered by different rules, but otherwise the distinction is pretty much
@@ -323,7 +323,7 @@ See `:help syntastic_quiet_messages` for details.
 
 <a name="faqaggregate"></a>
 
-__3.10.\ Q. I have enabled multiple checkers for the current filetype.  How can I
+__3.10. Q. I have enabled multiple checkers for the current filetype.  How can I
 display all of the errors from all of the checkers together?__
 
 A. Set `g:syntastic_aggregate_errors` to 1 in your vimrc:
@@ -335,7 +335,7 @@ See `:help syntastic-aggregating-errors` for more details.
 
 <a name="faqlnext"></a>
 
-__3.11.\ Q. How can I jump between the different errors without using the location
+__3.11. Q. How can I jump between the different errors without using the location
 list at the bottom of the window?__
 
 A. Vim provides several built-in commands for this. See `:help :lnext` and
@@ -347,7 +347,7 @@ mappings (among other things).
 
 <a name="faqbdelete"></a>
 
-__3.12.\ Q. The error window is closed automatically when I :quit the current buffer
+__3.12. Q. The error window is closed automatically when I :quit the current buffer
 but not when I :bdelete it?__
 
 A. There is no safe way to handle that situation automatically, but you can
