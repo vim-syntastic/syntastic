@@ -18,10 +18,25 @@
 
 
 - - -
-1\. [Introduction](#introduction)  
-2\. [Installation](#installation)  
-3\. [FAQ](#faq)  
-4\. [Other resources](#otherresources)  
+1. [Introduction](#introduction)  
+2. [Installation](#installation)  
+2.1. [Requirements](#requirements)  
+2.2. [Installing syntastic with Pathogen](#installpathogen)  
+3. [FAQ](#faq)  
+3.1. [I installed syntastic but it isn't reporting any errors...](#faqinfo)  
+3.2. [The `python` checker complains about syntactically valid Python 3 constructs...](#faqpython3)  
+3.3. [Are there any local checkers for HTML5 that I can use with syntastic?](#faqhtml5)  
+3.4. [The `perl` checker has stopped working...](#faqperl)  
+3.5. [What happened to the `rustc` checker?](#faqrust)  
+3.6. [I run a checker and the location list is not updated...](#faqloclist)  
+3.6. [I run`:lopen` or `:lwindow` and the error window is empty...](#faqloclist)  
+3.7. [How can I pass additional arguments to a checker?](#faqargs)  
+3.8. [Syntastic supports several checkers for my filetype - how do I tell which one(s) to use?](#faqcheckers)  
+3.9. [What is the difference between syntax checkers and style checkers?](#faqstyle)  
+3.10. [I have enabled multiple checkers for the current filetype.  How can I display all of the errors from all of the checkers together?](#faqaggregate)  
+3.11. [How can I jump between the different errors without using the location list at the bottom of the window?](#faqlnext)  
+3.12. [The error window is closed automatically when I :quit the current buffer but not when I :bdelete it?](#faqbdelete)  
+4. [Other resources](#otherresources)  
 - - -
 
 <a name="introduction"></a>
