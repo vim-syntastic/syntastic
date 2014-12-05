@@ -21,26 +21,29 @@ endif
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! SyntaxCheckers_javascript_flow_IsAvailable() dict
-    if !executable(self.getExec())
-        return 0
-    endif
-
-    return executable(self.getExec())
-endfunction
-
 function! SyntaxCheckers_javascript_flow_GetLocList() dict
     let makeprg = self.makeprgBuild({
-        \ 'args': '' })
+        \ 'exe_after': 'check',
+        \ 'args_after': '--show-all-errors --json' })
 
     let errorformat =
-                \ '%E,' .
-                \ '%C%f:%l:%v\,%c: %m,' .
-                \ '%C%\w%\\+%m,' .
-                \ '%Z%\s%m,' .
-                \ '%Z%m'
+        \ '%f:%l:%c:%n: %m,' .
+        \ '%f:%l:%c: %m'
 
-    return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
+    let loclist = SyntasticMake({
+        \ 'makeprg': makeprg,
+        \ 'errorformat': errorformat,
+        \ 'preprocess': 'flow',
+        \ 'defaults': {'type': 'E'} })
+
+    for e in loclist
+        if get(e, 'col', 0) && get(e, 'nr', 0)
+            let e['hl'] = '\%>' . (e['col'] - 1) . 'c\%<' . (e['nr'] + 1) . 'c'
+            let e['nr'] = 0
+        endif
+    endfor
+
+    return loclist
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
