@@ -33,15 +33,12 @@ function! SyntaxCheckers_javascript_flow_GetLocList() dict
     let makeprg = self.makeprgBuild({
         \ 'args': '' })
 
-    " BLANK LINE
-    let errorformat = '%E'
-    " ^FILEPATH:LINE:COL:UNKNOWN:ERROR_START
-    let errorformat .= ',%C%f:%l:%v\,%c: %m'
-    " ^IGNORE ERROR_CONTINUE
-    let errorformat .= ',%C%\w%\\+%m'
-    " ^  OTHER_FILEPATH:LINE:COL:UNKNOWN: ERROR_END
-    let errorformat .= ',%Z%\s%m'
-    let errorformat .= ',%Z%m'
+    let errorformat =
+                \ '%E,' .
+                \ '%C%f:%l:%v\,%c: %m,' .
+                \ '%C%\w%\\+%m,' .
+                \ '%Z%\s%m,' .
+                \ '%Z%m'
 
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 endfunction
