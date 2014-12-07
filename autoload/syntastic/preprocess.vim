@@ -131,7 +131,7 @@ function! syntastic#preprocess#perl(errors) " {{{2
     let out = []
 
     for e in a:errors
-        let parts = matchlist(e, '\v^(.*)\sat\s(.*)\sline\s(\d+)(.*)$')
+        let parts = matchlist(e, '\v^(.*)\sat\s(.{-})\sline\s(\d+)(.*)$')
         if !empty(parts)
             call add(out, parts[2] . ':' . parts[3] . ':' . parts[1] . parts[4])
         endif
