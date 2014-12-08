@@ -291,7 +291,7 @@ function! s:UpdateErrors(auto_invoked, checker_names) " {{{2
     endif
 
     call s:modemap.synch()
-    let run_checks = !a:auto_invoked || s:modemap.allowsAutoChecking(&filetype)
+    let run_checks = !a:auto_invoked || s:modemap.doAutoChecking()
     if run_checks
         call s:CacheErrors(a:checker_names)
     endif

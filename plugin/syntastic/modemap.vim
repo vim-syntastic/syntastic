@@ -38,6 +38,15 @@ function! g:SyntasticModeMap.allowsAutoChecking(filetype) " {{{2
     endif
 endfunction " }}}2
 
+function! g:SyntasticModeMap.doAutoChecking() " {{{2
+    let local_mode = get(b:, 'syntastic_mode', '')
+    if local_mode ==# 'active' || local_mode ==# 'passive'
+        return local_mode ==# 'active'
+    endif
+
+    return self.allowsAutoChecking(&filetype)
+endfunction " }}}2
+
 function! g:SyntasticModeMap.isPassive() " {{{2
     return self._mode ==# 'passive'
 endfunction " }}}2
