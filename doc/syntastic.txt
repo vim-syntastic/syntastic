@@ -163,8 +163,9 @@ Example: >
 You can use the |:Errors| command to display the errors for the current buffer
 in the |location-list|.
 
-Note that when you use |:Errors|, the current location list is overwritten
-with Syntastic's own location list.
+Note that when you use |:Errors| the current location list is overwritten with
+Syntastic's own location list. The location list is also overwritten when
+|syntastic_auto_jump| is non-zero and the cursor has to jump to an issue.
 
 By default syntastic doesn't fill the |location-list| with the errors found by
 the checkers, in order to reduce clashes with other plugins. Consequently, if
