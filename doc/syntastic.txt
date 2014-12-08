@@ -459,8 +459,18 @@ the "passive_filetypes" array ("active_filetypes" is ignored).
 If any of "mode", "active_filetypes", or "passive_filetypes" are left
 unspecified, they default to values above.
 
+If local variable |'b:syntastic_mode'| is defined its value takes precedence
+over all calculations involving |'syntastic_mode_map'| for the corresponding
+buffer.
+
 At runtime, the |:SyntasticToggleMode| command can be used to switch between
 active and passive modes.
+
+                                                          *'b:syntastic_mode'*
+Default: unset
+Only the local form |'b:syntastic_mode'| is used. When set to either "active"
+or "passive", it takes precedence over |'syntastic_mode_map'| when deciding
+whether the corresponding buffer should be checked automatically.
 
                                                   *'syntastic_quiet_messages'*
 Default: {}
