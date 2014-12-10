@@ -383,12 +383,17 @@ when saving or opening a file.
 When set to 0 the cursor won't jump automatically. >
     let g:syntastic_auto_jump = 0
 <
-When set to 1 the cursor will always jump to the first issue detected. >
+When set to 1 the cursor will always jump to the first issue detected,
+regardless of type. >
     let g:syntastic_auto_jump = 1
 <
 When set to 2 the cursor will jump to the first issue detected, but only if
 this issue is an error. >
     let g:syntastic_auto_jump = 2
+<
+When set to 3 the cursor will jump to the first error detected, if any. If
+all issues detected are warnings, the cursor won't jump. >
+    let g:syntastic_auto_jump = 3
 <
                                                    *'syntastic_auto_loc_list'*
 Default: 2
