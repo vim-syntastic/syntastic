@@ -133,8 +133,14 @@ function! g:SyntasticLoclist.getStatuslineFlag() " {{{2
     return self._stl_flag
 endfunction " }}}2
 
-function! g:SyntasticLoclist.getFirstIssue() " {{{2
-    return get(self._rawLoclist, 0, {})
+function! g:SyntasticLoclist.getFirstError() " {{{2
+    for idx in range(len(self._rawLoclist))
+        if get(self._rawLoclist[idx], 'type', '') ==? 'E'
+            return idx + 1
+        endif
+    endfor
+
+    return 0
 endfunction " }}}2
 
 function! g:SyntasticLoclist.getName() " {{{2
