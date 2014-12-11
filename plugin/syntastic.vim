@@ -305,7 +305,7 @@ function! s:UpdateErrors(auto_invoked, checker_names) " {{{2
     " populate loclist and jump {{{3
     let do_jump = syntastic#util#var('auto_jump') + 0
     if do_jump == 2
-        let do_jump = loclist.getFirstError() == 1
+        let do_jump = loclist.getFirstError(1)
     elseif do_jump == 3
         let do_jump = loclist.getFirstError()
     elseif 0 > do_jump || do_jump > 3

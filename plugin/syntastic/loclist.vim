@@ -133,8 +133,13 @@ function! g:SyntasticLoclist.getStatuslineFlag() " {{{2
     return self._stl_flag
 endfunction " }}}2
 
-function! g:SyntasticLoclist.getFirstError() " {{{2
-    for idx in range(len(self._rawLoclist))
+function! g:SyntasticLoclist.getFirstError(...) " {{{2
+    let max_issues = len(self._rawLoclist)
+    if a:0 && a:1 < max_issues
+        let max_issues = a:1
+    endif
+
+    for idx in range(max_issues)
         if get(self._rawLoclist[idx], 'type', '') ==? 'E'
             return idx + 1
         endif
