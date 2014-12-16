@@ -20,7 +20,7 @@ set cpo&vim
 function! SyntaxCheckers_lua_luacheck_GetHighlightRegex(item)
     let term = matchstr(a:item['text'], '\m''\zs\S\+\ze''')
     if term != ''
-        return '\V\<' . escape(term, '\') . '\>''
+        return '\V\<' . escape(term, '\') . '\>'
     endif
 
     let term = matchstr(a:item['text'], '\m\(accessing undefined\|setting non-standard global\|' .
