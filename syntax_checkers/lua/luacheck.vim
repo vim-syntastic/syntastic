@@ -14,19 +14,27 @@ if exists("g:loaded_syntastic_lua_luacheck_checker")
 endif
 let g:loaded_syntastic_lua_luacheck_checker = 1
 
-if !exists('g:syntastic_lua_luacheck_sort')
-    let g:syntastic_lua_luacheck_sort = 1
-endif
-
 let s:save_cpo = &cpo
 set cpo&vim
 
 function! SyntaxCheckers_lua_luacheck_GetHighlightRegex(item)
-    let term = matchstr(a:item['text'], '''\zs.*\ze''') " matches the substring wrapped in single quotes
-    if term != ''
-        let term = '\V\<' . escape(term, '\') . '\>'
+    let term = matchstr(a:item['text'], '\m\(accessing undefined\|setting non-standard global\|' .
+                \ 'setting non-module global\|unused global\) variable \zs\S\+')
+    if term == ''
+        let term = matchstr(a:item['text'], '\mvariable \zs\S\+\ze was previously defined')
     endif
-    return term
+    if term == ''
+        let term = matchstr(a:item['text'], '\munused \(variable\|argument\|loop variable\) \zs\S\+')
+    endif
+    if term == ''
+        let term = matchstr(a:item['text'], '\m\(value assigned to variable\|value of argument\|' .
+                \ 'value of loop variable\) \zs\S\+')
+    endif
+    if term == ''
+        let term = matchstr(a:item['text'], '\mvariable \zs\S\+\ze is never set')
+    endif
+
+    return term != '' ? '\V\<' . escape(term, '\') . '\>' : ''
 endfunction
 
 function! SyntaxCheckers_lua_luacheck_GetLocList() dict
@@ -36,12 +44,17 @@ function! SyntaxCheckers_lua_luacheck_GetLocList() dict
         \ '%f:%l:%c: %m,'.
         \ '%-G%.%#'
 
-    return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
+    return SyntasticMake({
+        \ 'makeprg': makeprg,
+        \ 'errorformat': errorformat,
+        \ 'subtype': 'Style',
+        \ 'defaults': { 'type': 'W' },
+        \ 'returns': [0, 1, 2] })
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
-            \ 'filetype': 'lua',
-            \ 'name': 'luacheck' })
+    \ 'filetype': 'lua',
+    \ 'name': 'luacheck' })
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
