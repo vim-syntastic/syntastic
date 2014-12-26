@@ -28,6 +28,7 @@ function! SyntaxCheckers_javascript_jscs_GetLocList() dict
 
     return SyntasticMake({
         \ 'makeprg': makeprg,
+        \ 'cwd': expand('%:p:h'),
         \ 'errorformat': errorformat,
         \ 'subtype': 'Style',
         \ 'preprocess': 'checkstyle',
