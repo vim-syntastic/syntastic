@@ -21,4 +21,4 @@ call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'name': 'oclint',
     \ 'redirect': 'c/oclint'})
 
-" vim: set et sts=4 sw=4:
+" vim: set sw=4 sts=4 et fdm=marker:
