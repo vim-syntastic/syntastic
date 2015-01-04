@@ -18,9 +18,17 @@ endfunction " }}}2
 " read additional compiler flags from the given configuration file
 " the file format and its parsing mechanism is inspired by clang_complete
 function! syntastic#c#ReadConfig(file) " {{{2
-    " search in the current file's directory upwards
+    call syntastic#log#debug(g:_SYNTASTIC_DEBUG_CHECKERS, 'ReadConfig: looking for', a:file)
+
+    " search upwards from the current file's directory
     let config = findfile(a:file, '.;')
-    if config == '' || !filereadable(config)
+    if config == ''
+        call syntastic#log#debug(g:_SYNTASTIC_DEBUG_CHECKERS, 'ReadConfig: file not found')
+        return ''
+    endif
+    call syntastic#log#debug(g:_SYNTASTIC_DEBUG_CHECKERS, 'ReadConfig: config file:', config)
+    if !filereadable(config)
+        call syntastic#log#debug(g:_SYNTASTIC_DEBUG_CHECKERS, 'ReadConfig: file unreadable')
         return ''
     endif
 
@@ -31,6 +39,7 @@ function! syntastic#c#ReadConfig(file) " {{{2
     try
         let lines = readfile(config)
     catch /\m^Vim\%((\a\+)\)\=:E48[45]/
+        call syntastic#log#debug(g:_SYNTASTIC_DEBUG_CHECKERS, 'ReadConfig: error reading file')
         return ''
     endtry
 
