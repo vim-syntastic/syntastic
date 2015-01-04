@@ -607,7 +607,7 @@ endfunction " }}}2
 
 " Skip running in special buffers
 function! s:_skip_file() " {{{2
-    let fname = expand('%')
+    let fname = expand('%', 1)
     let skip = get(b:, 'syntastic_skip_checks', 0) || (&buftype != '') ||
         \ !filereadable(fname) || getwinvar(0, '&diff') || s:_ignore_file(fname) ||
         \ fnamemodify(fname, ':e') =~? g:syntastic_ignore_extensions
@@ -621,7 +621,7 @@ endfunction " }}}2
 function! s:_explain_skip(filetypes) " {{{2
     if empty(a:filetypes) && s:_skip_file()
         let why = []
-        let fname = expand('%')
+        let fname = expand('%', 1)
 
         if get(b:, 'syntastic_skip_checks', 0)
             call add(why, 'b:syntastic_skip_checks set')

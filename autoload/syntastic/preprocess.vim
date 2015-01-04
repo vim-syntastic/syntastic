@@ -30,7 +30,7 @@ endfunction " }}}2
 
 function! syntastic#preprocess#checkstyle(errors) " {{{2
     let out = []
-    let fname = expand('%')
+    let fname = expand('%', 1)
     for err in a:errors
         if match(err, '\m<error\>') > -1
             let line = str2nr(matchstr(err, '\m\<line="\zs\d\+\ze"'))

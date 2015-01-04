@@ -37,7 +37,7 @@ function! SyntaxCheckers_go_govet_GetLocList() dict
     return SyntasticMake({
         \ 'makeprg': makeprg,
         \ 'errorformat': errorformat,
-        \ 'cwd': expand('%:p:h'),
+        \ 'cwd': expand('%:p:h', 1),
         \ 'defaults': {'type': 'w'} })
 endfunction
 

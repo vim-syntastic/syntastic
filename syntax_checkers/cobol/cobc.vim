@@ -28,7 +28,7 @@ function! SyntaxCheckers_cobol_cobc_IsAvailable() dict
         let g:syntastic_cobol_compiler = self.getExec()
     endif
     call self.log('g:syntastic_cobol_compiler =', g:syntastic_cobol_compiler)
-    return executable(expand(g:syntastic_cobol_compiler))
+    return executable(expand(g:syntastic_cobol_compiler, 1))
 endfunction
 
 function! SyntaxCheckers_cobol_cobc_GetLocList() dict

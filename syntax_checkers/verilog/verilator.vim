@@ -21,7 +21,7 @@ function! SyntaxCheckers_verilog_verilator_IsAvailable() dict
         let g:syntastic_verilog_compiler = self.getExec()
     endif
     call self.log('g:syntastic_verilog_compiler =', g:syntastic_verilog_compiler)
-    return executable(expand(g:syntastic_verilog_compiler))
+    return executable(expand(g:syntastic_verilog_compiler, 1))
 endfunction
 
 function! SyntaxCheckers_verilog_verilator_GetLocList() dict
