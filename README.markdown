@@ -144,7 +144,7 @@ If you get an error when you do this, then you probably didn't install
 following:
 
 1. Created both the `~/.vim/autoload` and `~/.vim/bundle` directories.
-2. Added the `call pathogen#infect()` line to your `~/.vimrc` file
+2. Added the `execute pathogen#infect()` line to your `~/.vimrc` file
 3. Did the `git clone` of syntastic inside `~/.vim/bundle`
 4. Have permissions to access all of these directories.
 
