@@ -143,7 +143,7 @@ function! s:_logRedirect(on) " {{{2
     if exists("g:syntastic_debug_file")
         if a:on
             try
-                execute 'redir >> ' . fnameescape(expand(g:syntastic_debug_file))
+                execute 'redir >> ' . fnameescape(expand(g:syntastic_debug_file, 1))
             catch /\m^Vim\%((\a\+)\)\=:/
                 silent! redir END
                 unlet g:syntastic_debug_file

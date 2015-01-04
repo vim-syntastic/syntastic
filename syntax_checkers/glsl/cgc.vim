@@ -61,7 +61,7 @@ function! s:GetProfile()
         let profile = matchstr(getline(line), magic . '\zs.*')
     else
         let extensions = exists('g:syntastic_glsl_extensions') ? g:syntastic_glsl_extensions : s:glsl_extensions
-        let profile = get(extensions, tolower(expand('%:e')), 'gpu_vert')
+        let profile = get(extensions, tolower(expand('%:e', 1)), 'gpu_vert')
     endif
 
     return profile

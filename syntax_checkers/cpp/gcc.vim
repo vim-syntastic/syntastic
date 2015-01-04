@@ -27,7 +27,7 @@ function! SyntaxCheckers_cpp_gcc_IsAvailable() dict
         let g:syntastic_cpp_compiler = executable(self.getExec()) ? self.getExec() : 'clang++'
     endif
     call self.log('g:syntastic_cpp_compiler =', g:syntastic_cpp_compiler)
-    return executable(expand(g:syntastic_cpp_compiler))
+    return executable(expand(g:syntastic_cpp_compiler, 1))
 endfunction
 
 function! SyntaxCheckers_cpp_gcc_GetLocList() dict

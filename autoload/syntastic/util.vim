@@ -223,7 +223,7 @@ function! syntastic#util#findInParent(what, where) " {{{2
 
     let old = ''
     while here != ''
-        let p = split(globpath(here, a:what), '\n')
+        let p = split(globpath(here, a:what, 1), '\n')
 
         if !empty(p)
             return fnamemodify(p[0], ':p')
@@ -260,8 +260,8 @@ function! syntastic#util#shescape(string) " {{{2
 endfunction " }}}2
 
 " A less noisy shellescape(expand())
-function! syntastic#util#shexpand(string) " {{{2
-    return syntastic#util#shescape(expand(a:string))
+function! syntastic#util#shexpand(string, ...) " {{{2
+    return syntastic#util#shescape(a:0 ? expand(a:string, a:1) : expand(a:string, 1))
 endfunction " }}}2
 
 " decode XML entities
@@ -343,7 +343,7 @@ function! s:_rmrf(what) " {{{2
     endif
 
     if getftype(a:what) ==# 'dir'
-        for f in split(globpath(a:what, '*'), "\n")
+        for f in split(globpath(a:what, '*', 1), "\n")
             call s:_rmrf(f)
         endfor
         silent! call system(s:rmdir . ' ' . syntastic#util#shescape(a:what))

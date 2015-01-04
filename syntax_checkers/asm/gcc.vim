@@ -26,7 +26,7 @@ function! SyntaxCheckers_asm_gcc_IsAvailable() dict
     if !exists('g:syntastic_asm_compiler')
         let g:syntastic_asm_compiler = self.getExec()
     endif
-    return executable(expand(g:syntastic_asm_compiler))
+    return executable(expand(g:syntastic_asm_compiler, 1))
 endfunction
 
 function! SyntaxCheckers_asm_gcc_GetLocList() dict
@@ -41,7 +41,7 @@ endfunction
 
 function! s:GetDialect()
     return exists('g:syntastic_asm_dialect') ? g:syntastic_asm_dialect :
-        \ expand('%:e') ==? 'asm' ? 'intel' : 'att'
+        \ expand('%:e', 1) ==? 'asm' ? 'intel' : 'att'
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({

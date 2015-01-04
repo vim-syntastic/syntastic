@@ -208,7 +208,7 @@ endfunction " }}}2
 " resolve user CFLAGS
 function! s:_get_cflags(ft, ck, opts) " {{{2
     " determine whether to parse header files as well
-    if has_key(a:opts, 'header_names') && expand('%') =~? a:opts['header_names']
+    if has_key(a:opts, 'header_names') && expand('%', 1) =~? a:opts['header_names']
         if s:_get_checker_var('g', a:ft, a:ck, 'check_header', 0)
             let flags = get(a:opts, 'header_flags', '') . ' -c ' . syntastic#c#NullOutput()
         else
@@ -297,7 +297,7 @@ function! s:_search_headers() " {{{2
     " search included headers
     for hfile in files
         if hfile != ''
-            let filename = expand('%:p:h') . syntastic#util#Slash() . hfile
+            let filename = expand('%:p:h', 1) . syntastic#util#Slash() . hfile
 
             try
                 let lines = readfile(filename, '', 100)

@@ -27,7 +27,7 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 function! SyntaxCheckers_racket_code_ayatollah_IsAvailable() dict
-    let s:script = expand(g:syntastic_racket_code_ayatollah_script)
+    let s:script = expand(g:syntastic_racket_code_ayatollah_script, 1)
     return executable(self.getExec()) && filereadable(s:script)
 endfunction
 

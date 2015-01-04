@@ -39,7 +39,7 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 function! SyntaxCheckers_sass_sass_GetLocList() dict
-    if !g:syntastic_sass_check_partials && expand('%:t')[0] == '_'
+    if !g:syntastic_sass_check_partials && expand('%:t', 1)[0] == '_'
         return []
     endif
 

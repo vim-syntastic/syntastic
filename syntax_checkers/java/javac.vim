@@ -98,8 +98,8 @@ function! s:SplitClasspath(classpath)
 endfunction
 
 function! s:LoadConfigFile()
-    if filereadable(expand(g:syntastic_java_javac_config_file))
-        exe 'source ' . fnameescape(expand(g:syntastic_java_javac_config_file))
+    if filereadable(expand(g:syntastic_java_javac_config_file, 1))
+        exe 'source ' . fnameescape(expand(g:syntastic_java_javac_config_file, 1))
     endif
 endfunction
 
@@ -112,9 +112,9 @@ function! s:SaveClasspath()
     endfor
     " save classpath to config file
     if g:syntastic_java_javac_config_file_enabled
-        if filereadable(expand(g:syntastic_java_javac_config_file))
+        if filereadable(expand(g:syntastic_java_javac_config_file, 1))
             " load lines from config file
-            let lines = readfile(expand(g:syntastic_java_javac_config_file))
+            let lines = readfile(expand(g:syntastic_java_javac_config_file, 1))
             " strip g:syntastic_java_javac_classpath options from config file lines
             let i = 0
             while i < len(lines)
@@ -130,7 +130,7 @@ function! s:SaveClasspath()
         " add new g:syntastic_java_javac_classpath option to config
         call add(lines, 'let g:syntastic_java_javac_classpath = ' . string(path))
         " save config file lines
-        call writefile(lines, expand(g:syntastic_java_javac_config_file))
+        call writefile(lines, expand(g:syntastic_java_javac_config_file, 1))
     endif
     " set new classpath
     let g:syntastic_java_javac_classpath = path
@@ -167,7 +167,7 @@ function! s:SaveConfig()
     let lines = getline(1, line('$'))
     if g:syntastic_java_javac_config_file_enabled
         " save config file lines
-        call writefile(lines, expand(g:syntastic_java_javac_config_file))
+        call writefile(lines, expand(g:syntastic_java_javac_config_file, 1))
     endif
     let &modified = 0
 endfunction
@@ -177,8 +177,8 @@ function! s:EditConfig()
     let winnr = bufwinnr('^' . command . '$')
     if winnr < 0
         let lines = []
-        if filereadable(expand(g:syntastic_java_javac_config_file))
-            let lines = readfile(expand(g:syntastic_java_javac_config_file))
+        if filereadable(expand(g:syntastic_java_javac_config_file, 1))
+            let lines = readfile(expand(g:syntastic_java_javac_config_file, 1))
         endif
         execute (len(lines) + 5) . 'sp ' . fnameescape(command)
 
@@ -282,8 +282,8 @@ function! s:GetMavenClasspath()
 endfunction
 
 function! SyntaxCheckers_java_javac_IsAvailable() dict
-    let s:has_maven = executable(expand(g:syntastic_java_maven_executable))
-    return executable(expand(g:syntastic_java_javac_executable))
+    let s:has_maven = executable(expand(g:syntastic_java_maven_executable, 1))
+    return executable(expand(g:syntastic_java_javac_executable, 1))
 endfunction
 
 function! s:MavenOutputDirectory()
@@ -294,13 +294,13 @@ function! s:MavenOutputDirectory()
         if has_key(mvn_properties, 'project.properties.build.dir')
             let output_dir = mvn_properties['project.properties.build.dir']
         endif
-        if stridx(expand( '%:p:h' ), 'src.main.java') >= 0
+        if stridx(expand('%:p:h', 1), 'src.main.java') >= 0
             let output_dir .= '/target/classes'
             if has_key(mvn_properties, 'project.build.outputDirectory')
                 let output_dir = mvn_properties['project.build.outputDirectory']
             endif
         endif
-        if stridx(expand( '%:p:h' ), 'src.test.java') >= 0
+        if stridx(expand('%:p:h', 1), 'src.test.java') >= 0
             let output_dir .= '/target/test-classes'
             if has_key(mvn_properties, 'project.build.testOutputDirectory')
                 let output_dir = mvn_properties['project.build.testOutputDirectory']
@@ -335,9 +335,9 @@ function! SyntaxCheckers_java_javac_GetLocList() dict
     for path in split(g:syntastic_java_javac_classpath, s:ClassSep())
         if path != ''
             try
-                let ps = glob(path, 0, 1)
+                let ps = glob(path, 1, 1)
             catch
-                let ps = split(glob(path, 0), "\n")
+                let ps = split(glob(path, 1), "\n")
             endtry
             if type(ps) == type([])
                 for p in ps
@@ -371,7 +371,7 @@ function! SyntaxCheckers_java_javac_GetLocList() dict
         let javac_opts .= ' -cp ' . syntastic#util#shexpand(javac_classpath)
     endif
 
-    let fname = expand('%:p:h') . syntastic#util#Slash() . expand ('%:t')
+    let fname = expand('%:p:h', 1) . syntastic#util#Slash() . expand ('%:t', 1)
 
     if has('win32unix')
         let fname = s:CygwinPath(fname)

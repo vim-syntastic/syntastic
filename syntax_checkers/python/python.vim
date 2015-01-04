@@ -18,7 +18,7 @@ let g:loaded_syntastic_python_python_checker = 1
 let s:save_cpo = &cpo
 set cpo&vim
 
-let s:compiler = expand('<sfile>:p:h') . syntastic#util#Slash() . 'compile.py'
+let s:compiler = expand('<sfile>:p:h', 1) . syntastic#util#Slash() . 'compile.py'
 
 function! SyntaxCheckers_python_python_IsAvailable() dict
     if !executable(self.getExec())

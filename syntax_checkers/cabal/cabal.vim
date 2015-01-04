@@ -40,7 +40,7 @@ function! SyntaxCheckers_cabal_cabal_GetLocList() dict
     return SyntasticMake({
         \ 'makeprg': makeprg,
         \ 'errorformat': errorformat,
-        \ 'cwd': expand('%:p:h'),
+        \ 'cwd': expand('%:p:h', 1),
         \ 'preprocess': 'cabal',
         \ 'defaults': {'bufnr': bufnr('')} })
 endfunction
