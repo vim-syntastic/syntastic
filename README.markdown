@@ -154,9 +154,9 @@ following:
 ## 3\. Recommended settings
 
 Syntastic has a large number of options that can be configured, and the
-defaults are not particularly suitable for new users.  It is recommended that
-you start by adding the following lines to your `vimrc` file then return
-to them later, preferably after reading the manual (see `:help syntastic`):
+defaults are not particularly well suitable for new users.  It is recommended
+that you start by adding the following lines to your `vimrc` file, and return
+to them after reading the manual (see `:help syntastic` in Vim):
 ```vim
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
