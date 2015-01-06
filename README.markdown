@@ -261,7 +261,7 @@ A. Almost all syntax checkers use the `makeprgBuild()` function. Those checkers
 that do can be configured using global variables. The general form of the
 global `args` variables is `syntastic_<filetype>_<checker>_args`.
 
-So, If you wanted to pass "--my --args --here" to the ruby mri checker you
+So, If you wanted to pass `--my --args --here` to the ruby mri checker you
 would add this line to your `vimrc`:
 ```vim
 let g:syntastic_ruby_mri_args = "--my --args --here"
