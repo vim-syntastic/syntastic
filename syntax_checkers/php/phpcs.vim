@@ -15,17 +15,31 @@ if exists("g:loaded_syntastic_php_phpcs_checker")
 endif
 let g:loaded_syntastic_php_phpcs_checker = 1
 
+if !exists('g:syntastic_php_phpcs_tab_width')
+    let g:syntastic_php_phpcs_tab_width = 4
+endif
+
+if !exists('g:syntastic_php_phpcs_column_specifier')
+    let g:syntastic_php_phpcs_column_specifier = '%c'
+endif
+
 let s:save_cpo = &cpo
 set cpo&vim
 
 function! SyntaxCheckers_php_phpcs_GetLocList() dict
+    if g:syntastic_php_phpcs_tab_width
+        let args = '--tab-width=' . g:syntastic_php_phpcs_tab_width
+    else
+        let args = ''
+    endif
+
     let makeprg = self.makeprgBuild({
-        \ 'args': '--tab-width=' . &tabstop,
-        \ 'args_after': '--report=csv' })
+        \ 'args_after': '--report=csv',
+        \ 'args': args })
 
     let errorformat =
         \ '%-GFile\,Line\,Column\,Type\,Message\,Source\,Severity%.%#,'.
-        \ '"%f"\,%l\,%v\,%t%*[a-zA-Z]\,"%m"\,%*[a-zA-Z0-9_.-]\,%*[0-9]%.%#'
+        \ '"%f"\,%l\,' . g:syntastic_php_phpcs_column_specifier . '\,%t%*[a-zA-Z]\,"%m"\,%*[a-zA-Z0-9_.-]\,%*[0-9]%.%#'
 
     return SyntasticMake({
         \ 'makeprg': makeprg,
