@@ -51,11 +51,11 @@ function! SyntaxCheckers_go_go_GetLocList() dict
     " compiled by `go build`, therefore `go test` must be called for those.
     if match(expand('%', 1), '\m_test\.go$') == -1
         let opts = syntastic#util#shescape(syntastic#util#var('go_go_build_args'))
-        let makeprg = self.getExec() . ' build ' . opts . ' ' . syntastic#c#NullOutput()
+        let makeprg = self.getExec() . ' build ' . syntastic#c#NullOutput() . ' ' . opts
         let cleanup = 0
     else
         let opts = syntastic#util#shescape(syntastic#util#var('go_go_test_args'))
-        let makeprg = self.getExec() . ' test -c ' . opts . ' ' . syntastic#c#NullOutput()
+        let makeprg = self.getExec() . ' test -c ' . syntastic#c#NullOutput() . ' ' . opts
         let cleanup = 1
     endif
 
