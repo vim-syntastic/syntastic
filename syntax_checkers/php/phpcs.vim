@@ -19,13 +19,11 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 function! SyntaxCheckers_php_phpcs_GetLocList() dict
-    let makeprg = self.makeprgBuild({
-        \ 'args': '--tab-width=' . &tabstop,
-        \ 'args_after': '--report=csv' })
+    let makeprg = self.makeprgBuild({ 'args_after': '--report=csv' })
 
     let errorformat =
         \ '%-GFile\,Line\,Column\,Type\,Message\,Source\,Severity%.%#,'.
-        \ '"%f"\,%l\,%v\,%t%*[a-zA-Z]\,"%m"\,%*[a-zA-Z0-9_.-]\,%*[0-9]%.%#'
+        \ '"%f"\,%l\,%c\,%t%*[a-zA-Z]\,"%m"\,%*[a-zA-Z0-9_.-]\,%*[0-9]%.%#'
 
     return SyntasticMake({
         \ 'makeprg': makeprg,
