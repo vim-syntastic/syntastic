@@ -50,11 +50,13 @@ function! SyntaxCheckers_go_go_GetLocList() dict
     " Test files, i.e. files with a name ending in `_test.go`, are not
     " compiled by `go build`, therefore `go test` must be called for those.
     if match(expand('%', 1), '\m_test\.go$') == -1
-        let opts = syntastic#util#shescape(syntastic#util#var('go_go_build_args'))
+        let opts = syntastic#util#var('go_go_build_args')
+        let opts = opts != '' ? syntastic#util#shescape(opts) : ''
         let makeprg = self.getExec() . ' build ' . opts . ' ' . syntastic#c#NullOutput()
         let cleanup = 0
     else
-        let opts = syntastic#util#shescape(syntastic#util#var('go_go_test_args'))
+        let opts = syntastic#util#var('go_go_test_args')
+        let opts = opts != '' ? syntastic#util#shescape(opts) : ''
         let makeprg = self.getExec() . ' test -c ' . opts . ' ' . syntastic#c#NullOutput()
         let cleanup = 1
     endif
