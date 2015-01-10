@@ -21,6 +21,7 @@ CONTENTS                                                  *syntastic-contents*
 
     1.Intro........................................|syntastic-intro|
         1.1.Quick start............................|syntastic-quickstart|
+        1.2.Recommended settings...................|syntastic-recommended|
     2.Functionality provided.......................|syntastic-functionality|
         2.1.The statusline flag....................|syntastic-statusline-flag|
         2.2.Error signs............................|syntastic-error-signs|
@@ -85,13 +86,35 @@ You can see the list of checkers available for the current filetype with the
 
 You probably want to override the configured list of checkers for the
 filetypes you use, and also change the arguments passed to specific checkers
-to suit your needs. See |syntastic-checker-options| for details.
+to suit your needs. See |syntastic-checker-options| below for details.
 
 Use |:SyntasticCheck| to manually check right now. Use |:Errors| to open the
 |location-list| window, and |:lclose| to close it. You can clear the error
 list with |:SyntasticReset|, and you can use |:SyntasticToggleMode| to switch
 between active (checking on writing the buffer) and passive (manual) checking.
 
+You don't have to switch focus to the |location-list| window to jump to the
+different errors.  Vim provides several built-in commands for this, for
+example |:lnext| and |:lprevious|.  You may want to add shortcut mappings for
+these commands, or perhaps install a plugin such as Tim Pope's 'unimpaired'
+(see https://github.com/tpope/vim-unimpaired) that provides such mappings.
+
+------------------------------------------------------------------------------
+1.2. Recommended settings                              *syntastic-recommended*
+
+Syntastic has a large number of options that can be configured, and the
+defaults are not particularly well suitable for new users. It is recommended
+that you start by adding the following lines to your vimrc, and return to them
+later as needed: >
+    set statusline+=%#warningmsg#
+    set statusline+=%{SyntasticStatuslineFlag()}
+    set statusline+=%*
+
+    let g:syntastic_always_populate_loc_list = 1
+    let g:syntastic_auto_loc_list = 1
+    let g:syntastic_check_on_open = 1
+    let g:syntastic_check_on_wq = 0
+<
 ==============================================================================
 2. Functionality provided                            *syntastic-functionality*
 

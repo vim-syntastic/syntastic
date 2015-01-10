@@ -358,7 +358,7 @@ __4.11. Q. How can I jump between the different errors without using the locatio
 list at the bottom of the window?__
 
 A. Vim provides several built-in commands for this. See `:help :lnext` and
-`:help :lprev`.
+`:help :lprevious`.
 
 If you use these commands a lot then you may want to add shortcut mappings to
 your `vimrc`, or install something like [unimpaired][2], which provides such
