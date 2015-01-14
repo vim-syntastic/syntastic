@@ -30,7 +30,11 @@ function! SyntaxCheckers_ruby_rubocop_IsAvailable() dict
 endfunction
 
 function! SyntaxCheckers_ruby_rubocop_GetLocList() dict
-    let makeprg = self.makeprgBuild({ 'args_after': '--format emacs --silent' })
+    let rubocop_args = '--format emacs'
+    if exists('g:syntastic_ruby_rubocop_args')
+        let rubocop_args .= ' '.g:syntastic_ruby_rubocop_args
+    endif
+    let makeprg = self.makeprgBuild({ 'args_after': rubocop_args })
 
     let errorformat = '%f:%l:%c: %t: %m'
 
