@@ -26,11 +26,15 @@ function! SyntaxCheckers_ruby_rubocop_IsAvailable() dict
     let ver = syntastic#util#getVersion(self.getExecEscaped() . ' --version')
     call self.log(self.getExec() . ' version =', ver)
 
-    return syntastic#util#versionIsAtLeast(ver, [0, 9, 0])
+    return syntastic#util#versionIsAtLeast(ver, [0, 12, 0])
 endfunction
 
 function! SyntaxCheckers_ruby_rubocop_GetLocList() dict
-    let makeprg = self.makeprgBuild({ 'args_after': '--format emacs --silent' })
+    let rubocop_args = '--format emacs'
+    if exists('g:syntastic_ruby_rubocop_args')
+        let rubocop_args .= ' '.g:syntastic_ruby_rubocop_args
+    endif
+    let makeprg = self.makeprgBuild({ 'args_after': rubocop_args })
 
     let errorformat = '%f:%l:%c: %t: %m'
 
