@@ -264,6 +264,17 @@ function! syntastic#util#shexpand(string, ...) " {{{2
     return syntastic#util#shescape(a:0 ? expand(a:string, a:1) : expand(a:string, 1))
 endfunction " }}}2
 
+" Escape arguments
+function! syntastic#util#argsescape(opt) " {{{2
+    if type(a:opt) == type('') && a:opt != ''
+        return [a:opt]
+    elseif type(a:opt) == type([])
+        return map(copy(a:opt), 'syntastic#util#shescape(v:val)')
+    endif
+
+    return []
+endfunction " }}}2
+
 " decode XML entities
 function! syntastic#util#decodeXMLEntities(string) " {{{2
     let str = a:string
