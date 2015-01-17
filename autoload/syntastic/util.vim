@@ -61,7 +61,8 @@ endfunction " }}}2
 
 " Recursively remove a directory
 function! syntastic#util#rmrf(what) " {{{2
-    if a:what == '.'
+    " try to make sure we don't delete directories we didn't create
+    if a:what !~? 'vim-syntastic-'
         return
     endif
 
