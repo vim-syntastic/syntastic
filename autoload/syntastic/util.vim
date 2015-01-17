@@ -377,6 +377,10 @@ function! s:_rmrf(what) " {{{2
     endif
 
     if getftype(a:what) ==# 'dir'
+        if filewritable(a:what) != 2
+            return
+        endif
+
         for f in split(globpath(a:what, '*', 1), "\n")
             call s:_rmrf(f)
         endfor
