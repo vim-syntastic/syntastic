@@ -47,10 +47,6 @@ if !exists('g:syntastic_java_javac_delete_output')
     let g:syntastic_java_javac_delete_output = 1
 endif
 
-if !exists('g:syntastic_java_javac_temp_dir')
-    let g:syntastic_java_javac_temp_dir = syntastic#util#tmpdir()
-endif
-
 if !exists('g:syntastic_java_javac_autoload_maven_classpath')
     let g:syntastic_java_javac_autoload_maven_classpath = 1
 endif
@@ -93,7 +89,7 @@ function! SyntaxCheckers_java_javac_GetLocList() dict " {{{1
 
     let output_dir = ''
     if g:syntastic_java_javac_delete_output
-        let output_dir = g:syntastic_java_javac_temp_dir
+        let output_dir = syntastic#util#tmpdir()
         let javac_opts .= ' -d ' . syntastic#util#shescape(output_dir)
     endif
 
@@ -166,7 +162,7 @@ function! SyntaxCheckers_java_javac_GetLocList() dict " {{{1
         \ '%+C%.%#,'.
         \ '%-G%.%#'
 
-    if g:syntastic_java_javac_delete_output
+    if output_dir != ''
         silent! call mkdir(output_dir, 'p')
     endif
     let errors = SyntasticMake({
@@ -174,7 +170,7 @@ function! SyntaxCheckers_java_javac_GetLocList() dict " {{{1
         \ 'errorformat': errorformat,
         \ 'postprocess': ['cygwinRemoveCR'] })
 
-    if g:syntastic_java_javac_delete_output
+    if output_dir != ''
         call syntastic#util#rmrf(output_dir)
     endif
     return errors
