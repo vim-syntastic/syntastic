@@ -21,9 +21,7 @@ set cpo&vim
 
 function! SyntaxCheckers_ruby_rubylint_GetLocList() dict
     if !exists('s:rubylint_new')
-        let ver = syntastic#util#getVersion(self.getExecEscaped() . ' --version')
-        call self.log(self.getExec() . ' version =', ver)
-        let s:rubylint_new = syntastic#util#versionIsAtLeast(ver, [2])
+        let s:rubylint_new = syntastic#util#versionIsAtLeast(self.getVersion(), [2])
     endif
     let makeprg = self.makeprgBuild({ 'args': (s:rubylint_new ? '' : 'analyze ') . '--presenter=syntastic' })
 
