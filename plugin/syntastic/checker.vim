@@ -81,8 +81,7 @@ function! g:SyntasticChecker.getVersion(...) " {{{2
     if !exists('self._version')
         let command = a:0 ? a:1 : self.getExecEscaped() . ' --version'
         let version_output = system(command)
-        call syntastic#log#debug( g:_SYNTASTIC_DEBUG_CHECKERS,
-            \ self._filetype . '/' . self._name . ': output of ' . string(command) . ': ' .
+        call self.log('getVersion: ' . string(command) . ': ' .
             \ string(split(version_output, "\n", 1)) .
             \ (v:shell_error ? ' (exit code ' . v:shell_error . ')' : '') )
         call self.setVersion(syntastic#util#parseVersion(version_output))
