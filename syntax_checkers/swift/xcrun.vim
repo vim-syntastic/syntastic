@@ -30,7 +30,7 @@ function! SyntaxCheckers_swift_xcrun_GetLocList() dict
         \ '%f:%l:%c: %tarning: %m,'.
         \ '%f:%l: %trror: %m,'.
         \ '%f:%l: fatal %trror: %m,'.
-        \ '%f:%l: %tarning: %m' .
+        \ '%f:%l: %tarning: %m,' .
         \ '%-G%.%#'
 
     return SyntasticMake({
