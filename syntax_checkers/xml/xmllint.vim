@@ -15,6 +15,12 @@ if exists("g:loaded_syntastic_xml_xmllint_checker")
 endif
 let g:loaded_syntastic_xml_xmllint_checker = 1
 
+" Allow one to override arguments to xmllint
+if !exists("g:syntastic_xml_xmllint_cli_args")
+    let g:syntastic_xml_xmllint_cli_args = '--xinclude --noout --postvalid'
+endif
+
+
 let s:save_cpo = &cpo
 set cpo&vim
 
@@ -23,7 +29,7 @@ set cpo&vim
 " and http://www.xmlsoft.org/catalog.html for more information.
 
 function! SyntaxCheckers_xml_xmllint_GetLocList() dict
-    let makeprg = self.makeprgBuild({ 'args_after': '--xinclude --noout --postvalid' })
+    let makeprg = self.makeprgBuild({ 'args_after': g:syntastic_xml_xmllint_cli_args })
 
     let errorformat=
         \ '%E%f:%l: error : %m,' .
