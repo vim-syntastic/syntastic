@@ -24,7 +24,7 @@ set cpo&vim
 
 function! SyntaxCheckers_xml_xmllint_GetLocList() dict
     let makeprg = self.makeprgBuild({
-        \ 'args': '--xinclude --postvalid' })
+        \ 'args': '--xinclude --postvalid',
         \ 'args_after': '--noout' })
 
     let errorformat=
