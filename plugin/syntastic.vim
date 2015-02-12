@@ -19,7 +19,7 @@ if has('reltime')
     lockvar! g:_SYNTASTIC_START
 endif
 
-let g:_SYNTASTIC_VERSION = '3.6.0-19'
+let g:_SYNTASTIC_VERSION = '3.6.0-20'
 lockvar g:_SYNTASTIC_VERSION
 
 " Sanity checks {{{1
@@ -42,15 +42,21 @@ endfor
 let s:_running_windows = syntastic#util#isRunningWindows()
 lockvar s:_running_windows
 
-if !s:_running_windows && executable('uname')
+if s:_running_windows
+    let g:_SYNTASTIC_UNAME = 'Windows'
+elseif executable('uname')
     try
-        let s:_uname = system('uname')
+        let g:_SYNTASTIC_UNAME = split(system('uname'), "\n")[0]
     catch /\m^Vim\%((\a\+)\)\=:E484/
         call syntastic#log#error("your shell " . &shell . " can't handle traditional UNIX syntax for redirections")
         finish
+    catch /\m^Vim\%((\a\+)\)\=:E684/
+        let g:_SYNTASTIC_UNAME = 'Unknown'
     endtry
-    lockvar s:_uname
+else
+    let g:_SYNTASTIC_UNAME = 'Unknown'
 endif
+lockvar g:_SYNTASTIC_UNAME
 
 " }}}1
 
@@ -351,7 +357,8 @@ function! s:CacheErrors(checker_names) " {{{2
     if !s:_skip_file()
         " debug logging {{{3
         call syntastic#log#debugShowVariables(g:_SYNTASTIC_DEBUG_TRACE, 'aggregate_errors')
-        call syntastic#log#debug(g:_SYNTASTIC_DEBUG_TRACE, 'getcwd() = ' . getcwd())
+        call syntastic#log#debug(g:_SYNTASTIC_DEBUG_CHECKERS, '$PATH = ' . string($PATH))
+        call syntastic#log#debug(g:_SYNTASTIC_DEBUG_TRACE, 'getcwd() = ' . string(getcwd()))
         " }}}3
 
         let filetypes = s:_resolve_filetypes([])
@@ -678,11 +685,7 @@ function! s:_bash_hack() " {{{2
 endfunction " }}}2
 
 function! s:_os_name() " {{{2
-    if !exists('s:_uname')
-        let s:_uname = system('uname')
-        lockvar s:_uname
-    endif
-    return s:_uname
+    return g:_SYNTASTIC_UNAME
 endfunction " }}}2
 
 " }}}1
