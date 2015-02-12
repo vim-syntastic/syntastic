@@ -72,7 +72,7 @@ function! g:SyntasticModeMap.echoMode() " {{{2
 endfunction " }}}2
 
 function! g:SyntasticModeMap.modeInfo(filetypes) " {{{2
-    echomsg 'Syntastic version: ' . g:_SYNTASTIC_VERSION
+    echomsg 'Syntastic version: ' . g:_SYNTASTIC_VERSION . ' (Vim ' . v:version . ', ' . g:_SYNTASTIC_UNAME . ')'
     let type = len(a:filetypes) ? a:filetypes[0] : &filetype
     echomsg 'Info for filetype: ' . type
 
