@@ -158,36 +158,38 @@ function! syntastic#preprocess#prospector(errors) " {{{2
     endtry
 
     let out = []
-    if type(errs) == type({}) && has_key(errs, 'messages') && type(errs['messages']) == type([])
-        for e in errs['messages']
-            if type(e) == type({})
-                try
-                    if e['source'] ==# 'pylint'
-                        let e['location']['character'] += 1
-                    endif
-
-                    let msg =
-                        \ e['location']['path'] . ':' .
-                        \ e['location']['line'] . ':' .
-                        \ e['location']['character'] . ': ' .
-                        \ e['code'] . ' ' .
-                        \ e['message'] . ' ' .
-                        \ '[' . e['source'] . ']'
-
-                    call add(out, msg)
-                catch /\m^Vim\%((\a\+)\)\=:E716/
+    if type(errs) == type({}) && has_key(errs, 'messages')
+        if type(errs['messages']) == type([])
+            for e in errs['messages']
+                if type(e) == type({})
+                    try
+                        if e['source'] ==# 'pylint'
+                            let e['location']['character'] += 1
+                        endif
+    
+                        let msg =
+                            \ e['location']['path'] . ':' .
+                            \ e['location']['line'] . ':' .
+                            \ e['location']['character'] . ': ' .
+                            \ e['code'] . ' ' .
+                            \ e['message'] . ' ' .
+                            \ '[' . e['source'] . ']'
+    
+                        call add(out, msg)
+                    catch /\m^Vim\%((\a\+)\)\=:E716/
+                        call syntastic#log#warn('checker python/prospector: unknown error format')
+                        let out = []
+                        break
+                    endtry
+                else
                     call syntastic#log#warn('checker python/prospector: unknown error format')
                     let out = []
                     break
-                endtry
-            else
-                call syntastic#log#warn('checker python/prospector: unknown error format')
-                let out = []
-                break
-            endif
-        endfor
-    else
-        call syntastic#log#warn('checker python/prospector: unknown error format')
+                endif
+            endfor
+        else
+            call syntastic#log#warn('checker python/prospector: unknown error format')
+        endif
     endif
 
     return out
