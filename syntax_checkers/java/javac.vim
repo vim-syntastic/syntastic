@@ -155,9 +155,9 @@ function! SyntaxCheckers_java_javac_GetLocList() dict " {{{1
 
     " unashamedly stolen from *errorformat-javac* (quickfix.txt) and modified to include error types
     let errorformat =
-        \ '%E%f:%l:\ error:\ %m,'.
-        \ '%W%f:%l:\ warning:\ %m,'.
-        \ '%A%f:%l:\ %m,'.
+        \ '%E%f:%l: error: %m,'.
+        \ '%W%f:%l: warning: %m,'.
+        \ '%A%f:%l: %m,'.
         \ '%+Z%p^,'.
         \ '%+C%.%#,'.
         \ '%-G%.%#'
