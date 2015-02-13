@@ -166,7 +166,7 @@ function! syntastic#preprocess#prospector(errors) " {{{2
                         if e['source'] ==# 'pylint'
                             let e['location']['character'] += 1
                         endif
-    
+
                         let msg =
                             \ e['location']['path'] . ':' .
                             \ e['location']['line'] . ':' .
@@ -174,7 +174,7 @@ function! syntastic#preprocess#prospector(errors) " {{{2
                             \ e['code'] . ' ' .
                             \ e['message'] . ' ' .
                             \ '[' . e['source'] . ']'
-    
+
                         call add(out, msg)
                     catch /\m^Vim\%((\a\+)\)\=:E716/
                         call syntastic#log#warn('checker python/prospector: unknown error format')
