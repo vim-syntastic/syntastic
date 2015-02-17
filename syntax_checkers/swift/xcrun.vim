@@ -18,6 +18,11 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 function! SyntaxCheckers_swift_xcrun_GetLocList() dict
+    if !exists('g:syntastic_enable_swift_xcrun_checker') || !g:syntastic_enable_swift_xcrun_checker
+        call syntastic#log#error('checker swift/xcrun: checks disabled for security reasons; ' .
+            \ 'set g:syntastic_enable_swift_xcrun_checker to 1 to override')
+        return []
+    endif
 
     let makeprg = self.makeprgBuild({ 'args_after': 'swift' })
 
