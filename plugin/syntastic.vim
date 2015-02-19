@@ -19,7 +19,7 @@ if has('reltime')
     lockvar! g:_SYNTASTIC_START
 endif
 
-let g:_SYNTASTIC_VERSION = '3.6.0-27'
+let g:_SYNTASTIC_VERSION = '3.6.0-28'
 lockvar g:_SYNTASTIC_VERSION
 
 " Sanity checks {{{1
@@ -486,8 +486,8 @@ function! SyntasticMake(options) " {{{2
     if has_key(a:options, 'env') && len(a:options['env'])
         for key in keys(a:options['env'])
             if key =~? '\m^[a-z_]\+$'
-                exec 'let env_save[' . string(key) . '] = $' . key
-                exec 'let $' . key . ' = ' . string(a:options['env'][key])
+                execute 'let env_save[' . string(key) . '] = $' . key
+                execute 'let $' . key . ' = ' . string(a:options['env'][key])
             endif
         endfor
     endif
@@ -502,7 +502,7 @@ function! SyntasticMake(options) " {{{2
     let $LC_MESSAGES = old_lc_messages
     if len(env_save)
         for key in keys(env_save)
-            exec 'let $' . key . ' = ' . string(env_save[key])
+            execute 'let $' . key . ' = ' . string(env_save[key])
         endfor
     endif
     " }}}3
