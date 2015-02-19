@@ -388,13 +388,15 @@ function! s:MavenOutputDirectory() " {{{2
         if has_key(mvn_properties, 'project.properties.build.dir')
             let output_dir = mvn_properties['project.properties.build.dir']
         endif
-        if stridx(expand('%:p:h', 1), 'src.main.java') >= 0
+
+        let path = expand('%:p:h', 1)
+        if stridx(path, 'src.main.java') >= 0 || stridx(path, 'src/main/java') >= 0
             let output_dir .= '/target/classes'
             if has_key(mvn_properties, 'project.build.outputDirectory')
                 let output_dir = mvn_properties['project.build.outputDirectory']
             endif
         endif
-        if stridx(expand('%:p:h', 1), 'src.test.java') >= 0
+        if stridx(path, 'src.test.java') >= 0 || stridx(path, 'src/test/java') >= 0
             let output_dir .= '/target/test-classes'
             if has_key(mvn_properties, 'project.build.testOutputDirectory')
                 let output_dir = mvn_properties['project.build.testOutputDirectory']
