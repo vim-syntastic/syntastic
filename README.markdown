@@ -58,7 +58,7 @@ Chef, CoffeeScript, Coco, Coq, CSS, Cucumber, CUDA, D, Dart, DocBook, Dust,
 Elixir, Erlang, eRuby, Fortran, Gentoo metadata, GLSL, Go, Haml, Haskell,
 Haxe, Handlebars, HSS, HTML, Java, JavaScript, JSON, JSX, LESS, Lex, Limbo,
 LISP, LLVM intermediate language, Lua, Markdown, MATLAB, NASM, Objective-C,
-oBJECTIVE-c++, OCaml, Perl, Perl POD, PHP, gettext Portable Object, OS X and
+Objective-C++, OCaml, Perl, Perl POD, PHP, gettext Portable Object, OS X and
 iOS property lists, Puppet, Python, R, Racket, Relax NG, reStructuredText, RPM
 spec, Ruby, SASS/SCSS, Scala, Slim, Tcl, TeX, Texinfo, Twig, TypeScript, Vala,
 Verilog, VHDL, VimL, xHtml, XML, XSLT, YACC, YAML, z80, Zope page templates,
