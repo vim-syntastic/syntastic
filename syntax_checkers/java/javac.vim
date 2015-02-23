@@ -146,7 +146,7 @@ function! SyntaxCheckers_java_javac_GetLocList() dict " {{{1
     let fname = expand('%:p:h', 1) . syntastic#util#Slash() . expand ('%:t', 1)
 
     if has('win32unix')
-        let fname = s:CygwinPath(fname)
+        let fname = syntastic#util#CygwinPath(fname)
     endif
 
     let makeprg = self.makeprgBuild({
@@ -178,10 +178,6 @@ function! SyntaxCheckers_java_javac_GetLocList() dict " {{{1
 endfunction " }}}1
 
 " Utilities {{{1
-
-function! s:CygwinPath(path) " {{{2
-    return substitute(system('cygpath -m ' . syntastic#util#shescape(a:path)), "\n", '', 'g')
-endfunction " }}}2
 
 function! s:RemoveCarriageReturn(line) " {{{2
     return substitute(a:line, "\r", '', 'g')
@@ -405,7 +401,7 @@ function! s:MavenOutputDirectory() " {{{2
         endif
 
         if has('win32unix')
-            let output_dir = s:CygwinPath(output_dir)
+            let output_dir = syntastic#util#CygwinPath(output_dir)
         endif
         return output_dir
     endif
