@@ -255,7 +255,7 @@ endfunction " }}}2
 
 " A less noisy shellescape()
 function! syntastic#util#shescape(string) abort " {{{2
-    return a:string =~ '\m^[A-Za-z0-9_/.-]\+$' ? a:string : shellescape(a:string)
+    return a:string =~# '\m^[A-Za-z0-9_/.-]\+$' ? a:string : shellescape(a:string)
 endfunction " }}}2
 
 " A less noisy shellescape(expand())
