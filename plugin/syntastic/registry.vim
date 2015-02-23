@@ -73,6 +73,7 @@ let s:_DEFAULT_CHECKERS = {
         \ 'scss':        ['sass', 'scss_lint'],
         \ 'sh':          ['sh', 'shellcheck'],
         \ 'slim':        ['slimrb'],
+        \ 'sml':         ['smlnj'],
         \ 'spec':        ['rpmlint'],
         \ 'tcl':         ['nagelfar'],
         \ 'tex':         ['lacheck', 'chktex'],
