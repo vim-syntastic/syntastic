@@ -256,6 +256,58 @@ function! syntastic#preprocess#validator(errors) abort " {{{2
     return out
 endfunction " }}}2
 
+" @vimlint(EVL102, 1, l:true)
+" @vimlint(EVL102, 1, l:false)
+" @vimlint(EVL102, 1, l:null)
+function! syntastic#preprocess#vint(errors) abort " {{{2
+    " JSON artifacts
+    let true = 1
+    let false = 0
+    let null = ''
+
+    " A hat tip to Marc Weber for this trick
+    " http://stackoverflow.com/questions/17751186/iterating-over-a-string-in-vimscript-or-parse-a-json-file/19105763#19105763
+    try
+        let errs = eval(join(a:errors, ''))
+    catch
+        let errs = []
+    endtry
+
+    let out = []
+    if type(errs) == type([])
+        for e in errs
+            if type(e) == type({})
+                try
+                    let msg =
+                        \ e['file_path'] . ':' .
+                        \ e['line_number'] . ':' .
+                        \ e['column_number'] . ':' .
+                        \ e['severity'][0] . ': ' .
+                        \ e['description'] . ' (' .
+                        \ e['policy_name'] . ')'
+
+                    call add(out, msg)
+                catch /\m^Vim\%((\a\+)\)\=:E716/
+                    call syntastic#log#warn('checker vim/vint: unknown error format')
+                    let out = []
+                    break
+                endtry
+            else
+                call syntastic#log#warn('checker vim/vint: unknown error format')
+                let out = []
+                break
+            endif
+        endfor
+    else
+        call syntastic#log#warn('checker vim/vint: unknown error format')
+    endif
+
+    return out
+endfunction " }}}2
+" @vimlint(EVL102, 0, l:true)
+" @vimlint(EVL102, 0, l:false)
+" @vimlint(EVL102, 0, l:null)
+
 " }}}1
 
 let &cpo = s:save_cpo
