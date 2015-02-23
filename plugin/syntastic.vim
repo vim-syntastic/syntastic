@@ -19,7 +19,7 @@ if has('reltime')
     lockvar! g:_SYNTASTIC_START
 endif
 
-let g:_SYNTASTIC_VERSION = '3.6.0-42'
+let g:_SYNTASTIC_VERSION = '3.6.0-43'
 lockvar g:_SYNTASTIC_VERSION
 
 " Sanity checks {{{1
@@ -259,7 +259,7 @@ function! s:BufEnterHook() abort " {{{2
         \ ', &buftype = ' . string(&buftype))
     if &buftype == ''
         call s:notifiers.refresh(g:SyntasticLoclist.current())
-    elseif &buftype == 'quickfix'
+    elseif &buftype ==# 'quickfix'
         " TODO: this is needed because in recent versions of Vim lclose
         " can no longer be called from BufWinLeave
         " TODO: at this point there is no b:syntastic_loclist
@@ -550,7 +550,7 @@ function! SyntasticMake(options) abort " {{{2
     let &shellredir = old_shellredir
     " }}}3
 
-    if !s:_running_windows && (s:_os_name() =~ "FreeBSD" || s:_os_name() =~ "OpenBSD")
+    if !s:_running_windows && (s:_os_name() =~? "FreeBSD" || s:_os_name() =~? "OpenBSD")
         call syntastic#util#redraw(g:syntastic_full_redraws)
     endif
 

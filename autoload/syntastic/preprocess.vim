@@ -207,7 +207,7 @@ function! syntastic#preprocess#rparse(errors) abort " {{{2
         if i > 0 && errlist[i][:1] == '  ' && errlist[i] !~ '\m\s\+\^$'
             let errlist[i-1] .= errlist[i][1:]
             call remove(errlist, i)
-        elseif errlist[i] !~ '\m^\(Lint:\|Lint checking:\|Error in\) '
+        elseif errlist[i] !~# '\m^\(Lint:\|Lint checking:\|Error in\) '
             call remove(errlist, i)
         else
             let i += 1
