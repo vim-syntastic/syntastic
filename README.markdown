@@ -245,9 +245,8 @@ let g:syntastic_enable_perl_checker = 1
 
 __4.5. Q. What happened to the `rustc` checker?__
 
-A. It has been included in the [Rust compiler package][12].  If you have
-a recent version of the Rust compiler, the checker should be picked up
-automatically by syntastic.
+A. It is now part of the [rust.vim][12] plugin.  If you install this plugin the
+checker should be picked up automatically by syntastic.
 
 <a name="faqxcrun"></a>
 
@@ -421,7 +420,7 @@ a look at [jedi-vim][7], [python-mode][8], or [YouCompleteMe][9].
 [9]: http://valloric.github.io/YouCompleteMe/
 [10]: http://perldoc.perl.org/perlrun.html#*-c*
 [11]: https://github.com/scrooloose/syntastic/wiki/Syntax-Checker-Guide
-[12]: https://github.com/rust-lang/rust/
+[12]: https://github.com/rust-lang/rust.vim
 [13]: http://www.vim.org/
 [14]: https://github.com/Shougo/neobundle.vim
 [15]: https://github.com/MarcWeber/vim-addon-manager
