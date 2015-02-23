@@ -52,18 +52,20 @@ can be done on demand, or automatically as files are saved. If syntax errors
 are detected, the user is notified and is happy because they didn't have to
 compile their code or execute their script to find them.
 
-At the time of this writing, syntax checking plugins exist for ActionScript,
+At the time of this writing, syntastic has checking plugins for ActionScript,
 Ada, AppleScript, AsciiDoc, ASM, BEMHTML, Bro, Bourne shell, C, C++, C#, Cabal,
 Chef, CoffeeScript, Coco, Coq, CSS, Cucumber, CUDA, D, Dart, DocBook, Dust,
 Elixir, Erlang, eRuby, Fortran, Gentoo metadata, GLSL, Go, Haml, Haskell,
 Haxe, Handlebars, HSS, HTML, Java, JavaScript, JSON, JSX, LESS, Lex, Limbo,
 LISP, LLVM intermediate language, Lua, Markdown, MATLAB, NASM, Objective-C,
 Objective-C++, OCaml, Perl, Perl POD, PHP, gettext Portable Object, OS X and
-iOS property lists, Puppet, Python, R, Racket, Relax NG, reStructuredText, RPM
-spec, Ruby, SASS/SCSS, Scala, Slim, Tcl, TeX, Texinfo, Twig, TypeScript, Vala,
-Verilog, VHDL, VimL, xHtml, XML, XSLT, YACC, YAML, z80, Zope page templates,
-and zsh.  See the [wiki][3] for details about the corresponding supported
-checkers.
+iOS property lists, Puppet, Python, R, Racket, Relax NG, reStructuredText,
+RPM spec, Ruby, SASS/SCSS, Scala, Slim, Tcl, TeX, Texinfo, Twig, TypeScript,
+Vala, Verilog, VHDL, VimL, xHtml, XML, XSLT, YACC, YAML, z80, Zope page
+templates, and zsh.  See the [wiki][3] for details about the corresponding
+supported checkers.  A number of third party Vim plugins also provide checking
+plugins for syntastic, for example [omnisharp-vim][25], [rust.vim][12],
+[syntastic-extras][26], and [vim-swift][24].
 
 Below is a screenshot showing the methods that Syntastic uses to display syntax
 errors.  Note that, in practise, you will only have a subset of these methods
@@ -433,6 +435,8 @@ a look at [jedi-vim][7], [python-mode][8], or [YouCompleteMe][9].
 [22]: https://github.com/scrooloose/syntastic/wiki/HTML%3A---validator
 [23]: http://validator.github.io/validator/#standalone
 [24]: https://github.com/kballard/vim-swift
+[25]: https://github.com/OmniSharp/omnisharp-vim
+[26]: https://github.com/myint/syntastic-extras
 
 <!--
 vim:tw=79:sw=4:
