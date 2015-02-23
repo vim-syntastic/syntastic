@@ -184,18 +184,18 @@ supported, look at the [wiki][3]. Note that aliases do not work; the actual
 executables must be available in your `$PATH`. Symbolic links are okay though.
 You can see syntastic's idea of available checkers by running `:SyntasticInfo`.
 
-A second reason is that the checker you want to run might not be enabled,
-even though it is available. Syntastic comes preconfigured with a default
-list of enabled checkers per filetype, but this list is deliberatley kept
-short in order to prevent slowing down Vim or trying to run conflicting
-checkers. The same command `:SyntasticInfo` will also show you which checkers
-are enabled. You can tell syntastic which checkers you want to run by setting
-`g:syntastic_<filetype>_checkers` in your `vimrc` (see [below](#faqcheckers)).
+A second probable reason is that none of the available checkers are
+enabled. Syntastic comes preconfigured with a default list of enabled checkers
+per filetype, but this list is kept short in order to prevent slowing down Vim
+or trying to run conflicting checks. The command `:SyntasticInfo` will show you
+which checkers are enabled. You can tell syntastic which checkers (among the
+available ones) you want to run by setting `g:syntastic_<filetype>_checkers` in
+your `vimrc` (see [below](#faqcheckers)).
 
 Another reason it could fail is that either the command line options or the
 error output for a syntax checker may have changed. In this case, make sure you
 have the latest version of the syntax checker installed. If it still fails then
-create an issue - or better yet, create a pull request.
+post an [issue][4] - or better yet, create a pull request.
 
 <a name="faqpython3"></a>
 
