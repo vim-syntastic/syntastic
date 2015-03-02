@@ -860,16 +860,10 @@ https://github.com/jmcantrell/vim-virtualenv).  This is a limitation of
 ------------------------------------------------------------------------------
 6.10. Interaction with vim-auto-save                 *syntastic-vim-auto-save*
 
-At the time of this writing, syntastic checks in active mode are not triggered
-by 'vim-auto-save' (see https://github.com/907th/vim-auto-save). The reason is
-a limitation in 'vim-auto-save', namely a missing flag to an 'autocmd' (see
-|autocmd-nested|). Fortunately it's pretty easy to achieve a similar effect
-without 'vim-auto-save'': >
-    augroup syntastic
-        autocmd CursorHold * nested update
-    augroup END
-    set updatetime=200
-<
+Syntastic can be used together with the 'vim-auto-save' Vim plugin (see
+https://github.com/907th/vim-auto-save).  However, syntastic checks in active
+mode only work with 'vim-auto-save' version 0.1.7 or later.
+
 ==============================================================================
 7. About                                                     *syntastic-about*
 
