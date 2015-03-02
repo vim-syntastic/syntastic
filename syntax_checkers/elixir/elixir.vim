@@ -21,9 +21,9 @@ set cpo&vim
 " TODO: we should probably split this into separate checkers
 function! SyntaxCheckers_elixir_elixir_IsAvailable() dict
     call self.log(
-        \ 'executable("elixir") = ' . executable('elixir') . ', ' .
+        \ 'executable("elixirc") = ' . executable('elixirc') . ', ' .
         \ 'executable("mix") = ' . executable('mix'))
-    return executable('elixir') && executable('mix')
+    return executable('elixirc') && executable('mix')
 endfunction
 
 function! SyntaxCheckers_elixir_elixir_GetLocList() dict
@@ -34,7 +34,7 @@ function! SyntaxCheckers_elixir_elixir_GetLocList() dict
     endif
 
     let make_options = {}
-    let compile_command = 'elixir'
+    let compile_command = 'elixirc --ignore-module-conflict -o /tmp'
     let mix_file = syntastic#util#findInParent('mix.exs', expand('%:p:h', 1))
 
     if filereadable(mix_file)
@@ -44,7 +44,26 @@ function! SyntaxCheckers_elixir_elixir_GetLocList() dict
 
     let make_options['makeprg'] = self.makeprgBuild({ 'exe': compile_command })
 
-    let make_options['errorformat'] = '** %*[^\ ] %f:%l: %m'
+    " ----- errorformat  -----
+
+    " error sample:
+    " ** (CompileError) elixir-lazy.exs:13: undefined function asdfasd/0
+    "     (stdlib) lists.erl:1352: :lists.mapfoldl/3
+    "     (stdlib) lists.erl:1353: :lists.mapfoldl/3
+    let efm = '** (%*[^\ ]%trror) %f:%l: %m'
+
+    " warning sample:
+    " elixir-lazy.exs:8: warning: variable n is unused
+    let efm .= ',%f:%l: %tarning: %m'
+
+    " error sample:
+    " ** (UndefinedFunctionError) undefined function: Problem2.multiples_of_3_5__range/1
+    "     Problem2.multiples_of_3_5__range(1000)
+    "     elixir-lazy.exs:13: (file)
+    "     (elixir) lib/code.ex:316: Code.require_file/2
+    let efm .= ',%A** (%*[^\ ]%trror) %m,%Z    %f:%l: (file),%-C    (elixir) %.%#,%+C    %m'
+
+    let make_options['errorformat'] = efm
 
     return SyntasticMake(make_options)
 endfunction
