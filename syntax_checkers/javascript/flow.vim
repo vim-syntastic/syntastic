@@ -23,7 +23,7 @@ set cpo&vim
 
 function! SyntaxCheckers_javascript_flow_GetLocList() dict
     let makeprg = self.makeprgBuild({
-        \ 'exe': self.getExecEscaped() . ' check',
+        \ 'exe': self.getExecEscaped(),
         \ 'args_after': '--show-all-errors --json' })
 
     let errorformat =
