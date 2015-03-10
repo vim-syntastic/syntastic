@@ -217,8 +217,10 @@ __4.3. Q. Are there any local checkers for HTML5 that I can use with syntastic?_
 
 [HTML Tidy][18] has a fork named [HTML Tidy for HTML5][19].  It's a drop
 in replacement, and syntastic can use it without changes.  Just install it
-somewhere and point `g:syntastic_html_tidy_exec` to its executable.
-
+somewhere and point `g:syntastic_html_tidy_exec` to its executable:
+```vim
+let g:syntastic_html_tidy_exec = 'tidy5'
+```
 Alternatively, you can install [vnu.jar][21] from the [validator.nu][20]
 project and run it as a [HTTP server][23]:
 ```sh
@@ -431,7 +433,7 @@ a look at [jedi-vim][7], [python-mode][8], or [YouCompleteMe][9].
 [16]: https://github.com/junegunn/vim-plug/
 [17]: https://github.com/gmarik/Vundle.vim
 [18]: http://tidy.sourceforge.net/
-[19]: http://w3c.github.io/tidy-html5/
+[19]: http://www.htacg.org/tidy-html5/
 [20]: http://about.validator.nu/
 [21]: https://github.com/validator/validator/releases/latest
 [22]: https://github.com/scrooloose/syntastic/wiki/HTML%3A---validator
