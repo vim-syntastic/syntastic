@@ -17,9 +17,16 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 function! SyntaxCheckers_typescript_tsc_GetLocList() dict
-    let makeprg = self.makeprgBuild({
-        \ 'args': '--module commonjs',
-        \ 'args_after': '--out ' . syntastic#util#DevNull() })
+    if syntastic#util#isRunningWindows()
+        " On Windows, tsc is unable to use 'NUL'.
+        let makeprg = self.makeprgBuild({
+            \ 'args': '--module commonjs',
+            \ 'args_after': '--outDir ' . $temp })
+    else
+        let makeprg = self.makeprgBuild({
+            \ 'args': '--module commonjs',
+            \ 'args_after': '--out ' . syntastic#util#DevNull() })
+    endif
 
     let errorformat =
         \ '%E%f %#(%l\,%c): error %m,' .
