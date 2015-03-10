@@ -17,7 +17,7 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 function! SyntaxCheckers_typescript_tsc_GetLocList() dict
-    if has("win32")
+    if syntastic#util#isRunningWindows()
         " On Windows, tsc is unable to use 'NUL'.
         let makeprg = self.makeprgBuild({
             \ 'args': '--module commonjs',
