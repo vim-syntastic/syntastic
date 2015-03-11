@@ -80,10 +80,16 @@ function! g:SyntasticChecker.getLocListRaw() abort " {{{2
     let name = self._filetype . '/' . self._name
     try
         let list = self._locListFunc()
-        call syntastic#log#debug(g:_SYNTASTIC_DEBUG_TRACE, 'getLocList: checker ' . name . ' returned ' . v:shell_error)
+        if self._exec != ''
+            call syntastic#log#debug(g:_SYNTASTIC_DEBUG_TRACE, 'getLocList: checker ' . name . ' returned ' . v:shell_error)
+        endif
     catch /\m\C^Syntastic: checker error$/
         let list = []
-        call syntastic#log#error('checker ' . name . ' returned abnormal status ' . v:shell_error)
+        if self._exec != ''
+            call syntastic#log#error('checker ' . name . ' returned abnormal status ' . v:shell_error)
+        else
+            call syntastic#log#error('checker ' . name . ' aborted')
+        endif
     endtry
     call self._populateHighlightRegexes(list)
     call syntastic#log#debug(g:_SYNTASTIC_DEBUG_LOCLIST, name . ' raw:', list)
