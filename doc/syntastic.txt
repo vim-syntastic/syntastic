@@ -608,7 +608,7 @@ Set this to the full path of the shell you want syntastic to use when running
 the checkers. On UNIX and Mac OS-X this shell has to support the standard UNIX
 syntax for file redirections ">" and "2>", such as "zsh", "bash", "ksh", or
 even the original Bourne "sh". Example: >
-    set shell=/bin/bash
+    let g:syntastic_shell = "/bin/sh"
 <
                                                            *'syntastic_debug'*
 Default: 0
@@ -816,11 +816,10 @@ have to set |ycm_show_diagnostics_ui| to 0. E.g.: >
 
 At the time of this writing the 'fish' shell (see http://fishshell.com/)
 doesn't support the standard UNIX syntax for file redirections, and thus it
-can't be used together with syntastic. You don't need to change your login
-shell to address this problem, but you do have to point Vim's 'shell' to a more
-traditional shell, such as "zsh", "bash", "ksh", or even the original Bourne
-"sh": >
-    set shell=bash
+can't be used together with syntastic. You can however set |g:syntastic_shell|
+to a more traditional shell, such as "zsh", "bash", "ksh", or even the
+original Bourne "sh": >
+    let g:syntastic_shell = "/bin/sh"
 <
 ------------------------------------------------------------------------------
 6.6. Interaction with PowerShell                        *syntastic-powershell*
@@ -842,7 +841,7 @@ is possible, but potentially problematic. In order to do it you'll need to set
 Please keep in mind however that Vim can't take advantage of any of the
 interactive features of 'fizsh'. Using a more traditional shell such as "zsh",
 "bash", "ksh", or the original Bourne "sh" might be a better choice: >
-    set shell=zsh
+    let g:syntastic_shell = "/bin/sh"
 <
 ------------------------------------------------------------------------------
 6.8. Interaction with Eclim                                  *syntastic-eclim*
