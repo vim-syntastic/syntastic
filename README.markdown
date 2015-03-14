@@ -196,6 +196,20 @@ which checkers are enabled. You can tell syntastic which checkers (among the
 available ones) you want to run by setting `g:syntastic_<filetype>_checkers` in
 your `vimrc` (see [below](#faqcheckers)).
 
+A third possible reason is that the `$PATH` seen by syntastic might not be same
+as the `$PATH` in your login shell. Syntastic runs checkers using the shell
+pointed to by Vim's `shell` (or by `g:syntastic_shell`, if set), and that's the
+one you need to configure to set the proper `$PATH` and environment variables
+for your checkers. You can see syntastic's idea of `$PATH` by running
+```vim
+:echo syntastic#util#system('echo "$PATH"')
+```
+on UNIX and Mac OS-X systems, or
+```vim
+:echo syntastic#util#system('echo %PATH%')
+```
+on Windows.
+
 Another reason it could fail is that either the command line options or the
 error output for a syntax checker may have changed. In this case, make sure you
 have the latest version of the syntax checker installed. If it still fails then
