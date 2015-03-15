@@ -23,7 +23,7 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 function! SyntaxCheckers_html_w3_GetLocList() dict
-    let makeprg = self.getExecEscaped() . ' -q -s -F output=json ' .
+    let makeprg = self.getExecEscaped() . ' -q -L -s -F output=json ' .
         \ '-F uploaded_file=@' . syntastic#util#shexpand('%:p') . '\;type=text/html ' .
         \ g:syntastic_html_w3_api
 
