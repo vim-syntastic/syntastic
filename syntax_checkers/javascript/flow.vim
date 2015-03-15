@@ -22,6 +22,10 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 function! SyntaxCheckers_javascript_flow_GetLocList() dict
+    if findfile('.flowconfig', '.;') == ''
+        return []
+    endif
+
     let makeprg = self.makeprgBuild({
         \ 'exe': self.getExecEscaped() . ' check',
         \ 'args_after': '--show-all-errors --json' })
