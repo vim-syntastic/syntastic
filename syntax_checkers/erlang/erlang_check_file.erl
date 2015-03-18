@@ -1,56 +1,66 @@
 #!/usr/bin/env escript
--export([main/1]).
 
-main([FileName]) ->
-    LibDirs = (["ebin", "include", "src", "test"] ++
-               filelib:wildcard("{apps,deps,lib}/*/{ebin,include}")),
-    compile(FileName, LibDirs);
+main([File]) ->
+    Dir = get_root(filename:dirname(File)),
+    Defs = [strong_validation,
+            warn_export_all,
+            warn_export_vars,
+            warn_shadow_vars,
+            warn_obsolete_guard,
+            warn_unused_import,
+            report,
+            {i, Dir ++ "/include"}],
+    RebarFile = rebar_file(Dir),
+    RebarOpts = rebar_opts(Dir ++ "/" ++ RebarFile),
+    code:add_patha(filename:absname("ebin")),
+    compile:file(File, Defs ++ RebarOpts);
 
-main([FileName, "-rebar", Path, LibDirs]) ->
-    {ok, L} = file:consult(Path),
-    P = dict:from_list(L),
-    Root = filename:dirname(Path),
+main(_) ->
+    io:format("Usage: ~s <file>~n", [escript:script_name()]),
+    halt(1).
 
-    Lib1 = case dict:find(lib_dirs, P) of
-             {ok, X} -> lists:map(fun(Sub) -> Root ++ "/" ++ Sub end, X);
-             _ -> []
-           end,
+rebar_file(Dir) ->
+    DirList = filename:split(Dir),
+    case lists:last(DirList) of
+        "test" ->
+            "rebar.test.config";
+        _ ->
+            "rebar.config"
+    end.
 
-    Lib2 = case dict:find(sub_dirs, P) of
-             {ok, Y} -> lists:foldl(
-                          fun(Sub,Sofar) ->
-                              Sofar ++ [
-                                        Root ++ "/" ++ Sub,
-                                        Root ++ "/" ++ Sub ++ "/include",
-                                        Root ++ "/" ++ Sub ++ "/deps",
-                                        Root ++ "/" ++ Sub ++ "/lib"
-                                       ] end, [], Y);
-             _ -> []
-           end,
+rebar_opts(RebarFile) ->
+    Dir = get_root(filename:dirname(RebarFile)),
+    case file:consult(RebarFile) of
+        {ok, Terms} ->
+            RebarLibDirs = proplists:get_value(lib_dirs, Terms, []),
+            lists:foreach(
+                fun(LibDir) ->
+                        code:add_pathsa(filelib:wildcard(LibDir ++ "/*/ebin"))
+                end, RebarLibDirs),
+            RebarDepsDir = proplists:get_value(deps_dir, Terms, "deps"),
+            code:add_pathsa(filelib:wildcard(RebarDepsDir ++ "/*/ebin")),
+            IncludeDeps = {i, filename:join(Dir, RebarDepsDir)},
+            proplists:get_value(erl_opts, Terms, []) ++ [IncludeDeps];
+        {error, _} when RebarFile == "rebar.config" ->
+          fallback_opts();
+        {error, _} ->
+            rebar_opts("rebar.config")
+    end.
 
-    LibDirs1 = LibDirs ++ Lib1 ++ Lib2,
-    %io:format("~p~n", [LibDirs1]),
-    compile(FileName, LibDirs1);
+fallback_opts() ->
+    code:add_pathsa(filelib:wildcard("deps/*/ebin")),
+    code:add_pathsa(nested_app_ebins()),
+    [ { i, filename:absname("deps") }
+      | [ { i, filename:absname(Path) } || Path <- filelib:wildcard("deps/*/apps")]
+    ].
 
-main([FileName | LibDirs]) ->
-    compile(FileName, LibDirs).
+nested_app_ebins() ->
+    DetectedAppSrcFiles = filelib:wildcard("deps/*/apps/**/*.app.src"),
+    [apps_dir_from_src(AppSrcFile)||AppSrcFile<-DetectedAppSrcFiles].
 
-compile(FileName, LibDirs) ->
-    Root = get_root(filename:dirname(FileName)),
-    ok = code:add_pathsa(LibDirs),
-    compile:file(FileName,
-                 [warn_obsolete_guard,
-                  warn_unused_import,
-                  warn_shadow_vars,
-                  warn_export_vars,
-                  strong_validation,
-                  report] ++
-                 [{i, filename:join(Root, I)} || I <- LibDirs] ++
-                 case lists:member("deps/pmod_transform/include", LibDirs) of
-                     true -> [{parse_transform, pmod_pt}];
-                     _    -> []
-                 end
-                ).
+apps_dir_from_src(SrcFile) ->
+    SrcDir = filename:dirname(SrcFile),
+    filename:join(SrcDir, "../../ebin").
 
 get_root(Dir) ->
     Path = filename:split(filename:absname(Dir)),
