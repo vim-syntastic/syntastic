@@ -18,7 +18,7 @@ if exists("g:loaded_syntastic_rst_rst2pseudoxml_checker")
 endif
 let g:loaded_syntastic_rst_rst2pseudoxml_checker = 1
 
-let s:rst2pseudoxml = executable('rst2pseudoxml.py') ? 'rst2pseudoxml.py' : 'rst2pseudoxml'
+let s:rst2pseudoxml = (executable('rst2pseudoxml.py') && !syntastic#util#isRunningWindows()) ? 'rst2pseudoxml.py' : 'rst2pseudoxml'
 
 let s:save_cpo = &cpo
 set cpo&vim
