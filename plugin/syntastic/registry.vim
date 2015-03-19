@@ -53,6 +53,7 @@ let s:_DEFAULT_CHECKERS = {
         \ 'lua':           ['luac'],
         \ 'markdown':      ['mdl'],
         \ 'matlab':        ['mlint'],
+        \ 'mercury':       ['mmc'],
         \ 'nasm':          ['nasm'],
         \ 'nroff':         ['mandoc'],
         \ 'objc':          ['gcc'],

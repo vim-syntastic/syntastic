@@ -1,9 +1,13 @@
 "============================================================================
 "File:        mercury.vim
 "Description: Syntax checking plugin for syntastic.vim
-"             Based off of the hlint syntax checker.
-"Maintainer:  Josh Rahm (joshuarahm@gmail.com)
-"License:     WTF
+"Maintainer:  Joshua Rahm (joshuarahm@gmail.com)
+"License:     This program is free software. It comes without any warranty,
+"             to the extent permitted by applicable law. You can redistribute
+"             it and/or modify it under the terms of the Do What The Fuck You
+"             Want To Public License, Version 2, as published by Sam Hocevar.
+"             See http://sam.zoy.org/wtfpl/COPYING for more details.
+"
 "============================================================================
 
 if exists('g:loaded_syntastic_mercury_mmc_checker')
@@ -11,27 +15,28 @@ if exists('g:loaded_syntastic_mercury_mmc_checker')
 endif
 let g:loaded_syntastic_mercury_mmc_checker = 1
 
-if !exists('g:syntastic_mercury_compiler_options')
-    let g:syntastic_mercury_compiler_options=''
-endif
-
 let s:save_cpo = &cpo
 set cpo&vim
 
 function! SyntaxCheckers_mercury_mmc_GetLocList() dict
-    let makeprg = self.makeprgBuild({
-      \  'exe': self.getExecEscaped() . ' -e ' . g:syntastic_mercury_compiler_options})
+    let makeprg = self.makeprgBuild({ 'args_before': '-e' })
 
     let errorformat =
-        \ '%E%f:%l:   error:%m,' .
-        \ '%E%f:%l: Error:%m,' .
-        \ '%W%f:%l:   warning:%m,' .
-        \ '%E%f:%l:   mode error:%m'
+        \ '%C%f:%l:  %m,' .
+        \ '%E%f:%l: %m,' .
+        \ '%-G%.%#'
 
-    return SyntasticMake({
+    let loclist = SyntasticMake({
         \ 'makeprg': makeprg,
-        \ 'errorformat': errorformat,
-        \ 'postprocess': ['compressWhitespace'] })
+        \ 'errorformat': errorformat })
+
+    for e in loclist
+        if stridx(e['text'], ' warning:') >= 0
+            let e['type'] = 'W'
+        endif
+    endfor
+
+    return loclist
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
@@ -41,4 +46,4 @@ call g:SyntasticRegistry.CreateAndRegisterChecker({
 let &cpo = s:save_cpo
 unlet s:save_cpo
 
-" vim: set et sts=4 sw=4:
+" vim: set sw=4 sts=4 et fdm=marker:
