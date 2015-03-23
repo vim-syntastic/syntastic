@@ -45,11 +45,14 @@ CONTENTS                                                  *syntastic-contents*
         7.2.Eclim..................................|syntastic-eclim|
         7.3.The fish shell.........................|syntastic-fish|
         7.4.The fizsh shell........................|syntastic-fizsh|
-        7.5.The PowerShell shell...................|syntastic-powershell|
-        7.6.python-mode............................|syntastic-pymode|
-        7.7.vim-auto-save..........................|syntastic-vim-auto-save|
-        7.8.vim-virtualenv.........................|syntastic-vim-virtualenv|
-        7.9.YouCompleteMe..........................|syntastic-ycm|
+        7.5.powerline..............................|syntastic-powerline|
+        7.6.The PowerShell shell...................|syntastic-powershell|
+        7.7.python-mode............................|syntastic-pymode|
+        7.8.vim-airline............................|syntastic-vim-airline|
+        7.9.vim-auto-save..........................|syntastic-vim-auto-save|
+        7.10.vim-go................................|syntastic-vim-go|
+        7.11.vim-virtualenv........................|syntastic-vim-virtualenv|
+        7.12.YouCompleteMe.........................|syntastic-ycm|
     8.About........................................|syntastic-about|
     9.License......................................|syntastic-license|
 
@@ -858,7 +861,17 @@ interactive features of "fizsh". Using a more traditional shell such as "zsh",
     let g:syntastic_shell = "/bin/sh"
 <
 ------------------------------------------------------------------------------
-7.5. The PowerShell shell                               *syntastic-powershell*
+7.5. powerline                                           *syntastic-powerline*
+
+Syntastic uses the standard Vim variable |w:quickfix_title| to show the names
+of the checkers responsible for the current error lists on the statusline of
+the error window.  At the time of this writing the "powerline" Vim plugin
+(https://github.com/powerline/powerline) ignores |w:quickfix_title|, which
+means it won't show the corresponding information on the statusline of the
+error window.
+
+------------------------------------------------------------------------------
+7.6. The PowerShell shell                               *syntastic-powershell*
 
 At the time of this writing, syntastic is not compatible with using "Windows
 PowerShell" (http://technet.microsoft.com/en-us/library/bb978526.aspx) as Vim's
@@ -867,7 +880,7 @@ Vim's 'shell' to a more traditional program, such as "cmd.exe": >
     set shell=cmd.exe
 <
 ------------------------------------------------------------------------------
-7.6 python-mode                                             *syntastic-pymode*
+7.7 python-mode                                             *syntastic-pymode*
 
 Syntastic can be used along with the "python-mode" Vim plugin (see
 https://github.com/klen/python-mode). However, they both run syntax checks by
@@ -878,14 +891,37 @@ for python in syntastic (see |syntastic_mode_map|), or disable lint checks in
     let g:pymode_lint_write = 0
 <
 ------------------------------------------------------------------------------
-7.7. vim-auto-save                                   *syntastic-vim-auto-save*
+7.8. vim-airline                                       *syntastic-vim-airline*
+
+Syntastic uses the standard Vim variable |w:quickfix_title| to show the names
+of the checkers responsible for the current error lists on the statusline of
+the error window.  At the time of this writing the "vim-airline" Vim plugin
+(https://github.com/bling/vim-airline) ignores |w:quickfix_title|, which means
+it won't show the corresponding information on the statusline of the error
+window.
+
+------------------------------------------------------------------------------
+7.9. vim-auto-save                                   *syntastic-vim-auto-save*
 
 Syntastic can be used together with the "vim-auto-save" Vim plugin (see
 https://github.com/907th/vim-auto-save).  However, syntastic checks in active
 mode only work with "vim-auto-save" version 0.1.7 or later.
 
 ------------------------------------------------------------------------------
-7.8. vim-virtualenv                                 *syntastic-vim-virtualenv*
+7.10. vim-go                                                *syntastic-vim-go*
+
+The "vim-go" Vim plugin (https://github.com/fatih/vim-go) uses |quickfix|
+lists, and thus doesn't conflict with syntastic (which uses |location-list|
+lists).  However, both "vim-go" and syntastic run syntax checks by default
+when you save buffers to disk, and this can have confusing results.  To
+avoid both plugins opening error windows, you can either set passive
+mode for go in syntastic (see |syntastic_mode_map|), or prevent "vim-go"
+from showing a quickfix window when |g:go_fmt_command| fails, by setting
+|g:go_fmt_fail_silently| to 1.  E.g.: >
+    let g:go_fmt_fail_silently = 1
+<
+------------------------------------------------------------------------------
+7.11. vim-virtualenv                                *syntastic-vim-virtualenv*
 
 At the time of this writing, syntastic can't run checkers installed
 in Python virtual environments activated by "vim-virtualenv" (see
@@ -893,7 +929,7 @@ https://github.com/jmcantrell/vim-virtualenv).  This is a limitation of
 "vim-virtualenv".
 
 ------------------------------------------------------------------------------
-7.9 YouCompleteMe                                              *syntastic-ycm*
+7.12 YouCompleteMe                                             *syntastic-ycm*
 
 Syntastic can be used together with the "YouCompleteMe" Vim plugin (see
 http://valloric.github.io/YouCompleteMe/).  However, by default "YouCompleteMe"
