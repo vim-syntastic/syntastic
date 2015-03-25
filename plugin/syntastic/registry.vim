@@ -1,4 +1,4 @@
-if exists("g:loaded_syntastic_registry") || !exists("g:loaded_syntastic_plugin")
+if exists('g:loaded_syntastic_registry') || !exists('g:loaded_syntastic_plugin')
     finish
 endif
 let g:loaded_syntastic_registry = 1
@@ -285,7 +285,7 @@ function! g:SyntasticRegistry._loadCheckersFor(filetype) abort " {{{2
         return
     endif
 
-    execute "runtime! syntax_checkers/" . a:filetype . "/*.vim"
+    execute 'runtime! syntax_checkers/' . a:filetype . '/*.vim'
 
     if !has_key(self._checkerMap, a:filetype)
         let self._checkerMap[a:filetype] = {}

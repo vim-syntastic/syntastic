@@ -22,7 +22,7 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 function! SyntaxCheckers_javascript_flow_GetLocList() dict
-    if findfile('.flowconfig', '.;') == ''
+    if findfile('.flowconfig', '.;') ==# ''
         return []
     endif
 

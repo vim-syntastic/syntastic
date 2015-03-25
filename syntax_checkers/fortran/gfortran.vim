@@ -10,7 +10,7 @@
 "
 "============================================================================
 
-if exists("g:loaded_syntastic_fortran_gfortran_checker")
+if exists('g:loaded_syntastic_fortran_gfortran_checker')
     finish
 endif
 let g:loaded_syntastic_fortran_gfortran_checker=1

@@ -4,7 +4,7 @@
 "Maintainer:  Bill Casarin <bill@casarin.ca>
 "============================================================================
 
-if exists("g:loaded_syntastic_typescript_tsc_checker")
+if exists('g:loaded_syntastic_typescript_tsc_checker')
     finish
 endif
 let g:loaded_syntastic_typescript_tsc_checker = 1
@@ -30,7 +30,7 @@ function! SyntaxCheckers_typescript_tsc_GetLocList() dict
     return SyntasticMake({
         \ 'makeprg': makeprg,
         \ 'errorformat': errorformat,
-        \ 'defaults': {'bufnr': bufnr("")} })
+        \ 'defaults': {'bufnr': bufnr('')} })
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({

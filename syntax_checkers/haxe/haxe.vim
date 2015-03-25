@@ -10,7 +10,7 @@
 "
 "============================================================================
 
-if exists("g:loaded_syntastic_haxe_haxe_checker")
+if exists('g:loaded_syntastic_haxe_haxe_checker')
     finish
 endif
 let g:loaded_syntastic_haxe_haxe_checker = 1
@@ -30,7 +30,7 @@ function! SyntaxCheckers_haxe_haxe_GetLocList() dict
 
     call self.log('hxml =', hxml)
 
-    if hxml != ''
+    if hxml !=# ''
         let makeprg = self.makeprgBuild({
             \ 'fname': syntastic#util#shescape(fnamemodify(hxml, ':t')) })
 
