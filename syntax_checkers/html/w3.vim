@@ -10,7 +10,7 @@
 "
 "============================================================================
 
-if exists("g:loaded_syntastic_html_w3_checker")
+if exists('g:loaded_syntastic_html_w3_checker')
     finish
 endif
 let g:loaded_syntastic_html_w3_checker = 1
@@ -41,7 +41,7 @@ function! SyntaxCheckers_html_w3_GetLocList() dict
     let loclist = SyntasticMake({
         \ 'makeprg': makeprg,
         \ 'errorformat': errorformat,
-        \ 'defaults': {'bufnr': bufnr("")},
+        \ 'defaults': {'bufnr': bufnr('')},
         \ 'returns': [0] })
 
     for e in loclist

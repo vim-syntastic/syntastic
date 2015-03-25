@@ -9,7 +9,7 @@
 "
 "============================================================================
 
-if exists("g:loaded_syntastic_sh_bashate_checker")
+if exists('g:loaded_syntastic_sh_bashate_checker')
     finish
 endif
 let g:loaded_syntastic_sh_bashate_checker = 1

@@ -10,7 +10,7 @@
 "
 "============================================================================
 
-if exists("g:loaded_syntastic_elixir_elixir_checker")
+if exists('g:loaded_syntastic_elixir_elixir_checker')
     finish
 endif
 let g:loaded_syntastic_elixir_elixir_checker = 1

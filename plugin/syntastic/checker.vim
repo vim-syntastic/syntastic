@@ -1,4 +1,4 @@
-if exists("g:loaded_syntastic_checker") || !exists("g:loaded_syntastic_plugin")
+if exists('g:loaded_syntastic_checker') || !exists('g:loaded_syntastic_plugin')
     finish
 endif
 let g:loaded_syntastic_checker = 1
@@ -59,7 +59,7 @@ function! g:SyntasticChecker.syncExec() dict " {{{2
         \ expand( exists('b:syntastic_' . self._name . '_exec') ? b:syntastic_{self._name}_exec :
         \ syntastic#util#var(self._filetype . '_' . self._name . '_exec'), 1 )
 
-    if user_exec != '' && user_exec !=# self._exec
+    if user_exec !=# '' && user_exec !=# self._exec
         let self._exec = user_exec
         if has_key(self, '_available')
             " we have a new _exec on the block, it has to be validated
@@ -80,12 +80,12 @@ function! g:SyntasticChecker.getLocListRaw() abort " {{{2
     let name = self._filetype . '/' . self._name
     try
         let list = self._locListFunc()
-        if self._exec != ''
+        if self._exec !=# ''
             call syntastic#log#debug(g:_SYNTASTIC_DEBUG_TRACE, 'getLocList: checker ' . name . ' returned ' . v:shell_error)
         endif
     catch /\m\C^Syntastic: checker error$/
         let list = []
-        if self._exec != ''
+        if self._exec !=# ''
             call syntastic#log#error('checker ' . name . ' returned abnormal status ' . v:shell_error)
         else
             call syntastic#log#error('checker ' . name . ' aborted')
@@ -198,7 +198,7 @@ function! g:SyntasticChecker._populateHighlightRegexes(errors) abort " {{{2
         for e in a:errors
             if e['valid']
                 let term = self._highlightRegexFunc(e)
-                if term != ''
+                if term !=# ''
                     let e['hl'] = term
                 endif
             endif
