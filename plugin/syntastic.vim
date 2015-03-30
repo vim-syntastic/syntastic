@@ -19,7 +19,7 @@ if has('reltime')
     lockvar! g:_SYNTASTIC_START
 endif
 
-let g:_SYNTASTIC_VERSION = '3.6.0-65'
+let g:_SYNTASTIC_VERSION = '3.6.0-66'
 lockvar g:_SYNTASTIC_VERSION
 
 " Sanity checks {{{1
@@ -304,6 +304,9 @@ function! s:UpdateErrors(auto_invoked, checker_names) abort " {{{2
     let run_checks = !a:auto_invoked || s:modemap.doAutoChecking()
     if run_checks
         call s:CacheErrors(a:checker_names)
+        unlockvar! b:syntastic_changedtick
+        let b:syntastic_changedtick = b:changedtick
+        lockvar! b:syntastic_changedtick
     endif
 
     let loclist = g:SyntasticLoclist.current()
