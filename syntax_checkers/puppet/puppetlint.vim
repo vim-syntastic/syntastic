@@ -19,9 +19,9 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 function! SyntaxCheckers_puppet_puppetlint_IsAvailable() dict
-    call self.log("executable('puppet') = " . executable('puppet') . ', ' .
+    call self.log("executable('puppet-lint') = " . executable('puppet-lint') . ', ' .
         \ 'executable(' . string(self.getExec()) . ') = ' . executable(self.getExec()))
-    if !executable('puppet') || !executable(self.getExec())
+    if !executable('puppet-lint') || !executable(self.getExec())
         return 0
     endif
     let ver = self.getVersion(self.getExecEscaped() . ' --version 2>' . syntastic#util#DevNull())
