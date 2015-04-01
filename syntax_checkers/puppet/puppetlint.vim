@@ -19,13 +19,10 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 function! SyntaxCheckers_puppet_puppetlint_IsAvailable() dict
-    call self.log("executable('puppet') = " . executable('puppet') . ', ' .
-        \ 'executable(' . string(self.getExec()) . ') = ' . executable(self.getExec()))
-    if !executable('puppet') || !executable(self.getExec())
+    if !executable(self.getExec())
         return 0
     endif
-    let ver = self.getVersion(self.getExecEscaped() . ' --version 2>' . syntastic#util#DevNull())
-    return syntastic#util#versionIsAtLeast(ver, [0, 1, 10])
+    return syntastic#util#versionIsAtLeast(self.getVersion(), [0, 2])
 endfunction
 
 function! SyntaxCheckers_puppet_puppetlint_GetLocList() dict
