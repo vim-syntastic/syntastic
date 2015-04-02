@@ -94,7 +94,7 @@ let s:_DEFAULT_CHECKERS = {
         \ 'yaml':          ['jsyaml'],
         \ 'z80':           ['z80syntaxchecker'],
         \ 'zpt':           ['zptlint'],
-        \ 'zsh':           ['zsh', 'shellcheck'],
+        \ 'zsh':           ['zsh'],
     \ }
 lockvar! s:_DEFAULT_CHECKERS
 
