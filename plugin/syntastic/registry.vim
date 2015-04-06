@@ -105,6 +105,7 @@ let s:_DEFAULT_FILETYPE_MAP = {
         \ 'litcoffee': 'coffee',
         \ 'mail': 'text',
         \ 'mkd': 'markdown',
+        \ 'pe-puppet': 'puppet',
         \ 'sgml': 'docbk',
         \ 'sgmllnx': 'docbk',
     \ }
