@@ -140,8 +140,8 @@ function! syntastic#util#var(name, ...) abort " {{{2
 endfunction " }}}2
 
 " Parse a version string.  Return an array of version components.
-function! syntastic#util#parseVersion(version) abort " {{{2
-    return map(split(matchstr( a:version, '\v^\D*\zs\d+(\.\d+)+\ze' ), '\m\.'), 'str2nr(v:val)')
+function! syntastic#util#parseVersion(version, ...) abort " {{{2
+    return map(split(matchstr( a:version, a:0 ? a:1 : '\v^\D*\zs\d+(\.\d+)+\ze' ), '\m\.'), 'str2nr(v:val)')
 endfunction " }}}2
 
 " Verify that the 'installed' version is at least the 'required' version.
