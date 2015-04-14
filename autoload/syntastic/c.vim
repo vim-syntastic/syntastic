@@ -221,12 +221,12 @@ function! s:_get_cflags(ft, ck, opts) abort " {{{2
 
     let flags .= ' ' . s:_get_checker_var('g', a:ft, a:ck, 'compiler_options', '') . ' ' . s:_get_include_dirs(a:ft)
 
-    " check if the user manually set some cflags
-    let b_cflags = s:_get_checker_var('b', a:ft, a:ck, 'cflags', '')
-    if b_cflags ==# ''
-        " check whether to search for include files at all
-        if !s:_get_checker_var('g', a:ft, a:ck, 'no_include_search', 0)
-            if a:ft ==# 'c' || a:ft ==# 'cpp'
+    if a:ft ==# 'c' || a:ft ==# 'cpp'
+        " check if the user manually set some cflags
+        let b_cflags = s:_get_checker_var('b', a:ft, a:ck, 'cflags', '')
+        if b_cflags ==# ''
+            " check whether to search for include files at all
+            if !s:_get_checker_var('g', a:ft, a:ck, 'no_include_search', 0)
                 " refresh the include file search if desired
                 if s:_get_checker_var('g', a:ft, a:ck, 'auto_refresh_includes', 0)
                     let flags .= ' ' . s:_search_headers()
@@ -238,10 +238,10 @@ function! s:_get_cflags(ft, ck, opts) abort " {{{2
                     let flags .= ' ' . b:syntastic_{a:ft}_includes
                 endif
             endif
+        else
+            " user-defined cflags
+            let flags .= ' ' . b_cflags
         endif
-    else
-        " user-defined cflags
-        let flags .= ' ' . b_cflags
     endif
 
     " add optional config file parameters
