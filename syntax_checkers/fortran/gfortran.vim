@@ -40,10 +40,6 @@ function! SyntaxCheckers_fortran_gfortran_GetLocList() dict " {{{1
         return []
     endif
 
-    if exists('g:syntastic_fortran_gfortran_sort')
-        let save_sort = g:syntastic_fortran_gfortran_sort
-    endif
-
     if s:type_map[g:syntastic_fortran_compiler] ==# 'gfortran'
         let errorformat =
             \ '%-C %#,'.
@@ -67,25 +63,9 @@ function! SyntaxCheckers_fortran_gfortran_GetLocList() dict " {{{1
         endif
     endif
 
-    let loclist = syntastic#c#GetLocList('fortran', 'gfortran', {
+    return syntastic#c#GetLocList('fortran', 'gfortran', {
         \ 'errorformat': errorformat,
         \ 'main_flags': '-fsyntax-only' })
-
-    if s:type_map[g:syntastic_fortran_compiler] ==# 'ifort'
-        for e in loclist
-            if match(getline(e['lnum']), "\t") >= 0
-                let e['vcol'] = 1
-            endif
-        endfor
-    endif
-
-    if exists('save_sort')
-        let g:syntastic_fortran_gfortran_sort = save_sort
-    else
-        unlet! g:syntastic_fortran_gfortran_sort
-    endif
-
-    return loclist
 endfunction " }}}1
 " @vimlint(EVL104, 0, l:errorformat)
 
