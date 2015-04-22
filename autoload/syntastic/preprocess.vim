@@ -88,7 +88,7 @@ function! syntastic#preprocess#flow(errors) abort " {{{2
                         \ m['path'] . ':' .
                         \ m['line'] . ':' .
                         \ m['start'] . ':' .
-                        \ (m['line'] ==# m['endline'] ? m['end'] . ':' : '') .
+                        \ (m['line'] ==# m['endline'] && str2nr(m['end']) > 0 ? m['end'] . ':' : '') .
                         \ ' ' . m['descr']
 
                     if len(t)
