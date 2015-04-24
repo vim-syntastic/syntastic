@@ -9,11 +9,6 @@
 "             See http://sam.zoy.org/wtfpl/COPYING for more details.
 "
 "============================================================================
-"
-" Checker option:
-"
-" - g:syntastic_xhtml_tidy_ignore_errors (list; default: [])
-"   list of errors to ignore
 
 if exists('g:loaded_syntastic_xhtml_tidy_checker')
     finish
