@@ -36,15 +36,6 @@ function! SyntaxCheckers_ruby_yard_GetLocList() dict
         \ 'makeprg': makeprg,
         \ 'errorformat': errorformat})
 
-    " Convert Yard severities to error types recognized by syntastic
-    for e in loclist
-        if e['type'] ==# 'e'
-            let e['type'] = 'E'
-        elseif e['type'] ==# 'w'
-            let e['type'] = 'W'
-        endif
-    endfor
-
     return loclist
 endfunction
 
