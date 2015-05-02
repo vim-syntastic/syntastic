@@ -336,6 +336,7 @@ function! g:SyntasticLoclist.show() abort " {{{2
                     call setwinvar(win, 'quickfix_title', ':SyntasticCheck ' . self._name)
                     call setbufvar(buf, 'syntastic_owner_buffer', self._owner)
                     call setbufvar(self._owner, 'syntastic_loclist_buffer', buf)
+                    break
                 endif
             endif
         endfor
