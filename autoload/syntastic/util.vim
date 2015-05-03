@@ -164,7 +164,7 @@ function! syntastic#util#compareLexi(a, b) abort " {{{2
             return a_element > b_element ? 1 : -1
         endif
     endfor
-    " Everything matched, so it is at least the required version.
+    " still here, thus everything matched
     return 0
 endfunction " }}}2
 
@@ -323,11 +323,10 @@ function! syntastic#util#dictFilter(errors, filter) abort " {{{2
     endtry
 endfunction " }}}2
 
-" Return a [high, low] list of integers, representing the time
-" (hopefully high resolution) since program start
-" TODO: This assumes reltime() returns a list of integers.
+" Return a [seconds, fractions] list of integers, representing the
+" (hopefully high resolution) time since program start
 function! syntastic#util#stamp() abort " {{{2
-    return reltime(g:_SYNTASTIC_START)
+    return split( split(reltimestr(reltime(g:_SYNTASTIC_START)))[0], '\.' )
 endfunction " }}}2
 
 " }}}1
