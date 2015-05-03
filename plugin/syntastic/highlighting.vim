@@ -29,7 +29,7 @@ function! g:SyntasticHighlightingNotifier.enabled() abort " {{{2
     return s:has_highlighting && syntastic#util#var('enable_highlighting')
 endfunction " }}}2
 
-" Sets error highlights in the cuirrent window
+" Sets error highlights in the current window
 function! g:SyntasticHighlightingNotifier.refresh(loclist) abort " {{{2
     if self.enabled()
         call syntastic#log#debug(g:_SYNTASTIC_DEBUG_NOTIFICATIONS, 'highlighting: refresh')

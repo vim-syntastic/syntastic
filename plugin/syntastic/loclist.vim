@@ -306,7 +306,7 @@ function! g:SyntasticLoclist.show() abort " {{{2
         let num = winnr()
         execute 'lopen ' . syntastic#util#var('loc_list_height')
         if num != winnr()
-            wincmd p
+            execute num . 'wincmd w'
         endif
 
         " try to find the loclist window and set w:quickfix_title
