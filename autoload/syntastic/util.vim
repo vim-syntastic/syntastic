@@ -323,7 +323,7 @@ function! syntastic#util#dictFilter(errors, filter) abort " {{{2
     endtry
 endfunction " }}}2
 
-" Return a [seconds, fractions] list of integers, representing the
+" Return a [seconds, fractions] list of strings, representing the
 " (hopefully high resolution) time since program start
 function! syntastic#util#stamp() abort " {{{2
     return split( split(reltimestr(reltime(g:_SYNTASTIC_START)))[0], '\.' )
