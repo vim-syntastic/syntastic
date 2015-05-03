@@ -304,9 +304,21 @@ function! g:SyntasticLoclist.show() abort " {{{2
 
     if !self.isEmpty()
         let num = winnr()
+
+        " Check if there is a location list open already.
+        let loclist_buf = getbufvar(bufnr('%'), 'syntastic_loclist_buffer')
+        if loclist_buf != ''
+            let loclist_winnr = bufwinnr(loclist_buf)
+            if loclist_winnr != -1
+                return
+            endif
+        endif
+
         execute 'lopen ' . syntastic#util#var('loc_list_height')
         if num != winnr()
-            wincmd p
+            " Explicitly select the previous window; 'wincmd p' might be
+            " hijacked / not restored properly through autocommands.
+            exec num . 'wincmd w'
         endif
 
         " try to find the loclist window and set w:quickfix_title
@@ -323,6 +335,8 @@ function! g:SyntasticLoclist.show() abort " {{{2
                             \ ( (title ==# '' || title ==# ':setloclist()') && errors == getloclist(0) )
                     call setwinvar(win, 'quickfix_title', ':SyntasticCheck ' . self._name)
                     call setbufvar(buf, 'syntastic_owner_buffer', self._owner)
+                    call setbufvar(self._owner, 'syntastic_loclist_buffer', buf)
+                    break
                 endif
             endif
         endfor
