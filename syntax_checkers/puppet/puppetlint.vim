@@ -22,6 +22,7 @@ function! SyntaxCheckers_puppet_puppetlint_IsAvailable() dict
     if !executable(self.getExec())
         return 0
     endif
+    let s:puppetlint_new = syntastic#util#versionIsAtLeast(self.getVersion(), [1])
     return syntastic#util#versionIsAtLeast(self.getVersion(), [0, 2])
 endfunction
 
@@ -29,7 +30,9 @@ function! SyntaxCheckers_puppet_puppetlint_GetLocList() dict
     call syntastic#log#deprecationWarn('puppet_lint_arguments', 'puppet_puppetlint_args')
 
     let makeprg = self.makeprgBuild({
-        \ 'args_after': '--log-format "%{KIND} [%{check}] %{message} at %{fullpath}:%{linenumber}"' })
+        \ 'args_after':
+        \       '--log-format "%{KIND} [%{check}] %{message} at %{fullpath}:' .
+        \       (s:puppetlint_new ? '%{line}' : '%{linenumber}') . '"' })
 
     let errorformat = '%t%*[a-zA-Z] %m at %f:%l'
 
