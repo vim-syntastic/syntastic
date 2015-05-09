@@ -22,7 +22,7 @@ function! SyntaxCheckers_sh_bashate_GetLocList() dict
 
     let errorformat =
         \ '%EE%n: %m,' .
-        \ '%Z - %f: L%l,' .
+        \ '%Z - %f%\s%\+: L%l,' .
         \ '%-G%.%#'
 
     let loclist = SyntasticMake({
