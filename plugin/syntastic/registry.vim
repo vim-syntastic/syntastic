@@ -63,6 +63,7 @@ let s:_DEFAULT_CHECKERS = {
         \ 'php':           ['php', 'phpcs', 'phpmd'],
         \ 'po':            ['msgfmt'],
         \ 'pod':           ['podchecker'],
+        \ 'pony':          ['ponyc'],
         \ 'puppet':        ['puppet', 'puppetlint'],
         \ 'python':        ['python', 'flake8', 'pylint'],
         \ 'r':             [],
