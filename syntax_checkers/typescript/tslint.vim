@@ -33,6 +33,7 @@ function! SyntaxCheckers_typescript_tslint_GetLocList() dict
         \ 'makeprg': makeprg,
         \ 'errorformat': errorformat,
         \ 'preprocess': 'tslint',
+        \ 'subtype': 'Style',
         \ 'returns': [0, 2] })
 endfunction
 
