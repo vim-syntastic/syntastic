@@ -52,6 +52,7 @@ CONTENTS                                                  *syntastic-contents*
         7.9.vim-go.................................|syntastic-vim-go|
         7.10.vim-virtualenv........................|syntastic-vim-virtualenv|
         7.11.YouCompleteMe.........................|syntastic-ycm|
+        7.12.The zsh shell and rvm.................|syntastic-zsh|
     8.About........................................|syntastic-about|
     9.License......................................|syntastic-license|
 
@@ -934,6 +935,16 @@ filetypes, in order to allow its own checkers to run.  If you want to use YCM's
 identifier completer but still run syntastic's checkers for those filetypes you
 have to set |ycm_show_diagnostics_ui| to 0. E.g.: >
     let g:ycm_show_diagnostics_ui = 0
+<
+------------------------------------------------------------------------------
+7.12 The zsh shell and rvm                                     *syntastic-zsh*
+
+If you're running MacVim together with the "zsh" shell (http://www.zsh.org/)
+and "rvm" (https://rvm.io/), you need to be aware that MacVim does not source
+the .zshrc file, but will source a .zshenv file.  Consequently you have to
+either source the "rvm" scripts from within .zshenv, or just set your shell to
+"sh": >
+    let g:syntastic_shell = "/bin/sh"
 <
 ==============================================================================
 8. About                                                     *syntastic-about*
