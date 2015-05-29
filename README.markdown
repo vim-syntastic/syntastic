@@ -410,7 +410,7 @@ work around it:
 
 ```vim
 nnoremap <silent> <C-d> :lclose<CR>:bdelete<CR>
-cabbrev <silent> bd lclose\|bdelete
+cabbrev <silent> bd <C-r>=(getcmdtype()==#':' && getcmdpos()==1 ? 'lclose\|bdelete' : 'bd')<CR>
 ```
 
 <a name="otherresources"></a>
