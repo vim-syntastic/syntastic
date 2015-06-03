@@ -59,7 +59,10 @@ function! SyntaxCheckers_go_go_GetLocList() dict
         let cleanup = 1
     endif
     let opt_str = (type(opts) != type('') || opts !=# '') ? join(syntastic#util#argsescape(opts)) : opts
-    let makeprg = self.getExec() . ' ' . cmd . ' ' . opt_str . ' ' . syntastic#c#NullOutput()
+    let execName = self.getExec()
+    let tmpDir = syntastic#util#tmpdir()
+    let tmpFile = tmpDir . "/" . cmd . ".out"
+    let makeprg = self.getExec() . ' ' . cmd . ' ' . opt_str . ' -o ' . tmpFile
 
     " The first pattern is for warnings from C compilers.
     let errorformat =
@@ -82,6 +85,8 @@ function! SyntaxCheckers_go_go_GetLocList() dict
     if cleanup
         call delete(expand('%:p:h', 1) . syntastic#util#Slash() . expand('%:p:h:t', 1) . '.test')
     endif
+
+    call syntastic#util#rmrf(tmpDir)
 
     return errors
 endfunction
