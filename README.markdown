@@ -66,7 +66,7 @@ YAML, z80, Zope page templates, and zsh.  See the [wiki][3] for details about
 the corresponding supported checkers.
 
 A number of third-party Vim plugins also provide checkers for syntastic,
-for example: [omnisharp-vim][25], [rust.vim][12], [syntastic-extras][26],
+for example: [omnisharp-vim][25], [rust.vim][12], [crystal.vim][29], [syntastic-extras][26],
 [syntastic-more][27], [vim-eastwood][28], and [vim-swift][24].
 
 Below is a screenshot showing the methods that Syntastic uses to display syntax
@@ -457,6 +457,7 @@ a look at [jedi-vim][7], [python-mode][8], or [YouCompleteMe][9].
 [26]: https://github.com/myint/syntastic-extras
 [27]: https://github.com/roktas/syntastic-more
 [28]: https://github.com/venantius/vim-eastwood
+[29]: https://github.com/rhysd/vim-crystal
 
 <!--
 vim:tw=79:sw=4:
