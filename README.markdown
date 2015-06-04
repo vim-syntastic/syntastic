@@ -66,8 +66,9 @@ YAML, z80, Zope page templates, and zsh.  See the [wiki][3] for details about
 the corresponding supported checkers.
 
 A number of third-party Vim plugins also provide checkers for syntastic,
-for example: [omnisharp-vim][25], [rust.vim][12], [crystal.vim][29], [syntastic-extras][26],
-[syntastic-more][27], [vim-eastwood][28], and [vim-swift][24].
+for example: [omnisharp-vim][25], [rust.vim][12], [syntastic-extras][26],
+[syntastic-more][27], [vim-crystal][29], [vim-eastwood][28], and
+[vim-swift][24].
 
 Below is a screenshot showing the methods that Syntastic uses to display syntax
 errors.  Note that, in practise, you will only have a subset of these methods
