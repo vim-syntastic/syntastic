@@ -38,6 +38,7 @@ function! SyntaxCheckers_javascript_flow_GetLocList() dict
         \ 'args_after': '--show-all-errors --json' })
 
     let errorformat =
+        \ '%.%#: %m (%f:%l:%c\,%.%#),' .
         \ '%f:%l:%c:%n: %m,' .
         \ '%f:%l:%c: %m'
 
