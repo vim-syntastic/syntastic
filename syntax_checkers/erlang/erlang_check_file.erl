@@ -50,8 +50,8 @@ rebar_opts(RebarFile) ->
 fallback_opts() ->
     code:add_pathsa(filelib:wildcard("deps/*/ebin")),
     code:add_pathsa(nested_app_ebins()),
-    [ { i, filename:absname("deps") }
-      | [ { i, filename:absname(Path) } || Path <- filelib:wildcard("deps/*/apps")]
+    [
+     { i, filename:absname("apps") }, { i, filename:absname("deps") } | [ { i, filename:absname(Path) } || Path <- filelib:wildcard("deps/*/apps")]
     ].
 
 nested_app_ebins() ->
