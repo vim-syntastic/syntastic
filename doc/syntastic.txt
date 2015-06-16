@@ -40,6 +40,7 @@ CONTENTS                                                  *syntastic-contents*
         6.1.Handling of composite filetypes........|syntastic-composite|
         6.2.Editing files over network.............|syntastic-netrw|
         6.3.The 'shellslash' option................|syntastic-shellslash|
+        6.4.Saving Vim sessions....................|syntastic-sessions|
     7.Compatibility with other software............|syntastic-compatibility|
         7.1.The csh and tcsh shells................|syntastic-csh|
         7.2.Eclim..................................|syntastic-eclim|
@@ -811,6 +812,16 @@ shell.  It should be turned off if your 'shell' (or |g:syntastic_shell|) is
 "cmd.exe", and on for shells that expect an UNIX-like syntax, such as Cygwin's
 "sh".  Most checkers will stop working if 'shellslash' is set to the wrong
 value.
+
+------------------------------------------------------------------------------
+6.4 Saving Vim sessions                                   *syntastic-sessions*
+
+If you use |:mksession| to save Vim sessions you should probably make sure to
+remove option "blank" from 'sessionoptions': >
+    set sessionoptions-=blank
+<
+This will prevent |:mksession| from saving |syntastic-error-window| as empty
+quickfix windows.
 
 ==============================================================================
 7. Compatibility with other software                 *syntastic-compatibility*
