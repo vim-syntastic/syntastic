@@ -128,6 +128,13 @@ endfunction " }}}2
 " @vimlint(EVL102, 0, l:false)
 " @vimlint(EVL102, 0, l:null)
 
+function! syntastic#preprocess#iconv(errors) abort " {{{2
+    return
+        \ (has('iconv') || has('iconv/dyn')) && &encoding !=# '' && &encoding !=# 'utf-8' ?
+        \       map(a:errors, 'iconv(v:val, "utf-8", &encoding)') :
+        \       a:errors
+endfunction " }}}2
+
 function! syntastic#preprocess#killEmpty(errors) abort " {{{2
     return filter(copy(a:errors), 'v:val !=# ""')
 endfunction " }}}2
