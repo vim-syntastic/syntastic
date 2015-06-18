@@ -68,6 +68,7 @@ function! SyntaxCheckers_haskell_ghc_mod_GetLocList() dict
     return SyntasticMake({
         \ 'makeprg': makeprg,
         \ 'errorformat': errorformat,
+        \ 'preprocess': 'iconv',
         \ 'postprocess': ['compressWhitespace'],
         \ 'returns': [0] })
 endfunction
