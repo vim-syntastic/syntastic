@@ -20,11 +20,12 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 function! SyntaxCheckers_nix_nix_GetLocList() dict
-    let makeprg = self.makeprgBuild({ 'args': '--parse-only' })
+    let makeprg = self.makeprgBuild({ 'args_after': '--parse-only' })
 
-    let errorformat = "%m\\, at %f:%l:%c,"
-        \ ."%m at %f\\, line %l:,"
-        \ ."error: %m\\, in %f"
+    let errorformat =
+        \ '%m\, at %f:%l:%c,' .
+        \ '%m at %f\, line %l:,' .
+        \ 'error: %m\, in %f'
 
     return SyntasticMake({
         \ 'makeprg': makeprg,
