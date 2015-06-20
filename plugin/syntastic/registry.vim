@@ -55,6 +55,7 @@ let s:_DEFAULT_CHECKERS = {
         \ 'matlab':        ['mlint'],
         \ 'mercury':       ['mmc'],
         \ 'nasm':          ['nasm'],
+        \ 'nix':           ['nix'],
         \ 'nroff':         ['mandoc'],
         \ 'objc':          ['gcc'],
         \ 'objcpp':        ['gcc'],
