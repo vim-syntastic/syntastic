@@ -21,7 +21,7 @@ function! syntastic#c#ReadConfig(file) abort " {{{2
     call syntastic#log#debug(g:_SYNTASTIC_DEBUG_CHECKERS, 'ReadConfig: looking for', a:file)
 
     " search upwards from the current file's directory
-    let config = findfile(a:file, '.;')
+    let config = findfile(a:file, expand('%:p:h', 1) . ';')
     if config ==# ''
         call syntastic#log#debug(g:_SYNTASTIC_DEBUG_CHECKERS, 'ReadConfig: file not found')
         return ''

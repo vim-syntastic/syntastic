@@ -226,8 +226,10 @@ function! syntastic#util#bufIsActive(buffer) abort " {{{2
     return 0
 endfunction " }}}2
 
-" start in directory a:where and walk up the parent folders until it
-" finds a file matching a:what; return path to that file
+" start in directory a:where and walk up the parent folders until it finds a
+" file matching a:what; return path to that file; do NOT use this function
+" if a:what doesn't contain wildcards, use findfile(a:what, a:where . ';')
+" instead
 function! syntastic#util#findInParent(what, where) abort " {{{2
     let here = fnamemodify(a:where, ':p')
 

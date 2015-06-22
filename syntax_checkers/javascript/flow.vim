@@ -29,7 +29,7 @@ function! SyntaxCheckers_javascript_flow_IsAvailable() dict
 endfunction
 
 function! SyntaxCheckers_javascript_flow_GetLocList() dict
-    if findfile('.flowconfig', '.;') ==# ''
+    if findfile('.flowconfig', expand('%:p:h', 1) . ';') ==# ''
         return []
     endif
 
