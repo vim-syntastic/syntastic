@@ -69,7 +69,7 @@ let s:_DEFAULT_CHECKERS = {
         \ 'r':             [],
         \ 'racket':        ['racket'],
         \ 'rnc':           ['rnv'],
-        \ 'rst':           ['rst2pseudoxml'],
+        \ 'rst':           ['sphinx'],
         \ 'ruby':          ['mri'],
         \ 'sass':          ['sass'],
         \ 'scala':         ['fsc', 'scalac'],
