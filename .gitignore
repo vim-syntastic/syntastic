@@ -1,4 +1,5 @@
 *~
+*.pyc
 *.swp
 tags
 .DS_Store
