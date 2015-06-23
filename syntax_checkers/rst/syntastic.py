@@ -1,5 +1,5 @@
 # File:        syntastic.py
-# Description: Dummy builder  for Sphinx
+# Description: Dummy builder for Sphinx
 # Maintainer:  LCD 47 <lcd047 at gmail dot com>
 # License:     This program is free software. It comes without any warranty,
 #              to the extent permitted by applicable law. You can redistribute
@@ -21,9 +21,6 @@ class DummyBuilder(Builder):
 
     def get_outdated_docs(self):
         return 'all files'
-        # return self.env.found_docs
-        # for docname in self.env.found_docs:
-        #     yield docname
 
     def prepare_writing(self, docnames):
         pass

@@ -47,16 +47,18 @@ function! SyntaxCheckers_rst_sphinx_GetLocList() dict
     let makeprg = self.makeprgBuild({
         \ 'args': '-n -E',
         \ 'args_after': '-q -N -b dummy -c ' . syntastic#util#shescape(confdir),
-        \ 'fname': srcdir,
+        \ 'fname': syntastic#util#shescape(srcdir),
         \ 'fname_after': syntastic#util#shescape(s:sphinx_cache_location) })
 
     let errorformat =
+        \ '%E%f:%l: SEVER%t: %m,' .
         \ '%f:%l: %tRROR: %m,' .
         \ '%f:%l: %tARNING: %m,' .
+        \ '%E%f:: SEVER%t: %m,' .
         \ '%f:: %tRROR: %m,' .
         \ '%f:: %tARNING: %m,' .
         \ '%trror: %m,' .
-        \ '%-G%.%#'
+        \ '%+C%.%#'
 
     let loclist = SyntasticMake({
         \ 'makeprg': makeprg,
