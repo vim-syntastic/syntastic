@@ -25,7 +25,7 @@ class DummyBuilder(Builder):
     def prepare_writing(self, docnames):
         pass
 
-    def write(self, *ignored):
+    def write_doc(self, docname, doctree):
         pass
 
 
