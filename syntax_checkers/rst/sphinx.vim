@@ -20,11 +20,18 @@ let s:pythonpath = expand('<sfile>:p:h')
 let s:save_cpo = &cpo
 set cpo&vim
 
+let s:sphinx_cache_location = syntastic#util#tmpdir()
+lockvar s:sphinx_cache_location
+
+augroup syntastic
+    autocmd VimLeave * call syntastic#util#rmrf(s:sphinx_cache_location)
+augroup END
+
 function! SyntaxCheckers_rst_sphinx_GetLocList() dict
 
     let srcdir = syntastic#util#var('rst_sphinx_source_dir')
     if srcdir == ''
-        let config = findfile('conf.py', '.;')
+        let config = findfile('conf.py',  expand('%:p:h', 1) . ';')
         if config == ''
             return []
         endif
@@ -33,17 +40,15 @@ function! SyntaxCheckers_rst_sphinx_GetLocList() dict
 
     let confdir = syntastic#util#var('rst_sphinx_config_dir')
     if confdir == ''
-        let config = findfile('conf.py', '.;')
+        let config = findfile('conf.py',  expand('%:p:h', 1) . ';')
         let confdir = config != '' ? fnamemodify(config, ':p:h') : srcdir
     endif
 
-    let tmpdir = syntastic#util#tmpdir()
-
     let makeprg = self.makeprgBuild({
-        \ 'args': '-n',
-        \ 'args_after': '-q -E -N -b dummy -c ' . syntastic#util#shescape(confdir),
+        \ 'args': '-n -E',
+        \ 'args_after': '-q -N -b dummy -c ' . syntastic#util#shescape(confdir),
         \ 'fname': srcdir,
-        \ 'fname_after': tmpdir })
+        \ 'fname_after': syntastic#util#shescape(s:sphinx_cache_location) })
 
     let errorformat =
         \ '%f:%l: %tRROR: %m,' .
@@ -58,8 +63,6 @@ function! SyntaxCheckers_rst_sphinx_GetLocList() dict
         \ 'errorformat': errorformat,
         \ 'env': { 'PYTHONPATH': s:pythonpath },
         \ 'returns': [0] })
-
-    call syntastic#util#rmrf(tmpdir)
 
     return loclist
 endfunction
