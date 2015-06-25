@@ -131,9 +131,9 @@ function! SyntaxCheckers_java_javac_GetLocList() dict " {{{1
     if g:syntastic_java_javac_custom_classpath_command !=# ''
         " Pre-process the classpath command string a little.
         let classpath_command = g:syntastic_java_javac_custom_classpath_command
-        for sub in [['\V%FILE_PATH%', expand('%:p')],
-            \       ['\V%FILE_NAME%', expand('%:t')],
-            \       ['\V%FILE_DIR%',  expand('%:p:h')]]
+        for sub in [['\V%FILE_PATH%', syntastic#util#shexpand('%:p')],
+            \       ['\V%FILE_NAME%', syntastic#util#shexpand('%:t')],
+            \       ['\V%FILE_DIR%',  syntastic#util#shexpand('%:p:h')]]
             let classpath_command = substitute(classpath_command, sub[0], sub[1], 'g')
         endfor
         let lines = syntastic#util#system(classpath_command)
