@@ -134,7 +134,7 @@ function! SyntaxCheckers_java_javac_GetLocList() dict " {{{1
         for sub in [['\V%FILE_PATH%', expand('%:p')],
             \       ['\V%FILE_NAME%', expand('%:t')],
             \       ['\V%FILE_DIR%',  expand('%:p:h')]]
-            let classpath_command = substitute(classpath_command, sub[0], sub[1], 'g')
+            let classpath_command = substitute(classpath_command, sub[0], syntastic#util#shexpand(sub[1]), 'g')
         endfor
         let lines = syntastic#util#system(classpath_command)
         if syntastic#util#isRunningWindows() || has('win32unix')
