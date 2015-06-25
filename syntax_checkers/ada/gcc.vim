@@ -32,7 +32,7 @@ function! SyntaxCheckers_ada_gcc_GetLocList() dict
         \     '%-G%f:%s:,' .
         \     '%f:%l:%c: %m,' .
         \     '%f:%l: %m',
-        \ 'main_flags': '-c -x ada -fsyntax-only',
+        \ 'main_flags': '-c -gnats',
         \ 'header_flags': '-x ada',
         \ 'header_names': '\.ads$' })
 endfunction
