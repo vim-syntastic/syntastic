@@ -129,7 +129,14 @@ function! SyntaxCheckers_java_javac_GetLocList() dict " {{{1
 
     " load custom classpath {{{2
     if g:syntastic_java_javac_custom_classpath_command !=# ''
-        let lines = syntastic#util#system(g:syntastic_java_javac_custom_classpath_command)
+        " Pre-process the classpath command string a little.
+        let classpath_command = g:syntastic_java_javac_custom_classpath_command
+        for sub in [['%FILE_PATH%', syntastic#util#shexpand('%:p')],
+                  \ ['%FILE_NAME%', syntastic#util#shexpand('%:t')],
+                  \ ['%FILE_DIR%',  syntastic#util#shexpand('%:p:h')]]
+            let classpath_command = substitute(classpath_command, sub[0], sub[1], 'g')
+        endfor
+        let lines = system(classpath_command)
         if syntastic#util#isRunningWindows() || has('win32unix')
             let lines = substitute(lines, "\r\n", "\n", 'g')
         endif
