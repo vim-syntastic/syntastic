@@ -227,10 +227,18 @@ function! syntastic#util#bufIsActive(buffer) abort " {{{2
 endfunction " }}}2
 
 " start in directory a:where and walk up the parent folders until it finds a
-" file matching a:what; return path to that file; do NOT use this function if
-" a:what doesn't contain wildcards, use findfile(a:what, escape(a:where, ' ') . ';')
-" instead
-function! syntastic#util#findInParent(what, where) abort " {{{2
+" file named a:what; return path to that file
+function! syntastic#util#findFileInParent(what, where) abort " {{{2
+    let old_suffixesadd = &suffixesadd
+    let &suffixesadd = ''
+    let file = findfile(a:what, escape(a:where, ' ') . ';')
+    let &suffixesadd = old_suffixesadd
+    return file
+endfunction " }}}2
+
+" start in directory a:where and walk up the parent folders until it finds a
+" file matching a:what; return path to that file
+function! syntastic#util#findGlobInParent(what, where) abort " {{{2
     let here = fnamemodify(a:where, ':p')
 
     let root = syntastic#util#Slash()

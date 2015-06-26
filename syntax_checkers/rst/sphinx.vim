@@ -30,7 +30,7 @@ function! SyntaxCheckers_rst_sphinx_GetLocList() dict
     let srcdir = syntastic#util#var('rst_sphinx_source_dir')
     call self.log('g:syntastic_rst_sphinx_source_dir =', srcdir)
     if srcdir == ''
-        let config = findfile('conf.py',  escape(expand('%:p:h', 1), ' ') . ';')
+        let config = syntastic#util#findFileInParent('conf.py',  expand('%:p:h', 1))
         if config == '' || !filereadable(config)
             call self.log('conf.py file not found')
             return []
@@ -41,7 +41,7 @@ function! SyntaxCheckers_rst_sphinx_GetLocList() dict
     let confdir = syntastic#util#var('rst_sphinx_config_dir')
     call self.log('g:syntastic_rst_sphinx_config_dir =', confdir)
     if confdir == ''
-        let config = findfile('conf.py',  escape(expand('%:p:h', 1), ' ') . ';')
+        let config = syntastic#util#findFileInParent('conf.py',  expand('%:p:h', 1))
         let confdir = (config != '' && filereadable(config)) ? fnamemodify(config, ':p:h') : srcdir
     endif
 
