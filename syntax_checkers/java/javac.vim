@@ -73,6 +73,17 @@ endif
 
 " }}}1
 
+" Constants {{{1
+
+let s:_FILE_SHORTCUTS = {
+        \ '%FILE_PATH%':  '%:p',
+        \ '%FILE_NAME%':  '%:t',
+        \ '%FILE_DIR%':   '%:p:h',
+    \ }
+lockvar! s:_FILE_SHORTCUTS
+
+" }}}1
+
 command! SyntasticJavacEditClasspath call s:EditClasspath()
 
 if g:syntastic_java_javac_config_file_enabled
@@ -131,10 +142,8 @@ function! SyntaxCheckers_java_javac_GetLocList() dict " {{{1
     if g:syntastic_java_javac_custom_classpath_command !=# ''
         " Pre-process the classpath command string a little.
         let classpath_command = g:syntastic_java_javac_custom_classpath_command
-        for sub in [['\V%FILE_PATH%', expand('%:p')],
-            \       ['\V%FILE_NAME%', expand('%:t')],
-            \       ['\V%FILE_DIR%',  expand('%:p:h')]]
-            let classpath_command = substitute(classpath_command, sub[0], syntastic#util#shescape(sub[1]), 'g')
+        for [key, val] in items(s:_FILE_SHORTCUTS)
+            let classpath_command = substitute(classpath_command, '\V' . key, syntastic#util#shexpand(val), 'g')
         endfor
         let lines = syntastic#util#system(classpath_command)
         if syntastic#util#isRunningWindows() || has('win32unix')
