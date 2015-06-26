@@ -19,7 +19,7 @@ if has('reltime')
     lockvar! g:_SYNTASTIC_START
 endif
 
-let g:_SYNTASTIC_VERSION = '3.6.0-110'
+let g:_SYNTASTIC_VERSION = '3.6.0-111'
 lockvar g:_SYNTASTIC_VERSION
 
 " Sanity checks {{{1
@@ -552,6 +552,7 @@ function! SyntasticMake(options) abort " {{{2
     endif
 
     if bailout
+        call syntastic#log#ndebug(g:_SYNTASTIC_DEBUG_LOCLIST, 'checker output:', err_lines)
         throw 'Syntastic: checker error'
     endif
 

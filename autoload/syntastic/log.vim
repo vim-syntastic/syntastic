@@ -123,6 +123,21 @@ function! syntastic#log#debugDump(level) abort " {{{2
     call syntastic#log#debugShowVariables( a:level, sort(keys(g:_SYNTASTIC_DEFAULTS)) )
 endfunction " }}}2
 
+function! syntastic#log#ndebug(level, title, messages) abort " {{{2
+    if s:_isDebugEnabled(a:level)
+        return
+    endif
+
+    call syntastic#log#error(a:title)
+    if type(a:messages) == type([])
+        for msg in a:messages
+            echomsg msg
+        endfor
+    else
+        echomsg a:messages
+    endif
+endfunction " }}}2
+
 " }}}1
 
 " Private functions {{{1
