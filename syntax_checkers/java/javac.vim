@@ -315,7 +315,7 @@ endfunction " }}}2
 
 function! s:GetMavenProperties() " {{{2
     let mvn_properties = {}
-    let pom = findfile('pom.xml', escape(expand('%:p:h', 1), ' ') . ';')
+    let pom = syntastic#util#findFileInParent('pom.xml', expand('%:p:h', 1))
     if s:has_maven && filereadable(pom)
         if !has_key(g:syntastic_java_javac_maven_pom_properties, pom)
             let mvn_cmd = syntastic#util#shexpand(g:syntastic_java_maven_executable) .
@@ -350,7 +350,7 @@ function! s:GetMavenProperties() " {{{2
 endfunction " }}}2
 
 function! s:GetMavenClasspath() " {{{2
-    let pom = findfile('pom.xml', escape(expand('%:p:h', 1), ' ') . ';')
+    let pom = syntastic#util#findFileInParent('pom.xml', expand('%:p:h', 1))
     if s:has_maven && filereadable(pom)
         if !has_key(g:syntastic_java_javac_maven_pom_ftime, pom) || g:syntastic_java_javac_maven_pom_ftime[pom] != getftime(pom)
             let mvn_cmd = syntastic#util#shexpand(g:syntastic_java_maven_executable) .
@@ -394,7 +394,7 @@ function! s:GetMavenClasspath() " {{{2
 endfunction " }}}2
 
 function! s:MavenOutputDirectory() " {{{2
-    let pom = findfile('pom.xml', escape(expand('%:p:h', 1), ' ') . ';')
+    let pom = syntastic#util#findFileInParent('pom.xml', expand('%:p:h', 1))
     if s:has_maven && filereadable(pom)
         let mvn_properties = s:GetMavenProperties()
         let output_dir = getcwd()
