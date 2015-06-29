@@ -10,10 +10,17 @@ main([File]) ->
             warn_unused_import,
             report,
             {i, Dir ++ "/include"}],
+    %% `rebar.config` is looked for,
+    %% but it is not necessarily the one in the project root.
+    %% I.e. it may be one deeper in the project file hierarchy.
     RebarFile = rebar_file(Dir),
+    %% `rebar.config` might contain relative paths.
+    %% They are relative to the file! Not to the project root.
     RebarOpts = rebar_opts(Dir ++ "/" ++ RebarFile),
     code:add_patha(filename:absname("ebin")),
-    compile:file(File, Defs ++ RebarOpts);
+    %% `compile:file/2` requires the `{i, Path}` to be relative
+    %% to CWD - no surprise here.
+    compile:file(File, Defs ++ translate_paths(Dir, RebarOpts));
 
 main(_) ->
     io:format("Usage: ~s <file>~n", [escript:script_name()]),
@@ -74,3 +81,15 @@ get_root(["test" | Tail], _Path) ->
     lists:reverse(Tail);
 get_root([_ | Tail], Path) ->
     get_root(Tail, Path).
+
+translate_paths(Dir, RebarOpts) ->
+    [ translate_path(Dir, Opt) || Opt <- RebarOpts ].
+
+translate_path(Dir, {i, Path}) ->
+    case Path of
+        %% absolute
+        "/" ++ _ -> {i, Path};
+        %% relative -> make absolute taking rebar.config location into account
+        _ -> {i, filename:join([Dir, Path])}
+    end;
+translate_path(_, Other) -> Other.
