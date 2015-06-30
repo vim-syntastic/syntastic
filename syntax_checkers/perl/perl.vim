@@ -51,7 +51,7 @@ function! SyntaxCheckers_perl_perl_IsAvailable() dict
 endfunction
 
 function! SyntaxCheckers_perl_perl_GetLocList() dict
-    if !exists('g:syntastic_enable_perl_checker') || !g:syntastic_enable_perl_checker
+    if !syntastic#util#var('enable_perl_checker', 0)
         call syntastic#log#error('checker perl/perl: checks disabled for security reasons; ' .
             \ 'set g:syntastic_enable_perl_checker to 1 to override')
         return []
