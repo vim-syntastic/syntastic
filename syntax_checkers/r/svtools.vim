@@ -46,7 +46,7 @@ function! SyntaxCheckers_r_svtools_IsAvailable() dict
 endfunction
 
 function! SyntaxCheckers_r_svtools_GetLocList() dict
-    if !exists('g:syntastic_enable_r_svtools_checker') || !g:syntastic_enable_r_svtools_checker
+    if !syntastic#util#var('enable_r_svtools_checker', 0)
         call syntastic#log#error('checker r/svtools: checks disabled for security reasons; set g:syntastic_enable_r_svtools_checker to 1 to override')
         return []
     endif

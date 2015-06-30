@@ -27,7 +27,7 @@ function! SyntaxCheckers_elixir_elixir_IsAvailable() dict
 endfunction
 
 function! SyntaxCheckers_elixir_elixir_GetLocList() dict
-    if !exists('g:syntastic_enable_elixir_checker') || !g:syntastic_enable_elixir_checker
+    if !syntastic#util#var('enable_elixir_checker', 0)
         call syntastic#log#error('checker elixir/elixir: checks disabled for security reasons; ' .
             \ 'set g:syntastic_enable_elixir_checker to 1 to override')
         return []
