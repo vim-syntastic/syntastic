@@ -25,6 +25,10 @@ function! g:SyntasticChecker.New(args) abort " {{{2
         let prefix = 'SyntaxCheckers_' . newObj._filetype . '_' . newObj._name . '_'
     endif
 
+    if has_key(a:args, 'enable')
+        let newObj._enable = a:args['enable']
+    endif
+
     let newObj._locListFunc = function(prefix . 'GetLocList')
 
     if exists('*' . prefix . 'IsAvailable')
@@ -78,6 +82,21 @@ endfunction " }}}2
 
 function! g:SyntasticChecker.getLocListRaw() abort " {{{2
     let name = self._filetype . '/' . self._name
+
+    if has_key(self, '_enable')
+        let status = syntastic#util#var(self._enable, -1)
+        if status < 0
+            call syntastic#log#error('checker ' . name . ': checks disabled for security reasons; ' .
+                \ 'set g:syntastic_' . self._enable . ' to 1 to override')
+        endif
+        if status <= 0
+            call syntastic#log#debug(g:_SYNTASTIC_DEBUG_TRACE, 'getLocList: checker ' . name . ' enabled but not forced')
+            return []
+        else
+            call syntastic#log#debug(g:_SYNTASTIC_DEBUG_TRACE, 'getLocList: checker ' . name . ' forced')
+        endif
+    endif
+
     try
         let list = self._locListFunc()
         if self._exec !=# ''
@@ -150,6 +169,10 @@ function! g:SyntasticChecker.isAvailable() abort " {{{2
         let self._available = self._isAvailableFunc()
     endif
     return self._available
+endfunction " }}}2
+
+function! g:SyntasticChecker.isDisabled() abort " {{{2
+    return has_key(self, '_enable') && syntastic#util#var(self._enable, -1) <= 0
 endfunction " }}}2
 
 function! g:SyntasticChecker.wantSort() abort " {{{2
