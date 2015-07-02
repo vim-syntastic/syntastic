@@ -461,7 +461,7 @@ Use this option to map non-standard filetypes to standard ones.  Corresponding
 checkers are mapped accordingly, which allows syntastic to check files with
 non-standard filetypes: >
     let g:syntastic_filetype_map = {
-        \ "latex": "tex",
+        \ "plaintex": "tex",
         \ "gentoo-metadata": "xml" }
 <
 Composite filetypes can also be mapped to simple types, which disables the
