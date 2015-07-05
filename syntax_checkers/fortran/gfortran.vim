@@ -44,8 +44,8 @@ function! SyntaxCheckers_fortran_gfortran_GetLocList() dict " {{{1
         let errorformat =
             \ '%-C %#,'.
             \ '%-C  %#%.%#,'.
-            \ '%A%f:%l.%c:,'.
-            \ '%Z%trror: %m,'.
+            \ '%A%f:%l%[.:]%c:,'.
+            \ '%Z%\m%\%%(Fatal %\)%\?%trror: %m,'.
             \ '%Z%tarning: %m,'.
             \ '%-G%.%#'
         if !exists('g:syntastic_fortran_gfortran_sort')
