@@ -953,10 +953,12 @@ have to set |ycm_show_diagnostics_ui| to 0. E.g.: >
 If you're running MacVim together with the "zsh" shell (http://www.zsh.org/)
 and "rvm" (https://rvm.io/), you need to be aware that MacVim does not source
 the .zshrc file, but will source a .zshenv file.  Consequently you have to
-either source the "rvm" scripts from within .zshenv, or just set your shell to
-"sh": >
-    let g:syntastic_shell = "/bin/sh"
+either source the "rvm" scripts from within .zshenv, or just change your shell
+to something else: >
+    set shell=/bin/sh
 <
+Of course, you'll have to make sure "rvm" still works in the new shell.
+
 ==============================================================================
 8. About                                                     *syntastic-about*
 
