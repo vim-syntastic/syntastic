@@ -2,6 +2,7 @@
 "File:        tsc.vim
 "Description: TypeScript syntax checker
 "Maintainer:  Bill Casarin <bill@casarin.ca>
+"
 "============================================================================
 
 if exists('g:loaded_syntastic_typescript_tsc_checker')
@@ -16,24 +17,24 @@ endif
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! SyntaxCheckers_typescript_tsc_GetLocList() dict
-    if !exists('s:tsc_new')
+function! SyntaxCheckers_typescript_tsc_IsAvailable() dict
+    let version_output = split(syntastic#util#system(self.getExecEscaped() . ' --version'), '\n', 1)
+    let ver = filter(copy(version_output), 'v:val =~# ''\m\<Version ''')
+    let parsed_ver = len(ver) ? syntastic#util#parseVersion(ver[0], '\v<Version \zs\d+(\.\d+)\ze') : []
+
+    if len(parsed_ver)
+        call self.setVersion(parsed_ver)
+        let s:tsc_new = syntastic#util#versionIsAtLeast(parsed_ver, [1, 5])
+    else
+        call syntastic#log#ndebug(g:_SYNTASTIC_DEBUG_LOCLIST, 'checker output:', version_output)
+        call syntastic#log#error("checker typescript/tsc: can't parse version string (abnormal termination?)")
         let s:tsc_new = -1
-        try
-            let tsc_version = filter(split(syntastic#util#system(self.getExecEscaped() . ' --version'), '\n'), 'v:val =~# ''\m\<Version ''')[0]
-            let ver = syntastic#util#parseVersion(tsc_version, '\v<Version \zs\d+(\.\d+)\ze')
-            call self.setVersion(ver)
-
-            let s:tsc_new = syntastic#util#versionIsAtLeast(ver, [1, 5])
-        catch /\m^Vim\%((\a\+)\)\=:E684/
-            call syntastic#log#error("checker typescript/tsc: can't parse version string (abnormal termination?)")
-        endtry
     endif
 
-    if s:tsc_new < 0
-        return []
-    endif
+    return s:tsc_new >= 0
+endfunction
 
+function! SyntaxCheckers_typescript_tsc_GetLocList() dict
     let makeprg = self.makeprgBuild({
         \ 'args': '--module commonjs',
         \ 'args_after': (s:tsc_new ? '--noEmit' : '--out ' . syntastic#util#DevNull()) })
