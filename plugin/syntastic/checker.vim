@@ -127,7 +127,13 @@ function! g:SyntasticChecker.getVersion(...) abort " {{{2
         call self.log('getVersion: ' . string(command) . ': ' .
             \ string(split(version_output, "\n", 1)) .
             \ (v:shell_error ? ' (exit code ' . v:shell_error . ')' : '') )
-        call self.setVersion(syntastic#util#parseVersion(version_output))
+        let parsed_ver = syntastic#util#parseVersion(version_output)
+        if len(parsed_ver)
+            call self.setVersion(parsed_ver)
+        else
+            call syntastic#log#ndebug(g:_SYNTASTIC_DEBUG_LOCLIST, 'checker output:', split(version_output, "\n", 1))
+            call syntastic#log#error("checker " . self._filetype . "/" . self._name . ": can't parse version string (abnormal termination?)")
+        endif
     endif
     return get(self, '_version', [])
 endfunction " }}}2
@@ -136,8 +142,6 @@ function! g:SyntasticChecker.setVersion(version) abort " {{{2
     if len(a:version)
         let self._version = copy(a:version)
         call self.log(self.getExec() . ' version =', a:version)
-    else
-        call syntastic#log#error("checker " . self._filetype . "/" . self._name . ": can't parse version string (abnormal termination?)")
     endif
 endfunction " }}}2
 
