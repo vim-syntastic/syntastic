@@ -58,7 +58,7 @@ endfunction " }}}2
 " getExec() or getExecEscaped().  Normally isAvailable() does that for you
 " automatically, but you should keep still this in mind if you change the
 " current checker workflow.
-function! g:SyntasticChecker.syncExec() dict " {{{2
+function! g:SyntasticChecker.syncExec() abort " {{{2
     let user_exec =
         \ expand( exists('b:syntastic_' . self._name . '_exec') ? b:syntastic_{self._name}_exec :
         \ syntastic#util#var(self._filetype . '_' . self._name . '_exec'), 1 )
