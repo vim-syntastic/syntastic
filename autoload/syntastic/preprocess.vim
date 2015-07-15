@@ -59,27 +59,12 @@ function! syntastic#preprocess#cppcheck(errors) abort " {{{2
     return map(copy(a:errors), 'substitute(v:val, ''\v^\[[^]]+\]\zs( -\> \[[^]]+\])+\ze:'', "", "")')
 endfunction " }}}2
 
-" @vimlint(EVL102, 1, l:true)
-" @vimlint(EVL102, 1, l:false)
-" @vimlint(EVL102, 1, l:null)
 function! syntastic#preprocess#flow(errors) abort " {{{2
-    " JSON artifacts
-    let true = 1
-    let false = 0
-    let null = ''
-
     let idx = 0
-    while idx < len(a:errors) && a:errors[idx][0] != '{'
+    while idx < len(a:errors) && a:errors[idx][0] !=# '{'
         let idx += 1
     endwhile
-
-    " A hat tip to Marc Weber for this trick
-    " http://stackoverflow.com/questions/17751186/iterating-over-a-string-in-vimscript-or-parse-a-json-file/19105763#19105763
-    try
-        let errs = eval(join(a:errors[idx :], ''))
-    catch
-        let errs = {}
-    endtry
+    let errs = s:_decode_JSON(join(a:errors[idx :], ''))
 
     let out = []
     if type(errs) == type({}) && has_key(errs, 'errors') && type(errs['errors']) == type([])
@@ -108,25 +93,22 @@ function! syntastic#preprocess#flow(errors) abort " {{{2
 
                     call add(out, msg)
                 catch /\m^Vim\%((\a\+)\)\=:E716/
-                    call syntastic#log#warn('checker javascript/flow: unknown error format')
+                    call syntastic#log#warn('checker javascript/flow: unrecognized error format')
                     let out = []
                     break
                 endtry
             else
-                call syntastic#log#warn('checker javascript/flow: unknown error format')
+                call syntastic#log#warn('checker javascript/flow: unrecognized error format')
                 let out = []
                 break
             endif
         endfor
     else
-        call syntastic#log#warn('checker javascript/flow: unknown error format')
+        call syntastic#log#warn('checker javascript/flow: unrecognized error format')
     endif
 
     return out
 endfunction " }}}2
-" @vimlint(EVL102, 0, l:true)
-" @vimlint(EVL102, 0, l:false)
-" @vimlint(EVL102, 0, l:null)
 
 function! syntastic#preprocess#iconv(errors) abort " {{{2
     return
@@ -152,22 +134,8 @@ function! syntastic#preprocess#perl(errors) abort " {{{2
     return syntastic#util#unique(out)
 endfunction " }}}2
 
-" @vimlint(EVL102, 1, l:true)
-" @vimlint(EVL102, 1, l:false)
-" @vimlint(EVL102, 1, l:null)
 function! syntastic#preprocess#prospector(errors) abort " {{{2
-    " JSON artifacts
-    let true = 1
-    let false = 0
-    let null = ''
-
-    " A hat tip to Marc Weber for this trick
-    " http://stackoverflow.com/questions/17751186/iterating-over-a-string-in-vimscript-or-parse-a-json-file/19105763#19105763
-    try
-        let errs = eval(join(a:errors, ''))
-    catch
-        let errs = {}
-    endtry
+    let errs = s:_decode_JSON(join(a:errors, ''))
 
     let out = []
     if type(errs) == type({}) && has_key(errs, 'messages')
@@ -189,26 +157,23 @@ function! syntastic#preprocess#prospector(errors) abort " {{{2
 
                         call add(out, msg)
                     catch /\m^Vim\%((\a\+)\)\=:E716/
-                        call syntastic#log#warn('checker python/prospector: unknown error format')
+                        call syntastic#log#warn('checker python/prospector: unrecognized error format')
                         let out = []
                         break
                     endtry
                 else
-                    call syntastic#log#warn('checker python/prospector: unknown error format')
+                    call syntastic#log#warn('checker python/prospector: unrecognized error format')
                     let out = []
                     break
                 endif
             endfor
         else
-            call syntastic#log#warn('checker python/prospector: unknown error format')
+            call syntastic#log#warn('checker python/prospector: unrecognized error format')
         endif
     endif
 
     return out
 endfunction " }}}2
-" @vimlint(EVL102, 0, l:true)
-" @vimlint(EVL102, 0, l:false)
-" @vimlint(EVL102, 0, l:null)
 
 function! syntastic#preprocess#rparse(errors) abort " {{{2
     let errlist = copy(a:errors)
@@ -268,22 +233,8 @@ function! syntastic#preprocess#validator(errors) abort " {{{2
     return out
 endfunction " }}}2
 
-" @vimlint(EVL102, 1, l:true)
-" @vimlint(EVL102, 1, l:false)
-" @vimlint(EVL102, 1, l:null)
 function! syntastic#preprocess#vint(errors) abort " {{{2
-    " JSON artifacts
-    let true = 1
-    let false = 0
-    let null = ''
-
-    " A hat tip to Marc Weber for this trick
-    " http://stackoverflow.com/questions/17751186/iterating-over-a-string-in-vimscript-or-parse-a-json-file/19105763#19105763
-    try
-        let errs = eval(join(a:errors, ''))
-    catch
-        let errs = []
-    endtry
+    let errs = s:_decode_JSON(join(a:errors, ''))
 
     let out = []
     if type(errs) == type([])
@@ -300,21 +251,51 @@ function! syntastic#preprocess#vint(errors) abort " {{{2
 
                     call add(out, msg)
                 catch /\m^Vim\%((\a\+)\)\=:E716/
-                    call syntastic#log#warn('checker vim/vint: unknown error format')
+                    call syntastic#log#warn('checker vim/vint: unrecognized error format')
                     let out = []
                     break
                 endtry
             else
-                call syntastic#log#warn('checker vim/vint: unknown error format')
+                call syntastic#log#warn('checker vim/vint: unrecognized error format')
                 let out = []
                 break
             endif
         endfor
     else
-        call syntastic#log#warn('checker vim/vint: unknown error format')
+        call syntastic#log#warn('checker vim/vint: unrecognized error format')
     endif
 
     return out
+endfunction " }}}2
+
+" }}}1
+
+" Private functions {{{1
+
+" @vimlint(EVL102, 1, l:true)
+" @vimlint(EVL102, 1, l:false)
+" @vimlint(EVL102, 1, l:null)
+function! s:_decode_JSON(json) abort " {{{2
+    " The following is inspired by https://github.com/MarcWeber/vim-addon-manager and
+    " http://stackoverflow.com/questions/17751186/iterating-over-a-string-in-vimscript-or-parse-a-json-file/19105763#19105763
+    " A hat tip to Marc Weber for this trick
+    if substitute(a:json, '\v\"%(\\.|[^"\\])*\"|true|false|null|[+-]?\d+%(\.\d+%([Ee][+-]?\d+)?)?', '', 'g') !~# "[^,:{}[\\] \t]"
+        " JSON artifacts
+        let true = 1
+        let false = 0
+        let null = ''
+
+        try
+            let object = eval(a:json)
+        catch
+            " malformed JSON
+            let object = ''
+        endtry
+    else
+        let object = ''
+    endif
+
+    return object
 endfunction " }}}2
 " @vimlint(EVL102, 0, l:true)
 " @vimlint(EVL102, 0, l:false)
