@@ -27,14 +27,14 @@ set cpo&vim
 
 function! SyntaxCheckers_c_clang_tidy_GetLocList() dict
     let makeprg = self.makeprgBuild({
+        \ 'args':
+        \   '-extra-arg -fshow-column ' .
+        \   '-extra-arg -fshow-source-location ' .
+        \   '-extra-arg -fno-caret-diagnostics ' .
+        \   '-extra-arg -fno-color-diagnostics ' .
+        \   '-extra-arg -fdiagnostics-format=clang',
         \ 'post_args':
-        \   '-- ' .
-        \   syntastic#c#ReadConfig(g:syntastic_clang_tidy_config_file) . ' ' .
-        \   '-fshow-column ' .
-        \   '-fshow-source-location ' .
-        \   '-fno-caret-diagnostics ' .
-        \   '-fno-color-diagnostics ' .
-        \   '-fdiagnostics-format=clang' })
+        \   syntastic#c#ReadConfig(g:syntastic_clang_check_config_file) })
 
     let errorformat =
         \ '%E%f:%l:%c: fatal error: %m,' .
