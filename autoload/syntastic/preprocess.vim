@@ -276,6 +276,10 @@ endfunction " }}}2
 " @vimlint(EVL102, 1, l:false)
 " @vimlint(EVL102, 1, l:null)
 function! s:_decode_JSON(json) abort " {{{2
+    if a:json ==# ''
+        return []
+    endif
+
     " The following is inspired by https://github.com/MarcWeber/vim-addon-manager and
     " http://stackoverflow.com/questions/17751186/iterating-over-a-string-in-vimscript-or-parse-a-json-file/19105763#19105763
     " A hat tip to Marc Weber for this trick
