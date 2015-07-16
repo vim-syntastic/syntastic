@@ -112,7 +112,7 @@ endfunction " }}}2
 
 function! syntastic#preprocess#iconv(errors) abort " {{{2
     return
-        \ (has('iconv') || has('iconv/dyn')) && &encoding !=# '' && &encoding !=# 'utf-8' ?
+        \ has('iconv') && &encoding !=# '' && &encoding !=# 'utf-8' ?
         \       map(a:errors, 'iconv(v:val, "utf-8", &encoding)') :
         \       a:errors
 endfunction " }}}2
