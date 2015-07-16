@@ -13,6 +13,11 @@ let g:loaded_syntastic_sql_sqlint_checker = 1
 let s:save_cpo = &cpo
 set cpo&vim
 
+function! SyntaxCheckers_sql_sqlint_GetHighlightRegex(i)
+    let term = matchstr(a:i['text'], '\m at or near "\zs[^"]\+\ze"')
+    return term !=# '' ? '\V\<' . escape(term, '\') . '\>' : ''
+endfunction
+
 function! SyntaxCheckers_sql_sqlint_IsAvailable() dict
     if !executable(self.getExec())
         return 0
