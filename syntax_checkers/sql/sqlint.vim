@@ -23,18 +23,16 @@ endfunction
 function! SyntaxCheckers_sql_sqlint_GetLocList() dict
     let makeprg = self.makeprgBuild({})
 
-    let commonformat = '%f:%l:%c:'
     let errorformat =
-        \ '%E%>' . commonformat . "ERROR %m," .
-        \ '%+C%>  %.%#,' .
-        \ '%W%>' . commonformat . "WARNING %m," .
-        \ '%+C%>  %.%#'
-    let loclist = SyntasticMake({
+        \ '%E%f:%l:%c:ERROR %m,' .
+        \ '%W%f:%l:%c:WARNING %m,' .
+        \ '%C %m'
+
+    return SyntasticMake({
         \ 'makeprg': makeprg,
         \ 'errorformat': errorformat,
-        \ 'subtype': 'Style'})
-
-    return loclist
+        \ 'subtype': 'Style',
+        \ 'returns': [0] })
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
