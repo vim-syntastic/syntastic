@@ -23,54 +23,64 @@ if !exists('g:syntastic_ruby_flog_threshold_error')
     let g:syntastic_ruby_flog_threshold_error = 90
 endif
 
+if !exists('g:syntastic_ruby_flog_sort')
+    let g:syntastic_ruby_flog_sort = 1
+endif
+
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! SyntaxCheckers_ruby_flog_GetLocList() dict
-    let makeprg = self.makeprgBuild({})
+function! SyntaxCheckers_ruby_flog_GetLocList() dict " {{{1
+    let makeprg = self.makeprgBuild({ 'args': '-a' })
 
     " Example output:
     "   93.25: MyClass::my_method my_file:42
-    "
-    " %p for the leading spaces
-    " %m for the message (score)
-    " :\ %.%#: for anything in between the :
-    " %l for the line number
-    let errorformat = '%p%m:\ %.%#:%l'
+    let errorformat = '%\m%\s%#%m: %.%# %f:%l'
 
     let loclist = SyntasticMake({
         \ 'makeprg': makeprg,
-        \ 'defaults': {'bufnr': bufnr('')},
-        \ 'errorformat': errorformat})
+        \ 'errorformat': errorformat,
+        \ 'subtype': 'Style' })
 
-    " Split output into error and warning
-    let min = g:syntastic_ruby_flog_threshold_warning
-    let max = g:syntastic_ruby_flog_threshold_error
+    let trail_w = s:_float2str(g:syntastic_ruby_flog_threshold_warning) . ')'
+    let trail_e = s:_float2str(g:syntastic_ruby_flog_threshold_error) . ')'
     for e in loclist
-      if e['valid'] ==# '0'
-        continue
-      endif
+      let score = s:_str2float(e['text'])
 
-      let score = str2nr(e['text'])
-      " Discard scores too low
-      if score < min
-        let e['valid'] = '0'
-        continue
-      endif
-
-      " Set as warning or error based on the thresholds
-      let e['text'] = 'Complexity is too high (' . score . '/'
-      if score > max
-        let e['type'] = 'E'
-        let e['text'] .= max . ')'
+      let e['text'] = 'Complexity is too high (' . s:_float2str(score) . '/'
+      if score < g:syntastic_ruby_flog_threshold_warning
+          let e['valid'] = 0
+      elseif score < g:syntastic_ruby_flog_threshold_error
+          let e['type'] = 'W'
+          let e['text'] .= trail_w
       else
-        let e['type'] = 'W'
-        let e['text'] .= min . ')'
+          let e['type'] = 'E'
+          let e['text'] .= trail_e
       endif
     endfor
 
     return loclist
-endfunction
+endfunction " }}}1
+
+" Utilities {{{1
+
+function! s:_float2str_smart(val) " {{{2
+    return printf('%.1f', a:val)
+endfunction " }}}2
+
+function! s:_float2str_dumb(val) " {{{2
+    return a:val
+endfunction " }}}2
+
+if !exists('s:_str2float')
+    let s:_str2float = function(exists('*str2float') ? 'str2float' : 'str2nr')
+endif
+
+if !exists('s:_float2str')
+    let s:_float2str = function(has('float') ? 's:_float2str_smart' : 's:_float2str_dumb')
+endif
+
+" }}}1
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'ruby',
