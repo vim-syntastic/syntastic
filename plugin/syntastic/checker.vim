@@ -85,6 +85,11 @@ function! g:SyntasticChecker.getLocListRaw() abort " {{{2
 
     if has_key(self, '_enable')
         let status = syntastic#util#var(self._enable, -1)
+        if type(status) != type(0)
+            call syntastic#log#error('checker ' . name . ': checks disabled due to bad config: ' .
+                \ 'set g:syntastic_' . self._enable . ' to an integer')
+            return []
+        endif
         if status < 0
             call syntastic#log#error('checker ' . name . ': checks disabled for security reasons; ' .
                 \ 'set g:syntastic_' . self._enable . ' to 1 to override')
