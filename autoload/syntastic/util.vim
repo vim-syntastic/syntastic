@@ -339,6 +339,17 @@ function! syntastic#util#stamp() abort " {{{2
     return split( split(reltimestr(reltime(g:_SYNTASTIC_START)))[0], '\.' )
 endfunction " }}}2
 
+let s:_str2float = function(exists('*str2float') ? 'str2float' : 'str2nr')
+lockvar s:_str2float
+
+function! syntastic#util#str2float(val) abort " {{{2
+    return s:_str2float(a:val)
+endfunction " }}}2
+
+function! syntastic#util#float2str(val) abort " {{{2
+    return s:_float2str(a:val)
+endfunction " }}}2
+
 " }}}1
 
 " Private functions {{{1
@@ -415,6 +426,17 @@ function! s:_rmrf(what) abort " {{{2
         silent! call delete(a:what)
     endif
 endfunction " }}}2
+
+function! s:_float2str_smart(val) abort " {{{2
+    return printf('%.1f', a:val)
+endfunction " }}}2
+
+function! s:_float2str_dumb(val) abort " {{{2
+    return a:val
+endfunction " }}}2
+
+let s:_float2str = function(has('float') ? 's:_float2str_smart' : 's:_float2str_dumb')
+lockvar s:_float2str
 
 " }}}1
 

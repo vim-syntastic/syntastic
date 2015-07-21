@@ -30,7 +30,7 @@ endif
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! SyntaxCheckers_ruby_flog_GetLocList() dict " {{{1
+function! SyntaxCheckers_ruby_flog_GetLocList() dict
     let makeprg = self.makeprgBuild({ 'args': '-a' })
 
     " Example output:
@@ -42,12 +42,12 @@ function! SyntaxCheckers_ruby_flog_GetLocList() dict " {{{1
         \ 'errorformat': errorformat,
         \ 'subtype': 'Style' })
 
-    let trail_w = s:_float2str(g:syntastic_ruby_flog_threshold_warning) . ')'
-    let trail_e = s:_float2str(g:syntastic_ruby_flog_threshold_error) . ')'
+    let trail_w = syntastic#util#float2str(g:syntastic_ruby_flog_threshold_warning) . ')'
+    let trail_e = syntastic#util#float2str(g:syntastic_ruby_flog_threshold_error) . ')'
     for e in loclist
-      let score = s:_str2float(e['text'])
+      let score = syntastic#util#str2float(e['text'])
 
-      let e['text'] = 'Complexity is too high (' . s:_float2str(score) . '/'
+      let e['text'] = 'Complexity is too high (' . syntastic#util#float2str(score) . '/'
       if score < g:syntastic_ruby_flog_threshold_warning
           let e['valid'] = 0
       elseif score < g:syntastic_ruby_flog_threshold_error
@@ -60,27 +60,7 @@ function! SyntaxCheckers_ruby_flog_GetLocList() dict " {{{1
     endfor
 
     return loclist
-endfunction " }}}1
-
-" Utilities {{{1
-
-function! s:_float2str_smart(val) " {{{2
-    return printf('%.1f', a:val)
-endfunction " }}}2
-
-function! s:_float2str_dumb(val) " {{{2
-    return a:val
-endfunction " }}}2
-
-if !exists('s:_str2float')
-    let s:_str2float = function(exists('*str2float') ? 'str2float' : 'str2nr')
-endif
-
-if !exists('s:_float2str')
-    let s:_float2str = function(has('float') ? 's:_float2str_smart' : 's:_float2str_dumb')
-endif
-
-" }}}1
+endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'ruby',
