@@ -19,7 +19,7 @@ if has('reltime')
     lockvar! g:_SYNTASTIC_START
 endif
 
-let g:_SYNTASTIC_VERSION = '3.6.0-134'
+let g:_SYNTASTIC_VERSION = '3.6.0-135'
 lockvar g:_SYNTASTIC_VERSION
 
 " Sanity checks {{{1
@@ -237,9 +237,9 @@ endfunction " }}}2
 
 augroup syntastic
     autocmd!
-    autocmd BufReadPost  * call s:BufReadPostHook()
-    autocmd BufWritePost * call s:BufWritePostHook()
-    autocmd BufEnter     * call s:BufEnterHook()
+    autocmd BufReadPost  * nested call s:BufReadPostHook()
+    autocmd BufWritePost * nested call s:BufWritePostHook()
+    autocmd BufEnter     *        call s:BufEnterHook()
 augroup END
 
 if exists('##QuitPre')
@@ -302,17 +302,23 @@ function! s:UpdateErrors(auto_invoked, checker_names) abort " {{{2
     call syntastic#log#debugDump(g:_SYNTASTIC_DEBUG_VARIABLES)
     call syntastic#log#debug(g:_SYNTASTIC_DEBUG_TRACE, 'UpdateErrors' . (a:auto_invoked ? ' (auto)' : '') .
         \ ': ' . (len(a:checker_names) ? join(a:checker_names) : 'default checkers'))
+
+    call s:modemap.synch()
+
     if s:_skip_file()
         return
     endif
 
-    call s:modemap.synch()
     let run_checks = !a:auto_invoked || s:modemap.doAutoChecking()
     if run_checks
         call s:CacheErrors(a:checker_names)
         unlockvar! b:syntastic_changedtick
         let b:syntastic_changedtick = b:changedtick
         lockvar! b:syntastic_changedtick
+    else
+        if a:auto_invoked
+            return
+        endif
     endif
 
     let loclist = g:SyntasticLoclist.current()
