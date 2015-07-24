@@ -307,7 +307,6 @@ the location list explicitly.
 ==============================================================================
 4. Global Options                                   *syntastic-global-options*
 
-
                                                    *'syntastic_check_on_open'*
 Default: 0
 If enabled, syntastic will do syntax checks when buffers are first loaded as
@@ -316,9 +315,9 @@ well as on saving >
 <
                                                      *'syntastic_check_on_wq'*
 Default: 1
-Normally syntastic runs syntax checks whenever buffers are written to disk.
-If you want to skip these checks when you issue |:wq|, |:x|, and |:ZZ|, set this
-variable to 0. >
+In active mode syntax checks are normally run whenever buffers are written to
+disk, even when the writes happen right before quitting Vim. If you want to
+skip checks when you issue |:wq|, |:x|, and |:ZZ|, set this variable to 0: >
     let g:syntastic_check_on_wq = 0
 <
                                                 *'syntastic_aggregate_errors'*
