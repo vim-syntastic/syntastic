@@ -20,14 +20,12 @@ set cpo&vim
 function! SyntaxCheckers_qml_qmllint_GetLocList() dict
     let makeprg = self.makeprgBuild({})
 
-    " Supported error formats can be found in
-    " qt-everywhere-opensource-src-5.5.0/qtdeclarative/tools/qmllint/main.cpp
-    let errorformat =
-        \ '%E%f:%l : %m'
+    let errorformat = '%f:%l : %m'
 
     return SyntasticMake({
         \ 'makeprg': makeprg,
         \ 'errorformat': errorformat,
+        \ 'postprocess': ['guards'],
         \ 'returns': [0, 255] })
 endfunction
 
