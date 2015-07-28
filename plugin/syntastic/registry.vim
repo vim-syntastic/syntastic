@@ -66,6 +66,7 @@ let s:_DEFAULT_CHECKERS = {
         \ 'pod':           ['podchecker'],
         \ 'puppet':        ['puppet', 'puppetlint'],
         \ 'python':        ['python', 'flake8', 'pylint'],
+        \ 'qml':           ['qmllint'],
         \ 'r':             [],
         \ 'racket':        ['racket'],
         \ 'rnc':           ['rnv'],
