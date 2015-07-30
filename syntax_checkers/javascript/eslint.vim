@@ -43,9 +43,15 @@ function! SyntaxCheckers_javascript_eslint_GetLocList() dict
         \ 'errorformat': errorformat,
         \ 'postprocess': ['guards'] })
 
-    for e in loclist
-        let e['col'] += 1
-    endfor
+    if !exists('s:eslint_new')
+        let s:eslint_new = syntastic#util#versionIsAtLeast(self.getVersion(), [1])
+    endif
+
+    if !s:eslint_new
+        for e in loclist
+            let e['col'] += 1
+        endfor
+    endif
 
     return loclist
 endfunction
