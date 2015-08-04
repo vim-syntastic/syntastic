@@ -22,9 +22,7 @@ function! SyntaxCheckers_typescript_tslint_GetHighlightRegex(item)
 endfunction
 
 function! SyntaxCheckers_typescript_tslint_GetLocList() dict
-    let makeprg = self.makeprgBuild({
-        \ 'args_after': '--format verbose',
-        \ 'fname_before': '-f' })
+    let makeprg = self.makeprgBuild({'args_after': '--format verbose'})
 
     " (comment-format) ts/app.ts[12, 36]: comment must start with lowercase letter
     let errorformat = '%f[%l\, %c]: %m'
