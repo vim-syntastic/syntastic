@@ -173,9 +173,8 @@ function! SyntaxCheckers_java_javac_GetLocList() dict " {{{1
     let errorformat =
         \ '%E%f:%l: error: %m,'.
         \ '%W%f:%l: warning: %m,'.
-        \ '%A%f:%l: %m,'.
-        \ '%+Z%p^,'.
-        \ '%+C%.%#,'.
+        \ '%E%f:%l: %m,'.
+        \ '%Z%p^,'.
         \ '%-G%.%#'
 
     if output_dir !=# ''
