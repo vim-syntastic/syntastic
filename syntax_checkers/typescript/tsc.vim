@@ -18,6 +18,10 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 function! SyntaxCheckers_typescript_tsc_IsAvailable() dict
+    if !executable(self.getExec())
+        return 0
+    endif
+
     let version_output = split(syntastic#util#system(self.getExecEscaped() . ' --version'), '\n', 1)
     let ver = filter(copy(version_output), 'v:val =~# ''\m\<Version ''')
     let parsed_ver = len(ver) ? syntastic#util#parseVersion(ver[0], '\v<Version \zs\d+(\.\d+)\ze') : []
