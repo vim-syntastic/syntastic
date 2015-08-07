@@ -54,7 +54,7 @@ CONTENTS                                                  *syntastic-contents*
         7.10.vim-go................................|syntastic-vim-go|
         7.11.vim-virtualenv........................|syntastic-vim-virtualenv|
         7.12.YouCompleteMe.........................|syntastic-ycm|
-        7.13.The zsh shell and rvm.................|syntastic-zsh|
+        7.13.The zsh shell and MacVim..............|syntastic-zsh|
     8.About........................................|syntastic-about|
     9.License......................................|syntastic-license|
 
@@ -966,16 +966,15 @@ have to set |g:ycm_show_diagnostics_ui| to 0. E.g.: >
     let g:ycm_show_diagnostics_ui = 0
 <
 ------------------------------------------------------------------------------
-7.13 The zsh shell and rvm                                     *syntastic-zsh*
+7.13 The zsh shell and MacVim                                  *syntastic-zsh*
 
 If you're running MacVim together with the "zsh" shell (http://www.zsh.org/)
-and "rvm" (https://rvm.io/), you need to be aware that MacVim does not source
-the .zshrc file, but will source a .zshenv file.  Consequently you have to
-either source the "rvm" scripts from within .zshenv, or just change your shell
-to something else: >
-    set shell=/bin/sh
-<
-Of course, you'll have to make sure "rvm" still works in the new shell.
+you need to be aware that MacVim does not source your .zshrc file, but will
+source a .zshenv file.  Consequently you have to move any setup steps relevant
+to the checkers you're using from .zshrc to .zshenv, otherwise your checkers
+will misbehave when run by syntastic.  This is particularly important for
+programs such as "rvm" (https://rvm.io/) or "rbenv" (http://rbenv.org/), that
+rely on setting environment variables.
 
 ==============================================================================
 8. About                                                     *syntastic-about*
