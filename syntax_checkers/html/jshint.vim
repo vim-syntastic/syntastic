@@ -22,7 +22,10 @@ function! SyntaxCheckers_html_jshint_IsAvailable() dict
     if !executable(self.getExec())
         return 0
     endif
-    return syntastic#util#versionIsAtLeast(self.getVersion(), [2, 4])
+
+    let command = self.getExecEscaped() . ' --version'
+    let ver = self.getVersion(syntastic#util#isRunningWindows() ? command : (command . ' 2>&1'))
+    return syntastic#util#versionIsAtLeast(ver, [2, 4])
 endfunction
 
 function! SyntaxCheckers_html_jshint_GetLocList() dict
