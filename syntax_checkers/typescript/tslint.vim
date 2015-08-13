@@ -27,8 +27,7 @@ function! SyntaxCheckers_typescript_tslint_GetLocList() dict
     endif
 
     let makeprg = self.makeprgBuild({
-        \ 'args_after': '--format verbose',
-        \ 'fname_before': (s:tslint_new ? '' : '-f') })
+        \ 'args_after': '--format verbose' })
 
     " (comment-format) ts/app.ts[12, 36]: comment must start with lowercase letter
     let errorformat = '%f[%l\, %c]: %m'
