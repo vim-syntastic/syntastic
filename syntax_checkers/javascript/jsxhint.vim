@@ -22,7 +22,8 @@ function! SyntaxCheckers_javascript_jsxhint_IsAvailable() dict
         return 0
     endif
 
-    let ver = self.getVersion(self.getExecEscaped() . ' --version 2>&1')
+    let command = self.getExecEscaped() . ' --version'
+    let ver = self.getVersion(syntastic#util#isRunningWindows() ? command : (command . ' 2>&1'))
     return syntastic#util#versionIsAtLeast(ver, [0, 4, 1])
 endfunction
 

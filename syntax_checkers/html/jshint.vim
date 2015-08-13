@@ -23,7 +23,8 @@ function! SyntaxCheckers_html_jshint_IsAvailable() dict
         return 0
     endif
 
-    let ver = self.getVersion(self.getExecEscaped() . ' --version 2>&1')
+    let command = self.getExecEscaped() . ' --version'
+    let ver = self.getVersion(syntastic#util#isRunningWindows() ? command : (command . ' 2>&1'))
     return syntastic#util#versionIsAtLeast(ver, [2, 4])
 endfunction
 
