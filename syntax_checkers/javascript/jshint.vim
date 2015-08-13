@@ -27,7 +27,7 @@ function! SyntaxCheckers_javascript_jshint_IsAvailable() dict
         return 0
     endif
 
-    let ver = self.getVersion()
+    let ver = self.getVersion(self.getExecEscaped() . ' --version 2>&1')
     let s:jshint_new = syntastic#util#versionIsAtLeast(ver, [1, 1])
 
     return syntastic#util#versionIsAtLeast(ver, [1])
