@@ -110,10 +110,10 @@ these commands, or perhaps install a plugin such as Tim Pope's 'unimpaired'
 ------------------------------------------------------------------------------
 1.2. Recommended settings                              *syntastic-recommended*
 
-Syntastic has a large number of options that can be configured, and the
-defaults are not particularly well suitable for new users. It is recommended
-that you start by adding the following lines to your vimrc, and return to them
-later as needed: >
+Syntastic has numerous options that can be configured, and the defaults are
+not particularly well suitable for new users. It is recommended that you start
+by adding the following lines to your vimrc, and return to them later as
+needed: >
     set statusline+=%#warningmsg#
     set statusline+=%{SyntasticStatuslineFlag()}
     set statusline+=%*
@@ -459,8 +459,8 @@ opens. >
 Default: []
 Use this option to specify files that syntastic should never check.  It's a
 list of |regular-expression| patterns.  The full paths of files (see |::p|) are
-matched against these patterns, and the matches are case sensitive. Use |\c|
-to specify case insensitive patterns.  Example: >
+matched against these patterns, and the matches are case-sensitive. Use |\c|
+to specify case-insensitive patterns.  Example: >
     let g:syntastic_ignore_files = ['\m^/usr/include/', '\m\c\.h$']
 <
                                                     *'syntastic_filetype_map'*
@@ -535,10 +535,10 @@ overriding filters, cf. |filter-overrides|).
 
     "level" - takes one of two values, "warnings" or "errors"
     "type"  - can be either "syntax" or "style"
-    "regex" - is matched against the messages' text as a case insensitive
+    "regex" - is matched against the messages' text as a case-insensitive
               |regular-expression|
     "file"  - is matched against the filenames the messages refer to, as a
-              case sensitive |regular-expression|.
+              case-sensitive |regular-expression|.
 
 If a key is prefixed by an exclamation mark "!", the corresponding filter is
 negated (i.e. the above example silences all messages that are NOT errors).
@@ -799,7 +799,7 @@ Some Vim plugins use composite filetypes, such as "django.python" or
 "handlebars.html". Normally, syntastic deals with this situation by splitting
 the filetype in its simple components, and calling all checkers that apply.
 If this behaviour is not desirable, you can disable it by mapping the
-composite filetypes to a simple ones using |'syntastic_filetype_map'|, e.g.: >
+composite filetypes to simple ones using |'syntastic_filetype_map'|, e.g.: >
     let g:syntastic_filetype_map = { "handlebars.html": "handlebars" }
 <
 ------------------------------------------------------------------------------
