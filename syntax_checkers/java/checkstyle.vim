@@ -49,12 +49,19 @@ function! SyntaxCheckers_java_checkstyle_GetLocList() dict
         let fname = substitute(syntastic#util#system('cygpath -m ' . fname), '\m\%x00', '', 'g')
     endif
 
+    let checkstyle_args = [
+        \ '-c', expand(g:syntastic_java_checkstyle_conf_file, 1),
+        \ '-f', 'xml']
+
+    if exists("g:syntastic_java_checkstyle_property_file")
+        let property_file = expand(g:syntastic_java_checkstyle_property_file, 1)
+        let checkstyle_args += ['-p', property_file]
+    endif
+
     let makeprg = self.makeprgBuild({
         \ 'args_after': [
         \       '-cp', expand(g:syntastic_java_checkstyle_classpath, 1),
-        \       'com.puppycrawl.tools.checkstyle.Main',
-        \       '-c', expand(g:syntastic_java_checkstyle_conf_file, 1),
-        \       '-f', 'xml'],
+        \       'com.puppycrawl.tools.checkstyle.Main'] + checkstyle_args,
         \ 'fname': fname })
 
     let errorformat = '%f:%t:%l:%c:%m'
