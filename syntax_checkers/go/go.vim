@@ -77,6 +77,7 @@ function! SyntaxCheckers_go_go_GetLocList() dict
         \ 'makeprg': makeprg,
         \ 'errorformat': errorformat,
         \ 'cwd': expand('%:p:h', 1),
+        \ 'env': {'GOGC': 'off'},
         \ 'defaults': {'type': 'e'} })
 
     if cleanup
