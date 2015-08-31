@@ -27,7 +27,9 @@ function! SyntaxCheckers_purescript_pulp_GetLocList() dict
     let errorformat =
         \ '%E\\s%#\"%f\"%.%#,' .
         \ '%E%.%#Error at %f line %l\, column %c - %.%#,'.
-        \ '%ZSee http%.%#,' .
+        \ '%-G\* ERROR: Subcommand%.%#,' .
+        \ '\* ERROR: %m,' .
+        \ '%Z\\s%#See http%.%#,' .
         \ '%C\\s%#%m,' .
         \ '%Z'
 
