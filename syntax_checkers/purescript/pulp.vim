@@ -25,7 +25,9 @@ function! SyntaxCheckers_purescript_pulp_GetLocList() dict
         \ 'fname': syntastic#util#shexpand('%:p') })
 
     let errorformat =
-        \ '%E\\s%#\"%f\"%.%#,' .
+        \ '%E\\s%#psc: %m,' .
+        \ '%C\\s%#at \"%f\" \(line %l\, column %c\)%.%#,' .
+        \ '%E\\s%#\"%f\" \(line %l\, column %c\)%.%#,' .
         \ '%E%.%#Error at %f line %l\, column %c - %.%#,'.
         \ '%-G\* ERROR: Subcommand%.%#,' .
         \ '\* ERROR: %m,' .
