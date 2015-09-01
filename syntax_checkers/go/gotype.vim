@@ -19,7 +19,13 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 function! SyntaxCheckers_go_gotype_GetLocList() dict
-    let makeprg = self.getExecEscaped() . ' .'
+    if match(expand('%', 1), '\m_test\.go$') == -1
+        let opts = ''
+    else
+        let opts = ' -a'
+    endif
+
+    let makeprg = self.getExecEscaped() . opts . ' .'
 
     let errorformat =
         \ '%f:%l:%c: %m,' .
