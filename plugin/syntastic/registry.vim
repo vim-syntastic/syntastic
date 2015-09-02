@@ -42,6 +42,7 @@ let s:_DEFAULT_CHECKERS = {
         \ 'haxe':          ['haxe'],
         \ 'hss':           ['hss'],
         \ 'html':          ['tidy'],
+        \ 'jade':          ['jade_lint'],
         \ 'java':          ['javac'],
         \ 'javascript':    ['jshint', 'jslint'],
         \ 'json':          ['jsonlint', 'jsonval'],
