@@ -7,6 +7,7 @@
 "             it and/or modify it under the terms of the Do What The Fuck You
 "             Want To Public License, Version 2, as published by Sam Hocevar.
 "             See http://sam.zoy.org/wtfpl/COPYING for more details.
+"
 "============================================================================
 
 if exists('g:loaded_syntastic_jade_jade_lint_checker')
@@ -17,25 +18,21 @@ let g:loaded_syntastic_jade_jade_lint_checker = 1
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! SyntaxCheckers_jade_jade_lint_IsAvailable() dict
-  return executable('jade-lint')
-endfunction
-
 function! SyntaxCheckers_jade_jade_lint_GetLocList() dict
-    let makeprg = self.makeprgBuild({ 'exe': 'jade-lint', 'args': '-r inline' })
+    let makeprg = self.makeprgBuild({ 'args_after': '-r inline' })
 
     let errorformat = '%f:%l:%c %m'
 
     return SyntasticMake({
         \ 'makeprg': makeprg,
-        \ 'errorformat': errorformat })
+        \ 'errorformat': errorformat,
+        \ 'returns': [0, 2] })
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'jade',
     \ 'name': 'jade_lint',
-    \ 'exe': 'jade-lint',
-    \ 'returns': [0, 2] })
+    \ 'exec': 'jade-lint' })
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
