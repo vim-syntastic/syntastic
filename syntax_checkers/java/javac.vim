@@ -84,11 +84,12 @@ lockvar! s:_FILE_SHORTCUTS
 
 " }}}1
 
-command! SyntasticJavacEditClasspath call s:EditClasspath()
+" Commands {{{1
 
-if g:syntastic_java_javac_config_file_enabled
-    command! SyntasticJavacEditConfig call s:EditConfig()
-endif
+command! SyntasticJavacEditClasspath call s:EditClasspath()
+command! SyntasticJavacEditConfig    call s:EditConfig()
+
+" }}}1
 
 function! SyntaxCheckers_java_javac_IsAvailable() dict " {{{1
     let s:has_maven = executable(expand(g:syntastic_java_maven_executable, 1))
@@ -289,6 +290,10 @@ function! s:SaveConfig() " {{{2
 endfunction " }}}2
 
 function! s:EditConfig() " {{{2
+    if !g:syntastic_java_javac_config_file_enabled
+        return
+    endif
+
     let command = 'syntastic javac config'
     let winnr = bufwinnr('^' . command . '$')
     if winnr < 0
