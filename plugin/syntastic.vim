@@ -19,7 +19,7 @@ if has('reltime')
     lockvar! g:_SYNTASTIC_START
 endif
 
-let g:_SYNTASTIC_VERSION = '3.6.0-154'
+let g:_SYNTASTIC_VERSION = '3.6.0-155'
 lockvar g:_SYNTASTIC_VERSION
 
 " Sanity checks {{{1
@@ -195,6 +195,9 @@ command! Errors              call SyntasticErrors()
 command! SyntasticReset      call SyntasticReset()
 command! SyntasticToggleMode call SyntasticToggleMode()
 command! SyntasticSetLoclist call SyntasticSetLoclist()
+
+command! SyntasticJavacEditClasspath runtime! syntax_checkers/java/*.vim | SyntasticJavacEditClasspath
+command! SyntasticJavacEditConfig    runtime! syntax_checkers/java/*.vim | SyntasticJavacEditConfig
 
 " }}}1
 
