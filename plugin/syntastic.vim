@@ -15,10 +15,12 @@ endif
 let g:loaded_syntastic_plugin = 1
 
 if has('reltime')
+    unlockvar! g:_SYNTASTIC_START
     let g:_SYNTASTIC_START = reltime()
     lockvar! g:_SYNTASTIC_START
 endif
 
+unlockvar g:_SYNTASTIC_VERSION
 let g:_SYNTASTIC_VERSION = '3.6.0-155'
 lockvar g:_SYNTASTIC_VERSION
 
@@ -44,6 +46,7 @@ for s:feature in [
     endif
 endfor
 
+unlockvar s:_running_windows
 let s:_running_windows = syntastic#util#isRunningWindows()
 lockvar s:_running_windows
 
@@ -51,6 +54,7 @@ if !exists('g:syntastic_shell')
     let g:syntastic_shell = &shell
 endif
 
+unlockvar g:_SYNTASTIC_UNAME
 if s:_running_windows
     let g:_SYNTASTIC_UNAME = 'Windows'
 elseif executable('uname')
@@ -71,6 +75,7 @@ lockvar g:_SYNTASTIC_UNAME
 
 " Defaults {{{1
 
+unlockvar! g:_SYNTASTIC_DEFAULTS
 let g:_SYNTASTIC_DEFAULTS = {
         \ 'aggregate_errors':         0,
         \ 'always_populate_loc_list': 0,
@@ -125,6 +130,7 @@ endif
 
 " Debug {{{1
 
+unlockvar! s:_DEBUG_DUMP_OPTIONS
 let s:_DEBUG_DUMP_OPTIONS = [
         \ 'shell',
         \ 'shellcmdflag',
@@ -141,18 +147,24 @@ endif
 lockvar! s:_DEBUG_DUMP_OPTIONS
 
 " debug constants
-let     g:_SYNTASTIC_DEBUG_TRACE         = 1
-lockvar g:_SYNTASTIC_DEBUG_TRACE
-let     g:_SYNTASTIC_DEBUG_LOCLIST       = 2
-lockvar g:_SYNTASTIC_DEBUG_LOCLIST
-let     g:_SYNTASTIC_DEBUG_NOTIFICATIONS = 4
-lockvar g:_SYNTASTIC_DEBUG_NOTIFICATIONS
-let     g:_SYNTASTIC_DEBUG_AUTOCOMMANDS  = 8
-lockvar g:_SYNTASTIC_DEBUG_AUTOCOMMANDS
-let     g:_SYNTASTIC_DEBUG_VARIABLES     = 16
-lockvar g:_SYNTASTIC_DEBUG_VARIABLES
-let     g:_SYNTASTIC_DEBUG_CHECKERS      = 32
-lockvar g:_SYNTASTIC_DEBUG_CHECKERS
+unlockvar g:_SYNTASTIC_DEBUG_TRACE
+let       g:_SYNTASTIC_DEBUG_TRACE         = 1
+lockvar   g:_SYNTASTIC_DEBUG_TRACE
+unlockvar g:_SYNTASTIC_DEBUG_LOCLIST
+let       g:_SYNTASTIC_DEBUG_LOCLIST       = 2
+lockvar   g:_SYNTASTIC_DEBUG_LOCLIST
+unlockvar g:_SYNTASTIC_DEBUG_NOTIFICATIONS
+let       g:_SYNTASTIC_DEBUG_NOTIFICATIONS = 4
+lockvar   g:_SYNTASTIC_DEBUG_NOTIFICATIONS
+unlockvar g:_SYNTASTIC_DEBUG_AUTOCOMMANDS
+let       g:_SYNTASTIC_DEBUG_AUTOCOMMANDS  = 8
+lockvar   g:_SYNTASTIC_DEBUG_AUTOCOMMANDS
+unlockvar g:_SYNTASTIC_DEBUG_VARIABLES
+let       g:_SYNTASTIC_DEBUG_VARIABLES     = 16
+lockvar   g:_SYNTASTIC_DEBUG_VARIABLES
+unlockvar g:_SYNTASTIC_DEBUG_CHECKERS
+let       g:_SYNTASTIC_DEBUG_CHECKERS      = 32
+lockvar   g:_SYNTASTIC_DEBUG_CHECKERS
 
 " }}}1
 
