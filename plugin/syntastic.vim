@@ -19,7 +19,7 @@ if has('reltime')
     lockvar! g:_SYNTASTIC_START
 endif
 
-let g:_SYNTASTIC_VERSION = '3.6.0-156'
+let g:_SYNTASTIC_VERSION = '3.6.0-157'
 lockvar g:_SYNTASTIC_VERSION
 
 " Sanity checks {{{1
@@ -271,6 +271,9 @@ function! s:BufEnterHook() abort " {{{2
         \ 'autocmd: BufEnter, buffer ' . bufnr('') . ' = ' . string(bufname(str2nr(bufnr('')))) .
         \ ', &buftype = ' . string(&buftype))
     if &buftype ==# ''
+        if get(b:, 'syntastic_skip_checks', 0)
+            unlet b:syntastic_loclist
+        endif
         call s:notifiers.refresh(g:SyntasticLoclist.current())
     elseif &buftype ==# 'quickfix'
         " TODO: this is needed because in recent versions of Vim lclose
