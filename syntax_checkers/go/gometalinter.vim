@@ -19,20 +19,29 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 function! SyntaxCheckers_go_gometalinter_GetLocList() dict
-    let opts = syntastic#util#var('go_gometalinter_args', '')
+    let opts = syntastic#util#var('go_gometalinter_args', '-t')
     let opt_str = (type(opts) != type('') || opts !=# '') ? join(syntastic#util#argsescape(opts)) : opts
     let makeprg = self.getExecEscaped() . ' ' . opt_str
 
     let errorformat =
-        \ '%f:%l:%c:%m,' .
+        \ '%f:%l:%c:%tarning: %m,' .
+        \ '%f:%l:%c:%trror: %m,' .
+        \ '%f:%l::%tarning: %m,' .
+        \ '%f:%l::%trror: %m,' .
         \ '%-G%.%#'
 
-    return SyntasticMake({
+    let loclist = SyntasticMake({
         \ 'makeprg': makeprg,
         \ 'errorformat': errorformat,
-        \ 'cwd': expand('%:p:h', 1),
-        \ 'defaults': {'type': 'w'},
-        \ 'subtype': 'Style' })
+        \ 'cwd': expand('%:p:h', 1)})
+
+    for e in loclist
+        if e['type'] =~? '\m^[W]'
+            let e['subtype'] = 'Style'
+        endif
+    endfor
+
+    return loclist
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
