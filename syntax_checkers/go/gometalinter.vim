@@ -19,7 +19,7 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 function! SyntaxCheckers_go_gometalinter_GetLocList() dict
-    let makeprg = self.makeprgBuild({})
+    let makeprg = self.getExecEscaped()
 
     let errorformat =
         \ '%f:%l:%c:%m,' .
@@ -28,6 +28,7 @@ function! SyntaxCheckers_go_gometalinter_GetLocList() dict
     return SyntasticMake({
         \ 'makeprg': makeprg,
         \ 'errorformat': errorformat,
+        \ 'cwd': expand('%:p:h', 1),
         \ 'defaults': {'type': 'w'},
         \ 'subtype': 'Style' })
 endfunction
