@@ -19,7 +19,9 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 function! SyntaxCheckers_go_gometalinter_GetLocList() dict
-    let makeprg = self.getExecEscaped()
+    let opts = syntastic#util#var('go_gometalinter_args', '')
+    let opt_str = (type(opts) != type('') || opts !=# '') ? join(syntastic#util#argsescape(opts)) : opts
+    let makeprg = self.getExecEscaped() . ' ' . opt_str
 
     let errorformat =
         \ '%f:%l:%c:%m,' .
