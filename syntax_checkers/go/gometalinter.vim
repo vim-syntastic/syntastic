@@ -33,7 +33,7 @@ function! SyntaxCheckers_go_gometalinter_GetLocList() dict
         \ 'returns': [0, 1] })
 
     for e in loclist
-        if e['text'] =~# '\v\((deadcode|gocyclo|golint|defercheck|varcheck|structcheck|errcheck|dupl)\)$'
+        if e['text'] =~# '\v\(%(deadcode|gocyclo|golint|defercheck|varcheck|structcheck|errcheck|dupl)\)$'
             let e['subtype'] = 'Style'
         endif
     endfor
