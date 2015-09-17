@@ -21,7 +21,7 @@ set cpo&vim
 function! SyntaxCheckers_go_gometalinter_GetLocList() dict
     let makeprg = self.makeprgBuild({
         \ 'args': '-t',
-        \ 'fname': syntastic#util#shescape(expand('%:p:h', 1)) })
+        \ 'fname': syntastic#util#shexpand('%:p:h') })
 
     let errorformat =
         \ '%f:%l:%c:%trror: %m,' .
