@@ -19,24 +19,21 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 function! SyntaxCheckers_go_gometalinter_GetLocList() dict
-    let opts = syntastic#util#var('go_gometalinter_args', '-t')
-    let opt_str = (type(opts) != type('') || opts !=# '') ? join(syntastic#util#argsescape(opts)) : opts
-    let makeprg = self.getExecEscaped() . ' ' . opt_str
+    let makeprg = self.makeprgBuild({ 'args': '-t' })
 
     let errorformat =
-        \ '%f:%l:%c:%tarning: %m,' .
         \ '%f:%l:%c:%trror: %m,' .
-        \ '%f:%l::%tarning: %m,' .
+        \ '%f:%l:%c:%tarning: %m,' .
         \ '%f:%l::%trror: %m,' .
-        \ '%-G%.%#'
+        \ '%f:%l::%tarning: %m'
 
     let loclist = SyntasticMake({
         \ 'makeprg': makeprg,
         \ 'errorformat': errorformat,
-        \ 'cwd': expand('%:p:h', 1)})
+        \ 'returns': [0, 1] })
 
     for e in loclist
-        if e['type'] =~? '\m^[W]'
+        if e['text'] =~# '\v\((deadcode|gocyclo|golint|defercheck|varcheck|structcheck|errcheck|dupl)\)$'
             let e['subtype'] = 'Style'
         endif
     endfor
