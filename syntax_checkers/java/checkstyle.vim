@@ -35,10 +35,10 @@ function! SyntaxCheckers_java_checkstyle_IsAvailable() dict
     let classpath = expand(g:syntastic_java_checkstyle_classpath, 1)
     let conf_file = expand(g:syntastic_java_checkstyle_conf_file, 1)
     call self.log(
-        \ 'filereadable(' . string(classpath) . ') = ' . filereadable(classpath) . ', ' .
+        \ 'filereadable(' . string(classpath) . ') = ' . s:FilesReadable(classpath) . ', ' .
         \ 'filereadable(' . string(conf_file) . ') = ' . filereadable(conf_file))
 
-    return filereadable(classpath) && filereadable(conf_file)
+    return s:FilesReadable(classpath) && filereadable(conf_file)
 endfunction
 
 function! SyntaxCheckers_java_checkstyle_GetLocList() dict
@@ -73,5 +73,22 @@ call g:SyntasticRegistry.CreateAndRegisterChecker({
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
+
+function! s:FilesReadable(classpath)
+    let notfound = []
+    if !filereadable(a:classpath)
+        for FILE in split(a:classpath, s:ClassSep())
+            if !filereadable(FILE)
+                call add(notfound, FILE)
+            endif
+        endfor
+    endif
+
+    return !len(notfound)
+endfunction
+
+function! s:ClassSep()
+    return (syntastic#util#isRunningWindows() || has('win32unix')) ? ';' : ':'
+endfunction
 
 " vim: set sw=4 sts=4 et fdm=marker:
