@@ -66,9 +66,9 @@ VHDL, VimL, xHtml, XML, XSLT, YACC, YAML, z80, Zope page templates, and zsh.
 See the [wiki][3] for details about the corresponding supported checkers.
 
 A number of third-party Vim plugins also provide checkers for syntastic,
-for example: [omnisharp-vim][25], [rust.vim][12], [syntastic-extras][26],
-[syntastic-more][27], [vim-crystal][29], [vim-eastwood][28], and
-[vim-swift][24].
+for example: [merlin][30], [omnisharp-vim][25], [rust.vim][12],
+[syntastic-extras][26], [syntastic-more][27], [vim-crystal][29],
+[vim-eastwood][28], and [vim-swift][24].
 
 Below is a screenshot showing the methods that Syntastic uses to display syntax
 errors.  Note that, in practise, you will only have a subset of these methods
@@ -459,6 +459,7 @@ a look at [jedi-vim][7], [python-mode][8], or [YouCompleteMe][9].
 [27]: https://github.com/roktas/syntastic-more
 [28]: https://github.com/venantius/vim-eastwood
 [29]: https://github.com/rhysd/vim-crystal
+[30]: https://github.com/the-lambda-church/merlin
 
 <!--
 vim:tw=79:sw=4:
