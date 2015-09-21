@@ -572,12 +572,18 @@ ones produced by "pylint": >
 Default: [Syntax: line:%F (%t)]
 Use this option to control what the syntastic statusline text contains. Several
 magic flags are available to insert information:
-    %e - number of errors
-    %w - number of warnings
-    %t - total number of warnings and errors
+    %e  - number of errors
+    %w  - number of warnings
+    %t  - total number of warnings and errors
+    %ne - filename of file containing first error
+    %nw - filename of file containing first warning
+    %N  - filename of file containing first warning or error
+    %pe - filename with path of file containing first error
+    %pw - filename with path of file containing first warning
+    %P  - filename with path of file containing first warning or error
     %fe - line number of first error
     %fw - line number of first warning
-    %F - line number of first warning or error
+    %F  - line number of first warning or error
 
 Several additional flags are available to hide text under certain conditions:
     %E{...} - hide the text in the brackets unless there are errors
