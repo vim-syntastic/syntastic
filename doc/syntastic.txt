@@ -585,6 +585,13 @@ magic flags are available to insert information:
     %fw - line number of first warning
     %F  - line number of first warning or error
 
+These flags accept width and alignment controls similar to the ones used by
+|'statusline'| flags:
+    %-0{minwid}.{maxwid}{flag}
+
+All fields except {flag} are optional. A single percent sign can be given as
+"%%".
+
 Several additional flags are available to hide text under certain conditions:
     %E{...} - hide the text in the brackets unless there are errors
     %W{...} - hide the text in the brackets unless there are warnings
