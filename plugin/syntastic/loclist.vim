@@ -111,6 +111,7 @@ function! g:SyntasticLoclist.getStatuslineFlag() abort " {{{2
             let output = substitute(output, '\m\C%B{\([^}]*\)}', (num_warnings && num_errors) ? '\1' : '' , 'g')
 
             let flags = {
+                \ '%':  '%',
                 \ 't':  num_issues,
                 \ 'e':  num_errors,
                 \ 'w':  num_warnings,
@@ -123,7 +124,7 @@ function! g:SyntasticLoclist.getStatuslineFlag() abort " {{{2
                 \ 'nw': (num_warnings ? fnamemodify( bufname(warnings[0]['bufnr']), ':t') : ''),
                 \ 'pw': (num_warnings ? fnamemodify( bufname(warnings[0]['bufnr']), ':p:~:.') : ''),
                 \ 'fw': (num_warnings ? warnings[0]['lnum'] : '') }
-            let output = substitute(output, '\v\C\%([npf][ew]|[NPFtew])', '\=flags[submatch(1)]', 'g')
+            let output = substitute(output, '\v\C\%(-?\d*%(\.\d+)?)([npf][ew]|[NPFtew%])', '\=syntastic#util#wformat(submatch(1), flags[submatch(2)])', 'g')
 
             let self._stl_flag = output
         else
