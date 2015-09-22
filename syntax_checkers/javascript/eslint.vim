@@ -26,6 +26,10 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 function! SyntaxCheckers_javascript_eslint_IsAvailable() dict
+    if g:syntastic_javascript_eslint_generic
+        call self.log('generic eslint, exec =', self.getExec())
+    endif
+
     if !executable(self.getExec())
         return 0
     endif
