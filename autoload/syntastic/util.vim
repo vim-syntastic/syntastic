@@ -369,15 +369,13 @@ function! syntastic#util#wformat(format, str) abort " {{{2
     let out = substitute(a:str, "\t", ' ', 'g')
 
     if maxlen && s:_width(out) > maxlen
-        let chars = filter(split(a:str, '\zs\ze', 1), 'v:val !=# ""')
-        let totlen = 0
+        let chars = filter(split(out, '\zs\ze', 1), 'v:val !=# ""')
         let out = ''
 
         if flushleft
             for c in chars
-                if totlen + s:_width(c) < maxlen
+                if s:_width(out . c) < maxlen
                     let out .= c
-                    let totlen += s:_width(c)
                 else
                     let out .= &encoding ==# 'utf-8' && &termencoding ==# 'utf-8' ? "\u2026" : '>'
                     break
@@ -386,9 +384,8 @@ function! syntastic#util#wformat(format, str) abort " {{{2
         else
             call reverse(chars)
             for c in chars
-                if totlen + s:_width(c) < maxlen
+                if s:_width(c . out) < maxlen
                     let out = c . out
-                    let totlen += s:_width(c)
                 else
                     let out = (&encoding ==# 'utf-8' && &termencoding ==# 'utf-8' ? "\u2026" : '<') . out
                     break
