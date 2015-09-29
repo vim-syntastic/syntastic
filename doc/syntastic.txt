@@ -356,7 +356,7 @@ Default: 1
 This option controls which errors are echoed to the command window if
 |'syntastic_echo_current_error'| is set and multiple errors are found on the
 same line. When the option is enabled, the first error corresponding to the
-current column is show. Otherwise, the first error on the current line is
+current column is shown. Otherwise, the first error on the current line is
 echoed, regardless of the cursor position on the current line.
 
 When dealing with very large lists of errors, disabling this option can speed
