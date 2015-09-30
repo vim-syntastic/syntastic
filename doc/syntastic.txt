@@ -247,7 +247,8 @@ You can selectively disable some of the errors found by checkers either
 using |'syntastic_quiet_messages'|, or by specifying a list of patterns in
 |'syntastic_ignore_files'|.
 
-See also: |'syntastic_<filetype>_<checker>_quiet_messages'|.
+See also: |'syntastic_<filetype>_<checker>_quiet_messages'| and
+|'b:syntastic_skip_checks'|.
 
 ==============================================================================
 3. Commands                                               *syntastic-commands*
