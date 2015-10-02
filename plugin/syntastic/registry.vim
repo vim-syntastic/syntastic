@@ -8,7 +8,7 @@ let g:loaded_syntastic_registry = 1
 let s:_DEFAULT_CHECKERS = {
         \ 'actionscript':  ['mxmlc'],
         \ 'ada':           ['gcc'],
-        \ 'apiblueprint':  ['snowcrash'],
+        \ 'apiblueprint':  ['drafter'],
         \ 'applescript':   ['osacompile'],
         \ 'asciidoc':      ['asciidoc'],
         \ 'asm':           ['gcc'],
