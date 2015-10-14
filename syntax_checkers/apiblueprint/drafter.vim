@@ -34,7 +34,7 @@ function! SyntaxCheckers_apiblueprint_drafter_GetLocList() dict
         \ 'makeprg': makeprg,
         \ 'errorformat': errorformat,
         \ 'defaults': {'bufnr': bufnr('')},
-        \ 'returns': [0, 2] })
+        \ 'returns': [0, 2, 3, 4] })
 
     for e in loclist
         let matches = matchlist(e['text'], '\v^(.+); line (\d+), column (\d+) - line (\d+), column (\d+)$')
