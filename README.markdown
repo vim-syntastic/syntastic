@@ -427,7 +427,8 @@ There are also a dedicated [google group][5], and a
 Syntastic aims to provide a common interface to syntax checkers for as many
 languages as possible.  For particular languages, there are, of course, other
 plugins that provide more functionality than syntastic.  You might want to take
-a look at [jedi-vim][7], [python-mode][8], or [YouCompleteMe][9].
+a look at [ghcmod-vim][31], [jedi-vim][7], [python-mode][8], [vim-go][32], or
+[YouCompleteMe][9].
 
 [0]: https://github.com/scrooloose/syntastic/raw/master/_assets/screenshot_1.png
 [1]: https://github.com/tpope/vim-pathogen
@@ -460,6 +461,8 @@ a look at [jedi-vim][7], [python-mode][8], or [YouCompleteMe][9].
 [28]: https://github.com/venantius/vim-eastwood
 [29]: https://github.com/rhysd/vim-crystal
 [30]: https://github.com/the-lambda-church/merlin
+[31]: https://github.com/eagletmt/ghcmod-vim
+[32]: https://github.com/fatih/vim-go
 
 <!--
 vim:tw=79:sw=4:
