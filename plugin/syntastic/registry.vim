@@ -95,6 +95,7 @@ let s:_DEFAULT_CHECKERS = {
         \ 'xhtml':         ['tidy'],
         \ 'xml':           ['xmllint'],
         \ 'xslt':          ['xmllint'],
+        \ 'xquery':        ['basex'],
         \ 'yacc':          ['bison'],
         \ 'yaml':          ['jsyaml'],
         \ 'z80':           ['z80syntaxchecker'],
