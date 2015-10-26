@@ -20,17 +20,17 @@ set cpo&vim
 function! SyntaxCheckers_xquery_basex_GetLocList() dict
     let makeprg = self.makeprgBuild({
         \ 'args_after': '-z',
-        \ 'fname': ['-q', "inspect:module('" . expand('%:p', 1) . "')"] })
+        \ 'fname_before': '-q',
+        \ 'fname': syntastic#util#shescape('inspect:module("' . escape(expand('%:p', 1), '"') . '")') })
 
     let errorformat =
-        \ '%-GStopped at %\%.\, %l/%c:,'.
-        \ '%A[%.%#] Stopped at %f\, %l/%c:,'.
-        \ '%Z[%t%\D%#%n] %m'
+        \ '%f:%l:%c:%t:%n:%m,' .
+        \ '%m'
 
     let loclist = SyntasticMake({
         \ 'makeprg': makeprg,
         \ 'errorformat': errorformat,
-        \ 'postprocess': ['compressWhitespace'] })
+        \ 'preprocess': 'basex' })
 
     for e in loclist
         if e['type'] !=# 'W' && e['type'] !=# 'E'

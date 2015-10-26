@@ -8,6 +8,28 @@ set cpo&vim
 
 " Public functions {{{1
 
+function! syntastic#preprocess#basex(errors) abort " {{{2a
+    let out = []
+    let idx = 0
+    while idx < len(a:errors)
+        let parts = matchlist(a:errors[idx], '\v^\[\S+\] Stopped at (.+), (\d+)/(\d+):')
+        if len(parts) > 3
+            let err = parts[1] . ':' . parts[2] . ':' . parts[3] . ':'
+            let parts = matchlist(a:errors[idx+1], '\v^\[(.)\D+(\d+)\] (.+)')
+            if len(parts) > 3
+                let err .= (parts[1] ==? 'W' || parts[1] ==? 'E' ? parts[1] : 'E') . ':' . parts[2] . ':' . parts[3]
+                call add(out, err)
+                let idx +=1
+            endif
+        elseif a:errors[idx] =~# '\m^\['
+            " unparseable errors
+            call add(out, a:errors[idx])
+        endif
+        let idx +=1
+    endwhile
+    return out
+endfunction " }}}2
+
 function! syntastic#preprocess#cabal(errors) abort " {{{2
     let out = []
     let star = 0
