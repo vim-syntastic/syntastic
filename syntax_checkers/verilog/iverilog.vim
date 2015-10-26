@@ -15,15 +15,15 @@ set cpo&vim
 
 function! SyntaxCheckers_verilog_iverilog_GetLocList() dict
     let makeprg = self.makeprgBuild({
-                \ 'args_before': '-t null',
-                \ 'args': '-Wall' })
+        \ 'args_before': '-t null',
+        \ 'args': '-Wall' })
 
     let errorformat =
-        \     '%f:%l: %trror: %m,' .
-        \     '%f:%l: %tarning: %m,' .
-        \     '%E%f:%l:      : %m,' .
-        \     '%W%f:%l:        : %m,' .
-        \     '%f:%l: %m'
+        \ '%f:%l: %trror: %m,' .
+        \ '%f:%l: %tarning: %m,' .
+        \ '%E%f:%l:      : %m,' .
+        \ '%W%f:%l:        : %m,' .
+        \ '%f:%l: %m'
 
     return SyntasticMake({'makeprg': makeprg, 'errorformat': errorformat})
 endfunction
