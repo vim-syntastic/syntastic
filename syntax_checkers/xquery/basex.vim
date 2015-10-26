@@ -19,7 +19,7 @@ set cpo&vim
 
 function! SyntaxCheckers_xquery_basex_GetLocList() dict
     let makeprg = self.makeprgBuild({
-        \ 'fname_before': '-z',
+        \ 'args_after': '-z',
         \ 'fname': ['-q', "inspect:module('" . expand('%:p', 1) . "')"] })
 
     let errorformat =
