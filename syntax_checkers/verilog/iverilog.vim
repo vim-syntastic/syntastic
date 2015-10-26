@@ -9,22 +9,22 @@ if exists('g:loaded_syntastic_verilog_iverilog_checker')
 endif
 let g:loaded_syntastic_verilog_iverilog_checker = 1
 
-if !exists('g:syntastic_verilog_compiler_options')
-    let g:syntastic_verilog_compiler_options = '-Wall'
-endif
-
 let s:save_cpo = &cpo
 set cpo&vim
 
 function! SyntaxCheckers_verilog_iverilog_GetLocList() dict
-    if !exists('g:syntastic_verilog_compiler')
-        let g:syntastic_verilog_compiler = self.getExec()
-    endif
-    return syntastic#c#GetLocList('verilog', 'iverilog', {
-        \ 'errorformat':
+    let makeprg = self.makeprgBuild({
+                \ 'args_before': '-t null',
+                \ 'args': '-Wall' })
+
+    let errorformat =
         \     '%f:%l: %trror: %m,' .
-        \     '%f:%l: %tarning: %m',
-        \ 'main_flags': '-t null' })
+        \     '%f:%l: %tarning: %m,' .
+        \     '%E%f:%l:      : %m,' .
+        \     '%W%f:%l:        : %m,' .
+        \     '%f:%l: %m'
+
+    return SyntasticMake({'makeprg': makeprg, 'errorformat': errorformat})
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
