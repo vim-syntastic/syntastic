@@ -2,6 +2,7 @@
 "File:        iverilog.vim
 "Description: Syntax checking plugin for syntastic.vim
 "Maintainer:  Psidium <psiidium at gmail dot com>
+"License:     The MIT License
 "============================================================================
 
 if exists('g:loaded_syntastic_verilog_iverilog_checker')
