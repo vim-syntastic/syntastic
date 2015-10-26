@@ -17,27 +17,28 @@ let g:loaded_syntastic_xquery_basex_checker = 1
 let s:save_cpo = &cpo
 set cpo&vim
 
-if exists('g:syntastic_extra_filetypes')
-    call add(g:syntastic_extra_filetypes, 'xquery')
-else
-    let g:syntastic_extra_filetypes = ['xquery']
-endif
+function! SyntaxCheckers_xquery_basex_GetLocList() dict
+    let makeprg = self.makeprgBuild({
+        \ 'fname_before': '-z',
+        \ 'fname': ['-q', "inspect:module('" . expand('%:p', 1) . "')"] })
 
-function SyntaxCheckers_xquery_basex_IsAvailable() dict
-    return executable(expand(self.getExec(), 1))
-endfunction
-
-function SyntaxCheckers_xquery_basex_GetLocList() dict
-    let makeprg = 'basex -z -q "inspect:module(' . "'" . expand("%:p") . "')" . '"'
     let errorformat =
-        \ '%-GStopped at .\, %l/%c:,'.
-        \ '%E[%.%#] Stopped at %f\, %l/%c:,'.
-        \ '%Z[%t%#%n] %m'
+        \ '%-GStopped at %\%.\, %l/%c:,'.
+        \ '%A[%.%#] Stopped at %f\, %l/%c:,'.
+        \ '%Z[%t%\D%#%n] %m'
 
-    return SyntasticMake({
+    let loclist = SyntasticMake({
         \ 'makeprg': makeprg,
-        \ 'errorformat': errorformat
-        \ })
+        \ 'errorformat': errorformat,
+        \ 'postprocess': ['compressWhitespace'] })
+
+    for e in loclist
+        if e['type'] !=# 'W' && e['type'] !=# 'E'
+            let e['type'] = 'E'
+        endif
+    endfor
+
+    return loclist
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
