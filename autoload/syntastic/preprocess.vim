@@ -238,13 +238,13 @@ function! syntastic#preprocess#stylelint(errors) abort " {{{2
                         \ e['text']
                     call add(out, msg)
                 catch /\m^Vim\%((\a\+)\)\=:E716/
-                    call syntastic#log#warn('checker javascript/flow: unrecognized error format')
+                    call syntastic#log#warn('checker css/stylelint: unrecognized error format')
                     let out = []
                     break
                 endtry
             endfor
         else
-            call syntastic#log#warn('checker javascript/stylelint: unrecognized error format')
+            call syntastic#log#warn('checker css/stylelint: unrecognized error format')
         endif
     endif
     return out
