@@ -20,19 +20,16 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 function! SyntaxCheckers_css_stylelint_GetLocList() dict
-    let makeprg = self.makeprgBuild({ })
-    " Example output:
-    " CssSyntaxError: /path/to/file.css:2:11: Missed semicolon
-    " or
-    " 2:11    Expected single space after ":" (declaration-colon-space-after)
-    let errorformat = 
-          \ 'CssSyntaxError: %f:%l:%c: %m,' .
-          \ '%\m%l\:%c%\s%#%m,'
+    let makeprg = self.makeprgBuild({ 'args_after': '-f json' })
+
+    let errorformat = '%t:%f:%l:%c:%m'
 
     return SyntasticMake({
         \ 'makeprg': makeprg,
         \ 'errorformat': errorformat,
-        \ 'defaults': {'bufnr': bufnr('')} })
+        \ 'subtype': 'Style',
+        \ 'preprocess': 'stylelint',
+        \ 'returns': [0, 1, 2] })
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
