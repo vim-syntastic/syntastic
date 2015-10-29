@@ -214,6 +214,42 @@ function! syntastic#preprocess#rparse(errors) abort " {{{2
     return out
 endfunction " }}}2
 
+function! syntastic#preprocess#stylelint(errors) abort " {{{2
+    let out = []
+
+    " CssSyntaxError: /path/to/file.css:2:11: Missed semicolon
+    let parts = matchlist(a:errors[0], '\v^CssSyntaxError: (.{-1,}):(\d+):(\d+): (.+)')
+    if len(parts) > 4
+        call add(out, 'E:' . join(parts[1:4], ':'))
+    else
+        let errs = s:_decode_JSON(join(a:errors, ''))
+
+        let out = []
+        if type(errs) == type([]) && len(errs) == 1 && type(errs[0]) == type({}) &&
+            \ has_key(errs[0], 'source') && has_key(errs[0], 'warnings') && type(errs[0]['warnings']) == type([])
+
+            for e in errs[0]['warnings']
+                try
+                    let msg =
+                        \ ['W', 'E'][e['severity']-1] . ':' .
+                        \ errs[0]['source'] . ':' .
+                        \ e['line'] . ':' .
+                        \ e['column'] . ':' .
+                        \ e['text']
+                    call add(out, msg)
+                catch /\m^Vim\%((\a\+)\)\=:E716/
+                    call syntastic#log#warn('checker javascript/flow: unrecognized error format')
+                    let out = []
+                    break
+                endtry
+            endfor
+        else
+            call syntastic#log#warn('checker javascript/stylelint: unrecognized error format')
+        endif
+    endif
+    return out
+endfunction " }}}2
+
 function! syntastic#preprocess#tslint(errors) abort " {{{2
     return map(copy(a:errors), 'substitute(v:val, ''\m^\(([^)]\+)\)\s\(.\+\)$'', ''\2 \1'', "")')
 endfunction " }}}2
