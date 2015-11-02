@@ -19,16 +19,30 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 function! SyntaxCheckers_slim_slimrb_GetLocList() dict
+    if !exists('s:slimrb_new')
+        let ver = self.getVersion(self.getExecEscaped() . ' --version 2>'. syntastic#util#DevNull())
+        let s:slimrb_new = syntastic#util#versionIsAtLeast(ver, [1, 3, 1])
+    endif
+
     let makeprg = self.makeprgBuild({ 'args_after': '-c' })
 
-    let errorformat =
-        \ '%f:%l:%c:%m,' .
-        \ '%f:%l:%m'
+    if s:slimrb_new
+        let errorformat =
+            \ '%C %#%f\, Line %l\, Column %c,'.
+            \ '%-G %.%#,'.
+            \ '%ESlim::Parser::SyntaxError: %m,'.
+            \ '%+C%.%#'
+    else
+        let errorformat =
+            \ '%C %#%f\, Line %l,'.
+            \ '%-G %.%#,'.
+            \ '%ESlim::Parser::SyntaxError: %m,'.
+            \ '%+C%.%#'
+    endif
 
     return SyntasticMake({
         \ 'makeprg': makeprg,
-        \ 'errorformat': errorformat,
-        \ 'preprocess': 'slimrb' })
+        \ 'errorformat': errorformat })
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({

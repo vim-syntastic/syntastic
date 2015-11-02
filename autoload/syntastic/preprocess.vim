@@ -414,36 +414,6 @@ function! syntastic#preprocess#nix(errors) abort " {{{2
     return out
 endfunction " }}}2
 
-function! syntastic#preprocess#slimrb(errors) abort " {{{2
-    let out = []
-    for e in a:errors
-        " slimrb >= 1.3.1
-        let parts = matchlist(e, '\v^\s*(\S.{-1,}), Line (\d+), Column (\d+)$')
-        if len(parts) > 3
-            call add(out, join(parts[1:3], ':'))
-            continue
-        endif
-
-        " slimrb < 1.3.1
-        let parts = matchlist(e, '\v^\s*(\S.{-1,}), Line (\d+)$')
-        if len(parts) > 2
-            call add(out, parts[1] . ':' . parts[2])
-            continue
-        endif
-
-        let parts = matchlist(e, '\m^Slim::Parser::SyntaxError: (.+)$')
-        if len(parts) > 1
-            let out[-1] .= ':' . parts[1]
-            continue
-        endif
-
-        if e !~# '\m^\s'
-            let out[-1] .= ' ' . e
-        endif
-    endfor
-    return out
-endfunction " }}}2
-
 " }}}1
 
 " Private functions {{{1
