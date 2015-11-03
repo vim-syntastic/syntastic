@@ -19,13 +19,13 @@ if has('reltime')
     lockvar! g:_SYNTASTIC_START
 endif
 
-let g:_SYNTASTIC_VERSION = '3.7.0-21'
+let g:_SYNTASTIC_VERSION = '3.7.0-22'
 lockvar g:_SYNTASTIC_VERSION
 
 " Sanity checks {{{1
 
 if v:version < 700 || (v:version == 700 && !has('patch175'))
-    call syntastic#log#error('need Vim version 7.175 or later')
+    call syntastic#log#error('need Vim version 7.0.175 or later')
     finish
 endif
 
