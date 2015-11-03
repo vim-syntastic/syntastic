@@ -14,7 +14,7 @@ if exists('g:loaded_syntastic_javascript_standard_checker')
 endif
 let g:loaded_syntastic_javascript_standard_checker = 1
 
-if !exists('g:syntastic_javascript_eslint_generic')
+if !exists('g:syntastic_javascript_standard_generic')
     let g:syntastic_javascript_standard_generic = 0
 endif
 
