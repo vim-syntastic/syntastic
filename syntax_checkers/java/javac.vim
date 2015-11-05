@@ -132,13 +132,10 @@ function! SyntaxCheckers_java_javac_GetLocList() dict " {{{1
     endfor
 
     if s:has_maven && g:syntastic_java_javac_autoload_maven_classpath
-        let maven_output_dir = s:MavenOutputDirectory()
-        if maven_output_dir !=# '.'
-            if !g:syntastic_java_javac_delete_output
-                let javac_opts .= ' -d ' . syntastic#util#shescape(maven_output_dir)
-            endif
-            let javac_classpath = s:AddToClasspath(javac_classpath, s:GetMavenClasspath())
+        if !g:syntastic_java_javac_delete_output
+            let javac_opts .= ' -d ' . syntastic#util#shescape(s:MavenOutputDirectory())
         endif
+        let javac_classpath = s:AddToClasspath(javac_classpath, s:GetMavenClasspath())
     endif
     " }}}2
 
