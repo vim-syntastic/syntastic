@@ -19,7 +19,7 @@ if has('reltime')
     lockvar! g:_SYNTASTIC_START
 endif
 
-let g:_SYNTASTIC_VERSION = '3.7.0-25'
+let g:_SYNTASTIC_VERSION = '3.7.0-28'
 lockvar g:_SYNTASTIC_VERSION
 
 " Sanity checks {{{1
@@ -189,12 +189,12 @@ endfunction " }}}2
 " @vimlint(EVL103, 0, a:cmdLine)
 " @vimlint(EVL103, 0, a:argLead)
 
-command! -nargs=* -complete=custom,s:CompleteCheckerName SyntasticCheck call SyntasticCheck(<f-args>)
-command! -nargs=? -complete=custom,s:CompleteFiletypes   SyntasticInfo  call SyntasticInfo(<f-args>)
-command! Errors              call SyntasticErrors()
-command! SyntasticReset      call SyntasticReset()
-command! SyntasticToggleMode call SyntasticToggleMode()
-command! SyntasticSetLoclist call SyntasticSetLoclist()
+command! -bar -nargs=* -complete=custom,s:CompleteCheckerName SyntasticCheck call SyntasticCheck(<f-args>)
+command! -bar -nargs=? -complete=custom,s:CompleteFiletypes   SyntasticInfo  call SyntasticInfo(<f-args>)
+command! -bar Errors              call SyntasticErrors()
+command! -bar SyntasticReset      call SyntasticReset()
+command! -bar SyntasticToggleMode call SyntasticToggleMode()
+command! -bar SyntasticSetLoclist call SyntasticSetLoclist()
 
 command! SyntasticJavacEditClasspath runtime! syntax_checkers/java/*.vim | SyntasticJavacEditClasspath
 command! SyntasticJavacEditConfig    runtime! syntax_checkers/java/*.vim | SyntasticJavacEditConfig
