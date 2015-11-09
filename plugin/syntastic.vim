@@ -19,7 +19,7 @@ if has('reltime')
     lockvar! g:_SYNTASTIC_START
 endif
 
-let g:_SYNTASTIC_VERSION = '3.7.0-28'
+let g:_SYNTASTIC_VERSION = '3.7.0-29'
 lockvar g:_SYNTASTIC_VERSION
 
 " Sanity checks {{{1
@@ -92,6 +92,7 @@ let g:_SYNTASTIC_DEFAULTS = {
         \ 'ignore_extensions':        '\c\v^([gx]?z|lzma|bz2)$',
         \ 'ignore_files':             [],
         \ 'loc_list_height':          10,
+        \ 'nested_autocommands':      0,
         \ 'quiet_messages':           {},
         \ 'reuse_loc_lists':          0,
         \ 'shell':                    &shell,
@@ -240,10 +241,20 @@ endfunction " }}}2
 
 augroup syntastic
     autocmd!
-    autocmd BufReadPost  * nested call s:BufReadPostHook()
-    autocmd BufWritePost * nested call s:BufWritePostHook()
-    autocmd BufEnter     *        call s:BufEnterHook()
+    autocmd BufEnter * call s:BufEnterHook()
 augroup END
+
+if g:syntastic_nested_autocommands
+    augroup syntastic
+        autocmd BufReadPost  * nested call s:BufReadPostHook()
+        autocmd BufWritePost * nested call s:BufWritePostHook()
+    augroup END
+else
+    augroup syntastic
+        autocmd BufReadPost  * call s:BufReadPostHook()
+        autocmd BufWritePost * call s:BufWritePostHook()
+    augroup END
+endif
 
 if exists('##QuitPre')
     " QuitPre was added in Vim 7.3.544
