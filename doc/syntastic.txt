@@ -633,7 +633,6 @@ The above variable can be used to disable exit code checks in syntastic.
 
                                                            *'syntastic_shell'*
 Default: Vim's 'shell'
-
 This is the (full path to) the shell syntastic will use to run the checkers.
 On UNIX and Mac OS-X this shell must accept Bourne-compatible syntax for
 file "stdout" and "stderr" redirections ">file" and "2>file".  Examples of
@@ -645,6 +644,13 @@ operations.  It must take care to initialize all environment variables needed
 by the checkers you're using.  Example: >
     let g:syntastic_shell = "/bin/sh"
 <
+                                             *'syntastic_nested_autocommands'*
+Default: 0
+Controls whether syntastic's autocommands |BufReadPost| and |BufWritePost|
+are called from other |BufReadPost| and |BufWritePost| autocommands (see
+|autocmd-nested|).  This is known to trigger interoperability problems with
+other plugins, so only enable it if you actually need that functionality.
+
                                                            *'syntastic_debug'*
 Default: 0
 Set this to the sum of one or more of the following flags to enable
