@@ -8,6 +8,7 @@ let g:loaded_syntastic_registry = 1
 let s:_DEFAULT_CHECKERS = {
         \ 'actionscript':  ['mxmlc'],
         \ 'ada':           ['gcc'],
+        \ 'ansible':       ['ansible_lint'],
         \ 'apiblueprint':  ['drafter'],
         \ 'applescript':   ['osacompile'],
         \ 'asciidoc':      ['asciidoc'],
