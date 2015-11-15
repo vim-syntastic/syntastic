@@ -53,17 +53,18 @@ are detected, the user is notified and is happy because they didn't have to
 compile their code or execute their script to find them.
 
 At the time of this writing, syntastic has checking plugins for ActionScript,
-Ada, API Blueprint, AppleScript, AsciiDoc, ASM, BEMHTML, Bro, Bourne shell, C,
-C++, C#, Cabal, Chef, CoffeeScript, Coco, Coq, CSS, Cucumber, CUDA, D, Dart,
-DocBook, Dust, Elixir, Erlang, eRuby, Fortran, Gentoo metadata, GLSL, Go,
-Haml, Haskell, Haxe, Handlebars, HSS, HTML, Jade, Java, JavaScript, JSON, JSX,
-LESS, Lex, Limbo, LISP, LLVM intermediate language, Lua, Markdown, MATLAB,
-Mercury, NASM, Nix, Objective-C, Objective-C++, OCaml, Perl, Perl POD, PHP,
-gettext Portable Object, OS X and iOS property lists, Puppet, Python, QML, R,
-Racket, Relax NG, reStructuredText, RPM spec, Ruby, SASS/SCSS, Scala, Slim,
-SML, Sphinx, SQL, Stylus, Tcl, TeX, Texinfo, Twig, TypeScript, Vala, Verilog,
-VHDL, VimL, xHtml, XML, XSLT, XQuery, YACC, YAML, z80, Zope page templates, and
-zsh.  See the [wiki][3] for details about the corresponding supported checkers.
+Ada, Ansible configurations, API Blueprint, AppleScript, AsciiDoc, ASM,
+BEMHTML, Bro, Bourne shell, C, C++, C#, Cabal, Chef, CoffeeScript, Coco,
+Coq, CSS, Cucumber, CUDA, D, Dart, DocBook, Dust, Elixir, Erlang, eRuby,
+Fortran, Gentoo metadata, GLSL, Go, Haml, Haskell, Haxe, Handlebars, HSS,
+HTML, Jade, Java, JavaScript, JSON, JSX, LESS, Lex, Limbo, LISP, LLVM
+intermediate language, Lua, Markdown, MATLAB, Mercury, NASM, Nix, Objective-C,
+Objective-C++, OCaml, Perl, Perl POD, PHP, gettext Portable Object, OS X and
+iOS property lists, Puppet, Python, QML, R, Racket, Relax NG, reStructuredText,
+RPM spec, Ruby, SASS/SCSS, Scala, Slim, SML, Sphinx, SQL, Stylus, Tcl, TeX,
+Texinfo, Twig, TypeScript, Vala, Verilog, VHDL, VimL, xHtml, XML, XSLT, XQuery,
+YACC, YAML, z80, Zope page templates, and zsh.  See the [wiki][3] for details
+about the corresponding supported checkers.
 
 A number of third-party Vim plugins also provide checkers for syntastic,
 for example: [merlin][30], [omnisharp-vim][25], [rust.vim][12],

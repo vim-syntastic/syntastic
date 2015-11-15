@@ -1,5 +1,5 @@
 "============================================================================
-"File:        ansible-lint.vim
+"File:        ansible_lint.vim
 "Description: Syntax checking plugin for syntastic.vim
 "Maintainer:  Erik Zaadi <erik.zaadi at gmail dot com>
 "License:     This program is free software. It comes without any warranty,
@@ -10,36 +10,33 @@
 "
 "============================================================================
 
-if exists('g:loaded_syntastic_ansible_lint_checker')
+if exists('g:loaded_syntastic_ansible_ansible_lint_checker')
     finish
 endif
-let g:loaded_syntastic_ansible_lint_checker = 1
+let g:loaded_syntastic_ansible_ansible_lint_checker = 1
 
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! SyntaxCheckers_ansible_lint_GetLocList() dict
-    let makeprg = self.makeprgBuild({'args': '-p'})
+function! SyntaxCheckers_ansible_ansible_lint_GetLocList() dict
+    let makeprg = self.makeprgBuild({ 'args': '-p' })
 
-    let errorformat = '%f:%l: %m'
+    let errorformat = '%f:%l: [ANSIBLE%n] %m'
 
     let env = syntastic#util#isRunningWindows() ? {} : { 'TERM': 'dumb' }
 
-    let loclist = SyntasticMake({
+    return SyntasticMake({
         \ 'makeprg': makeprg,
         \ 'errorformat': errorformat,
-        \ 'env': env})
-
-    for e in loclist
-        let e['type'] = e['text'] =~? '^W' ? 'W' : 'E'
-    endfor
-
-    return loclist
+        \ 'env': env,
+        \ 'defaults': {'type': 'E'},
+        \ 'subtype': 'Style',
+        \ 'returns': [0, 2] })
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'ansible',
-    \ 'name': 'lint', 
+    \ 'name': 'ansible_lint',
     \ 'exec': 'ansible-lint'})
 
 let &cpo = s:save_cpo
