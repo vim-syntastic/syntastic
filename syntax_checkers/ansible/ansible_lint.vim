@@ -26,7 +26,7 @@ function! SyntaxCheckers_ansible_ansible_lint_IsAvailable() dict
 endfunction
 
 function! SyntaxCheckers_ansible_ansible_lint_GetLocList() dict
-    let makeprg = self.makeprgBuild({ 'args': '-p' })
+    let makeprg = self.makeprgBuild({ 'args_after': '-p' })
 
     let errorformat = '%f:%l: [ANSIBLE%n] %m'
 
