@@ -18,6 +18,13 @@ let g:loaded_syntastic_ansible_ansible_lint_checker = 1
 let s:save_cpo = &cpo
 set cpo&vim
 
+function! SyntaxCheckers_ansible_ansible_lint_IsAvailable() dict
+    if !executable(self.getExec())
+        return 0
+    endif
+    return syntastic#util#versionIsAtLeast(self.getVersion(), [2, 0, 4])
+endfunction
+
 function! SyntaxCheckers_ansible_ansible_lint_GetLocList() dict
     let makeprg = self.makeprgBuild({ 'args': '-p' })
 
