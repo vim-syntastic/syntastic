@@ -402,18 +402,28 @@ function! s:MavenOutputDirectory() " {{{2
     if s:has_maven && filereadable(pom)
         let mvn_properties = s:GetMavenProperties()
         let output_dir = getcwd()
+        let sep = syntastic#util#Slash()
         if has_key(mvn_properties, 'project.properties.build.dir')
             let output_dir = mvn_properties['project.properties.build.dir']
         endif
+        if has_key(mvn_properties,'project.build.sourceDirectory')
+            let src_dir = mvn_properties['project.build.sourceDirectory']
+        else
+            let src_dir = join(['src', 'main', 'java'], sep)
+        endif
+        if has_key(mvn_properties,'project.build.testsourceDirectory')
+            let test_src_dir = mvn_properties['project.build.testsourceDirectory']
+        else
+            let test_src_dir = join(['src', 'test', 'java'], sep)
+        endif
 
-        let sep = syntastic#util#Slash()
-        if stridx(expand('%:p:h', 1), join(['src', 'main', 'java'], sep)) >= 0
+        if stridx(expand('%:p:h', 1), src_dir) >= 0
             let output_dir = join ([output_dir, 'target', 'classes'], sep)
             if has_key(mvn_properties, 'project.build.outputDirectory')
                 let output_dir = mvn_properties['project.build.outputDirectory']
             endif
         endif
-        if stridx(expand('%:p:h', 1), join(['src', 'test', 'java'], sep)) >= 0
+        if stridx(expand('%:p:h', 1), test_src_dir) >= 0
             let output_dir = join([output_dir, 'target', 'test-classes'], sep)
             if has_key(mvn_properties, 'project.build.testOutputDirectory')
                 let output_dir = mvn_properties['project.build.testOutputDirectory']
@@ -423,6 +433,7 @@ function! s:MavenOutputDirectory() " {{{2
         if has('win32unix')
             let output_dir = syntastic#util#CygwinPath(output_dir)
         endif
+        let g:wsdtest = output_dir
         return output_dir
     endif
     return '.'
