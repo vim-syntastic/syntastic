@@ -433,7 +433,6 @@ function! s:MavenOutputDirectory() " {{{2
         if has('win32unix')
             let output_dir = syntastic#util#CygwinPath(output_dir)
         endif
-        let g:wsdtest = output_dir
         return output_dir
     endif
     return '.'
