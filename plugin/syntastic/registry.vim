@@ -30,6 +30,7 @@ let s:_DEFAULT_CHECKERS = {
         \ 'd':             ['dmd'],
         \ 'dart':          ['dartanalyzer'],
         \ 'docbk':         ['xmllint'],
+        \ 'dockerfile':    ['dockerfile_lint'],
         \ 'dustjs':        ['swiffer'],
         \ 'elixir':        [],
         \ 'erlang':        ['escript'],
