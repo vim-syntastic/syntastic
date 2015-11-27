@@ -1,6 +1,6 @@
 "============================================================================
 "File:        dockerfile_lint.vim
-"Description: Syntax checking plugin for syntastic.vim using `dockerfile-lint`
+"Description: Syntax checking plugin for syntastic.vim using dockerfile-lint
 "             (https://github.com/projectatomic/dockerfile-lint).
 "Maintainer:  Tim Carry <tim at pixelastic dot com>
 "License:     This program is free software. It comes without any warranty,
@@ -10,7 +10,7 @@
 "             See http://sam.zoy.org/wtfpl/COPYING for more details.
 "
 "============================================================================
-"
+
 if exists('g:loaded_syntastic_dockerfile_dockerfile_lint_checker')
     finish
 endif
@@ -21,15 +21,26 @@ set cpo&vim
 
 function! SyntaxCheckers_dockerfile_dockerfile_lint_GetLocList() dict
     let makeprg = self.makeprgBuild({
-      \ 'args': '--json -f' })
+        \ 'args_after': '-j',
+        \ 'fname_before': '-f' })
 
-    let errorformat = '%t:%l:%m'
+    let errorformat = '%t:%n:%l:%m'
 
-    return SyntasticMake({
+    let loclist = SyntasticMake({
         \ 'makeprg': makeprg,
         \ 'errorformat': errorformat,
+        \ 'preprocess': 'dockerfile_lint',
         \ 'defaults': {'bufnr': bufnr('')},
-        \ 'preprocess': 'dockerfile_lint' })
+        \ 'returns': [0, 1] })
+
+    for e in loclist
+        if e['nr']
+            let e['subtype'] = 'Style'
+        endif
+        call remove(e, 'nr')
+    endfor
+
+    return loclist
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({

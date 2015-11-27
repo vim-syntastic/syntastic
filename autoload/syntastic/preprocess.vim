@@ -62,26 +62,38 @@ endfunction " }}}2
 function! syntastic#preprocess#dockerfile_lint(errors) abort " {{{2
     let out = []
     let json = s:_decode_JSON(join(a:errors, ''))
-    let data = json['error']['data'] + json['warn']['data'] + json['info']['data']
 
     if type(json) == type({})
-        for e in data
-          let type = toupper(e['level'][0])
-          let type = (type ==# 'I') ? 'W' : type
-          let line = has_key(e, 'line') ? e['line'] : 1
-          let message = e['message']
-          if has_key(e, 'description') && e['description'] !=# 'None'
-            let message = message . '. ' . e['description']
-          endif
+        try
+            let data = json['error']['data'] + json['warn']['data'] + json['info']['data']
+            for e in data
+                let type = toupper(e['level'][0])
+                if type ==# 'I'
+                    let type = 'W'
+                    let style = 1
+                else
+                    let style = 0
+                endif
 
-          let msg =
-              \ type . ':' .
-              \ line . ':' .
-              \ message
-          call add(out, msg)
-        endfor
+                let line = get(e, 'line', 1)
+                let message = e['message']
+                if has_key(e, 'description') && e['description'] !=# 'None'
+                    let message = message . '. ' . e['description']
+                endif
+
+                let msg =
+                    \ type . ':' .
+                    \ style . ':' .
+                    \ line . ':' .
+                    \ message
+                call add(out, msg)
+            endfor
+        catch /\m^Vim\%((\a\+)\)\=:E716/
+            call syntastic#log#warn('checker dockerfile/dockerfile_lint: unrecognized error format')
+            let out = []
+        endtry
     else
-        call syntastic#log#warn('checker dockerfile/dockerfile-lint: unrecognized error format')
+        call syntastic#log#warn('checker dockerfile/dockerfile_lint: unrecognized error format')
     endif
     return out
 endfunction " }}}2
