@@ -59,6 +59,33 @@ function! syntastic#preprocess#cppcheck(errors) abort " {{{2
     return map(copy(a:errors), 'substitute(v:val, ''\v^\[[^]]+\]\zs( -\> \[[^]]+\])+\ze:'', "", "")')
 endfunction " }}}2
 
+function! syntastic#preprocess#dockerfile_lint(errors) abort " {{{2
+    let out = []
+    let json = s:_decode_JSON(join(a:errors, ''))
+    let data = json['error']['data'] + json['warn']['data'] + json['info']['data']
+
+    if type(json) == type({})
+        for e in data
+          let type = toupper(e['level'][0])
+          let type = (type ==# 'I') ? 'W' : type
+          let line = has_key(e, 'line') ? e['line'] : 1
+          let message = e['message']
+          if has_key(e, 'description') && e['description'] !=# 'None'
+            let message = message . '. ' . e['description']
+          endif
+
+          let msg =
+              \ type . ':' .
+              \ line . ':' .
+              \ message
+          call add(out, msg)
+        endfor
+    else
+        call syntastic#log#warn('checker dockerfile/dockerfile-lint: unrecognized error format')
+    endif
+    return out
+endfunction " }}}2
+
 function! syntastic#preprocess#flow(errors) abort " {{{2
     let idx = 0
     while idx < len(a:errors) && a:errors[idx][0] !=# '{'
