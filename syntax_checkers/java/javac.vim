@@ -360,7 +360,7 @@ function! s:GetMavenClasspath() " {{{2
             let mvn_cmd = syntastic#util#shexpand(g:syntastic_java_maven_executable) .
                 \ ' -f ' . syntastic#util#shescape(pom) .
                 \ ' ' . g:syntastic_java_maven_options
-            let mvn_classpath_output = split(syntastic#util#system(mvn_cmd . ' dependency:build-classpath'), "\n")
+            let mvn_classpath_output = split(syntastic#util#system(mvn_cmd . ' dependency:build-classpath -DincludeScope=test'), "\n")
             let mvn_classpath = ''
             let class_path_next = 0
 
