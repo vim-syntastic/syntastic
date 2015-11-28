@@ -943,8 +943,8 @@ https://github.com/klen/python-mode). However, they both run syntax checks by
 default when you save buffers to disk, and this is probably not what you want.
 To avoid both plugins opening error windows, you can either set passive mode
 for python in syntastic (see |'syntastic_mode_map'|), or disable lint checks in
-"python-mode", by setting |pymode_lint_write| to 0. E.g.: >
-    let g:pymode_lint_write = 0
+"python-mode", by setting |pymode_lint_on_write| to 0. E.g.: >
+    let g:pymode_lint_on_write = 0
 <
 ------------------------------------------------------------------------------
 7.9. vim-auto-save                                   *syntastic-vim-auto-save*
