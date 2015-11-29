@@ -17,10 +17,6 @@ let g:loaded_syntastic_slim_slim_lint_checker = 1
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! SyntaxCheckers_slim_slim_lint_IsAvailable() dict
-    return executable(self.getExec())
-endfunction
-
 function! SyntaxCheckers_slim_slim_lint_GetLocList() dict
     let makeprg = self.makeprgBuild({})
 
