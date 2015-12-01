@@ -440,7 +440,21 @@ function! s:MavenOutputDirectory() " {{{2
 endfunction " }}}2
 
 fu! s:GradleOutputDirectory()
-    "TODO
+    let gradle_build = syntastic#util#findFileInParent('build.gradle', expand('%:p:h', 1))
+    let sep = syntastic#util#Slash()
+    let items = split(gradle_build,sep)
+    if len(items)==1
+        return 'build/intermediates/classes/debug'
+    else
+        let outputdir =''
+        for i in items
+            if i != 'build.gradle'
+                let outputdir .= i.sep
+            endif
+        endfor
+        return outputdir.'build/intermediates/classes/debug'
+    endif
+    return '.'
 endf
 
 fu! s:GetGradleClasspath()
