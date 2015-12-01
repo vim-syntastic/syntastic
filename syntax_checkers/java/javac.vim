@@ -18,6 +18,7 @@ let g:syntastic_java_javac_maven_pom_tags = ['build', 'properties']
 let g:syntastic_java_javac_maven_pom_properties = {}
 let s:has_maven = 0
 let s:has_gradle = 0
+let g:javac_checker_home = fnamemodify(expand('<sfile>'), ':p:h:gs?\\?/?')
 
 let s:save_cpo = &cpo
 set cpo&vim
@@ -33,7 +34,7 @@ if !exists('g:syntastic_java_maven_executable')
 endif
 
 if !exists('g:syntastic_java_gradle_executable')
-    let g:syntastic_java_maven_executable = './gradlew'
+    let g:syntastic_java_gradle_executable = './gradlew'
 endif
 
 if !exists('g:syntastic_java_javac_options')
@@ -102,6 +103,7 @@ command! SyntasticJavacEditConfig    call s:EditConfig()
 
 function! SyntaxCheckers_java_javac_IsAvailable() dict " {{{1
     let s:has_maven = executable(expand(g:syntastic_java_maven_executable, 1))
+    let s:has_gradle = executable(expand(g:syntastic_java_gradle_executable, 1))
     return executable(expand(g:syntastic_java_javac_executable, 1))
 endfunction " }}}1
 
@@ -435,8 +437,42 @@ fu! s:GradleOutputDirectory()
 endf
 
 fu! s:GetGradleClasspath()
-    "TODO
+    try
+        let f = tempname()
+        if has("win32") || has("win16")
+            let gradle = '.\gradlew.bat'
+        else
+            let gradle = './gradlew'
+        endif
+        if !executable(gradle)
+            let gradle = 'gradle'
+        endif
+        call writefile(["allprojects{apply from: '" . g:javac_checker_home . "/classpath.gradle'}"], f)
+        let ret = system(gradle . ' -q -I ' . shellescape(f) . ' classpath' )
+        if v:shell_error == 0
+            let cp = filter(split(ret, "\n"), 'v:val =~ "^CLASSPATH:"')[0][10:]
+            if filereadable(getcwd() . "/build.gradle")
+                let out_putdir = s:GlobPathList(getcwd(), '**/build/intermediates/classes/debug', 0)
+                for classes in out_putdir
+                    let cp .= s:ClassSep().classes
+                endfor
+            endif
+            return cp
+        endif
+    catch
+    finally
+        call delete(f)
+    endtry
+    return '.'
 endf
+
+function! s:GlobPathList(path, pattern, suf)
+  if has("patch-7.4.279")
+    return globpath(a:path, a:pattern, a:suf, 1)
+  else
+    return split(globpath(a:path, a:pattern, a:suf), "\n")
+  endif
+endfunction
 
 " }}}1
 
