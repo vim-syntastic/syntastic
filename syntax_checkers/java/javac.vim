@@ -80,6 +80,13 @@ endif
 if !exists('g:syntastic_java_javac_maven_pom_classpath')
     let g:syntastic_java_javac_maven_pom_classpath = {}
 endif
+if !exists('g:syntastic_java_javac_gradle_ftime')
+    let g:syntastic_java_javac_gradle_ftime = {}
+endif
+
+if !exists('g:syntastic_java_javac_gradle_classpath')
+    let g:syntastic_java_javac_gradle_classpath = {}
+endif
 
 " }}}1
 
@@ -437,33 +444,37 @@ fu! s:GradleOutputDirectory()
 endf
 
 fu! s:GetGradleClasspath()
-    try
-        let f = tempname()
-        if has("win32") || has("win16")
-            let gradle = '.\gradlew.bat'
-        else
-            let gradle = './gradlew'
+    let gradle = syntastic#util#findFileInParent('build.gradle', expand('%:p:h', 1))
+    if s:has_gradle && filereadable(gradle)
+        if !has_key(g:syntastic_java_javac_gradle_ftime, gradle) || g:syntastic_java_javac_gradle_ftime[gradle] != getftime(gradle)
+            try
+                let f = tempname()
+                if has("win32") || has("win16")
+                    let gradle_cmd = '.\gradlew.bat'
+                else
+                    let gradle_cmd = './gradlew'
+                endif
+                call writefile(["allprojects{apply from: '" . g:javac_checker_home . "/classpath.gradle'}"], f)
+                let ret = system(gradle_cmd . ' -q -I ' . shellescape(f) . ' classpath' )
+                if v:shell_error == 0
+                    let cp = filter(split(ret, "\n"), 'v:val =~ "^CLASSPATH:"')[0][10:]
+                    if filereadable(getcwd() . "/build.gradle")
+                        let out_putdir = s:GlobPathList(getcwd(), '**/build/intermediates/classes/debug', 0)
+                        for classes in out_putdir
+                            let cp .= s:ClassSep().classes
+                        endfor
+                    endif
+                endif
+            catch
+            finally
+                call delete(f)
+            endtry
+            let g:syntastic_java_javac_gradle_ftime[gradle] = getftime(gradle)
+            let g:syntastic_java_javac_gradle_classpath[gradle] = cp
         endif
-        if !executable(gradle)
-            let gradle = 'gradle'
-        endif
-        call writefile(["allprojects{apply from: '" . g:javac_checker_home . "/classpath.gradle'}"], f)
-        let ret = system(gradle . ' -q -I ' . shellescape(f) . ' classpath' )
-        if v:shell_error == 0
-            let cp = filter(split(ret, "\n"), 'v:val =~ "^CLASSPATH:"')[0][10:]
-            if filereadable(getcwd() . "/build.gradle")
-                let out_putdir = s:GlobPathList(getcwd(), '**/build/intermediates/classes/debug', 0)
-                for classes in out_putdir
-                    let cp .= s:ClassSep().classes
-                endfor
-            endif
-            return cp
-        endif
-    catch
-    finally
-        call delete(f)
-    endtry
-    return '.'
+        return g:syntastic_java_javac_gradle_classpath[gradle]
+    endif
+    return ''
 endf
 
 function! s:GlobPathList(path, pattern, suf)
