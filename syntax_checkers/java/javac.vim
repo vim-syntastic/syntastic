@@ -17,6 +17,7 @@ let g:loaded_syntastic_java_javac_checker = 1
 let g:syntastic_java_javac_maven_pom_tags = ['build', 'properties']
 let g:syntastic_java_javac_maven_pom_properties = {}
 let s:has_maven = 0
+let s:has_gradle = 0
 
 let s:save_cpo = &cpo
 set cpo&vim
@@ -29,6 +30,10 @@ endif
 
 if !exists('g:syntastic_java_maven_executable')
     let g:syntastic_java_maven_executable = 'mvn'
+endif
+
+if !exists('g:syntastic_java_gradle_executable')
+    let g:syntastic_java_maven_executable = './gradlew'
 endif
 
 if !exists('g:syntastic_java_javac_options')
@@ -49,6 +54,10 @@ endif
 
 if !exists('g:syntastic_java_javac_autoload_maven_classpath')
     let g:syntastic_java_javac_autoload_maven_classpath = 1
+endif
+
+if !exists('g:syntastic_java_javac_autoload_gradle_classpath')
+    let g:syntastic_java_javac_autoload_gradle_classpath = 1
 endif
 
 if !exists('g:syntastic_java_javac_config_file_enabled')
@@ -136,6 +145,12 @@ function! SyntaxCheckers_java_javac_GetLocList() dict " {{{1
             let javac_opts .= ' -d ' . syntastic#util#shescape(s:MavenOutputDirectory())
         endif
         let javac_classpath = s:AddToClasspath(javac_classpath, s:GetMavenClasspath())
+    endif
+    if s:has_gradle && g:syntastic_java_javac_autoload_gradle_classpath
+        if !g:syntastic_java_javac_delete_output
+            let javac_opts .= ' -d ' . syntastic#util#shescape(s:GradleOutputDirectory())
+        endif
+        let javac_classpath = s:AddToClasspath(javac_classpath, s:GetGradleClasspath())
     endif
     " }}}2
 
@@ -414,6 +429,14 @@ function! s:MavenOutputDirectory() " {{{2
     endif
     return '.'
 endfunction " }}}2
+
+fu! s:GradleOutputDirectory()
+    "TODO
+endf
+
+fu! s:GetGradleClasspath()
+    "TODO
+endf
 
 " }}}1
 
