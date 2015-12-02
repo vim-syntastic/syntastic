@@ -88,6 +88,7 @@ let s:_DEFAULT_CHECKERS = {
         \ 'tex':           ['lacheck', 'chktex'],
         \ 'texinfo':       ['makeinfo'],
         \ 'text':          [],
+        \ 'travisci':      ['travis'],
         \ 'twig':          ['twiglint'],
         \ 'typescript':    ['tsc'],
         \ 'vala':          ['valac'],
