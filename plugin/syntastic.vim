@@ -19,7 +19,7 @@ if has('reltime')
     lockvar! g:_SYNTASTIC_START
 endif
 
-let g:_SYNTASTIC_VERSION = '3.7.0-47'
+let g:_SYNTASTIC_VERSION = '3.7.0-48'
 lockvar g:_SYNTASTIC_VERSION
 
 " Sanity checks {{{1
@@ -163,6 +163,8 @@ let s:registry = g:SyntasticRegistry.Instance()
 let s:notifiers = g:SyntasticNotifiers.Instance()
 let s:modemap = g:SyntasticModeMap.Instance()
 
+let s:_quit_pre = []
+
 " Commands {{{1
 
 " @vimlint(EVL103, 1, a:cursorPos)
@@ -259,7 +261,7 @@ endif
 if exists('##QuitPre')
     " QuitPre was added in Vim 7.3.544
     augroup syntastic
-        autocmd QuitPre * call s:QuitPreHook()
+        autocmd QuitPre * call s:QuitPreHook(expand('<amatch>', 1))
     augroup END
 endif
 
@@ -296,10 +298,15 @@ function! s:BufEnterHook() abort " {{{2
     endif
 endfunction " }}}2
 
-function! s:QuitPreHook() abort " {{{2
-    call syntastic#log#debug(g:_SYNTASTIC_DEBUG_AUTOCOMMANDS,
-        \ 'autocmd: QuitPre, buffer ' . bufnr('') . ' = ' . string(bufname(str2nr(bufnr('')))))
-    let b:syntastic_skip_checks = get(b:, 'syntastic_skip_checks', 0) || !syntastic#util#var('check_on_wq')
+function! s:QuitPreHook(fname) abort " {{{2
+    let buf = bufnr(fnameescape(a:fname))
+    call syntastic#log#debug(g:_SYNTASTIC_DEBUG_AUTOCOMMANDS, 'autocmd: QuitPre, buffer ' . buf . ' = ' . string(a:fname))
+
+    if !syntastic#util#var('check_on_wq')
+        call syntastic#util#setWids()
+        call add(s:_quit_pre, buf . '_' . getbufvar(buf, 'changetick') . '_' . w:syntastic_wid)
+    endif
+
     if get(w:, 'syntastic_loclist_set', 0)
         call SyntasticLoclistHide()
     endif
@@ -636,12 +643,26 @@ function! s:_ignore_file(filename) abort " {{{2
     return 0
 endfunction " }}}2
 
+function! s:_is_quitting(buf) abort " {{{2
+    let quitting = 0
+    if exists('w:syntastic_wid')
+        let key = a:buf . '_' . getbufvar(a:buf, 'changetick') . '_' . w:syntastic_wid
+        let idx = index(s:_quit_pre, key)
+        if idx >= 0
+            call remove(s:_quit_pre, idx)
+            let quitting = 1
+        endif
+    endif
+
+    return quitting
+endfunction " }}}2
+
 " Skip running in special buffers
 function! s:_skip_file() abort " {{{2
     let fname = expand('%', 1)
-    let skip = get(b:, 'syntastic_skip_checks', 0) || (&buftype !=# '') ||
-        \ !filereadable(fname) || getwinvar(0, '&diff') || s:_ignore_file(fname) ||
-        \ fnamemodify(fname, ':e') =~? g:syntastic_ignore_extensions
+    let skip = s:_is_quitting(bufnr('%')) || get(b:, 'syntastic_skip_checks', 0) ||
+        \ (&buftype !=# '') || !filereadable(fname) || getwinvar(0, '&diff') ||
+        \ s:_ignore_file(fname) || fnamemodify(fname, ':e') =~? g:syntastic_ignore_extensions
     if skip
         call syntastic#log#debug(g:_SYNTASTIC_DEBUG_TRACE, '_skip_file: skipping checks')
     endif
@@ -654,6 +675,9 @@ function! s:_explain_skip(filetypes) abort " {{{2
         let why = []
         let fname = expand('%', 1)
 
+        if s:_is_quitting(bufnr('%'))
+            call add(why, 'quitting buffer')
+        endif
         if get(b:, 'syntastic_skip_checks', 0)
             call add(why, 'b:syntastic_skip_checks set')
         endif

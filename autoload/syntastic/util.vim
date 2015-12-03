@@ -339,6 +339,21 @@ function! syntastic#util#stamp() abort " {{{2
     return split( split(reltimestr(reltime(g:_SYNTASTIC_START)))[0], '\.' )
 endfunction " }}}2
 
+let s:_wid_base = 'syntastic_' . getpid() . '_' . reltimestr(g:_SYNTASTIC_START) . '_'
+let s:_wid_pool = 0
+
+" Add unique IDs to windows
+function! syntastic#util#setWids() abort " {{{2
+    for tab in range(1, tabpagenr('$'))
+        for win in range(1, tabpagewinnr(tab, '$'))
+            if gettabwinvar(tab, win, 'syntastic_wid') ==# ''
+                call settabwinvar(tab, win, 'syntastic_wid', s:_wid_base . s:_wid_pool)
+                let s:_wid_pool += 1
+            endif
+        endfor
+    endfor
+endfunction " }}}2
+
 let s:_str2float = function(exists('*str2float') ? 'str2float' : 'str2nr')
 lockvar s:_str2float
 
