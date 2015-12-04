@@ -159,8 +159,21 @@ function! g:SyntasticRegistry.Instance() abort " {{{2
 endfunction " }}}2
 
 function! g:SyntasticRegistry.CreateAndRegisterChecker(args) abort " {{{2
-    let checker = g:SyntasticChecker.New(a:args)
     let registry = g:SyntasticRegistry.Instance()
+
+    if has_key(a:args, 'redirect')
+        let [ft, name] = split(a:args['redirect'], '/')
+        call registry._loadCheckersFor(ft)
+
+        let clone = get(registry._checkerMap[ft], name, {})
+        if empty(clone)
+            throw 'Syntastic: Checker ' . a:args['redirect'] . ' redirects to unregistered checker ' . ft . '/' . name
+        endif
+
+        let checker = g:SyntasticChecker.New(a:args, clone)
+    else
+        let checker = g:SyntasticChecker.New(a:args)
+    endif
     call registry._registerChecker(checker)
 endfunction " }}}2
 
@@ -195,7 +208,7 @@ function! g:SyntasticRegistry.getCheckersAvailable(ftalias, hints_list) abort " 
     return filter(self.getCheckers(a:ftalias, a:hints_list), 'v:val.isAvailable()')
 endfunction " }}}2
 
-" Same as getCheckers(), but keep only the checkers tyhat are available and
+" Same as getCheckers(), but keep only the checkers that are available and
 " disabled.  This runs the corresponding IsAvailable() functions for all checkers.
 function! g:SyntasticRegistry.getCheckersDisabled(ftalias, hints_list) abort " {{{2
     return filter(self.getCheckers(a:ftalias, a:hints_list), 'v:val.isDisabled() && v:val.isAvailable()')

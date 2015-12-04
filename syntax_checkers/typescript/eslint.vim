@@ -15,8 +15,6 @@ if exists('g:loaded_syntastic_typescript_eslint_checker')
 endif
 let g:loaded_syntastic_typescript_eslint_checker = 1
 
-runtime! syntax_checkers/javascript/*.vim
-
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'typescript',
     \ 'name': 'eslint',

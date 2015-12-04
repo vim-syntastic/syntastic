@@ -15,8 +15,6 @@ if exists('g:loaded_syntastic_rmd_lintr_checker')
 endif
 let g:loaded_syntastic_rmd_lintr_checker = 1
 
-runtime! syntax_checkers/r/*.vim
-
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'rmd',
     \ 'name': 'lintr',
