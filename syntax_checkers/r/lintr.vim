@@ -18,7 +18,7 @@
 " code in your file, set g:syntastic_enable_r_lintr_checker to 1 in
 " your vimrc to enable this checker:
 "
-let g:syntastic_enable_r_lintr_checker = 1
+" let g:syntastic_enable_r_lintr_checker = 1
 
 if exists("g:loaded_syntastic_r_lintr_checker")
     finish
@@ -50,11 +50,6 @@ function! SyntaxCheckers_r_lintr_IsAvailable() dict
 endfunction
 
 function! SyntaxCheckers_r_lintr_GetLocList() dict
-    if !exists('g:syntastic_enable_r_lintr_checker') || !g:syntastic_enable_r_lintr_checker
-        call syntastic#log#error('checker r/lintr: checks disabled for security reasons; set g:syntastic_enable_r_lintr_checker to 1 to override')
-        return []
-    endif
-
     let setwd = syntastic#util#isRunningWindows() ? 'setwd(''' . escape(getcwd(), '"\') . '''); ' : ''
     let makeprg = self.getExecEscaped() . ' --slave --no-restore --no-save' .
         \ ' -e ' . syntastic#util#shescape(setwd . 'suppressPackageStartupMessages(library(lintr)); ' .
@@ -77,7 +72,8 @@ endfunction
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'r',
     \ 'name': 'lintr',
-    \ 'exec': 'R' })
+    \ 'exec': 'R',
+    \ 'enable': 'enable_r_lintr_checker'})
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
