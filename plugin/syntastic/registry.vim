@@ -71,6 +71,7 @@ let s:_DEFAULT_CHECKERS = {
         \ 'python':        ['python', 'flake8', 'pylint'],
         \ 'qml':           ['qmllint'],
         \ 'r':             [],
+        \ 'rmd':           [],
         \ 'racket':        ['racket'],
         \ 'rnc':           ['rnv'],
         \ 'rst':           ['rst2pseudoxml'],
