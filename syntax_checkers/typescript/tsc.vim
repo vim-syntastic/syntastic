@@ -52,6 +52,7 @@ function! SyntaxCheckers_typescript_tsc_GetLocList() dict
     return SyntasticMake({
         \ 'makeprg': makeprg,
         \ 'errorformat': errorformat,
+        \ 'postprocess': ['guards'],
         \ 'defaults': {'bufnr': bufnr('')} })
 endfunction
 
