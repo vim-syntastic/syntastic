@@ -20,13 +20,13 @@ set cpo&vim
 function! SyntaxCheckers_javascript_mixedindentlint_GetLocList() dict
     let makeprg = self.makeprgBuild({})
 
-    let errorformat = 'Line %l in "%f" %.%#.'
+    let errorformat = 'Line %l in "%f" %.%#'
 
     return SyntasticMake({
         \ 'makeprg': makeprg,
         \ 'errorformat': errorformat,
-        \ 'defaults': { 'bufnr': bufnr(''), 'text': 'Indentation differs from rest of file' },
-        \ 'returns': [0,1] })
+        \ 'defaults': { 'text': 'Indentation differs from rest of file' },
+        \ 'returns': [0, 1] })
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
