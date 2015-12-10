@@ -14,23 +14,8 @@ if exists('g:loaded_syntastic_javascript_mixedindentlint_checker')
 endif
 let g:loaded_syntastic_javascript_mixedindentlint_checker = 1
 
-if !exists('g:syntastic_javascript_mixedindentlint_generic')
-    let g:syntastic_javascript_mixedindentlint_generic = 0
-endif
-
 let s:save_cpo = &cpo
 set cpo&vim
-
-function! SyntaxCheckers_javascript_mixedindentlint_IsAvailable() dict
-    if g:syntastic_javascript_mixedindentlint_generic
-        call self.log('generic mixedindentlint, exec =', self.getExec())
-    endif
-
-    if !executable(self.getExec())
-        return 0
-    endif
-    return g:syntastic_javascript_mixedindentlint_generic || syntastic#util#versionIsAtLeast(self.getVersion(), [1, 0, 0])
-endfunction
 
 function! SyntaxCheckers_javascript_mixedindentlint_GetLocList() dict
     let makeprg = self.makeprgBuild({})
@@ -40,7 +25,8 @@ function! SyntaxCheckers_javascript_mixedindentlint_GetLocList() dict
     return SyntasticMake({
         \ 'makeprg': makeprg,
         \ 'errorformat': errorformat,
-        \ 'defaults': { 'bufnr': bufnr(''), 'text': 'Indentation that differs from rest of file' } })
+        \ 'defaults': { 'bufnr': bufnr(''), 'text': 'Indentation differs from rest of file' },
+        \ 'returns': [0,1] })
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
