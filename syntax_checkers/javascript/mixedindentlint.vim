@@ -25,6 +25,7 @@ function! SyntaxCheckers_javascript_mixedindentlint_GetLocList() dict
     return SyntasticMake({
         \ 'makeprg': makeprg,
         \ 'errorformat': errorformat,
+        \ 'subtype': 'Style',
         \ 'defaults': { 'text': 'Indentation differs from rest of file' },
         \ 'returns': [0, 1] })
 endfunction
