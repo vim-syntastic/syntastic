@@ -1,6 +1,6 @@
 "============================================================================
-"File:        go.vim
-"Description: Check go syntax using 'gofmt -l' followed by 'go [build|test]'
+"File:        gb.vim
+"Description: Check go syntax using 'gofmt -l' followed by 'gb [build|test]'
 "Maintainer:  Victor Vrantchan <vrantchan@gmail.com>
 "License:     This program is free software. It comes without any warranty,
 "             to the extent permitted by applicable law. You can redistribute
@@ -49,7 +49,7 @@ function! SyntaxCheckers_go_gb_GetLocList() dict
     endif
 
     " Test files, i.e. files with a name ending in `_test.go`, are not
-    " compiled by `go build`, therefore `go test` must be called for those.
+    " compiled by `gb build`, therefore `gb test` must be called for those.
     if match(expand('%', 1), '\m_test\.go$') == -1
         let cmd = 'build'
         let cleanup = 0
