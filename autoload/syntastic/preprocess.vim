@@ -269,15 +269,16 @@ function! syntastic#preprocess#stylelint(errors) abort " {{{2
 
             for e in errs[0]['warnings']
                 try
+                    let severity = type(e['severity']) == type(0) ? ['W', 'E'][e['severity']-1] : e['severity'][0]
                     let msg =
-                        \ ['W', 'E'][e['severity']-1] . ':' .
+                        \ severity . ':' .
                         \ errs[0]['source'] . ':' .
                         \ e['line'] . ':' .
                         \ e['column'] . ':' .
                         \ e['text']
                     call add(out, msg)
                 catch /\m^Vim\%((\a\+)\)\=:E716/
-                    call syntastic#log#warn('checker css/stylelint: unrecognized error format')
+                    call syntastic#log#warn('checker css/stylelint: unrecognized error item ' . string(e))
                     let out = []
                     break
                 endtry
