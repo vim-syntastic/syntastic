@@ -266,7 +266,7 @@ if exists('##QuitPre')
 endif
 
 function! s:BufReadPostHook() abort " {{{2
-    if g:syntastic_check_on_open
+    if g:syntastic_check_on_open && &pvw == 0
         call syntastic#log#debug(g:_SYNTASTIC_DEBUG_AUTOCOMMANDS,
             \ 'autocmd: BufReadPost, buffer ' . bufnr('') . ' = ' . string(bufname(str2nr(bufnr('')))))
         call s:UpdateErrors(1, [])
