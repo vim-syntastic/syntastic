@@ -19,7 +19,7 @@ if has('reltime')
     lockvar! g:_SYNTASTIC_START
 endif
 
-let g:_SYNTASTIC_VERSION = '3.7.0-63'
+let g:_SYNTASTIC_VERSION = '3.7.0-64'
 lockvar g:_SYNTASTIC_VERSION
 
 " Sanity checks {{{1
@@ -662,7 +662,8 @@ function! s:_skip_file() abort " {{{2
     let fname = expand('%', 1)
     let skip = s:_is_quitting(bufnr('%')) || get(b:, 'syntastic_skip_checks', 0) ||
         \ (&buftype !=# '') || !filereadable(fname) || getwinvar(0, '&diff') ||
-        \ s:_ignore_file(fname) || fnamemodify(fname, ':e') =~? g:syntastic_ignore_extensions
+        \ getwinvar(0, '&previewwindow') || s:_ignore_file(fname) ||
+        \ fnamemodify(fname, ':e') =~? g:syntastic_ignore_extensions
     if skip
         call syntastic#log#debug(g:_SYNTASTIC_DEBUG_TRACE, '_skip_file: skipping checks')
     endif
@@ -689,6 +690,9 @@ function! s:_explain_skip(filetypes) abort " {{{2
         endif
         if getwinvar(0, '&diff')
             call add(why, 'diff mode')
+        endif
+        if getwinvar(0, '&previewwindow')
+            call add(why, 'preview window')
         endif
         if s:_ignore_file(fname)
             call add(why, 'filename matching g:syntastic_ignore_files')
