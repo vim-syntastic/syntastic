@@ -439,7 +439,8 @@ Default: 2
 Use this option to tell syntastic to automatically open and/or close the
 |location-list| (see |syntastic-error-window|).
 
-When set to 0 the error window will not be opened or closed automatically. >
+When set to 0 the error window will be neither opened nor closed
+automatically. >
     let g:syntastic_auto_loc_list = 0
 <
 When set to 1 the error window will be automatically opened when errors are
@@ -449,6 +450,10 @@ detected, and closed when none are detected. >
 When set to 2 the error window will be automatically closed when no errors are
 detected, but not opened automatically. >
     let g:syntastic_auto_loc_list = 2
+<
+When set to 3 the error window will be automatically opened when errors are
+detected, but not closed automatically. >
+    let g:syntastic_auto_loc_list = 3
 <
                                                  *'syntastic_loc_list_height'*
 Default: 10
