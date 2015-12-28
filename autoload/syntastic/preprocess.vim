@@ -156,6 +156,32 @@ function! syntastic#preprocess#iconv(errors) abort " {{{2
         \       a:errors
 endfunction " }}}2
 
+function! syntastic#preprocess#jscs(errors) abort " {{{2
+    let out = []
+    let json = s:_decode_JSON(join(a:errors, ''))
+
+    if type(json) == type({})
+        for fname in keys(json)
+            if type(json[fname]) == type([])
+                for e in json[fname]
+                    try
+                        let e['message'] = substitute(e['message'], "\n", ' ', 'g')
+                        cal add(out, fname . ':' . e['line'] . ':' . e['column'] . ':' . e['message'])
+                    catch /\m^Vim\%((\a\+)\)\=:E716/
+                        call syntastic#log#warn('checker javascript/jscs: unrecognized error item ' . string(e))
+                        let out = []
+                    endtry
+                endfor
+            else
+                call syntastic#log#warn('checker javascript/jscs: unrecognized error format')
+            endif
+        endfor
+    else
+        call syntastic#log#warn('checker javascript/jscs: unrecognized error format')
+    endif
+    return out
+endfunction " }}}2
+
 function! syntastic#preprocess#killEmpty(errors) abort " {{{2
     return filter(copy(a:errors), 'v:val !=# ""')
 endfunction " }}}2
