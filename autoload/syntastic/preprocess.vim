@@ -176,8 +176,6 @@ function! syntastic#preprocess#jscs(errors) abort " {{{2
                 call syntastic#log#warn('checker javascript/jscs: unrecognized error format')
             endif
         endfor
-    else
-        call syntastic#log#warn('checker javascript/jscs: unrecognized error format')
     endif
     return out
 endfunction " }}}2
