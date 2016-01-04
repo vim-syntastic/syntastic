@@ -157,9 +157,14 @@ function! syntastic#preprocess#iconv(errors) abort " {{{2
 endfunction " }}}2
 
 function! syntastic#preprocess#jscs(errors) abort " {{{2
-    let out = []
-    let json = s:_decode_JSON(join(a:errors, ''))
+    let errs = join(a:errors, '')
+    if errs ==# ''
+        return []
+    endif
 
+    let json = s:_decode_JSON(errs)
+
+    let out = []
     if type(json) == type({})
         for fname in keys(json)
             if type(json[fname]) == type([])
