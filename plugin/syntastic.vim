@@ -19,7 +19,7 @@ if has('reltime')
     lockvar! g:_SYNTASTIC_START
 endif
 
-let g:_SYNTASTIC_VERSION = '3.7.0-68'
+let g:_SYNTASTIC_VERSION = '3.7.0-69'
 lockvar g:_SYNTASTIC_VERSION
 
 " Sanity checks {{{1
@@ -510,6 +510,7 @@ function! SyntasticMake(options) abort " {{{2
 
     if has_key(a:options, 'errorformat')
         let &errorformat = a:options['errorformat']
+        set errorformat<
     endif
 
     if has_key(a:options, 'cwd')
