@@ -541,10 +541,10 @@ overriding filters, cf. |filter-overrides|).
 
     "level" - takes one of two values, "warnings" or "errors"
     "type"  - can be either "syntax" or "style"
-    "regex" - is matched against the messages' text as a case-insensitive
-              |regular-expression|
-    "file"  - is matched against the filenames the messages refer to, as a
-              case-sensitive |regular-expression|.
+    "regex" - each item in list is matched against the messages' text as a
+              case-insensitive |regular-expression|
+    "file"  - each item in list is matched against the filenames the messages
+              refer to, as a case-sensitive |regular-expression|.
 
 If a key is prefixed by an exclamation mark "!", the corresponding filter is
 negated (i.e. the above example silences all messages that are NOT errors).
