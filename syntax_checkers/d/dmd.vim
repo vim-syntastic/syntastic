@@ -39,6 +39,7 @@ function! SyntaxCheckers_d_dmd_GetLocList() dict
     if !exists('g:syntastic_d_include_dirs')
         let g:syntastic_d_include_dirs = filter(glob($HOME . '/.dub/packages/*', 1, 1), 'isdirectory(v:val)')
         call map(g:syntastic_d_include_dirs, 'isdirectory(v:val . "/source") ? v:val . "/source" : v:val')
+        call map(g:syntastic_d_include_dirs, 'isdirectory(v:val . "/src") ? v:val . "/src" : v:val')
         call add(g:syntastic_d_include_dirs, './source')
     endif
 
