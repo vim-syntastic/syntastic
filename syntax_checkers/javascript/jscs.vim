@@ -29,7 +29,8 @@ function! SyntaxCheckers_javascript_jscs_IsAvailable() dict
 endfunction
 
 function! SyntaxCheckers_javascript_jscs_GetLocList() dict
-    let makeprg = self.makeprgBuild({ 'args_after': '--no-colors --reporter json' })
+    let config = findfile('.jscsrc', '.;')
+    let makeprg = self.makeprgBuild({ 'args_after': '--no-colors --reporter json --config ' . config })
 
     let errorformat = '%f:%l:%c:%m'
 
