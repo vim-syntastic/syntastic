@@ -90,18 +90,7 @@ function! syntastic#util#rmrf(what) abort " {{{2
     endif
 
     if  getftype(a:what) ==# 'dir'
-        if !exists('s:rmrf')
-            let s:rmrf =
-                \ has('unix') || has('mac') ? 'rm -rf' :
-                \ has('win32') || has('win64') ? 'rmdir /S /Q' :
-                \ has('win16') || has('win95') || has('dos16') || has('dos32') ? 'deltree /Y' : ''
-        endif
-
-        if s:rmrf !=# ''
-            silent! call syntastic#util#system(s:rmrf . ' ' . syntastic#util#shescape(a:what))
-        else
-            call s:_rmrf(a:what)
-        endif
+        call s:_delete(a:what, 'rf')
     else
         silent! call delete(a:what)
     endif
@@ -477,6 +466,27 @@ function! s:_translateElement(key, term) abort " {{{2
     endif
     return ret
 endfunction " }}}2
+
+" @vimlint(EVL103, 1, a:flags)
+function! s:_delete_dumb(what, flags) abort " {{{2
+    if !exists('s:rmrf')
+        let s:rmrf =
+            \ has('unix') || has('mac') ? 'rm -rf' :
+            \ has('win32') || has('win64') ? 'rmdir /S /Q' :
+            \ has('win16') || has('win95') || has('dos16') || has('dos32') ? 'deltree /Y' : ''
+    endif
+
+    if s:rmrf !=# ''
+        silent! call syntastic#util#system(s:rmrf . ' ' . syntastic#util#shescape(a:what))
+    else
+        call s:_rmrf(a:what)
+    endif
+endfunction " }}}2
+" @vimlint(EVL103, 0, a:flags)
+
+" delete(dir, 'rf') was added in Vim 7.4.1107, but it didn't become usable until 7.4.1128
+let s:_delete = function(v:version > 704 || (v:version == 704 && has('patch1128')) ? 'delete' : 's:_delete_dumb')
+lockvar s:_delete
 
 function! s:_rmrf(what) abort " {{{2
     if !exists('s:rmdir')
