@@ -55,8 +55,16 @@ if !exists('g:syntastic_java_javac_config_file_enabled')
     let g:syntastic_java_javac_config_file_enabled = 0
 endif
 
+if !exists('g:syntastic_java_javac_config_file_use_git_root')
+    let g:syntastic_java_javac_config_file_use_git_root = 0
+endif
+
 if !exists('g:syntastic_java_javac_config_file')
-    let g:syntastic_java_javac_config_file = '.syntastic_javac_config'
+    if g:syntastic_java_javac_config_file_use_git_root
+        let g:syntastic_java_javac_config_file = system('echo -n `git rev-parse --show-toplevel`') . '/.syntastic_javac_config'
+    else
+        let g:syntastic_java_javac_config_file = '.syntastic_javac_config'
+    endif
 endif
 
 if !exists('g:syntastic_java_javac_custom_classpath_command')
