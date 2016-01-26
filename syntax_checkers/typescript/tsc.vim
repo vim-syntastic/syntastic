@@ -39,8 +39,13 @@ function! SyntaxCheckers_typescript_tsc_IsAvailable() dict
 endfunction
 
 function! SyntaxCheckers_typescript_tsc_GetLocList() dict
+    let args = '--module commonjs'
+    let filename = expand('%:e')
+    if filename == 'tsx'
+        let args = args . ' --jsx react'
+    endif
     let makeprg = self.makeprgBuild({
-        \ 'args': '--module commonjs',
+        \ 'args': args,
         \ 'args_after': (s:tsc_new ? '--noEmit' : '--out ' . syntastic#util#DevNull()) })
 
     let errorformat =
