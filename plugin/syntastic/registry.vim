@@ -100,7 +100,7 @@ let s:_DEFAULT_CHECKERS = {
         \ 'xslt':          ['xmllint'],
         \ 'xquery':        ['basex'],
         \ 'yacc':          ['bison'],
-        \ 'yaml':          ['jsyaml'],
+        \ 'yaml':          ['jsyaml', 'yamllint'],
         \ 'z80':           ['z80syntaxchecker'],
         \ 'zpt':           ['zptlint'],
         \ 'zsh':           ['zsh'],
