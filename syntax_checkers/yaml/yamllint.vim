@@ -1,7 +1,7 @@
 "============================================================================
 "File:        yamllint.vim
 "Description: YAML files linting for syntastic.vim
-"Maintainer:  Adrien Vergé <http://yamllint.readthedocs.org/>
+"Maintainer:  Adrien Vergé
 "License:     This program is free software. It comes without any warranty,
 "             to the extent permitted by applicable law. You can redistribute
 "             it and/or modify it under the terms of the Do What The Fuck You
@@ -27,11 +27,19 @@ function! SyntaxCheckers_yaml_yamllint_GetLocList() dict
 
     let env = syntastic#util#isRunningWindows() ? {} : { 'TERM': 'dumb' }
 
-    return SyntasticMake({
+    let loclist = SyntasticMake({
         \ 'makeprg': makeprg,
         \ 'errorformat': errorformat,
         \ 'env': env,
         \ 'returns': [0, 1] })
+
+    for e in loclist
+        if e['type'] ==? 'W'
+            let e['subtype'] = 'Style'
+        endif
+    endfor
+
+    return loclist
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
