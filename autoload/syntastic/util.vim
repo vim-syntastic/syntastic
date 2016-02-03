@@ -51,7 +51,7 @@ endfunction " }}}2
 function! syntastic#util#tmpdir() abort " {{{2
     let tempdir = ''
 
-    if (has('unix') || has('mac')) && executable('mktemp')
+    if (has('unix') || has('mac')) && executable('mktemp') && !has('win32unix')
         " TODO: option "-t" to mktemp(1) is not portable
         let tmp = $TMPDIR !=# '' ? $TMPDIR : $TMP !=# '' ? $TMP : '/tmp'
         let out = split(syntastic#util#system('mktemp -q -d ' . tmp . '/vim-syntastic-' . getpid() . '-XXXXXXXX'), "\n")
