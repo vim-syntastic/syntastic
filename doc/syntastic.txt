@@ -158,6 +158,11 @@ Something like this could be more useful: >
 When syntax errors are detected a flag will be shown. The content of the flag
 is derived from the |syntastic_stl_format| option.
 
+Please note that these settings might conflict with other Vim plugins that
+change the way statusline works. Refer to these plugins' documentation for
+possible solutions. See also |syntastic-powerline| below if you're using the
+"powerline" Vim plugin (https://github.com/powerline/powerline).
+
 ------------------------------------------------------------------------------
 2.2. Error signs                                       *syntastic-error-signs*
 
