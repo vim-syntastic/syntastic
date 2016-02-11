@@ -36,12 +36,47 @@ function! SyntaxCheckers_d_dmd_IsAvailable() dict
 endfunction
 
 function! SyntaxCheckers_d_dmd_GetLocList() dict
-    if !exists('g:syntastic_d_include_dirs')
-        let g:syntastic_d_include_dirs = filter(glob($HOME . '/.dub/packages/*', 1, 1), 'isdirectory(v:val)')
-        call map(g:syntastic_d_include_dirs, 'isdirectory(v:val . "/source") ? v:val . "/source" : v:val')
-        call add(g:syntastic_d_include_dirs, './source')
+    let dubPaths = []
+
+    if executable('dub')
+        " If dub is installed, start searching for the project root,
+        " from the current source directory.
+        let path = expand('%:p:h')
+        let dubCommand = 'dub describe --import-paths'
+
+        while 1
+            if len(globpath(path, 'dub.json')) > 0 || len(globpath(path, 'dub.sdl')) > 0 || len(globpath(path, 'package.json')) > 0
+                " We hit a directory with a dub package file.
+                " Run the command to find the paths.
+                let dubPaths = split(system('cd ' . shellescape(path) . ' && ' . dubCommand), '\n')
+
+                if v:shell_error
+                    " The dub command failed, so clear the captured output.
+                    " Otherwise, we will capture some garbage.
+                    let dubPaths = []
+                endif
+
+                break
+            endif
+
+            let nextPath = fnamemodify(path, ':h')
+
+            if path == nextPath
+                " We just checked a root directory, so stop here.
+                break
+            endif
+
+            " Go up one directory.
+            let path = nextPath
+        endwhile
     endif
 
+    if len(dubPaths) > 0
+        " We found the exact import paths through DUB, so use those.
+        return dubPaths
+    endif
+
+    " Fall back on using DMD to find import paths.
     return syntastic#c#GetLocList('d', 'dmd', {
         \ 'errorformat':
         \     '%-G%f:%s:,%f(%l): %m,' .
