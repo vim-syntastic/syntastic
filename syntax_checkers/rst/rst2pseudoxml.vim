@@ -31,7 +31,12 @@ function! SyntaxCheckers_rst_rst2pseudoxml_GetLocList() dict
     let errorformat =
         \ '%f:%l: (%tNFO/1) %m,'.
         \ '%f:%l: (%tARNING/2) %m,'.
-        \ '%f:%l: (%tRROR/3) %m,'.
+        \ '%f:%l: (%tRROR/3) %m,'
+    " Match errors like 'Anonymous hyperlink mismatch' that don't have line
+    " numbers
+    let errorformat .= '%f:: (%tRROR/3) %m,'
+    let errorformat .=
+        \ '%f:%l: (%tNFO/1) %m,'.
         \ '%f:%l: (%tEVERE/4) %m,'.
         \ '%-G%.%#'
 
