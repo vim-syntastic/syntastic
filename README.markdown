@@ -280,7 +280,6 @@ install this plugin the checker should be picked up automatically by syntastic.
 
 <a name="faqloclist"></a>
 
-__4.7. Q. I run a checker and the location list is not updated...__  
 __4.7. Q. I run`:lopen` or `:lwindow` and the error window is empty...__
 
 A. By default the location list is changed only when you run the `:Errors`
