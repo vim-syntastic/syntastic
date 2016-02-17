@@ -21,6 +21,27 @@ function! syntastic#postprocess#compressWhitespace(errors) abort " {{{2
     return a:errors
 endfunction " }}}2
 
+" remove initial empty lines
+function! syntastic#postprocess#removeEmptyLines(errors) abort " {{{2
+    for e in a:errors
+        let e['text'] = substitute(e['text'], '\m^\n\+', '', '')
+    endfor
+
+    return a:errors
+endfunction " }}}2
+
+" unindent consistently
+function! syntastic#postprocess#unindent(errors) abort " {{{2
+    for e in a:errors
+        let lines = split(e['text'], '\n', 1)
+        let indent = min(map(copy(lines), 'len(matchstr(v:val,"^ \\+"))'))
+        let lines = map(lines, 'v:val[' . indent . ':]')
+        let e['text'] = join(lines, "\n")
+    endfor
+
+    return a:errors
+endfunction " }}}2
+
 " remove spurious CR under Cygwin
 function! syntastic#postprocess#cygwinRemoveCR(errors) abort " {{{2
     if has('win32unix')
