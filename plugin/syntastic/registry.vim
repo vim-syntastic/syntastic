@@ -45,6 +45,7 @@ let s:_DEFAULT_CHECKERS = {
         \ 'hss':           ['hss'],
         \ 'html':          ['tidy'],
         \ 'jade':          ['jade_lint'],
+        \ 'pug':          ['pug_lint'],
         \ 'java':          ['javac'],
         \ 'javascript':    ['jshint', 'jslint'],
         \ 'json':          ['jsonlint', 'jsonval'],
