@@ -57,7 +57,7 @@ Ada, Ansible configurations, API Blueprint, AppleScript, AsciiDoc, ASM,
 BEMHTML, Bro, Bourne shell, C, C++, C#, Cabal, Chef, CoffeeScript, Coco, Coq,
 CSS, Cucumber, CUDA, D, Dart, DocBook, Dockerfile, Dust, Elixir, Erlang,
 eRuby, Fortran, Gentoo metadata, GLSL, Go, Haml, Haskell, Haxe, Handlebars,
-HSS, HTML, Jade, Java, JavaScript, JSON, JSX, LESS, Lex, Limbo, LISP, LLVM
+HSS, HTML, Jade/Pug, Java, JavaScript, JSON, JSX, LESS, Lex, Limbo, LISP, LLVM
 intermediate language, Lua, Markdown, MATLAB, Mercury, NASM, Nix, Objective-C,
 Objective-C++, OCaml, Perl, Perl POD, PHP, gettext Portable Object, OS X and
 iOS property lists, Puppet, Python, QML, R, Racket, Relax NG, reStructuredText,
