@@ -105,6 +105,12 @@ Syntastic should work with any modern plugin managers for Vim, such as
 [Vundle][17]. Instructions for installing syntastic with [Pathogen][1] are
 included below for completeness.
 
+Starting with Vim version 7.4.1486 you can also load syntastic using the
+standard mechanism of packages, without the help of third-party plugin managers
+(see `:help packages` in Vim for details).  Please note that, while support for
+packages has been added in Vim 7.4.1384, only versions 7.4.1486 and later have
+all functionality needed by syntastic.
+
 Last but not least: syntastic doesn't know how to do any syntax checks by
 itself. In order to get meaningful results you need to install external
 checkers corresponding to the types of files you use. Please consult the
@@ -254,11 +260,11 @@ __4.4. Q. The `perl` checker has stopped working...__
 A. The `perl` checker runs `perl -c` against your file, which in turn
 __executes__ any `BEGIN`, `UNITCHECK`, and `CHECK` blocks, and any `use`
 statements in your file (cf. [perlrun][10]).  This is probably fine if you
-wrote the file yourself, but it's a security problem if you're checking third
-party files.  Since there is currently no way to disable this behaviour while
-still producing useful results, the checker is now disabled by default.  To
-(re-)enable it, make sure the `g:syntastic_perl_checkers` list includes `perl`,
-and set `g:syntastic_enable_perl_checker` to 1 in your `vimrc`:
+wrote the file yourself, but it's a security problem if you're checking
+third-party files.  Since there is currently no way to disable this behaviour
+while still producing useful results, the checker is now disabled by default.
+To (re-)enable it, make sure the `g:syntastic_perl_checkers` list includes
+`perl`, and set `g:syntastic_enable_perl_checker` to 1 in your `vimrc`:
 ```vim
 let g:syntastic_enable_perl_checker = 1
 ```
