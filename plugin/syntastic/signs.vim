@@ -20,15 +20,7 @@ let s:setup_done = 0
 " Public methods {{{1
 
 function! g:SyntasticSignsNotifier.New() abort " {{{2
-    let newObj = copy(self)
-
-    if !s:setup_done
-        call self._setup()
-        let s:setup_done = 1
-        lockvar s:setup_done
-    endif
-
-    return newObj
+    return copy(self)
 endfunction " }}}2
 
 function! g:SyntasticSignsNotifier.enabled() abort " {{{2
@@ -37,8 +29,15 @@ endfunction " }}}2
 
 function! g:SyntasticSignsNotifier.refresh(loclist) abort " {{{2
     call syntastic#log#debug(g:_SYNTASTIC_DEBUG_NOTIFICATIONS, 'signs: refresh')
+
     let old_signs = copy(self._bufSignIds())
     if self.enabled()
+        if !s:setup_done
+            call self._setup()
+            let s:setup_done = 1
+            lockvar s:setup_done
+        endif
+
         call self._signErrors(a:loclist)
     endif
     call self._removeSigns(old_signs)
