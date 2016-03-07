@@ -20,7 +20,8 @@ let s:setup_done = 0
 " Public methods {{{1
 
 function! g:SyntasticSignsNotifier.New() abort " {{{2
-    return copy(self)
+    let newObj = copy(self)
+    return newObj
 endfunction " }}}2
 
 function! g:SyntasticSignsNotifier.enabled() abort " {{{2
