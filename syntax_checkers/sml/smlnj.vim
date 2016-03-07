@@ -18,8 +18,56 @@ let g:loaded_syntastic_sml_smlnj_checker = 1
 let s:save_cpo = &cpo
 set cpo&vim
 
+" If the user is using a CM file to manage their program, we'd like to detect
+" this and set the flags for makeprgBuild appropriately.
+"
+" This function basically automates this process which formerly required user
+" intervention:
+"
+"   - Figure out whether the project is using a CM file
+"   - Figure out the name of the CM file for this project
+"   - Edit the vimrc, using the appropriate name:
+"         let g:syntastic_sml_smlnj_args = "-m sources.cm"
+"         let g:syntastic_sml_smlnj_fname = ""
+"   - Re-launch Vim
+"
+" Of course none of these are that hard, but it's tedious to have to edit the
+" vimrc every time you start working in a different folder on a new project.
+
+function! s:DetectCMFile()
+    " Start searching at the current folder
+    let curdir = fnamemodify("%", ":p:h")
+
+    while 1
+        " Check if there are any cm files in the current folder
+        let cmfiles = split(globpath(curdir, "*.cm"))
+        if len(cmfiles) > 0
+            " Return the first CM file. The user can always override which
+            " CM file is used according to the procedure discussed above.
+            "
+            " TODO(jez): This is a bad heuristic if there are many CM files.
+            return cmfiles[0]
+        endif
+
+        let nextdir = fnamemodify(curdir, ":h")
+        if nextdir ==# curdir
+            break
+        else
+            let curdir = nextdir
+        endif
+    endwhile
+
+endfunction
+
 function! SyntaxCheckers_sml_smlnj_GetLocList() dict
-    let makeprg = self.makeprgBuild({})
+    let cmfile = s:DetectCMFile()
+    if !empty(cmfile)
+        " Use the CM file we found
+        let makeprg = self.makeprgBuild({"args": "-m " . cmfile, "fname": ""})
+    else
+        " Default to running smlnj on the current file
+        let makeprg = self.makeprgBuild({})
+    endif
 
     let errorformat =
         \ '%E%f:%l%\%.%c %trror: %m,' .
