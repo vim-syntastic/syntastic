@@ -37,6 +37,7 @@ CONTENTS                                                  *syntastic-contents*
         5.3.Configuring specific checkers..........|syntastic-config-makeprg|
         5.4.Sorting errors.........................|syntastic-config-sort|
         5.5.Debugging..............................|syntastic-config-debug|
+        5.6.Profiling..............................|syntastic-profiling|
     6.Notes........................................|syntastic-notes|
         6.1.Handling of composite filetypes........|syntastic-composite|
         6.2.Editing files over network.............|syntastic-netrw|
@@ -866,6 +867,23 @@ and 33:
 Debug logs can be saved to a file; see |'syntastic_debug_file'| for details.
 
 Setting |'syntastic_debug'| to 0 turns off logging.
+
+------------------------------------------------------------------------------
+5.6 Profiling                                            *syntastic-profiling*
+
+A very useful tool for debugging performance problems is Vim's built-in
+|profiler|. In order to enable profiling for syntastic you need to add two lines
+to your vimrc (not to gvimrc): >
+    profile start syntastic.log
+    profile! file */syntastic/*
+<
+(assuming your copy of syntastic lives in a directory creatively named
+"syntastic"). These lines must be executed before syntastic is loaded, so you
+need to put them before package managers such as "pathogen" or "Vundle", and
+(in newer Vim versions) before any commands related to |packages|.
+
+A log file is created in the current directory, and is updated when you quit
+Vim.
 
 ==============================================================================
 6. Notes                                                     *syntastic-notes*
