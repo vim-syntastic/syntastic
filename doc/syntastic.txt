@@ -36,8 +36,9 @@ CONTENTS                                                  *syntastic-contents*
         5.2.Choosing the executable................|syntastic-config-exec|
         5.3.Configuring specific checkers..........|syntastic-config-makeprg|
         5.4.Sorting errors.........................|syntastic-config-sort|
-        5.5.Debugging..............................|syntastic-config-debug|
-        5.6.Profiling..............................|syntastic-profiling|
+        5.5.Filtering errors.......................|syntastic-config-filtering|
+        5.6.Debugging..............................|syntastic-config-debug|
+        5.7.Profiling..............................|syntastic-profiling|
     6.Notes........................................|syntastic-notes|
         6.1.Handling of composite filetypes........|syntastic-composite|
         6.2.Editing files over network.............|syntastic-netrw|
@@ -747,38 +748,41 @@ takes precedence over both 'b:syntastic_<filetype>_<checker>_exec' and
 ------------------------------------------------------------------------------
 5.3 Configuring specific checkers                   *syntastic-config-makeprg*
 
-Checkers are run by constructing a command line and passing it to a shell.
-In most cases this command line is built using an internal function named
-'makeprgBuild()', which provides a number of options that allows you to
-customise every part of the command that gets called.
+Checkers are run by constructing a command line and by passing it to a shell
+(see |'shell'| and |'syntastic_shell'|). In most cases this command line is
+built using an internal function named 'makeprgBuild()', which provides a
+number of options that allow you to customise every part of the command that
+gets called.
 
                                    *'syntastic_<filetype>_<checker>_<option>'*
-Checkers that use 'makeprgBuild()' construct a command line like this: >
+Checkers that use 'makeprgBuild()' construct the corresponding command line
+like this: >
     let makeprg = self.makeprgBuild({
-                \ "exe": self.getExec(),
-                \ "args": "-a -b -c",
-                \ "fname: shellescape(expand('%', 1)),
-                \ "post_args": "--more --args",
-                \ "tail": "2>/dev/null" })
+                \ 'exe': self.getExec(),
+                \ 'args': '-a -b -c',
+                \ 'fname': shellescape(expand('%', 1)),
+                \ 'post_args': '--more --args',
+                \ 'tail': '2>/dev/null' })
 <
 The result is a command line of the form: >
     <exe> <args> <fname> <post_args> <tail>
 <
-All arguments above are optional, and can be overridden by setting global
+All fields above are optional, and can be overridden by setting global
 variables 'g:syntastic_<filetype>_<checker-name>_<option-name>' - even
 parameters not specified in the call to 'makeprgBuild()'. For example to
-override the args and the tail: >
-    let g:syntastic_c_pc_lint_args = "-w5 -Iz:/usr/include/linux"
-    let g:syntastic_c_pc_lint_tail = "2>/dev/null"
+override the argguments and the tail: >
+    let g:syntastic_c_pc_lint_args = '-w5 -Iz:/usr/include/linux'
+    let g:syntastic_c_pc_lint_tail = '2>/dev/null'
 <
-These variables also have local versions named
+These variables also have buffer-local versions named
 'b:syntastic_<filetype>_<checker-name>_<option-name>', which takes precedence
 over the global ones in the corresponding buffers.
 
-If any of the characters in the values of these variables have a special
-meaning for the shell in use (see |'shell'| and |'syntastic_shell'|) you need
-to escape them so that they can survive shell expansions. Vim function
-|shellescape()| can help you with that: >
+You can see the final outcome of setting these variables in the debug logs
+(cf. |syntastic-config-debug|).
+
+Special characters need to be escaped, so that they can survive shell
+expansions. Vim function |shellescape()| can help you here: >
     let g:syntastic_c_cppcheck_args =
         \ '-DBUILD_BASENAME=my-module ' . shellescape('-DBUILD_STR(s)=#s')
 <
@@ -787,23 +791,21 @@ the value into a list: >
     let g:syntastic_c_cppcheck_args =
         \ ['-DBUILD_BASENAME=my-module', '-DBUILD_STR(s)=#s']
 <
-Each element of the list will then be escaped as needed and turned into a
-separate shell argument.
+Each element of this list is then escaped as needed, and turned into a
+separate argument for the shell.
 
+                                                      *syntastic-config-empty*
 If one of the above variables has a non-empty default and you want it to be
 empty, you can set it to an empty string, e.g.: >
     let g:syntastic_javascript_jslint_args = ""
-
-You can see the final outcome of setting these variables in the debug logs
-(cf. |syntastic-config-debug|).
-
+<
                                         *'syntastic_<filetype>_<checker>_exe'*
 The 'exe' option is special. Normally it is the same as the 'exec' attribute
 described above, but you can use it to add environment variables to the
 command line, or to change the way the checker is run. For example this setup
-allows you to run PC-Lint under Wine emulation on Linux: >
-    let  g:syntastic_c_pc_lint_exec = "wine"
-    let  g:syntastic_c_pc_lint_exe = "wine c:/path/to/lint-nt.exe"
+allows you to run PC-Lint on Linux, under Wine emulation: >
+    let  g:syntastic_c_pc_lint_exec = 'wine'
+    let  g:syntastic_c_pc_lint_exe = 'wine c:/path/to/lint-nt.exe'
 <
                                       *'syntastic_<filetype>_<checker>_fname'*
 
@@ -819,16 +821,6 @@ look at the source code of the checker in question. If there are specific
 options that can be set, they are normally documented in the wiki:
 
     https://github.com/scrooloose/syntastic/wiki/Syntax-Checkers
-
-                             *'syntastic_<filetype>_<checker>_quiet_messages'*
-Last but not least, 'g:syntastic_<filetype>_<checker-name>_quiet_messages' can
-be used to restrict message filters to messages produced by specific checkers.
-Example: >
-    let g:syntastic_python_pylama_quiet_messages = {
-        \ "type":  "style",
-        \ "regex": '\m\[C03\d\d\]' }
-<
-See |syntastic_quiet_messages| for the syntax.
 
 ------------------------------------------------------------------------------
 5.4 Sorting errors                                     *syntastic-config-sort*
@@ -850,7 +842,21 @@ For aggregated lists (see |syntastic-aggregating-errors|) these variables are
 ignored if |'syntastic_sort_aggregated_errors'| is set (which is the default).
 
 ------------------------------------------------------------------------------
-5.5 Debugging                                         *syntastic-config-debug*
+5.5 Filtering errors                              *syntastic-config-filtering*
+
+                             *'syntastic_<filetype>_<checker>_quiet_messages'*
+Finally, variables 'g:syntastic_<filetype>_<checker-name>_quiet_messages' can
+be used to filter out some of the messages produced by specific checkers. The
+effect is identical to that of |syntastic_quiet_messages|, except only messages
+from the corresponding checkers are filtered. Example: >
+    let g:syntastic_python_pylama_quiet_messages = {
+        \ "type":  "style",
+        \ "regex": '\m\[C03\d\d\]' }
+<
+The syntax is of course identical to that of |syntastic_quiet_messages|.
+
+------------------------------------------------------------------------------
+5.6 Debugging                                         *syntastic-config-debug*
 
 Syntastic can log a trace of its working to Vim's |message-history|. To verify
 the command line constructed by syntastic to run a checker, set the variable
@@ -869,7 +875,7 @@ Debug logs can be saved to a file; see |'syntastic_debug_file'| for details.
 Setting |'syntastic_debug'| to 0 turns off logging.
 
 ------------------------------------------------------------------------------
-5.6 Profiling                                            *syntastic-profiling*
+5.7 Profiling                                            *syntastic-profiling*
 
 A very useful tool for debugging performance problems is Vim's built-in
 |profiler|. In order to enable profiling for syntastic you need to add two lines
