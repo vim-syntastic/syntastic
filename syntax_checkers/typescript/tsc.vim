@@ -14,6 +14,10 @@ if !exists('g:syntastic_typescript_tsc_sort')
     let g:syntastic_typescript_tsc_sort = 1
 endif
 
+if !exists('g:syntastic_typescript_tsc_compiler_option')
+    let g:syntastic_typescript_tsc_compiler_option = ''
+endif
+
 let s:save_cpo = &cpo
 set cpo&vim
 
@@ -40,7 +44,7 @@ endfunction
 
 function! SyntaxCheckers_typescript_tsc_GetLocList() dict
     let makeprg = self.makeprgBuild({
-        \ 'args': '--module commonjs',
+        \ 'args': '--module commonjs ' . g:syntastic_typescript_tsc_compiler_option,
         \ 'args_after': (s:tsc_new ? '--noEmit' : '--out ' . syntastic#util#DevNull()) })
 
     let errorformat =
