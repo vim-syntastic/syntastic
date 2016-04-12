@@ -102,6 +102,7 @@ let s:_DEFAULT_CHECKERS = {
         \ 'xquery':        ['basex'],
         \ 'yacc':          ['bison'],
         \ 'yaml':          ['jsyaml'],
+        \ 'yang':          ['pyang'],
         \ 'z80':           ['z80syntaxchecker'],
         \ 'zpt':           ['zptlint'],
         \ 'zsh':           ['zsh'],
