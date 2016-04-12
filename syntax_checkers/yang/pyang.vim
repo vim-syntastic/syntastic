@@ -31,8 +31,6 @@ function! SyntaxCheckers_yang_pyang_GetLocList() dict
         \ 'postprocess': ['filterForeignErrors'] })
 endfunction
 
-runtime! syntax_checkers/yang/pyang.vim
-
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'yang',
     \ 'name': 'pyang'})
