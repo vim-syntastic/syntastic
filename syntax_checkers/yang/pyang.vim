@@ -18,12 +18,17 @@ let g:loaded_syntastic_yang_pyang_checker = 1
 let s:save_cpo = &cpo
 set cpo&vim
 
+function! SyntaxCheckers_yang_pyang_GetHighlightRegex(item)
+    let term = matchstr(a:item['text'], '\m"\zs[^"]\+\ze"')
+    return term != '' ? '\V\<' . escape(term, '\') . '\>' : ''
+endfunction
+
 function! SyntaxCheckers_yang_pyang_GetLocList() dict
     let makeprg = self.makeprgBuild({})
 
     let errorformat =
-        \ '%W%f:%l: warning: %m,' .
-        \ '%E%f:%l: error: %m'
+        \ '%f:%l: %trror: %m,' .
+        \ '%f:%l: %tarning: %m'
 
     return SyntasticMake({
         \ 'makeprg': makeprg,
