@@ -21,7 +21,9 @@ set cpo&vim
 function! SyntaxCheckers_yang_pyang_GetLocList() dict
     let makeprg = self.makeprgBuild({})
 
-    let errorformat = '%f:%l:%m'
+    let errorformat =
+        \ '%W%f:%l: warning: %m,' .
+        \ '%E%f:%l: error: %m'
 
     return SyntasticMake({
         \ 'makeprg': makeprg,
