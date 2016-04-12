@@ -19,7 +19,7 @@ if has('reltime')
     lockvar! g:_SYNTASTIC_START
 endif
 
-let g:_SYNTASTIC_VERSION = '3.7.0-109'
+let g:_SYNTASTIC_VERSION = '3.7.0-112'
 lockvar g:_SYNTASTIC_VERSION
 
 " Sanity checks {{{1
@@ -333,9 +333,7 @@ function! s:UpdateErrors(auto_invoked, checker_names) abort " {{{2
     let run_checks = !a:auto_invoked || s:modemap.doAutoChecking()
     if run_checks
         call s:CacheErrors(a:checker_names)
-        unlockvar! b:syntastic_changedtick
-        let b:syntastic_changedtick = b:changedtick
-        lockvar! b:syntastic_changedtick
+        call syntastic#util#setChangedtick()
     else
         if a:auto_invoked
             return
@@ -362,6 +360,9 @@ function! s:UpdateErrors(auto_invoked, checker_names) abort " {{{2
     if syntastic#util#var('always_populate_loc_list') || do_jump
         call syntastic#log#debug(g:_SYNTASTIC_DEBUG_NOTIFICATIONS, 'loclist: setloclist (new)')
         call setloclist(0, loclist.getRaw())
+        if !exists('b:syntastic_changedtick')
+            call syntastic#util#setChangedtick()
+        endif
         let w:syntastic_loclist_set = [bufnr(''), b:syntastic_changedtick]
         if run_checks && do_jump && !loclist.isEmpty()
             call syntastic#log#debug(g:_SYNTASTIC_DEBUG_NOTIFICATIONS, 'loclist: jump')

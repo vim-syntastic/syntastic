@@ -297,6 +297,7 @@ function! g:SyntasticLoclist.setloclist() abort " {{{2
         let replace = g:syntastic_reuse_loc_lists && !empty(w:syntastic_loclist_set)
         call syntastic#log#debug(g:_SYNTASTIC_DEBUG_NOTIFICATIONS, 'loclist: setloclist ' . (replace ? '(replace)' : '(new)'))
         call setloclist(0, self.getRaw(), replace ? 'r' : ' ')
+        call syntastic#util#setChangedtick()
         let w:syntastic_loclist_set = [bufnr(''), b:syntastic_changedtick]
     endif
 endfunction " }}}2
