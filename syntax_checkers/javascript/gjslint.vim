@@ -22,7 +22,7 @@ function! SyntaxCheckers_javascript_gjslint_GetLocList() dict
 
     let makeprg = self.makeprgBuild({
         \ 'args': '--nodebug_indentation',
-        \ 'args_after': '--nosummary --unix_mode --nobeep' })
+        \ 'args_after': '--check_html --nosummary --unix_mode --nobeep' })
 
     let errorformat =
         \ "%f:%l:(New Error -%\\?\%n) %m," .
