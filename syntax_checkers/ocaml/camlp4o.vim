@@ -15,16 +15,12 @@ if exists('g:loaded_syntastic_ocaml_camlp4o_checker')
 endif
 let g:loaded_syntastic_ocaml_camlp4o_checker = 1
 
-if exists('g:syntastic_ocaml_camlp4r') && g:syntastic_ocaml_camlp4r != 0
-    let s:ocamlpp='camlp4r'
-else
-    let s:ocamlpp='camlp4o'
-endif
-
 let s:save_cpo = &cpo
 set cpo&vim
 
 " Checker options {{{1
+
+let s:ocamlpp = get(g:, 'syntastic_ocaml_camlp4r', 0) ? 'camlp4r' : 'camlp4o'
 
 if !exists('g:syntastic_ocaml_use_ocamlc') || !executable('ocamlc')
     let g:syntastic_ocaml_use_ocamlc = 0
@@ -32,6 +28,10 @@ endif
 
 if !exists('g:syntastic_ocaml_use_janestreet_core')
     let g:syntastic_ocaml_use_janestreet_core = 0
+endif
+
+if !exists('g:syntastic_ocaml_janestreet_core_dir')
+    let g:syntastic_ocaml_janestreet_core_dir = '.'
 endif
 
 if !exists('g:syntastic_ocaml_use_ocamlbuild') || !executable('ocamlbuild')
@@ -95,7 +95,7 @@ endfunction " }}}2
 function! s:GetOcamlcMakeprg() " {{{2
     if g:syntastic_ocaml_use_janestreet_core
         let build_cmd = 'ocamlc -I '
-        let build_cmd .= expand(g:syntastic_ocaml_janestreet_core_dir, 1)
+        let build_cmd .= syntastic#util#shexpand(g:syntastic_ocaml_janestreet_core_dir)
         let build_cmd .= ' -c ' . syntastic#util#shexpand('%')
         return build_cmd
     else
