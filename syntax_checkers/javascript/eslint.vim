@@ -22,6 +22,16 @@ if !exists('g:syntastic_javascript_eslint_generic')
     let g:syntastic_javascript_eslint_generic = 0
 endif
 
+" Use local eslint when possible
+if !exists('g:syntastic_javascript_eslint_use_local_node_module')
+    let g:syntastic_javascript_eslint_use_local_node_module = 1
+endif
+
+" Typical local path to eslint
+if !exists('g:syntastic_javascript_eslint_local_path')
+    let g:syntastic_javascript_eslint_local_path = "/node_modules/eslint/bin/eslint.js"
+endif
+
 let s:save_cpo = &cpo
 set cpo&vim
 
@@ -41,6 +51,7 @@ function! SyntaxCheckers_javascript_eslint_GetLocList() dict
         call syntastic#log#deprecationWarn('javascript_eslint_conf', 'javascript_eslint_args',
             \ "'--config ' . syntastic#util#shexpand(OLD_VAR)")
     endif
+
 
     let makeprg = self.makeprgBuild({ 'args_before': (g:syntastic_javascript_eslint_generic ? '' : '-f compact') })
 
@@ -68,7 +79,21 @@ function! SyntaxCheckers_javascript_eslint_GetLocList() dict
     return loclist
 endfunction
 
+function s:GetLocalEslintExec()
+    let project_file = syntastic#util#findFileInParent('package.json', getcwd())
+    let project_dir = fnamemodify(project_file, ':p:h')
+    let path_to_eslint = project_dir . g:syntastic_javascript_eslint_local_path
+    return path_to_eslint
+endfunction
+
+if g:syntastic_javascript_eslint_use_local_node_module
+    let s:eslint_exec = syntastic#util#shescape(s:GetLocalEslintExec())
+else
+    let s:eslint_exec = 'eslint'
+endif
+
 call g:SyntasticRegistry.CreateAndRegisterChecker({
+    \ 'exec': s:eslint_exec,
     \ 'filetype': 'javascript',
     \ 'name': 'eslint'})
 
