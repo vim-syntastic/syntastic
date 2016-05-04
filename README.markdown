@@ -18,27 +18,27 @@
 
 
 - - -
-1. [Introduction](#introduction)  
-2. [Installation](#installation)  
-2.1. [Requirements](#requirements)  
-2.2. [Installing syntastic with Pathogen](#installpathogen)  
-3. [Recommended settings](#settings)  
-4. [FAQ](#faq)  
-4.1. [I installed syntastic but it isn't reporting any errors...](#faqinfo)  
-4.2. [The `python` checker complains about syntactically valid Python 3 constructs...](#faqpython3)  
-4.3. [Are there any local checkers for HTML5 that I can use with syntastic?](#faqhtml5)  
-4.4. [The `perl` checker has stopped working...](#faqperl)  
-4.5. [What happened to the `rustc` checker?](#faqrust)  
-4.6. [What happened to the `xcrun` checker?](#faqxcrun)  
-4.7. [I run a checker and the location list is not updated...](#faqloclist)  
-4.7. [I run`:lopen` or `:lwindow` and the error window is empty...](#faqloclist)  
-4.8. [How can I pass additional arguments to a checker?](#faqargs)  
-4.9. [Syntastic supports several checkers for my filetype - how do I tell which one(s) to use?](#faqcheckers)  
-4.10. [What is the difference between syntax checkers and style checkers?](#faqstyle)  
-4.11. [I have enabled multiple checkers for the current filetype. How can I display all errors from all checkers together?](#faqaggregate)  
-4.12. [How can I jump between the different errors without using the location list at the bottom of the window?](#faqlnext)  
-4.13. [The error window is closed automatically when I :quit the current buffer but not when I :bdelete it?](#faqbdelete)  
-5. [Resources](#otherresources)  
+1. [Introduction](#introduction)
+2. [Installation](#installation)
+2.1. [Requirements](#requirements)
+2.2. [Installing syntastic with Pathogen](#installpathogen)
+3. [Recommended settings](#settings)
+4. [FAQ](#faq)
+4.1. [I installed syntastic but it isn't reporting any errors...](#faqinfo)
+4.2. [The `python` checker complains about syntactically valid Python 3 constructs...](#faqpython3)
+4.3. [Are there any local checkers for HTML5 that I can use with syntastic?](#faqhtml5)
+4.4. [The `perl` checker has stopped working...](#faqperl)
+4.5. [What happened to the `rustc` checker?](#faqrust)
+4.6. [What happened to the `xcrun` checker?](#faqxcrun)
+4.7. [I run a checker and the location list is not updated...](#faqloclist)
+4.7. [I run`:lopen` or `:lwindow` and the error window is empty...](#faqloclist)
+4.8. [How can I pass additional arguments to a checker?](#faqargs)
+4.9. [Syntastic supports several checkers for my filetype - how do I tell which one(s) to use?](#faqcheckers)
+4.10. [What is the difference between syntax checkers and style checkers?](#faqstyle)
+4.11. [I have enabled multiple checkers for the current filetype. How can I display all errors from all checkers together?](#faqaggregate)
+4.12. [How can I jump between the different errors without using the location list at the bottom of the window?](#faqlnext)
+4.13. [The error window is closed automatically when I :quit the current buffer but not when I :bdelete it?](#faqbdelete)
+5. [Resources](#otherresources)
 
 - - -
 
@@ -287,7 +287,7 @@ install this plugin the checker should be picked up automatically by syntastic.
 
 <a name="faqloclist"></a>
 
-__4.7. Q. I run a checker and the location list is not updated...__  
+__4.7. Q. I run a checker and the location list is not updated...__
 __4.7. Q. I run`:lopen` or `:lwindow` and the error window is empty...__
 
 A. By default the location list is changed only when you run the `:Errors`
