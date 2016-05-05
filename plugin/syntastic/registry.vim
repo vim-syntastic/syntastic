@@ -90,6 +90,8 @@ let s:_DEFAULT_CHECKERS = {
         \ 'tex':           ['lacheck', 'chktex'],
         \ 'texinfo':       ['makeinfo'],
         \ 'text':          [],
+        \ 'trig':          ['rapper'],
+        \ 'turtle':        ['rapper'],
         \ 'twig':          ['twiglint'],
         \ 'typescript':    ['tsc'],
         \ 'vala':          ['valac'],
