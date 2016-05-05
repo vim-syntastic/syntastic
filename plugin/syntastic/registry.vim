@@ -37,7 +37,7 @@ let s:_DEFAULT_CHECKERS = {
         \ 'eruby':         ['ruby'],
         \ 'fortran':       ['gfortran'],
         \ 'glsl':          ['cgc'],
-        \ 'go':            ['go'],
+        \ 'go':            [],
         \ 'haml':          ['haml'],
         \ 'handlebars':    ['handlebars'],
         \ 'haskell':       ['hdevtools', 'hlint'],
