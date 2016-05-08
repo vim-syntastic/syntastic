@@ -11,8 +11,21 @@ let g:loaded_syntastic_sh_shellcheck_checker = 1
 let s:save_cpo = &cpo
 set cpo&vim
 
+function! s:GetDialectArgument()
+    if exists('b:is_bash') && b:is_bash
+        return '-s bash'
+    elseif exists('b:is_sh') && b:is_sh
+        return '-s sh'
+    elseif exists('b:is_kornshell') && b:is_kornshell
+        return '-s ksh'
+    endif
+
+    return ''
+endfunction
+
 function! SyntaxCheckers_sh_shellcheck_GetLocList() dict
-    let makeprg = self.makeprgBuild({ 'args_after': '-f gcc' })
+    let args = '-f gcc ' . s:GetDialectArgument()
+    let makeprg = self.makeprgBuild({ 'args_after': args })
 
     let errorformat =
         \ '%f:%l:%c: %trror: %m,' .
