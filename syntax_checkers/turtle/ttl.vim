@@ -17,12 +17,15 @@ let g:loaded_syntastic_turtle_ttl_checker = 1
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! SyntaxCheckers_turtle_ttl_GetLocList() dict
-    let makeprg = self.makeprgBuild({ 'post_args_after': '' })
+function! SyntaxCheckers_turtle_ttl_GetHighlightRegex(item)
+    let term = matchstr(a:item['text'], '\m"\zs[^"]\+\ze"')
+    return term !=# '' ? '\V\<' . escape(term, '\') . '\>' : ''
+endfunction
 
-    let errorformat =
-        \ '%E[Error: %m at line %l.],' .
-        \ '%E[Error: %m on line %l.]'
+function! SyntaxCheckers_turtle_ttl_GetLocList() dict
+    let makeprg = self.makeprgBuild({})
+
+    let errorformat = '%\m[Error: %m %\%%(at%\|on%\) line %l%\%.]'
 
     return SyntasticMake({
         \ 'makeprg': makeprg,
