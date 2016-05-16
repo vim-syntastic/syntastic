@@ -18,6 +18,7 @@ let s:_DEFAULT_CHECKERS = {
         \ 'c':             ['gcc'],
         \ 'cabal':         ['cabal'],
         \ 'chef':          ['foodcritic'],
+        \ 'clean':         ['cpm'],
         \ 'co':            ['coco'],
         \ 'cobol':         ['cobc'],
         \ 'coffee':        ['coffee', 'coffeelint'],
