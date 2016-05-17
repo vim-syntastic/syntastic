@@ -18,37 +18,17 @@ let g:loaded_syntastic_clean_clm_checker = 1
 let s:save_cpo = &cpo
 set cpo&vim
 
-" Find a Clean module
-" First attempts to find it in dir, then in $CLEAN_HOME/lib/.
-function! clm#findmodule(name, dir)
-    if isdirectory(a:dir . '/' . a:name)
-        return a:dir . '/' . a:name
-    elseif $CLEAN_HOME != ''
-        let path = expand($CLEAN_HOME . '/lib/' . a:name)
-        if isdirectory(path)
-            return path
-        endif
-    else
-        return ''
-    endif
+function! SyntaxCheckers_clean_clm_IsAvailable() dict
+    return syntastic#util#versionIsAtLeast(self.getVersion(), [2,4])
 endfunction
 
 function! SyntaxCheckers_clean_clm_GetLocList() dict
     let module = expand('%:t:r', 1)
     let moddir = expand('%:p:h', 1)
 
-    let args_before = ['-c']
-    if exists('b:syntastic_clean_clm_libraries')
-        let libraries = map(b:syntastic_clean_clm_libraries, 'clm#findmodule(v:val, moddir)')
-        let libraries = filter(libraries, 'v:val != ""')
-        for lib in libraries
-            let args_before += ['-I', lib]
-        endfor
-    endif
-
     let makeprg = self.makeprgBuild({
-                \ 'args_before': args_before,
-                \ 'fname': shellescape(module) })
+                \ 'args_before': '-c',
+                \ 'fname': syntastic#util#shescape(module) })
 
     " (Mainly) from timjs/clean-vim
     let errorformat  = '%E%trror [%f\,%l]: %m' " General error (without location info)

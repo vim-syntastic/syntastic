@@ -27,7 +27,7 @@ function! SyntaxCheckers_clean_cpm_GetLocList() dict
         let cwd = expand('%:p:h', 1)
         let makeprg = self.makeprgBuild({
                     \ 'exe_after': 'project',
-                    \ 'fname': shellescape(prj),
+                    \ 'fname': syntastic#util#shescape(prj),
                     \ 'post_args_before': 'build' })
     else
         " If the current module does not have a corresponding project file,
