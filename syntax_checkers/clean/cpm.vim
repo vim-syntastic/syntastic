@@ -22,21 +22,20 @@ function! SyntaxCheckers_clean_cpm_GetLocList() dict
     let module = expand('%:r')
     let prj = module . '.prj'
 
-    if !filereadable(prj)
-        let prj = get(split(glob('*.prj'), '\n'), 0)
-    endif
-
     if filereadable(prj)
-        " Use a .prj (project file) if found in the current directory
-        " Meaning that if the project file is for another main module, the
-        " current file will only be checked if that module imports the current
-        " module
+        " Use a .prj (project file) with the same name as the current module.
         let makeprg = self.makeprgBuild({
                     \ 'args': 'project',
                     \ 'fname': prj,
                     \ 'post_args': 'build' })
+    elseif glob('*.prj') != ''
+        " If the current module does not have a corresponding project file,
+        " but there do exist project files, simply run cpm make.
+        " This means that if these projects don't use the current module, it
+        " won't be checked.
+        let makeprg = self.makeprgBuild({ 'args': 'make' })
     else
-        " Otherwise, attempt to check as a simple module with clm
+        " Otherwise, fall back to clm and attempt to build as a main module.
         " Will fail if other libraries than StdEnv are used, but in this case
         " you should be using cpm anyway.
         let makeprg = self.makeprgBuild({
