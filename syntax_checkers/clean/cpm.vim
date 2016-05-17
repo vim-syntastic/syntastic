@@ -18,21 +18,17 @@ let g:loaded_syntastic_clean_cpm_checker = 1
 let s:save_cpo = &cpo
 set cpo&vim
 
-if !exists('g:syntastic_clean_cocl_errorformat')
-    execute 'source ' . fnameescape(expand('<sfile>:p:h', 1) . '/cocl_errorformat.vim')
-endif
-
 function! SyntaxCheckers_clean_cpm_GetLocList() dict
-    let module = expand('%:r', 1)
+    let module = expand('%:t:r', 1)
     let prj = module . '.prj'
 
     if filereadable(prj)
         " Use a .prj (project file) with the same name as the current module.
         let cwd = expand('%:p:h', 1)
         let makeprg = self.makeprgBuild({
-                    \ 'args': 'project',
-                    \ 'fname': prj,
-                    \ 'post_args': 'build' })
+                    \ 'exe_after': 'project',
+                    \ 'fname': shellescape(prj),
+                    \ 'post_args_before': 'build' })
     else
         " If the current module does not have a corresponding project file,
         " simply run cpm make in the first directory we find with a .prj file.
@@ -43,10 +39,21 @@ function! SyntaxCheckers_clean_cpm_GetLocList() dict
         let makeprg = self.makeprgBuild({ 'args': 'make' })
     endif
 
+    " (Mainly) from timjs/clean-vim
+    let errorformat  = '%E%trror [%f\,%l]: %m' " General error (without location info)
+    let errorformat .= ',%E%trror [%f\,%l\,]: %m' " General error (without location info)
+    let errorformat .= ',%E%trror [%f\,%l\,%s]: %m' " General error
+    let errorformat .= ',%E%type error [%f\,%l\,%s]:%m' " Type error
+    let errorformat .= ',%E%tverloading error [%f\,%l\,%s]:%m' " Overloading error
+    let errorformat .= ',%E%tniqueness error [%f\,%l\,%s]:%m' " Uniqueness error
+    let errorformat .= ',%E%tarse error [%f\,%l;%c\,%s]: %m' " Parse error
+    let errorformat .= ',%+C %m' " Extra info
+    let errorformat .= ',%-G%s' " Ignore rest
+
     return SyntasticMake({
                 \ 'cwd': cwd,
                 \ 'makeprg': makeprg,
-                \ 'errorformat': g:syntastic_clean_cocl_errorformat })
+                \ 'errorformat': errorformat })
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({

@@ -18,21 +18,53 @@ let g:loaded_syntastic_clean_clm_checker = 1
 let s:save_cpo = &cpo
 set cpo&vim
 
-if !exists('g:syntastic_clean_cocl_errorformat')
-    execute 'source ' . fnameescape(expand('<sfile>:p:h') . '/cocl_errorformat.vim')
-endif
+" Find a Clean module
+" First attempts to find it in dir, then in $CLEAN_HOME/lib/.
+function! clm#findmodule(name, dir)
+    if isdirectory(a:dir . '/' . a:name)
+        return a:dir . '/' . a:name
+    elseif $CLEAN_HOME != ''
+        let path = expand($CLEAN_HOME . '/lib/' . a:name)
+        if isdirectory(path)
+            return path
+        endif
+    else
+        return ''
+    endif
+endfunction
 
 function! SyntaxCheckers_clean_clm_GetLocList() dict
-    let module = expand('%:r', 1)
+    let module = expand('%:t:r', 1)
+    let moddir = expand('%:p:h', 1)
+
+    let args_before = ['-c']
+    if exists('b:syntastic_clean_clm_libraries')
+        let libraries = map(b:syntastic_clean_clm_libraries, 'clm#findmodule(v:val, moddir)')
+        let libraries = filter(libraries, 'v:val != ""')
+        for lib in libraries
+            let args_before += ['-I', lib]
+        endfor
+    endif
 
     let makeprg = self.makeprgBuild({
-                \ 'args': '-c',
-                \ 'fname': module })
+                \ 'args_before': args_before,
+                \ 'fname': shellescape(module) })
+
+    " (Mainly) from timjs/clean-vim
+    let errorformat  = '%E%trror [%f\,%l]: %m' " General error (without location info)
+    let errorformat .= ',%E%trror [%f\,%l\,]: %m' " General error (without location info)
+    let errorformat .= ',%E%trror [%f\,%l\,%s]: %m' " General error
+    let errorformat .= ',%E%type error [%f\,%l\,%s]:%m' " Type error
+    let errorformat .= ',%E%tverloading error [%f\,%l\,%s]:%m' " Overloading error
+    let errorformat .= ',%E%tniqueness error [%f\,%l\,%s]:%m' " Uniqueness error
+    let errorformat .= ',%E%tarse error [%f\,%l;%c\,%s]: %m' " Parse error
+    let errorformat .= ',%+C %m' " Extra info
+    let errorformat .= ',%-G%s' " Ignore rest
 
     return SyntasticMake({
-                \ 'cwd': expand('%:p:h', 1),
+                \ 'cwd': moddir,
                 \ 'makeprg': makeprg,
-                \ 'errorformat': g:syntastic_clean_cocl_errorformat })
+                \ 'errorformat': errorformat })
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
