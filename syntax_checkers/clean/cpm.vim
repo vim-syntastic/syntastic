@@ -18,44 +18,35 @@ let g:loaded_syntastic_clean_cpm_checker = 1
 let s:save_cpo = &cpo
 set cpo&vim
 
+if !exists('g:syntastic_clean_cocl_errorformat')
+    execute 'source ' . fnameescape(expand('<sfile>:p:h', 1) . '/cocl_errorformat.vim')
+endif
+
 function! SyntaxCheckers_clean_cpm_GetLocList() dict
-    let module = expand('%:r')
+    let module = expand('%:r', 1)
     let prj = module . '.prj'
 
     if filereadable(prj)
         " Use a .prj (project file) with the same name as the current module.
+        let cwd = expand('%:p:h', 1)
         let makeprg = self.makeprgBuild({
                     \ 'args': 'project',
                     \ 'fname': prj,
                     \ 'post_args': 'build' })
-    elseif glob('*.prj') != ''
-        " If the current module does not have a corresponding project file,
-        " but there do exist project files, simply run cpm make.
-        " This means that if these projects don't use the current module, it
-        " won't be checked.
-        let makeprg = self.makeprgBuild({ 'args': 'make' })
     else
-        " Otherwise, fall back to clm and attempt to build as a main module.
-        " Will fail if other libraries than StdEnv are used, but in this case
-        " you should be using cpm anyway.
-        let makeprg = self.makeprgBuild({
-                    \ 'exe': 'clm',
-                    \ 'args': '-c',
-                    \ 'fname': module })
+        " If the current module does not have a corresponding project file,
+        " simply run cpm make in the first directory we find with a .prj file.
+        " This means that if none of the projects in the directory first found
+        " use the current module, it won't be checked.
+        let prj = syntastic#util#findGlobInParent('*.prj', expand('%:p:h', 1))
+        let cwd = fnamemodify(prj, ':h')
+        let makeprg = self.makeprgBuild({ 'args': 'make' })
     endif
 
-    " (Mainly) from timjs/clean-vim
-    let errorformat  = '%E%trror [%f\,%l]: %m' " General error (without location info)
-    let errorformat .= ',%E%trror [%f\,%l\,]: %m' " General error (without location info)
-    let errorformat .= ',%E%trror [%f\,%l\,%s]: %m' " General error
-    let errorformat .= ',%E%type error [%f\,%l\,%s]:%m' " Type error
-    let errorformat .= ',%E%tverloading error [%f\,%l\,%s]:%m' " Overloading error
-    let errorformat .= ',%E%tniqueness error [%f\,%l\,%s]:%m' " Uniqueness error
-    let errorformat .= ',%E%tarse error [%f\,%l;%c\,%s]: %m' " Parse error
-    let errorformat .= ',%+C %m' " Extra info
-    let errorformat .= ',%-G%s' " Ignore rest
-
-    return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
+    return SyntasticMake({
+                \ 'cwd': cwd,
+                \ 'makeprg': makeprg,
+                \ 'errorformat': g:syntastic_clean_cocl_errorformat })
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
