@@ -14,6 +14,10 @@ if !exists('g:syntastic_typescript_tsc_sort')
     let g:syntastic_typescript_tsc_sort = 1
 endif
 
+if !exists('g:syntastic_typescript_tsc_target')
+    let g:syntastic_typescript_tsc_target = ''
+endif
+
 let s:save_cpo = &cpo
 set cpo&vim
 
@@ -39,10 +43,10 @@ function! SyntaxCheckers_typescript_tsc_IsAvailable() dict
 endfunction
 
 function! SyntaxCheckers_typescript_tsc_GetLocList() dict
+    let target = syntastic#util#var('typescript_tsc_target')
     let makeprg = self.makeprgBuild({
-        \ 'args': '--module commonjs',
+        \ 'args': (target == '' ? '' : '--target ' . target) . ' --module commonjs',
         \ 'args_after': (s:tsc_new ? '--noEmit' : '--out ' . syntastic#util#DevNull()) })
-
     let errorformat =
         \ '%E%f %#(%l\,%c): error %m,' .
         \ '%E%f %#(%l\,%c): %m,' .
