@@ -22,13 +22,14 @@ function! SyntaxCheckers_cuda_nvcc_GetLocList() dict
         \ 'args_before': '--cuda -O0 -I . ' .
         \ syntastic#c#ReadConfig(g:syntastic_cuda_config_file) .
         \ ' -Xcompiler -fsyntax-only',
-        \ 'tail_after': syntastic#c#NullOutput()}
+        \ 'tail': syntastic#c#NullOutput()}
 
     if index(['h', 'hpp', 'cuh'], expand('%:e', 1), 0, 1) >= 0
         if syntastic#util#var('cuda_check_header', 0)
-            let buildoptions.exe_before = 'touch /tmp/.syntastic_dummy.cu ;'
-            let buildoptions.fname = '/tmp/.syntastic_dummy.cu'
+            let buildoptions.exe_before = 'echo > .syntastic_dummy.cu ;'
+            let buildoptions.fname = '.syntastic_dummy.cu'
             let buildoptions.args_after = '-include ' . syntastic#util#shexpand('%')
+            let buildoptions.tail_after = '; rm .syntastic_dummy.cu'
         else
             return []
         endif
