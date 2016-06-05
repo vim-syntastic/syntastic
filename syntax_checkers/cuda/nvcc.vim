@@ -10,19 +10,37 @@ if exists('g:loaded_syntastic_cuda_nvcc_checker')
 endif
 let g:loaded_syntastic_cuda_nvcc_checker = 1
 
+if !exists('g:syntastic_cuda_config_file')
+    let g:syntastic_cuda_config_file = '.syntastic_cuda_config'
+endif
+
 let s:save_cpo = &cpo
 set cpo&vim
 
 function! SyntaxCheckers_cuda_nvcc_GetLocList() dict
-    if syntastic#util#var('cuda_arch') !=# ''
-        let arch_flag = '-arch=' . g:syntastic_cuda_arch
-    else
-        let arch_flag = ''
+    let arch_flag = syntastic#util#var('cuda_arch')
+    if arch_flag !=# ''
+        let arch_flag = ' -arch=' . arch_flag
     endif
-    let makeprg =
-        \ self.getExecEscaped() . ' ' . arch_flag .
-        \ ' --cuda -O0 -I . -Xcompiler -fsyntax-only ' .
-        \ syntastic#util#shexpand('%') . ' ' . syntastic#c#NullOutput()
+
+    let build_opts = {}
+    if index(['h', 'hpp', 'cuh'], expand('%:e', 1), 0, 1) >= 0
+        if syntastic#util#var('cuda_check_header', 0)
+            let build_opts = {
+                \ 'exe_before': 'echo > .syntastic_dummy.cu ;',
+                \ 'fname_before': '.syntastic_dummy.cu -include' }
+        else
+            return []
+        endif
+    endif
+
+    call extend(build_opts, {
+        \ 'args_before': '--cuda -O0 -I .' . arch_flag,
+        \ 'args': syntastic#c#ReadConfig(g:syntastic_cuda_config_file),
+        \ 'args_after': '-Xcompiler -fsyntax-only',
+        \ 'tail_after': syntastic#c#NullOutput() })
+
+    let makeprg = self.makeprgBuild(build_opts)
 
     let errorformat =
         \ '%*[^"]"%f"%*\D%l: %m,'.
@@ -39,18 +57,6 @@ function! SyntaxCheckers_cuda_nvcc_GetLocList() dict
         \ '%X%*\a: Leaving directory `%f'','.
         \ '%DMaking %*\a in %f,'.
         \ '%f|%l| %m'
-
-    if index(['h', 'hpp', 'cuh'], expand('%:e', 1), 0, 1) >= 0
-        if syntastic#util#var('cuda_check_header', 0)
-            let makeprg =
-                \ 'echo > .syntastic_dummy.cu ; ' .
-                \ self.getExecEscaped() . ' ' . arch_flag .
-                \ ' --cuda -O0 -I . .syntastic_dummy.cu -Xcompiler -fsyntax-only -include ' .
-                \ syntastic#util#shexpand('%') . ' ' . syntastic#c#NullOutput()
-        else
-            return []
-        endif
-    endif
 
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 endfunction
