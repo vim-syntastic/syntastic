@@ -39,9 +39,22 @@ function! SyntaxCheckers_typescript_tsc_IsAvailable() dict
 endfunction
 
 function! SyntaxCheckers_typescript_tsc_GetLocList() dict
-    let makeprg = self.makeprgBuild({
-        \ 'args': '--module commonjs',
-        \ 'args_after': (s:tsc_new ? '--noEmit' : '--out ' . syntastic#util#DevNull()) })
+    " Suppress compiler output; the necessary flag depends on the version.
+    let suppress_args = s:tsc_new ? '--noEmit' : '--out ' . syntastic#util#DevNull()
+
+    " Search upwards in the directory structure for a tsconfig.json, compiling
+    " the project (instead of the single file) if found.
+    let tsconfig = syntastic#util#findFileInParent('tsconfig.json', expand('%:p:h', 1))
+    if filereadable(tsconfig)
+        let makeprg = self.makeprgBuild({
+            \ 'fname': '',
+            \ 'args': '-p ' . fnamemodify(tsconfig, ':h'),
+            \ 'args_after': suppress_args })
+    else
+        let makeprg = self.makeprgBuild({
+            \ 'args': '--module commonjs',
+            \ 'args_after': suppress_args })
+    endif
 
     let errorformat =
         \ '%E%f %#(%l\,%c): error %m,' .
