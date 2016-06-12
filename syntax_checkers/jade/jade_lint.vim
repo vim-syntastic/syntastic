@@ -18,7 +18,6 @@ let g:loaded_syntastic_jade_jade_lint_checker = 1
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'jade',
     \ 'name': 'jade_lint',
-    \ 'exec': 'jade-lint',
     \ 'redirect': 'pug/pug_lint'})
 
 " vim: set sw=4 sts=4 et fdm=marker:
