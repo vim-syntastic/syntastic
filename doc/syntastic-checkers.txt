@@ -4,7 +4,7 @@
 ==============================================================================
 SYNTAX CHECKERS BY LANGUAGE                          *syntastic-checkers-lang*
 
-Syntastic comes with checkers for the following languages:
+|syntastic| comes with checkers for the following languages:
 
     ActionScript.............................|syntastic-checkers-actionscript|
     Ada......................................|syntastic-checkers-ada|
@@ -5330,6 +5330,8 @@ details:
 
     https://github.com/sasstools/sass-lint
 
+Syntastic requires "Sass Lint" version 1.5.0 or later.
+
 Checker options~
 
 This checker is initialised using the "makeprgBuild()" function and thus it
@@ -5486,6 +5488,8 @@ Maintainer:  LCD 47 <lcd047@gmail.com>
 details:
 
     https://github.com/sasstools/sass-lint
+
+Syntastic requires "Sass Lint" version 1.5.0 or later.
 
 Checker options~
 
