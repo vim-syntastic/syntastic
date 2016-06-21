@@ -3374,6 +3374,11 @@ Checker options~
 This checker is initialised using the "makeprgBuild()" function and thus it
 accepts the standard options described at |syntastic-config-makeprg|.
 
+Note~
+
+"tern-lint" recursively scans files starting from (Vim's idea of) the current
+directory, regardless of the current file.
+
 ==============================================================================
 SYNTAX CHECKERS FOR JSON                             *syntastic-checkers-json*
 
