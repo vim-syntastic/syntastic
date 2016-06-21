@@ -3009,6 +3009,7 @@ The following checkers are available for JavaScript (filetype "javascript"):
     9. JSXHint..................|syntastic-javascript-jsxhint|
     10. mixedindentlint.........|syntastic-javascript-mixedindentlint|
     11. standard................|syntastic-javascript-standard|
+    12. tern-lint...............|syntastic-javascript-tern_lint|
 
 ------------------------------------------------------------------------------
 1. Closure Compiler                     *syntastic-javascript-closurecompiler*
@@ -3354,6 +3355,25 @@ example to use happiness (https://github.com/JedWatson/happiness) instead of
     let g:syntastic_javascript_standard_exec = "happiness"
     let g:syntastic_javascript_standard_generic = 1
 <
+------------------------------------------------------------------------------
+12. tern-lint                                 *syntastic-javascript-tern_lint*
+
+Name:        tern_lint
+Maintainer:  LCD 47 <lcd047@gmail.com>
+
+"tern-lint" is a static type checker for JavaScript.  See the project's page
+for more information:
+
+    https://github.com/angelozerr/tern-lint
+
+Syntastic requires a version of Vim compiled with the |+byte_offset| feature
+to use this checker.
+
+Checker options~
+
+This checker is initialised using the "makeprgBuild()" function and thus it
+accepts the standard options described at |syntastic-config-makeprg|.
+
 ==============================================================================
 SYNTAX CHECKERS FOR JSON                             *syntastic-checkers-json*
 
