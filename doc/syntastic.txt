@@ -561,7 +561,7 @@ option should be set to something like: >
         \ "file:p":  ['\m^/usr/include/', '\m\c\.h$'] }
 <
 Each element turns off messages matching the patterns specified by the
-corresponding value. Values are lists, but if a list consist of a single
+corresponding value. Values are lists, but if a list consists of a single
 element you may omit the brackets (e.g. you may write "style" instead of
 ["style"]). Elements with values [] or "" are ignored (this is useful for
 overriding filters, cf. |filter-overrides|).
