@@ -199,6 +199,7 @@ function! g:SyntasticRegistry.getCheckers(ftalias, hints_list) abort " {{{2
     let names =
         \ !empty(a:hints_list) ? syntastic#util#unique(a:hints_list) :
         \ exists('b:syntastic_checkers') ? b:syntastic_checkers :
+        \ exists('b:syntastic_' . ft . '_checkers') ? b:syntastic_{ft}_checkers :
         \ exists('g:syntastic_' . ft . '_checkers') ? g:syntastic_{ft}_checkers :
         \ get(s:_DEFAULT_CHECKERS, ft, 0)
 
@@ -229,6 +230,10 @@ function! g:SyntasticRegistry.getKnownFiletypes() abort " {{{2
 
     if exists('g:syntastic_extra_filetypes') && type(g:syntastic_extra_filetypes) == type([])
         call extend(types, g:syntastic_extra_filetypes)
+    endif
+
+    if exists('b:syntastic_filetype_map')
+        call extend(types, keys(b:syntastic_filetype_map))
     endif
 
     return syntastic#util#unique(types)
