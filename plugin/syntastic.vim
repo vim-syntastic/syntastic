@@ -632,7 +632,12 @@ endfunction " }}}2
 
 function! s:_resolve_filetypes(filetypes) abort " {{{2
     let type = len(a:filetypes) ? a:filetypes[0] : &filetype
-    return split( get(g:syntastic_filetype_map, type, type), '\m\.' )
+    if exists('b:syntastic_filetype_map') && has_key(b:syntastic_filetype_map, type)
+        let type = get(b:syntastic_filetype_map, type)
+    else
+        let type = get(g:syntastic_filetype_map, type, type)
+    endif
+    return split(type, '\m\.')
 endfunction " }}}2
 
 function! s:_ignore_file(filename) abort " {{{2
