@@ -239,8 +239,8 @@ of Python, and install in it the checkers you want to use.  Set
 `g:syntastic_python_checkers` accordingly in your `vimrc`, and run [Vim][vim]
 from the virtual environment.
 
-If you're starting Vim from a desktop environment rather than from a terminal
-you might need to write wrapper scripts around your checkers, to activate the
+If you're starting Vim from a desktop manager rather than from a terminal you
+might need to write wrapper scripts around your checkers, to activate the
 virtual environment before running the actual checks.  Then you'll need to
 point the relevant `g:syntastic_python_<checker>_exec` variables to the wrapper
 scripts.
@@ -254,8 +254,8 @@ activate the environment for the relevant version of Ruby, and install in it
 the checkers you want to use.  Set `g:syntastic_ruby_checkers` accordingly in
 your `vimrc`, and run [Vim][vim] from the virtual environment.
 
-If you're starting Vim from a desktop environment rather than from a terminal
-you might need to write wrapper scripts around your checkers, to activate the
+If you're starting Vim from a desktop manager rather than from a terminal you
+might need to write wrapper scripts around your checkers, to activate the
 virtual environment before running the actual checks.  Then you'll need to
 point the relevant `g:syntastic_ruby_<checker>_exec` variables to the wrapper
 scripts.
