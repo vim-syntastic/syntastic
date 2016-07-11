@@ -447,11 +447,11 @@ For example for `jscs`:
 ```vim
 function! FindConfig(prefix, what, where)
     let cfg = findfile(a:what, escape(a:where, ' ') . ';')
-    return cfg !=# '' ? a:prefix . ' ' . cfg : ''
+    return cfg !=# '' ? ' ' . a:prefix . ' ' . cfg : ''
 endfunction
 
 autocmd FileType javascript let b:syntastic_javascript_jscs_args =
-    \ get(g:, 'syntastic_javascript_jscs_args', '') . ' ' .
+    \ get(g:, 'syntastic_javascript_jscs_args', '') .
     \ FindConfig('-c', '.jscsrc', expand('<amatch>:p:h', 1))
 ```
 <a name="faqbdelete"></a>
