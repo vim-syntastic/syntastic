@@ -152,7 +152,7 @@ You now have pathogen installed and can put syntastic into `~/.vim/bundle` like
 this:
 ```sh
 cd ~/.vim/bundle && \
-git clone https://github.com/scrooloose/syntastic.git
+git clone --depth=1 https://github.com/scrooloose/syntastic.git
 ```
 Quit vim and start it back up to reload it, then type:
 ```vim
