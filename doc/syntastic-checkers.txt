@@ -344,7 +344,7 @@ accepts the standard options described at |syntastic-config-makeprg|.
 ==============================================================================
 SYNTAX CHECKERS FOR ASSEMBLY LANGUAGES                *syntastic-checkers-asm*
 
-The following checkers are available for asembly languages (filetype "asm"):
+The following checkers are available for assembly languages (filetype "asm"):
 
     1. GCC......................|syntastic-asm-gcc|
 
@@ -432,7 +432,7 @@ The following checkers are available for BEMHTML (filetype "bemhtml"):
 Name:        bemhtmllint
 Maintainer:  Sergej Tatarincev
 
-BEMHTML is a template engine intended for using with BEM methodology
+BEMHTML is a template engine intended for using with the BEM methodology
 (http://bem.info/method/). See the project's page at GitHub for details:
 
     https://github.com/SevInf/bemhtml-lint
@@ -1450,7 +1450,7 @@ The following checkers are available for Coq (filetype "coq"):
 Name:        coqtop
 Maintainer:  Matvey Aksenov <matvey.aksenov@gmail.com>
 
-"Coqtop" is the top level intrface for Coq. See the project's page for
+"Coqtop" is the top level interface for Coq. See the project's page for
 details:
 
     http://coq.inria.fr/
@@ -5060,7 +5060,7 @@ directory, or if you want to override the autodetected paths, options
 |'g:syntastic_rst_sphinx_source_dir'| and |'g:syntastic_rst_sphinx_config_dir'|
 take precedence over the detected values.
 
-Please not also that the checker creates output files in a temporary directory
+Please note also that the checker creates output files in a temporary directory
 that is created upon the first run in the current session, and is removed when
 Vim exits. If you need to change the location of this directory you can do
 so by exporting the environment variables "TMPDIR" or "TMP" (on UNIX and Mac
