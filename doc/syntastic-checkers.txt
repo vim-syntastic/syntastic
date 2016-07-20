@@ -492,7 +492,7 @@ Checker options~
 This checker is initialised using the "makeprgBuild()" function and thus it
 accepts the standard options described at |syntastic-config-makeprg|.
 
-Aditionally:
+Additionally:
 
                                               *g:syntastic_avrgcc_config_file*
 Type: string
@@ -1989,8 +1989,8 @@ Name:        syntaxerl
 Maintainer:  locojay
 
 "SyntaxErl" is a syntax checker for Erlang. It uses "rebar"
-(https://github.com/basho/rebar) to determine correct deps and libs paths.
-See the project's page for more information:
+(https://github.com/basho/rebar) to determine correct dependencies and library
+paths. See the project's page for more information:
 
     https://github.com/ten0s/syntaxerl
 
@@ -2191,7 +2191,7 @@ If the magic comment does not exist, then the dictionary
 'g:syntastic_glsl_extensions' is used to infer the appropriate profile from
 the current file's extension. If this dictionary does not exist either, a
 default dictionary is used instead. Finally, if the current file's extension
-cannott be found in these dictionaries, the checker assumes a vertex shader
+cannot be found in these dictionaries, the checker assumes a vertex shader
 profile.
 
                                                   *'g:syntastic_glsl_options'*
@@ -2879,7 +2879,7 @@ point |'g:syntastic_java_checkstyle_classpath'| to it:
     http://iweb.dl.sourceforge.net/project/checkstyle/checkstyle/
     http://checkstyle.sourceforge.net/cmdline.html#Usage_by_Classpath_update
 
-Current builds at Maven Central do not package "checkstyles" with its
+Current builds at Maven Central do not package "checkstyle" with its
 dependencies:
 
     http://search.maven.org/#search|gav|1|g%3A%22com.puppycrawl.tools%22%20AND%20a%3A%22checkstyle%22
@@ -4637,7 +4637,7 @@ Please note that transforming a file like this affects line numbers and
 column numbers, and syntastic has no way to make the necessary adjustments.
 Consequently, errors might appear on surprising lines if you enable this
 feature and the transformed file has code on different lines than the raw
-file. For this reason the use of these transformations should be limitted
+file. For this reason the use of these transformations should be limited
 to codecs that preserve line numbers, such as the "spec" codec provided by
 "NoseOfYeti":
 
@@ -4741,7 +4741,7 @@ setting of "lint.style".
 Name:        lintr
 Maintainer:  Jim Hester <james.f.hester@gmail.com>
 
-"lintr" is a static code analysys tool for R files. See the project's page at
+"lintr" is a static code analysis tool for R files. See the project's page at
 GitHub for details:
 
     https://github.com/jimhester/lintr
@@ -4794,7 +4794,7 @@ This is a checker for R files, using the R package "svTools":
     http://cran.r-project.org/web/packages/svTools/
 
 In turn, this package delegates most of the work to the "checkUsage()"
-function in the codetools package:
+function in the "codetools" package:
 
     http://cran.r-project.org/web/packages/codetools/
 
@@ -4851,7 +4851,7 @@ The following checkers are available for R Markdown (filetype "rmd"):
 Name:        lintr
 Maintainer:  Jim Hester <james.f.hester@gmail.com>
 
-"lintr" is a static code analysys tool for R files.  See the project's page at
+"lintr" is a static code analysis tool for R files.  See the project's page at
 GitHub for details:
 
     https://github.com/jimhester/lintr
@@ -5081,7 +5081,7 @@ The following checkers are available for Linux RPM packages (filetype "spec"):
 Name:        rpmlint
 Maintainer:  LCD 47 <lcd047@gmail.com>
 
-"rpmlint" is a trool for checking Linux RPM packages. See the project's page
+"rpmlint" is a tool for checking Linux RPM packages. See the project's page
 for details:
 
     http://sourceforge.net/projects/rpmlint/
@@ -5165,7 +5165,7 @@ Name:        macruby
 Maintainer:  Martin Grenfell <martin.grenfell@gmail.com>
 
 "MacRuby" is an implementation of Ruby for Mac OS X. See the project's
-pagefor details:
+page for details:
 
     http://www.macruby.org/
 
@@ -5864,7 +5864,7 @@ The following checkers are available for Texinfo (filetype "texinfo"):
 Name:        makeinfo
 Maintainer:  LCD 47 <lcd047@gmail.com>
 
-"Makeinfo" is a convertor for Texinfo files. It is distributed together with
+"Makeinfo" is a converter for Texinfo files. It is distributed together with
 the GNU package "texinfo":
 
     http://www.gnu.org/software/texinfo/
