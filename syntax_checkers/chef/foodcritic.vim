@@ -22,11 +22,12 @@ function! SyntaxCheckers_chef_foodcritic_GetLocList() dict
     let makeprg = self.makeprgBuild({})
 
     " FC023: Prefer conditional attributes: ./recipes/config.rb:49
-    let errorformat = 'FC%n: %m: %f:%l'
+    let errorformat = '%m: %f:%l'
 
     return SyntasticMake({
         \ 'makeprg': makeprg,
-        \ 'errorformat': errorformat })
+        \ 'errorformat': errorformat,
+        \ 'postprocess': ['filterForeignErrors']})
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({

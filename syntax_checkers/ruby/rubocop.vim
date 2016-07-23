@@ -25,26 +25,28 @@ function! SyntaxCheckers_ruby_rubocop_IsAvailable() dict
     return syntastic#util#versionIsAtLeast(self.getVersion(), [0, 12, 0])
 endfunction
 
-function! SyntaxCheckers_ruby_rubocop_GetLocList() dict
-    let makeprg = self.makeprgBuild({ 'args_after': '--format emacs' })
-
-    let errorformat = '%f:%l:%c: %t: %m'
-
-    let loclist = SyntasticMake({
-        \ 'makeprg': makeprg,
-        \ 'errorformat': errorformat,
-        \ 'subtype': 'Style'})
-
+function! SyntaxCheckers_ruby_rubocop_Postprocess(errors) abort
     " convert rubocop severities to error types recognized by syntastic
-    for e in loclist
+    for e in a:errors
         if e['type'] ==# 'F'
             let e['type'] = 'E'
         elseif e['type'] !=# 'W' && e['type'] !=# 'E'
             let e['type'] = 'W'
         endif
     endfor
+    return a:errors
+endfunction
 
-    return loclist
+function! SyntaxCheckers_ruby_rubocop_GetLocList() dict
+    let makeprg = self.makeprgBuild({ 'args_after': '--format emacs' })
+
+    let errorformat = '%f:%l:%c: %t: %m'
+
+    return SyntasticMake({
+        \ 'makeprg': makeprg,
+        \ 'errorformat': errorformat,
+        \ 'subtype': 'Style',
+        \ 'Postprocess': ['SyntaxCheckers_ruby_rubocop_Postprocess']})
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
