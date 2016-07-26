@@ -6087,8 +6087,7 @@ SYNTAX CHECKERS FOR TYPESCRIPT                 *syntastic-checkers-typescript*
 The following checkers are available for TypeScript (filetype "typescript"):
 
     1. ESLint...................|syntastic-typescript-eslint|
-    2. tsc......................|syntastic-typescript-tsc|
-    3. TSLint...................|syntastic-typescript-tslint|
+    2. TSLint...................|syntastic-typescript-tslint|
 
 ------------------------------------------------------------------------------
 1. ESLint                                        *syntastic-typescript-eslint*
@@ -6118,29 +6117,7 @@ as "typescript-vim":
 See also: |syntastic-html-eslint|, |syntastic-javascript-eslint|.
 
 ------------------------------------------------------------------------------
-2. tsc                                              *syntastic-typescript-tsc*
-
-Name:        tsc
-Maintainer:  Bill Casarin <bill@casarin.ca>
-
-"tsc" is a compiler for TypeScript. See the project's page for details:
-
-    http://www.typescriptlang.org/
-
-Checker options~
-
-This checker is initialised using the "makeprgBuild()" function and thus it
-accepts the standard options described at |syntastic-config-makeprg|.
-
-Note~
-
-You probably also need a plugin to set |filetype| for TypeScript files, such
-as "typescript-vim":
-
-    https://github.com/leafgarland/typescript-vim
-
-------------------------------------------------------------------------------
-3. TSLint                                        *syntastic-typescript-tslint*
+2. TSLint                                        *syntastic-typescript-tslint*
 
 Name:        tslint
 Maintainer:  Seon-Wook Park <seon.wook@swook.net>
