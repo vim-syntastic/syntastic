@@ -12,6 +12,7 @@ let s:_DEFAULT_CHECKERS = {
         \ 'apiblueprint':  ['drafter'],
         \ 'applescript':   ['osacompile'],
         \ 'asciidoc':      ['asciidoc'],
+        \ 'asl':           ['iasl'],
         \ 'asm':           ['gcc'],
         \ 'bro':           ['bro'],
         \ 'bemhtml':       ['bemhtmllint'],
