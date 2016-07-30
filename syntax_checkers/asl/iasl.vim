@@ -58,9 +58,9 @@ function! SyntaxCheckers_asl_iasl_GetLocList() dict " {{{1
         \ 'returns': [0, 255] })
 
     " Change Remark comments to Warnings. Optimization comments are normally not
-    " reported unless '-vo' is added to the iasl options (not a Warning!).
+    " reported unless '-vo' is added to the iasl options.
     for e in loclist
-        if e['type'] =~? 'r'
+        if e['type'] =~? 'r' || e['type'] =~? 'o'
             let e['type'] = 'W'
         endif
     endfor
