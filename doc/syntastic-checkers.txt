@@ -895,17 +895,39 @@ SYNTAX CHECKERS FOR C++                               *syntastic-checkers-cpp*
 
 The following checkers are available for C++ (filetype "cpp"):
 
-    1. ClangCheck...............|syntastic-cpp-clang_check|
-    2. Clang-Tidy...............|syntastic-cpp-clang_tidy|
-    3. Cppcheck.................|syntastic-cpp-cppcheck|
-    4. Cpplint..................|syntastic-cpp-cpplint|
-    5. GCC......................|syntastic-cpp-gcc|
-    6. OClint...................|syntastic-cpp-oclint|
-    7. PC-Lint..................|syntastic-cpp-pc_lint|
-    8. Vera++...................|syntastic-cpp-verapp|
+    1. AVR-GCC..................|syntastic-cpp-avrgcc|
+    2. ClangCheck...............|syntastic-cpp-clang_check|
+    3. Clang-Tidy...............|syntastic-cpp-clang_tidy|
+    4. Cppcheck.................|syntastic-cpp-cppcheck|
+    5. Cpplint..................|syntastic-cpp-cpplint|
+    6. GCC......................|syntastic-cpp-gcc|
+    7. OClint...................|syntastic-cpp-oclint|
+    8. PC-Lint..................|syntastic-cpp-pc_lint|
+    9. Vera++...................|syntastic-cpp-verapp|
 
 ------------------------------------------------------------------------------
-1. ClangCheck                                      *syntastic-cpp-clang_check*
+1. AVR-GCC                                              *syntastic-cpp-avrgcc*
+
+Name:        avrgcc
+Maintainer:  Sławek Piotrowski <sentinel@atteo.com>
+
+Checker options~
+
+This checker is initialised using the "makeprgBuild()" function and thus it
+accepts the standard options described at |syntastic-config-makeprg|.
+
+Additionally:
+
+                                              *g:syntastic_avrgcc_config_file*
+Type: string
+Default: ".syntastic_avrgcc_config"
+File containing compilation flags (such as defines or include directories),
+one option per line (cf. |syntastic-config-files|).
+
+See also: |syntastic-c-avrgcc|.
+
+------------------------------------------------------------------------------
+2. ClangCheck                                      *syntastic-cpp-clang_check*
 
 Name:        clang_check
 Maintainer:  Benjamin Bannier <bbannier@gmail.com>
@@ -948,7 +970,7 @@ then ignored.
 See also: |syntastic-c-clang_check|.
 
 ------------------------------------------------------------------------------
-2. Clang-Tidy                                       *syntastic-cpp-clang_tidy*
+3. Clang-Tidy                                       *syntastic-cpp-clang_tidy*
 
 Name:        clang_tidy
 Maintainer:  Benjamin Bannier <bbannier@gmail.com>
@@ -999,7 +1021,7 @@ then ignored.
 See also: |syntastic-c-clang_tidy|.
 
 ------------------------------------------------------------------------------
-3. Cppcheck                                           *syntastic-cpp-cppcheck*
+4. Cppcheck                                           *syntastic-cpp-cppcheck*
 
 Name:        cppcheck
 Maintainer:  LCD 47 <lcd047@gmail.com>
@@ -1025,7 +1047,7 @@ one option per line (cf. |syntastic-config-files|).
 See also: |syntastic-c-cppcheck|.
 
 ------------------------------------------------------------------------------
-4. Cpplint                                             *syntastic-cpp-cpplint*
+5. Cpplint                                             *syntastic-cpp-cpplint*
 
 Name:        cpplint
 Maintainer:  LCD 47 <lcd047@gmail.com>
@@ -1061,7 +1083,7 @@ However, if your "cpplint" was installed with "pip", the script's name is
     let g:syntastic_cpp_cpplint_exec = "cpplint"
 <
 ------------------------------------------------------------------------------
-5. GCC                                                     *syntastic-cpp-gcc*
+6. GCC                                                     *syntastic-cpp-gcc*
 
 Name:        gcc
 Maintainer:  Gregor Uhlenheuer <kongo2002@gmail.com>
@@ -1158,7 +1180,7 @@ executable.
 See also: |syntastic-c-gcc|.
 
 ------------------------------------------------------------------------------
-6. OClint                                               *syntastic-cpp-oclint*
+7. OClint                                               *syntastic-cpp-oclint*
 
 Name:        oclint
 Maintainer:  "UnCO" Lin <undercooled@lavabit.com>
@@ -1198,7 +1220,7 @@ Config files pointed to by 'g:syntastic_oclint_config_file' are then ignored.
 See also: |syntastic-c-oclint|.
 
 ------------------------------------------------------------------------------
-7. PC-Lint                                             *syntastic-cpp-pc_lint*
+8. PC-Lint                                             *syntastic-cpp-pc_lint*
 
 Name:        pc_lint
 Maintainer:  Steve Bragg <steve@empresseffects.com>
@@ -1225,7 +1247,7 @@ current directory and in parent directories; first such file found is used.
 See also: |syntastic-c-pc_lint|.
 
 ------------------------------------------------------------------------------
-8. Vera++                                               *syntastic-cpp-verapp*
+9. Vera++                                               *syntastic-cpp-verapp*
 
 Name:        verapp
 Maintainer:  Lucas Verney <phyks@phyks.me>
@@ -6838,6 +6860,7 @@ syntastic-specific configuration files:
         OpenCOBOL (|syntastic-cobol-cobc|)
 
     C++~
+        AVR-GCC (|syntastic-cpp-avrgcc|)
         ClangCheck (|syntastic-cpp-clang_check|)
         Clang-Tidy (|syntastic-cpp-clang_tidy|)
         Cppcheck (|syntastic-cpp-cppcheck|)
