@@ -31,7 +31,7 @@ function! SyntaxCheckers_asl_iasl_GetLocList() dict " {{{1
 
     let output_dir = ''
     if g:syntastic_asl_iasl_delete_output
-        let output_dir = syntastic#util#tmpdir()
+        let output_dir = syntastic#util#tmpdir() . syntastic#util#Slash()
         let iasl_opts .= ' -p' . syntastic#util#shescape(output_dir)
     endif
 
