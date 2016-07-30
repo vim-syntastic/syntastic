@@ -19,10 +19,6 @@ set cpo&vim
 
 " Checker options {{{1
 
-if !exists('g:syntastic_asl_iasl_options')
-    let g:syntastic_asl_iasl_options = ''
-endif
-
 if !exists('g:syntastic_asl_iasl_delete_output')
     let g:syntastic_asl_iasl_delete_output = 1
 endif
@@ -39,9 +35,7 @@ function! SyntaxCheckers_asl_iasl_GetLocList() dict " {{{1
         let iasl_opts .= ' -p' . syntastic#util#shescape(output_dir)
     endif
 
-    let makeprg = self.makeprgBuild({
-        \ 'args': g:syntastic_asl_iasl_options,
-        \ 'args_after': iasl_opts })
+    let makeprg = self.makeprgBuild({ 'args_after': iasl_opts })
 
     " See source/compiler/aslmessages.c for functions that produce output:
     " AePrintException, called via AslCommonError, via AslError.
