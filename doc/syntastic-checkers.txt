@@ -6,6 +6,7 @@ SYNTAX CHECKERS BY LANGUAGE                          *syntastic-checkers-lang*
 
 |syntastic| comes with checkers for the following languages:
 
+    ACPI Source Language.....................|syntastic-checkers-asl|
     ActionScript.............................|syntastic-checkers-actionscript|
     Ada......................................|syntastic-checkers-ada|
     Ansible..................................|syntastic-checkers-ansible|
@@ -131,6 +132,39 @@ SYNTAX CHECKERS BY LANGUAGE                          *syntastic-checkers-lang*
     Zsh......................................|syntastic-checkers-zsh|
 
 Third-party checkers are available for additional languages.
+
+==============================================================================
+SYNTAX CHECKERS FOR ACPI SOURCE LANGUAGE              *syntastic-checkers-asl*
+
+The following checkers are available for the ACPI Source Language (filetype
+"asl"):
+
+    1. iasl.....................|syntastic-asl-iasl|
+
+------------------------------------------------------------------------------
+1. iasl                                                   *syntastic-asl-iasl*
+
+Name:        iasl
+Maintainer:  Peter Wu <peter@lekensteyn.nl>
+
+Checker options~
+
+This checker is initialised using the "makeprgBuild()" function and thus it
+accepts the standard options described at |syntastic-config-makeprg|.
+
+Additionally:
+
+                                        *'g:syntastic_asl_iasl_delete_output'*
+Type: boolean
+Default: 1
+When set the checker will delete the ".aml" files created by "iasl".
+
+Note~
+
+You probably also need a plugin to set |filetype| for ASL files, such as
+"vim-acpi-asl":
+
+    https://github.com/martinlroth/vim-acpi-asl
 
 ==============================================================================
 SYNTAX CHECKERS FOR ACTIONSCRIPT             *syntastic-checkers-actionscript*
