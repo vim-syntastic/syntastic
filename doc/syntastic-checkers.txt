@@ -526,7 +526,7 @@ accepts the standard options described at |syntastic-config-makeprg|.
 
 Additionally:
 
-                                              *g:syntastic_avrgcc_config_file*
+                                            *'g:syntastic_avrgcc_config_file'*
 Type: string
 Default: ".syntastic_avrgcc_config"
 File containing compilation flags (such as defines or include directories),
@@ -950,7 +950,7 @@ accepts the standard options described at |syntastic-config-makeprg|.
 
 Additionally:
 
-                                              *g:syntastic_avrgcc_config_file*
+                                            'g:syntastic_avrgcc_config_file'
 Type: string
 Default: ".syntastic_avrgcc_config"
 File containing compilation flags (such as defines or include directories),
