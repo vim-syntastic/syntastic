@@ -1,6 +1,6 @@
 "============================================================================
 "File:        iasl.vim
-"Description: Syntax checking plugin for syntastic.vim using iasl
+"Description: Syntax checking plugin for syntastic using iasl
 "Maintainer:  Peter Wu <peter@lekensteyn.nl>
 "License:     This program is free software. It comes without any warranty,
 "             to the extent permitted by applicable law. You can redistribute
@@ -17,30 +17,12 @@ let g:loaded_syntastic_asl_iasl_checker = 1
 let s:save_cpo = &cpo
 set cpo&vim
 
-" Checker options {{{1
+function! SyntaxCheckers_asl_iasl_GetLocList() dict
+    let tmpdir = syntastic#util#tmpdir()
+    let makeprg = self.makeprgBuild({
+        \ 'args': '-vi',
+        \ 'args_after': '-p ' . tmpdir })
 
-if !exists('g:syntastic_asl_iasl_delete_output')
-    let g:syntastic_asl_iasl_delete_output = 1
-endif
-
-" }}}1
-
-function! SyntaxCheckers_asl_iasl_GetLocList() dict " {{{1
-    " Enable less verbose messages for use with IDES (MSVC style).
-    let iasl_opts = '-vi'
-
-    let output_dir = ''
-    if g:syntastic_asl_iasl_delete_output
-        let output_dir = syntastic#util#tmpdir()
-        let iasl_opts .= ' -p' . syntastic#util#shescape(output_dir)
-    endif
-
-    let makeprg = self.makeprgBuild({ 'args_after': iasl_opts })
-
-    " See source/compiler/aslmessages.c for functions that produce output:
-    " AePrintException, called via AslCommonError, via AslError.
-    " "%s(%u) : %s"             filename, line no, message without ID
-    " "%s(%u) : %s %4.4d - %s"  filename, line no, level, exception code, msg
     let errorformat =
         \ '%f(%l) : %trror    %n - %m,' .
         \ '%f(%l) : %tarning  %n - %m,' .
@@ -48,29 +30,24 @@ function! SyntaxCheckers_asl_iasl_GetLocList() dict " {{{1
         \ '%f(%l) : %tptimize %n - %m,' .
         \ '%f(%l) : %m'
 
-    if output_dir !=# ''
-        silent! call mkdir(output_dir, 'p')
-    endif
-
     let loclist = SyntasticMake({
         \ 'makeprg': makeprg,
         \ 'errorformat': errorformat,
         \ 'returns': [0, 255] })
 
-    " Change Remark comments to Warnings. Optimization comments are normally not
-    " reported unless '-vo' is added to the iasl options.
     for e in loclist
-        if e['type'] =~? 'r' || e['type'] =~? 'o'
+        if e['type'] =~? 'r'
             let e['type'] = 'W'
+        elseif e['type'] =~? 'o'
+            let e['type'] = 'W'
+            let e['subtype'] = 'Style'
         endif
     endfor
 
-    if output_dir !=# ''
-        call syntastic#util#rmrf(output_dir)
-    endif
+    call syntastic#util#rmrf(tmpdir)
 
     return loclist
-endfunction "}}}1
+endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'asl',

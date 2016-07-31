@@ -147,17 +147,15 @@ The following checkers are available for the ACPI Source Language (filetype
 Name:        iasl
 Maintainer:  Peter Wu <peter@lekensteyn.nl>
 
+"iasl" is a compiler/decompiler for ACPI Source Language(ASL) and ACPI Machine
+Language (AML). See the project's page for details:
+
+    https://acpica.org/
+
 Checker options~
 
 This checker is initialised using the "makeprgBuild()" function and thus it
 accepts the standard options described at |syntastic-config-makeprg|.
-
-Additionally:
-
-                                        *'g:syntastic_asl_iasl_delete_output'*
-Type: boolean
-Default: 1
-When set the checker will delete the ".aml" files created by "iasl".
 
 Note~
 
