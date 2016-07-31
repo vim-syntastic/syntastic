@@ -55,21 +55,21 @@ can be done on demand, or automatically as files are saved. If syntax errors
 are detected, the user is notified and is happy because they didn't have to
 compile their code or execute their script to find them.
 
-At the time of this writing, syntastic has checking plugins for ActionScript,
-Ada, Ansible configurations, API Blueprint, AppleScript, AsciiDoc, Assembly
-languages, BEMHTML, Bro, Bourne shell, C, C++, C#, Cabal, Chef, CoffeeScript,
-Coco, Coq, CSS, Cucumber, CUDA, D, Dart, DocBook, Dockerfile, Dust, Elixir,
-Erlang, eRuby, Fortran, Gentoo metadata, GLSL, Go, Haml, Haskell, Haxe,
-Handlebars, HSS, HTML, Java, JavaScript, JSON, JSX, LESS, Lex, Limbo, LISP,
-LLVM intermediate language, Lua, Markdown, MATLAB, Mercury, NASM, Nix,
-Objective-C, Objective-C++, OCaml, Perl, Perl POD, PHP, gettext Portable
-Object, OS X and iOS property lists, Pug (formerly Jade), Puppet, Python,
-QML, R, Racket, RDF TriG, RDF Turtle, Relax NG, reStructuredText, RPM spec,
-Ruby, SASS/SCSS, Scala, Slim, SML, Sphinx, SQL, Stylus, Tcl, TeX, Texinfo,
-Twig, TypeScript, Vala, Verilog, VHDL, VimL, xHtml, XML, XSLT, XQuery,
-YACC, YAML, YANG data models, z80, Zope page templates, and Zsh. See the
-[manual][checkers] for details about the corresponding supported checkers
-(`:help syntastic-checkers` in Vim).
+At the time of this writing, syntastic has checking plugins for ACPI
+Source Language, ActionScript, Ada, Ansible configurations, API Blueprint,
+AppleScript, AsciiDoc, Assembly languages, BEMHTML, Bro, Bourne shell, C,
+C++, C#, Cabal, Chef, CoffeeScript, Coco, Coq, CSS, Cucumber, CUDA, D, Dart,
+DocBook, Dockerfile, Dust, Elixir, Erlang, eRuby, Fortran, Gentoo metadata,
+GLSL, Go, Haml, Haskell, Haxe, Handlebars, HSS, HTML, Java, JavaScript, JSON,
+JSX, LESS, Lex, Limbo, LISP, LLVM intermediate language, Lua, Markdown,
+MATLAB, Mercury, NASM, Nix, Objective-C, Objective-C++, OCaml, Perl, Perl
+POD, PHP, gettext Portable Object, OS X and iOS property lists, Pug (formerly
+Jade), Puppet, Python, QML, R, Racket, RDF TriG, RDF Turtle, Relax NG,
+reStructuredText, RPM spec, Ruby, SASS/SCSS, Scala, Slim, SML, Sphinx, SQL,
+Stylus, Tcl, TeX, Texinfo, Twig, TypeScript, Vala, Verilog, VHDL, VimL, xHtml,
+XML, XSLT, XQuery, YACC, YAML, YANG data models, z80, Zope page templates, and
+Zsh. See the [manual][checkers] for details about the corresponding supported
+checkers (`:help syntastic-checkers` in Vim).
 
 A number of third-party Vim plugins also provide checkers for syntastic, for
 example: [merlin][merlin], [omnisharp-vim][omnisharp], [rust.vim][rust],
