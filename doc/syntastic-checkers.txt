@@ -147,8 +147,8 @@ The following checkers are available for the ACPI Source Language (filetype
 Name:        iasl
 Maintainer:  Peter Wu <peter@lekensteyn.nl>
 
-"iasl" is a compiler/decompiler for ACPI Source Language(ASL) and ACPI Machine
-Language (AML). See the project's page for details:
+"iasl" is a compiler/decompiler for ACPI Source Language (ASL) and ACPI
+Machine Language (AML). See the project's page for details:
 
     https://acpica.org/
 
