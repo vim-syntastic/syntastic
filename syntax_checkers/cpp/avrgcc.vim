@@ -1,6 +1,6 @@
 "============================================================================
 "File:        avrgcc.vim
-"Description: Syntax checking plugin for syntastic.vim
+"Description: Syntax checking plugin for syntastic
 "Maintainer:  Sławek Piotrowski <sentinel at atteo dot com>
 "License:     This program is free software. It comes without any warranty,
 "             to the extent permitted by applicable law. You can redistribute
@@ -15,41 +15,11 @@ if exists('g:loaded_syntastic_cpp_avrgcc_checker')
 endif
 let g:loaded_syntastic_cpp_avrgcc_checker = 1
 
-if !exists('g:syntastic_avrgcc_config_file')
-    let g:syntastic_avrgcc_config_file = '.syntastic_avrgcc_config'
-endif
-
-let s:save_cpo = &cpo
-set cpo&vim
-
-function! SyntaxCheckers_cpp_avrgcc_GetLocList() dict
-    let makeprg = self.makeprgBuild({
-        \ 'args_before': syntastic#c#ReadConfig(g:syntastic_avrgcc_config_file),
-        \ 'args_after': '-x c++ -fsyntax-only' })
-
-    let errorformat =
-        \ '%-G%f:%s:,' .
-        \ '%-G%f:%l: %#error: %#(Each undeclared identifier is reported only%.%#,' .
-        \ '%-G%f:%l: %#error: %#for each function it appears%.%#,' .
-        \ '%-GIn file included%.%#,' .
-        \ '%-G %#from %f:%l\,,' .
-        \ '%f:%l:%c: %trror: %m,' .
-        \ '%f:%l:%c: %tarning: %m,' .
-        \ '%f:%l:%c: %m,' .
-        \ '%f:%l: %trror: %m,' .
-        \ '%f:%l: %tarning: %m,'.
-        \ '%f:%l: %m'
-
-    return SyntasticMake({
-        \ 'makeprg': makeprg,
-        \ 'errorformat': errorformat,
-        \ 'postprocess': ['compressWhitespace'] })
-endfunction
-
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'cpp',
     \ 'name': 'avrgcc',
-    \ 'exec': 'avr-g++'})
+    \ 'exec': 'avr-g++',
+    \ 'redirect': 'c/avrgcc'})
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
