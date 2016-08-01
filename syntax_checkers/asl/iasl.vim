@@ -18,10 +18,10 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 function! SyntaxCheckers_asl_iasl_GetLocList() dict
-    let tmpdir = syntastic#util#tmpdir() . syntastic#util#slash()
+    let tmpdir = syntastic#util#tmpdir() . syntastic#util#Slash()
     let makeprg = self.makeprgBuild({
         \ 'args': '-vi',
-        \ 'args_after': ['-p ', tmpdir] })
+        \ 'args_after': ['-p', tmpdir] })
 
     let errorformat =
         \ '%f(%l) : %trror    %n - %m,' .
