@@ -65,7 +65,7 @@ JSX, LESS, Lex, Limbo, LISP, LLVM intermediate language, Lua, Markdown,
 MATLAB, Mercury, NASM, Nix, Objective-C, Objective-C++, OCaml, Perl, Perl
 POD, PHP, gettext Portable Object, OS X and iOS property lists, Pug (formerly
 Jade), Puppet, Python, QML, R, Racket, RDF TriG, RDF Turtle, Relax NG,
-reStructuredText, RPM spec, Ruby, SASS/SCSS, Scala, Slim, SML, Sphinx, SQL,
+reStructuredText, RPM spec, Ruby, SASS/SCSS, Scala, Slim, SML, Solidity, Sphinx, SQL,
 Stylus, Tcl, TeX, Texinfo, Twig, TypeScript, Vala, Verilog, VHDL, VimL, xHtml,
 XML, XSLT, XQuery, YACC, YAML, YANG data models, z80, Zope page templates, and
 Zsh. See the [manual][checkers] for details about the corresponding supported
