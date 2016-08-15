@@ -101,6 +101,7 @@ SYNTAX CHECKERS BY LANGUAGE                          *syntastic-checkers-lang*
     Sh.......................................|syntastic-checkers-sh|
     Slim.....................................|syntastic-checkers-slim|
     SML......................................|syntastic-checkers-sml|
+    Solicity.................................|syntastic-checkers-solicity|
     SQL......................................|syntastic-checkers-sql|
     Stylus...................................|syntastic-checkers-stylus|
 
@@ -5773,6 +5774,29 @@ Maintainer:  LCD 47 <lcd047@gmail.com>
 "smlnj" is a compiler for Standard ML '97. See the project's page for details:
 
     http://www.smlnj.org/
+
+Checker options~
+
+This checker is initialised using the "makeprgBuild()" function and thus it
+accepts the standard options described at |syntastic-config-makeprg|.
+
+==============================================================================
+SYNTAX CHECKERS FOR SOLIDITY                     *syntastic-checkers-solidity*
+
+The following checkers are available for Solidity (filetype "sol"):
+
+    1. SOLC.....................|syntastic-solidity-solc|
+
+------------------------------------------------------------------------------
+1. Solc                                              *syntastic-solidity-solc*
+
+Name:        solc 
+Maintainer:  Jacob Cholewa <jacob@cholewa.dk>
+
+"Solc" is a compiler for the Etherium Smart-Contract language Solidity.
+See the project's page for details:
+
+    https://github.com/ethereum/solidity
 
 Checker options~
 
