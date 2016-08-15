@@ -21,7 +21,7 @@ set cpo&vim
 function! SyntaxCheckers_solidity_solc_GetLocList() dict
     let makeprg = self.makeprgBuild({})
 
-    LET ERRORformat = '%f:%l:%c: %trror: %m'
+    let errorformat = '%f:%l:%c: %trror: %m'
 
     return SyntasticMake({
         \ 'makeprg': makeprg,
