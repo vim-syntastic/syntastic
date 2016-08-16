@@ -23,6 +23,6 @@ at savetime.
 syntastic installation information and setup:
 https://github.com/scrooloose/syntastic
 
-Once the addition of Perl 6 support is completed, a PR will be sent iupstream.
+Once Perl 6 support is completed, a PR will be sent upstream.
 
 El_Che @ #perl6
