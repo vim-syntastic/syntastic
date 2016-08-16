@@ -234,7 +234,6 @@ function! syntastic#preprocess#perl6(errors) abort " {{{2
 		else
             if (match(e, line_pattern_def) > -1)
         	    let parts = matchlist(e, line_pattern_def)
-                echo parts
 			    let err_str.line = parts[1]
                 continue
                 echom 'here'
@@ -243,7 +242,6 @@ function! syntastic#preprocess#perl6(errors) abort " {{{2
                 echom 'there'
                 "The undeclare line with nr must be added to msg
         	    let parts = matchlist(e, line_pattern_undecl)
-                echo parts
 			    let err_str.line = parts[1]
             endif
 		    "Add it to the message, ignore empty lines
