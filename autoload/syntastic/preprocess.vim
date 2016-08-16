@@ -236,10 +236,8 @@ function! syntastic#preprocess#perl6(errors) abort " {{{2
         	    let parts = matchlist(e, line_pattern_def)
 			    let err_str.line = parts[1]
                 continue
-                echom 'here'
             endif
             if (match(e, line_pattern_undecl) > -1)
-                echom 'there'
                 "The undeclare line with nr must be added to msg
         	    let parts = matchlist(e, line_pattern_undecl)
 			    let err_str.line = parts[1]
@@ -258,7 +256,6 @@ function! syntastic#preprocess#perl6(errors) abort " {{{2
         endif
     endfor
 
-    echo err_str
 	if has_key(err_str, 'line')
         "Some errors do not show the file name
         if !has_key(err_str, 'file')
