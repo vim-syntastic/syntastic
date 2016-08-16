@@ -5793,7 +5793,7 @@ The following checkers are available for Solidity (filetype "solidity"):
 Name:        solc 
 Maintainer:  Jacob Cholewa <jacob@cholewa.dk>
 
-"solc" is a compiler for Etherium's smart-contract language "Solidity"
+"solc" is a compiler for Ethereum's smart-contract language "Solidity"
 (https://solidity.readthedocs.io/). See the project's page for details:
 
     https://github.com/ethereum/solidity
