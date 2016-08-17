@@ -74,6 +74,13 @@ function! SyntaxCheckers_perl6_perl6_GetLocList() dict " {{{1
         let includes = copy(syntastic#util#var('perl6_lib_path'))
     endif
 
+    "Support for PERL6LIB shell environment
+    if $PERL6LIB != ''
+        let perl6lib = includes + split($PERL6LIB, ':')
+        let includes = perl6lib
+    endif
+
+    echo includes
     let shebang = syntastic#util#parseShebang()
     let extra = join(map(includes, '"-I" . v:val'))
     "let errorformat = '%f|%l|%m'
