@@ -89,11 +89,11 @@ function! syntastic#preprocess#dockerfile_lint(errors) abort " {{{2
                 call add(out, msg)
             endfor
         catch /\m^Vim\%((\a\+)\)\=:E716/
-            call syntastic#log#warn('checker dockerfile/dockerfile_lint: unrecognized error format')
+            call syntastic#log#warn('checker dockerfile/dockerfile_lint: unrecognized error format (crashed checker?)')
             let out = []
         endtry
     else
-        call syntastic#log#warn('checker dockerfile/dockerfile_lint: unrecognized error format')
+        call syntastic#log#warn('checker dockerfile/dockerfile_lint: unrecognized error format (crashed checker?)')
     endif
     return out
 endfunction " }}}2
@@ -132,18 +132,18 @@ function! syntastic#preprocess#flow(errors) abort " {{{2
 
                     call add(out, msg)
                 catch /\m^Vim\%((\a\+)\)\=:E716/
-                    call syntastic#log#warn('checker javascript/flow: unrecognized error format')
+                    call syntastic#log#warn('checker javascript/flow: unrecognized error format (crashed checker?)')
                     let out = []
                     break
                 endtry
             else
-                call syntastic#log#warn('checker javascript/flow: unrecognized error format')
+                call syntastic#log#warn('checker javascript/flow: unrecognized error format (crashed checker?)')
                 let out = []
                 break
             endif
         endfor
     else
-        call syntastic#log#warn('checker javascript/flow: unrecognized error format')
+        call syntastic#log#warn('checker javascript/flow: unrecognized error format (crashed checker?)')
     endif
 
     return out
@@ -178,11 +178,11 @@ function! syntastic#preprocess#jscs(errors) abort " {{{2
                     endtry
                 endfor
             else
-                call syntastic#log#warn('checker javascript/jscs: unrecognized error format')
+                call syntastic#log#warn('checker javascript/jscs: unrecognized error format (crashed checker?)')
             endif
         endfor
     else
-        call syntastic#log#warn('checker javascript/jscs: unrecognized error format')
+        call syntastic#log#warn('checker javascript/jscs: unrecognized error format (crashed checker?)')
     endif
     return out
 endfunction " }}}2
@@ -298,7 +298,7 @@ function! syntastic#preprocess#prospector(errors) abort " {{{2
                 endif
             endfor
         else
-            call syntastic#log#warn('checker python/prospector: unrecognized error format')
+            call syntastic#log#warn('checker python/prospector: unrecognized error format (crashed checker?)')
         endif
     endif
 
@@ -371,11 +371,11 @@ function! syntastic#preprocess#scss_lint(errors) abort " {{{2
                     endtry
                 endfor
             else
-                call syntastic#log#warn('checker scss/scss_lint: unrecognized error format')
+                call syntastic#log#warn('checker scss/scss_lint: unrecognized error format (crashed checker?)')
             endif
         endfor
     else
-        call syntastic#log#warn('checker scss/scss_lint: unrecognized error format')
+        call syntastic#log#warn('checker scss/scss_lint: unrecognized error format (crashed checker?)')
     endif
     return out
 endfunction " }}}2
@@ -411,7 +411,7 @@ function! syntastic#preprocess#stylelint(errors) abort " {{{2
                 endtry
             endfor
         else
-            call syntastic#log#warn('checker css/stylelint: unrecognized error format')
+            call syntastic#log#warn('checker css/stylelint: unrecognized error format (crashed checker?)')
         endif
     endif
     return out
@@ -458,7 +458,7 @@ echomsg string(json)
             endtry
         endfor
     else
-        call syntastic#log#warn('checker javascript/tern_lint: unrecognized error format')
+        call syntastic#log#warn('checker javascript/tern_lint: unrecognized error format (crashed checker?)')
     endif
 
 echomsg string(out)
@@ -513,7 +513,7 @@ function! syntastic#preprocess#vint(errors) abort " {{{2
             endif
         endfor
     else
-        call syntastic#log#warn('checker vim/vint: unrecognized error format')
+        call syntastic#log#warn('checker vim/vint: unrecognized error format (crashed checker?)')
     endif
 
     return out
