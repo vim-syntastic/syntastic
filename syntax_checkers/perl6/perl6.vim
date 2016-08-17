@@ -53,7 +53,7 @@ function! SyntaxCheckers_perl6_perl6_IsAvailable() dict " {{{1
 endfunction " }}}1
 
 function! SyntaxCheckers_perl6_perl6_GetHighlightRegex(item)
-    let eject_pat     = '------>\s*\(.*\)⏏'
+    let eject_pat     = '------>\s*\(.\{-}\)⏏'
     let can_only_pat  = "^Can only use '" . '\(.\{-}\)' . "'"
     let undecl_pat    = '^Undeclared .*:\W\(.\{-}\)\s'
     let not_found_pat = 'Could not find \(.\{-}\) at'
