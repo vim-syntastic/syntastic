@@ -80,7 +80,6 @@ function! SyntaxCheckers_perl6_perl6_GetLocList() dict " {{{1
         let includes = perl6lib
     endif
 
-    echo includes
     let shebang = syntastic#util#parseShebang()
     let extra = join(map(includes, '"-I" . v:val'))
     "let errorformat = '%f|%l|%m'
