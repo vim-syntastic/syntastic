@@ -53,6 +53,33 @@ function! SyntaxCheckers_perl6_perl6_IsAvailable() dict " {{{1
 endfunction " }}}1
 
 function! SyntaxCheckers_perl6_perl6_GetHighlightRegex(item)
+    let eject_pat    = '------>\s*\(.*\)⏏'
+    let can_only_pat = "^Can only use '" . '\(.\{-}\)' . "'"
+    let undecl_pat   = '^Undeclared .*:\W\(.\{-}\)\s'
+    if match(a:item['text'], eject_pat) > -1 
+        echo a:item
+        let parts = matchlist(a:item['text'], eject_pat)
+        if !empty(parts)
+            echom parts[1]
+            return parts[1]
+        endif
+    endif
+    if match(a:item['text'], can_only_pat) > -1 
+        echo a:item
+        let parts = matchlist(a:item['text'], can_only_pat)
+        if !empty(parts)
+            echom parts[1]
+            return parts[1]
+        endif
+    endif
+    if match(a:item['text'], undecl_pat) > -1 
+        echo a:item
+        let parts = matchlist(a:item['text'], undecl_pat)
+        if !empty(parts)
+            echom parts[1]
+            return parts[1]
+        endif
+    endif
     "if match(a:item['text'], '------>') > -1
     "    let term = split(a:item['text'], '------>')[1]
 	"	substitute(term, '⏏', '', '')
