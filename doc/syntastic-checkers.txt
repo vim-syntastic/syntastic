@@ -4312,11 +4312,14 @@ Default: "perl"
 The perl interpreter to use.
 
                                                  *'g:syntastic_perl6_lib_path'*
-Type: list os strings
+Type: list ofs strings
 Default: []
 List of include directories to be added to the perl command line. Example: >
     let g:syntastic_perl6_lib_path = [ "./lib", "./lib/auto" ]
-<
+
+Alternatively, you can also set the PERL6LIB shell variable with add-hoc
+paths. The paths will then be added to g:syntastic_perl6_lib_path. 
+
 ==============================================================================
 SYNTAX CHECKERS FOR PHP                               *syntastic-checkers-php*
 

@@ -20,9 +20,32 @@ Within vim, type :Helptags once.
 The linter is by no means complete, but on my setup it shows most of the errors
 at savetime.
 
-syntastic installation information and setup:
-https://github.com/scrooloose/syntastic
+syntastic installation information and minimal .vimrc setup:
+https://github.com/nxadm/syntastic (fork with perl6 doc)
+https://github.com/scrooloose/syntastic (upstream)
 
-Once Perl 6 support is completed, a PR will be sent upstream.
+Short howto for Perl 6:
+Add this to your .vimrc:
+```
+"syntastic syntax checking
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+"airline integration (commented)
+"set statusline+=%#warningmsg#
+"set statusline+=%{SyntasticStatuslineFlag()}
+"set statusline+=%*
+"Language specific configuration
+"A comma separated list of paths to be included to -I
+"let g:syntastic_perl6_lib_path = [ '/home/claudio/Code/OpenLDAP-DataConsistency/lib' ]
+"You need to enable the perl6 checker
+let g:syntastic_enable_perl6_checker = 1
+```
+There are two ways of dealing with unknown lib path perl6 errors, you can populate the g:syntastic_perl6_lib_path with default lib dirs, and/or more
+practically set the PERL6LIB shell variable.
+
+Once Perl 6 support is completed, a PR will be sent upstream. Post an issue
+if you found Perl 6 syntax (compile) error not yet catched.
 
 El_Che @ #perl6
