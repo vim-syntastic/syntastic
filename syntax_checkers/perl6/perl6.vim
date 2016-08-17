@@ -53,42 +53,19 @@ function! SyntaxCheckers_perl6_perl6_IsAvailable() dict " {{{1
 endfunction " }}}1
 
 function! SyntaxCheckers_perl6_perl6_GetHighlightRegex(item)
-    let eject_pat    = '------>\s*\(.*\)⏏'
-    let can_only_pat = "^Can only use '" . '\(.\{-}\)' . "'"
-    let undecl_pat   = '^Undeclared .*:\W\(.\{-}\)\s'
-    if match(a:item['text'], eject_pat) > -1 
-        echo a:item
-        let parts = matchlist(a:item['text'], eject_pat)
-        if !empty(parts)
-            echom parts[1]
-            return parts[1]
+    let eject_pat     = '------>\s*\(.*\)⏏'
+    let can_only_pat  = "^Can only use '" . '\(.\{-}\)' . "'"
+    let undecl_pat    = '^Undeclared .*:\W\(.\{-}\)\s'
+    let not_found_pat = 'Could not find \(.\{-}\) at'
+    
+    for pat in [ eject_pat, can_only_pat, undecl_pat, not_found_pat ]
+        if match(a:item['text'], pat) > -1 
+            let parts = matchlist(a:item['text'], pat)
+            if !empty(parts)
+                return parts[1]
+            endif
         endif
-    endif
-    if match(a:item['text'], can_only_pat) > -1 
-        echo a:item
-        let parts = matchlist(a:item['text'], can_only_pat)
-        if !empty(parts)
-            echom parts[1]
-            return parts[1]
-        endif
-    endif
-    if match(a:item['text'], undecl_pat) > -1 
-        echo a:item
-        let parts = matchlist(a:item['text'], undecl_pat)
-        if !empty(parts)
-            echom parts[1]
-            return parts[1]
-        endif
-    endif
-    "if match(a:item['text'], '------>') > -1
-    "    let term = split(a:item['text'], '------>')[1]
-	"	substitute(term, '⏏', '', '')
-	"	substitute(term, '<EOL>', '', '')
-    "    return '\V\\<'.term.'\\>'
-	"elseif match(a:item['text'], 'Undeclared routine') > -1
-    "    let term = split(a:item['text'], 'Undeclared routine')[1]
-    "    return '\V\\<'.term.'\\>'
-    "endif
+    endfor
 
     return ''
 endfunction

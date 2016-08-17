@@ -48,4 +48,30 @@ practically set the PERL6LIB shell variable.
 Once Perl 6 support is completed, a PR will be sent upstream. Post an issue
 if you found Perl 6 syntax (compile) error not yet catched.
 
+Implemented:
+- Show regular errors of the type:
+```
+===SORRY!=== Error while compiling <file>
+<reason>
+at <file:line>
+------> <place of program eject>
+```
+- Show error for undeclared rountines/names/... :
+```
+===SORRY!=== Error while compiling <file>
+Undeclared <type>:
+    <name> used at line <line>
+```
+- Show error for not found libraries (use):
+```
+===SORRY!===
+Could not find <name> at line <line> in:
+   <paths>
+```
+- Hightlight error in text for errors reported by:
+    - ------> and ⏏ (eject)
+    - "Can only use..."
+    - "Undeclared..."
+    - "Could not find..."
+
 El_Che @ #perl6
