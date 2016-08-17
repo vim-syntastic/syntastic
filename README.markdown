@@ -28,7 +28,7 @@
 4.2. [How can I check scripts written for different versions of Python?](#faqpython)  
 4.3. [How can I check scripts written for different versions of Ruby?](#faqruby)  
 4.4. [Are there any local checkers for HTML5 that I can use with syntastic?](#faqhtml5)  
-4.5. [The `perl` checker has stopped working...](#faqperl)  
+4.5. [The `perl` or `perl6` checker has stopped working...](#faqperl)  
 4.6. [What happened to the `rustc` checker?](#faqrust)  
 4.7. [What happened to the `tsc` checker?](#faqtsc)  
 4.8. [What happened to the `xcrun` checker?](#faqxcrun)  
@@ -63,9 +63,9 @@ DocBook, Dockerfile, Dust, Elixir, Erlang, eRuby, Fortran, Gentoo metadata,
 GLSL, Go, Haml, Haskell, Haxe, Handlebars, HSS, HTML, Java, JavaScript, JSON,
 JSX, LESS, Lex, Limbo, LISP, LLVM intermediate language, Lua, Markdown,
 MATLAB, Mercury, NASM, Nix, Objective-C, Objective-C++, OCaml, Perl, Perl
-POD, PHP, gettext Portable Object, OS X and iOS property lists, Pug (formerly
-Jade), Puppet, Python, QML, R, Racket, RDF TriG, RDF Turtle, Relax NG,
-reStructuredText, RPM spec, Ruby, SASS/SCSS, Scala, Slim, SML, Solidity,
+POD, Perl 6, PHP, gettext Portable Object, OS X and iOS property lists, Pug 
+(formerly Jade), Puppet, Python, QML, R, Racket, RDF TriG, RDF Turtle, Relax 
+NG, reStructuredText, RPM spec, Ruby, SASS/SCSS, Scala, Slim, SML, Solidity,
 Sphinx, SQL, Stylus, Tcl, TeX, Texinfo, Twig, TypeScript, Vala, Verilog,
 VHDL, VimL, xHtml, XML, XSLT, XQuery, YACC, YAML, YANG data models, z80, Zope
 page templates, and Zsh. See the [manual][checkers] for details about the
@@ -283,19 +283,29 @@ let g:syntastic_html_validator_api = 'http://localhost:8888/'
 
 <a name="faqperl"></a>
 
-__4.5. Q. The `perl` checker has stopped working...__
+__4.5. Q. The `perl` or `perl6` checker has stopped working...__
 
 A. The `perl` checker runs `perl -c` against your file, which in turn
 __executes__ any `BEGIN`, `UNITCHECK`, and `CHECK` blocks, and any `use`
-statements in your file (cf. [perlrun][perlrun]). This is probably fine if you
-wrote the file yourself, but it's a security problem if you're checking
-third-party files. Since there is currently no way to disable this behaviour
-while still producing useful results, the checker is now disabled by default.
-To (re-)enable it, make sure the `g:syntastic_perl_checkers` list includes
-`perl`, and set `g:syntastic_enable_perl_checker` to 1 in your `vimrc`:
-```vim
-let g:syntastic_enable_perl_checker = 1
-```
+statements in your file (cf. [perlrun][perlrun]). The `perl` checker runs
+`perl6 -c` against your file, which in turn __runs__ BEGIN and CHECK blocks.
+This is probably fine if you wrote the file yourself, but it's a security
+problem if you're checking third-party files. Since there is currently no way
+to disable this behaviour while still producing useful results, the checker
+is now disabled by default.
+To (re-)enable it for perl5, make sure the
+`g:syntastic_perl_checkers` list includes `perl`, and set
+`g:syntastic_enable_perl_checker` to 1 in your `vimrc`:
+```vim                                                                          
+let g:syntastic_enable_perl_checker = 1                                         
+```                                                                             
+To (re-)enable it for perl6, make sure the
+`g:syntastic_perl6_yntastic_perl6_checkersheckers` list includes `perl6`, and
+set
+`g:syntastic_enable_perl6_checker` to 1 in your `vimrc`:
+```vim                                                                          
+let g:syntastic_enable_perl6_checker = 1                                        
+``` 
 
 <a name="faqrust"></a>
 
