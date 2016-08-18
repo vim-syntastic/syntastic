@@ -205,60 +205,51 @@ function! syntastic#preprocess#perl(errors) abort " {{{2
 endfunction " }}}2
 
 function! syntastic#preprocess#perl6(errors) abort " {{{2
-    let out               = [] "List of errors
-    let err_str           = {} "Error parts 
-    let err_str.msg       = '' "We'll concatenate the messages
-    let file_pat          = 'Error while compiling\s\(.*\)$' 
-    let line_pat_def      = '^at .*:\(\d\+\)$'
-    let line_pat_undecl   = '^.* used at line \(\d\+\)'
-    let ansi_pat          = '\e[[0-9]\+[mK]'
-    "Error message for among other undeclared subroutines & names
-    let undeclared_pat    = '^Undeclared\s\+'
-    let notfound_pat      = '^Could not find .* at line \(\d\+\) in:'
-                                              
+    let out = []
+    let fname = ''
+    let line = 0
+    let column = 0
+    let msg = ''
+
     for e in a:errors
-        "Get the filename 
-        if match(e, file_pat) > -1
-            let parts = matchlist(e, file_pat)
-            let err_str.file = parts[1]
-        "Get the line number
+        if e =~# '\m^\s*$'
+            continue
+        endif
+
+        if e =~# '\m^===SORRY!=== Error while compiling\s'
+            if msg !=# ''
+                call add(out, join([fname, line, column, msg], ':'))
+            endif
+
+            let fname = matchstr(e, '\m^===SORRY!=== Error while compiling\s\zs.*')
+            let line = 0
+            let column = 0
+            let msg = ''
+        elseif e =~# '\m^at line \d\+$'
+            let line = matchstr(e, '\m^at line \zs\d\+')
+        elseif e =~# '\m used at line \d\+'
+            let parts = matchlist(e, '\v^\s*(\S+) used at line (\d+)')
+            if len(parts) >= 3
+                let [what, line] = parts[1:2]
+                let msg .= ' ' . what
+            endif
+        elseif e =~# '\m^at .*:\d\+$'
+            let parts = matchlist(e, '\v^at\s+(.*)\:(\d+)$')
+            if len(parts) >= 3
+                let [fname, line] = parts[1:2]
+            endif
+        elseif e =~# '\m^Could not find .* at line \d\+ in:'
+            let line = matchstr(e, '\m^Could not find .* at line \zs\d\+')
+        elseif e =~# '^\m------> \(<BOL>\)\=.\{-}<HERE>'
+            let column = strlen(matchstr(e, '^\m------> \(<BOL>\)\=\zs.\{-}\ze<HERE>')) + 1
         else
-            if match(e, line_pat_def) > -1
-                let parts = matchlist(e, line_pat_def)
-                let err_str.line = parts[1]
-                continue "We only need the line number
-            endif
-            if match(e, line_pat_undecl) > -1
-                "The undeclare line with nr must be added to msg
-                let parts = matchlist(e, line_pat_undecl)
-                let err_str.line = parts[1]
-            endif
-            if match(e, notfound_pat) > -1
-                "The unknown line with nr must be added to msg
-                let parts = matchlist(e, notfound_pat)
-                let err_str.line = parts[1]
-            endif
-            "Add it to the message, ignore empty lines
-            if match(e, '\S') > -1
-                if match(e, '^\s\+') > -1
-                    let e = substitute(e,'^\s\+', '', '')
-                endif
-                if match(e, ansi_pat) > -1
-                    let e = substitute(e, ansi_pat, '', 'g')
-                endif
-                let concat = err_str.msg . e . '␤' "utf8 newline symbol
-                let err_str.msg = concat
-            endif
+            let e = substitute(e, '\m^\s\+', '', '')
+            let msg .= (msg !=# '' ? ' ' : '') . e
         endif
     endfor
 
-    if has_key(err_str, 'line')
-        "Some errors do not show the file name
-        if !has_key(err_str, 'file')
-            let err_str.file = expand('%p')
-        endif
-        call add(out, err_str.file . '|:|' . 
-                    \ err_str.line . '|:|' . err_str.msg )
+    if msg !=# ''
+        call add(out, join([fname, line, column, msg], ':'))
     endif
 
     return syntastic#util#unique(out)
