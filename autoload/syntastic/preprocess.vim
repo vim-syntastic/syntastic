@@ -216,7 +216,17 @@ function! syntastic#preprocess#perl6(errors) abort " {{{2
             continue
         endif
 
-        if e =~# '\m^===SORRY!=== Error while compiling\s'
+        if e =~# '\m^Error while '
+            if msg !=# ''
+                call add(out, join([fname, line, column, msg], ':'))
+            endif
+
+            call add(out, ':0:0:' . e)
+            let fname = ''
+            let line = 0
+            let column = 0
+            let msg = ''
+        elseif e =~# '\m^===SORRY!=== Error while compiling\s'
             if msg !=# ''
                 call add(out, join([fname, line, column, msg], ':'))
             endif
@@ -241,7 +251,11 @@ function! syntastic#preprocess#perl6(errors) abort " {{{2
         elseif e =~# '\m^Could not find .* at line \d\+ in:'
             let line = matchstr(e, '\m^Could not find .* at line \zs\d\+')
         elseif e =~# '^\m------> \(<BOL>\)\=.\{-}<HERE>'
-            let column = strlen(matchstr(e, '^\m------> \(<BOL>\)\=\zs.\{-}\ze<HERE>')) + 1
+            let str = matchstr(e, '^\m------> \(<BOL>\)\=\zs.\{-}\ze<HERE>')
+            let str = has('iconv') && &encoding !=# '' && &encoding !=# 'utf-8' ? iconv(str, 'utf-8', &encoding) : str
+            if syntastic#util#strwidth(str) < 40
+                let column = strlen(str) + 1
+            endif
         else
             let e = substitute(e, '\m^\s\+', '', '')
             let msg .= (msg !=# '' ? ' ' : '') . e

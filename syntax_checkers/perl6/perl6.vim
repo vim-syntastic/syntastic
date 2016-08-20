@@ -71,15 +71,18 @@ function! SyntaxCheckers_perl6_perl6_GetLocList() dict " {{{1
     endif
     call map(includes, '"-I" . v:val')
 
-    let errorformat = '%f:%l:%c:%m'
+    let errorformat =
+        \ '%f:%l:%c:%m,' .
+        \ ':%l:%c:%m'
 
     let makeprg = self.makeprgBuild({ 'args_before': ['-c'] + includes })
 
     return SyntasticMake({
         \ 'makeprg': makeprg,
         \ 'errorformat': errorformat,
-        \ 'env': { 'RAKUDO_ERROR_COLOR': '' },
+        \ 'env': { 'RAKUDO_ERROR_COLOR': '0' },
         \ 'defaults': { 'bufnr': bufnr(''), 'type': 'E' },
+        \ 'returns': [0, 1],
         \ 'preprocess': 'perl6' })
 endfunction " }}}1
 

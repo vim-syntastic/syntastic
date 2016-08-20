@@ -170,6 +170,10 @@ endfunction " }}}2
 let s:_width = function(exists('*strwidth') ? 'strwidth' : 'strlen')
 lockvar s:_width
 
+function! syntastic#util#strwidth(str) abort " {{{2
+    return s:_width(a:str)
+endfunction " }}}2
+
 function! syntastic#util#screenWidth(str, tabstop) abort " {{{2
     let chunks = split(a:str, "\t", 1)
     let width = s:_width(chunks[-1])
