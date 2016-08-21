@@ -205,15 +205,27 @@ function! syntastic#preprocess#perl(errors) abort " {{{2
 endfunction " }}}2
 
 function! syntastic#preprocess#perl6(errors) abort " {{{2
+    if a:errors[0] ==# 'Syntax OK'
+        return []
+    endif
+
     let out = []
     let fname = ''
     let line = 0
     let column = 0
     let msg = ''
 
+    let skip =0
     for e in a:errors
         if e =~# '\m^\s*$'
             continue
+        endif
+
+        if skip
+            if e =~# '\v^\s{4}'
+                continue
+            endif
+            let skip =0
         endif
 
         if e =~# '\m^Error while '
@@ -235,6 +247,14 @@ function! syntastic#preprocess#perl6(errors) abort " {{{2
             let line = 0
             let column = 0
             let msg = ''
+        elseif e ==# '===SORRY!==='
+            if msg !=# ''
+                call add(out, join([fname, line, column, msg], ':'))
+            endif
+
+            let line = 0
+            let column = 0
+            let msg = ''
         elseif e =~# '\m^at line \d\+$'
             let line = matchstr(e, '\m^at line \zs\d\+')
         elseif e =~# '\m used at line \d\+'
@@ -249,7 +269,14 @@ function! syntastic#preprocess#perl6(errors) abort " {{{2
                 let [fname, line] = parts[1:2]
             endif
         elseif e =~# '\m^Could not find .* at line \d\+ in:'
-            let line = matchstr(e, '\m^Could not find .* at line \zs\d\+')
+            let parts = matchlist(e, '\v^(Could not find .*) at line (\d+)')
+            if len(parts) >= 3
+                let [msg, line] = parts[1:2]
+            endif
+            let skip = 1
+        elseif e =~# '\m^Could not find .* in:'
+            let msg = matchstr(e, '\m^Could not find .*\ze in:')
+            let skip = 1
         elseif e =~# '^\m------> \(<BOL>\)\=.\{-}<HERE>'
             let str = matchstr(e, '^\m------> \(<BOL>\)\=\zs.\{-}\ze<HERE>')
             let str = has('iconv') && &encoding !=# '' && &encoding !=# 'utf-8' ? iconv(str, 'utf-8', &encoding) : str

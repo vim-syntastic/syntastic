@@ -55,6 +55,10 @@ function! SyntaxCheckers_perl6_perl6_GetHighlightRegex(item) " {{{1
         return '\V' . escape(term, '\')
     endif
     let term = matchstr(a:item['text'], '\mCould not find \zs.\{-}\ze at')
+    if term !=# ''
+        return '\V' . escape(term, '\')
+    endif
+    let term = matchstr(a:item['text'], '\mCould not find \zs\S\+$')
     return term !=# '' ? '\V' . escape(term, '\') : ''
 endfunction " }}}1
 
