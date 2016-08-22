@@ -87,7 +87,8 @@ function! SyntaxCheckers_perl6_perl6_GetLocList() dict " {{{1
         \ 'env': { 'RAKUDO_ERROR_COLOR': '0' },
         \ 'defaults': { 'bufnr': bufnr(''), 'type': 'E' },
         \ 'returns': [0, 1],
-        \ 'preprocess': 'perl6' })
+        \ 'preprocess': 'perl6',
+        \ 'postprocess': ['iconv'] })
 endfunction " }}}1
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
