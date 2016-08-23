@@ -46,19 +46,20 @@ CONTENTS                                                  *syntastic-contents*
         6.4.Saving Vim sessions....................|syntastic-sessions|
         6.5.The location list callback.............|syntastic-loclist-callback|
     7.Compatibility with other software............|syntastic-compatibility|
-        7.1.The csh and tcsh shells................|syntastic-csh|
-        7.2.Eclim..................................|syntastic-eclim|
-        7.3.The fish shell.........................|syntastic-fish|
-        7.4.The fizsh shell........................|syntastic-fizsh|
-        7.5.flagship...............................|syntastic-flagship|
-        7.6.powerline..............................|syntastic-powerline|
-        7.7.The PowerShell shell...................|syntastic-powershell|
-        7.8.python-mode............................|syntastic-pymode|
-        7.9.vim-auto-save..........................|syntastic-vim-auto-save|
-        7.10.vim-go................................|syntastic-vim-go|
-        7.11.vim-virtualenv........................|syntastic-vim-virtualenv|
-        7.12.YouCompleteMe.........................|syntastic-ycm|
-        7.13.The zsh shell and MacVim..............|syntastic-zsh|
+        7.1.airline................................|syntastic-airline|
+        7.2.The csh and tcsh shells................|syntastic-csh|
+        7.3.Eclim..................................|syntastic-eclim|
+        7.4.The fish shell.........................|syntastic-fish|
+        7.5.The fizsh shell........................|syntastic-fizsh|
+        7.6.flagship...............................|syntastic-flagship|
+        7.7.powerline..............................|syntastic-powerline|
+        7.8.The PowerShell shell...................|syntastic-powershell|
+        7.9.python-mode............................|syntastic-pymode|
+        7.10.vim-auto-save.........................|syntastic-vim-auto-save|
+        7.11.vim-go................................|syntastic-vim-go|
+        7.12.vim-virtualenv........................|syntastic-vim-virtualenv|
+        7.13.YouCompleteMe.........................|syntastic-ycm|
+        7.14.The zsh shell and MacVim..............|syntastic-zsh|
     8.About........................................|syntastic-about|
     9.License......................................|syntastic-license|
 
@@ -158,12 +159,17 @@ Something like this could be more useful: >
     set statusline+=%*
 <
 When syntax errors are detected a flag will be shown. The content of the flag
-is derived from the |syntastic_stl_format| option.
+is derived from the |'syntastic_stl_format'| option.
 
 Please note that these settings might conflict with other Vim plugins that
-change the way statusline works. Refer to these plugins' documentation for
-possible solutions. See also |syntastic-powerline| below if you're using the
-"powerline" Vim plugin (https://github.com/powerline/powerline).
+change the way statusline works. Refer to the |syntastic-compatibility| notes
+below and to the respective plugins' documentation for possible solutions.
+
+In particular see |syntastic-airline| below if you're using the "airline" Vim
+plugin (https://github.com/vim-airline/vim-airline). See |syntastic-flagship|
+if you're using "flagship" (https://github.com/tpope/vim-flagship). See also
+|syntastic-powerline| if you're using the "powerline" Vim plugin
+(https://github.com/powerline/powerline).
 
 ------------------------------------------------------------------------------
 2.2. Error signs                                       *syntastic-error-signs*
@@ -987,7 +993,16 @@ also affect window sizes.)
 7. Compatibility with other software                 *syntastic-compatibility*
 
 ------------------------------------------------------------------------------
-7.1 The csh and tcsh shells                                    *syntastic-csh*
+7.1 airline                                                *syntastic-airline*
+
+The "airline" Vim plugin (https://github.com/vim-airline/vim-airline) comes
+packaged with a mechanism of showing flags on the |'statusline'| according to
+your |'syntastic_stl_format'|. You don't need to add add the flag explicitly
+to your |'statusline'| as described in the |syntastic-statusline-flag| section
+above.
+
+------------------------------------------------------------------------------
+7.2 The csh and tcsh shells                                    *syntastic-csh*
 
 The "csh" and "tcsh" shells are mostly compatible with syntastic. However,
 some checkers assume Bourne shell syntax for redirecting "stderr". For this
@@ -996,7 +1011,7 @@ such as "zsh", "bash", "ksh", or even the original Bourne "sh": >
     let g:syntastic_shell = "/bin/sh"
 <
 ------------------------------------------------------------------------------
-7.2. Eclim                                                   *syntastic-eclim*
+7.3. Eclim                                                   *syntastic-eclim*
 
 Syntastic can be used together with "Eclim" (see http://eclim.org/). However,
 by default Eclim disables syntastic's checks for the filetypes it supports, in
@@ -1009,7 +1024,7 @@ run Eclim's validation for others. Please consult Eclim's documentation for
 details.
 
 ------------------------------------------------------------------------------
-7.3 The fish shell                                            *syntastic-fish*
+7.4 The fish shell                                            *syntastic-fish*
 
 At the time of this writing the "fish" shell (see http://fishshell.com/)
 doesn't support the standard UNIX syntax for file redirections, and thus it
@@ -1019,7 +1034,7 @@ original Bourne "sh": >
     let g:syntastic_shell = "/bin/sh"
 <
 ------------------------------------------------------------------------------
-7.4. The fizsh shell                                         *syntastic-fizsh*
+7.5. The fizsh shell                                         *syntastic-fizsh*
 
 Using syntastic with the "fizsh" shell (see https://github.com/zsh-users/fizsh)
 is possible, but potentially problematic. In order to do it you'll need to set
@@ -1032,7 +1047,7 @@ interactive features of "fizsh". Using a more traditional shell such as "zsh",
     let g:syntastic_shell = "/bin/sh"
 <
 ------------------------------------------------------------------------------
-7.5 flagship                                              *syntastic-flagship*
+7.6 flagship                                              *syntastic-flagship*
 
 The "flagship" Vim plugin (https://github.com/tpope/vim-flagship) has its
 own mechanism of showing flags on the |'statusline'|. To allow "flagship"
@@ -1042,7 +1057,7 @@ described in the |syntastic-statusline-flag| section above: >
     autocmd User Flags call Hoist("window", "SyntasticStatuslineFlag")
 <
 ------------------------------------------------------------------------------
-7.6. powerline                                           *syntastic-powerline*
+7.7. powerline                                           *syntastic-powerline*
 
 The "powerline" Vim plugin (https://github.com/powerline/powerline) comes
 packaged with a syntastic segment. To customize this segment create a file
@@ -1059,7 +1074,7 @@ packaged with a syntastic segment. To customize this segment create a file
     }
 <
 ------------------------------------------------------------------------------
-7.7. The PowerShell shell                               *syntastic-powershell*
+7.8. The PowerShell shell                               *syntastic-powershell*
 
 At the time of this writing, syntastic is not compatible with using "Windows
 PowerShell" (http://technet.microsoft.com/en-us/library/bb978526.aspx) as Vim's
@@ -1068,7 +1083,7 @@ Vim's 'shell' to a more traditional program, such as "cmd.exe": >
     set shell=cmd.exe
 <
 ------------------------------------------------------------------------------
-7.8 python-mode                                             *syntastic-pymode*
+7.9 python-mode                                             *syntastic-pymode*
 
 Syntastic can be used along with the "python-mode" Vim plugin (see
 https://github.com/klen/python-mode). However, they both run syntax checks by
@@ -1079,14 +1094,14 @@ for python in syntastic (see |'syntastic_mode_map'|), or disable lint checks in
     let g:pymode_lint_on_write = 0
 <
 ------------------------------------------------------------------------------
-7.9. vim-auto-save                                   *syntastic-vim-auto-save*
+7.10. vim-auto-save                                  *syntastic-vim-auto-save*
 
 Syntastic can be used together with the "vim-auto-save" Vim plugin (see
 https://github.com/907th/vim-auto-save). However, syntastic checks in active
 mode only work with "vim-auto-save" version 0.1.7 or later.
 
 ------------------------------------------------------------------------------
-7.10. vim-go                                                *syntastic-vim-go*
+7.11. vim-go                                                *syntastic-vim-go*
 
 Syntastic can be used along with the "vim-go" Vim plugin (see
 https://github.com/fatih/vim-go). However, both "vim-go" and syntastic run
@@ -1103,7 +1118,7 @@ stick with |quickfix| lists: >
     let g:go_list_type = "quickfix"
 <
 ------------------------------------------------------------------------------
-7.11. vim-virtualenv                                *syntastic-vim-virtualenv*
+7.12. vim-virtualenv                                *syntastic-vim-virtualenv*
 
 At the time of this writing, syntastic can't run checkers installed
 in Python virtual environments activated by "vim-virtualenv" (see
@@ -1111,7 +1126,7 @@ https://github.com/jmcantrell/vim-virtualenv). This is a limitation of
 "vim-virtualenv".
 
 ------------------------------------------------------------------------------
-7.12 YouCompleteMe                                             *syntastic-ycm*
+7.13 YouCompleteMe                                             *syntastic-ycm*
 
 Syntastic can be used together with the "YouCompleteMe" Vim plugin (see
 http://valloric.github.io/YouCompleteMe/). However, by default "YouCompleteMe"
@@ -1122,7 +1137,7 @@ have to set |g:ycm_show_diagnostics_ui| to 0. E.g.: >
     let g:ycm_show_diagnostics_ui = 0
 <
 ------------------------------------------------------------------------------
-7.13 The zsh shell and MacVim                                  *syntastic-zsh*
+7.14 The zsh shell and MacVim                                  *syntastic-zsh*
 
 If you're running MacVim together with the "zsh" shell (http://www.zsh.org/)
 you need to be aware that MacVim does not source your .zshrc file, but will
