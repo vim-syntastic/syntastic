@@ -308,8 +308,8 @@ checker should be picked up automatically by syntastic.
 
 __4.7. Q. What happened to the `tsc` checker?__
 
-A. It didn't meet people's expectations and it has been removed. Please
-consider using the external checker [tsuquyomi][tsuquyomi] instead. If you
+A. It didn't meet people's expectations and it has been removed. A better
+checker for TypeScript comes with the plugin [tsuquyomi][tsuquyomi]. If you
 install this plugin the checker should be picked up automatically by syntastic.
 
 <a name="faqxcrun"></a>
