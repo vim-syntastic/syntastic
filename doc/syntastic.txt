@@ -998,9 +998,9 @@ also affect window sizes.)
 The "airline" Vim plugin (https://github.com/vim-airline/vim-airline) comes
 packaged with a mechanism of showing flags on the |'statusline'| according
 to your |'syntastic_stl_format'|. When using this plugin you do NOT need to
-follow the recommendation outlined at in the |syntastic-statusline-flag|
-section above to modify your |'statusline'|; "airline" will make all necessary
-changes automatically.
+follow the recommendation outlined in the |syntastic-statusline-flag| section
+above to modify your |'statusline'|; "airline" will make all necessary changes
+automatically.
 
 ------------------------------------------------------------------------------
 7.2 The csh and tcsh shells                                    *syntastic-csh*
