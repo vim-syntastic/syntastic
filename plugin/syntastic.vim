@@ -283,6 +283,11 @@ function! s:BufEnterHook() abort " {{{2
     call syntastic#log#debug(g:_SYNTASTIC_DEBUG_AUTOCOMMANDS,
         \ 'autocmd: BufEnter, buffer ' . bufnr('') . ' = ' . string(bufname(str2nr(bufnr('')))) .
         \ ', &buftype = ' . string(&buftype))
+
+    if s:_skip_file()
+        return
+    endif
+
     if &buftype ==# ''
         call s:notifiers.refresh(g:SyntasticLoclist.current())
     elseif &buftype ==# 'quickfix'
