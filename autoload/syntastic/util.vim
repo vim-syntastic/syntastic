@@ -271,6 +271,11 @@ function! syntastic#util#findGlobInParent(what, where) abort " {{{2
     return ''
 endfunction " }}}2
 
+" Returns the buffer number of a filename
+function! syntastic#util#fname2buf(fname) abort " {{{2
+    return bufnr('^' . escape( fnamemodify(a:fname, ':p'), '\$.*~[' ) . '$')
+endfunction " }}}2
+
 " Returns unique elements in a list
 function! syntastic#util#unique(list) abort " {{{2
     let seen = {}
@@ -342,10 +347,8 @@ function! syntastic#util#stamp() abort " {{{2
     return split( split(reltimestr(reltime(g:_SYNTASTIC_START)))[0], '\.' )
 endfunction " }}}2
 
-function! syntastic#util#setChangedtick() abort " {{{2
-    unlockvar! b:syntastic_changedtick
-    let b:syntastic_changedtick = b:changedtick
-    lockvar! b:syntastic_changedtick
+function! syntastic#util#setChangedtick(buf) abort " {{{2
+    call setbufvar(a:buf, 'syntastic_changedtick', getbufvar(a:buf, 'changedtick'))
 endfunction " }}}2
 
 let s:_wid_base = 'syntastic_' . getpid() . '_' . reltimestr(g:_SYNTASTIC_START) . '_'
