@@ -19,7 +19,7 @@ if has('reltime')
     lockvar! g:_SYNTASTIC_START
 endif
 
-let g:_SYNTASTIC_VERSION = '3.7.0-201'
+let g:_SYNTASTIC_VERSION = '3.7.0-202'
 lockvar g:_SYNTASTIC_VERSION
 
 " Sanity checks {{{1
@@ -244,6 +244,7 @@ endfunction " }}}2
 
 augroup syntastic
     autocmd!
+    autocmd VimEnter * call s:VimEnterHook()
     autocmd BufEnter * call s:BufEnterHook(expand('<afile>', 1))
 augroup END
 
@@ -268,7 +269,7 @@ endif
 
 function! s:BufReadPostHook(fname) abort " {{{2
     let buf = syntastic#util#fname2buf(a:fname)
-    if g:syntastic_check_on_open
+    if g:syntastic_check_on_open && buf > 0
         call syntastic#log#debug(g:_SYNTASTIC_DEBUG_AUTOCOMMANDS,
             \ 'autocmd: BufReadPost, buffer ' . buf . ' = ' . string(a:fname))
         if index(s:_check_stack, buf) == -1
@@ -288,11 +289,13 @@ function! s:BufEnterHook(fname) abort " {{{2
     let buf = syntastic#util#fname2buf(a:fname)
     call syntastic#log#debug(g:_SYNTASTIC_DEBUG_AUTOCOMMANDS,
         \ 'autocmd: BufEnter, buffer ' . buf . ' = ' . string(a:fname) . ', &buftype = ' . string(&buftype))
-    if &buftype ==# ''
+    if buf > 0 && getbufvar(buf, '&buftype') ==# ''
         let idx = index(reverse(copy(s:_check_stack)), buf)
         if idx >= 0
-            call remove(s:_check_stack, -idx - 1)
-            call s:UpdateErrors(buf, 1, [])
+            if !has('vim_starting')
+                call remove(s:_check_stack, -idx - 1)
+                call s:UpdateErrors(buf, 1, [])
+            endif
         else
             call s:notifiers.refresh(g:SyntasticLoclist.current())
         endif
@@ -306,6 +309,17 @@ function! s:BufEnterHook(fname) abort " {{{2
         if !empty(get(w:, 'syntastic_loclist_set', [])) && !empty(loclist) && empty(filter( buffers, 'syntastic#util#bufIsActive(v:val)' ))
             call SyntasticLoclistHide()
         endif
+    endif
+endfunction " }}}2
+
+function! s:VimEnterHook() abort " {{{2
+    let buf = bufnr('')
+    call syntastic#log#debug(g:_SYNTASTIC_DEBUG_AUTOCOMMANDS,
+        \ 'autocmd: VimEnter, buffer ' . buf . ' = ' . string(bufname(buf)) . ', &buftype = ' . string(&buftype))
+    let idx = index(reverse(copy(s:_check_stack)), buf)
+    if idx >= 0 && getbufvar(buf, '&buftype') ==# ''
+        call remove(s:_check_stack, -idx - 1)
+        call s:UpdateErrors(buf, 1, [])
     endif
 endfunction " }}}2
 
