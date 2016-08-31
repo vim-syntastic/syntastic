@@ -265,11 +265,12 @@ scripts.
 
 __4.4. Q. Are there any local checkers for HTML5 that I can use with syntastic?__
 
-[HTML Tidy][tidy_old] has a fork named [HTML Tidy for HTML5][tidy]. It's a drop
-in replacement, and syntastic can use it without changes. Just install it
-somewhere and point `g:syntastic_html_tidy_exec` to its executable:
+[HTML Tidy][tidy] been updated to handle html5. It's a drop-in
+replacement, and syntastic can use it without changes. Just install it
+somewhere ([instructions][tidy_instructions], [binaries][tidy_binaries])
+and point `g:syntastic_html_tidy_exec` to its executable:
 ```vim
-let g:syntastic_html_tidy_exec = 'tidy5'
+let g:syntastic_html_tidy_exec = 'tidy'
 ```
 Alternatively, you can install [vnu.jar][vnu_jar] from the [validator.nu][vnu]
 project and run it as a [HTTP server][vnu_server]:
@@ -517,8 +518,9 @@ a look at [ghcmod-vim][ghcmod], [jedi-vim][jedi], [python-mode][python_mode], [v
 [rvm]:              https://rvm.io/
 [stack_overflow]:   http://stackoverflow.com/questions/tagged/syntastic
 [swift]:            https://github.com/kballard/vim-swift
-[tidy]:             http://www.htacg.org/tidy-html5/
-[tidy_old]:         http://tidy.sourceforge.net/
+[tidy]:             https://github.com/htacg/tidy-html5
+[tidy_instructions]:http://www.html-tidy.org/#homepage19700601get_tidy
+[tidy_binaries]:    http://binaries.html-tidy.org/
 [tsuquyomi]:        https://github.com/Quramy/tsuquyomi/
 [unimpaired]:       https://github.com/tpope/vim-unimpaired
 [vam]:              https://github.com/MarcWeber/vim-addon-manager
