@@ -278,7 +278,7 @@ function! syntastic#util#fname2buf(fname) abort " {{{2
     if exists('+shellslash')
         let old_shellslash = &shellslash
         let &shellslash = 1
-        let buf = bufnr(escape( fnamemodify(a:fname, ':p'), '\*?,{[' ))
+        let buf = bufnr(escape( fnamemodify(a:fname, ':p'), '\*?,{}[' ))
         let &shellslash = old_shellslash
     else
         let buf = bufnr(escape( fnamemodify(a:fname, ':p'), '\*?,{}[' ))
