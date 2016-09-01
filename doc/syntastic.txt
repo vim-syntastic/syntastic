@@ -1077,11 +1077,13 @@ packaged with a syntastic segment. To customize this segment create a file
 ------------------------------------------------------------------------------
 7.8. The PowerShell shell                               *syntastic-powershell*
 
-At the time of this writing, syntastic is not compatible with using "Windows
-PowerShell" (http://technet.microsoft.com/en-us/library/bb978526.aspx) as Vim's
-'shell'. You may still run Vim from 'PowerShell', but you do have to point
-Vim's 'shell' to a more traditional program, such as "cmd.exe": >
-    set shell=cmd.exe
+At the time of this writing syntastic is not compatible with using
+"PowerShell" (https://msdn.microsoft.com/en-us/powershell) as Vim's 'shell'.
+You may still run Vim from "PowerShell", but you do have to point Vim's
+'shell' to a more traditional program, such as "cmd.exe" on Windows, or
+"/bin/sh" on UNIX: >
+    set shell=c:\Windows\system32\cmd.exe
+    set shell=/bin/sh
 <
 ------------------------------------------------------------------------------
 7.9 python-mode                                             *syntastic-pymode*
