@@ -273,7 +273,18 @@ endfunction " }}}2
 
 " Returns the buffer number of a filename
 function! syntastic#util#fname2buf(fname) abort " {{{2
-    return bufnr('^' . escape( fnamemodify(a:fname, ':p'), '\$.*~[' ) . '$')
+    " this is a best-effort attempt to escape file patterns (cf. :h file-pattern)
+    " XXX it fails for filenames containing something like \{2,3}
+    if exists('+shellslash')
+        let old_shellslash = &shellslash
+        let &shellslash = 1
+        let buf = bufnr(escape( fnamemodify(a:fname, ':p'), '\*?,{[' ))
+        let &shellslash = old_shellslash
+    else
+        let buf = bufnr(escape( fnamemodify(a:fname, ':p'), '\*?,{}[' ))
+    endif
+
+    return buf
 endfunction " }}}2
 
 " Returns unique elements in a list
