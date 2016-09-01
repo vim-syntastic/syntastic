@@ -19,7 +19,7 @@ if has('reltime')
     lockvar! g:_SYNTASTIC_START
 endif
 
-let g:_SYNTASTIC_VERSION = '3.7.0-206'
+let g:_SYNTASTIC_VERSION = '3.7.0-207'
 lockvar g:_SYNTASTIC_VERSION
 
 " Sanity checks {{{1
@@ -244,8 +244,9 @@ endfunction " }}}2
 
 augroup syntastic
     autocmd!
-    autocmd VimEnter * call s:VimEnterHook()
-    autocmd BufEnter * call s:BufEnterHook(expand('<afile>', 1))
+    autocmd VimEnter    * call s:VimEnterHook()
+    autocmd BufEnter    * call s:BufEnterHook(expand('<afile>', 1))
+    autocmd BufWinEnter * call s:BufWinEnterHook(expand('<afile>', 1))
 augroup END
 
 if g:syntastic_nested_autocommands
@@ -308,6 +309,19 @@ function! s:BufEnterHook(fname) abort " {{{2
         let buffers = syntastic#util#unique(map(loclist, 'v:val["bufnr"]') + (owner ? [owner] : []))
         if !empty(get(w:, 'syntastic_loclist_set', [])) && !empty(loclist) && empty(filter( buffers, 'syntastic#util#bufIsActive(v:val)' ))
             call SyntasticLoclistHide()
+        endif
+    endif
+endfunction " }}}2
+
+function! s:BufWinEnterHook(fname) abort " {{{2
+    let buf = syntastic#util#fname2buf(a:fname)
+    call syntastic#log#debug(g:_SYNTASTIC_DEBUG_AUTOCOMMANDS,
+        \ 'autocmd: BufWinEnter, buffer ' . buf . ' = ' . string(a:fname) . ', &buftype = ' . string(&buftype))
+    if buf > 0 && getbufvar(buf, '&buftype') ==# ''
+        let idx = index(reverse(copy(s:_check_stack)), buf)
+        if idx >= 0 && !has('vim_starting')
+            call remove(s:_check_stack, -idx - 1)
+            call s:UpdateErrors(buf, 1, [])
         endif
     endif
 endfunction " }}}2
