@@ -272,20 +272,34 @@ function! syntastic#util#findGlobInParent(what, where) abort " {{{2
 endfunction " }}}2
 
 " Returns the buffer number of a filename
+" @vimlint(EVL104, 1, l:old_shellslash)
 function! syntastic#util#fname2buf(fname) abort " {{{2
-    " this is a best-effort attempt to escape file patterns (cf. :h file-pattern)
-    " XXX it fails for filenames containing something like \{2,3}
     if exists('+shellslash')
+        " bufnr() can't cope with backslashes
         let old_shellslash = &shellslash
         let &shellslash = 1
-        let buf = bufnr(escape( fnamemodify(a:fname, ':p'), '\*?,{}[' ))
+    endif
+
+    " this is a best-effort attempt to escape file patterns (cf. :h file-pattern)
+    " XXX it fails for filenames containing something like \{2,3}
+    for md in [':~:.', ':~', ':p']
+        let buf = bufnr('^' . escape(fnamemodify(a:fname, md), '\*?,{}[') . '$')
+        if buf != -1
+            break
+        endif
+    endfor
+    if buf == -1
+        " XXX definitely wrong, but hope is the last thing to die :)
+        let buf = bufnr(fnamemodify(a:fname, ':p'))
+    endif
+
+    if exists('+shellslash')
         let &shellslash = old_shellslash
-    else
-        let buf = bufnr(escape( fnamemodify(a:fname, ':p'), '\*?,{}[' ))
     endif
 
     return buf
 endfunction " }}}2
+" @vimlint(EVL104, 0, l:old_shellslash)
 
 " Returns unique elements in a list
 function! syntastic#util#unique(list) abort " {{{2
