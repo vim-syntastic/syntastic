@@ -19,7 +19,7 @@ if has('reltime')
     lockvar! g:_SYNTASTIC_START
 endif
 
-let g:_SYNTASTIC_VERSION = '3.7.0-211'
+let g:_SYNTASTIC_VERSION = '3.7.0-212'
 lockvar g:_SYNTASTIC_VERSION
 
 " Sanity checks {{{1
@@ -598,7 +598,7 @@ function! SyntasticMake(options) abort " {{{2
             let err_lines = call('syntastic#preprocess#' . a:options['preprocess'], [err_lines])
             call syntastic#log#debug(g:_SYNTASTIC_DEBUG_LOCLIST, 'preprocess:', err_lines)
         endif
-        lgetexpr err_lines
+        noautocmd lgetexpr err_lines
 
         let errors = deepcopy(getloclist(0))
 
