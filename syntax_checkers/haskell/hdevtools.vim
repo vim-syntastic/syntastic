@@ -34,6 +34,7 @@ function! SyntaxCheckers_haskell_hdevtools_GetLocList() dict
         \ '%W%f:%l:%v: Warning: %m,'.
         \ '%W%f:%l:%v: Warning:,'.
         \ '%E%f:%l:%v: %m,'.
+        \ '%E%f:%l:%v-%.%#,: %m,'.
         \ '%E%>%f:%l:%v:,'.
         \ '%+C  %#%m,'.
         \ '%W%>%f:%l:%v:,'.
