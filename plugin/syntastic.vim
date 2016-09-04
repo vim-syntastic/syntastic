@@ -19,7 +19,7 @@ if has('reltime')
     lockvar! g:_SYNTASTIC_START
 endif
 
-let g:_SYNTASTIC_VERSION = '3.7.0-213'
+let g:_SYNTASTIC_VERSION = '3.7.0-214'
 lockvar g:_SYNTASTIC_VERSION
 
 " Sanity checks {{{1
@@ -132,12 +132,14 @@ let s:_DEBUG_DUMP_OPTIONS = [
         \ 'shellpipe',
         \ 'shellquote',
         \ 'shellredir',
-        \ 'shellslash',
         \ 'shelltemp',
         \ 'shellxquote'
     \ ]
 if exists('+shellxescape')
     call add(s:_DEBUG_DUMP_OPTIONS, 'shellxescape')
+endif
+if exists('+shellslash')
+    call add(s:_DEBUG_DUMP_OPTIONS, 'shellslash')
 endif
 lockvar! s:_DEBUG_DUMP_OPTIONS
 
@@ -216,6 +218,8 @@ function! SyntasticInfo(...) abort " {{{2
     call s:modemap.modeInfo(a:000)
     call s:registry.echoInfoFor(s:_resolve_filetypes(a:000))
     call s:_explain_skip(a:000)
+    call syntastic#log#debugShowOptions(g:_SYNTASTIC_DEBUG_TRACE, s:_DEBUG_DUMP_OPTIONS)
+    call syntastic#log#debugDump(g:_SYNTASTIC_DEBUG_VARIABLES)
 endfunction " }}}2
 
 function! SyntasticErrors() abort " {{{2
@@ -327,6 +331,13 @@ function! s:BufWinEnterHook(fname) abort " {{{2
 endfunction " }}}2
 
 function! s:VimEnterHook() abort " {{{2
+    let g:syntastic_version =
+        \ g:_SYNTASTIC_VERSION .
+        \ ' (Vim ' . v:version . (has('nvim') ? ', Neovim' : '') . ', ' .
+        \ g:_SYNTASTIC_UNAME .
+        \ (has('gui') ? ', GUI' : '') . ')'
+    lockvar g:syntastic_version
+
     let buf = bufnr('')
     call syntastic#log#debug(g:_SYNTASTIC_DEBUG_AUTOCOMMANDS,
         \ 'autocmd: VimEnter, buffer ' . buf . ' = ' . string(bufname(buf)) . ', &buftype = ' . string(&buftype))
@@ -440,6 +451,7 @@ function! s:CacheErrors(buf, checker_names) abort " {{{2
     if !s:_skip_file(a:buf)
         " debug logging {{{3
         call syntastic#log#debugShowVariables(g:_SYNTASTIC_DEBUG_TRACE, 'aggregate_errors')
+        call syntastic#log#debug(g:_SYNTASTIC_DEBUG_CHECKERS, '$TERM = ' . string($TERM))
         call syntastic#log#debug(g:_SYNTASTIC_DEBUG_CHECKERS, '$PATH = ' . string($PATH))
         call syntastic#log#debug(g:_SYNTASTIC_DEBUG_TRACE, 'getcwd() = ' . string(getcwd()))
         " }}}3
