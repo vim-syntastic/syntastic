@@ -19,7 +19,7 @@ if has('reltime')
     lockvar! g:_SYNTASTIC_START
 endif
 
-let g:_SYNTASTIC_VERSION = '3.7.0-214'
+let g:_SYNTASTIC_VERSION = '3.7.0-215'
 lockvar g:_SYNTASTIC_VERSION
 
 " Sanity checks {{{1
@@ -135,12 +135,15 @@ let s:_DEBUG_DUMP_OPTIONS = [
         \ 'shelltemp',
         \ 'shellxquote'
     \ ]
-if exists('+shellxescape')
-    call add(s:_DEBUG_DUMP_OPTIONS, 'shellxescape')
-endif
-if exists('+shellslash')
-    call add(s:_DEBUG_DUMP_OPTIONS, 'shellslash')
-endif
+for s:feature in [
+        \ 'shellxescape',
+        \ 'shellslash',
+    \ ]
+
+    if exists('+' . s:feature)
+        call add(s:_DEBUG_DUMP_OPTIONS, s:feature)
+    endif
+endfor
 lockvar! s:_DEBUG_DUMP_OPTIONS
 
 " debug constants
