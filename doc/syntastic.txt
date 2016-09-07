@@ -804,7 +804,7 @@ The result is a command line of the form: >
 All fields above are optional, and can be overridden by setting global
 variables 'g:syntastic_<filetype>_<checker-name>_<option-name>' - even
 parameters not specified in the call to "makeprgBuild()". For example to
-override the argguments and the tail: >
+override the arguments and the tail: >
     let g:syntastic_c_pc_lint_args = "-w5 -Iz:/usr/include/linux"
     let g:syntastic_c_pc_lint_tail = "2>/dev/null"
 <
