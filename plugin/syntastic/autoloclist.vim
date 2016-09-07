@@ -25,10 +25,10 @@ function! g:SyntasticAutoloclistNotifier.AutoToggle(loclist) abort " {{{2
             call a:loclist.show()
         endif
     else
-        if auto_loc_list == 1 || auto_loc_list == 2
+        if (auto_loc_list == 1 || auto_loc_list == 2) && !empty(get(w:, 'syntastic_loclist_set', []))
             "TODO: this will close the loc list window if one was opened by
             "something other than syntastic
-            lclose
+            call SyntasticLoclistHide()
         endif
     endif
 endfunction " }}}2
