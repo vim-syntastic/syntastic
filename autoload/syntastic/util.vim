@@ -372,8 +372,8 @@ function! syntastic#util#stamp() abort " {{{2
     return split( split(reltimestr(reltime(g:_SYNTASTIC_START)))[0], '\.' )
 endfunction " }}}2
 
-function! syntastic#util#setChangedtick(buf) abort " {{{2
-    call setbufvar(a:buf, 'syntastic_changedtick', getbufvar(a:buf, 'changedtick'))
+function! syntastic#util#setLastTick(buf) abort " {{{2
+    call setbufvar(a:buf, 'syntastic_lasttick', getbufvar(a:buf, 'changedtick'))
 endfunction " }}}2
 
 let s:_wid_base = 'syntastic_' . getpid() . '_' . reltimestr(g:_SYNTASTIC_START) . '_'
