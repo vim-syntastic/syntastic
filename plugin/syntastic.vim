@@ -19,7 +19,7 @@ if has('reltime')
     lockvar! g:_SYNTASTIC_START
 endif
 
-let g:_SYNTASTIC_VERSION = '3.7.0-217'
+let g:_SYNTASTIC_VERSION = '3.7.0-220'
 lockvar g:_SYNTASTIC_VERSION
 
 " Sanity checks {{{1
@@ -238,7 +238,7 @@ function! SyntasticReset() abort " {{{2
         try
             " Vim 7.4.2200 or later
             call setloclist(0, [], 'r', { 'title': '' })
-        catch /\m^Vim\%((\a\+)\)\=:E118/
+        catch /\m^Vim\%((\a\+)\)\=:E\%(118\|731\)/
             " do nothing
         endtry
     endif
@@ -633,7 +633,7 @@ function! SyntasticMake(options) abort " {{{2
             try
                 " Vim 7.4.2200 or later
                 call setloclist(0, [], 'r', { 'title': '' })
-            catch /\m^Vim\%((\a\+)\)\=:E118/
+            catch /\m^Vim\%((\a\+)\)\=:E\%(118\|731\)/
                 " do nothing
             endtry
         catch /\m^Vim\%((\a\+)\)\=:E776/
