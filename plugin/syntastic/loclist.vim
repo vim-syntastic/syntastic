@@ -300,7 +300,7 @@ function! g:SyntasticLoclist.setloclist(new) abort " {{{2
         try
             " Vim 7.4.2200 or later
             call setloclist(0, [], 'r', { 'title': (self.isEmpty() ? '' : ':SyntasticCheck ' . self._name) })
-        catch /\m^Vim\%((\a\+)\)\=:E118/
+        catch /\m^Vim\%((\a\+)\)\=:E\%(118\|731\)/
             " do nothing
         endtry
         call syntastic#util#setLastTick(self._owner)
