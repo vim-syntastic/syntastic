@@ -299,7 +299,7 @@ function! g:SyntasticLoclist.setloclist(new) abort " {{{2
         call setloclist(0, self.getRaw(), replace ? 'r' : ' ')
         try
             " Vim 7.4.2200 or later
-            call setloclist(0, [], 'r', { 'title': (self.isEmpty() ? '' : ':SyntasticCheck ' . self._name) })
+            call setloclist(0, [], 'r', { 'title': ':SyntasticCheck ' . self._name })
         catch /\m^Vim\%((\a\+)\)\=:E\%(118\|731\)/
             " do nothing
         endtry
