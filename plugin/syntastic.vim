@@ -19,7 +19,7 @@ if has('reltime')
     lockvar! g:_SYNTASTIC_START
 endif
 
-let g:_SYNTASTIC_VERSION = '3.7.0-220'
+let g:_SYNTASTIC_VERSION = '3.7.0-221'
 lockvar g:_SYNTASTIC_VERSION
 
 " Sanity checks {{{1
@@ -234,7 +234,6 @@ function! SyntasticReset() abort " {{{2
     call s:ClearCache(bufnr(''))
     call s:notifiers.refresh(g:SyntasticLoclist.New([]))
     if !empty(get(w:, 'syntastic_loclist_set', []))
-        let w:syntastic_loclist_set = []
         try
             " Vim 7.4.2200 or later
             call setloclist(0, [], 'r', { 'title': '' })
@@ -419,7 +418,6 @@ function! s:UpdateErrors(buf, auto_invoked, checker_names) abort " {{{2
         let do_jump = 0
     endif
 
-    let w:syntastic_loclist_set = []
     if syntastic#util#var('always_populate_loc_list') || do_jump
         call loclist.setloclist(1)
         if run_checks && do_jump && !loclist.isEmpty()

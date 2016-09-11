@@ -29,6 +29,7 @@ function! g:SyntasticAutoloclistNotifier.AutoToggle(loclist) abort " {{{2
             "TODO: this will close the loc list window if one was opened by
             "something other than syntastic
             call SyntasticLoclistHide()
+            let w:syntastic_loclist_set = []
         endif
     endif
 endfunction " }}}2
