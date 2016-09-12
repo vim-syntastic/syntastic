@@ -202,6 +202,10 @@ following highlight groups:
 Example: >
     highlight SyntasticErrorLine guibg=#2f0000
 <
+With Vim 8.0 or later you can ask Vim not to turn off the sign column when no
+errors are found, by setting 'signcolumn' to "yes": >
+    set signcolumn=yes
+<
 ------------------------------------------------------------------------------
 2.3. The error window                                   *syntastic-error-window*
 
