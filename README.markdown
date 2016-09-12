@@ -31,7 +31,7 @@
 4.5. [I run a checker and the location list is not updated...](#faqloclist)  
 4.5. [I run`:lopen` or `:lwindow` and the error window is empty...](#faqloclist)  
 4.6. [How can I jump between the different errors without using the location list at the bottom of the window?](#faqlnext)  
-4.7. [The error window is closed automatically when I :quit the current buffer but not when I :bdelete it?](#faqbdelete)  
+4.7. [The error window is closed automatically when I `:quit` the current buffer but not when I `:bdelete` it?](#faqbdelete)  
 4.8. [My favourite checker needs to load a configuration file from the project's root rather than the current directory...](#faqconfig)  
 4.9. [What is the difference between syntax checkers and style checkers?](#faqstyle)  
 4.10. [How can I check scripts written for different versions of Python?](#faqpython)  
@@ -105,9 +105,9 @@ version 7 or later with the "normal", "big", or "huge" feature sets should be
 fine.
 
 Syntastic should work with any modern plugin managers for Vim, such as
-[NeoBundle][neobundle], [Pathogen][pathogen], [Vim-Addon-Manager][vam], [Vim-Plug][plug], or
-[Vundle][vundle]. Instructions for installing syntastic with [Pathogen][pathogen] are
-included below for completeness.
+[NeoBundle][neobundle], [Pathogen][pathogen], [Vim-Addon-Manager][vam],
+[Vim-Plug][plug], or [Vundle][vundle]. Instructions for installing syntastic
+with [Pathogen][pathogen] are included below for completeness.
 
 Starting with Vim version 7.4.1486 you can also load syntastic using the
 standard mechanism of packages, without the help of third-party plugin managers
@@ -331,8 +331,8 @@ mappings (among other things).
 
 <a name="faqbdelete"></a>
 
-__4.7. Q. The error window is closed automatically when I :quit the current buffer
-but not when I :bdelete it?__
+__4.7. Q. The error window is closed automatically when I `:quit` the current buffer
+but not when I `:bdelete` it?__
 
 A. There is no safe way to handle that situation automatically, but you can
 work around it:
