@@ -65,6 +65,7 @@ let s:_DEFAULT_CHECKERS = {
         \ 'objcpp':        ['gcc'],
         \ 'ocaml':         ['camlp4o'],
         \ 'perl':          ['perlcritic'],
+        \ 'perl6':         [],
         \ 'php':           ['php', 'phpcs', 'phpmd'],
         \ 'po':            ['msgfmt'],
         \ 'pod':           ['podchecker'],
