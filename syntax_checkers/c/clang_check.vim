@@ -22,11 +22,20 @@ if !exists('g:syntastic_c_clang_check_sort')
     let g:syntastic_c_clang_check_sort = 1
 endif
 
+if exists('g:syntastic_clang_check_analyze') &&
+   \ g:syntastic_clang_check_analyze == 1
+    let g:syntastic_clang_check_analyze_str = '-analyze'
+else
+    let g:syntastic_clang_check_analyze_str = ''
+endif
+
 let s:save_cpo = &cpo
 set cpo&vim
 
 function! SyntaxCheckers_c_clang_check_GetLocList() dict
     let makeprg = self.makeprgBuild({
+        \ 'args_before':
+        \   g:syntastic_clang_check_analyze_str,
         \ 'post_args':
         \   '-- ' .
         \   syntastic#c#ReadConfig(g:syntastic_clang_check_config_file) . ' ' .
