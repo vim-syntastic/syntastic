@@ -1,7 +1,7 @@
 "============================================================================
 "File:        ncverilog.vim
 "Description: Syntax checking plugin for syntastic.vim
-"Maintainer:  Kocha <kocha dot lsifrontend at gmail dot com>
+"Maintainer:  limelightful
 "============================================================================
 
 if exists('g:loaded_syntastic_verilog_ncverilog_checker')
