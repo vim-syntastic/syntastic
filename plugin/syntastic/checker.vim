@@ -68,10 +68,15 @@ endfunction " }}}2
 " getExec() or getExecEscaped().  Normally isAvailable() does that for you
 " automatically, but you should keep still this in mind if you change the
 " current checker workflow.
-function! g:SyntasticChecker.syncExec() abort " {{{2
-    let suffix = self._name . '_exec'
-    let user_exec = expand( syntastic#util#var(self._filetype . '_' . suffix, syntastic#util#var(suffix)), 1 )
-    let self._exec = user_exec !=# '' ? user_exec : self._exec_default
+function! g:SyntasticChecker.syncExec(...) abort " {{{2
+    if a:0
+        let self._exec = a:1
+    else
+        let suffix = self._name . '_exec'
+        let self._exec = expand(
+            \ syntastic#util#var(self._filetype . '_' . suffix,
+            \ syntastic#util#var(suffix, self._exec_default)), 1 )
+    endif
 endfunction " }}}2
 
 function! g:SyntasticChecker.getExec() abort " {{{2
@@ -157,7 +162,7 @@ endfunction " }}}2
 
 function! g:SyntasticChecker.log(msg, ...) abort " {{{2
     let leader = self._filetype . '/' . self._name . ': '
-    if a:0 > 0
+    if a:0
         call syntastic#log#debug(g:_SYNTASTIC_DEBUG_CHECKERS, leader . a:msg, a:1)
     else
         call syntastic#log#debug(g:_SYNTASTIC_DEBUG_CHECKERS, leader . a:msg)
