@@ -15,7 +15,7 @@ function! g:SyntasticChecker.New(args, ...) abort " {{{2
 
     if a:0
         " redirected checker
-        let newObj._exec = get(a:args, 'exec', a:1['_exec'])
+        let newObj._exec_default = get(a:args, 'exec', a:1['_exec'])
 
         let filetype = a:1['_filetype']
         let name = a:1['_name']
@@ -31,7 +31,7 @@ function! g:SyntasticChecker.New(args, ...) abort " {{{2
             let newObj._enable = a:1['_enable']
         endif
     else
-        let newObj._exec = get(a:args, 'exec', newObj._name)
+        let newObj._exec_default = get(a:args, 'exec', newObj._name)
         let prefix = 'SyntaxCheckers_' . newObj._filetype . '_' . newObj._name . '_'
 
         if has_key(a:args, 'enable')
@@ -69,17 +69,9 @@ endfunction " }}}2
 " automatically, but you should keep still this in mind if you change the
 " current checker workflow.
 function! g:SyntasticChecker.syncExec() abort " {{{2
-    let user_exec =
-        \ expand( exists('b:syntastic_' . self._name . '_exec') ? b:syntastic_{self._name}_exec :
-        \ syntastic#util#var(self._filetype . '_' . self._name . '_exec'), 1 )
-
-    if user_exec !=# '' && user_exec !=# self._exec
-        let self._exec = user_exec
-        if has_key(self, '_available')
-            " we have a new _exec on the block, it has to be validated
-            call remove(self, '_available')
-        endif
-    endif
+    let suffix = self._name . '_exec'
+    let user_exec = expand( syntastic#util#var(self._filetype . '_' . suffix, syntastic#util#var(suffix)), 1 )
+    let self._exec = user_exec !=# '' ? user_exec : self._exec_default
 endfunction " }}}2
 
 function! g:SyntasticChecker.getExec() abort " {{{2
@@ -187,10 +179,15 @@ endfunction " }}}2
 
 function! g:SyntasticChecker.isAvailable() abort " {{{2
     call self.syncExec()
+
     if !has_key(self, '_available')
-        let self._available = self._isAvailableFunc()
+        let self._available = {}
     endif
-    return self._available
+    if !has_key(self._available, self._exec)
+        let self._available[self._exec] = self._isAvailableFunc()
+    endif
+
+    return self._available[self._exec]
 endfunction " }}}2
 
 function! g:SyntasticChecker.isDisabled() abort " {{{2

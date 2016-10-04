@@ -19,7 +19,7 @@ if has('reltime')
     lockvar! g:_SYNTASTIC_START
 endif
 
-let g:_SYNTASTIC_VERSION = '3.7.0-226'
+let g:_SYNTASTIC_VERSION = '3.7.0-227'
 lockvar g:_SYNTASTIC_VERSION
 
 " Sanity checks {{{1
@@ -136,9 +136,9 @@ let s:_DEBUG_DUMP_OPTIONS = [
         \ 'shellxquote'
     \ ]
 for s:feature in [
-        \ 'shellxescape',
-        \ 'shellslash',
         \ 'autochdir',
+        \ 'shellslash',
+        \ 'shellxescape',
     \ ]
 
     if exists('+' . s:feature)
