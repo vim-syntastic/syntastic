@@ -15,7 +15,7 @@ function! g:SyntasticChecker.New(args, ...) abort " {{{2
 
     if a:0
         " redirected checker
-        let newObj._exec_default = get(a:args, 'exec', a:1['_exec'])
+        let newObj._exec_default = get(a:args, 'exec', a:1['_exec_default'])
 
         let filetype = a:1['_filetype']
         let name = a:1['_name']
