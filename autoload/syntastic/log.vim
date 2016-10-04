@@ -21,7 +21,7 @@ function! syntastic#log#warn(msg) abort " {{{2
 endfunction " }}}2
 
 function! syntastic#log#error(msg) abort " {{{2
-    execute "normal \<Esc>"
+    execute 'normal! \<Esc>'
     echohl ErrorMsg
     echomsg 'syntastic: error: ' . a:msg
     echohl None

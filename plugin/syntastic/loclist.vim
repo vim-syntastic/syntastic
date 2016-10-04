@@ -29,7 +29,7 @@ endfunction " }}}2
 
 function! g:SyntasticLoclist.current(...) abort " {{{2
     let buf = a:0 > 1 ? a:1 : bufnr('')
-    let loclist = getbufvar(buf, 'syntastic_loclist')
+    let loclist = syntastic#util#getbufvar(buf, 'syntastic_loclist', {})
     if type(loclist) != type({}) || empty(loclist)
         unlet! loclist
         let loclist = g:SyntasticLoclist.New([])
