@@ -32,6 +32,9 @@ function! g:SyntasticChecker.New(args, ...) abort " {{{2
         endif
     else
         let newObj._exec_default = get(a:args, 'exec', newObj._name)
+        if newObj._exec_default ==# ''
+            let newObj._exec_default = '<dummy>'
+        endif
         let prefix = 'SyntaxCheckers_' . newObj._filetype . '_' . newObj._name . '_'
 
         if has_key(a:args, 'enable')
