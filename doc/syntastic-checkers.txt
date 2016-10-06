@@ -2949,6 +2949,14 @@ Name:        javac
 Maintainers: Jochen Keil <jochen.keil@gmail.com>
              Dmitry Geurkov <d.geurkov@gmail.com>
 
+Note~
+
+This checker is not suitable for use with large Java projects. The design
+of "javac" makes this checker prone to running into various limitations of
+your shell, Vim, and your Java compiler. You are strongly advised to use
+something like Eclim (http://eclim.org/) instead of syntastic for projects of
+any substantial size or complexity.
+
 Commands~
 
 The following commands are available:
