@@ -588,7 +588,7 @@ lockvar s:_float2str
 
 function! s:_getbufvar_dumb(buf, name, ...) abort " {{{2
     let ret = getbufvar(a:buf, a:name)
-    if a:0 && ret ==# ''
+    if a:0 && type(ret) == type('') && ret ==# ''
         unlet! ret
         let ret = a:1
     endif
