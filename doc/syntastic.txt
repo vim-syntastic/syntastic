@@ -301,12 +301,22 @@ the order specified. The set by |'syntastic_aggregate_errors'| still apply.
 Example: >
     :SyntasticCheck flake8 pylint
 <
+You can also run checkers for filetypes different from the current filetype
+by qualifying their names with their respective filetypes, like this:
+"<filetype>/<checker>".
+
+Example: >
+    :SyntasticCheck lacheck text/language_check
+<
 :SyntasticInfo                                                *:SyntasticInfo*
 
 The command takes an optional argument, and outputs information about the
 checkers available for the filetype named by said argument, or for the current
 filetype if no argument was provided.
 
+Example: >
+    :SyntasticInfo python
+<
 :SyntasticReset                                              *:SyntasticReset*
 
 Resets the list of errors and turns off all error notifiers.
@@ -761,6 +771,10 @@ If neither |'g:syntastic_<filetype>_checkers'| nor |'b:syntastic_checkers'|
 is set, a default list of checker is used. Beware however that this list
 deliberately kept minimal, for performance reasons.
 
+You can specify checkers for other filetypes anywhere in these lists, by
+qualifying their names with their respective filetypes: >
+    let g:syntastic_tex_checkers = ["lacheck", "text/language_check"]
+<
 Take a look elsewhere in this manual to find out what checkers and filetypes
 are supported by syntastic: |syntastic-checkers|.
 
@@ -854,9 +868,8 @@ omitting the filename from the command line: >
     let g:syntastic_sml_smlnj_fname = ""
 <
                                             *syntastic-config-no-makeprgbuild*
-For checkers that do not use the "makeprgBuild()" function you will have to
-look at the source code of the checker in question. If there are specific
-options that can be set they are normally documented in this manual (see
+For checkers that do not use the "makeprgBuild()" function any specific
+options that can be set should be documented in this manual (see
 |syntastic-checkers|).
 
 ------------------------------------------------------------------------------

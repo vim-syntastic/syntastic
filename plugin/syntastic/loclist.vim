@@ -281,7 +281,7 @@ endfunction " }}}2
 "
 "would return all errors for buffer 10.
 "
-"Note that all comparisons are done with ==?
+"Note that all string comparisons are done with ==?
 function! g:SyntasticLoclist.filter(filters) abort " {{{2
     let conditions = values(map(copy(a:filters), 's:_translate(v:key, v:val)'))
     let filter = len(conditions) == 1 ?
