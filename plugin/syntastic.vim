@@ -19,7 +19,7 @@ if has('reltime')
     lockvar! g:_SYNTASTIC_START
 endif
 
-let g:_SYNTASTIC_VERSION = '3.7.0-233'
+let g:_SYNTASTIC_VERSION = '3.7.0-234'
 lockvar g:_SYNTASTIC_VERSION
 
 " Sanity checks {{{1
@@ -178,11 +178,20 @@ let s:_quit_pre = []
 " @vimlint(EVL103, 1, a:cmdLine)
 " @vimlint(EVL103, 1, a:argLead)
 function! s:CompleteCheckerName(argLead, cmdLine, cursorPos) abort " {{{2
-    let checker_names = []
-    for ft in s:_resolve_filetypes([])
-        call extend(checker_names, s:registry.getNamesOfAvailableCheckers(ft))
-    endfor
-    return join(checker_names, "\n")
+    let names = []
+
+    let sep_idx = stridx(a:argLead, '/')
+    if sep_idx >= 1
+        let ft = a:argLead[: sep_idx-1]
+        call extend(names, map( s:registry.getNamesOfAvailableCheckers(ft), 'ft . "/" . v:val' ))
+    else
+        for ft in s:registry.resolveFiletypes(&filetype)
+            call extend(names, s:registry.getNamesOfAvailableCheckers(ft))
+        endfor
+        call extend(names, map( copy(s:registry.getKnownFiletypes()), 'v:val . "/"' ))
+    endif
+
+    return join(names, "\n")
 endfunction " }}}2
 " @vimlint(EVL103, 0, a:cursorPos)
 " @vimlint(EVL103, 0, a:cmdLine)
@@ -220,7 +229,7 @@ endfunction " }}}2
 
 function! SyntasticInfo(...) abort " {{{2
     call s:modemap.modeInfo(a:000)
-    call s:registry.echoInfoFor(s:_resolve_filetypes(a:000))
+    call s:registry.echoInfoFor(a:000)
     call s:_explain_skip(a:000)
     call syntastic#log#debugShowOptions(g:_SYNTASTIC_DEBUG_TRACE, s:_DEBUG_DUMP_OPTIONS)
     call syntastic#log#debugDump(g:_SYNTASTIC_DEBUG_VARIABLES)
@@ -384,14 +393,12 @@ function! s:UpdateErrors(buf, auto_invoked, checker_names) abort " {{{2
         return
     endif
 
-    let run_checks = !a:auto_invoked || s:modemap.doAutoChecking()
+    let run_checks = !a:auto_invoked || s:modemap.doAutoChecking(a:buf)
     if run_checks
         call s:CacheErrors(a:buf, a:checker_names)
         call syntastic#util#setLastTick(a:buf)
-    else
-        if a:auto_invoked
-            return
-        endif
+    elseif a:auto_invoked
+        return
     endif
 
     let loclist = g:SyntasticLoclist.current(a:buf)
@@ -453,20 +460,17 @@ function! s:CacheErrors(buf, checker_names) abort " {{{2
         call syntastic#log#debug(g:_SYNTASTIC_DEBUG_TRACE, 'getcwd() = ' . string(getcwd()))
         " }}}3
 
-        let filetypes = s:_resolve_filetypes([])
-        let aggregate_errors = syntastic#util#var('aggregate_errors') || len(filetypes) > 1
+        let clist = s:registry.getCheckers(getbufvar(a:buf, '&filetype'), a:checker_names)
+
+        let aggregate_errors =
+            \ syntastic#util#var('aggregate_errors') || len(syntastic#util#unique(map(copy(clist), 'v:val.getFiletype()'))) > 1
         let decorate_errors = aggregate_errors && syntastic#util#var('id_checkers')
         let sort_aggregated_errors = aggregate_errors && syntastic#util#var('sort_aggregated_errors')
-
-        let clist = []
-        for type in filetypes
-            call extend(clist, s:registry.getCheckers(type, a:checker_names))
-        endfor
 
         let names = []
         let unavailable_checkers = 0
         for checker in clist
-            let cname = checker.getFiletype() . '/' . checker.getName()
+            let cname = checker.getCName()
             if !checker.isAvailable()
                 call syntastic#log#debug(g:_SYNTASTIC_DEBUG_TRACE, 'CacheErrors: Checker ' . cname . ' is not available')
                 let unavailable_checkers += 1
@@ -686,11 +690,6 @@ endfunction " }}}2
 " }}}1
 
 " Utilities {{{1
-
-function! s:_resolve_filetypes(filetypes) abort " {{{2
-    let type = len(a:filetypes) ? a:filetypes[0] : &filetype
-    return split( get(g:syntastic_filetype_map, type, type), '\m\.' )
-endfunction " }}}2
 
 function! s:_ignore_file(filename) abort " {{{2
     let fname = fnamemodify(a:filename, ':p')
