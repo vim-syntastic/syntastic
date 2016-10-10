@@ -19,7 +19,7 @@ if has('reltime')
     lockvar! g:_SYNTASTIC_START
 endif
 
-let g:_SYNTASTIC_VERSION = '3.7.0-234'
+let g:_SYNTASTIC_VERSION = '3.7.0-235'
 lockvar g:_SYNTASTIC_VERSION
 
 " Sanity checks {{{1
@@ -321,7 +321,7 @@ function! s:BufEnterHook(fname) abort " {{{2
         " TODO: this is needed because in recent versions of Vim lclose
         " can no longer be called from BufWinLeave
         " TODO: at this point there is no b:syntastic_loclist
-        let loclist = filter(copy(getloclist(0)), 'v:val["valid"] == 1')
+        let loclist = filter(copy(getloclist(0)), 'v:val["valid"]')
         let owner = str2nr(getbufvar(buf, 'syntastic_owner_buffer'))
         let buffers = syntastic#util#unique(map(loclist, 'v:val["bufnr"]') + (owner ? [owner] : []))
         if !empty(get(w:, 'syntastic_loclist_set', [])) && !empty(loclist) && empty(filter( buffers, 'syntastic#util#bufIsActive(v:val)' ))

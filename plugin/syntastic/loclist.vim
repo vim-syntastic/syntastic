@@ -10,7 +10,7 @@ let g:SyntasticLoclist = {}
 function! g:SyntasticLoclist.New(rawLoclist) abort " {{{2
     let newObj = copy(self)
 
-    let llist = filter(copy(a:rawLoclist), 'v:val["valid"] == 1')
+    let llist = filter(copy(a:rawLoclist), 'v:val["valid"]')
 
     for e in llist
         if get(e, 'type', '') ==# ''

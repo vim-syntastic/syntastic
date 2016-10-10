@@ -26,7 +26,7 @@
 4. [FAQ](#faq)  
 4.1. [I installed syntastic but it isn't reporting any errors...](#faqinfo)  
 4.2. [Syntastic supports several checkers for my filetype, how do I tell it which one(s) to use?](#faqcheckers)  
-4.3. [How can run checkers for "foreign" filetypes against the current file?](#faqforeign)  
+4.3. [How can I run checkers for "foreign" filetypes against the current file?](#faqforeign)  
 4.4. [I have enabled multiple checkers for the current filetype. How can I display all errors from all checkers together?](#faqaggregate)  
 4.5. [How can I pass additional arguments to a checker?](#faqargs)  
 4.6. [I run a checker and the location list is not updated...](#faqloclist)  
@@ -269,7 +269,7 @@ aren't listed in `g:syntastic_<filetype>_checkers`.
 
 <a name="faqforeign"></a>
 
-__4.3. Q. How can run checkers for "foreign" filetypes against the current
+__4.3. Q. How can I run checkers for "foreign" filetypes against the current
 file?__
 
 A. You need to qualify the name of the "foreign" checker with the name
