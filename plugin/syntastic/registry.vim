@@ -212,7 +212,7 @@ function! g:SyntasticRegistry.getCheckers(ftalias, hints_list) abort " {{{2
             let defs =
                 \ exists('g:syntastic_' . ft . '_checkers') ? g:syntastic_{ft}_checkers :
                 \ get(s:_DEFAULT_CHECKERS, ft, [])
-            call extend(cnames, map(copy(defs), 'ft . "/" . v:val' ))
+            call extend(cnames, map(copy(defs), 'stridx(v:val, "/") < 0 ? ft . "/" . v:val : v:val' ))
         endfor
     endif
     let cnames = syntastic#util#unique(cnames)
