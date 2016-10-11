@@ -43,6 +43,7 @@ let s:_DEFAULT_CHECKERS = {
         \ 'handlebars':    ['handlebars'],
         \ 'haskell':       ['hdevtools', 'hlint'],
         \ 'haxe':          ['haxe'],
+        \ 'help':          [],
         \ 'hss':           ['hss'],
         \ 'html':          ['tidy'],
         \ 'jade':          ['jade_lint'],
