@@ -19,7 +19,7 @@ if has('reltime')
     lockvar! g:_SYNTASTIC_START
 endif
 
-let g:_SYNTASTIC_VERSION = '3.7.0-238'
+let g:_SYNTASTIC_VERSION = '3.7.0-239'
 lockvar g:_SYNTASTIC_VERSION
 
 " Sanity checks {{{1
@@ -57,7 +57,7 @@ elseif executable('uname')
     try
         let g:_SYNTASTIC_UNAME = split(syntastic#util#system('uname'), "\n")[0]
     catch /\m^Vim\%((\a\+)\)\=:E484/
-        call syntastic#log#error("your shell " .  syntastic#util#var('shell') . " can't handle traditional UNIX syntax for redirections")
+        call syntastic#log#error("can't run external programs (misconfigured shell options?)")
         finish
     catch /\m^Vim\%((\a\+)\)\=:E684/
         let g:_SYNTASTIC_UNAME = 'Unknown'
