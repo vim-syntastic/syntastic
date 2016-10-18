@@ -277,8 +277,8 @@ function! g:SyntasticRegistry.echoInfoFor(ftalias_list) abort " {{{2
     else
         let ft = ft_list[0]
         let available = self.getNamesOfAvailableCheckers(ft)
-        let active = map(self.getCheckersAvailable(ft, []), 'v:val.getName()')
-        let disabled = map(self.getCheckersDisabled(ft, []), 'v:val.getName()')
+        let active = map(self.getCheckersAvailable(ft, []), 'ft ==# v:val.getFiletype() ? v:val.getName() : v:val.getCName()')
+        let disabled = map(self.getCheckersDisabled(ft, []), 'ft ==# v:val.getFiletype() ? v:val.getName() : v:val.getCName()')
     endif
 
     let cnt = len(available)
@@ -294,7 +294,7 @@ function! g:SyntasticRegistry.echoInfoFor(ftalias_list) abort " {{{2
     let cnt = len(disabled)
     let plural = cnt != 1 ? 's' : ''
     if len(disabled)
-        let cklist = join(sort(disabled))
+        let cklist = join(sort(disabled, 's:_compare_filetypes'))
         echomsg 'Checker' . plural . ' disabled for security reasons: ' . cklist
     endif
 
@@ -412,6 +412,26 @@ endfunction " }}}2
 
 function! s:_disabled_by_ycm(filetype) abort " {{{2
     return index(s:_YCM_TYPES, a:filetype) >= 0
+endfunction " }}}2
+
+function! s:_compare_filetypes(a, b) abort " {{{2
+    if a:a ==# a:b
+        return 0
+    endif
+
+    if stridx(a:a, '/') < 0
+        if stridx(a:b, '/') < 0
+            return a:a < a:b ? -1 : 1
+        else
+            return -1
+        endif
+    else
+        if stridx(a:b, '/') < 0
+            return 1
+        else
+            return a:a < a:b ? -1 : 1
+        endif
+    endif
 endfunction " }}}2
 
 " }}}1
