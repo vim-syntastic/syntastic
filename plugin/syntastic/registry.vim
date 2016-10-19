@@ -294,7 +294,7 @@ function! g:SyntasticRegistry.echoInfoFor(ftalias_list) abort " {{{2
     let cnt = len(disabled)
     let plural = cnt != 1 ? 's' : ''
     if len(disabled)
-        let cklist = join(sort(disabled, 's:_compare_filetypes'))
+        let cklist = join(sort(disabled, 's:_compare_checker_names'))
         echomsg 'Checker' . plural . ' disabled for security reasons: ' . cklist
     endif
 
@@ -414,7 +414,7 @@ function! s:_disabled_by_ycm(filetype) abort " {{{2
     return index(s:_YCM_TYPES, a:filetype) >= 0
 endfunction " }}}2
 
-function! s:_compare_filetypes(a, b) abort " {{{2
+function! s:_compare_checker_names(a, b) abort " {{{2
     if a:a ==# a:b
         return 0
     endif
