@@ -2009,7 +2009,7 @@ Security~
 
 This checker executes the code in the files it checks:
 
-    https://github.com/scrooloose/syntastic/issues/1141
+    https://github.com/vim-syntastic/syntastic/issues/1141
 
 This is probably fine if you wrote the files yourself, but it can be a problem
 if you're trying to check third party files. If you are 100% willing to let
@@ -5123,7 +5123,7 @@ Security~
 
 This checker executes the code in the files it checks:
 
-    https://github.com/scrooloose/syntastic/issues/1773
+    https://github.com/vim-syntastic/syntastic/issues/1773
 
 This is probably fine if you wrote the files yourself, but it can be a problem
 if you're trying to check third party files. If you are 100% willing to let
