@@ -18,6 +18,14 @@ let g:loaded_syntastic_stylus_stylint_checker = 1
 let s:save_cpo = &cpo
 set cpo&vim
 
+function! SyntaxCheckers_stylus_stylint_IsAvailable() dict
+    if !executable(self.getExec())
+        return 0
+    endif
+    " XXX versions 1.5.7 and later are not supported
+    return !syntastic#util#versionIsAtLeast(self.getVersion(), [1, 5, 7])
+endfunction
+
 function! SyntaxCheckers_stylus_stylint_GetLocList() dict
     let makeprg = self.makeprgBuild({})
 
