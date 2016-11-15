@@ -6012,6 +6012,8 @@ the project's page at GitHub for details:
 
     https://github.com/rossPatton/stylint
 
+Syntastic doesn't support "Stylint" version 1.5.7 or later.
+
 Checker options~
 
 This checker is initialised using the "makeprgBuild()" function and thus it
