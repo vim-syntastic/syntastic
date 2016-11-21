@@ -37,8 +37,19 @@ function! syntastic#util#system(command) abort " {{{2
     let $LC_MESSAGES = 'C'
     let $LC_ALL = ''
 
+    let crashed = 0
     let cmd_start = reltime()
-    let out = system(a:command)
+    try
+        let out = system(a:command)
+    catch
+        let crashed = 1
+        call syntastic#log#error('exception running system(' . string(a:command) . '): ' . v:exception)
+        call syntastic#log#debug(g:_SYNTASTIC_DEBUG_TRACE, '$TERM = ' . string($TERM))
+        call syntastic#log#debug(g:_SYNTASTIC_DEBUG_TRACE, '$PATH = ' . string($PATH))
+        call syntastic#log#debug(g:_SYNTASTIC_DEBUG_TRACE, 'getcwd() = ' . string(getcwd()))
+        call syntastic#log#debugShowOptions(g:_SYNTASTIC_DEBUG_TRACE, g:_SYNTASTIC_SHELL_OPTIONS)
+        let out = ''
+    endtry
     let cmd_time = split(reltimestr(reltime(cmd_start)))[0]
 
     let $LC_ALL = old_lc_all
@@ -46,7 +57,7 @@ function! syntastic#util#system(command) abort " {{{2
 
     let &shell = old_shell
 
-    if exists('g:_SYNTASTIC_DEBUG_TRACE')
+    if !crashed && exists('g:_SYNTASTIC_DEBUG_TRACE')
         call syntastic#log#debug(g:_SYNTASTIC_DEBUG_TRACE, 'system: command run in ' . cmd_time . 's')
     endif
 
