@@ -46,14 +46,23 @@ function! SyntaxCheckers_perl6_perl6_IsAvailable() dict " {{{1
 endfunction " }}}1
 
 function! SyntaxCheckers_perl6_perl6_GetHighlightRegex(item) " {{{1
+    " Arrow-eject errors
+    let parts = matchlist(a:item['text'],
+        \'------>\s*\(.\{-}\)<HERE>')
+    if !empty(parts)
+        return '\V' . escape(parts[1], '\')
+    endif
+    " Default (catches also '^Can only use'
     let term = matchstr(a:item['text'], '\m''\zs.\{-}\ze''')
     if term !=# ''
         return '\V' . escape(term, '\')
     endif
+    "Undeclare routines and names
     let term = matchstr(a:item['text'], '\m^Undeclared .\+:\W\zs\S\+\ze')
     if term !=# ''
         return '\V' . escape(term, '\')
     endif
+    "Not found modules
     let term = matchstr(a:item['text'], '\mCould not find \zs.\{-}\ze at')
     if term !=# ''
         return '\V' . escape(term, '\')
