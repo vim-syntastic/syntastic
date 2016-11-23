@@ -44,7 +44,12 @@ function! syntastic#util#system(command) abort " {{{2
     catch
         let crashed = 1
         call syntastic#log#error('exception running system(' . string(a:command) . '): ' . v:exception)
-        call syntastic#log#debug(g:_SYNTASTIC_DEBUG_TRACE, '$TERM = ' . string($TERM))
+        if syntastic#util#isRunningWindows()
+            call syntastic#log#debug(g:_SYNTASTIC_DEBUG_CHECKERS, '$TMP = ' . string($TMP) . ', $TEMP = ' . string($TEMP))
+        else
+            call syntastic#log#debug(g:_SYNTASTIC_DEBUG_CHECKERS, '$TERM = ' . string($TERM))
+            call syntastic#log#debug(g:_SYNTASTIC_DEBUG_CHECKERS, '$TMPDIR = ' . string($TMPDIR))
+        endif
         call syntastic#log#debug(g:_SYNTASTIC_DEBUG_TRACE, '$PATH = ' . string($PATH))
         call syntastic#log#debug(g:_SYNTASTIC_DEBUG_TRACE, 'getcwd() = ' . string(getcwd()))
         call syntastic#log#debugShowOptions(g:_SYNTASTIC_DEBUG_TRACE, g:_SYNTASTIC_SHELL_OPTIONS)
