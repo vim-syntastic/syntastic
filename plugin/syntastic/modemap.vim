@@ -57,6 +57,7 @@ function! g:SyntasticModeMap.toggleMode() abort " {{{2
 
     if self._mode ==# 'active'
         let self._mode = 'passive'
+        let self._activeFiletypes = []
     else
         let self._mode = 'active'
     endif
@@ -77,7 +78,6 @@ function! g:SyntasticModeMap.modeInfo(filetypes) abort " {{{2
     let type = len(a:filetypes) ? a:filetypes[0] : &filetype
     echomsg 'Info for filetype: ' . type
 
-    call self.synch()
     echomsg 'Global mode: ' . self._mode
     if self._mode ==# 'active'
         if len(self._passiveFiletypes)
