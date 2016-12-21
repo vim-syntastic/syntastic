@@ -6493,6 +6493,12 @@ Default: unset
 Space-separated list of "vapi" directories to be passed as "--vapidirs"
 arguments.
 
+                                                *'g:syntastic_vala_sources'*
+Type: string or array of strings
+Default: unset
+Space-separated list of "source" files to be passed to the compiler, the
+extension ".vala" is automatically appended.
+
 Notes~
 
 If |'g:syntastic_vala_modules'| is unset, you can also specify a list of
@@ -6501,7 +6507,11 @@ module to load for the current file by adding a special comment starting with
 
 If |'g:syntastic_vala_vapi_dirs'| is unset, you can also specify a list of
 "vapi" directories for the current file by adding a special comment starting
-with "// vapidirs:" and containing a space-delimited list of names.
+with "// vapidirs: " and containing a space-delimited list of names.
+
+If |'g:syntastic_vala_sources'| is unset, you can also specify a list of
+"source" files needed by the current file by adding a special comment starting
+with "// sources: " and containing a space-delimited list of names.
 
 ==============================================================================
 SYNTAX CHECKERS FOR VERILOG                       *syntastic-checkers-verilog*
