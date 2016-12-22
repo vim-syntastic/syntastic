@@ -27,7 +27,8 @@ function! SyntaxCheckers_vala_valac_GetLocList() dict " {{{1
     let vala_pkg_args = join(map(s:GetValaModules(), '"--pkg ".v:val'), ' ')
     let vala_vapi_args = join(map(s:GetValaVapiDirs(), '"--vapidir ".v:val'), ' ')
     let vala_src_args = join(map(s:GetValaSources(), 'v:val.".vala"'), ' ')
-    let makeprg = self.makeprgBuild({ 'args': '-C ' . vala_src_args . ' ' . vala_pkg_args . ' ' . vala_vapi_args })
+    let vala_flag_args = join(map(s:GetValaFlags(), '"--".v:val'), ' ')
+    let makeprg = self.makeprgBuild({ 'args': '-C ' . vala_flag_args . ' ' . vala_src_args . ' ' . vala_pkg_args . ' ' . vala_vapi_args })
 
     let errorformat =
         \ '%A%f:%l.%c-%\d%\+.%\d%\+: %t%[a-z]%\+: %m,'.
@@ -90,6 +91,23 @@ function! s:GetValaSources() " {{{2
     let sources_line = search('^// sources: ', 'n')
     let sources_str = getline(sources_line)
     return split(strpart(sources_str, 12), '\m\s\+')
+endfunction " }}}2
+
+function! s:GetValaFlags() " {{{2
+    if exists('g:syntastic_vala_flags') || exists('b:syntastic_vala_flags')
+        let flags = syntastic#util#var('vala_flags')
+        if type(flags) == type('')
+            return split(flags, '\m\s\+')
+        elseif type(flags) == type([])
+            return copy(flags)
+        else
+            echoerr 'syntastic_vala_flags must be either a list, or a string: fallback to in-file modules string'
+        endif
+    endif
+
+    let flags = search('^// flags: ', 'n')
+    let flags = getline(flags)
+    return split(strpart(flags, 10), '\m\s\+')
 endfunction " }}}2
 
 " }}}1

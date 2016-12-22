@@ -6499,6 +6499,12 @@ Default: unset
 Space-separated list of "source" files to be passed to the compiler, the
 extension ".vala" is automatically appended.
 
+                                                *'g:syntastic_vala_flags'*
+Type: string or array of strings
+Default: unset
+Space-separated list of flags to be passed to the compiler. The leading "--"
+are prepended automatically.
+
 Notes~
 
 If |'g:syntastic_vala_modules'| is unset, you can also specify a list of
