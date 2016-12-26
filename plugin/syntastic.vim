@@ -228,6 +228,9 @@ function! SyntasticCheck(...) abort " {{{2
 endfunction " }}}2
 
 function! SyntasticInfo(...) abort " {{{2
+    if !exists('g:syntastic_version')
+        call s:GetSyntasticVersion()
+    endif
     call s:modemap.modeInfo(a:000)
     call s:registry.echoInfoFor(a:000)
     call s:_explain_skip(a:000)
@@ -261,7 +264,7 @@ endfunction " }}}2
 
 augroup syntastic
     autocmd!
-    autocmd VimEnter    * call s:VimEnterHook()
+    autocmd VimEnter    * call s:GetSyntasticVersion()
     autocmd BufEnter    * call s:BufEnterHook(expand('<afile>', 1))
     autocmd BufWinEnter * call s:BufWinEnterHook(expand('<afile>', 1))
 augroup END
@@ -343,7 +346,7 @@ function! s:BufWinEnterHook(fname) abort " {{{2
     endif
 endfunction " }}}2
 
-function! s:VimEnterHook() abort " {{{2
+function! s:GetSyntasticVersion() abort " {{{2
     let g:syntastic_version =
         \ g:_SYNTASTIC_VERSION .
         \ ' (Vim ' . v:version . (has('nvim') ? ', Neovim' : '') . ', ' .
