@@ -42,6 +42,10 @@ function! SyntaxCheckers_elixir_elixir_GetLocList() dict
         \ '%E** %*[^\ ] %f:%l: %m,' .
         \ '%W%f:%l: warning: %m'
 
+    if exists('g:syntastic_elixir_compile_env')
+      let make_options['env'] = g:syntastic_elixir_compile_env
+    endif
+
     return SyntasticMake(make_options)
 endfunction
 
