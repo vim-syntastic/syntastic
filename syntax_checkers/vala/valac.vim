@@ -53,7 +53,7 @@ function! s:GetValaOpts(buf, name, comment, cmd) " {{{2
         else
             let opts = []
             for line in filter(getbufline(a:buf, 1, 100), 'v:val =~# ' . string('\m^//\s\+' . a:comment . ':\s*'))
-                call extend(opts, split( matchstr(line, '\m^//\s\+' . a:comment . ':\s*\zs'), '\s\+' ))
+                call extend(opts, split( matchstr(line, '\m^//\s\+' . a:comment . ':\s*\zs.*'), '\s\+' ))
             endfor
 
             call map( filter(opts, 'v:val !=# ""'), 'syntastic#util#shescape(v:val)' )
