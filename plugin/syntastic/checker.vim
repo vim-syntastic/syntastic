@@ -182,7 +182,7 @@ function! g:SyntasticChecker.makeprgBuild(opts) abort " {{{2
     let parts = []
     call extend(parts, self._getOpt(a:opts, basename, 'exe', self.getExecEscaped()))
     call extend(parts, self._getOpt(a:opts, basename, 'args', ''))
-    call extend(parts, self._getOpt(a:opts, basename, 'fname', syntastic#util#shexpand('%')))
+    call extend(parts, self._getOpt(a:opts, basename, 'fname', syntastic#util#shexpand( expand('<afile>', 1) )))
     call extend(parts, self._getOpt(a:opts, basename, 'post_args', ''))
     call extend(parts, self._getOpt(a:opts, basename, 'tail', ''))
 
