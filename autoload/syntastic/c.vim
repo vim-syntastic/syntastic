@@ -23,6 +23,9 @@ function! syntastic#c#ReadConfig(file) abort " {{{2
     " search upwards from the current file's directory
     let config = syntastic#util#findFileInParent(a:file, expand('%:p:h', 1))
     if config ==# ''
+        let config = syntastic#util#findFileInParent(a:file, expand(getcwd(), 1))
+    endif
+    if config ==# ''
         call syntastic#log#debug(g:_SYNTASTIC_DEBUG_CHECKERS, 'ReadConfig: file not found')
         return ''
     endif
