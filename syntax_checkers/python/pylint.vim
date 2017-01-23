@@ -32,7 +32,7 @@ function! SyntaxCheckers_python_pylint_IsAvailable() dict " {{{1
         " On new-ish Fedora it's "python3-pylint 1.2.0".
         " Have you guys considered switching to creative writing yet? ;)
 
-        let version_output = syntastic#util#system(self.getExecEscaped() . ' --version')
+        let version_output = syntastic#util#system(self.getExecEscaped() . ' --version 2>/dev/null')
         let pylint_version = filter( split(version_output, '\m, \=\|\n'), 'v:val =~# ''\m^\(python[-0-9]*-\|\.\)\=pylint[-0-9]*\>''' )[0]
         let parsed_ver = syntastic#util#parseVersion(substitute(pylint_version, '\v^\S+\s+', '', ''))
         call self.setVersion(parsed_ver)
