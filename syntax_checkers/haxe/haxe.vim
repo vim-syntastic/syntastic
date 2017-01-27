@@ -32,7 +32,8 @@ function! SyntaxCheckers_haxe_haxe_GetLocList() dict
 
     if hxml !=# ''
         let makeprg = self.makeprgBuild({
-            \ 'fname': syntastic#util#shescape(fnamemodify(hxml, ':t')) })
+            \ 'fname': syntastic#util#shescape(fnamemodify(hxml, ':t')), 
+            \ 'args_after' :  ['--no-output'] })
 
         let errorformat = '%E%f:%l: characters %c-%n : %m'
 
