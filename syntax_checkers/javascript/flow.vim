@@ -33,8 +33,10 @@ function! SyntaxCheckers_javascript_flow_GetLocList() dict
         return []
     endif
 
+    let use_server = get(g:, 'syntastic_javascript_flow_use_server')
+
     let makeprg = self.makeprgBuild({
-        \ 'exe': self.getExecEscaped() . ' check',
+        \ 'exe_after': (use_server ? 'status' : 'check'),
         \ 'args_after': '--show-all-errors --json' })
 
     let errorformat =
