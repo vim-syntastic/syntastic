@@ -19,7 +19,7 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 function! SyntaxCheckers_go_govet_GetLocList() dict
-    let makeprg = self.getExecEscaped() . ' vet'
+    let makeprg = self.makeprgBuild({ 'args_before': 'vet' })
 
     let errorformat =
         \ '%Evet: %.%\+: %f:%l:%c: %m,' .
