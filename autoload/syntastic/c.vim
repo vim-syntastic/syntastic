@@ -104,7 +104,7 @@ function! s:_init() abort " {{{2
     call s:_registerHandler('\m\<freetype',    's:_checkPackage', ['freetype', 'freetype2', 'freetype'])
     call s:_registerHandler('\m\<glade',       's:_checkPackage', ['glade', 'libglade-2.0', 'libglade'])
     call s:_registerHandler('\m\<glib',        's:_checkPackage', ['glib', 'glib-2.0', 'glib'])
-    call s:_registerHandler('\m\<gtk',         's:_checkPackage', ['gtk', 'gtk+-2.0', 'gtk+', 'glib-2.0', 'glib'])
+    call s:_registerHandler('\m\<gtk',         's:_checkPackage', ['gtk', 'gtk+-3.0', 'gtk+-2.0', 'gtk+', 'glib-2.0', 'glib'])
     call s:_registerHandler('\m\<libsoup',     's:_checkPackage', ['libsoup', 'libsoup-2.4', 'libsoup-2.2'])
     call s:_registerHandler('\m\<libxml',      's:_checkPackage', ['libxml', 'libxml-2.0', 'libxml'])
     call s:_registerHandler('\m\<pango',       's:_checkPackage', ['pango', 'pango'])
