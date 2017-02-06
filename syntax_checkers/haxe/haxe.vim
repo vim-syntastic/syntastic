@@ -35,7 +35,8 @@ function! SyntaxCheckers_haxe_haxe_GetLocList() dict
             \ 'fname': syntastic#util#shescape(fnamemodify(hxml, ':t')), 
             \ 'args_after' :  ['--no-output'] })
 
-        let errorformat = '%E%f:%l: characters %c-%n : %m'
+        let errorformat = '%W%f:%l: characters %c-%n : Warning : %m,' .
+            \ '%E%f:%l: characters %c-%n : %m'
 
         let loclist = SyntasticMake({
             \ 'makeprg': makeprg,
