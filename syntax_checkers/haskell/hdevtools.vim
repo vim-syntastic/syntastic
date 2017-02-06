@@ -26,8 +26,7 @@ function! SyntaxCheckers_haskell_hdevtools_GetLocList() dict
     endif
 
     let makeprg = self.makeprgBuild({
-        \ 'exe_after': 'check',
-        \ 'fname': syntastic#util#shexpand('%:p') })
+        \ 'exe_after': 'check'})
 
     let errorformat =
         \ '%-Z %#,'.
