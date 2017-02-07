@@ -15,6 +15,11 @@ if exists('g:loaded_syntastic_php_phpmd_checker')
 endif
 let g:loaded_syntastic_php_phpmd_checker = 1
 
+" Rule set built-in or XML file for mess detector, comma separated
+if !exists("g:syntastic_php_phpmd_ruleset")
+    let g:syntastic_php_phpmd_ruleset='codesize,design,unusedcode,naming'
+endif
+
 let s:save_cpo = &cpo
 set cpo&vim
 
@@ -57,7 +62,7 @@ endfunction
 function! SyntaxCheckers_php_phpmd_GetLocList() dict
     let makeprg = self.makeprgBuild({
         \ 'post_args_before': 'text',
-        \ 'post_args': 'codesize,design,unusedcode,naming' })
+        \ 'post_args': g:syntastic_php_phpmd_ruleset })
 
     let errorformat = '%E%f:%l%\s%#%m'
 
