@@ -21,6 +21,7 @@ set cpo&vim
 
 function! SyntaxCheckers_less_recess_GetLocList() dict
     let makeprg = self.makeprgBuild({
+        \ 'args': g:syntastic_recess_options,
         \ 'post_args_after': '--format=compact --stripColors' })
 
     let errorformat =
