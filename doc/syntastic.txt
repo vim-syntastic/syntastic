@@ -127,6 +127,7 @@ needed: >
     let g:syntastic_auto_loc_list = 1
     let g:syntastic_check_on_open = 1
     let g:syntastic_check_on_wq = 0
+    let g:syntastic_check_on_write = 1
 <
 ==============================================================================
 2. Functionality provided                            *syntastic-functionality*
@@ -348,6 +349,13 @@ disk, even when the writes happen just before quitting Vim. If you want to
 skip checks when you issue `:wq`, `:x`, and `:ZZ`, set this variable to 0: >
     let g:syntastic_check_on_wq = 0
 <
+                                                  *'syntastic_check_on_write'*
+Type: boolean
+Default: 1
+In active mode syntax checks are normally run whenever buffers are written.
+If you want to skip checks when you issue `:w`, set this variable to 0: >
+    let g:syntastic_check_on_write = 0
+
                                                 *'syntastic_aggregate_errors'*
 Type: boolean
 Default: 0

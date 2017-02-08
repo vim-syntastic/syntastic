@@ -87,6 +87,7 @@ let g:_SYNTASTIC_DEFAULTS = {
         \ 'auto_loc_list':            2,
         \ 'check_on_open':            0,
         \ 'check_on_wq':              1,
+        \ 'check_on_write':           1,
         \ 'cursor_columns':           1,
         \ 'debug':                    0,
         \ 'echo_current_error':       1,
@@ -306,10 +307,12 @@ function! s:BufReadPostHook(fname) abort " {{{2
 endfunction " }}}2
 
 function! s:BufWritePostHook(fname) abort " {{{2
-    let buf = syntastic#util#fname2buf(a:fname)
-    call syntastic#log#debug(g:_SYNTASTIC_DEBUG_AUTOCOMMANDS,
-        \ 'autocmd: BufWritePost, buffer ' . buf . ' = ' . string(a:fname))
-    call s:UpdateErrors(buf, 1, [])
+    if g:syntastic_check_on_write
+        let buf = syntastic#util#fname2buf(a:fname)
+        call syntastic#log#debug(g:_SYNTASTIC_DEBUG_AUTOCOMMANDS,
+            \ 'autocmd: BufWritePost, buffer ' . buf . ' = ' . string(a:fname))
+        call s:UpdateErrors(buf, 1, [])
+    endif
 endfunction " }}}2
 
 function! s:BufEnterHook(fname) abort " {{{2
