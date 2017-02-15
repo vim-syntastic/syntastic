@@ -63,7 +63,17 @@ function! SyntaxCheckers_cuda_nvcc_GetLocList() dict
         \ '%DMaking %*\a in %f,'.
         \ '%f|%l| %m'
 
-    let loclist = SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
+    let loclist = SyntasticMake({
+        \ 'makeprg': makeprg,
+        \ 'errorformat': errorformat,
+        \ 'defaults': {'type': 'E'} })
+
+    for e in loclist
+        if e['text'] =~? '\m^warning:'
+            let e['text'] = substitute(e['text'], '\m\c^warning:\s*', '', '')
+            let e['type'] = 'W'
+        endif
+    endfor
 
     if dummy !=# ''
         call delete(dummy)
