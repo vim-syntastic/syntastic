@@ -69,8 +69,9 @@ function! SyntaxCheckers_cuda_nvcc_GetLocList() dict
         \ 'defaults': {'type': 'E'} })
 
     for e in loclist
-        if e['text'] =~? '\m^warning:'
-            let e['text'] = substitute(e['text'], '\m\c^warning:\s*', '', '')
+        let pat = matchstr(e['text'], '\m\c^\s*warning:\s*\zs.*')
+        if pat !=# ''
+            let e['text'] = pat
             let e['type'] = 'W'
         endif
     endfor
