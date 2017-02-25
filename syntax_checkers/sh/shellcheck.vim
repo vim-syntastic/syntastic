@@ -47,7 +47,7 @@ function! s:GetShell(buf) " {{{2
             let sh = 'ksh'
         elseif syntastic#util#bufRawVar(a:buf, 'is_bash', 0)
             let sh = 'bash'
-        elseif syntastic#util#RawVar(a:buf, 'is_sh', 0)
+        elseif syntastic#util#bufRawVar(a:buf, 'is_sh', 0)
             let sh = 'sh'
         endif
     endif
