@@ -447,6 +447,12 @@ virtual environment before running the actual checks.  Then you'll need to
 point the relevant `g:syntastic_ruby_<checker>_exec` variables to the wrapper
 scripts.
 
+e.g. To use rbenv to activate the correct version of Ruby:
+
+```vim
+silent let g:syntastic_ruby_mri_exec = substitute(system('rbenv which ruby'),'\n\+$','','')
+```
+
 <a name="faqperl"></a>
 
 __4.13. Q. The `perl` checker has stopped working...__
