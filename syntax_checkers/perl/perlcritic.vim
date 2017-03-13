@@ -19,12 +19,16 @@ if !exists('g:syntastic_perl_perlcritic_thres')
     let g:syntastic_perl_perlcritic_thres = 5
 endif
 
+if !exists('g:syntastic_perl_perlcritic_message')
+    let g:syntastic_perl_perlcritic_message = '(\%s) \%m (\%e)'
+endif
+
 let s:save_cpo = &cpo
 set cpo&vim
 
 function! SyntaxCheckers_perl_perlcritic_GetLocList() dict
     let makeprg = self.makeprgBuild({
-        \ 'args_after': '--quiet --nocolor --verbose "\%s:\%f:\%l:\%c:(\%s) \%m (\%e)\n"' })
+        \ 'args_after': '--quiet --nocolor --verbose "\%s:\%f:\%l:\%c:' . g:syntastic_perl_perlcritic_message . '\n"' })
 
     let errorformat = '%t:%f:%l:%c:%m'
 
