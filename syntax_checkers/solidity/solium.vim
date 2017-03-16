@@ -20,15 +20,17 @@ set cpo&vim
 
 function! SyntaxCheckers_solidity_solium_GetLocList() dict
     let makeprg = self.makeprgBuild({
-        \ 'exe': 'solium',
-        \ 'fname': expand('%:p',1),
-        \ 'args': '-R gcc --file'})
+        \ 'args_after': '-R gcc',
+        \ 'fname_before': '--file'})
 
-    let errorformat = '%f:%l:%c: %trror: %m'
+    let errorformat =
+        \ '%f:%l:%c: %trror: %m,' .
+        \ '%f:%l:%c: %tarning: %m'
 
     return SyntasticMake({
         \ 'makeprg': makeprg,
-        \ 'errorformat': errorformat })
+        \ 'errorformat': errorformat,
+        \ 'returns': [0, 1] })
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
