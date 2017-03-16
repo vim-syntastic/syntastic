@@ -1957,6 +1957,27 @@ Checker options~
 This checker is initialised using the "makeprgBuild()" function and thus it
 accepts the standard options described at |syntastic-config-makeprg|.
 
+------------------------------------------------------------------------------
+1. hadolint                              *syntastic-dockerfile-dockerfile_lint*
+
+Name:        hadoling
+Maintainer:  Jesper B. Rosenkilde <jbr at humppa dot dk>
+
+Dockerfile linter written in Haskell
+(http://hadolint.lukasmartinelli.ch/)
+GitHub for details:
+
+    https://github.com/lukasmartinelli/hadolint
+
+Installation~
+
+    See github
+
+Checker options~
+
+This checker is initialised using the "makeprgBuild()" function and thus it
+accepts the standard options described at |syntastic-config-makeprg|.
+
 ==============================================================================
 SYNTAX CHECKERS FOR DUST                           *syntastic-checkers-dustjs*
 
