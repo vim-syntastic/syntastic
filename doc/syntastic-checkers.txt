@@ -5970,6 +5970,7 @@ SYNTAX CHECKERS FOR SOLIDITY                     *syntastic-checkers-solidity*
 The following checkers are available for Solidity (filetype "solidity"):
 
     1. solc.....................|syntastic-solidity-solc|
+    1. solium...................|syntastic-solidity-solium|
 
 ------------------------------------------------------------------------------
 1. solc                                              *syntastic-solidity-solc*
@@ -5994,6 +5995,35 @@ You probably also need a plugin to set |filetype| for Solidity files, such as
 
     https://github.com/tomlion/vim-solidity
 
+------------------------------------------------------------------------------
+1. solium                                          *syntastic-solidity-solium*
+
+Name:        solium
+Maintainer:  Matthijs van den Bos <matthijs@vandenbos.org>
+
+Solium is a linter for Solidity which uses Abstract Syntax Trees and allows
+the user to enable/disable existing rules and add their own ones. See the 
+project's page for details:
+
+    https://github.com/duaraghav8/Solium
+
+Checker options~
+
+This checker is configured by the .soliumrc.json file.
+
+Note
+
+Solium doesn't run without a .soliumrc.json in the directory where it is run
+from. In the case of this checker, that is the directory where the file being
+checked is located. If there is no .soliumrc.json there, the checker won't
+work.
+
+Note~
+
+You probably also need a plugin to set |filetype| for Solidity files, such as
+"vim-solidity":
+
+    https://github.com/tomlion/vim-solidity
 
 ==============================================================================
 SYNTAX CHECKERS FOR SQL                               *syntastic-checkers-sql*
