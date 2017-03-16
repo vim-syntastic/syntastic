@@ -20,17 +20,15 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 function! SyntaxCheckers_dockerfile_hadolint_GetLocList() dict
-    let makeprg = self.makeprgBuild({ 'exe': 'hadolint' })
+    let makeprg = self.makeprgBuild({})
 
     let errorformat = '%W%f:%l %m'
 
-    let loclist = SyntasticMake({
+    return SyntasticMake({
         \ 'makeprg': makeprg,
         \ 'errorformat': errorformat,
         \ 'subtype': 'Style',
         \ 'returns': [0, 1] })
-
-    return loclist
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
