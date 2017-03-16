@@ -86,7 +86,7 @@ let s:_DEFAULT_CHECKERS = {
         \ 'slim':          ['slimrb'],
         \ 'sml':           ['smlnj'],
         \ 'spec':          ['rpmlint'],
-        \ 'solidity':      ['solc', 'solium'],
+        \ 'solidity':      ['solc'],
         \ 'sql':           ['sqlint'],
         \ 'stylus':        ['stylint'],
         \ 'tcl':           ['nagelfar'],
