@@ -1934,6 +1934,7 @@ SYNTAX CHECKERS FOR DOCKERFILE                 *syntastic-checkers-dockerfile*
 The following checkers are available for Dockerfile (filetype "dockerfile"):
 
     1. dockerfile-lint..........|syntastic-dockerfile-dockerfile_lint|
+    2. Hadolint.................|syntastic-dockerfile-hadolint|
 
 ------------------------------------------------------------------------------
 1. dockerfile-lint                      *syntastic-dockerfile-dockerfile_lint*
@@ -1958,20 +1959,15 @@ This checker is initialised using the "makeprgBuild()" function and thus it
 accepts the standard options described at |syntastic-config-makeprg|.
 
 ------------------------------------------------------------------------------
-1. hadolint                              *syntastic-dockerfile-dockerfile_lint*
+2. Hadolint                                    *syntastic-dockerfile-hadolint*
 
-Name:        hadoling
-Maintainer:  Jesper B. Rosenkilde <jbr at humppa dot dk>
+Name:        hadolint
+Maintainer:  Jesper B. Rosenkilde <jbr@humppa.dk>
 
-Dockerfile linter written in Haskell
-(http://hadolint.lukasmartinelli.ch/)
-GitHub for details:
+"Hadolint" is a dockerfile linter written in Haskell. See the project's page
+at GitHub for details:
 
     https://github.com/lukasmartinelli/hadolint
-
-Installation~
-
-    See github
 
 Checker options~
 
