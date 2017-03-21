@@ -4901,59 +4901,11 @@ SYNTAX CHECKERS FOR R                                   *syntastic-checkers-r*
 
 The following checkers are available for R (filetype "r"):
 
-    1. lint.....................|syntastic-r-lint|
-    2. lintr....................|syntastic-r-lintr|
-    3. svtools..................|syntastic-r-svtools|
+    1. lintr....................|syntastic-r-lintr|
+    2. svtools..................|syntastic-r-svtools|
 
 ------------------------------------------------------------------------------
-1. lint                                                     *syntastic-r-lint*
-
-Name:        lint
-Maintainer:  LCD 47 <lcd047@gmail.com>
-
-This is a style checker for R files, using the R package "lint":
-
-    http://cran.r-project.org/web/packages/lint/
-
-Checker option~
-
-                                                 *'g:syntastic_r_lint_styles'*
-Type: string
-Default: "lint.style"
-R list of style tests to apply.
-
-Set 'g:syntastic_r_lint_styles' to something like this: >
-    let g:syntastic_r_lint_styles =
-        \ 'list(spacing.indentation.notabs, spacing.indentation.evenindent)'
-<
-See "lint"'s manual for possible values:
-
-    http://cran.r-project.org/web/packages/lint/lint.pdf
-
-Note~
-
-This checker doesn't call the "makeprgBuild()" function, and thus it ignores
-the usual 'g:syntastic_r_lint_<option>' variables. The only exception is
-'g:syntastic_r_lint_exec', which can still be used to override the "R"
-executable.
-
-Limitations~
-
-The checker uses column numbers only when running into syntax errors.  If
-you're checking files containing tab characters, then Vim's 'tabstop' must
-match R's idea of tabstop, otherwise column numbers will be shifted. At the
-time of this writing R's tabstop is hardcoded to 8, so you should probably
-add something like this to your vimrc: >
-    set tabstop=8
-<
-The "lint" package will only show at most 5 messages of a kind. At the time of
-this writing this is not configurable.
-
-Beware also that the checker is pretty slow when using the default style
-setting of "lint.style".
-
-------------------------------------------------------------------------------
-2. lintr                                                   *syntastic-r-lintr*
+1. lintr                                                   *syntastic-r-lintr*
 
 Name:        lintr
 Maintainer:  Jim Hester <james.f.hester@gmail.com>
@@ -5001,7 +4953,7 @@ executable.
 See also: |syntastic-rmd-lintr|.
 
 ------------------------------------------------------------------------------
-3. svtools                                               *syntastic-r-svtools*
+2. svtools                                               *syntastic-r-svtools*
 
 Name:        svtools
 Maintainer:  LCD 47 <lcd047@gmail.com>
