@@ -22,6 +22,9 @@ function! SyntaxCheckers_ruby_rubocop_IsAvailable() dict
     if !executable(self.getExec())
         return 0
     endif
+    let ver = syntastic#util#parseVersion(syntastic#util#system(self.getExecEscaped() . ' --version 2>'. syntastic#util#DevNull()))
+    call self.setVersion(ver)
+
     return syntastic#util#versionIsAtLeast(self.getVersion(), [0, 12, 0])
 endfunction
 
