@@ -56,7 +56,7 @@ if s:_running_windows
     let g:_SYNTASTIC_UNAME = 'Windows'
 elseif executable('uname')
     try
-        let g:_SYNTASTIC_UNAME = split(syntastic#util#system('uname'), "\n")[0]
+        let g:_SYNTASTIC_UNAME = split(syntastic#util#system(['uname']), "\n")[0]
     catch /\m^Vim\%((\a\+)\)\=:E484/
         call syntastic#log#error("can't run external programs (misconfigured shell options?)")
         finish
