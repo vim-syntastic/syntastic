@@ -10,28 +10,28 @@
 "
 "============================================================================
 
-if exists('g:loaded_syntastic_c_gcc_checker')
+if exists('g:loaded_syntastic_c_cc_checker')
     finish
 endif
-let g:loaded_syntastic_c_gcc_checker = 1
+let g:loaded_syntastic_c_cc_checker = 1
 
 if !exists('g:syntastic_c_compiler_options')
-    let g:syntastic_c_compiler_options = '-std=gnu99'
+    let g:syntastic_c_compiler_options = '-std=c99'
 endif
 
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! SyntaxCheckers_c_gcc_IsAvailable() dict
+function! SyntaxCheckers_c_cc_IsAvailable() dict
     if !exists('g:syntastic_c_compiler')
-        let g:syntastic_c_compiler = executable(self.getExec()) ? self.getExec() : 'clang'
+        let g:syntastic_c_compiler = self.getExec()
     endif
     call self.log('g:syntastic_c_compiler =', g:syntastic_c_compiler)
     return executable(expand(g:syntastic_c_compiler, 1))
 endfunction
 
-function! SyntaxCheckers_c_gcc_GetLocList() dict
-    return syntastic#c#GetLocList('c', 'gcc', {
+function! SyntaxCheckers_c_cc_GetLocList() dict
+    return syntastic#c#GetLocList('c', 'cc', {
         \ 'errorformat':
         \     '%-G%f:%s:,' .
         \     '%-G%f:%l: %#error: %#(Each undeclared identifier is reported only%.%#,' .
@@ -51,7 +51,7 @@ endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'c',
-    \ 'name': 'gcc' })
+    \ 'name': 'cc' })
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
