@@ -424,6 +424,21 @@ function! syntastic#preprocess#validator(errors) abort " {{{2
     return out
 endfunction " }}}2
 
+function! syntastic#preprocess#dscanner(errors) abort " {{{2
+    let startIndex = index(a:errors, '{')
+    let data = join(a:errors[startIndex:], '')
+    let errs = s:_decode_JSON(data)
+
+    let out = []
+    let issues = errs['issues']
+    for issue in issues
+        let msg = issue['fileName'] . ':' . issue['line'] . ':'
+                    \ . issue['column'] . ':' . issue['message']
+        call add(out, msg)
+    endfor
+    return out
+endfunction " }}}2
+
 function! syntastic#preprocess#vint(errors) abort " {{{2
     let errs = s:_decode_JSON(join(a:errors, ''))
 
