@@ -28,7 +28,7 @@ let s:_DEFAULT_CHECKERS = {
         \ 'css':           ['csslint'],
         \ 'cucumber':      ['cucumber'],
         \ 'cuda':          ['nvcc'],
-        \ 'd':             ['dmd', 'dscanner'],
+        \ 'd':             ['dmd'],
         \ 'dart':          ['dartanalyzer'],
         \ 'docbk':         ['xmllint'],
         \ 'dockerfile':    ['dockerfile_lint'],
