@@ -1755,6 +1755,7 @@ SYNTAX CHECKERS FOR D                                   *syntastic-checkers-d*
 The following checkers are available for D (filetype "d"):
 
     1. DMD......................|syntastic-d-dmd|
+    1. D-Scanner................|syntastic-d-dscanner|
 
 ------------------------------------------------------------------------------
 1. DMD                                                       *syntastic-d-dmd*
@@ -1833,6 +1834,22 @@ This checker doesn't call the "makeprgBuild()" function, and thus it ignores
 the usual 'g:syntastic_d_dmd_<option>' variables. The only exception is
 'g:syntastic_d_dmd_exec', which can still be used to override the checker's
 executable.
+
+------------------------------------------------------------------------------
+2. D-Scanner                                             *syntastic-d-dscanner*
+
+Name:        dscanner
+Maintainer:  ANtlord
+
+"D-Scanner" is a tool for analyzing D source code (https://dlang.org/).
+See the manual for more information:
+
+    https://github.com/Hackerpilot/Dscanner
+
+Checker options~
+
+This checker is initialised using the "makeprgBuild()" function and thus it
+accepts the standard options described at |syntastic-config-makeprg|.
 
 ==============================================================================
 SYNTAX CHECKERS FOR DART                             *syntastic-checkers-dart*
