@@ -1755,7 +1755,7 @@ SYNTAX CHECKERS FOR D                                   *syntastic-checkers-d*
 The following checkers are available for D (filetype "d"):
 
     1. DMD......................|syntastic-d-dmd|
-    1. D-Scanner................|syntastic-d-dscanner|
+    2. D-Scanner................|syntastic-d-dscanner|
 
 ------------------------------------------------------------------------------
 1. DMD                                                       *syntastic-d-dmd*
@@ -1836,13 +1836,13 @@ the usual 'g:syntastic_d_dmd_<option>' variables. The only exception is
 executable.
 
 ------------------------------------------------------------------------------
-2. D-Scanner                                             *syntastic-d-dscanner*
+2. D-Scanner                                            *syntastic-d-dscanner*
 
 Name:        dscanner
 Maintainer:  ANtlord
 
-"D-Scanner" is a tool for analyzing D source code (https://dlang.org/).
-See the manual for more information:
+"D-Scanner" is a tool for analyzing D source code (https://dlang.org/). See
+the project's page at GitHub for more information:
 
     https://github.com/Hackerpilot/Dscanner
 
