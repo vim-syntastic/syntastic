@@ -18,6 +18,11 @@ let g:loaded_syntastic_d_dscanner_checker = 1
 let s:save_cpo = &cpo
 set cpo&vim
 
+function! SyntaxCheckers_d_dscanner_GetHighlightRegex(i)
+    let term = matchstr(a:i['text'], '\m^.\{-}''\zs\S\+\ze''')
+    return term !=# '' ? '\V\<' . escape(term, '\') . '\>' : ''
+endfunction
+
 function! SyntaxCheckers_d_dscanner_GetLocList() dict
     let makeprg = self.makeprgBuild({
         \ 'args_after': '--report',
