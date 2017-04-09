@@ -9,6 +9,7 @@ SYNTAX CHECKERS BY LANGUAGE                          *syntastic-checkers-lang*
     ACPI Source Language.....................|syntastic-checkers-asl|
     ActionScript.............................|syntastic-checkers-actionscript|
     Ada......................................|syntastic-checkers-ada|
+    ALF......................................|syntastic-checkers-alf|
     Ansible..................................|syntastic-checkers-ansible|
     API Blueprint............................|syntastic-checkers-apiblueprint|
     AppleScript..............................|syntastic-checkers-applescript|
@@ -262,6 +263,53 @@ This checker doesn't call the "makeprgBuild()" function, and thus it ignores
 the usual 'g:syntastic_ada_gcc_<option>' variables. The only exception is
 'g:syntastic_ada_gcc_exec', which can still be used to override the checker's
 executable.
+
+==============================================================================
+SYNTAX CHECKERS FOR ALF 	                      *syntastic-checkers-alf*
+
+The following checkers are available for Ansible (filetype "ansible"):
+
+    1. sweet...............................|syntastic-alf-sweet|
+
+------------------------------------------------------------------------------
+1. sweet                                                 *syntastic-alf-sweet*
+
+Name:        sweet       
+Maintainer:  Rick Veens <rickveens92@gmail.com>
+
+What is SWEET and this ALF language?
+
+ALF is the interface language for the static-analysis tool SWEET. ALF code is 
+indended to be generated from a compiler or other translation software, where 
+the source program can be either a high-level or a low-level language.
+
+SWEET can compute interesting things about your code using flow analysis. 
+For example how often a loop is executed. It can also compute the WCET 
+(Worst Case Execution Time) of your code, if you give it the basic block cycle 
+costs in addition to ALF.
+
+Please see
+
+    http://www.mrtc.mdh.se/projects/wcet/sweet/
+
+for more information about SWEET.
+The ALF specification document can be found at
+
+    http://www.es.mdh.se/pdf_publications/1420.pdf.
+
+There is currently no version numbering for SWEET, unfortunately.
+
+Checker options~
+
+This checker is initialised using the "makeprgBuild()" function and thus it
+accepts the standard options described at |syntastic-config-makeprg|.
+
+Note~
+
+You probably also need a plugin to set |filetype| for ALF files, such
+as "alf-vim":
+
+    https://github.com/rveens/alf-vim 
 
 ==============================================================================
 SYNTAX CHECKERS FOR ANSIBLE                       *syntastic-checkers-ansible*

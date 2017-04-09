@@ -9,6 +9,7 @@ let s:_DEFAULT_CHECKERS = {
         \ 'actionscript':  ['mxmlc'],
         \ 'ada':           ['gcc'],
         \ 'ansible':       ['ansible_lint'],
+        \ 'alf':       	   ['sweet'],
         \ 'apiblueprint':  ['drafter'],
         \ 'applescript':   ['osacompile'],
         \ 'asciidoc':      ['asciidoc'],
