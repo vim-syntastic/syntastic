@@ -5086,6 +5086,7 @@ The following checkers are available for Racket (filetype "racket"):
 
     1. code-ayatollah...........|syntastic-racket-code-ayatollah|
     2. racket...................|syntastic-racket-racket|
+	3. raco.....................|syntastic-racket-raco|
 
 ------------------------------------------------------------------------------
 1. code-ayatollah                            *syntastic-racket-code-ayatollah*
@@ -5130,6 +5131,22 @@ over a global one in the buffers where it is defined.
 Please note that setting this variable doesn't automatically enable the
 checker, you still need to add "racket" to 'g:syntastic_racket_checkers' if
 you plan to use it.
+
+Checker options~
+
+This checker is initialised using the "makeprgBuild()" function and thus it
+accepts the standard options described at |syntastic-config-makeprg|.
+
+-----------------------------------------------------------------------------
+3. raco                                                 *syntastic-racket-raco*
+
+Name:        raco
+Maintainer:  Nymphium <s1311350@coins.tsukuba.ac.jp>
+
+"raco" supports various Racket tasks from a command line.
+See the reference manual for details:
+
+    *https://docs.racket-lang.org/raco/*
 
 Checker options~
 
