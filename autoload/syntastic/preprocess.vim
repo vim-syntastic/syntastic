@@ -8,6 +8,34 @@ set cpo&vim
 
 " Public functions {{{1
 
+function! syntastic#preprocess#alex(errors) abort " {{{2
+    let out = []
+    for err in a:errors
+      let split = split(err, '\s\+')
+
+      " Skipping header/footers
+      if len(split) < 4
+        continue
+      endif
+
+      let type = split[1]
+      if type ==# 'warning'
+        let type = 'W'
+      else
+        let type = 'E'
+      endif
+
+      let line = split(split[0],':')[0]
+
+      let rulename = split[-1]
+      let description = join(split[2:-2], ' ')
+      let message = '[' . rulename . '] ' . description
+
+      call add(out, type . ':' . line . ':' . message)
+    endfor
+    return out
+endfunction " }}}2
+
 function! syntastic#preprocess#cabal(errors) abort " {{{2
     let out = []
     let star = 0
