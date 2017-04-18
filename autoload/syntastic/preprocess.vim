@@ -435,7 +435,7 @@ echomsg string(out)
 endfunction " }}}2
 
 function! syntastic#preprocess#tslint(errors) abort " {{{2
-    return map(copy(a:errors), 'substitute(v:val, ''\m^\(([^)]\+)\)\s\(.\+\)$'', ''\2 \1'', "")')
+    return map(copy(a:errors), 'substitute(v:val, ''\v^((ERROR|WARNING): )?\zs(\([^)]+\))\s(.+)$'', ''\4 \3'', "")')
 endfunction " }}}2
 
 function! syntastic#preprocess#validator(errors) abort " {{{2
