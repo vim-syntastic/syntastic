@@ -30,7 +30,18 @@ function! SyntaxCheckers_typescript_tslint_GetLocList() dict
         let s:tslint_major_version = self.getVersion()[0]
     endif
 
+    if exists(':TsuStartServer')
+        " If tsuquyomi is installed, ask for the config file name
+        let s:tsconfig = tsuquyomi#tsClient#tsProjectInfo(@%, 0)['configFileName']
+
+        if s:tslint_major_version >= 5
+            " tslint v5 requires tsconfig file specified for some rules
+            let s:tsargs = '--type-check -p ' . s:tsconfig
+        endif
+    endif
+
     let makeprg = self.makeprgBuild({
+        \ 'args_after': (exists('s:tsargs') ? s:tsargs : ''),
         \ 'fname_before': (s:tslint_new ? '' : '-f') })
 
     " Example output:
