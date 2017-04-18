@@ -26,12 +26,20 @@ function! SyntaxCheckers_typescript_tslint_GetLocList() dict
         let s:tslint_new = syntastic#util#versionIsAtLeast(self.getVersion(), [2, 4])
     endif
 
+    if !exists('s:tslint_major_version')
+        let s:tslint_major_version = self.getVersion()[0]
+    endif
+
     let makeprg = self.makeprgBuild({
-        \ 'args_after': '--format verbose',
         \ 'fname_before': (s:tslint_new ? '' : '-f') })
 
-    " (comment-format) ts/app.ts[12, 36]: comment must start with lowercase letter
-    let errorformat = '%f[%l\, %c]: %m'
+    " Example output:
+    " ts/app.ts[12, 36]: comment must start with lowercase letter
+    if s:tslint_major_version >= 5
+        let errorformat = 'ERROR: %f[%l\, %c]: %m'
+    else
+        let errorformat = '%f[%l\, %c]: %m'
+    endif
 
     return SyntasticMake({
         \ 'makeprg': makeprg,
