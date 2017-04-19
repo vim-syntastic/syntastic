@@ -157,6 +157,7 @@ To use the statusline flag, this must appear in your |'statusline'| setting >
 <
 Something like this could be more useful: >
     set statusline+=%#warningmsg#
+    set statusline+=%*
     set statusline+=%{SyntasticStatuslineFlag()}
     set statusline+=%*
 <
