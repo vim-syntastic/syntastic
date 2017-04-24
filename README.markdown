@@ -62,7 +62,7 @@ AppleScript, AsciiDoc, Assembly languages, BEMHTML, Bro, Bourne shell, C,
 C++, C#, Cabal, Chef, CoffeeScript, Coco, Coq, CSS, Cucumber, CUDA, D, Dart,
 DocBook, Dockerfile, Dust, Elixir, Erlang, eRuby, Fortran, Gentoo metadata,
 GLSL, Go, Haml, Haskell, Haxe, Handlebars, HSS, HTML, Java, JavaScript, JSON,
-JSX, LESS, Lex, Limbo, LISP, LLVM intermediate language, Lua, Markdown,
+JSX, Julia, LESS, Lex, Limbo, LISP, LLVM intermediate language, Lua, Markdown,
 MATLAB, Mercury, NASM, Nix, Objective-C, Objective-C++, OCaml, Perl, Perl
 POD, PHP, gettext Portable Object, OS X and iOS property lists, Pug (formerly
 Jade), Puppet, Python, QML, R, Racket, RDF TriG, RDF Turtle, Relax NG,
