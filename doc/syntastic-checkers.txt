@@ -3615,7 +3615,7 @@ Installation~
 You need to install Julia itself, and the package "Lint". You can install
 "Lint" from the Julia package manager, with the command: >
     Pkg.add("Lint")
-
+<
 Checker Options~
 
 This checker doesn't call the "makeprgBuild()" function, and thus it ignores
