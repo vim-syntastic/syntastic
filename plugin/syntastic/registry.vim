@@ -50,6 +50,7 @@ let s:_DEFAULT_CHECKERS = {
         \ 'java':          ['javac'],
         \ 'javascript':    ['jshint', 'jslint'],
         \ 'json':          ['jsonlint', 'jsonval'],
+        \ 'julia':         [],
         \ 'less':          ['lessc'],
         \ 'lex':           ['flex'],
         \ 'limbo':         ['limbo'],
