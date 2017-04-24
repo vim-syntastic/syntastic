@@ -3623,6 +3623,13 @@ the usual 'g:syntastic_julia_lint_<option>' variables. The only exception is
 'g:syntastic_julia_lint_exec', which can still be used to override the "julia"
 executable.
 
+Note~
+
+You probably also need a plugin to set |filetype| for Julia files, such as
+"julia-vim":
+
+    https://github.com/JuliaEditorSupport/julia-vim
+
 ==============================================================================
 SYNTAX CHECKERS FOR LESS                             *syntastic-checkers-less*
 
