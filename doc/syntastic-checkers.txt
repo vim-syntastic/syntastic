@@ -2245,10 +2245,28 @@ SYNTAX CHECKERS FOR GETTEXT PO                         *syntastic-checkers-po*
 
 The following checkers are available for gettext .po files (filetype "po"):
 
-    1. msgfmt...................|syntastic-po-msgfmt|
+    1. Dennis...................|syntastic-po-dennis|
+    2. msgfmt...................|syntastic-po-msgfmt|
 
 ------------------------------------------------------------------------------
-1. msgfmt                                                *syntastic-po-msgfmt*
+1. Dennis                                                *syntastic-po-dennis*
+
+Name:        dennis
+Maintainer:  LCD 47 <lcd047@gmail.com>
+
+"Dennis" is a set of utilities for working with gettext Portable Object
+(http://www.gnu.org/software/gettext/manual/html_node/PO-Files.html)
+translation files.  See the program's manual for details:
+
+    http://dennis.readthedocs.io/en/latest/linting.html
+
+Checker options~
+
+This checker is initialised using the "makeprgBuild()" function and thus it
+accepts the standard options described at |syntastic-config-makeprg|.
+
+------------------------------------------------------------------------------
+2. msgfmt                                                *syntastic-po-msgfmt*
 
 Name:        msgfmt
 Maintainer:  Ryo Okubo <syucream1031@gmail.com>
