@@ -4695,20 +4695,49 @@ SYNTAX CHECKERS FOR PYTHON                         *syntastic-checkers-python*
 
 The following checkers are available for Python (filetype "python"):
 
-    1. flake8...................|syntastic-python-flake8|
-    2. Frosted..................|syntastic-python-frosted|
-    3. mypy.....................|syntastic-python-mypy|
-    4. Prospector...............|syntastic-python-prospector|
-    5. py3kwarn.................|syntastic-python-py3kwarn|
-    6. pycodestyle..............|syntastic-python-pycodestyle|
-    7. pydocstyle...............|syntastic-python-pydocstyle|
-    8. Pyflakes.................|syntastic-python-pyflakes|
-    9. Pylama...................|syntastic-python-pylama|
-    10. Pylint..................|syntastic-python-pylint|
-    11. python..................|syntastic-python-python|
+    1. Bandit...................|syntastic-python-bandit|
+    2. flake8...................|syntastic-python-flake8|
+    3. Frosted..................|syntastic-python-frosted|
+    4. mypy.....................|syntastic-python-mypy|
+    5. Prospector...............|syntastic-python-prospector|
+    6. py3kwarn.................|syntastic-python-py3kwarn|
+    7. pycodestyle..............|syntastic-python-pycodestyle|
+    8. pydocstyle...............|syntastic-python-pydocstyle|
+    9. Pyflakes.................|syntastic-python-pyflakes|
+    10. Pylama..................|syntastic-python-pylama|
+    11. Pylint..................|syntastic-python-pylint|
+    12. python..................|syntastic-python-python|
 
 ------------------------------------------------------------------------------
-1. flake8                                            *syntastic-python-flake8*
+1. Bandit                                            *syntastic-python-bandit*
+
+Name:        bandit
+Maintainer:  LCD 47 <lcd047@gmail.com>
+
+"Bandit" is an AST-based static analyzer for Python from OpenStack Security
+Group (http://openstack.org). See the project's official documentation for
+details:
+
+    https://wiki.openstack.org/wiki/Security/Projects/Bandit
+
+Installation~
+
+Install it with "pip": >
+    pip install bandit
+<
+Checker options~
+
+This checker is initialised using the "makeprgBuild()" function and thus it
+accepts the standard options described at |syntastic-config-makeprg|.
+
+Note~
+
+In order to check all files in a project, rather than the current file: >
+    let g:syntastic_python_bandit_fname = ['/path/to/project']
+    let g:syntastic_python_bandit_args = '-r'
+<
+------------------------------------------------------------------------------
+2. flake8                                            *syntastic-python-flake8*
 
 Name:        flake8
 Maintainers: Sylvain Soliman <Sylvain.Soliman+git@gmail.com>
@@ -4728,7 +4757,7 @@ This checker is initialised using the "makeprgBuild()" function and thus it
 accepts the standard options described at |syntastic-config-makeprg|.
 
 ------------------------------------------------------------------------------
-2. Frosted                                          *syntastic-python-frosted*
+3. Frosted                                          *syntastic-python-frosted*
 
 Name:        frosted
 Maintainer:  LCD 47 <lcd047@gmail.com>
@@ -4744,7 +4773,7 @@ This checker is initialised using the "makeprgBuild()" function and thus it
 accepts the standard options described at |syntastic-config-makeprg|.
 
 ------------------------------------------------------------------------------
-3. mypy                                                *syntastic-python-mypy*
+4. mypy                                                *syntastic-python-mypy*
 
 Name:        mypy
 Maintainer:  Russ Hewgill <Russ.Hewgill@gmail.com>
@@ -4760,7 +4789,7 @@ This checker is initialised using the "makeprgBuild()" function and thus it
 accepts the standard options described at |syntastic-config-makeprg|.
 
 ------------------------------------------------------------------------------
-4. Prospector                                    *syntastic-python-prospector*
+5. Prospector                                    *syntastic-python-prospector*
 
 Name:        prospector
 Maintainer:  LCD 47 <lcd047@gmail.com>
@@ -4783,7 +4812,7 @@ This checker is initialised using the "makeprgBuild()" function and thus it
 accepts the standard options described at |syntastic-config-makeprg|.
 
 ------------------------------------------------------------------------------
-5. py3kwarn                                        *syntastic-python-py3kwarn*
+6. py3kwarn                                        *syntastic-python-py3kwarn*
 
 Name:        py3kwarn
 Author: Liam Curry <liam@curry.name>
@@ -4799,7 +4828,7 @@ This checker is initialised using the "makeprgBuild()" function and thus it
 accepts the standard options described at |syntastic-config-makeprg|.
 
 ------------------------------------------------------------------------------
-6. pycodestyle                                  *syntastic-python-pycodestyle*
+7. pycodestyle                                  *syntastic-python-pycodestyle*
 
 Name:        pycodestyle
 Maintainer:  LCD 47 <lcd047@gmail.com>
@@ -4816,7 +4845,7 @@ This checker is initialised using the "makeprgBuild()" function and thus it
 accepts the standard options described at |syntastic-config-makeprg|.
 
 ------------------------------------------------------------------------------
-7. pydocstyle                                    *syntastic-python-pydocstyle*
+8. pydocstyle                                    *syntastic-python-pydocstyle*
 
 Name:        pydocstyle
 Maintainer:  LCD 47 <lcd047@gmail.com>
@@ -4834,7 +4863,7 @@ This checker is initialised using the "makeprgBuild()" function and thus it
 accepts the standard options described at |syntastic-config-makeprg|.
 
 ------------------------------------------------------------------------------
-8. Pyflakes                                        *syntastic-python-pyflakes*
+9. Pyflakes                                        *syntastic-python-pyflakes*
 
 Name:        pyflakes
 Authors:     Martin Grenfell <martin.grenfell@gmail.com>
@@ -4852,7 +4881,7 @@ This checker is initialised using the "makeprgBuild()" function and thus it
 accepts the standard options described at |syntastic-config-makeprg|.
 
 ------------------------------------------------------------------------------
-9. Pylama                                            *syntastic-python-pylama*
+10. Pylama                                           *syntastic-python-pylama*
 
 Name:        pylama
 Maintainer:  LCD 47 <lcd047@gmail.com>
@@ -4878,7 +4907,7 @@ This checker is initialised using the "makeprgBuild()" function and thus it
 accepts the standard options described at |syntastic-config-makeprg|.
 
 ------------------------------------------------------------------------------
-10. Pylint                                           *syntastic-python-pylint*
+11. Pylint                                           *syntastic-python-pylint*
 
 Name:        pylint
 Author: Parantapa Bhattacharya <parantapa@gmail.com>
@@ -4908,7 +4937,7 @@ recognise any messages. Example: >
         \ '--msg-template="{path}:{line}:{column}:{C}: [{symbol} {msg_id}] {msg}"'
 <
 ------------------------------------------------------------------------------
-11. python                                           *syntastic-python-python*
+12. python                                           *syntastic-python-python*
 
 Name:        python
 Maintainer:  LCD 47 <lcd047@gmail.com>
