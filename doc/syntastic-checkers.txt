@@ -2256,10 +2256,19 @@ Maintainer:  LCD 47 <lcd047@gmail.com>
 
 "Dennis" is a set of utilities for working with gettext Portable Object
 (http://www.gnu.org/software/gettext/manual/html_node/PO-Files.html)
-translation files.  See the program's manual for details:
+translation files:
+
+    https://github.com/willkg/dennis/
+
+See the program's manual for further details:
 
     http://dennis.readthedocs.io/en/latest/linting.html
 
+Installation~
+
+Install it with "pip": >
+    pip install dennis
+<
 Checker options~
 
 This checker is initialised using the "makeprgBuild()" function and thus it
