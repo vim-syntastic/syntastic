@@ -531,12 +531,13 @@ The following checkers are available for C (filetype "c"):
     3. ClangCheck...............|syntastic-c-clang_check|
     4. Clang-Tidy...............|syntastic-c-clang_tidy|
     5. Cppcheck.................|syntastic-c-cppcheck|
-    6. GCC......................|syntastic-c-gcc|
-    7. make.....................|syntastic-c-make|
-    8. OClint...................|syntastic-c-oclint|
-    9. PC-Lint..................|syntastic-c-pc_lint|
-    10. Sparse..................|syntastic-c-sparse|
-    11. Splint..................|syntastic-c-splint|
+    6. cppclean.................|syntastic-c-cppclean|
+    7. GCC......................|syntastic-c-gcc|
+    8. make.....................|syntastic-c-make|
+    9. OClint...................|syntastic-c-oclint|
+    10. PC-Lint.................|syntastic-c-pc_lint|
+    11. Sparse..................|syntastic-c-sparse|
+    12. Splint..................|syntastic-c-splint|
 
 ------------------------------------------------------------------------------
 1. AVR-GCC                                                *syntastic-c-avrgcc*
@@ -694,7 +695,31 @@ one option per line (cf. |syntastic-config-files|).
 See also: |syntastic-cpp-cppcheck|.
 
 ------------------------------------------------------------------------------
-6. GCC                                                       *syntastic-c-gcc*
+6. cppclean                                             *syntastic-c-cppclean*
+
+Name:        cppclean
+Maintainer:  LCD 47 <lcd047@gmail.com>
+
+"cppclean" attempts to find problems in C++ source that slow development in
+large code bases, for example various forms of unused code. See the project's
+page at GitHub for more information:
+
+    https://github.com/myint/cppclean
+
+Installation~
+
+Install it with "pip": >
+    pip install cppclean
+<
+Checker options~
+
+This checker is initialised using the "makeprgBuild()" function and thus it
+accepts the standard options described at |syntastic-config-makeprg|.
+
+See also: |syntastic-cpp-cppclean|.
+
+------------------------------------------------------------------------------
+7. GCC                                                       *syntastic-c-gcc*
 
 Name:        gcc
 Maintainer:  Gregor Uhlenheuer <kongo2002@gmail.com>
@@ -791,7 +816,7 @@ executable.
 See also: |syntastic-cpp-gcc|.
 
 ------------------------------------------------------------------------------
-7. make                                                     *syntastic-c-make*
+8. make                                                     *syntastic-c-make*
 
 Name:        make
 Maintainer:  Gregor Uhlenheuer <kongo2002@gmail.com>
@@ -802,7 +827,7 @@ This checker is initialised using the "makeprgBuild()" function and thus it
 accepts the standard options described at |syntastic-config-makeprg|.
 
 ------------------------------------------------------------------------------
-8. OClint                                                 *syntastic-c-oclint*
+9. OClint                                                 *syntastic-c-oclint*
 
 Name:        oclint
 Maintainer:  "UnCO" Lin <undercooled@lavabit.com>
@@ -841,7 +866,7 @@ Config files pointed to by 'g:syntastic_oclint_config_file' are then ignored.
 See also: |syntastic-cpp-oclint|.
 
 ------------------------------------------------------------------------------
-9. PC-Lint                                               *syntastic-c-pc_lint*
+10. PC-Lint                                              *syntastic-c-pc_lint*
 
 Name:        pc_lint
 Maintainer:  Steve Bragg <steve@empresseffects.com>
@@ -868,7 +893,7 @@ current directory and in parent directories; first such file found is used.
 See also: |syntastic-cpp-pc_lint|.
 
 ------------------------------------------------------------------------------
-10. Sparse                                                *syntastic-c-sparse*
+11. Sparse                                                *syntastic-c-sparse*
 
 Name:        sparse
 Maintainer:  Daniel Walker <dwalker@fifo99.com>
@@ -900,7 +925,7 @@ your vimrc: >
 This allows "Sparse" to read "GCC"'s private include files.
 
 ------------------------------------------------------------------------------
-11. Splint                                                *syntastic-c-splint*
+12. Splint                                                *syntastic-c-splint*
 
 Name:        splint
 Maintainer:  LCD 47 <lcd047@gmail.com>
@@ -956,11 +981,12 @@ The following checkers are available for C++ (filetype "cpp"):
     2. ClangCheck...............|syntastic-cpp-clang_check|
     3. Clang-Tidy...............|syntastic-cpp-clang_tidy|
     4. Cppcheck.................|syntastic-cpp-cppcheck|
-    5. Cpplint..................|syntastic-cpp-cpplint|
-    6. GCC......................|syntastic-cpp-gcc|
-    7. OClint...................|syntastic-cpp-oclint|
-    8. PC-Lint..................|syntastic-cpp-pc_lint|
-    9. Vera++...................|syntastic-cpp-verapp|
+    5. cppclean.................|syntastic-cpp-cppclean|
+    6. Cpplint..................|syntastic-cpp-cpplint|
+    7. GCC......................|syntastic-cpp-gcc|
+    8. OClint...................|syntastic-cpp-oclint|
+    9. PC-Lint..................|syntastic-cpp-pc_lint|
+    10. Vera++..................|syntastic-cpp-verapp|
 
 ------------------------------------------------------------------------------
 1. AVR-GCC                                              *syntastic-cpp-avrgcc*
@@ -1104,7 +1130,31 @@ one option per line (cf. |syntastic-config-files|).
 See also: |syntastic-c-cppcheck|.
 
 ------------------------------------------------------------------------------
-5. Cpplint                                             *syntastic-cpp-cpplint*
+5. cppclean                                           *syntastic-cpp-cppclean*
+
+Name:        cppclean
+Maintainer:  LCD 47 <lcd047@gmail.com>
+
+"cppclean" attempts to find problems in C++ source that slow development in
+large code bases, for example various forms of unused code. See the project's
+page at GitHub for more information:
+
+    https://github.com/myint/cppclean
+
+Installation~
+
+Install it with "pip": >
+    pip install cppclean
+<
+Checker options~
+
+This checker is initialised using the "makeprgBuild()" function and thus it
+accepts the standard options described at |syntastic-config-makeprg|.
+
+See also: |syntastic-c-cppclean|.
+
+------------------------------------------------------------------------------
+6. Cpplint                                             *syntastic-cpp-cpplint*
 
 Name:        cpplint
 Maintainer:  LCD 47 <lcd047@gmail.com>
@@ -1140,7 +1190,7 @@ However, if your "cpplint" was installed with "pip", the script's name is
     let g:syntastic_cpp_cpplint_exec = "cpplint"
 <
 ------------------------------------------------------------------------------
-6. GCC                                                     *syntastic-cpp-gcc*
+7. GCC                                                     *syntastic-cpp-gcc*
 
 Name:        gcc
 Maintainer:  Gregor Uhlenheuer <kongo2002@gmail.com>
@@ -1237,7 +1287,7 @@ executable.
 See also: |syntastic-c-gcc|.
 
 ------------------------------------------------------------------------------
-7. OClint                                               *syntastic-cpp-oclint*
+8. OClint                                               *syntastic-cpp-oclint*
 
 Name:        oclint
 Maintainer:  "UnCO" Lin <undercooled@lavabit.com>
@@ -1277,7 +1327,7 @@ Config files pointed to by 'g:syntastic_oclint_config_file' are then ignored.
 See also: |syntastic-c-oclint|.
 
 ------------------------------------------------------------------------------
-8. PC-Lint                                             *syntastic-cpp-pc_lint*
+9. PC-Lint                                             *syntastic-cpp-pc_lint*
 
 Name:        pc_lint
 Maintainer:  Steve Bragg <steve@empresseffects.com>
@@ -1304,7 +1354,7 @@ current directory and in parent directories; first such file found is used.
 See also: |syntastic-c-pc_lint|.
 
 ------------------------------------------------------------------------------
-9. Vera++                                               *syntastic-cpp-verapp*
+10. Vera++                                              *syntastic-cpp-verapp*
 
 Name:        verapp
 Maintainer:  Lucas Verney <phyks@phyks.me>
