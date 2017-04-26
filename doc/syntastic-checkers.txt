@@ -23,6 +23,7 @@ SYNTAX CHECKERS BY LANGUAGE                          *syntastic-checkers-lang*
     C++......................................|syntastic-checkers-cpp|
     Cabal....................................|syntastic-checkers-cabal|
     Chef.....................................|syntastic-checkers-chef|
+    CMake....................................|syntastic-checkers-cmake|
     COBOL....................................|syntastic-checkers-cobol|
     Coco.....................................|syntastic-checkers-co|
     CoffeeScript.............................|syntastic-checkers-coffee|
@@ -1485,6 +1486,34 @@ You probably also need a plugin to set |filetype| for Chef files, such as
 "vim-chef":
 
     https://github.com/dougireton/vim-chef
+
+==============================================================================
+SYNTAX CHECKERS FOR CMAKE                           *syntastic-checkers-cmake*
+
+The following checkers are available for CMake (filetype "cmake"):
+
+    1. cmakelint................|syntastic-cmake-cmakelint|
+
+------------------------------------------------------------------------------
+1. cmakelint                                       *syntastic-cmake-cmakelint*
+
+Name:        cmakelint
+Maintainer:  LCD 47 <lcd047@gmail.com>
+
+"cmakelint" is a style checker for "CMake" files (https://cmake.org/).
+See the project's page at GitHub more information:
+
+    https://github.com/richq/cmake-lint
+
+Installation~
+
+Install it with "pip": >
+    pip install cmakelint
+<
+Checker options~
+
+This checker is initialised using the "makeprgBuild()" function and thus it
+accepts the standard options described at |syntastic-config-makeprg|.
 
 ==============================================================================
 SYNTAX CHECKERS FOR COBOL                           *syntastic-checkers-cobol*
