@@ -39,7 +39,10 @@ function! SyntaxCheckers_javascript_jshint_GetLocList() dict
 
     let makeprg = self.makeprgBuild({ 'args_after': (s:jshint_new ? '--verbose ' : '') })
 
-    let errorformat = s:jshint_new ?
+    let errorformat = '%-G%\\d%\\+ error%\(s%\)%\?,' .
+        \ '%-G,'
+
+    let errorformat .= s:jshint_new ?
         \ '%A%f: line %l\, col %v\, %m \(%t%*\d\)' :
         \ '%E%f: line %l\, col %v\, %m'
 

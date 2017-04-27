@@ -38,7 +38,16 @@ function! SyntaxCheckers_javascript_jsxhint_GetLocList() dict " {{{1
     let makeprg = self.makeprgBuild({
         \ 'args_after': '--verbose' })
 
-    let errorformat = '%A%f: line %l\, col %v\, %m \(%t%*\d\)'
+    if !exists('s:jshint_new')
+        let s:jshint_new = syntastic#util#versionIsAtLeast(s:jshint_version, [1, 1])
+    endif
+
+    let errorformat = '%-G%\\d%\\+ error%\(s%\)%\?,' .
+        \ '%-G,'
+
+    let errorformat .= s:jshint_new ?
+        \ '%A%f: line %l\, col %v\, %m \(%t%*\d\)' :
+        \ '%E%f: line %l\, col %v\, %m'
 
     return SyntasticMake({
         \ 'makeprg': makeprg,
