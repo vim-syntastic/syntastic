@@ -44,7 +44,7 @@ function! SyntaxCheckers_haskell_hdevtools_GetLocList() dict
         \ 'makeprg': makeprg,
         \ 'errorformat': errorformat,
         \ 'defaults': {'vcol': 1},
-        \ 'postprocess': ['compressWhitespace'] })
+        \ 'postprocess': ['removeEmptyLines', 'unindent'] })
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
