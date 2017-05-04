@@ -20,8 +20,9 @@ set cpo&vim
 
 function! SyntaxCheckers_php_phpstan_GetLocList() dict
     let makeprg = self.makeprgBuild({
-        \ 'args': 'analyse',
-        \ 'post_args': '--level=5 --errorFormat raw' })
+        \ 'exe_after': 'analyse',
+        \ 'args': '--level=5',
+        \ 'args_after': '--errorFormat raw' })
 
     let errorformat = '%f:%l:%m'
 
