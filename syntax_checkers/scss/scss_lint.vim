@@ -56,7 +56,7 @@ endfunction
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'scss',
     \ 'name': 'scss_lint',
-    \ 'exec': 'scss-lint' })
+    \ 'exec': 'scss_lint' })
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
