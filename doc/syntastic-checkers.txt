@@ -6123,6 +6123,13 @@ Installation~
 You can install "Slim-Lint" with "gem": >
     gem install slim_lint
 <
+Note~
+
+You probably also need a plugin to set |filetype| for Slim files, such as
+"vim-slim":
+
+     https://github.com/slim-template/vim-slim
+
 ------------------------------------------------------------------------------
 2. Slimrb                                              *syntastic-slim-slimrb*
 
@@ -6138,6 +6145,13 @@ Checker options~
 
 This checker is initialised using the "makeprgBuild()" function and thus it
 accepts the standard options described at |syntastic-config-makeprg|.
+
+Note~
+
+You probably also need a plugin to set |filetype| for Slim files, such as
+"vim-slim":
+
+     https://github.com/slim-template/vim-slim
 
 ==============================================================================
 SYNTAX CHECKERS FOR SML                               *syntastic-checkers-sml*
