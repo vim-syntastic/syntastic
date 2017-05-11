@@ -91,6 +91,7 @@ let s:_DEFAULT_CHECKERS = {
         \ 'solidity':      ['solc'],
         \ 'sql':           ['sqlint'],
         \ 'stylus':        ['stylint'],
+        \ 'systemverilog': ['verilator'],
         \ 'tcl':           ['nagelfar'],
         \ 'tex':           ['lacheck', 'chktex'],
         \ 'texinfo':       ['makeinfo'],
