@@ -977,6 +977,22 @@ File containing project-specific options to be passed to "Splint"
 (such as defines or include directories), one option per line (cf.
 |syntastic-config-files|).
 
+------------------------------------------------------------------------------
+12. Ninja                                                  *syntastic-c-ninja*
+
+Name:        ninja
+Maintainer:  Rabin Vincent <rabin@rab.in>
+
+"Ninja" is a small build system with a focus on speed. See the project's page
+for details:
+
+    https://ninja-build.org/
+
+Checker options~
+
+This checker is initialised using the "makeprgBuild()" function and thus it
+accepts the standard options described at |syntastic-config-makeprg|.
+
 ==============================================================================
 SYNTAX CHECKERS FOR C#                                 *syntastic-checkers-cs*
 
