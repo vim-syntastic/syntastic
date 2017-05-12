@@ -21,7 +21,7 @@ set cpo&vim
 function! SyntaxCheckers_go_gotype_GetLocList() dict
     let buf = bufnr('')
     let makeprg = self.makeprgBuild({
-        \ 'args': (bufname(buf) =~# '\m_test\.go$' ? '-a' : ''),
+        \ 'args': (bufname(buf) =~# '\m_test\.go$' ? '-t' : ''),
         \ 'fname': '.' })
 
     let errorformat =
