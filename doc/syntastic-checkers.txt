@@ -4633,6 +4633,7 @@ The following checkers are available for PHP (filetype "php"):
     2. PHP_CodeSniffer..........|syntastic-php-phpcs|
     3. PHPLint..................|syntastic-php-phplint|
     4. PHP Mess Detector........|syntastic-php-phpmd|
+    5. PHPStan..................|syntastic-php-phpstan|
 
 ------------------------------------------------------------------------------
 1. PHP                                                     *syntastic-php-php*
@@ -4706,6 +4707,26 @@ Maintainer:  Martin Grenfell <martin.grenfell@gmail.com>
 details:
 
     http://phpmd.org
+
+Checker options~
+
+This checker is initialised using the "makeprgBuild()" function and thus it
+accepts the standard options described at |syntastic-config-makeprg|.
+
+------------------------------------------------------------------------------
+5. PHP Static Analysis Tool                             *syntastic-php-phpstan*
+
+Name:        phpstan
+Maintainer:  Przepompownia przepompownia@users.noreply.github.com
+
+"PHPStan" focuses on finding errors in your code without actually running it.
+See the project's page for details:
+
+    https://github.com/phpstan/phpstan
+
+Please note that the checker require raw output format available
+since 07351e3 revision of phpstan. While this functionality is not officially
+released, please require dev-master if you use phpstan from composer.
 
 Checker options~
 
