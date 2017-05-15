@@ -4714,7 +4714,7 @@ This checker is initialised using the "makeprgBuild()" function and thus it
 accepts the standard options described at |syntastic-config-makeprg|.
 
 ------------------------------------------------------------------------------
-5. PHP Static Analysis Tool                             *syntastic-php-phpstan*
+5. PHP Static Analysis Tool                            *syntastic-php-phpstan*
 
 Name:        phpstan
 Maintainer:  Przepompownia <przepompownia@users.noreply.github.com>
