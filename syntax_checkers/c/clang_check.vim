@@ -22,24 +22,34 @@ if !exists('g:syntastic_c_clang_check_sort')
     let g:syntastic_c_clang_check_sort = 1
 endif
 
+if !exists('g:syntastic_c_clang_check_database')
+    let g:syntastic_c_clang_check_database = ''
+endif
+
 let s:save_cpo = &cpo
 set cpo&vim
 
 function! SyntaxCheckers_c_clang_check_GetLocList() dict
+    if g:syntastic_c_clang_check_database == ''
+        let l:extra_args = '-- ' .
+        \   syntastic#c#ReadConfig(g:syntastic_clang_check_config_file)
+    else
+        let l:extra_args = '-p=' . g:syntastic_c_clang_check_database
+    endif
     let makeprg = self.makeprgBuild({
         \ 'post_args':
-        \   '-- ' .
-        \   syntastic#c#ReadConfig(g:syntastic_clang_check_config_file) . ' ' .
-        \   '-fshow-column ' .
-        \   '-fshow-source-location ' .
-        \   '-fno-caret-diagnostics ' .
-        \   '-fno-color-diagnostics ' .
-        \   '-fdiagnostics-format=clang' })
+        \   '-extra-arg=-fshow-column ' .
+        \   '-extra-arg=-fshow-source-location ' .
+        \   '-extra-arg=-fno-caret-diagnostics ' .
+        \   '-extra-arg=-fno-color-diagnostics ' .
+        \   '-extra-arg=-fdiagnostics-format=clang ' .
+        \   l:extra_args })
 
     let errorformat =
         \ '%E%f:%l:%c: fatal error: %m,' .
         \ '%E%f:%l:%c: error: %m,' .
         \ '%W%f:%l:%c: warning: %m,' .
+        \ '%W%f:%l:%c: note: %m,' .
         \ '%-G%\m%\%%(LLVM ERROR:%\|No compilation database found%\)%\@!%.%#,' .
         \ '%E%m'
 
