@@ -96,7 +96,7 @@ let s:_DEFAULT_CHECKERS = {
         \ 'texinfo':       ['makeinfo'],
         \ 'text':          [],
         \ 'trig':          ['rapper'],
-        \ 'turtle':        ['rapper'],
+        \ 'turtle':        ['rapper', 'ttl'],
         \ 'twig':          ['twiglint'],
         \ 'typescript':    [],
         \ 'vala':          ['valac'],
