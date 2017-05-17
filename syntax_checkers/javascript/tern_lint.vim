@@ -30,6 +30,7 @@ function! SyntaxCheckers_javascript_tern_lint_GetLocList() dict
         \ 'makeprg': makeprg,
         \ 'errorformat': errorformat,
         \ 'preprocess': 'tern_lint',
+        \ 'cwd': expand('%:p:h', 1),
         \ 'returns': [0] })
 
     for e in loclist
