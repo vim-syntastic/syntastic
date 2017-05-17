@@ -92,6 +92,7 @@ let s:_DEFAULT_CHECKERS = {
         \ 'sql':           ['sqlint'],
         \ 'stylus':        ['stylint'],
         \ 'tcl':           ['nagelfar'],
+        \ 'template':      ['xlint'],
         \ 'tex':           ['lacheck', 'chktex'],
         \ 'texinfo':       ['makeinfo'],
         \ 'text':          [],
