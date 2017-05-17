@@ -15,6 +15,10 @@ if exists('g:loaded_syntastic_haskell_hdevtools_checker')
 endif
 let g:loaded_syntastic_haskell_hdevtools_checker = 1
 
+if !exists('g:syntastic_hdevtools_config_file')
+    let g:syntastic_hdevtools_config_file = '.syntastic_hdevtools_config'
+endif
+
 let s:save_cpo = &cpo
 set cpo&vim
 
@@ -28,6 +32,7 @@ function! SyntaxCheckers_haskell_hdevtools_GetLocList() dict
     let buf = bufnr('')
     let makeprg = self.makeprgBuild({
         \ 'exe_after': 'check',
+        \ 'args_before' : s:ReadConfig(g:syntastic_hdevtools_config_file),
         \ 'fname': syntastic#util#shescape(fnamemodify(bufname(buf), ':p')) })
 
     let errorformat =
@@ -46,6 +51,45 @@ function! SyntaxCheckers_haskell_hdevtools_GetLocList() dict
         \ 'defaults': {'vcol': 1},
         \ 'postprocess': ['compressWhitespace'] })
 endfunction
+
+" read additional compiler flags from the given configuration file
+" the file format and its parsing mechanism is inspired by clang_complete
+function! s:ReadConfig(file) abort " {{{2
+    call syntastic#log#debug(g:_SYNTASTIC_DEBUG_CHECKERS, 'ReadConfig: looking for', a:file)
+
+    " search upwards from the current file's directory
+    let config = syntastic#util#findFileInParent(a:file, expand('%:p:h', 1))
+    if config ==# ''
+        call syntastic#log#debug(g:_SYNTASTIC_DEBUG_CHECKERS, 'ReadConfig: file not found')
+        return ''
+    endif
+    call syntastic#log#debug(g:_SYNTASTIC_DEBUG_CHECKERS, 'ReadConfig: config file:', config)
+    if !filereadable(config)
+        call syntastic#log#debug(g:_SYNTASTIC_DEBUG_CHECKERS, 'ReadConfig: file unreadable')
+        return ''
+    endif
+
+    " convert filename into absolute path
+    let filepath = fnamemodify(config, ':p:h')
+
+    " try to read config file
+    try
+        let lines = readfile(config)
+    catch /\m^Vim\%((\a\+)\)\=:E48[45]/
+        call syntastic#log#debug(g:_SYNTASTIC_DEBUG_CHECKERS, 'ReadConfig: error reading file')
+        return ''
+    endtry
+
+    " filter out empty lines and comments
+    call filter(lines, 'v:val !~# ''\v^(\s*#|$)''')
+
+    " remove leading and trailing spaces
+    call map(lines, 'substitute(v:val, ''\m^\s\+'', "", "")')
+    call map(lines, 'substitute(v:val, ''\m\s\+$'', "", "")')
+
+    map(lines, 'syntastic#util#shescape(v:val)')
+    return lines
+endfunction " }}}2
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'haskell',
