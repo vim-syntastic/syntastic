@@ -5843,6 +5843,7 @@ SYNTAX CHECKERS FOR SCALA                           *syntastic-checkers-scala*
 The following checkers are available for Scala (filetype "scala"):
 
     1. fsc......................|syntastic-scala-fsc|
+    1. fsc-improved.............|syntastic-scala-fsc-improved|
     2. scalac...................|syntastic-scala-scalac|
     3. Scalastyle...............|syntastic-scala-scalastyle|
 
@@ -5856,6 +5857,33 @@ Checker options~
 
 This checker is initialised using the "makeprgBuild()" function and thus it
 accepts the standard options described at |syntastic-config-makeprg|.
+
+------------------------------------------------------------------------------
+1. fsc-improved                                 *syntastic-scala-fsc-improved*
+
+Name:        fsc-improved
+Maintainer:  Emily St. <github@emily.st>
+
+This checker is an improvement upon the basic `fsc` checker in that it can
+successfully pass the parser stage of compilation, provided that the
+dependencies are added to a classpath file which the checker can find.
+
+Classpath files can be built by hand or automatically by tooling.
+
+Checker options~
+
+This checker is initialised using the "makeprgBuild()" function and thus it
+accepts the standard options described at |syntastic-config-makeprg|.
+
+Additionally:
+
+                              *'g:syntastic_scala_fsc_improved_classpath_file'*
+Type: string
+Default: ".classpath"
+Name of a file the checker should look for when trying to build the compiler's
+classpath. This allows you to add a project's dependencies, whether they be
+class files or directories with JARs within.
+
 
 ------------------------------------------------------------------------------
 2. scalac                                             *syntastic-scala-scalac*
