@@ -19,15 +19,10 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 function! SyntaxCheckers_yaml_jsyaml_GetLocList() dict
-    if !exists('s:js_yaml_new')
-        let s:js_yaml_new = syntastic#util#versionIsAtLeast(self.getVersion(), [2])
-    endif
 
-    let makeprg = self.makeprgBuild({ 'args_after': (s:js_yaml_new ? '' : '--compact') })
+    let makeprg = self.makeprgBuild({})
 
     let errorformat =
-        \ 'Error on line %l\, col %c:%m,' .
-        \ 'JS-YAML: %m at line %l\, column %c:,' .
         \ 'YAMLException: %m at line %l\, column %c:,' .
         \ '%-G%.%#'
 
