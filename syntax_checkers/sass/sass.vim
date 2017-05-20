@@ -45,7 +45,7 @@ function! SyntaxCheckers_sass_sass_GetLocList() dict
     endif
 
     let makeprg = self.makeprgBuild({
-        \ 'args_before': '--cache-location ' . s:sass_cache_location . ' ' . s:imports . ' --check' })
+        \ 'args_before': '-I app/assets/stylesheets --cache-location ' . s:sass_cache_location . ' ' . s:imports . ' --check' })
 
     let errorformat =
         \ '%E%\m%\%%(Syntax %\)%\?%trror: %m,' .
