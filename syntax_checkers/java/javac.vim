@@ -17,6 +17,8 @@ let g:loaded_syntastic_java_javac_checker = 1
 let g:syntastic_java_javac_maven_pom_tags = ['build', 'properties']
 let g:syntastic_java_javac_maven_pom_properties = {}
 let s:has_maven = 0
+let s:has_gradle = 0
+let g:javac_checker_home = fnamemodify(expand('<sfile>'), ':p:h:gs?\\?/?')
 
 let s:save_cpo = &cpo
 set cpo&vim
@@ -29,6 +31,10 @@ endif
 
 if !exists('g:syntastic_java_maven_executable')
     let g:syntastic_java_maven_executable = 'mvn'
+endif
+
+if !exists('g:syntastic_java_gradle_executable')
+    let g:syntastic_java_gradle_executable = './gradlew'
 endif
 
 if !exists('g:syntastic_java_javac_options')
@@ -51,6 +57,10 @@ if !exists('g:syntastic_java_javac_autoload_maven_classpath')
     let g:syntastic_java_javac_autoload_maven_classpath = 1
 endif
 
+if !exists('g:syntastic_java_javac_autoload_gradle_classpath')
+    let g:syntastic_java_javac_autoload_gradle_classpath = 1
+endif
+
 if !exists('g:syntastic_java_javac_config_file_enabled')
     let g:syntastic_java_javac_config_file_enabled = 0
 endif
@@ -69,6 +79,13 @@ endif
 
 if !exists('g:syntastic_java_javac_maven_pom_classpath')
     let g:syntastic_java_javac_maven_pom_classpath = {}
+endif
+if !exists('g:syntastic_java_javac_gradle_ftime')
+    let g:syntastic_java_javac_gradle_ftime = {}
+endif
+
+if !exists('g:syntastic_java_javac_gradle_classpath')
+    let g:syntastic_java_javac_gradle_classpath = {}
 endif
 
 " }}}1
@@ -93,6 +110,7 @@ command! SyntasticJavacEditConfig    call s:EditConfig()
 
 function! SyntaxCheckers_java_javac_IsAvailable() dict " {{{1
     let s:has_maven = executable(expand(g:syntastic_java_maven_executable, 1))
+    let s:has_gradle = executable(expand(g:syntastic_java_gradle_executable, 1))
     return executable(expand(g:syntastic_java_javac_executable, 1))
 endfunction " }}}1
 
@@ -136,6 +154,12 @@ function! SyntaxCheckers_java_javac_GetLocList() dict " {{{1
             let javac_opts .= ' -d ' . syntastic#util#shescape(s:MavenOutputDirectory())
         endif
         let javac_classpath = s:AddToClasspath(javac_classpath, s:GetMavenClasspath())
+    endif
+    if s:has_gradle && g:syntastic_java_javac_autoload_gradle_classpath
+        if !g:syntastic_java_javac_delete_output
+            let javac_opts .= ' -d ' . syntastic#util#shescape(s:GradleOutputDirectory())
+        endif
+        let javac_classpath = s:AddToClasspath(javac_classpath, s:GetGradleClasspath())
     endif
     " }}}2
 
@@ -414,6 +438,66 @@ function! s:MavenOutputDirectory() " {{{2
     endif
     return '.'
 endfunction " }}}2
+
+fu! s:GradleOutputDirectory()
+    let gradle_build = syntastic#util#findFileInParent('build.gradle', expand('%:p:h', 1))
+    let sep = syntastic#util#Slash()
+    let items = split(gradle_build,sep)
+    if len(items)==1
+        return 'build/intermediates/classes/debug'
+    else
+        let outputdir =''
+        for i in items
+            if i != 'build.gradle'
+                let outputdir .= i.sep
+            endif
+        endfor
+        return outputdir.'build/intermediates/classes/debug'
+    endif
+    return '.'
+endf
+
+fu! s:GetGradleClasspath()
+    let gradle = syntastic#util#findFileInParent('build.gradle', expand('%:p:h', 1))
+    if s:has_gradle && filereadable(gradle)
+        if !has_key(g:syntastic_java_javac_gradle_ftime, gradle) || g:syntastic_java_javac_gradle_ftime[gradle] != getftime(gradle)
+            try
+                let f = tempname()
+                if has("win32") || has("win16")
+                    let gradle_cmd = '.\gradlew.bat'
+                else
+                    let gradle_cmd = './gradlew'
+                endif
+                call writefile(["allprojects{apply from: '" . g:javac_checker_home . "/classpath.gradle'}"], f)
+                let ret = system(gradle_cmd . ' -q -I ' . shellescape(f) . ' classpath' )
+                if v:shell_error == 0
+                    let cp = filter(split(ret, "\n"), 'v:val =~ "^CLASSPATH:"')[0][10:]
+                    if filereadable(getcwd() . "/build.gradle")
+                        let out_putdir = s:GlobPathList(getcwd(), '**/build/intermediates/classes/debug', 0)
+                        for classes in out_putdir
+                            let cp .= s:ClassSep().classes
+                        endfor
+                    endif
+                endif
+            catch
+            finally
+                call delete(f)
+            endtry
+            let g:syntastic_java_javac_gradle_ftime[gradle] = getftime(gradle)
+            let g:syntastic_java_javac_gradle_classpath[gradle] = cp
+        endif
+        return g:syntastic_java_javac_gradle_classpath[gradle]
+    endif
+    return ''
+endf
+
+function! s:GlobPathList(path, pattern, suf)
+  if has("patch-7.4.279")
+    return globpath(a:path, a:pattern, a:suf, 1)
+  else
+    return split(globpath(a:path, a:pattern, a:suf), "\n")
+  endif
+endfunction
 
 " }}}1
 
