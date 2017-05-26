@@ -24,6 +24,14 @@ if !exists('g:syntastic_java_checkstyle_conf_file')
     let g:syntastic_java_checkstyle_conf_file = 'sun_checks.xml'
 endif
 
+if !exists('g:syntastic_java_checkstyle_config_file_enabled')
+    let g:syntastic_java_checkstyle_config_file_enabled = 0
+endif
+
+if !exists('g:syntastic_java_checkstyle_config_file')
+    let g:syntastic_java_checkstyle_config_file = '.syntastic_checkstyle_config'
+endif
+
 let s:save_cpo = &cpo
 set cpo&vim
 
@@ -46,7 +54,13 @@ function! SyntaxCheckers_java_checkstyle_GetLocList() dict
     if !exists('s:sep')
         let s:sep = syntastic#util#isRunningWindows() || has('win32unix') ? ';' : ':'
     endif
+
+    if g:syntastic_java_checkstyle_config_file_enabled
+        call s:LoadConfigFile()
+    endif
+
     let classpath = join(map( split(g:syntastic_java_checkstyle_classpath, s:sep, 1), 'expand(v:val, 1)' ), s:sep)
+
     call self.log('classpath =', classpath)
 
     " forced options
@@ -74,6 +88,12 @@ function! SyntaxCheckers_java_checkstyle_GetLocList() dict
         \ 'errorformat': errorformat,
         \ 'preprocess': 'checkstyle',
         \ 'subtype': 'Style' })
+endfunction
+
+function! s:LoadConfigFile()
+    if filereadable(expand(g:syntastic_java_checkstyle_config_file, 1))
+        execute 'source ' . fnameescape(expand(g:syntastic_java_checkstyle_config_file, 1))
+    endif
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
