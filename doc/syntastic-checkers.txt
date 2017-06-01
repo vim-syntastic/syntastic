@@ -2687,6 +2687,12 @@ Checker options~
 This checker is initialised using the "makeprgBuild()" function and thus it
 accepts the standard options described at |syntastic-config-makeprg|.
 
+                                         *'g:syntastic_hdevtools_config_file'*
+Type: string
+Default: ".syntastic_hdevtools_config"
+File containing additional compilation flags to be passed to hdevtools, one
+option per line (cf. |syntastic-config-files|).
+
 Note~
 
 If you're checking files containing tab characters, then Vim's 'tabstop'
@@ -7489,6 +7495,9 @@ syntastic-specific configuration files:
 
     Fortran~
         GNU Fortran (|syntastic-fortran-gfortran|)
+
+    Haskell~
+        hdevtools (|syntastic-haskell-hdevtools|)
 
     Objective-C~
         GCC (|syntastic-objc-gcc|)
