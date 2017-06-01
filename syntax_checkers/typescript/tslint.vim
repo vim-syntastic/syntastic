@@ -27,8 +27,7 @@ function! SyntaxCheckers_typescript_tslint_GetLocList() dict
     endif
 
     let makeprg = self.makeprgBuild({
-        \ 'args_after': '--format verbose',
-        \ 'fname_before': (s:tslint_new ? '' : '-f') })
+        \ 'args_after': '--format verbose' })
 
     let errorformat =
         \ '%EERROR: %f[%l\, %c]: %m,' .
