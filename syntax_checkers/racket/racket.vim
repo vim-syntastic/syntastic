@@ -20,12 +20,12 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 function! SyntaxCheckers_racket_racket_GetLocList() dict
-    let makeprg = self.makeprgBuild({})
+    let makeprg = self.makeprgBuild({'args' : 'make'})
 
     " example of error message
     "eval-apply.rkt:460:30: the-empty-environment: unbound identifier in module
     "  in: the-empty-environment
-    let errorformat = '%f:%l:%v: %m'
+    let errorformat = '%f:%l:%v: %m, %m'
 
     let loclist = SyntasticMake({
         \ 'makeprg': makeprg,
@@ -43,6 +43,7 @@ endfunction
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'racket',
     \ 'name': 'racket',
+    \ 'exec': 'raco',    
     \ 'enable': 'enable_racket_racket_checker' })
 
 let &cpo = s:save_cpo
