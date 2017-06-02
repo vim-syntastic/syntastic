@@ -60,9 +60,16 @@ endfunction " }}}2
 function! g:SyntasticLoclist.isNewerThan(stamp) abort " {{{2
     if !exists('self._stamp')
         let self._stamp = []
+    endif
+    if a:stamp == []
+        return 1
+    endif
+    if self._stamp == []
         return 0
     endif
-    return syntastic#util#compareLexi(self._stamp, a:stamp) > 0
+    let [a_s, a_ms] = split(split(reltimestr(reltime(self._stamp)))[0], '\.')
+    let [b_s, b_ms] = split(split(reltimestr(reltime(a:stamp)))[0], '\.')
+    return a_s > b_s || (a_s == b_s && a_ms > b_ms)
 endfunction " }}}2
 
 function! g:SyntasticLoclist.copyRaw() abort " {{{2
