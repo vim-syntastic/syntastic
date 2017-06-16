@@ -22,7 +22,7 @@ let s:_DEFAULT_CHECKERS = {
         \ 'cmake':         ['cmakelint'],
         \ 'co':            ['coco'],
         \ 'cobol':         ['cobc'],
-        \ 'coffee':        ['coffee', 'coffeelint'],
+        \ 'coffee':        ['coffee', 'coffeelint', 'coffee_jshint'],
         \ 'coq':           ['coqtop'],
         \ 'cpp':           ['gcc'],
         \ 'cs':            ['mcs'],
