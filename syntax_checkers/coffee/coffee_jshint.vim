@@ -1,6 +1,6 @@
 "============================================================================
-"File:        coffee-jshint.vim
-"Description: Syntax checking plugin for syntastic.vim
+"File:        coffee_jshint.vim
+"Description: Syntax checking plugin for syntastic
 "Maintainer:  John Krauss <john@johnkrauss.com>
 "License:     This program is free software. It comes without any warranty,
 "             to the extent permitted by applicable law. You can redistribute
@@ -22,21 +22,20 @@ function! SyntaxCheckers_coffee_coffee_jshint_GetLocList() dict
     let makeprg = self.makeprgBuild({})
 
     let errorformat =
-        \ '--------------------------------,' .
-        \ '%+P%f,' .
-        \ '%l:%c: %m,' .
-        \ '%-Q'
+        \ '%Q-%\{32\,},' .
+        \ '%E%l:%c: %m,' .
+        \ '%P%f'
 
     return SyntasticMake({
         \ 'makeprg': makeprg,
         \ 'errorformat': errorformat,
-        \ 'returns': [0, 1]})
+        \ 'returns': [0, 1] })
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'coffee',
     \ 'exec': 'coffee-jshint',
-    \ 'name': 'coffee_jshint'})
+    \ 'name': 'coffee_jshint' })
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
