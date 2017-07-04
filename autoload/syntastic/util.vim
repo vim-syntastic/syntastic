@@ -76,7 +76,7 @@ function! syntastic#util#tmpdir() abort " {{{2
     if (has('unix') || has('mac')) && executable('mktemp') && !has('win32unix')
         " TODO: option "-t" to mktemp(1) is not portable
         let tmp = $TMPDIR !=# '' ? $TMPDIR : $TMP !=# '' ? $TMP : '/tmp'
-        let out = split(syntastic#util#system('mktemp -q -d ' . tmp . '/vim-syntastic-' . s:fuzz() . '-XXXXXXXX'), "\n")
+        let out = split(syntastic#util#system('mktemp -q -d ' . tmp . '/vim-syntastic-' . s:_fuzz() . '-XXXXXXXX'), "\n")
         if v:shell_error == 0 && len(out) == 1
             let tempdir = out[0]
         endif
@@ -84,13 +84,13 @@ function! syntastic#util#tmpdir() abort " {{{2
 
     if tempdir ==# ''
         if has('win32') || has('win64')
-            let tempdir = $TEMP . syntastic#util#Slash() . 'vim-syntastic-' . s:fuzz()
+            let tempdir = $TEMP . syntastic#util#Slash() . 'vim-syntastic-' . s:_fuzz()
         elseif has('win32unix')
-            let tempdir = syntastic#util#CygwinPath('/tmp/vim-syntastic-'  . s:fuzz())
+            let tempdir = syntastic#util#CygwinPath('/tmp/vim-syntastic-'  . s:_fuzz())
         elseif $TMPDIR !=# ''
-            let tempdir = $TMPDIR . '/vim-syntastic-' . s:fuzz()
+            let tempdir = $TMPDIR . '/vim-syntastic-' . s:_fuzz()
         else
-            let tempdir = '/tmp/vim-syntastic-' . s:fuzz()
+            let tempdir = '/tmp/vim-syntastic-' . s:_fuzz()
         endif
 
         try
