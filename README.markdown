@@ -436,16 +436,27 @@ scripts.
 
 __4.12. Q. How can I check scripts written for different versions of Ruby?__
 
-A. Install a Ruby version manager such as [rvm][rvm] or [rbenv][rbenv],
-activate the environment for the relevant version of Ruby, and install in it
-the checkers you want to use.  Set `g:syntastic_ruby_checkers` accordingly in
-your `vimrc`, and run [Vim][vim] from the virtual environment.
+A. Install a Ruby version manager such as [rvm][rvm],  [rbenv][rbenv],
+[chruby][chruby] or [ry][ry], activate the relevant version of Ruby, and
+install in it the checkers you want to use.  Set `g:syntastic_ruby_checkers`
+accordingly in your `vimrc`, and run [Vim][vim] from the environment or
+location where the relevant ruby version will be active.
 
-If you're starting Vim from a desktop manager rather than from a terminal you
-might need to write wrapper scripts around your checkers, to activate the
-virtual environment before running the actual checks.  Then you'll need to
-point the relevant `g:syntastic_ruby_<checker>_exec` variables to the wrapper
-scripts.
+If you're starting Vim from a desktop manager rather than from a terminal and
+depending on the version manager you use, you might need to write wrapper
+scripts around your checkers, to activate the relevant version of ruby before
+running the actual checks.  Then you'll need to point the relevant
+`g:syntastic_ruby_<checker>_exec` variables to the wrapper scripts.
+
+With rvm gemsets the above will be sufficient but if you rely on bundler and
+the Gemfile to lock the checker versions you may want to either make use of
+`RUBYGEMS_GEMDEPS='-'`, install the [rubygems-bundler][rubygems-bundler] gem,
+or instruct Syntastic to use `bundle exec`. In all cases you will need to make
+sure the linter is run from the correct directory or use the environment
+variable `BUNDLE_GEMFILE` for bundler to catch the proper Gemfile while also
+pointing the checker to its eventual configuration file (e.g `rubocop
+--config`). This can be done in a wrapper script or by adjusting your `vimrc`
+configuration.
 
 <a name="faqperl"></a>
 
