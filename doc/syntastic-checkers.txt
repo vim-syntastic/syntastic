@@ -5720,11 +5720,12 @@ running "rubocop --version" from the shell. If it complains about "Parser"
 "Ruby" than you are running, your configuration is not directly supported by
 syntastic.
 
-While passing around the blame for this does have a certain entertaining value
-(cf. https://github.com/bbatsov/rubocop/issues/1819), the problem is real,
-since "Ruby" syntax did change between versions. The solution is to run a
-system such as "rbenv" (http://rbenv.org/) or "rvm" (https://rvm.io/), that
-allows you to run multiple versions of "Ruby" without conflicts: >
+While passing around the blame for this does have a certain entertaining
+value (cf. https://github.com/bbatsov/rubocop/issues/1819), the problem
+is real, since "Ruby" syntax did change between versions. The solution
+is to run a version manager such as "rbenv" (http://rbenv.org/) or "rvm"
+(https://rvm.io/), that allows you to run multiple versions of "Ruby" without
+conflicts: >
     $ rbenv version
     2.1.3 (set by /usr/local/var/rbenv/version)
     
@@ -5768,11 +5769,12 @@ running "ruby-lint --version" from the shell. If it complains about "Parser"
 "Ruby" than you are running, your configuration is not directly supported by
 syntastic.
 
-While passing around the blame for this does have a certain entertaining value
-(cf. https://github.com/bbatsov/rubocop/issues/1819), the problem is real,
-since "Ruby" syntax did change between versions. The solution is to run a
-system such as "rbenv" (http://rbenv.org/) or "rvm" (https://rvm.io/), that
-allows you to run multiple versions of "Ruby" without conflicts: >
+While passing around the blame for this does have a certain entertaining
+value (cf. https://github.com/bbatsov/rubocop/issues/1819), the problem
+is real, since "Ruby" syntax did change between versions. The solution
+is to run a version manager such as "rbenv" (http://rbenv.org/) or "rvm"
+(https://rvm.io/), that allows you to run multiple versions of "Ruby" without
+conflicts: >
     $ rbenv version
     2.1.3 (set by /usr/local/var/rbenv/version)
     

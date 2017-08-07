@@ -437,15 +437,15 @@ scripts.
 __4.12. Q. How can I check scripts written for different versions of Ruby?__
 
 A. Install a Ruby version manager such as [rvm][rvm] or [rbenv][rbenv],
-activate the environment for the relevant version of Ruby, and install in it
-the checkers you want to use.  Set `g:syntastic_ruby_checkers` accordingly in
-your `vimrc`, and run [Vim][vim] from the virtual environment.
+activate the relevant version of Ruby, and install in it the checkers you want
+to use.  Set `g:syntastic_ruby_checkers` accordingly in your `vimrc`, and run
+[Vim][vim] under the relevant Ruby version.
 
-If you're starting Vim from a desktop manager rather than from a terminal you
-might need to write wrapper scripts around your checkers, to activate the
-virtual environment before running the actual checks.  Then you'll need to
-point the relevant `g:syntastic_ruby_<checker>_exec` variables to the wrapper
-scripts.
+If you're starting Vim from a desktop manager rather than from a terminal
+and depending on the version manager you use you might need to write wrapper
+scripts around your checkers, to activate the relevant version of Ruby
+before running the actual checks.  Then you'll need to point the relevant
+`g:syntastic_ruby_<checker>_exec` variables to the wrapper scripts.
 
 <a name="faqperl"></a>
 
