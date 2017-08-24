@@ -2935,7 +2935,7 @@ See also: |syntastic-xhtml-tidy|.
 Name:        HTMLHint
 Maintainer:  LCD 47 <lcd047@gmail.com>
 
-"JSHint" is a static code analysis tool for HTML. See the project's page for
+"HTMLHint" is a static code analysis tool for HTML. See the project's page for
 details:
 
     http://htmlhint.com/
