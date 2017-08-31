@@ -23,7 +23,9 @@ function! SyntaxCheckers_python_flake8_GetLocList() dict
 
     let errorformat =
         \ '%E%f:%l: could not compile,%-Z%p^,' .
+        \ '%A%f:%l:%c: %t%n: %m,' .
         \ '%A%f:%l:%c: %t%n %m,' .
+        \ '%A%f:%l: %t%n: %m,' .
         \ '%A%f:%l: %t%n %m,' .
         \ '%-G%.%#'
 
@@ -50,11 +52,11 @@ function! SyntaxCheckers_python_flake8_GetLocList() dict
             call remove(e, 'nr')
         endif
 
-        if e['type'] =~? '\m^[CNW]'
+        if e['type'] =~? '\m^[CHNW]'
             let e['subtype'] = 'Style'
         endif
 
-        let e['type'] = e['type'] =~? '\m^[EFC]' ? 'E' : 'W'
+        let e['type'] = e['type'] =~? '\m^[EFHC]' ? 'E' : 'W'
     endfor
 
     return loclist
