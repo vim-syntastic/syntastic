@@ -121,6 +121,7 @@ SYNTAX CHECKERS BY LANGUAGE                          *syntastic-checkers-lang*
     VHDL.....................................|syntastic-checkers-vhdl|
     Vim help.................................|syntastic-checkers-help|
     VimL.....................................|syntastic-checkers-vim|
+    Vue.js...................................|syntastic-checkers-vue|
 
     xHTML....................................|syntastic-checkers-xhtml|
     XML......................................|syntastic-checkers-xml|
@@ -7031,6 +7032,34 @@ details:
 
     https://github.com/Kuniwak/vint
 
+Checker options~
+
+This checker is initialised using the "makeprgBuild()" function and thus it
+accepts the standard options described at |syntastic-config-makeprg|.
+
+==============================================================================
+SYNTAX CHECKERS FOR VUE.JS                            *syntastic-checkers-vue*
+
+The following checkers are available for Vue.js (filetype "vue"):
+
+    1. pug_lint_vue..............|syntastic-vue-pug_lint_vue|
+
+------------------------------------------------------------------------------
+1. pug_lint_vue                               *syntastic-vue-pug_lint_vue*
+
+Name:        pug_lint_vue
+Maintainer:  Tim Carry <tim@pixelastic.com>
+
+"pug-lint-vue" is a linter for Pug templates inside of Vue.js components. See
+the project's page at GitHub for details:
+
+    https://github.com/sourceboat/pug-lint-vue
+
+Installation~
+
+Install it with: >
+    npm install -g pug-lint-vue
+<
 Checker options~
 
 This checker is initialised using the "makeprgBuild()" function and thus it
