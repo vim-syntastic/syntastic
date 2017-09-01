@@ -41,6 +41,7 @@ function! SyntaxCheckers_python_flake8_GetLocList() dict
         " F*** are PyFlakes codes
         " C*** are McCabe complexity messages
         " N*** are naming conventions from pep8-naming
+        " H*** are OpenStack messages
 
         if has_key(e, 'nr')
             let e['text'] .= printf(' [%s%03d]', e['type'], e['nr'])
