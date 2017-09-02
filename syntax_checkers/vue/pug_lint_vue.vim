@@ -1,6 +1,6 @@
 "============================================================================
 "File:        pug_lint_vue.vim
-"Description: Syntax checking plugin for syntastic.vim using pug-lint-vue
+"Description: Syntax checking plugin for syntastic using pug-lint-vue
 "             (https://github.com/sourceboat/pug-lint-vue)
 "Maintainer:  Tim Carry <tim at pixelastic dot com>
 "License:     This program is free software. It comes without any warranty,
@@ -20,17 +20,15 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 function! SyntaxCheckers_vue_pug_lint_vue_GetLocList() dict
-    let makeprg = self.makeprgBuild({ 'fname': expand('%:p') })
+    let buf = bufnr('')
+    let makeprg = self.makeprgBuild({ 'fname': syntastic#util#shescape(fnamemodify(bufname(buf), ':p')) })
 
-    let errorformat = '  %l:%c %m'
+    let errorformat = '%\s%#%l:%c %m'
 
     return SyntasticMake({
         \ 'makeprg': makeprg,
         \ 'errorformat': errorformat,
-        \ 'defaults': {
-            \ 'bufnr': bufnr(''),
-            \ 'type': 'E'
-        \ } })
+        \ 'defaults': { 'bufnr': buf, 'type': 'E' } })
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
