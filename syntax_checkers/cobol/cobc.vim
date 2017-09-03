@@ -33,7 +33,7 @@ endfunction
 
 function! SyntaxCheckers_cobol_cobc_GetLocList() dict
     return syntastic#c#GetLocList('cobol', 'cobc', {
-        \ 'errorformat': '%f:%l: %trror: %m',
+        \ 'errorformat': '%f:%\s%#%l: %trror: %m',
         \ 'main_flags': '-fsyntax-only' })
 endfunction
 
