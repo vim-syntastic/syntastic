@@ -4751,7 +4751,7 @@ See the project's page iat GitHub for details:
 
     https://github.com/phpstan/phpstan
 
-Syntastic supports "PHPStan" versions 0.7 and later.
+Syntastic supports "PHPStan" versions 0.8.5 and later.
 
 Checker options~
 
