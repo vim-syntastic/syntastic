@@ -40,7 +40,7 @@ function! SyntaxCheckers_cpp_gcc_GetLocList() dict
         \     '%f:%l: %trror: %m,'.
         \     '%f:%l: %tarning: %m,'.
         \     '%f:%l: %m',
-        \ 'main_flags': '-x c++ -fsyntax-only',
+        \ 'main_flags': '-x c++ -std=gnu++11 -fsyntax-only',
         \ 'header_flags': '-x c++',
         \ 'header_names': '\m\.\(h\|hpp\|hh\)$' })
 endfunction
