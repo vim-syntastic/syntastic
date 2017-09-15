@@ -6282,6 +6282,7 @@ SYNTAX CHECKERS FOR SQL                               *syntastic-checkers-sql*
 The following checkers are available for SQL (filetype "sql"):
 
     1. sqlint...................|syntastic-sql-sqlint|
+    2. tsqllint.................|syntastic-sql-tsqllint|
 
 ------------------------------------------------------------------------------
 1. sqlint                                               *syntastic-sql-sqlint*
@@ -6293,6 +6294,22 @@ Maintainer:  Steve Purcell <steve@sanityinc.com>
 details:
 
     https://github.com/purcell/sqlint
+
+Checker options~
+
+This checker is initialised using the "makeprgBuild()" function and thus it
+accepts the standard options described at |syntastic-config-makeprg|.
+
+------------------------------------------------------------------------------
+2. tsqllint                                           *syntastic-sql-tsqllint*
+
+Name:        tsqllint
+Maintainer:  Daniel Walker <dwalker@fifo99.com>
+
+"tsqllint" is a lint checker for Transact-SQL scripts. See the project's page
+at GitHub for details:
+
+    https://github.com/tsqllint/tsqllint
 
 Checker options~
 
