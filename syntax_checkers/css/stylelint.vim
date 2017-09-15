@@ -1,6 +1,6 @@
 "============================================================================
 "File:        stylelint.vim
-"Description: Syntax checking plugin for syntastic.vim using `stylelint`
+"Description: Syntax checking plugin for syntastic using `stylelint`
 "             (https://github.com/stylelint/stylelint).
 "Maintainer:  Tim Carry <tim at pixelastic dot com>
 "License:     This program is free software. It comes without any warranty,
