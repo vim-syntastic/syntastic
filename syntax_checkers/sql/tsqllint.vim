@@ -23,10 +23,6 @@ endif
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! SyntaxCheckers_sql_tsqllint_IsAvailable() dict
-    return executable(self.getExec())
-endfunction
-
 function! SyntaxCheckers_sql_tsqllint_GetLocList() dict
     let makeprg = self.makeprgBuild({})
 
@@ -39,8 +35,7 @@ endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'sql',
-    \ 'name': 'tsqllint',
-    \ 'exec': 'tsqllint'})
+    \ 'name': 'tsqllint'})
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
