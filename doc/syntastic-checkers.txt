@@ -81,6 +81,7 @@ SYNTAX CHECKERS BY LANGUAGE                          *syntastic-checkers-lang*
     OCaml....................................|syntastic-checkers-ocaml|
 
     Perl.....................................|syntastic-checkers-perl|
+    Perl 6...................................|syntastic-checkers-perl6|
     PHP......................................|syntastic-checkers-php|
     POD......................................|syntastic-checkers-pod|
     Pug (formerly Jade)......................|syntastic-checkers-pug|
@@ -4562,11 +4563,11 @@ Security~
 
 This checker runs "perl -c" against your files, which in turn executes any
 "BEGIN", "UNITCHECK", and "CHECK" blocks, and any "use" statements in your
-file (cf. http://perldoc.perl.org/perlrun.html#*-c*). This is probably fine if
-you wrote the file yourself, but it can be a problem if you're trying to check
-third party files. If you are 100% willing to let Vim run the code in your
-file, set 'g:syntastic_enable_perl_checker' to 1 in your vimrc to enable this
-checker: >
+files (cf. http://perldoc.perl.org/perlrun.html#*-c*). This is probably fine
+if you wrote the file yourself, but it can be a problem if you're trying to
+check third party files. If you are 100% willing to let Vim run the code in
+your files, set 'g:syntastic_enable_perl_checker' to 1 in your vimrc to enable
+this checker: >
     let g:syntastic_enable_perl_checker = 1
 <
 There is also a buffer-local version of this variable, that takes precedence
@@ -4589,7 +4590,7 @@ Default: "perl"
 The perl interpreter to use.
 
                                                  *'g:syntastic_perl_lib_path'*
-Type: list os strings
+Type: list of strings
 Default: []
 List of include directories to be added to the perl command line. Example: >
     let g:syntastic_perl_lib_path = [ "./lib", "./lib/auto" ]
@@ -4650,6 +4651,65 @@ This checker is initialised using the "makeprgBuild()" function and thus it
 accepts the standard options described at |syntastic-config-makeprg|.
 
 See also: |syntastic-pod-podchecker|.
+
+==============================================================================
+SYNTAX CHECKERS FOR PERL 6                          *syntastic-checkers-perl6*
+
+The following checkers are available for Perl 6 (filetype "perl6"):
+
+    1. perl6....................|syntastic-perl6-perl6|
+
+------------------------------------------------------------------------------
+1. perl6                                               *syntastic-perl6-perl6*
+
+Name:        perl6
+Maintainers: Claudio Ramirez <pub.claudio@gmail.com>
+
+"perl6" is a checker for Perl 6 files using the "Rakudo" compiler. See the
+project's page for details:
+
+    http://rakudo.org/
+
+Syntastic requires Rakudo Star release 2017.01 or later.
+
+Security~
+
+This checker runs "perl6 -c" against your files, which executes any "BEGIN"
+and "CHECK" blocks (cf. https://docs.perl6.org/programs/00-running). This
+is probably fine if you wrote the files yourself, but it can be a problem if
+you're trying to check third party files. If you are 100% willing to let Vim
+run the code in your files, set 'g:syntastic_enable_perl6_checker' to 1 in
+your vimrc to enable this checker: >
+    let g:syntastic_enable_perl6_checker = 1
+<
+There is also a buffer-local version of this variable, that takes precedence
+over it in the buffers where it is defined.
+
+Please note that setting this variable doesn't automatically enable the
+checker, you still need to add it to 'g:syntastic_perl6_checkers' if you plan
+to use it.
+
+Checker options~
+
+This checker is initialised using the "makeprgBuild()" function and thus it
+accepts the standard options described at syntastic-config-makeprg.
+
+Additionally:
+
+                                                *'g:syntastic_perl6_lib_path'*
+Type: list of strings
+Default: []
+List of include directories to be added to the perl6 command line. Example: >
+    let g:syntastic_perl6_lib_path = [ "./lib", "./lib/auto" ]
+<
+You can also set the "PERL6LIB" environment variable to a colon-separated
+list of add-hoc include paths. These paths will then be added to the ones
+prescribed by |'g:syntastic_perl6_lib_path'|.
+
+Note~
+
+At the time of this writing the support for JSON error output of the "Rakudo"
+compiler is still incomplete.
 
 ==============================================================================
 SYNTAX CHECKERS FOR PHP                               *syntastic-checkers-php*
