@@ -25,6 +25,7 @@ function! SyntaxCheckers_scala_scalac_GetLocList() dict
 
     let errorformat =
         \ '%E%f:%l: %trror: %m,' .
+        \ '%W%f:%l: %tarning:%m,' .
         \ '%Z%p^,' .
         \ '%-G%.%#'
 
