@@ -21,7 +21,7 @@ set cpo&vim
 function! SyntaxCheckers_scala_scalac_GetLocList() dict
     call syntastic#log#deprecationWarn('scala_options', 'scala_scalac_args')
 
-    let makeprg = self.makeprgBuild({ 'args_after': '-Ystop-after:parser' })
+    let makeprg = self.makeprgBuild({ 'args': '-Ystop-after:parser' })
 
     let errorformat =
         \ '%E%f:%l: %trror: %m,' .
