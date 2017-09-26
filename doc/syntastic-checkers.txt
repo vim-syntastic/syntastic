@@ -6459,7 +6459,7 @@ Default: 1
 Whether to show informational messages ("chktex" option "-m"). By default
 informational messages are shown as warnings.
 
-Note~
+Notes~
 
 If you're checking files containing tab characters, then Vim's 'tabstop'
 must match "ChkTeX"'s idea of tabstop, otherwise column numbers will be
@@ -6467,6 +6467,9 @@ shifted. At the time of this writing, "ChkTeX"'s tabstop is hardcoded to 8,
 so you should probably add something like this to your vimrc: >
     set tabstop=8
 <
+Note also that because of the way "ChkTeX" handles error formats column
+numbers are not available on Windows when running under "cmd.exe".
+
 ------------------------------------------------------------------------------
 2. lacheck                                             *syntastic-tex-lacheck*
 

@@ -27,12 +27,18 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 function! SyntaxCheckers_tex_chktex_GetLocList() dict
-    let makeprg = self.makeprgBuild({ 'args_after': ['-q', '-f', "%k:%n:%f:%l:%c:%m\n"] })
+    if !exists('s:sumb_quoting')
+        let s:dumb_quoting = syntastic#util#isRunningWindows() && exists('+shellslash') && !&shellslash
+    endif
+    let makeprg = self.makeprgBuild({ 'args_after': (s:dumb_quoting ? ['-q', '-v1'] : ['-q', '-f', "%k:%n:%f:%l:%c:%m\n"]) })
 
     let errorformat =
         \ '%EError:%n:%f:%l:%v:%m,' .
         \ '%WWarning:%n:%f:%l:%v:%m,' .
         \ (g:syntastic_tex_chktex_showmsgs ? '%WMessage:%n:%f:%l:%v:%m,' : '') .
+        \ '%EError %n in %f line %l: %m,' .
+        \ '%WWarning %n in %f line %l: %m,' .
+        \ (g:syntastic_tex_chktex_showmsgs ? '%WMessage %n in %f line %l: %m,' : '') .
         \ '%Z%p^,' .
         \ '%-G%.%#'
 
