@@ -985,6 +985,7 @@ SYNTAX CHECKERS FOR C#                                 *syntastic-checkers-cs*
 The following checkers are available for C# (filetype "cs"):
 
     1. mcs......................|syntastic-cs-mcs|
+    2. csc......................|syntastic-cs-csc|
 
 ------------------------------------------------------------------------------
 1. mcs                                                      *syntastic-cs-mcs*
@@ -996,6 +997,27 @@ Maintainer:  Daniel Walker <dwalker@fifo99.com>
 (http://www.mono-project.com/Main_Page). See the program's manual for details:
 
     http://mono.wikia.com/wiki/Man_mcs
+
+Checker options~
+
+This checker is initialised using the "makeprgBuild()" function and thus it
+accepts the standard options described at |syntastic-config-makeprg|.
+
+------------------------------------------------------------------------------
+2. csc                                                      *syntastic-cs-csc*
+
+Name:        csc
+Maintainer:  Martin Aumont <martin.aumont@gmail.com>
+
+"csc" is the Roslyn C# compiler executable for the Mono project
+(http://www.mono-project.com/). "csc" replaces "mcs" and comes with full
+support for C# 7
+(http://www.mono-project.com/docs/about-mono/releases/5.0.0/#csc). See the
+program's page for details:
+
+    https://github.com/dotnet/roslyn
+
+This checker is based on Daniel Walker's "mcs" checker.
 
 Checker options~
 
