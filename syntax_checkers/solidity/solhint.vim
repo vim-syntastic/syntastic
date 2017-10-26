@@ -20,9 +20,11 @@ set cpo&vim
 
 function! SyntaxCheckers_solidity_solhint_GetLocList() dict
     let makeprg = self.makeprgBuild({
-        \ 'args_after': '-f unix' })
+        \ 'args_after': '-f compact' })
 
-    let errorformat = '%f:%l:%c: %m'
+    let errorformat =
+        \ '%E%f: line %l\, col %c\, Error - %m,' .
+        \ '%W%f: line %l\, col %c\, Warning - %m'
 
     return SyntasticMake({
         \ 'makeprg': makeprg,
