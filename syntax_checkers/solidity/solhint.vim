@@ -27,6 +27,7 @@ function! SyntaxCheckers_solidity_solhint_GetLocList() dict
     return SyntasticMake({
         \ 'makeprg': makeprg,
         \ 'errorformat': errorformat,
+        \ 'subtype': 'Style',
         \ 'returns': [0, 1] })
 endfunction
 
