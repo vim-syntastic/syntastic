@@ -6305,6 +6305,7 @@ The following checkers are available for Solidity (filetype "solidity"):
 
     1. solc.....................|syntastic-solidity-solc|
     2. Solium...................|syntastic-solidity-solium|
+    3. Solhint..................|syntastic-solidity-solhint|
 
 ------------------------------------------------------------------------------
 1. solc                                              *syntastic-solidity-solc*
@@ -6338,6 +6339,28 @@ Maintainer:  Matthijs van den Bos <matthijs@vandenbos.org>
 "Solium" is a linter for "Solidity" files. See the project's page for details:
 
     https://github.com/duaraghav8/Solium
+
+Checker options~
+
+This checker is initialised using the "makeprgBuild()" function and thus it
+accepts the standard options described at |syntastic-config-makeprg|.
+
+Note~
+
+You probably also need a plugin to set |filetype| for Solidity files, such as
+"vim-solidity":
+
+    https://github.com/tomlion/vim-solidity
+
+------------------------------------------------------------------------------
+2. Solium                                          *syntastic-solidity-solium*
+
+Name:        solhint
+Maintainer:  Brett Sun <qisheng.brett.sun@gmail.com>
+
+"Solhint" is a linter for "Solidity" files. See the project's page for details:
+
+    https://github.com/protofire/solhint
 
 Checker options~
 
