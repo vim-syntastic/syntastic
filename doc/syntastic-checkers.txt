@@ -6304,8 +6304,8 @@ SYNTAX CHECKERS FOR SOLIDITY                     *syntastic-checkers-solidity*
 The following checkers are available for Solidity (filetype "solidity"):
 
     1. solc.....................|syntastic-solidity-solc|
-    2. Solium...................|syntastic-solidity-solium|
-    3. Solhint..................|syntastic-solidity-solhint|
+    2. Solhint..................|syntastic-solidity-solhint|
+    3. Solium...................|syntastic-solidity-solium|
 
 ------------------------------------------------------------------------------
 1. solc                                              *syntastic-solidity-solc*
@@ -6331,14 +6331,15 @@ You probably also need a plugin to set |filetype| for Solidity files, such as
     https://github.com/tomlion/vim-solidity
 
 ------------------------------------------------------------------------------
-2. Solium                                          *syntastic-solidity-solium*
+2. Solhint                                        *syntastic-solidity-solhint*
 
-Name:        solium
-Maintainer:  Matthijs van den Bos <matthijs@vandenbos.org>
+Name:        solhint
+Maintainer:  Brett Sun <qisheng.brett.sun@gmail.com>
 
-"Solium" is a linter for "Solidity" files. See the project's page for details:
+"Solhint" is a style linter for "Solidity" files. See the project's page for
+details:
 
-    https://github.com/duaraghav8/Solium
+    https://github.com/protofire/solhint
 
 Checker options~
 
@@ -6353,14 +6354,14 @@ You probably also need a plugin to set |filetype| for Solidity files, such as
     https://github.com/tomlion/vim-solidity
 
 ------------------------------------------------------------------------------
-2. Solium                                          *syntastic-solidity-solium*
+3. Solium                                          *syntastic-solidity-solium*
 
-Name:        solhint
-Maintainer:  Brett Sun <qisheng.brett.sun@gmail.com>
+Name:        solium
+Maintainer:  Matthijs van den Bos <matthijs@vandenbos.org>
 
-"Solhint" is a linter for "Solidity" files. See the project's page for details:
+"Solium" is a linter for "Solidity" files. See the project's page for details:
 
-    https://github.com/protofire/solhint
+    https://github.com/duaraghav8/Solium
 
 Checker options~
 
