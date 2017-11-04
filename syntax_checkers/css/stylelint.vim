@@ -21,6 +21,7 @@ set cpo&vim
 
 let s:args_after = {
     \ 'css':  '-f json',
+    \ 'less': '-f json -s less',
     \ 'scss': '-f json -s scss' }
 
 function! SyntaxCheckers_css_stylelint_GetLocList() dict
