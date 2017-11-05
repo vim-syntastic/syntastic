@@ -307,8 +307,12 @@ function! syntastic#util#fname2buf(fname) abort " {{{2
 
     " this is a best-effort attempt to escape file patterns (cf. :h file-pattern)
     " XXX it fails for filenames containing something like \{2,3}
+    let buf = -1
     for md in [':~:.', ':~', ':p']
-        let buf = bufnr('^' . escape(fnamemodify(a:fname, md), '\*?,{}[') . '$')
+        try
+            " Older versions of Vim can throw E94 here
+            let buf = bufnr('^' . escape(fnamemodify(a:fname, md), '\*?,{}[') . '$')
+        endtry
         if buf != -1
             break
         endif
