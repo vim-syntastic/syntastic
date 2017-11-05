@@ -307,16 +307,18 @@ function! syntastic#util#fname2buf(fname) abort " {{{2
 
     " this is a best-effort attempt to escape file patterns (cf. :h file-pattern)
     " XXX it fails for filenames containing something like \{2,3}
+    let buf = -1
     for md in [':~:.', ':~', ':p']
-        let buf = bufnr('^' . escape(fnamemodify(a:fname, md), '\*?,{}[') . '$')
-        if buf != -1
-            break
+        " bufnr() throws E94 if buffer doesn't exist (contrary to what the doc
+        " says) in vim-7.4.
+        let pat = '^' . escape(fnamemodify(a:fname, md), '\*?,.{}[') . '$'
+        if bufexists(pat) != 0
+            let buf = bufnr(pat)
+            if buf != -1
+                break
+            endif
         endif
     endfor
-    if buf == -1
-        " XXX definitely wrong, but hope is the last thing to die :)
-        let buf = bufnr(fnamemodify(a:fname, ':p'))
-    endif
 
     if exists('+shellslash')
         let &shellslash = old_shellslash
