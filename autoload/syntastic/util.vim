@@ -312,6 +312,8 @@ function! syntastic#util#fname2buf(fname) abort " {{{2
         try
             " Older versions of Vim can throw E94 here
             let buf = bufnr('^' . escape(fnamemodify(a:fname, md), '\*?,{}[') . '$')
+        catch
+            " catch everything
         endtry
         if buf != -1
             break
