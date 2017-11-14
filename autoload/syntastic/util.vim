@@ -253,7 +253,7 @@ endfunction " }}}2
 function! syntastic#util#findFileInParent(what, where) abort " {{{2
     let old_suffixesadd = &suffixesadd
     let &suffixesadd = ''
-    let file = findfile(a:what, escape(a:where, ' ') . ';')
+    let file = findfile(a:what, escape(a:where, ' ,') . ';')
     let &suffixesadd = old_suffixesadd
     return file
 endfunction " }}}2
