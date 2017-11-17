@@ -1844,7 +1844,8 @@ Checker options~
 This checker is initialised using the "makeprgBuild()" function and thus it
 accepts the standard options described at |syntastic-config-makeprg|.
 
-See also: |syntastic-less-stylelint|, |syntastic-scss-stylelint|.
+See also: |syntastic-html-stylelint|, |syntastic-less-stylelint|,
+|syntastic-scss-stylelint|.
 
 ==============================================================================
 SYNTAX CHECKERS FOR CUCUMBER                     *syntastic-checkers-cucumber*
@@ -2838,9 +2839,10 @@ The following checkers are available for HTML (filetype "html"):
     4. HTMLHint.................|syntastic-html-htmlhint|
     5. JSHint...................|syntastic-html-jshint|
     6. proselint................|syntastic-html-proselint|
-    7. textlint.................|syntastic-html-textlint|
-    8. Validator................|syntastic-html-validator|
-    9. W3.......................|syntastic-html-w3|
+    7. stylelint................|syntastic-html-stylelint|
+    8. textlint.................|syntastic-html-textlint|
+    9. Validator................|syntastic-html-validator|
+    10. W3......................|syntastic-html-w3|
 
 ------------------------------------------------------------------------------
 1. ESLint                                              *syntastic-html-eslint*
@@ -3018,7 +3020,26 @@ See also: |syntastic-asciidoc-proselint|, |syntastic-help-proselint|,
 |syntastic-text-proselint|, |syntastic-xhtml-proselint|.
 
 ------------------------------------------------------------------------------
-7. textlint                                          *syntastic-html-textlint*
+7. stylelint                                        *syntastic-html-stylelint*
+
+Name:        stylelint
+Maintainer:  Tim Carry <tim@pixelastic.com>
+
+"stylelint" is a style linter for Cascading Stylesheets. See the project's
+page for more information:
+
+    http://stylelint.io/
+
+Checker options~
+
+This checker is initialised using the "makeprgBuild()" function and thus it
+accepts the standard options described at |syntastic-config-makeprg|.
+
+See also: |syntastic-css-stylelint|, |syntastic-less-stylelint|,
+|syntastic-scss-stylelint|.
+
+------------------------------------------------------------------------------
+8. textlint                                          *syntastic-html-textlint*
 
 Name:        textlint
 Maintainer:  LCD 47 <lcd047@gmail.com>
@@ -3043,7 +3064,7 @@ work:
 See also: |syntastic-markdown-textlint|, |syntastic-text-textlint|.
 
 ------------------------------------------------------------------------------
-8. Validator                                        *syntastic-html-validator*
+9. Validator                                        *syntastic-html-validator*
 
 Name:        validator
 Maintainer:  LCD 47 <lcd047@gmail.com>
@@ -3116,7 +3137,7 @@ You can lookup the meaning of these codes in cURL's manual:
     http://curl.haxx.se/docs/manpage.html#EXIT
 
 ------------------------------------------------------------------------------
-9. W3                                                      *syntastic-html-w3*
+10. W3                                                     *syntastic-html-w3*
 
 Name:        w3
 Maintainer:  Martin Grenfell <martin.grenfell@gmail.com>
@@ -3890,7 +3911,8 @@ Checker options~
 This checker is initialised using the "makeprgBuild()" function and thus it
 accepts the standard options described at |syntastic-config-makeprg|.
 
-See also: |syntastic-css-stylelint|, |syntastic-scss-stylelint|.
+See also: |syntastic-css-stylelint|, |syntastic-html-stylelint|,
+|syntastic-scss-stylelint|.
 
 ==============================================================================
 SYNTAX CHECKERS FOR LEX                               *syntastic-checkers-lex*
@@ -6158,7 +6180,8 @@ Checker options~
 This checker is initialised using the "makeprgBuild()" function and thus it
 accepts the standard options described at |syntastic-config-makeprg|.
 
-See also: |syntastic-css-stylelint|, |syntastic-less-stylelint|.
+See also: |syntastic-css-stylelint|, |syntastic-html-stylelint|,
+|syntastic-less-stylelint|.
 
 ==============================================================================
 SYNTAX CHECKERS FOR SH                                 *syntastic-checkers-sh*
