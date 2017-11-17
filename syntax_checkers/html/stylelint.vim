@@ -11,39 +11,15 @@
 "
 "============================================================================
 
-if exists('g:loaded_syntastic_css_stylelint_checker')
+if exists('g:loaded_syntastic_html_stylelint_checker')
     finish
 endif
-let g:loaded_syntastic_css_stylelint_checker = 1
-
-let s:save_cpo = &cpo
-set cpo&vim
-
-let s:args_after = {
-    \ 'css':  '-f json',
-    \ 'html': '-f json',
-    \ 'less': '-f json -s less',
-    \ 'scss': '-f json -s scss' }
-
-function! SyntaxCheckers_css_stylelint_GetLocList() dict
-    let makeprg = self.makeprgBuild({ 'args_after': get(s:args_after, self.getFiletype(), '') })
-
-    let errorformat = '%t:%f:%l:%c:%m'
-
-    return SyntasticMake({
-        \ 'makeprg': makeprg,
-        \ 'errorformat': errorformat,
-        \ 'subtype': 'Style',
-        \ 'preprocess': 'stylelint',
-        \ 'returns': [0, 1, 2] })
-endfunction
+let g:loaded_syntastic_html_stylelint_checker = 1
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
-    \ 'filetype': 'css',
-    \ 'name': 'stylelint'})
+    \ 'filetype': 'html',
+    \ 'name': 'stylelint',
+    \ 'redirect': 'css/stylelint'})
 
-let &cpo = s:save_cpo
-unlet s:save_cpo
 
 " vim: set sw=4 sts=4 et fdm=marker:
-
