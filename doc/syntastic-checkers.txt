@@ -7633,7 +7633,7 @@ You probably also need a plugin to set |filetype| for YANG files, such as
 ==============================================================================
 SYNTAX CHECKERS FOR YARA                             *syntastic-checkers-yara*
 
-The following checkers are available for YARA rule files. (filetype "yara"):
+The following checkers are available for YARA rule files (filetype "yara"):
 
     1. yarac....................|syntastic-yara-yarac|
 
@@ -7643,8 +7643,8 @@ The following checkers are available for YARA rule files. (filetype "yara"):
 Name:        yarac
 Maintainer:  Albert Song <albb@teamt5.org>
 
-"yarac" is the official compiler for YARA rule files.
-See the project's page at GitHub for more information:
+"yarac" is the official compiler for YARA rule files. See the project's page
+at GitHub for more information:
 
     https://github.com/VirusTotal/yara
 
@@ -7655,9 +7655,10 @@ accepts the standard options described at |syntastic-config-makeprg|.
 
 Note~
 
-You probably also need to set |filetype| for YARA rule files to "yara".
-You can do that with an `:autocmd`: >
-    autocmd BufNewFile,BufRead *.yar,*.yara set filetype=yara syntax=yara
+You probably also need a plugin to set |filetype| for YARA rule files, such as
+"vim-yara":
+
+    https://github.com/yaunj/vim-yara
 
 ==============================================================================
 SYNTAX CHECKERS FOR Z80                               *syntastic-checkers-z80*
