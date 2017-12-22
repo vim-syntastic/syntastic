@@ -1,6 +1,6 @@
 "============================================================================
 "File:        yara.vim
-"Description: Syntax checking plugin for syntastic.vim
+"Description: Syntax checking plugin for syntastic
 "Maintainer:  Albert Song (albb@teamt5.org)
 "License:     This program is free software. It comes without any warranty,
 "             to the extent permitted by applicable law. You can redistribute
@@ -22,13 +22,13 @@ function! SyntaxCheckers_yara_yarac_GetLocList() dict
     let makeprg = self.makeprgBuild({ 'fname_after' : syntastic#util#DevNull() })
 
     let errorformat =
-            \ '%f(%l): %trror: %m,' .
-            \ '%f(%l): %tarning: %m,'.
-            \ '%f(%l): %m'
+        \ '%f(%l): %trror: %m,' .
+        \ '%f(%l): %tarning: %m,' .
+        \ '%f(%l): %m'
 
     return SyntasticMake({
-	\ 'makeprg': makeprg,
-	\ 'errorformat': errorformat })
+        \ 'makeprg': makeprg,
+        \ 'errorformat': errorformat })
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
