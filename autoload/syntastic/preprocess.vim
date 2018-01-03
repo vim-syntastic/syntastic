@@ -635,9 +635,16 @@ function! syntastic#preprocess#mypy(errors) abort " {{{2
     let out = []
     for e in a:errors
         " new format
-        let parts = matchlist(e, '\v^(.{-1,}):(\d+): error: (.+)')
-        if len(parts) > 3
-            call add(out, join(parts[1:3], ':'))
+        let parts = matchlist(e, '\v^(.{-1,}):(\d+):(\d+:)? (error|warning): (.+)')
+        if len(parts) > 5
+            " strip the last character (the colon) and increment by one
+            let parts[3] = string(str2nr(parts[3][:-2]) + 1)
+            let parts[4] = parts[4][0]
+            call add(out, join(parts[1:5], ':'))
+            continue
+        elseif len(parts) > 4
+            let parts[3] = parts[3][0]
+            call add(out, join(parts[1:4], ':'))
             continue
         endif
 
