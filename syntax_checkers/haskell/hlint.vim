@@ -15,8 +15,9 @@ set cpo&vim
 
 function! SyntaxCheckers_haskell_hlint_GetLocList() dict
     let buf = bufnr('')
+    let modifiedbufname = fnamemodify(bufname(buf), ':p')
     let makeprg = self.makeprgBuild({
-        \ 'fname': syntastic#util#shescape(fnamemodify(bufname(buf), ':p')) })
+        \ 'fname': has('win32unix')?syntastic#util#CygwinPath(modifiedbufname):syntastic#util#shescape(modifiedbufname)})
 
     let errorformat =
         \ '%E%f:%l:%v: Error while reading hint file\, %m,' .
