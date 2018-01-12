@@ -1120,7 +1120,7 @@ one option per line (cf. |syntastic-config-files|).
 Note~
 
 By default you can set "ClangTidy" parameters in
-'g:syntastic_ppc_clang_tidy_args', and compilation parameters (defines,
+'g:syntastic_cpp_clang_tidy_args', and compilation parameters (defines,
 optimisation flags, etc.) in the configuration file.
 
 If you want "ClangTidy" to use compilation databases
