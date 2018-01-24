@@ -19,6 +19,10 @@ if !exists('g:syntastic_cpp_compiler_options')
     let g:syntastic_cpp_compiler_options = ''
 endif
 
+if !exists('g:syntastic_cpp_config_file')
+    let g:syntastic_cpp_config_file = '.syntastic_cpp_config'
+endif
+
 let s:save_cpo = &cpo
 set cpo&vim
 
@@ -40,7 +44,10 @@ function! SyntaxCheckers_cpp_gcc_GetLocList() dict
         \     '%f:%l: %trror: %m,'.
         \     '%f:%l: %tarning: %m,'.
         \     '%f:%l: %m',
-        \ 'main_flags': '-x c++ -fsyntax-only',
+        \ 'main_flags':
+        \ '-- ' .
+        \ syntastic#c#ReadConfig(g:syntastic_cpp_config_file) . ' ' .
+        \ '-x c++ -fsyntax-only',
         \ 'header_flags': '-x c++',
         \ 'header_names': '\m\.\(h\|hpp\|hh\)$' })
 endfunction
