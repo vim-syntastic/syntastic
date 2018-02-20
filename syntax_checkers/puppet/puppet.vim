@@ -31,7 +31,7 @@ function! SyntaxCheckers_puppet_puppet_GetLocList() dict
         \ '%-GError: Try ''puppet help parser validate'' for usage,' .
         \ '%A%t%*[a-zA-Z]: %m at %f:%l:%c,' .
         \ '%A%t%*[a-zA-Z]: %m at %f:%l,'.
-        \ '%AError: Could not parse for environment production: %m (file: %f\, line: %l\, column: %c)'
+        \ '%A%t%*[a-zA-Z]: Could not parse for environment production: %m (file: %f\, line: %l\, column: %c)'
 
     return SyntasticMake({
         \ 'makeprg': makeprg,
