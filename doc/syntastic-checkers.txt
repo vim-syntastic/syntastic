@@ -107,6 +107,7 @@ SYNTAX CHECKERS BY LANGUAGE                          *syntastic-checkers-lang*
     Solidity.................................|syntastic-checkers-solidity|
     SQL......................................|syntastic-checkers-sql|
     Stylus...................................|syntastic-checkers-stylus|
+    SystemVerilog............................|syntastic-checkers-systemverilog|
 
     Tcl......................................|syntastic-checkers-tcl|
     TeX......................................|syntastic-checkers-tex|
@@ -6837,6 +6838,91 @@ You probably also need a plugin to set |filetype| for Turtle files, such as
     https://github.com/niklasl/vim-rdf
 
 ==============================================================================
+SYNTAX CHECKERS FOR SYSTEMVERILOG           *syntastic-checkers-systemverilog*
+
+The following checkers are available for SystemVerilog (filetype "systemverilog"):
+
+    1. Icarus Verilog...........|syntastic-systemverilog-iverilog|
+    2. Verilator................|syntastic-systemverilog-verilator|
+
+------------------------------------------------------------------------------
+1. Icarus Verilog                           *syntastic-systemverilog-iverilog*
+
+Name:        iverilog
+Maintainer:  Psidium <psiidium@gmail.com>
+
+"Icarus Verilog" is a Verilog simulation and synthesis tool. See the
+project's page for details:
+
+    http://iverilog.icarus.com/
+
+Checker options~
+
+This checker is initialised using the "makeprgBuild()" function and thus it
+accepts the standard options described at |syntastic-config-makeprg|.
+
+------------------------------------------------------------------------------
+2. Verilator                               *syntastic-systemverilog-verilator*
+
+Name:        verilator
+Maintainer:  Kocha <kocha.lsifrontend@gmail.com>
+
+Checker options~
+
+                                        *'g:syntastic_systemverilog_compiler'*
+Type: string
+Default: "verilator"
+Compiler executable.
+
+                                     *'g:syntastic_systemverilog_errorformat'*
+Type: string
+Default: unset
+Override for the default |'errorformat'|.
+
+                           *'g:syntastic_systemverilog_remove_include_errors'*
+Type: boolean
+Default: 0
+By default, errors in files included from the file being checked are shown.
+Set this variable to 1 to remove messages about errors in included files.
+Please note that this means syntastic will silently abort checks if there are
+fatal errors in one of the included files.
+
+                                *'g:syntastic_systemverilog_compiler_options'*
+Type: string
+Default: unset
+Compilation flags (such as defines or include directories) to be passed to the
+linter. Defaults passed: "-Wall +systemverilogext+sv +systemverilogext+svh"
+
+                                     *'g:syntastic_systemverilog_config_file'*
+Type: string
+Default: ".syntastic_verilog_config"
+File containing additional compilation flags to be passed to the linter, one
+option per line (cf. |syntastic-config-files|).
+
+                                    *'g:syntastic_systemverilog_include_dirs'*
+Type: array of strings
+Default: []
+Include directories to be passed to the linter, in addition to the
+above compilation flags. You can set it like this: >
+    let g:syntastic_verilog_include_dirs = ["includes", "headers"]
+<
+and the corresponding "-Iincludes -Iheaders" will be added to the compilation
+flags.
+
+                                          *'b:syntastic_systemverilog_cflags'*
+Type: string
+Default: unset
+Buffer-local variable. Additional compilation flags specific to the current
+buffer.
+
+Note~
+
+This checker doesn't call the "makeprgBuild()" function, and thus it ignores
+the usual 'g:syntastic_verilog_verilator_<option>' variables. The only
+exception is 'g:syntastic_verilog_verilator_exec', which can still be used to
+override the linter's executable.
+
+==============================================================================
 SYNTAX CHECKERS FOR TWIG                             *syntastic-checkers-twig*
 
 The following checkers are available for Twig (filetype "twig"):
@@ -7793,6 +7879,9 @@ syntastic-specific configuration files:
     Objective-C++~
         GCC (|syntastic-objcpp-gcc|)
         OCLint (|syntastic-objcpp-oclint|)
+
+    SystemVerilog~
+        Verilator (|syntastic-systemverilog-verilator|)
 
     Verilog~
         Verilator (|syntastic-verilog-verilator|)
