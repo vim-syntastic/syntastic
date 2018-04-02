@@ -40,7 +40,7 @@ function! SyntaxCheckers_python_flake8_GetLocList() dict
         let parts = matchlist(e['text'], '\v\C^([A-Z]+)(\d+):?\s+(.*)')
         if len(parts) >= 4
             let e['type'] = parts[1][0]
-            let e['text'] = printf('%s [%s%03d]', parts[3], parts[1], parts[2])
+            let e['text'] = printf('%s [%s%s]', parts[3], parts[1], parts[2])
 
             if e['type'] ==? 'E' && parts[2] !~# '\m^9'
                 let e['subtype'] = 'Style'
