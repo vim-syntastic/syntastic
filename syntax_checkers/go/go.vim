@@ -56,11 +56,11 @@ function! SyntaxCheckers_go_go_GetLocList() dict
     " compiled by `go build`, therefore `go test` must be called for those.
     if bufname(buf) =~# '\m_test\.go$'
         let cmd = 'test -c'
-        let opts = syntastic#util#bufVar(buf, 'go_go_test_args', s:go_new ? '-buildmode=archive' : '')
+        let opts = syntastic#util#bufVar(buf, 'go_go_test_args', s:go_new ? '-buildmode=default' : '')
         let cleanup = 1
     else
         let cmd = 'build'
-        let opts = syntastic#util#bufVar(buf, 'go_go_build_args', s:go_new ? '-buildmode=archive' : '')
+        let opts = syntastic#util#bufVar(buf, 'go_go_build_args', s:go_new ? '-buildmode=default' : '')
         let cleanup = 0
     endif
     let opt_str = (type(opts) != type('') || opts !=# '') ? join(syntastic#util#argsescape(opts)) : opts
