@@ -10,10 +10,6 @@ if exists('g:loaded_syntastic_cuda_nvcc_checker')
 endif
 let g:loaded_syntastic_cuda_nvcc_checker = 1
 
-if !exists('g:syntastic_cuda_config_file')
-    let g:syntastic_cuda_config_file = '.syntastic_cuda_config'
-endif
-
 let s:save_cpo = &cpo
 set cpo&vim
 
@@ -41,7 +37,7 @@ function! SyntaxCheckers_cuda_nvcc_GetLocList() dict
 
     call extend(build_opts, {
         \ 'args_before': arch_flag . ' --cuda -O0 -I .',
-        \ 'args': syntastic#c#ReadConfig(g:syntastic_cuda_config_file),
+        \ 'args': syntastic#c#ReadConfig(syntastic#util#bufVar(buf, 'cuda_config_file'),
         \ 'args_after': '-Xcompiler -fsyntax-only',
         \ 'tail_after': syntastic#c#NullOutput() })
 

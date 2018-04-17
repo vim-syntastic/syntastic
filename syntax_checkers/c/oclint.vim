@@ -14,10 +14,6 @@ if exists('g:loaded_syntastic_c_oclint_checker')
 endif
 let g:loaded_syntastic_c_oclint_checker = 1
 
-if !exists('g:syntastic_oclint_config_file')
-    let g:syntastic_oclint_config_file = '.syntastic_oclint_config'
-endif
-
 if !exists('g:syntastic_c_oclint_sort')
     let g:syntastic_c_oclint_sort = 1
 endif
@@ -26,8 +22,10 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 function! SyntaxCheckers_c_oclint_GetLocList() dict
+    let buf = bufnr('')
+
     let makeprg = self.makeprgBuild({
-        \ 'post_args': '-- -c ' . syntastic#c#ReadConfig(g:syntastic_oclint_config_file) })
+        \ 'post_args': '-- -c ' . syntastic#c#ReadConfig(syntastic#util#bufVar(buf, 'oclint_config_file') })
 
     let errorformat =
         \ '%E%f:%l:%c: fatal error: %m,' .
