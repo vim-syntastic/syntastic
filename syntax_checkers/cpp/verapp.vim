@@ -16,16 +16,14 @@ if exists('g:loaded_syntastic_cpp_verapp_checker')
 endif
 let g:loaded_syntastic_cpp_verapp_checker = 1
 
-if !exists('g:syntastic_verapp_config_file')
-    let g:syntastic_verapp_config_file = '.syntastic_verapp_config'
-endif
-
 let s:save_cpo = &cpo
 set cpo&vim
 
 function! SyntaxCheckers_cpp_verapp_GetLocList() dict
+    let buf = bufnr('')
+
     let makeprg = self.makeprgBuild({
-        \ 'args': syntastic#c#ReadConfig(g:syntastic_verapp_config_file),
+        \ 'args': syntastic#c#ReadConfig(syntastic#util#bufVar(buf, 'verapp_config_file')),
         \ 'args_after': '--show-rule --no-duplicate -S -c -' })
 
     let errorformat = '%f:%t:%l:%c:%m'

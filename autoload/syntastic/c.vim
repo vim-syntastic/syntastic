@@ -228,7 +228,7 @@ function! s:_get_cflags(ft, ck, opts) abort " {{{2
     endif
 
     " add optional config file parameters
-    let config_file = s:_get_checker_var('g', a:ft, a:ck, 'config_file', '.syntastic_' . a:ft . '_config')
+    let config_file = s:_get_checker_var('b', a:ft, a:ck, 'config_file', s:_get_checker_var('g', a:ft, a:ck, 'config_file', ''))
     let flags .= ' ' . syntastic#c#ReadConfig(config_file)
 
     if b_cflags ==# '' && (a:ft ==# 'c' || a:ft ==# 'cpp') && !s:_get_checker_var('g', a:ft, a:ck, 'no_include_search', 0)

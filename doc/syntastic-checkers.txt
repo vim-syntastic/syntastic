@@ -234,7 +234,7 @@ linter.
 
                                                *'g:syntastic_ada_config_file'*
 Type: string
-Default: ".syntastic_ada_config"
+Default: unset
 File containing additional compilation flags to be passed to the linter, one
 option per line (cf. |syntastic-config-files|).
 
@@ -453,7 +453,7 @@ assembler. Set it to something like "-mtune=native": >
 <
                                                *'g:syntastic_asm_config_file'*
 Type: string
-Default: ".syntastic_asm_config"
+Default: unset
 File containing additional compilation flags to be passed to the assembler,
 one option per line (see |syntastic-config-files|).
 
@@ -559,7 +559,7 @@ Additionally:
 
                                             *'g:syntastic_avrgcc_config_file'*
 Type: string
-Default: ".syntastic_avrgcc_config"
+Default: unset
 File containing compilation flags (such as defines or include directories),
 one option per line (cf. |syntastic-config-files|).
 
@@ -600,7 +600,7 @@ Additionally:
 
                                        *'g:syntastic_clang_check_config_file'*
 Type: string
-Default: ".syntastic_clang_check_config"
+Default: unset
 File containing compilation flags (such as defines or include directories),
 one option per line (cf. |syntastic-config-files|).
 
@@ -651,7 +651,7 @@ Additionally:
 
                                         *'g:syntastic_clang_tidy_config_file'*
 Type: string
-Default: ".syntastic_clang_tidy_config"
+Default: unset
 File containing compilation flags (such as defines or include directories),
 one option per line (cf. |syntastic-config-files|).
 
@@ -693,7 +693,7 @@ Additionally:
 
                                           *'g:syntastic_cppcheck_config_file'*
 Type: string
-Default: ".syntastic_cppcheck_config"
+Default: unset
 File containing compilation flags (such as defines or include directories),
 one option per line (cf. |syntastic-config-files|).
 
@@ -782,7 +782,7 @@ linter.
 
                                                  *'g:syntastic_c_config_file'*
 Type: string
-Default: ".syntastic_c_config"
+Default: unset
 File containing additional compilation flags to be passed to the linter, one
 option per line (cf. |syntastic-config-files|).
 
@@ -876,7 +876,7 @@ Additionally:
 
                                             'g:syntastic_oclint_config_file'
 Type: string
-Default: ".syntastic_oclint_config"
+Default: unset
 File containing compilation flags (such as defines or include directories),
 one option per line (cf. |syntastic-config-files|).
 
@@ -917,7 +917,7 @@ Additionally:
 
                                            *'g:syntastic_pc_lint_config_file'*
 Type: string
-Default: "options.lnt"
+Default: unset
 Name of an indirect (.lnt) file. A file with that name is looked up in the
 current directory and in parent directories; first such file found is used.
 
@@ -942,7 +942,7 @@ Additionally:
 
                                             *'g:syntastic_sparse_config_file'*
 Type: string
-Default: ".syntastic_sparse_config"
+Default: unset
 File containing compilation flags (such as defines or include directories),
 one option per line (cf. |syntastic-config-files|).
 
@@ -975,7 +975,7 @@ Additionally:
 
                                             *'g:syntastic_splint_config_file'*
 Type: string
-Default: ".syntastic_splint_config"
+Default: unset
 File containing project-specific options to be passed to "Splint"
 (such as defines or include directories), one option per line (cf.
 |syntastic-config-files|).
@@ -1035,7 +1035,7 @@ Additionally:
 
                                             'g:syntastic_avrgcc_config_file'
 Type: string
-Default: ".syntastic_avrgcc_config"
+Default: unset
 File containing compilation flags (such as defines or include directories),
 one option per line (cf. |syntastic-config-files|).
 
@@ -1062,7 +1062,7 @@ Additionally:
 
                                        'g:syntastic_clang_check_config_file'
 Type: string
-Default: ".syntastic_clang_check_config"
+Default: unset
 file containing compilation flags (such as defines or include directories),
 one option per line (cf. |syntastic-config-files|).
 
@@ -1113,7 +1113,7 @@ Additionally:
 
                                         'g:syntastic_clang_tidy_config_file'
 Type: string
-Default: ".syntastic_clang_tidy_config"
+Default: unset
 File containing compilation flags (such as defines or include directories),
 one option per line (cf. |syntastic-config-files|).
 
@@ -1155,7 +1155,7 @@ Additionally:
 
                                           'g:syntastic_cppcheck_config_file'
 Type: string
-Default: ".syntastic_cppcheck_config"
+Default: unset
 File containing compilation flags (such as defines or include directories),
 one option per line (cf. |syntastic-config-files|).
 
@@ -1280,7 +1280,7 @@ linter.
 
                                                *'g:syntastic_cpp_config_file'*
 Type: string
-Default: ".syntastic_cpp_config"
+Default: unset
 File containing additional compilation flags to be passed to the linter, one
 option per line (cf. |syntastic-config-files|).
 
@@ -1363,7 +1363,7 @@ Additionally:
 
                                             'g:syntastic_oclint_config_file'
 Type: string
-Default: ".syntastic_oclint_config"
+Default: unset
 File containing compilation flags (such as defines or include directories),
 one option per line (cf. |syntastic-config-files|).
 
@@ -1405,7 +1405,7 @@ Additionally:
 
                                            'g:syntastic_pc_lint_config_file'
 Type: string
-Default: "options.lnt"
+Default: unset
 Name of an indirect (.lnt) file. A file with that name is looked up in the
 current directory and in parent directories; first such file found is used.
 
@@ -1431,7 +1431,7 @@ Additionally:
 
                                             *'g:syntastic_verapp_config_file'*
 Type: string
-Default: ".syntastic_verapp_config"
+Default: unset
 File containing additional compilation flags to be passed to the linter, one
 option per line (cf. |syntastic-config-files|).
 
@@ -1562,7 +1562,7 @@ Compilation flags (such as "-std=cobol2002") to be passed to the linter.
 
                                              *'g:syntastic_cobol_config_file'*
 Type: string
-Default: ".syntastic_cobol_config"
+Default: unset
 File containing additional compilation flags to be passed to the linter, one
 option per line (cf. |syntastic-config-files|).
 
@@ -1905,7 +1905,7 @@ Example: >
 <
                                               *'g:syntastic_cuda_config_file'*
 Type: string
-Default: ".syntastic_cuda_config"
+Default: unset
 File containing additional compilation flags to be passed to the linter, one
 option per line (cf. |syntastic-config-files|).
 
@@ -1950,7 +1950,7 @@ linter.
 
                                                  *'g:syntastic_d_config_file'*
 Type: string
-Default: ".syntastic_d_config"
+Default: unset
 File containing additional compilation flags to be passed to the linter, one
 option per line (cf. |syntastic-config-files|).
 
@@ -2342,7 +2342,7 @@ Compilation flags (such as "-std=f95") to be passed to the linter.
 
                                            *'g:syntastic_fortran_config_file'*
 Type: string
-Default: ".syntastic_fortran_config"
+Default: unset
 File containing additional compilation flags to be passed to the linter, one
 option per line (cf. |syntastic-config-files|).
 
@@ -4349,7 +4349,7 @@ linter.
 
                                               *'g:syntastic_objc_config_file'*
 Type: string
-Default: ".syntastic_objc_config"
+Default: unset
 File containing additional compilation flags to be passed to the linter, one
 option per line (cf. |syntastic-config-files|).
 
@@ -4413,7 +4413,7 @@ Additionally:
 
                                             'g:syntastic_oclint_config_file'
 Type: string
-Default: ".syntastic_oclint_config"
+Default: unset
 File containing compilation flags (such as defines or include directories),
 one option per line (cf. |syntastic-config-files|).
 
@@ -4460,7 +4460,7 @@ linter.
 
                                             *'g:syntastic_objcpp_config_file'*
 Type: string
-Default: ".syntastic_objcpp_config"
+Default: unset
 File containing additional compilation flags to be passed to the linter, one
 option per line (cf. |syntastic-config-files|).
 
@@ -4524,7 +4524,7 @@ Additionally:
 
                                             'g:syntastic_oclint_config_file'
 Type: string
-Default: ".syntastic_oclint_config"
+Default: unset
 File containing compilation flags (such as defines or include directories),
 one option per line (cf. |syntastic-config-files|).
 
@@ -7030,7 +7030,7 @@ linter.
 
                                            *'g:syntastic_verilog_config_file'*
 Type: string
-Default: ".syntastic_verilog_config"
+Default: unset
 File containing additional compilation flags to be passed to the linter, one
 option per line (cf. |syntastic-config-files|).
 

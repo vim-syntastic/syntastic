@@ -15,18 +15,16 @@ if exists('g:loaded_syntastic_c_avrgcc_checker')
 endif
 let g:loaded_syntastic_c_avrgcc_checker = 1
 
-if !exists('g:syntastic_avrgcc_config_file')
-    let g:syntastic_avrgcc_config_file = '.syntastic_avrgcc_config'
-endif
-
 let s:save_cpo = &cpo
 set cpo&vim
 
 let s:opt_x = { 'c': 'c', 'cpp': 'c++' }
 
 function! SyntaxCheckers_c_avrgcc_GetLocList() dict
+    let buf = bufnr('')
+
     let makeprg = self.makeprgBuild({
-        \ 'args_before': syntastic#c#ReadConfig(g:syntastic_avrgcc_config_file),
+        \ 'args_before': syntastic#c#ReadConfig(syntastic#util#bufVar(buf, 'avrgcc_config_file')),
         \ 'args_after': '-x ' . get(s:opt_x, self.getFiletype(), '')  . ' -fsyntax-only' })
 
     let errorformat =

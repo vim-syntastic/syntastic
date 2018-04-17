@@ -14,10 +14,6 @@ if exists('g:loaded_syntastic_c_clang_check_checker')
 endif
 let g:loaded_syntastic_c_clang_check_checker = 1
 
-if !exists('g:syntastic_clang_check_config_file')
-    let g:syntastic_clang_check_config_file = '.syntastic_clang_check_config'
-endif
-
 if !exists('g:syntastic_c_clang_check_sort')
     let g:syntastic_c_clang_check_sort = 1
 endif
@@ -26,10 +22,12 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 function! SyntaxCheckers_c_clang_check_GetLocList() dict
+    let buf = bufnr('')
+
     let makeprg = self.makeprgBuild({
         \ 'post_args':
         \   '-- ' .
-        \   syntastic#c#ReadConfig(g:syntastic_clang_check_config_file) . ' ' .
+        \   syntastic#c#ReadConfig(syntastic#util#bufVar(buf, 'clang_check_config_file')) . ' ' .
         \   '-fshow-column ' .
         \   '-fshow-source-location ' .
         \   '-fno-caret-diagnostics ' .
