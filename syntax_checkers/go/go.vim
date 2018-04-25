@@ -88,7 +88,7 @@ function! SyntaxCheckers_go_go_GetLocList() dict
         \ 'defaults': {'type': 'e'} })
 
     if cleanup
-        call delete(fnamemodify(bufname(buf), ':p:h') . syntastic#util#Slash() . fnamemodify(bufname(buf), ':p:h') . '.test')
+        call delete(fnamemodify(bufname(buf), ':p:h') . syntastic#util#Slash() . fnamemodify(bufname(buf), ':p:h:t') . '.test')
     endif
 
     return errors
