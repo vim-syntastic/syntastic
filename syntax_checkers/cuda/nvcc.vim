@@ -37,7 +37,7 @@ function! SyntaxCheckers_cuda_nvcc_GetLocList() dict
 
     call extend(build_opts, {
         \ 'args_before': arch_flag . ' --cuda -O0 -I .',
-        \ 'args': syntastic#c#ReadConfig(syntastic#util#bufVar(buf, 'cuda_config_file'),
+        \ 'args': syntastic#c#ReadConfig(syntastic#util#bufVar(buf, 'cuda_config_file')),
         \ 'args_after': '-Xcompiler -fsyntax-only',
         \ 'tail_after': syntastic#c#NullOutput() })
 
