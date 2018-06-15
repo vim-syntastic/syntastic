@@ -2516,6 +2516,7 @@ The following checkers are available for Go (filetype "go"):
     4. Go Meta Linter...........|syntastic-go-gometalinter|
     5. gotype...................|syntastic-go-gotype|
     6. vet......................|syntastic-go-govet|
+    7. golangci-lint............|syntastic-go-golangci-lint|
 
 ------------------------------------------------------------------------------
 1. go                                                        *syntastic-go-go*
@@ -2619,6 +2620,16 @@ Note~
 
 This checker doesn't call the "makeprgBuild()" function, and thus it ignores
 the usual 'g:syntastic_go_govet_<option>' variables.
+
+------------------------------------------------------------------------------
+7. golangci-lint                                  *syntastic-go-golangci-lint*
+
+Name:        golangci-lint
+Maintainer:  Elvis Macak <elvis@lnmpy.com>
+
+See the tool's documentation for details:
+
+    https://github.com/golangci/golangci-lint
 
 ==============================================================================
 SYNTAX CHECKERS FOR HAML                             *syntastic-checkers-haml*
