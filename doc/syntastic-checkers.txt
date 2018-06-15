@@ -2512,11 +2512,11 @@ The following checkers are available for Go (filetype "go"):
 
     1. go.......................|syntastic-go-go|
     2. gofmt....................|syntastic-go-gofmt|
-    3. Golint...................|syntastic-go-golint|
-    4. Go Meta Linter...........|syntastic-go-gometalinter|
-    5. gotype...................|syntastic-go-gotype|
-    6. vet......................|syntastic-go-govet|
-    7. golangci-lint............|syntastic-go-golangci-lint|
+    3. GolangCI-Lint............|syntastic-go-golangci_lint|
+    4. Golint...................|syntastic-go-golint|
+    5. Go Meta Linter...........|syntastic-go-gometalinter|
+    6. gotype...................|syntastic-go-gotype|
+    7. vet......................|syntastic-go-govet|
 
 ------------------------------------------------------------------------------
 1. go                                                        *syntastic-go-go*
@@ -2565,7 +2565,22 @@ autocommand towards that end: >
     autocmd FileType go autocmd BufWritePre <buffer> Fmt
 <
 ------------------------------------------------------------------------------
-3. Golint                                                *syntastic-go-golint*
+3. GolangCI-Lint                                  *syntastic-go-golangci_lint*
+
+Name:        golangci_lint
+Maintainer:  Elvis Macak <elvis@lnmpy.com>
+
+GolangCI-Lint is a linters aggregator. See the project's page for details:
+
+    https://github.com/golangci/golangci-lint
+
+Checker options~
+
+This checker is initialised using the "makeprgBuild()" function and thus it
+accepts the standard options described at |syntastic-config-makeprg|.
+
+------------------------------------------------------------------------------
+4. Golint                                                *syntastic-go-golint*
 
 Name:        golint
 Maintainer: Hiroshi Ioka <hirochachacha@gmail.com>
@@ -2580,7 +2595,7 @@ This checker is initialised using the "makeprgBuild()" function and thus it
 accepts the standard options described at |syntastic-config-makeprg|.
 
 ------------------------------------------------------------------------------
-4. Go Meta Linter                                  *syntastic-go-gometalinter*
+5. Go Meta Linter                                  *syntastic-go-gometalinter*
 
 Name:        gometalinter
 Maintainer: Joshua Rubin <joshua@rubixconsulting.com>
@@ -2597,7 +2612,7 @@ This checker is initialised using the "makeprgBuild()" function and thus it
 accepts the standard options described at |syntastic-config-makeprg|.
 
 ------------------------------------------------------------------------------
-5. gotype                                                *syntastic-go-gotype*
+6. gotype                                                *syntastic-go-gotype*
 
 Name:        gotype
 Maintainer:  luz <ne.tetewi@gmail.com>
@@ -2607,7 +2622,7 @@ See the tool's documentation for details:
     https://godoc.org/golang.org/x/tools/cmd/gotype
 
 ------------------------------------------------------------------------------
-6. vet                                                    *syntastic-go-govet*
+7. vet                                                    *syntastic-go-govet*
 
 Name:        govet
 Maintainer:  Kamil Kisiel <kamil@kamilkisiel.net>
@@ -2620,16 +2635,6 @@ Note~
 
 This checker doesn't call the "makeprgBuild()" function, and thus it ignores
 the usual 'g:syntastic_go_govet_<option>' variables.
-
-------------------------------------------------------------------------------
-7. golangci-lint                                  *syntastic-go-golangci-lint*
-
-Name:        golangci-lint
-Maintainer:  Elvis Macak <elvis@lnmpy.com>
-
-See the tool's documentation for details:
-
-    https://github.com/golangci/golangci-lint
 
 ==============================================================================
 SYNTAX CHECKERS FOR HAML                             *syntastic-checkers-haml*
