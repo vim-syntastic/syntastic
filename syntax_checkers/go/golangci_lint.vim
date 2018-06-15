@@ -19,9 +19,7 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 function! SyntaxCheckers_go_golangci_lint_GetLocList() dict
-    let makeprg = self.makeprgBuild({ 
-        \ 'args_before':  'run',
-        \ })
+    let makeprg = self.makeprgBuild({ 'args_before':  'run' })
 
     let errorformat =
         \ '%f:%l:%c: %m,' .
@@ -32,7 +30,6 @@ function! SyntaxCheckers_go_golangci_lint_GetLocList() dict
         \ 'errorformat': errorformat,
         \ 'defaults': {'type': 'e'},
         \ 'subtype': 'Style' })
-
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
