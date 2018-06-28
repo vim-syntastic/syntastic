@@ -15,6 +15,10 @@ if exists('g:loaded_syntastic_nasm_nasm_checker')
 endif
 let g:loaded_syntastic_nasm_nasm_checker = 1
 
+if !exists('g:syntastic_nasm_format')
+    let g:syntastic_nasm_format = 'elf64'
+endif
+
 let s:save_cpo = &cpo
 set cpo&vim
 
@@ -22,6 +26,7 @@ function! SyntaxCheckers_nasm_nasm_GetLocList() dict
     let buf = bufnr('')
     let makeprg = self.makeprgBuild({
         \ 'args_after': '-X gnu' .
+        \       ' -f ' . g:syntastic_nasm_format .
         \       ' -I ' . syntastic#util#shescape(fnamemodify(bufname(buf), ':p:h') . syntastic#util#Slash()) .
         \       ' ' . syntastic#c#NullOutput() })
 
