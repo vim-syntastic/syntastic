@@ -313,7 +313,7 @@ function! g:SyntasticLoclist.show() abort " {{{2
     call syntastic#log#debug(g:_SYNTASTIC_DEBUG_NOTIFICATIONS, 'loclist: show')
     call self.setloclist(0)
 
-    if !self.isEmpty()
+    if !&previewwindow && !self.isEmpty()
         let num = winnr()
         execute 'lopen ' . syntastic#util#var('loc_list_height')
         if num != winnr()
