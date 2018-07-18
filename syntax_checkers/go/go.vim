@@ -60,7 +60,7 @@ function! SyntaxCheckers_go_go_GetLocList() dict
         let cleanup = 1
     else
         let cmd = 'build'
-        let opts = syntastic#util#bufVar(buf, 'go_go_build_args', s:go_new ? '-buildmode=default' : '')
+        let opts = syntastic#util#bufVar(buf, 'go_go_build_args', s:go_new ? '-buildmode=default -o=/dev/null' : '')
         let cleanup = 0
     endif
     let opt_str = (type(opts) != type('') || opts !=# '') ? join(syntastic#util#argsescape(opts)) : opts
