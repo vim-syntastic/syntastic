@@ -24,7 +24,8 @@ function! SyntaxCheckers_markdown_remark_lint_GetLocList() dict
           \'args_before': '--quiet --no-stdout --no-color' })
 
     let errorformat =
-        \ '  %l:%c  %tarning  %m'
+        \ '%\s%#%l:%c%\s%#%tarning  %m  remark-lint,' .
+        \ '%\s%#%l:%c-%.%#%\s%#%tarning  %m  remark-lint'
 
     return SyntasticMake({
         \ 'makeprg': makeprg,
