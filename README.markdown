@@ -535,9 +535,6 @@ a look at [ghcmod-vim][ghcmod], [jedi-vim][jedi], [python-mode][python_mode], [v
 [vim]:              http://www.vim.org/
 [vimgo]:            https://github.com/fatih/vim-go
 [virtualenv]:       https://virtualenv.pypa.io/en/stable/
-[vnu]:              http://about.validator.nu/
-[vnu_jar]:          https://github.com/validator/validator/releases/latest
-[vnu_server]:       http://validator.github.io/validator/#standalone
 [vundle]:           https://github.com/gmarik/Vundle.vim
 [ycm]:              http://valloric.github.io/YouCompleteMe/
 
