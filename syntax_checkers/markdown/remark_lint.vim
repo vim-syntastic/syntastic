@@ -20,18 +20,27 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 function! SyntaxCheckers_markdown_remark_lint_GetLocList() dict
-    let makeprg = self.makeprgBuild({ 
-          \'args_before': '--quiet --no-stdout --no-color' })
+    let makeprg = self.makeprgBuild({ 'args_before': '--quiet --no-stdout --no-color' })
 
     let errorformat =
-        \ '%\s%#%l:%c%\s%#%tarning  %m  remark-lint,' .
-        \ '%\s%#%l:%c-%.%#%\s%#%tarning  %m  remark-lint'
+        \ '%f:%t:%l:%c:%n:%m,' .
+        \ '%f:%t:%l:%c:%m'
 
-    return SyntasticMake({
+    let loclist = SyntasticMake({
         \ 'makeprg': makeprg,
         \ 'errorformat': errorformat,
-        \ 'defaults': {'bufnr': bufnr('')},
+        \ 'preprocess': 'remark_lint',
+        \ 'subtype': 'Style',
         \ 'returns': [0] })
+
+    for e in loclist
+        if get(e, 'col', 0) && get(e, 'nr', 0)
+            let e['hl'] = '\%>' . (e['col'] - 1) . 'c\%<' . (e['nr'] + 1) . 'c'
+            let e['nr'] = 0
+        endif
+    endfor
+
+    return loclist
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({

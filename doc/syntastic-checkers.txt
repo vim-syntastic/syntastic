@@ -4090,7 +4090,8 @@ The following checkers are available for Markdown (filetype "markdown"):
 
     1. Markdown lint tool.......|syntastic-markdown-mdl|
     2. proselint................|syntastic-markdown-proselint|
-    3. textlint.................|syntastic-markdown-textlint|
+    3. remark-lint..............|syntastic-markdown-remark_lint|
+    4. textlint.................|syntastic-markdown-textlint|
 
 ------------------------------------------------------------------------------
 1. Markdown lint tool                                 *syntastic-markdown-mdl*
@@ -4148,7 +4149,29 @@ See also: |syntastic-asciidoc-proselint|, |syntastic-help-proselint|,
 |syntastic-text-proselint|, |syntastic-xhtml-proselint|.
 
 ------------------------------------------------------------------------------
-3. textlint                                      *syntastic-markdown-textlint*
+3. remark-lint                                *syntastic-markdown-remark_lint*
+
+Name:        remark_lint
+Maintainer:  Tim Carry <tim@pixelastic.com>
+
+"remark-lint" is a code style linter for Markdown files.  See the project's
+page at GitHub for details:
+
+     https://github.com/remarkjs/remark-lint
+
+Note~
+
+Syntastic can't check whether "remark-lint" is installed properly beyond the
+existence of an executable named "remark". Please make sure "remark-lint" is
+installed and working properly before attempting to use it with syntastic.
+
+Checker options~
+
+This checker is initialised using the "makeprgBuild()" function and thus it
+accepts the standard options described at |syntastic-config-makeprg|.
+
+------------------------------------------------------------------------------
+4. textlint                                      *syntastic-markdown-textlint*
 
 Name:        textlint
 Maintainer:  LCD 47 <lcd047@gmail.com>
