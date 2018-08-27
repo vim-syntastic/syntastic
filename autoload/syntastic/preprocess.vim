@@ -388,6 +388,49 @@ function! syntastic#preprocess#rparse(errors) abort " {{{2
     return out
 endfunction " }}}2
 
+function! syntastic#preprocess#remark_lint(errors) abort " {{{2
+    let out = []
+    let fname = expand('%', 1)
+
+    for err in a:errors
+        if err =~# '\m^\f\+$'
+            let fname = err
+
+        elseif err =~# '\v^\s+\d+:\d+\s+%(warning|error)\s.*remark-lint$'
+            let parts = matchlist(err, '\v^\s+(\d+):(\d+)\s+([ew])\S+\s+(.{-})\s+(\S+)\s+remark-lint$')
+            if len(parts) >6
+                let line    = str2nr(parts[1])
+                let col     = str2nr(parts[2])
+                let type    = parts[3]
+                let message = parts[4] . ' [' . parts[5] . ']'
+                call add(out, join([fname, type, line, col, message], ':'))
+            else
+                call syntastic#log#warn('checker markdown/remark_lint: unrecognized error item ' . string(err))
+            endif
+
+        elseif err =~# '\v^\s+\d+:\d+-\d+:\d+\s+%(warning|error)\s.*remark-lint$'
+            let parts = matchlist(err, '\v^\s+(\d+):(\d+)-(\d+):(\d+)\s+([ew])\S+\s+(.{-})\s+(\S+)\s+remark-lint$')
+            if len(parts) >8
+                let line1   = str2nr(parts[1])
+                let col1    = str2nr(parts[2])
+                let line2   = str2nr(parts[3])
+                let col2    = str2nr(parts[4]) - 1
+                let type    = parts[5]
+                let message = parts[6] . ' [' . parts[7] . ']'
+                if line1 == line2
+                    call add(out, join([fname, type, line1, col1, col2, message], ':'))
+                else
+                    call add(out, join([fname, type, line1, col1, message], ':'))
+                endif
+            else
+                call syntastic#log#warn('checker markdown/remark_lint: unrecognized error item ' . string(err))
+            endif
+        endif
+    endfor
+
+    return out
+endfunction " }}}2
+
 function! syntastic#preprocess#scss_lint(errors) abort " {{{2
     let errs = join(a:errors, '')
     if errs ==# ''
