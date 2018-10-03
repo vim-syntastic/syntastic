@@ -33,8 +33,7 @@ function! SyntaxCheckers_ada_gcc_GetLocList() dict
         \     '%f:%l:%c: %m,' .
         \     '%f:%l: %m',
         \ 'main_flags': '-c -x ada -gnats -gnatef',
-        \ 'header_flags': '-x ada -gnats -gnatef',
-        \ 'header_names': '\.ads$' })
+        \ 'header_flags': '-x ada -gnats -gnatef' })
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
