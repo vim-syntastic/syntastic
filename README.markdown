@@ -1,49 +1,4 @@
-                   ,
-                  / \,,_  .'|
-               ,{{| /}}}}/_.'            _____________________________________________
-              }}}}` '{{'  '.            /                                             \
-            {{{{{    _   ;, \          /            Ladies and Gentlemen,              \
-         ,}}}}}}    /o`\  ` ;)        |                                                |
-        {{{{{{   /           (        |                 this is ...                    |
-        }}}}}}   |            \       |                                                |
-       {{{{{{{{   \            \      |                                                |
-       }}}}}}}}}   '.__      _  |     |    _____             __             __  _      |
-       {{{{{{{{       /`._  (_\ /     |   / ___/__  ______  / /_____ ______/ /_(_)____ |
-        }}}}}}'      |    //___/   --=:   \__ \/ / / / __ \/ __/ __ `/ ___/ __/ / ___/ |
-    jgs `{{{{`       |     '--'       |  ___/ / /_/ / / / / /_/ /_/ (__  ) /_/ / /__   |
-         }}}`                         | /____/\__, /_/ /_/\__/\__,_/____/\__/_/\___/   |
-                                      |      /____/                                    |
-                                      |                                               /
-                                       \_____________________________________________/
 
-
-- - -
-1. [Introduction](#introduction)  
-2. [Installation](#installation)  
-2.1. [Requirements](#requirements)  
-2.2. [Installing syntastic with Pathogen](#installpathogen)  
-3. [Recommended settings](#settings)  
-4. [FAQ](#faq)  
-4.1. [I installed syntastic but it isn't reporting any errors...](#faqinfo)  
-4.2. [Syntastic supports several checkers for my filetype, how do I tell it which one(s) to use?](#faqcheckers)  
-4.3. [How can I run checkers for "foreign" filetypes against the current file?](#faqforeign)  
-4.4. [I have enabled multiple checkers for the current filetype. How can I display all errors from all checkers together?](#faqaggregate)  
-4.5. [How can I pass additional arguments to a checker?](#faqargs)  
-4.6. [I run a checker and the location list is not updated...](#faqloclist)  
-4.6. [I run`:lopen` or `:lwindow` and the error window is empty...](#faqloclist)  
-4.7. [How can I jump between the different errors without using the location list at the bottom of the window?](#faqlnext)  
-4.8. [The error window is closed automatically when I `:quit` the current buffer but not when I `:bdelete` it?](#faqbdelete)  
-4.9. [My favourite checker needs to load a configuration file from the project's root rather than the current directory...](#faqconfig)  
-4.10. [What is the difference between syntax checkers and style checkers?](#faqstyle)  
-4.11. [How can I check scripts written for different versions of Python?](#faqpython)  
-4.12. [How can I check scripts written for different versions of Ruby?](#faqruby)  
-4.13. [The `perl` checker has stopped working...](#faqperl)  
-4.14. [What happened to the `rustc` checker?](#faqrust)  
-4.15. [What happened to the `tsc` checker?](#faqtsc)  
-4.16. [What happened to the `xcrun` checker?](#faqxcrun)  
-5. [Resources](#otherresources)  
-
-- - -
 
 <a name="introduction"></a>
 
