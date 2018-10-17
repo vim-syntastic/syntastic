@@ -39,6 +39,7 @@ function! SyntaxCheckers_c_checkpatch_GetLocList() dict
     let makeprg = self.makeprgBuild({ 'args_after': '--no-summary --no-tree --terse --file' })
 
     let errorformat =
+        \ '%W%f:%l: CHECK: %m,' .
         \ '%f:%l: %tARNING: %m,' .
         \ '%f:%l: %tRROR: %m'
 
