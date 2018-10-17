@@ -36,7 +36,13 @@ function! SyntaxCheckers_c_checkpatch_IsAvailable() dict
 endfunction
 
 function! SyntaxCheckers_c_checkpatch_GetLocList() dict
-    let makeprg = self.makeprgBuild({ 'args_after': '--no-summary --no-tree --terse --file' })
+
+    if !exists('g:syntastic_c_checkpatch_tree')
+        silent! call syntastic#util#system(self.getExec() . ' </dev/null')
+        let g:syntastic_c_checkpatch_tree = v:shell_error ? 0 : 1
+    endif
+
+    let makeprg = self.makeprgBuild({ 'args_after': '--no-summary --terse --file' . (g:syntastic_c_checkpatch_tree ? '' : ' --no-tree') })
 
     let errorformat =
         \ '%W%f:%l: CHECK: %m,' .
