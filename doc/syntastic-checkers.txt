@@ -579,6 +579,15 @@ Checker options~
 This checker is initialised using the "makeprgBuild()" function and thus it
 accepts the standard options described at |syntastic-config-makeprg|.
 
+Additionally:
+
+                                            *'g:syntastic_c_checkpatch_tree'*
+Type: boolean
+Default: unset
+When set to '0', will call checkpatch with '--no-tree' which disables warnings
+that require the full Linux source tree to run. If unset, Syntastic will
+attempt to autodetect if tree is available.
+
 ------------------------------------------------------------------------------
 3. ClangCheck                                        *syntastic-c-clang_check*
 
