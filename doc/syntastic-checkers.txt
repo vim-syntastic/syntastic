@@ -1476,7 +1476,7 @@ Maintainer:  Doug Ireton
 "Foodcritic" is a linter for "Chef" cookbooks (http://www.opscode.com/chef/).
 See the project's page for more information:
 
-    http://acrmp.github.io/foodcritic/
+    http://www.foodcritic.io/
 
 Checker options~
 
