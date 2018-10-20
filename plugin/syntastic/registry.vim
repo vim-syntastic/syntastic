@@ -114,6 +114,7 @@ let s:_DEFAULT_CHECKERS = {
         \ 'yang':          ['pyang'],
         \ 'yara':          ['yarac'],
         \ 'z80':           ['z80syntaxchecker'],
+        \ 'zig':           ['zig'],
         \ 'zpt':           ['zptlint'],
         \ 'zsh':           ['zsh'],
     \ }
