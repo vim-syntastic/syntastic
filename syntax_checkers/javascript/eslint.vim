@@ -33,6 +33,10 @@ function! SyntaxCheckers_javascript_eslint_IsAvailable() dict
     if !executable(self.getExec())
         return 0
     endif
+
+    let version_line = split(syntastic#util#system(self.getExecEscaped() . ' --version'), "\n")[-1]
+    call self.setVersion(syntastic#util#parseVersion(version_line))
+
     return g:syntastic_javascript_eslint_generic || syntastic#util#versionIsAtLeast(self.getVersion(), [0, 1])
 endfunction
 
