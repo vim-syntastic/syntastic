@@ -251,6 +251,44 @@ function! syntastic#preprocess#killEmpty(errors) abort " {{{2
     return filter(copy(a:errors), 'v:val !=# ""')
 endfunction " }}}2
 
+function! syntastic#preprocess#lynt(errors) abort " {{{2
+    let errs = join(a:errors, '')
+    if errs ==# ''
+        return []
+    endif
+
+    let json = s:_decode_JSON(errs)
+
+    let out = []
+    if type(json) == type([])
+        for err in json
+            if type(err) == type({}) && type(get(err, 'filePath')) == type('') && type(get(err, 'errors')) == type([])
+                let fname = get(err, 'filePath')
+
+                for e in get(err, 'errors')
+                    if type(e) == type({})
+                        try
+                            let line = e['line']
+                            let col  = e['column']
+                            let ecol = line == get(e, 'endLine') ? get(e, 'endColumn') : 0
+                            let msg  = e['message'] . ' [' . e['ruleName'] . ']'
+
+                            cal add(out, join([fname, line, col, ecol, msg], ':'))
+                        catch /\m^Vim\%((\a\+)\)\=:E716/
+                            call syntastic#log#warn('checker javascript/lynt: unrecognized error item ' . string(e))
+                        endtry
+                    else
+                        call syntastic#log#warn('checker javascript/lynt unrecognized error item ' . string(e))
+                    endif
+                endfor
+            endif
+        endfor
+    else
+        call syntastic#log#warn('checker javascript/lynt unrecognized error format (crashed checker?)')
+    endif
+    return out
+endfunction " }}}2
+
 function! syntastic#preprocess#perl(errors) abort " {{{2
     let out = []
 
