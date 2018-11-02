@@ -3408,9 +3408,10 @@ The following checkers are available for JavaScript (filetype "javascript"):
     7. JSHint...................|syntastic-javascript-jshint|
     8. JSLint...................|syntastic-javascript-jslint|
     9. JSXHint..................|syntastic-javascript-jsxhint|
-    10. mixedindentlint.........|syntastic-javascript-mixedindentlint|
-    11. standard................|syntastic-javascript-standard|
-    12. tern-lint...............|syntastic-javascript-tern_lint|
+    10. Lynt....................|syntastic-javascript-lynt|
+    11. mixedindentlint.........|syntastic-javascript-mixedindentlint|
+    12. standard................|syntastic-javascript-standard|
+    13. tern-lint...............|syntastic-javascript-tern_lint|
 
 ------------------------------------------------------------------------------
 1. Closure Compiler                     *syntastic-javascript-closurecompiler*
@@ -3640,7 +3641,7 @@ syntastic to call "JSLint" with no options.
 ------------------------------------------------------------------------------
 9. JSXHint                                      *syntastic-javascript-jsxhint*
 
-Name:        JSXHint
+Name:        jsxhint
 Maintainer:  Thomas Boyt <me@thomasboyt.com>
 
 "JSXHint" is a wrapper around JSHint (http://jshint.com/) for
@@ -3706,7 +3707,29 @@ To get around this, "Syntastic-React" can be used as a replacement for
     https://github.com/jaxbot/syntastic-react
 
 ------------------------------------------------------------------------------
-10. mixedindentlint                     *syntastic-javascript-mixedindentlint*
+10. Lynt                                           *syntastic-javascript-lynt*
+
+Name:        lynt
+Maintainer:  LCD 47 <lcd047@gmail.com>
+
+"Lynt" is a JavaScript linter with support for TypeScript, Flow, and React.
+See the project's page for more information:
+
+    https://github.com/saadq/lynt
+
+Checker options~
+
+This checker is initialised using the "makeprgBuild()" function and thus it
+accepts the standard options described at |syntastic-config-makeprg|.
+
+Note~
+
+Automatically fixing errors (option "--fix") is not supported.
+
+See also: |syntastic-typescript-lynt|.
+
+------------------------------------------------------------------------------
+11. mixedindentlint                     *syntastic-javascript-mixedindentlint*
 
 Name:        mixedindentlint
 Maintainer:  Payton Swick <payton@foolord.com>
@@ -3724,7 +3747,7 @@ accepts the standard options described at |syntastic-config-makeprg|.
 See also: |syntastic-css-mixedindentlint|, |syntastic-scss-mixedindentlint|.
 
 ------------------------------------------------------------------------------
-11. standard                                   *syntastic-javascript-standard*
+12. standard                                   *syntastic-javascript-standard*
 
 Name:        standard
 Maintainer:  LCD 47 <lcd047@gmail.com>
@@ -3758,7 +3781,7 @@ example to use happiness (https://github.com/JedWatson/happiness) instead of
     let g:syntastic_javascript_standard_generic = 1
 <
 ------------------------------------------------------------------------------
-12. tern-lint                                 *syntastic-javascript-tern_lint*
+13. tern-lint                                 *syntastic-javascript-tern_lint*
 
 Name:        tern_lint
 Maintainer:  LCD 47 <lcd047@gmail.com>
@@ -6913,7 +6936,8 @@ SYNTAX CHECKERS FOR TYPESCRIPT                 *syntastic-checkers-typescript*
 The following checkers are available for TypeScript (filetype "typescript"):
 
     1. ESLint...................|syntastic-typescript-eslint|
-    2. TSLint...................|syntastic-typescript-tslint|
+    2. Lynt.....................|syntastic-typescript-lynt|
+    3. TSLint...................|syntastic-typescript-tslint|
 
 ------------------------------------------------------------------------------
 1. ESLint                                        *syntastic-typescript-eslint*
@@ -6944,7 +6968,29 @@ See also: |syntastic-html-eslint|, |syntastic-javascript-eslint|,
 |syntastic-vue-eslint|.
 
 ------------------------------------------------------------------------------
-2. TSLint                                        *syntastic-typescript-tslint*
+2. Lynt                                            *syntastic-typescript-lynt*
+
+Name:        lynt
+Maintainer:  LCD 47 <lcd047@gmail.com>
+
+"Lynt" is a JavaScript linter with support for TypeScript, Flow, and React.
+See the project's page for more information:
+
+    https://github.com/saadq/lynt
+
+Checker options~
+
+This checker is initialised using the "makeprgBuild()" function and thus it
+accepts the standard options described at |syntastic-config-makeprg|.
+
+Note~
+
+Automatically fixing errors (option "--fix") is not supported.
+
+See also: |syntastic-javascript-lynt|.
+
+------------------------------------------------------------------------------
+3. TSLint                                        *syntastic-typescript-tslint*
 
 Name:        tslint
 Maintainer:  Seon-Wook Park <seon.wook@swook.net>
