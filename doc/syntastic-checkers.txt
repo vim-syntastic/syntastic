@@ -5023,6 +5023,13 @@ Checker options~
 This checker is initialised using the "makeprgBuild()" function and thus it
 accepts the standard options described at |syntastic-config-makeprg|.
 
+Note~
+
+You probably also need a plugin to set |filetype| for Puppet files, such as
+"vim-puppet":
+
+    https://github.com/rodjek/vim-puppet
+
 ------------------------------------------------------------------------------
 2. puppet-lint                                   *syntastic-puppet-puppetlint*
 
@@ -5039,6 +5046,13 @@ Checker options~
 
 This checker is initialised using the "makeprgBuild()" function and thus it
 accepts the standard options described at |syntastic-config-makeprg|.
+
+Note~
+
+You probably also need a plugin to set |filetype| for Puppet files, such as
+"vim-puppet":
+
+    https://github.com/rodjek/vim-puppet
 
 ==============================================================================
 SYNTAX CHECKERS FOR PYTHON                         *syntastic-checkers-python*
