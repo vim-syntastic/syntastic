@@ -107,6 +107,7 @@ SYNTAX CHECKERS BY LANGUAGE                          *syntastic-checkers-lang*
     Solidity.................................|syntastic-checkers-solidity|
     SQL......................................|syntastic-checkers-sql|
     Stylus...................................|syntastic-checkers-stylus|
+    SVG......................................|syntastic-checkers-svg|
 
     Tcl......................................|syntastic-checkers-tcl|
     TeX......................................|syntastic-checkers-tex|
@@ -6562,6 +6563,86 @@ Note~
 You might also find useful the "vim-stylus" plugin:
 
     https://github.com/wavded/vim-stylus
+
+==============================================================================
+SYNTAX CHECKERS FOR SVG                               *syntastic-checkers-svg*
+
+The following checkers are available for SVG (filetype "svg"):
+
+    1. validator................|syntastic-svg-validator|
+
+------------------------------------------------------------------------------
+1. Validator                                         *syntastic-svg-validator*
+
+Name:        validator
+Maintainer:  LCD 47 <lcd047@gmail.com>
+
+"Validator" is a non-DTD-based HTML linter.  See the project's page for
+details:
+
+    https://validator.github.io/validator/
+
+As a syntastic linter, you can validate your files against the online service
+(see https://validator.nu/), or you can install "vnu.jar":
+
+    https://github.com/validator/validator/releases/latest
+
+then run it as a HTTP server: >
+    $ java -Xss512k -cp /path/to/vnu.jar nu.validator.servlet.Main 8888
+<
+Requirement~
+
+This checker uses cURL:
+
+    http://curl.haxx.se/
+
+Checker options~
+
+                                             *'g:syntastic_svg_validator_api'*
+Type: string
+Default: "https://validator.nu/"
+URL of the service to use for checking. Leave it to the default to run the
+checks against "https://validator.nu/", or set it to "http://localhost:8888/"
+if you have "vnu.jar" installed, and you're running it as a standalone HTTP
+server. See:
+
+    https://validator.github.io/validator/#standalone
+
+                                          *'g:syntastic_svg_validator_parser'*
+Type: string
+Default: empty
+Parser to use. Legal values are: "xml", "xmldtd", "html", "html5", "html4",
+and "html4tr". Set it to "html5" to check HTML5 files. References:
+
+    https://wiki.whatwg.org/wiki/Validator.nu_Common_Input_Parameters#parser
+
+                                        *'g:syntastic_svg_validator_nsfilter'*
+Type: string
+Default: empty
+Sets the "nsfilter" for the parser. See:
+
+    https://wiki.whatwg.org/wiki/Validator.nu_Common_Input_Parameters#nsfilter
+
+                                            *'g:syntastic_svg_validator_exec'*
+Type: string
+Default: "curl"
+Path to the "cURL" executable. Override it with a full path if your "cURL" is
+not installed in a standard location.
+
+This checker doesn't call the "makeprgBuild()" function, and thus it ignores
+the usual 'g:syntastic_svg_validator_<option>' variables. The only exception
+is 'g:syntastic_svg_validator_exec', which can be used to override the path
+to the "cURL" executable.
+
+Note~
+
+Non-zero exit codes from "cURL" are typically network errors, and are signaled
+by syntastic with messages such as: >
+    syntastic: error: checker svg/validator returned abnormal status 26
+<
+You can lookup the meaning of these codes in cURL's manual:
+
+    https://curl.haxx.se/docs/manpage.html#EXIT
 
 ==============================================================================
 SYNTAX CHECKERS FOR TCL                               *syntastic-checkers-tcl*

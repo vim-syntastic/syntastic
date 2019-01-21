@@ -35,6 +35,7 @@ function! SyntaxCheckers_html_validator_GetLocListForType(exec_escaped, type)
     let fname = syntastic#util#shescape(fnamemodify(bufname(buf), ':p'))
     let media_type =
         \ a:type ==# 'html' ? 'text/html' :
+        \ a:type ==# 'svg' ? 'image/svg+xml' :
         \ a:type ==# 'xhtml' ? 'application/xhtml+xml' :
         \ ''
     let makeprg = a:exec_escaped . ' -q -L -s --compressed -F out=gnu -F asciiquotes=yes' .
