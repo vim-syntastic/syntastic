@@ -30,13 +30,16 @@ endif
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! SyntaxCheckers_html_validator_GetLocList() dict
+function! SyntaxCheckers_html_validator_GetLocListForType(exec_escaped, type)
     let buf = bufnr('')
     let fname = syntastic#util#shescape(fnamemodify(bufname(buf), ':p'))
-    let makeprg = self.getExecEscaped() . ' -q -L -s --compressed -F out=gnu -F asciiquotes=yes' .
-        \ (g:syntastic_html_validator_parser !=# '' ? ' -F parser=' . g:syntastic_html_validator_parser : '') .
-        \ (g:syntastic_html_validator_nsfilter !=# '' ? ' -F nsfilter=' . g:syntastic_html_validator_nsfilter : '') .
-        \ ' -F doc=@' . fname . '\;type=text/html\;filename=' . fname . ' ' . g:syntastic_html_validator_api
+    let media_type =
+        \ a:type ==# 'html' ? 'text/html' :
+        \ ''
+    let makeprg = a:exec_escaped . ' -q -L -s --compressed -F out=gnu -F asciiquotes=yes' .
+        \ (g:syntastic_{a:type}_validator_parser !=# '' ? ' -F parser=' . g:syntastic_{a:type}_validator_parser : '') .
+        \ (g:syntastic_{a:type}_validator_nsfilter !=# '' ? ' -F nsfilter=' . g:syntastic_{a:type}_validator_nsfilter : '') .
+        \ ' -F doc=@' . fname . (media_type !=# '' ? '\;type=' . media_type : '') . '\;filename=' . fname . ' ' . g:syntastic_{a:type}_validator_api
 
     let errorformat =
         \ '%E"%f":%l: %trror: %m,' .
@@ -57,6 +60,10 @@ function! SyntaxCheckers_html_validator_GetLocList() dict
         \ 'errorformat': errorformat,
         \ 'preprocess': 'validator',
         \ 'returns': [0] })
+endfunction
+
+function! SyntaxCheckers_html_validator_GetLocList() dict
+    return SyntaxCheckers_html_validator_GetLocListForType(self.getExecEscaped(), 'html')
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
