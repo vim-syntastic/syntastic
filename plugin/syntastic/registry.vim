@@ -92,6 +92,7 @@ let s:_DEFAULT_CHECKERS = {
         \ 'solidity':      ['solc'],
         \ 'sql':           ['sqlint'],
         \ 'stylus':        ['stylint'],
+        \ 'svg':           [],
         \ 'tcl':           ['nagelfar'],
         \ 'tex':           ['lacheck', 'chktex'],
         \ 'texinfo':       ['makeinfo'],
