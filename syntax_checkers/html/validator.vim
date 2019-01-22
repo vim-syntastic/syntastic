@@ -15,28 +15,48 @@ if exists('g:loaded_syntastic_html_validator_checker')
 endif
 let g:loaded_syntastic_html_validator_checker=1
 
-if !exists('g:syntastic_html_validator_api')
-    let g:syntastic_html_validator_api = 'https://validator.nu/'
-endif
-
-if !exists('g:syntastic_html_validator_parser')
-    let g:syntastic_html_validator_parser = ''
-endif
-
-if !exists('g:syntastic_html_validator_nsfilter')
-    let g:syntastic_html_validator_nsfilter = ''
-endif
-
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! SyntaxCheckers_html_validator_GetLocList() dict
+" Constants {{{1
+
+let s:DEFAULTS = {
+    \ 'api':      'https://validator.nu/',
+    \ 'nsfilter': '',
+    \ 'parser':   '',
+    \ 'schema':   '' }
+
+let s:CONTENT_TYPE = {
+    \ 'html': 'text/html',
+    \ 'svg':  'image/svg+xml',
+    \ 'xhtm': 'application/xhtml+xml' }
+
+" }}}1
+
+" @vimlint(EVL101, 1, l:api)
+" @vimlint(EVL101, 1, l:nsfilter)
+" @vimlint(EVL101, 1, l:parser)
+" @vimlint(EVL101, 1, l:schema)
+function! SyntaxCheckers_html_validator_GetLocList() dict " {{{1
     let buf = bufnr('')
+    let type = self.getFiletype()
     let fname = syntastic#util#shescape(fnamemodify(bufname(buf), ':p'))
+
+    for key in keys(s:DEFAULTS)
+        let l:{key} = syntastic#util#var(type . '_validator_' . key, get(s:DEFAULTS, key))
+    endfor
+    let ctype = get(s:CONTENT_TYPE, type, '')
+
+    " vint: -ProhibitUsingUndeclaredVariable
     let makeprg = self.getExecEscaped() . ' -q -L -s --compressed -F out=gnu -F asciiquotes=yes' .
-        \ (g:syntastic_html_validator_parser !=# '' ? ' -F parser=' . g:syntastic_html_validator_parser : '') .
-        \ (g:syntastic_html_validator_nsfilter !=# '' ? ' -F nsfilter=' . g:syntastic_html_validator_nsfilter : '') .
-        \ ' -F doc=@' . fname . '\;type=text/html\;filename=' . fname . ' ' . g:syntastic_html_validator_api
+        \ (nsfilter !=# '' ? ' -F nsfilter=' . syntastic#util#shescape(nsfilter) : '') .
+        \ (parser !=# '' ? ' -F parser=' . parser : '') .
+        \ (schema !=# '' ? ' -F schema=' . syntastic#util#shescape(schema) : '') .
+        \ ' -F doc=@' . fname .
+            \ (ctype !=# '' ? '\;type=' . ctype : '') .
+            \ '\;filename=' . fname .
+        \ ' ' . api
+    " vint: ProhibitUsingUndeclaredVariable
 
     let errorformat =
         \ '%E"%f":%l: %trror: %m,' .
@@ -57,7 +77,11 @@ function! SyntaxCheckers_html_validator_GetLocList() dict
         \ 'errorformat': errorformat,
         \ 'preprocess': 'validator',
         \ 'returns': [0] })
-endfunction
+endfunction " }}}1
+" @vimlint(EVL101, 0, l:schema)
+" @vimlint(EVL101, 0, l:parser)
+" @vimlint(EVL101, 0, l:nsfilter)
+" @vimlint(EVL101, 0, l:api)
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'html',
