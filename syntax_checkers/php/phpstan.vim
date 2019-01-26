@@ -29,7 +29,7 @@ function! SyntaxCheckers_php_phpstan_GetLocList() dict
     let makeprg = self.makeprgBuild({
         \ 'exe_after': 'analyse',
         \ 'args': '--level=5',
-        \ 'args_after': '--errorFormat raw' })
+        \ 'args_after': '--error-format raw' })
 
     let errorformat = '%f:%l:%m'
 
