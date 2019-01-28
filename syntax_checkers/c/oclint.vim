@@ -25,7 +25,7 @@ function! SyntaxCheckers_c_oclint_GetLocList() dict
     let buf = bufnr('')
 
     let makeprg = self.makeprgBuild({
-        \ 'post_args': '-- -c ' . syntastic#c#ReadConfig(syntastic#util#bufVar(buf, 'oclint_config_file') })
+        \ 'post_args': '-- -c ' . syntastic#c#ReadConfig(syntastic#util#bufVar(buf, 'oclint_config_file'))})
 
     let errorformat =
         \ '%E%f:%l:%c: fatal error: %m,' .
