@@ -15,18 +15,52 @@ if exists('g:loaded_syntastic_html_w3_checker')
 endif
 let g:loaded_syntastic_html_w3_checker = 1
 
-if !exists('g:syntastic_html_w3_api')
-    let g:syntastic_html_w3_api = 'http://validator.w3.org/check'
-endif
-
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! SyntaxCheckers_html_w3_GetLocList() dict
+" Constants {{{1
+
+let s:DEFAULTS = {
+    \ 'api':      'https://validator.w3.org/check',
+    \ 'doctype':  '' }
+
+let s:CONTENT_TYPE = {
+    \ 'html': 'text/html',
+    \ 'svg':  'image/svg+xml',
+    \ 'xhtml': 'application/xhtml+xml' }
+
+" }}}1
+
+" @vimlint(EVL101, 1, l:api)
+" @vimlint(EVL101, 1, l:doctype)
+" @vimlint(EVL104, 1, l:doctype)
+function! SyntaxCheckers_html_w3_GetLocList() dict " {{{1
     let buf = bufnr('')
-    let makeprg = self.getExecEscaped() . ' -q -L -s -F output=json ' .
-        \ '-F uploaded_file=@' . syntastic#util#shescape(fnamemodify(bufname(buf), ':p')) . '\;type=text/html ' .
-        \ g:syntastic_html_w3_api
+    let type = self.getFiletype()
+    let fname = syntastic#util#shescape(fnamemodify(bufname(buf), ':p'))
+
+    for key in keys(s:DEFAULTS)
+        let l:{key} = syntastic#util#var(type . '_w3_' . key, get(s:DEFAULTS, key))
+    endfor
+    let ctype = get(s:CONTENT_TYPE, type, '')
+
+    " SVG is detected as generic XML if doctype is unspecified.
+    " Default "SVG 1.1" with "Only if missing" (fbd=1) to use DTD if present.
+    let fbd = ''
+    if type ==# 'svg' && doctype ==# ''
+        let doctype = 'SVG 1.1'
+        let fbd = '1'
+    endif
+
+    " vint: -ProhibitUsingUndeclaredVariable
+    let makeprg = self.getExecEscaped() . ' -q -L -s --compressed -F output=json' .
+        \ (doctype !=# '' ? ' -F doctype=' . syntastic#util#shescape(doctype) : '') .
+        \ (fbd !=# '' ? ' -F fbd=' . fbd : '') .
+        \ ' -F uploaded_file=@' . fname .
+            \ (ctype !=# '' ? '\;type=' . ctype : '') .
+            \ '\;filename=' . fname .
+        \ ' ' . api
+    " vint: ProhibitUsingUndeclaredVariable
 
     let errorformat =
         \ '%A %\+{,' .
@@ -50,7 +84,10 @@ function! SyntaxCheckers_html_w3_GetLocList() dict
     endfor
 
     return loclist
-endfunction
+endfunction " }}}1
+" @vimlint(EVL104, 0, l:doctype)
+" @vimlint(EVL101, 0, l:doctype)
+" @vimlint(EVL101, 0, l:api)
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'html',
