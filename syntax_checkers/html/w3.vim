@@ -40,7 +40,7 @@ function! SyntaxCheckers_html_w3_GetLocList() dict " {{{1
     let type = self.getFiletype()
     let fname = syntastic#util#shescape(fnamemodify(bufname(buf), ':p'))
     let api = syntastic#util#var(type . '_w3_api', 'https://validator.w3.org/check')
-.
+
     for key in keys(s:DEFAULTS[type])
         let l:{key} = syntastic#util#var(type . '_w3_' . key, get(s:DEFAULTS[type], key))
     endfor
