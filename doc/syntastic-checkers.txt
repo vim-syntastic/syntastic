@@ -3197,7 +3197,7 @@ run the checks against "https://validator.w3.org/", or set it to
 
                                                *'g:syntastic_html_w3_doctype'*
 Type: string
-Default: ""
+Default: "HTML5"
 Name of the document type definition to use for checking.  If unspecified, the
 type is detected from the file content.  Currently supported values for HTML:
 
@@ -6697,7 +6697,7 @@ See also: |syntastic-html-validator|, |syntastic-xhtml-validator|.
 2. W3                                                      *syntastic-svg-w3*
 
 Name:        w3
-Maintainer:  Martin Grenfell <martin.grenfell@gmail.com>
+Maintainer:  Kevin Locke <kevin@kevinlocke.name>
 
 "W3" is the W3C Markup Validator for SVG.  See the project's page for
 details:
@@ -6727,10 +6727,9 @@ run the checks against "https://validator.w3.org/", or set it to
 
                                                 *'g:syntastic_svg_w3_doctype'*
 Type: string
-Default: "SVG 1.1" (if not detected from DTD)
-Name of the document type definition to use for checking.  If unspecified, the
-type is detected from a Document Type Declaration, if present, or "SVG 1.1" is
-used.  Currently supported values for SVG:
+Default: "SVG 1.1"
+Name of the document type definition to use for checking. Currently supported
+values for SVG:
 
   - SVG 1.0
   - SVG 1.1
@@ -7768,7 +7767,7 @@ See also: |syntastic-html-validator|, |syntastic-svg-validator|.
 5. W3                                                     *syntastic-xhtml-w3*
 
 Name:        w3
-Maintainer:  Martin Grenfell <martin.grenfell@gmail.com>
+Maintainer:  Kevin Locke <kevin@kevinlocke.name>
 
 "W3" is the W3C Markup Validator for XHTML.  See the project's page for
 details:
@@ -7798,7 +7797,7 @@ run the checks against "https://validator.w3.org/", or set it to
 
                                               *'g:syntastic_xhtml_w3_doctype'*
 Type: string
-Default: ""
+Default: "XHTML 1.1"
 Name of the document type definition to use for checking.  If unspecified, the
 type is detected from the file content.  Currently supported values for XHTML:
 
