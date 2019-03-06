@@ -42,7 +42,7 @@ function! SyntaxCheckers_javascript_eslint_GetLocList() dict
             \ "'--config ' . syntastic#util#shexpand(OLD_VAR)")
     endif
 
-    let makeprg = self.makeprgBuild({ 'args_before': (g:syntastic_javascript_eslint_generic ? '' : '-f compact') })
+    let makeprg = self.makeprgBuild({ 'args_before': (g:syntastic_javascript_eslint_generic ? '' : '-f --compact') })
 
     let errorformat =
         \ '%E%f: line %l\, col %c\, Error - %m,' .
