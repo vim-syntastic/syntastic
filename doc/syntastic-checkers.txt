@@ -2749,6 +2749,8 @@ details:
 
     http://community.haskell.org/~ndm/hlint/
 
+Syntastic requires "hlint" version 1.9.4 or later.
+
 Checker options~
 
 This checker is initialised using the "makeprgBuild()" function and thus it
