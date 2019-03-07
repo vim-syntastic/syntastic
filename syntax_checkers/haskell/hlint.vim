@@ -16,6 +16,7 @@ set cpo&vim
 function! SyntaxCheckers_haskell_hlint_GetLocList() dict
     let buf = bufnr('')
     let makeprg = self.makeprgBuild({
+        \ 'args_before': '--color=never',
         \ 'fname': syntastic#util#shescape(fnamemodify(bufname(buf), ':p')) })
 
     let errorformat =
