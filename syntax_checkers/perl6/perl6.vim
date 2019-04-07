@@ -25,11 +25,24 @@
 " Reference:
 "
 " - https://docs.perl6.org/programs/00-running
+"
+" If the Rakudo compiler version is before version 2018.08:
+"
+"   let g:syntastic_perl6_enviroment_variable = "RAKUDO_EXCEPTIONS_HANDLER"
+"
+" Reference:
+"
+" - https://docs.perl6.org/programs/03-environment-variables.html
+"
 
 if exists('g:loaded_syntastic_perl6_perl6_checker')
     finish
 endif
 let g:loaded_syntastic_perl6_perl6_checker = 1
+
+if !exists('g:syntastic_perl6_enviroment_variable')
+    let g:syntastic_perl6_enviroment_variable="PERL6_EXCEPTIONS_HANDLER"
+endif
 
 if !exists('g:syntastic_perl6_lib_path')
     let g:syntastic_perl6_lib_path = []
@@ -88,7 +101,7 @@ function! SyntaxCheckers_perl6_perl6_GetLocList() dict " {{{1
     return SyntasticMake({
         \ 'makeprg': makeprg,
         \ 'errorformat': errorformat,
-        \ 'env': { 'RAKUDO_EXCEPTIONS_HANDLER': 'JSON' },
+        \ 'env': { g:syntastic_perl6_enviroment_variable: 'JSON' },
         \ 'defaults': { 'bufnr': bufnr(''), 'type': 'E' },
         \ 'returns': [0, 1],
         \ 'preprocess': 'perl6',
