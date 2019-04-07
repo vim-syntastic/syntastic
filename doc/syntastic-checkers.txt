@@ -4815,7 +4815,8 @@ project's page for details:
 
     http://rakudo.org/
 
-Syntastic requires Rakudo Star release 2017.01 or later.
+Syntastic requires Rakudo Star release 2018.08 or later. Syntastic can't
+enforce this, since it can't reliably compare Rakudo Star versions.
 
 Security~
 
