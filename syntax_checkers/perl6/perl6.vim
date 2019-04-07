@@ -88,7 +88,7 @@ function! SyntaxCheckers_perl6_perl6_GetLocList() dict " {{{1
     return SyntasticMake({
         \ 'makeprg': makeprg,
         \ 'errorformat': errorformat,
-        \ 'env': { 'RAKUDO_EXCEPTIONS_HANDLER': 'JSON' },
+        \ 'env': { 'PERL6_EXCEPTIONS_HANDLER': 'JSON', 'RAKUDO_EXCEPTIONS_HANDLER': 'JSON' },
         \ 'defaults': { 'bufnr': bufnr(''), 'type': 'E' },
         \ 'returns': [0, 1],
         \ 'preprocess': 'perl6',
