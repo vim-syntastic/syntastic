@@ -25,13 +25,6 @@
 " Reference:
 "
 " - https://docs.perl6.org/programs/00-running
-"
-" If the Rakudo compiler version is before version 2018.08:
-"
-"   let g:syntastic_perl6_enviroment_variable = "RAKUDO_EXCEPTIONS_HANDLER"
-"
-" Reference:
-"
 " - https://docs.perl6.org/programs/03-environment-variables.html
 "
 
@@ -41,7 +34,7 @@ endif
 let g:loaded_syntastic_perl6_perl6_checker = 1
 
 if !exists('g:syntastic_perl6_enviroment_variable')
-    let g:syntastic_perl6_enviroment_variable="PERL6_EXCEPTIONS_HANDLER"
+   let g:syntastic_perl6_enviroment_variable = "PERL6_EXCEPTIONS_HANDLER"
 endif
 
 if !exists('g:syntastic_perl6_lib_path')

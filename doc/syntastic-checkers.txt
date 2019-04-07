@@ -4851,6 +4851,13 @@ You can also set the "PERL6LIB" environment variable to a colon-separated
 list of add-hoc include paths. These paths will then be added to the ones
 prescribed by |'g:syntastic_perl6_lib_path'|.
 
+                                     *'g:syntastic_perl6_enviroment_variable'*
+Type: string 
+Default: "PERL6_EXCEPTIONS_HANDLER"
+If the Rakudo compiler version is before version 2018.08
+(https://docs.perl6.org/programs/03-environment-variables):
+   `let g:syntastic_perl6_enviroment_variable = "RAKUDO_EXCEPTIONS_HANDLER"`
+
 Note~
 
 At the time of this writing the support for JSON error output of the "Rakudo"
