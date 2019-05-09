@@ -4953,7 +4953,7 @@ Name:        phpstan
 Maintainer:  Przepompownia <przepompownia@users.noreply.github.com>
 
 "PHPStan" focuses on finding errors in your code without actually running it.
-See the project's page iat GitHub for details:
+See the project's page at GitHub for details:
 
     https://github.com/phpstan/phpstan
 
