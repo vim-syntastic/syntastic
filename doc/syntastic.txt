@@ -2,7 +2,7 @@
 *syntastic*
 
 
-                    It's a bird! It's a plane! ZOMG It's ... ~
+                    It's a bird! It's a plane! OMG It's ... ~
 
                    _____             __             __  _      ~
                   / ___/__  ______  / /_____ ______/ /_(_)____ ~
