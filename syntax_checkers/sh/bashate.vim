@@ -21,6 +21,7 @@ function! SyntaxCheckers_sh_bashate_GetLocList() dict
     let makeprg = self.makeprgBuild({})
 
     let errorformat =
+        \ '%\m%f:%l:%c: %t%n %m,' .
         \ '%A%\s%#[%t] E%n: %m,' .
         \ '%EE%n: %m,' .
         \ '%Z - %f%\s%\+: L%l,' .
