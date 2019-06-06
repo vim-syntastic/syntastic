@@ -100,6 +100,7 @@ SYNTAX CHECKERS BY LANGUAGE                          *syntastic-checkers-lang*
 
     SASS.....................................|syntastic-checkers-sass|
     Scala....................................|syntastic-checkers-scala|
+    Scilla...................................|syntastic-checkers-scilla|
     SCSS.....................................|syntastic-checkers-scss|
     Sh.......................................|syntastic-checkers-sh|
     Slim.....................................|syntastic-checkers-slim|
@@ -6162,6 +6163,27 @@ full path.
 Type: string
 Default: "java"
 Path to the "java" executable.
+
+==============================================================================
+SYNTAX CHECKERS FOR SCILLA                           *syntastic-checkers-scilla*
+
+The following checkers are available for Scilla (filetype "scilla"):
+
+    1. scillachecker............|syntastic-scala-scillachecker|
+
+------------------------------------------------------------------------------
+1. scillachecker                                *syntastic-scilla-scillachecker*
+
+Name:        scillachecker
+Maintainer:  Bogdan Gusiev <agresso@gmail.com>
+
+scilla-checker is an official tool from Zilliqa to check scilla syntax and 
+type errors. For more info see: https://scilla.readthedocs.io/en/latest/scilla-checker.html
+
+Checker options~
+
+This checker is initialised using the "makeprgBuild()" function and thus it
+accepts the standard options described at |syntastic-config-makeprg|.
 
 ==============================================================================
 SYNTAX CHECKERS FOR SCSS                             *syntastic-checkers-scss*
