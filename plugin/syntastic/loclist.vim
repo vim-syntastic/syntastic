@@ -340,6 +340,46 @@ function! g:SyntasticLoclist.show() abort " {{{2
     endif
 endfunction " }}}2
 
+" jump to nearest item in the location list based on current line
+function! g:SyntasticLoclist.nearest() abort " {{{2
+    " short-circuits
+    let ll = getloclist('')
+    let l_ll = len(ll)
+    if l_ll == 0
+        return
+    endif
+    let pos = getpos('.')
+    let ln = pos[1]
+    if exists("b:syntastic_loclist_line") && b:syntastic_loclist_line == ln
+        return
+    endif
+    let b:syntastic_loclist_line = ln
+
+    " determine current nearest, assume last as optimum start, correct
+    " and account for multiple items per line
+    let idx = 0
+    if exists("b:syntastic_loclist_pos")
+        let idx = min([l_ll - 1, b:syntastic_loclist_pos - 1])
+    endif
+    while get(ll, idx).lnum >= ln && idx > 0
+        let idx -= 1
+    endwhile
+    while get(ll, idx).lnum < ln && idx < l_ll - 1
+        let idx += 1
+    endwhile
+    let idx_next = ((abs(get(ll, max([idx - 1, 0])).lnum - ln) <= abs(get(ll,idx).lnum - ln)) ? max([idx - 1, 0]) : idx)
+
+    " set
+    if idx_next < 0 || (exists("b:syntastic_loclist_pos") && b:syntastic_loclist_pos == idx_next + 1)
+        return
+    endif
+    let b:syntastic_loclist_pos = idx_next + 1
+    exe "ll " . b:syntastic_loclist_pos
+
+    " cleanup
+    call setpos(".", pos)
+endfunction " }}}2
+
 " }}}1
 
 " Public functions {{{1

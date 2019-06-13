@@ -499,6 +499,14 @@ When set to 3 the error window will be automatically opened when errors are
 detected, but not closed automatically. >
     let g:syntastic_auto_loc_list = 3
 <
+                                                 *'syntastic_loc_list_follow'*
+Type: integer
+Default: 0
+Use this option to enable automatic updating of the selected location list
+item based on the current cursor position. The nearest item with be selected.
+>
+    let g:syntastic_loc_list_follow = 1
+<
                                                  *'syntastic_loc_list_height'*
 Type: integer
 Default: 10

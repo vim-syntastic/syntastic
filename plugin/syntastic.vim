@@ -101,6 +101,7 @@ let g:_SYNTASTIC_DEFAULTS = {
         \ 'id_checkers':              1,
         \ 'ignore_extensions':        '\c\v^([gx]?z|lzma|bz2)$',
         \ 'ignore_files':             [],
+        \ 'loc_list_follow':          0,
         \ 'loc_list_height':          10,
         \ 'nested_autocommands':      0,
         \ 'quiet_messages':           {},
@@ -436,6 +437,13 @@ function! s:UpdateErrors(buf, auto_invoked, checker_names) abort " {{{2
         endif
     endif
     " }}}3
+
+    " loclist follow nearest {{{3
+    if syntastic#util#var('loc_list_follow')
+        autocmd CursorMoved <buffer> call g:SyntasticLoclist.nearest()
+    endif
+    " }}}3
+
 
     call s:notifiers.refresh(loclist)
 endfunction " }}}2
