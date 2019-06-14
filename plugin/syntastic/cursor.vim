@@ -33,6 +33,8 @@ function! g:SyntasticCursorNotifier.reset(loclist) abort " {{{2
     autocmd! syntastic CursorMoved
     unlet! b:syntastic_private_messages
     let b:syntastic_private_line = -1
+    unlet! b:syntastic_loclist_pos
+    unlet! b:syntastic_loclist_line
 endfunction " }}}2
 " @vimlint(EVL103, 0, a:loclist)
 
@@ -86,6 +88,10 @@ function! SyntasticRefreshCursor() abort " {{{2
         else
             echo
         endif
+    endif
+
+    if exists('b:syntastic_loclist_pos')
+        call g:SyntasticLoclist.nearest()
     endif
 endfunction " }}}2
 

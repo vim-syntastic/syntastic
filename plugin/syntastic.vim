@@ -438,9 +438,9 @@ function! s:UpdateErrors(buf, auto_invoked, checker_names) abort " {{{2
     endif
     " }}}3
 
-    " loclist follow nearest {{{3
+    " enable loclist follow {{{3
     if syntastic#util#var('loc_list_follow')
-        autocmd CursorMoved <buffer> call g:SyntasticLoclist.nearest()
+        let b:syntastic_loclist_pos = 1
     endif
     " }}}3
 
