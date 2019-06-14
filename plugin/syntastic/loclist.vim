@@ -371,6 +371,8 @@ function! g:SyntasticLoclist.nearest() abort " {{{2
         while idx + 1 < l_ll && get(ll, idx + 1).lnum == ln
             if abs(get(ll, idx + 1).col - col) < abs(get(ll, idx).col - col)
                 let idx += 1
+            elseif col > get(ll, idx + 1).col
+                let idx += 1
             else
                 break
             endif
