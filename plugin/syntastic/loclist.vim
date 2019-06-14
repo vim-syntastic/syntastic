@@ -350,13 +350,11 @@ function! g:SyntasticLoclist.nearest() abort " {{{2
     endif
     let pos = getpos('.')
     let ln = pos[1]
-    if exists("b:syntastic_loclist_line") && b:syntastic_loclist_line == ln
-        return
-    endif
-    let b:syntastic_loclist_line = ln
 
     " determine current nearest, assume last as optimum start, correct
     " and account for multiple items per line
+
+    " line
     let idx = 0
     if exists("b:syntastic_loclist_pos")
         let idx = min([l_ll - 1, b:syntastic_loclist_pos - 1])
@@ -367,7 +365,18 @@ function! g:SyntasticLoclist.nearest() abort " {{{2
     while get(ll, idx).lnum < ln && idx < l_ll - 1
         let idx += 1
     endwhile
-    let idx_next = ((abs(get(ll, max([idx - 1, 0])).lnum - ln) <= abs(get(ll,idx).lnum - ln)) ? max([idx - 1, 0]) : idx)
+    " column
+    if get(ll, idx).lnum == ln
+        let col = pos[2]
+        while idx + 1 < l_ll && get(ll, idx + 1).lnum == ln
+            if abs(get(ll, idx + 1).col - col) < abs(get(ll, idx).col - col)
+                let idx += 1
+            else
+                break
+            endif
+        endwhile
+    endif
+    let idx_next = ((abs(get(ll, max([idx - 1, 0])).lnum - ln) < abs(get(ll,idx).lnum - ln)) ? max([idx - 1, 0]) : idx)
 
     " set
     if idx_next < 0 || (exists("b:syntastic_loclist_pos") && b:syntastic_loclist_pos == idx_next + 1)
@@ -375,8 +384,6 @@ function! g:SyntasticLoclist.nearest() abort " {{{2
     endif
     let b:syntastic_loclist_pos = idx_next + 1
     exe "ll " . b:syntastic_loclist_pos
-
-    " cleanup
     call setpos(".", pos)
 endfunction " }}}2
 
