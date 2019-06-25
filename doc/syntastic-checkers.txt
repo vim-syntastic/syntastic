@@ -2516,8 +2516,9 @@ The following checkers are available for Go (filetype "go"):
     3. GolangCI-Lint............|syntastic-go-golangci_lint|
     4. Golint...................|syntastic-go-golint|
     5. Go Meta Linter...........|syntastic-go-gometalinter|
-    6. gotype...................|syntastic-go-gotype|
-    7. vet......................|syntastic-go-govet|
+    6. gopls....................|syntastic-go-gopls|
+    7. gotype...................|syntastic-go-gotype|
+    8. vet......................|syntastic-go-govet|
 
 ------------------------------------------------------------------------------
 1. go                                                        *syntastic-go-go*
@@ -2613,7 +2614,25 @@ This checker is initialised using the "makeprgBuild()" function and thus it
 accepts the standard options described at |syntastic-config-makeprg|.
 
 ------------------------------------------------------------------------------
-6. gotype                                                *syntastic-go-gotype*
+6. gopls                                                  *syntastic-go-gopls*
+
+Name:       gopls
+Maintainer: Jean-Philippe Guérard <jean-philippe.guerard@tigreraye.org>
+
+gopls (pronounced: "go please") is an implementation of the Language Server
+Protocol (LSP) server for Go. It can be used as a standalone linter.
+See the Go wiki for details:
+
+    https://github.com/golang/go/wiki/gopls
+
+Note~
+
+Initial releases of gopls did not allow use as a standalone linter. This
+checker will only work with releases of gopls that allow the use of
+the "version" and "check" commands.
+
+------------------------------------------------------------------------------
+7. gotype                                                *syntastic-go-gotype*
 
 Name:        gotype
 Maintainer:  luz <ne.tetewi@gmail.com>
@@ -2623,7 +2642,7 @@ See the tool's documentation for details:
     https://godoc.org/golang.org/x/tools/cmd/gotype
 
 ------------------------------------------------------------------------------
-7. vet                                                    *syntastic-go-govet*
+8. vet                                                    *syntastic-go-govet*
 
 Name:        govet
 Maintainer:  Kamil Kisiel <kamil@kamilkisiel.net>
