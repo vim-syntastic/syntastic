@@ -32,7 +32,7 @@ function! SyntaxCheckers_go_gopls_GetLocList() dict
 
     let errorformat =
         \ '%f:%l:%c: %m,' .
-        \ '%f:%l:%c-%\\d%\\+: %m,' .
+        \ '%f:%l:%c-%\d%\+: %m,' .
         \ '%-G%.%#'
 
     return SyntasticMake({
