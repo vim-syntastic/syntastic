@@ -536,7 +536,7 @@ a look at [ghcmod-vim][ghcmod], [jedi-vim][jedi], [python-mode][python_mode], [v
 [vimgo]:            https://github.com/fatih/vim-go
 [virtualenv]:       https://virtualenv.pypa.io/en/stable/
 [vundle]:           https://github.com/gmarik/Vundle.vim
-[ycm]:              http://valloric.github.io/YouCompleteMe/
+[ycm]:              https://github.com/ycm-core/YouCompleteMe
 
 <!--
 vim:tw=79:sw=4:
