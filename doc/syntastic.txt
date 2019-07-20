@@ -1175,7 +1175,7 @@ https://github.com/jmcantrell/vim-virtualenv). This is a limitation of
 7.15. YouCompleteMe                                            *syntastic-ycm*
 
 Syntastic can be used together with the "YouCompleteMe" Vim plugin (see
-http://valloric.github.io/YouCompleteMe/). However, by default "YouCompleteMe"
+https://github.com/ycm-core/YouCompleteMe). However, by default "YouCompleteMe"
 disables syntastic's checkers for the "c", "cpp", "objc", and "objcpp"
 filetypes, in order to allow its own checkers to run. If you want to use YCM's
 identifier completer but still run syntastic's checkers for those filetypes you
