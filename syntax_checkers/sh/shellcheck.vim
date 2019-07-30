@@ -15,7 +15,7 @@ function! SyntaxCheckers_sh_shellcheck_GetLocList() dict " {{{1
     let buf = bufnr('')
     let makeprg = self.makeprgBuild({
         \ 'args': s:GetShell(buf),
-        \ 'args_after': '-f gcc' })
+        \ 'args_after': '-f gcc -x' })
 
     let errorformat =
         \ '%f:%l:%c: %trror: %m,' .
