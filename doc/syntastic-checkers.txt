@@ -5426,6 +5426,15 @@ GitHub for details:
 
     https://github.com/jimhester/lintr
 
+Installation~
+
+In order to use this linter, you must first install the "lintr" R package
+(https://cran.r-project.org/web/packages/lintr/index.html), for example: >
+    $ R -e "install.packages('lintr')"
+
+or, if you are working in a conda environment: >
+    $ conda install r-lintr
+
 Security~
 
 This checker executes parts of the files it checks. This is probably fine if
@@ -5535,6 +5544,15 @@ Maintainer:  Jim Hester <james.f.hester@gmail.com>
 GitHub for details:
 
     https://github.com/jimhester/lintr
+
+Installation~
+
+In order to use this linter, you must first install the "lintr" R package
+(https://cran.r-project.org/web/packages/lintr/index.html), for example: >
+    $ R -e "install.packages('lintr')"
+
+or, if you are working in a conda environment: >
+    $ conda install r-lintr
 
 Security~
 
