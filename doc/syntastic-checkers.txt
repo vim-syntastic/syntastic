@@ -6388,6 +6388,10 @@ Checker options~
 This checker is initialised using the "makeprgBuild()" function and thus it
 accepts the standard options described at |syntastic-config-makeprg|.
 
+Note~
+
+Automatically formatting (option "-w") is not supported.
+
 ==============================================================================
 SYNTAX CHECKERS FOR SLIM                             *syntastic-checkers-slim*
 
