@@ -6304,6 +6304,7 @@ The following checkers are available for Sh (filetype "sh"):
     2. checkbashisms............|syntastic-sh-checkbashisms|
     3. sh.......................|syntastic-sh-sh|
     4. ShellCheck...............|syntastic-sh-shellcheck|
+    5. shfmt....................|syntastic-sh-shfmt|
 
 ------------------------------------------------------------------------------
 1. Bashate                                              *syntastic-sh-bashate*
@@ -6365,6 +6366,22 @@ Maintainer:  LCD 47 <lcd047@gmail.com>
 project's page for details:
 
     http://www.shellcheck.net/about.html
+
+Checker options~
+
+This checker is initialised using the "makeprgBuild()" function and thus it
+accepts the standard options described at |syntastic-config-makeprg|.
+
+------------------------------------------------------------------------------
+5. shfmt                                                  *syntastic-sh-shfmt*
+
+Name:        shfmt
+Maintainer:  LCD 47 <lcd047@gmail.com>
+
+"shfmt" is a parser, formatter, and interpreter for sh/bash/mksh. See the
+project's page at GitHub for details:
+
+    https://github.com/mvdan/sh
 
 Checker options~
 
