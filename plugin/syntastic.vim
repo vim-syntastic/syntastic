@@ -19,7 +19,7 @@ if has('reltime')
     lockvar! g:_SYNTASTIC_START
 endif
 
-let g:_SYNTASTIC_VERSION = '3.10.0-4'
+let g:_SYNTASTIC_VERSION = '3.10.0-5'
 lockvar g:_SYNTASTIC_VERSION
 
 " Sanity checks {{{1
@@ -57,10 +57,13 @@ if s:_running_windows
 elseif executable('uname')
     try
         let g:_SYNTASTIC_UNAME = split(syntastic#util#system('uname'), "\n")[0]
-    catch /\m^Vim\%((\a\+)\)\=:E484/
+    catch /\m^E145$/
+        call syntastic#log#error("can't run in rvim")
+        finish
+    catch /\m^E484$/
         call syntastic#log#error("can't run external programs (misconfigured shell options?)")
         finish
-    catch /\m^Vim\%((\a\+)\)\=:E684/
+    catch /\m^E684$/
         let g:_SYNTASTIC_UNAME = 'Unknown'
     endtry
 else

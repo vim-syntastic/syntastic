@@ -42,6 +42,11 @@ function! syntastic#util#system(command) abort " {{{2
     try
         let out = system(a:command)
     catch
+        if v:exception =~# '\m^Vim\%((\a\+)\)\=:\%(E145\|E484\|E684\)'
+            " XXX re-throwing unmodified v:exception triggers E608
+            throw substitute(v:exception, '.*:\(E145\|E484\|E684\).*', '\1', '')
+        endif
+
         let crashed = 1
         call syntastic#log#error('exception running system(' . string(a:command) . '): ' . v:exception)
         if syntastic#util#isRunningWindows()
