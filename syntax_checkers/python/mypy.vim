@@ -20,7 +20,10 @@ function! SyntaxCheckers_python_mypy_GetLocList() dict
         let s:mypy_new = syntastic#util#versionIsAtLeast(self.getVersion(), [0, 4, 5])
     endif
 
-    let makeprg = self.makeprgBuild({ 'args_after': (s:mypy_new ? '--show-column-numbers' : '') })
+    let buf = bufnr('')
+    let makeprg = self.makeprgBuild({
+        \ 'args_after': (s:mypy_new ? '--show-column-numbers' : ''),
+        \ 'fname': syntastic#util#shescape(fnamemodify(bufname(buf), ':p')) })
 
     let errorformat =
         \ '%f:%l:%c:%t:%m,' .
