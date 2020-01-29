@@ -118,7 +118,6 @@ SYNTAX CHECKERS BY LANGUAGE                          *syntastic-checkers-lang*
     Twig.....................................|syntastic-checkers-twig|
     TypeScript...............................|syntastic-checkers-typescript|
 
-    Vala.....................................|syntastic-checkers-vala|
     Verilog..................................|syntastic-checkers-verilog|
     VHDL.....................................|syntastic-checkers-vhdl|
     Vim help.................................|syntastic-checkers-help|
@@ -7250,51 +7249,6 @@ You probably also need a plugin to set |filetype| for TypeScript files, such
 as "typescript-vim":
 
     https://github.com/leafgarland/typescript-vim
-
-==============================================================================
-SYNTAX CHECKERS FOR VALA                             *syntastic-checkers-vala*
-
-The following checkers are available for Vala (filetype "vala"):
-
-    1. Valac....................|syntastic-vala-valac|
-
-------------------------------------------------------------------------------
-1. Valac                                                *syntastic-vala-valac*
-
-Name:        valac
-Maintainer:  Konstantin Stepanov (me@kstep.me)
-
-"valac" is a compiler for Vala. See the project's page for details:
-
-        https://wiki.gnome.org/Projects/Vala
-
-Checker options~
-
-This checker is initialised using the "makeprgBuild()" function and thus it
-accepts the standard options described at |syntastic-config-makeprg|.
-
-Additionally:
-
-                                                  *'g:syntastic_vala_modules'*
-Type: string or array of strings
-Default: unset
-Space-separated list of Vala modules to be passed as "--pkg" arguments.
-
-                                                *'g:syntastic_vala_vapi_dirs'*
-Type: string or array of strings
-Default: unset
-Space-separated list of "vapi" directories to be passed as "--vapidirs"
-arguments.
-
-Notes~
-
-If |'g:syntastic_vala_modules'| is unset, you can also specify a list of
-module to load for the current file by adding a special comment starting with
-"// modules: " and containing a space-delimited list of names.
-
-If |'g:syntastic_vala_vapi_dirs'| is unset, you can also specify a list of
-"vapi" directories for the current file by adding a special comment starting
-with "// vapidirs:" and containing a space-delimited list of names.
 
 ==============================================================================
 SYNTAX CHECKERS FOR VERILOG                       *syntastic-checkers-verilog*

@@ -41,6 +41,7 @@
 4.14. [What happened to the `rustc` checker?](#faqrust)  
 4.15. [What happened to the `tsc` checker?](#faqtsc)  
 4.16. [What happened to the `xcrun` checker?](#faqxcrun)  
+4.17. [What happened to the `valac` checker?](#faqvalac)  
 5. [Resources](#otherresources)  
 
 - - -
@@ -67,7 +68,7 @@ MATLAB, Mercury, NASM, Nix, Objective-C, Objective-C++, OCaml, Perl, Perl
 6, Perl POD, PHP, gettext Portable Object, OS X and iOS property lists, Pug
 (formerly Jade), Puppet, Python, QML, R, Racket, RDF TriG, RDF Turtle, Relax
 NG, reStructuredText, RPM spec, Ruby, SASS/SCSS, Scala, Slim, SML, Solidity,
-Sphinx, SQL, Stylus, Tcl, TeX, Texinfo, Twig, TypeScript, Vala, Verilog, VHDL,
+Sphinx, SQL, Stylus, Tcl, TeX, Texinfo, Twig, TypeScript, Verilog, VHDL,
 Vim help, VimL, Vue.js, xHtml, XML, XSLT, XQuery, YACC, YAML, YANG data models,
 YARA rules, z80, Zope page templates, and Zsh. See the [manual][checkers] for
 details about the corresponding supported checkers (`:help syntastic-checkers`
@@ -487,6 +488,13 @@ A. The `xcrun` checker used to have a security problem and it has been removed.
 A better checker for __Swift__ is part of the [vim-swift][swift] plugin. If you
 install this plugin the checker should be picked up automatically by syntastic.
 
+<a name="faqvalac"></a>
+
+__4.17. Q. What happened to the `valac` checker?__
+
+A. It is now part of the [vala.vim][vala] plugin. If you install this plugin the
+checker should be picked up automatically by syntastic.
+
 <a name="otherresources"></a>
 
 ## 5\. Resources
@@ -531,6 +539,7 @@ a look at [ghcmod-vim][ghcmod], [jedi-vim][jedi], [python-mode][python_mode], [v
 [swift]:            https://github.com/kballard/vim-swift
 [tsuquyomi]:        https://github.com/Quramy/tsuquyomi/
 [unimpaired]:       https://github.com/tpope/vim-unimpaired
+[vala]:             https://github.com/arrufat/vala.vim
 [vam]:              https://github.com/MarcWeber/vim-addon-manager
 [vim]:              http://www.vim.org/
 [vimgo]:            https://github.com/fatih/vim-go

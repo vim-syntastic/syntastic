@@ -101,7 +101,6 @@ let s:_DEFAULT_CHECKERS = {
         \ 'turtle':        ['rapper'],
         \ 'twig':          ['twiglint'],
         \ 'typescript':    [],
-        \ 'vala':          ['valac'],
         \ 'verilog':       ['verilator'],
         \ 'vhdl':          ['ghdl'],
         \ 'vim':           ['vimlint'],
