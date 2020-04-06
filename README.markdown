@@ -160,7 +160,7 @@ git clone --depth=1 https://github.com/vim-syntastic/syntastic.git
 ```
 Quit vim and start it back up to reload it, then type:
 ```vim
-:Helptags
+:help tags
 ```
 If you get an error when you do this, then you probably didn't install
 [Pathogen][pathogen] right. Go back to [Step 1](#step1) and make sure you did the
