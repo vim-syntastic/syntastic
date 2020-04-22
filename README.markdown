@@ -127,6 +127,23 @@ checkers.
 
 <a name="installpathogen"></a>
 
+### 2.1.1\. Installing syntastic with Vim 8+
+
+Add `packloadall` to your `.vimrc` (if you haven't already):
+
+`.vimrc`:
+
+```vim
+packloadall
+```
+
+Clone `syntastic` into your `~/.vim/pack/plugins/start` directory:
+
+```bash
+mkdir -p ~/.vim/pack/plugins/start
+git clone https://github.com/vim-syntastic/syntastic ~/.vim/pack/plugins/start/syntastic
+```
+
 ### 2.2\. Installing syntastic with Pathogen
 
 If you already have [Pathogen][pathogen] working then skip [Step 1](#step1) and go to
