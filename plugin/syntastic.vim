@@ -52,8 +52,21 @@ if !exists('g:syntastic_shell')
     let g:syntastic_shell = &shell
 endif
 
-if s:_running_windows
+" Determine `uname` without running the actual command, for faster startup.
+if exists('g:_SYNTASTIC_UNAME')
+    " Skip initialization - it's been set already (perhaps by the user).
+elseif s:_running_windows
     let g:_SYNTASTIC_UNAME = 'Windows'
+elseif has('linux')
+    let g:_SYNTASTIC_UNAME = 'Linux'
+elseif has('osx')
+    let g:_SYNTASTIC_UNAME = 'Darwin'
+elseif has('bsd')
+    " Strictly not correct - `uname` returns "FreeBSD" on FreeBSD, etc. - but
+    " unlikely to matter for the purposes of this plugin.
+    let g:_SYNTASTIC_UNAME = 'BSD'
+elseif has('sun')
+    let g:_SYNTASTIC_UNAME = 'SunOS'
 elseif executable('uname')
     try
         let g:_SYNTASTIC_UNAME = split(syntastic#util#system('uname'), "\n")[0]
@@ -654,7 +667,7 @@ function! SyntasticMake(options) abort " {{{2
     let &l:errorformat = old_local_errorformat
     " }}}3
 
-    if !s:_running_windows && (s:_os_name() =~? 'FreeBSD' || s:_os_name() =~? 'OpenBSD')
+    if !s:_running_windows && (s:_os_name() =~? 'BSD')
         call syntastic#util#redraw(g:syntastic_full_redraws)
     endif
 
