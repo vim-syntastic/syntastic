@@ -32,7 +32,7 @@ function! SyntaxCheckers_python_mypy_GetLocList() dict
     return SyntasticMake({
         \ 'makeprg': makeprg,
         \ 'errorformat': errorformat,
-        \ 'returns': [0, 1],
+        \ 'returns': [0, 1, 2],
         \ 'preprocess': 'mypy' })
 endfunction
 
