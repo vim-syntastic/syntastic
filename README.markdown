@@ -22,7 +22,7 @@
 2. [Installation](#installation)  
 2.1. [Requirements](#requirements)  
 2.2. [Installing syntastic with Pathogen](#installpathogen)  
-2.3. [Installing syntastic with vim8 packages](#installvim8)  
+2.3. [Installing syntastic with vim packages](#installvim)  
 3. [Recommended settings](#settings)  
 4. [FAQ](#faq)  
 4.1. [I installed syntastic but it isn't reporting any errors...](#faqinfo)  
@@ -172,7 +172,7 @@ following:
 3. Did the `git clone` of syntastic inside `~/.vim/bundle`
 4. Have permissions to access all of these directories.
 
-<a name="installvim8"></a>
+<a name="installvim"></a>
 
 ### 2.3\. Installing syntatic with vim packages
  
@@ -180,11 +180,10 @@ following:
 git clone https://github.com/vim-syntastic/syntastic.git ~/.vim/pack/plugins/start/syntastic.vim
 ```
 
-After launching vim, run 
+After installing, launch vim and run
 ```
 :helptags ~/.vim/pack/plugins/start/syntastic.vim/doc/
 ```
-
 to generate the manual (`:help syntastic`) 
 
 
