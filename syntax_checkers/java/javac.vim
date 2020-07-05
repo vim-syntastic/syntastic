@@ -26,6 +26,7 @@ set cpo&vim
 if !exists('g:syntastic_java_javac_executable')
     let g:syntastic_java_javac_executable = 'javac'
 endif
+let g:syntastic_java_javac_exec = g:syntastic_java_javac_executable
 
 if !exists('g:syntastic_java_maven_executable')
     let g:syntastic_java_maven_executable = 'mvn'
