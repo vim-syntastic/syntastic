@@ -1846,7 +1846,7 @@ This checker is initialised using the "makeprgBuild()" function and thus it
 accepts the standard options described at |syntastic-config-makeprg|.
 
 See also: |syntastic-html-stylelint|, |syntastic-less-stylelint|,
-|syntastic-scss-stylelint|.
+|syntastic-scss-stylelint|, |syntastic-vue-stylelint|.
 
 ==============================================================================
 SYNTAX CHECKERS FOR CUCUMBER                     *syntastic-checkers-cucumber*
@@ -3055,7 +3055,7 @@ This checker is initialised using the "makeprgBuild()" function and thus it
 accepts the standard options described at |syntastic-config-makeprg|.
 
 See also: |syntastic-css-stylelint|, |syntastic-less-stylelint|,
-|syntastic-scss-stylelint|.
+|syntastic-scss-stylelint|, |syntastic-vue-stylelint|.
 
 ------------------------------------------------------------------------------
 8. textlint                                          *syntastic-html-textlint*
@@ -3985,7 +3985,7 @@ This checker is initialised using the "makeprgBuild()" function and thus it
 accepts the standard options described at |syntastic-config-makeprg|.
 
 See also: |syntastic-css-stylelint|, |syntastic-html-stylelint|,
-|syntastic-scss-stylelint|.
+|syntastic-scss-stylelint|, |syntastic-vue-stylelint|.
 
 ==============================================================================
 SYNTAX CHECKERS FOR LEX                               *syntastic-checkers-lex*
@@ -6292,7 +6292,7 @@ This checker is initialised using the "makeprgBuild()" function and thus it
 accepts the standard options described at |syntastic-config-makeprg|.
 
 See also: |syntastic-css-stylelint|, |syntastic-html-stylelint|,
-|syntastic-less-stylelint|.
+|syntastic-less-stylelint|, |syntastic-vue-stylelint|.
 
 ==============================================================================
 SYNTAX CHECKERS FOR SH                                 *syntastic-checkers-sh*
@@ -7487,6 +7487,7 @@ The following checkers are available for Vue.js (filetype "vue"):
 
     1. ESLint...................|syntastic-vue-eslint|
     2. pug_lint_vue.............|syntastic-vue-pug_lint_vue|
+    3. stylelint................|syntastic-vue-stylelint|
 
 ------------------------------------------------------------------------------
 1. ESLint                                               *syntastic-vue-eslint*
@@ -7545,6 +7546,25 @@ You probably also need a plugin to set |filetype| for Vue.js files, such as
 "vim-vue":
 
     https://github.com/posva/vim-vue
+
+------------------------------------------------------------------------------
+3. stylelint                                         *syntastic-vue-stylelint*
+
+Name:        stylelint
+Maintainer:  Tim Carry <tim@pixelastic.com>
+
+"stylelint" is a style linter for Cascading Stylesheets. See the project's
+page for more information:
+
+    http://stylelint.io/
+
+Checker options~
+
+This checker is initialised using the "makeprgBuild()" function and thus it
+accepts the standard options described at |syntastic-config-makeprg|.
+
+See also: |syntastic-css-stylelint|, |syntastic-html-stylelint|,
+|syntastic-less-stylelint|, |syntastic-scss-stylelint|.
 
 ==============================================================================
 SYNTAX CHECKERS FOR XHTML                           *syntastic-checkers-xhtml*
