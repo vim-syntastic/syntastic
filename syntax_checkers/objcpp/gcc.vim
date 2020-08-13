@@ -16,15 +16,15 @@ endif
 let g:loaded_syntastic_objcpp_gcc_checker = 1
 
 if !exists('g:syntastic_objcpp_compiler_options')
-    let g:syntastic_objcpp_compiler_options = '-std=gnu99'
+    let g:syntastic_objcpp_compiler_options = '-std=gnu++14'
 endif
 
 let s:save_cpo = &cpo
 set cpo&vim
 
 function! SyntaxCheckers_objcpp_gcc_IsAvailable() dict
-    if !exists('g:syntastic_c_compiler')
-        let g:syntastic_objcpp_compiler = executable(self.getExec()) ? self.getExec() : 'clang'
+    if !exists('g:syntastic_objcpp_compiler')
+        let g:syntastic_objcpp_compiler = executable(self.getExec()) ? self.getExec() : 'clang++'
     endif
     call self.log('g:syntastic_objcpp_compiler =', g:syntastic_objcpp_compiler)
     return executable(expand(g:syntastic_objcpp_compiler, 1))
@@ -51,7 +51,8 @@ endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'objcpp',
-    \ 'name': 'gcc' })
+    \ 'name': 'gcc',
+    \ 'exec': 'g++' })
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
