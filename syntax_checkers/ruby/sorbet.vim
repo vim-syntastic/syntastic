@@ -26,21 +26,15 @@ function! SyntaxCheckers_ruby_sorbet_IsAvailable() dict
 endfunction
 
 function! SyntaxCheckers_ruby_sorbet_GetLocList() dict
-    let makeprg = self.makeprgBuild({'args_before': 'tc'})
+    let makeprg = self.makeprgBuild({ 'args_before': 'tc' })
 
     let errorformat = '%f:%l: %m'
 
-    let loclist = SyntasticMake({
+    return SyntasticMake({
         \ 'makeprg': makeprg,
         \ 'errorformat': errorformat,
-        \ 'subtype': 'Style'})
-
-    " sorbet only emits errors
-    for e in loclist
-        let e['type'] = 'E'
-    endfor
-
-    return loclist
+        \ 'type': 'E',
+        \ 'subtype': 'Style' })
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
