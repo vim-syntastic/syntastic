@@ -5804,6 +5804,7 @@ The following checkers are available for Ruby (filetype "ruby"):
     5. reek.....................|syntastic-ruby-reek|
     6. RuboCop..................|syntastic-ruby-rubocop|
     7. Ruby-lint................|syntastic-ruby-rubylint|
+    8. Sorbet...................|syntastic-ruby-sorbet|
 
 ------------------------------------------------------------------------------
 1. Flog                                                  *syntastic-ruby-flog*
@@ -6015,6 +6016,22 @@ also install a wrapper script that kills the version warning and point
 'g:syntastic_ruby_rubylint_exec' to it:
 
     https://gist.github.com/lcd047/492245d9923af45fb964
+
+------------------------------------------------------------------------------
+8. Sorbet                                              *syntastic-ruby-sorbet*
+
+Name:        sorbet
+Maintainer:  Tom Morton
+
+Sorbet is a static analysis and gradual typing tool for Ruby. See the
+project's page at GitHub for details:
+
+    https://github.com/sorbet/sorbet
+
+Checker options~
+
+This checker is initialised using the "makeprgBuild()" function and thus it
+accepts the standard options described at |syntastic-config-makeprg|.
 
 ==============================================================================
 SYNTAX CHECKERS FOR SASS                             *syntastic-checkers-sass*
