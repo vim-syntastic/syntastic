@@ -28,8 +28,14 @@ function! SyntaxCheckers_haskell_hlint_GetLocList() dict
 
     let errorformat =
         \ '%E%f:%l:%v: Error while reading hint file\, %m,' .
+        \ '%E%f:(%l\,%v)-(%*[0-9]\,%*[0-9]): Error: %m,' .
+        \ '%E%f:%l:%v-%*[0-9]: Error: %m,' .
         \ '%E%f:%l:%v: Error: %m,' .
+        \ '%W%f:(%l\,%v)-(%*[0-9]\,%*[0-9]): Warning: %m,' .
+        \ '%W%f:%l:%v-%*[0-9]: Warning: %m,' .
         \ '%W%f:%l:%v: Warning: %m,' .
+        \ '%W%f:(%l\,%v)-(%*[0-9]\,%*[0-9]): Suggestion: %m,' .
+        \ '%W%f:%l:%v-%*[0-9]: Suggestion: %m,' .
         \ '%W%f:%l:%v: Suggestion: %m,' .
         \ '%C%m'
 
