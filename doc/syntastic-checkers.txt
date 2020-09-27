@@ -59,7 +59,6 @@ SYNTAX CHECKERS BY LANGUAGE                          *syntastic-checkers-lang*
     Java.....................................|syntastic-checkers-java|
     JavaScript...............................|syntastic-checkers-javascript|
     JSON.....................................|syntastic-checkers-json|
-    Julia....................................|syntastic-checkers-julia|
 
     LESS.....................................|syntastic-checkers-less|
     Lex......................................|syntastic-checkers-lex|
@@ -3880,44 +3879,6 @@ Checker options~
 
 This checker is initialised using the "makeprgBuild()" function and thus it
 accepts the standard options described at |syntastic-config-makeprg|.
-
-==============================================================================
-SYNTAX CHECKERS FOR JULIA                           *syntastic-checkers-julia*
-
-The following checkers are available for Julia (filetype "julia"):
-
-    1. lint.....................|syntastic-julia-lint|
-
-------------------------------------------------------------------------------
-1. lint                                                 *syntastic-julia-lint*
-
-Name:        lint
-Maintainer:  LCD 47 <lcd047@gmail.com>
-
-This is a linter for Julia files (https://julialang.org/), using the Julia
-package "Lint". See the package's documentation for more information:
-
-    http://lintjl.readthedocs.io/
-
-Installation~
-
-You need to install Julia itself, and the package "Lint". You can install
-"Lint" from the Julia package manager, with the command: >
-    Pkg.add("Lint")
-<
-Checker Options~
-
-This checker doesn't call the "makeprgBuild()" function, and thus it ignores
-the usual 'g:syntastic_julia_lint_<option>' variables. The only exception is
-'g:syntastic_julia_lint_exec', which can still be used to override the "julia"
-executable.
-
-Note~
-
-You probably also need a plugin to set |filetype| for Julia files, such as
-"julia-vim":
-
-    https://github.com/JuliaEditorSupport/julia-vim
 
 ==============================================================================
 SYNTAX CHECKERS FOR LESS                             *syntastic-checkers-less*

@@ -42,6 +42,7 @@
 4.15. [What happened to the `tsc` checker?](#faqtsc)  
 4.16. [What happened to the `xcrun` checker?](#faqxcrun)  
 4.17. [What happened to the `valac` checker?](#faqvalac)  
+4.18. [What happened to the Julia `lint` checker?](#faqjulialint)  
 5. [Resources](#otherresources)  
 
 - - -
@@ -63,13 +64,13 @@ AppleScript, AsciiDoc, Assembly languages, BEMHTML, Bro, Bourne shell, C, C++,
 C#, Cabal, Chef, CMake, CoffeeScript, Coco, Coq, CSS, Cucumber, CUDA, D, Dart,
 DocBook, Dockerfile, Dust, Elixir, Erlang, eRuby, Fortran, Gentoo metadata,
 GLSL, Go, Haml, Haskell, Haxe, Handlebars, HSS, HTML, Java, JavaScript, JSON,
-JSX, Julia, LESS, Lex, Limbo, LISP, LLVM intermediate language, Lua, Markdown,
+JSX, LESS, Lex, Limbo, LISP, LLVM intermediate language, Lua, Markdown,
 MATLAB, Mercury, NASM, Nix, Objective-C, Objective-C++, OCaml, Perl, Perl
 6, Perl POD, PHP, gettext Portable Object, OS X and iOS property lists, Pug
 (formerly Jade), Puppet, Python, QML, R, Racket, RDF TriG, RDF Turtle, Relax
 NG, reStructuredText, RPM spec, Ruby, SASS/SCSS, Scala, Slim, SML, Solidity,
-Sphinx, SQL, Stylus, Tcl, TeX, Texinfo, Twig, TypeScript, Verilog, VHDL,
-Vim help, VimL, Vue.js, xHtml, XML, XSLT, XQuery, YACC, YAML, YANG data models,
+Sphinx, SQL, Stylus, Tcl, TeX, Texinfo, Twig, TypeScript, Verilog, VHDL, Vim
+help, VimL, Vue.js, xHtml, XML, XSLT, XQuery, YACC, YAML, YANG data models,
 YARA rules, z80, Zope page templates, and Zsh. See the [manual][checkers] for
 details about the corresponding supported checkers (`:help syntastic-checkers`
 in Vim).
@@ -495,6 +496,13 @@ __4.17. Q. What happened to the `valac` checker?__
 A. It is now part of the [vala.vim][vala] plugin. If you install this plugin the
 checker should be picked up automatically by syntastic.
 
+<a name="julialint"></a>
+
+__4.18. Q. What happened to the Julia `lint` checker?__
+
+A. It was removed, since the `Lint.jl` package [has been deprecated][julialint]
+and no longer works with recent Julia versions.
+
 <a name="otherresources"></a>
 
 ## 5\. Resources
@@ -522,6 +530,7 @@ a look at [ghcmod-vim][ghcmod], [jedi-vim][jedi], [python-mode][python_mode], [v
 [google_group]:     https://groups.google.com/group/vim-syntastic
 [guide]:            https://github.com/vim-syntastic/syntastic/wiki/Syntax-Checker-Guide
 [jedi]:             https://github.com/davidhalter/jedi-vim
+[julialint]:        https://github.com/tonyhffong/Lint.jl/issues/269
 [merlin]:           https://github.com/the-lambda-church/merlin
 [myint]:            https://github.com/myint/syntastic-extras
 [neobundle]:        https://github.com/Shougo/neobundle.vim
