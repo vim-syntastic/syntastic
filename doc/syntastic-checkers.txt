@@ -1192,7 +1192,7 @@ Maintainer:  LCD 47 <lcd047@gmail.com>
 
 For details about "Cpplint" see the project's page:
 
-    https://code.google.com/p/google-styleguide/
+    https://github.com/google/styleguide/
 
 Checker options~
 
