@@ -535,13 +535,14 @@ The following checkers are available for C (filetype "c"):
     4. Clang-Tidy...............|syntastic-c-clang_tidy|
     5. Cppcheck.................|syntastic-c-cppcheck|
     6. cppclean.................|syntastic-c-cppclean|
-    7. Flawfinder...............|syntastic-c-flawfinder|
-    8. GCC......................|syntastic-c-gcc|
-    9. make.....................|syntastic-c-make|
-    10. OClint..................|syntastic-c-oclint|
-    11. PC-Lint.................|syntastic-c-pc_lint|
-    12. Sparse..................|syntastic-c-sparse|
-    13. Splint..................|syntastic-c-splint|
+    7. Cpplint..................|syntastic-c-cpplint|
+    8. Flawfinder...............|syntastic-c-flawfinder|
+    9. GCC......................|syntastic-c-gcc|
+    10. make....................|syntastic-c-make|
+    11. OClint..................|syntastic-c-oclint|
+    12. PC-Lint.................|syntastic-c-pc_lint|
+    13. Sparse..................|syntastic-c-sparse|
+    14. Splint..................|syntastic-c-splint|
 
 ------------------------------------------------------------------------------
 1. AVR-GCC                                                *syntastic-c-avrgcc*
@@ -723,7 +724,43 @@ accepts the standard options described at |syntastic-config-makeprg|.
 See also: |syntastic-cpp-cppclean|.
 
 ------------------------------------------------------------------------------
-7. Flawfinder                                         *syntastic-c-flawfinder*
+7. Cpplint                                               *syntastic-c-cpplint*
+
+Name:        cpplint
+Maintainer:  Laurent Cheylus <foxy@free.fr>
+
+For details about "Cpplint" see the project's page:
+
+    https://github.com/google/styleguide
+
+Checker options~
+
+This checker is initialised using the "makeprgBuild()" function and thus it
+accepts the standard options described at |syntastic-config-makeprg|.
+
+Additionally:
+
+                                             *'g:syntastic_c_cpplint_thres'*
+Type: integer
+Default: 5
+Error threshold. Policy violations with a severity above this value are
+highlighted as errors, the others are considered warnings by syntastic.
+
+                                              *'g:syntastic_c_cpplint_args'*
+Type: string
+Default: "--verbose=3 --filter=-readability/casting"
+Command line options to pass to "Cpplint"
+
+Note~
+
+By default syntastic expects the "cpplint" script to be named "cpplint.py".
+However, if your "cpplint" was installed with "pip", the script's name is
+"cpplint", and you need to set 'g:syntastic_c_cpplint_exec' accordingly:
+>
+    let g:syntastic_c_cpplint_exec = "cpplint"
+<
+------------------------------------------------------------------------------
+8. Flawfinder                                         *syntastic-c-flawfinder*
 
 Name:        flawfinder
 Maintainer:  LCD 47 <lcd047@gmail.com>
@@ -749,7 +786,7 @@ highlighted as errors, the others are considered warnings by syntastic.
 See also: |syntastic-cpp-flawfinder|.
 
 ------------------------------------------------------------------------------
-8. GCC                                                       *syntastic-c-gcc*
+9. GCC                                                       *syntastic-c-gcc*
 
 Name:        gcc
 Maintainer:  Gregor Uhlenheuer <kongo2002@gmail.com>
@@ -846,7 +883,7 @@ executable.
 See also: |syntastic-cpp-gcc|.
 
 ------------------------------------------------------------------------------
-9. make                                                     *syntastic-c-make*
+10. make                                                     *syntastic-c-make*
 
 Name:        make
 Maintainer:  Gregor Uhlenheuer <kongo2002@gmail.com>
@@ -857,7 +894,7 @@ This checker is initialised using the "makeprgBuild()" function and thus it
 accepts the standard options described at |syntastic-config-makeprg|.
 
 ------------------------------------------------------------------------------
-10. OClint                                                *syntastic-c-oclint*
+11. OClint                                                *syntastic-c-oclint*
 
 Name:        oclint
 Maintainer:  "UnCO" Lin <undercooled@lavabit.com>
@@ -896,7 +933,7 @@ Config files pointed to by 'g:syntastic_oclint_config_file' are then ignored.
 See also: |syntastic-cpp-oclint|.
 
 ------------------------------------------------------------------------------
-11. PC-Lint                                              *syntastic-c-pc_lint*
+12. PC-Lint                                              *syntastic-c-pc_lint*
 
 Name:        pc_lint
 Maintainer:  Steve Bragg <steve@empresseffects.com>
@@ -923,7 +960,7 @@ current directory and in parent directories; first such file found is used.
 See also: |syntastic-cpp-pc_lint|.
 
 ------------------------------------------------------------------------------
-12. Sparse                                                *syntastic-c-sparse*
+13. Sparse                                                *syntastic-c-sparse*
 
 Name:        sparse
 Maintainer:  Daniel Walker <dwalker@fifo99.com>
@@ -955,7 +992,7 @@ your vimrc: >
 This allows "Sparse" to read "GCC"'s private include files.
 
 ------------------------------------------------------------------------------
-13. Splint                                                *syntastic-c-splint*
+14. Splint                                                *syntastic-c-splint*
 
 Name:        splint
 Maintainer:  LCD 47 <lcd047@gmail.com>
@@ -1192,7 +1229,7 @@ Maintainer:  LCD 47 <lcd047@gmail.com>
 
 For details about "Cpplint" see the project's page:
 
-    https://code.google.com/p/google-styleguide/
+    https://github.com/google/styleguide
 
 Checker options~
 
@@ -8209,6 +8246,7 @@ syntastic-specific configuration files:
         ClangCheck (|syntastic-c-clang_check|)
         Clang-Tidy (|syntastic-c-clang_tidy|)
         Cppcheck (|syntastic-c-cppcheck|)
+        Cpplint (|syntastic-c-cpplint|)
         GCC (|syntastic-c-gcc|)
         OCLint (|syntastic-c-oclint|)
         Sparse (|syntastic-c-sparse|)
