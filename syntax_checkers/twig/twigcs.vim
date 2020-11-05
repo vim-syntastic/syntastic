@@ -22,7 +22,7 @@ function! SyntaxCheckers_twig_twigcs_GetLocList() dict
     let makeprg = self.makeprgBuild({ 'args_after': '--reporter=emacs' })
     " example report line : path/to/file/a.html.twig:1:8: warning - Unused variable "foo".
     " available report values : ignore, info, warning, error
-    let errorformat = '%f:%l:%c: %t - %m'
+    let errorformat = '%f:%l:%c: %t%*[a-z] - %m'
 
     return SyntasticMake({
         \ 'makeprg': makeprg,
