@@ -98,7 +98,7 @@ let s:_DEFAULT_CHECKERS = {
         \ 'text':          [],
         \ 'trig':          ['rapper'],
         \ 'turtle':        ['rapper'],
-        \ 'twig':          ['twiglint', 'twigcs'],
+        \ 'twig':          ['twiglint'],
         \ 'typescript':    [],
         \ 'verilog':       ['verilator'],
         \ 'vhdl':          ['ghdl'],
