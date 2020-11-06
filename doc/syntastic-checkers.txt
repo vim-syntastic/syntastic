@@ -7120,6 +7120,7 @@ SYNTAX CHECKERS FOR TWIG                             *syntastic-checkers-twig*
 The following checkers are available for Twig (filetype "twig"):
 
     1. twig-lint................|syntastic-twig-twiglint|
+    2. twigcs...................|syntastic-twig-twigcs|
 
 ------------------------------------------------------------------------------
 1. twig-lint                                         *syntastic-twig-twiglint*
@@ -7145,6 +7146,22 @@ For the standalone executable, add the following to your vimrc file: >
 <
 For the "Composer" (https://getcomposer.org/) dependency "twig-lint" must be
 in your "$PATH". No further configuration is needed.
+
+------------------------------------------------------------------------------
+2. twigcs                                              *syntastic-twig-twigcs*
+
+Name:        twigcs
+Maintainer:  Ciloe <escrichjimmy@yahoo.fr>
+
+"twigcs" is a lint tool for Twig templates. See the project's page at
+GitHub for details:
+
+    https://github.com/friendsoftwig/twigcs
+
+Checker options~
+
+This checker is initialised using the "makeprgBuild()" function and thus it
+accepts the standard options described at |syntastic-config-makeprg|.
 
 ==============================================================================
 SYNTAX CHECKERS FOR TYPESCRIPT                 *syntastic-checkers-typescript*
