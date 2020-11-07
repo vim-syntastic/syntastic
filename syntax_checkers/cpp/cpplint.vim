@@ -19,11 +19,17 @@ if !exists('g:syntastic_cpp_cpplint_thres')
     let g:syntastic_cpp_cpplint_thres = 5
 endif
 
+let s:default_args = {
+    \ 'c': '--filter=-readability/casting',
+    \ 'cpp': '' }
+
 let s:save_cpo = &cpo
 set cpo&vim
 
 function! SyntaxCheckers_cpp_cpplint_GetLocList() dict
-    let makeprg = self.makeprgBuild({ 'args': '--verbose=3' })
+    let makeprg = self.makeprgBuild({
+                            \ 'args': get(s:default_args, self.getFiletype(), ''),
+                            \ 'args_after': '--verbose=3' })
 
     let errorformat = '%A%f:%l:  %m [%t],%-G%.%#'
 
@@ -35,7 +41,7 @@ function! SyntaxCheckers_cpp_cpplint_GetLocList() dict
 
     " change error types according to the prescribed threshold
     for e in loclist
-        let e['type'] = e['type'] < g:syntastic_cpp_cpplint_thres ? 'W' : 'E'
+        let e['type'] = e['type'] < g:syntastic_{self.getFiletype()}_cpplint_thres ? 'W' : 'E'
     endfor
 
     return loclist
