@@ -23,7 +23,7 @@ function! SyntaxCheckers_go_govet_GetLocList() dict
     let makeprg = self.getExecEscaped() . ' vet'
 
     let errorformat =
-        \ '%Evet: %.%\+: %f:%l:%c: %m,' .
+        \ '%Evet: %f:%l:%c: %m,' .
         \ '%f:%l:%c: %m,' .
         \ '%W%f:%l: %m,' .
         \ '%-G%.%#'
