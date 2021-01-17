@@ -22,6 +22,10 @@ if !exists('g:syntastic_javascript_eslint_generic')
     let g:syntastic_javascript_eslint_generic = 0
 endif
 
+if !exists( 'g:syntastic_javascript_eslint_command' )
+    let g:syntastic_javascript_eslint_command = ''
+endif
+
 let s:save_cpo = &cpo
 set cpo&vim
 
@@ -42,7 +46,11 @@ function! SyntaxCheckers_javascript_eslint_GetLocList() dict
             \ "'--config ' . syntastic#util#shexpand(OLD_VAR)")
     endif
 
-    let makeprg = self.makeprgBuild({ 'args_before': (g:syntastic_javascript_eslint_generic ? '' : '-f compact') })
+    if g:syntastic_javascript_eslint_command isnot ''
+        let makeprg = printf( g:syntastic_javascript_eslint_command, syntastic#util#shexpand( '%' ) )
+    else
+        let makeprg = self.makeprgBuild({ 'args_before': (g:syntastic_javascript_eslint_generic ? '' : '-f compact') })
+    endif
 
     let errorformat =
         \ '%E%f: line %l\, col %c\, Error - %m,' .
