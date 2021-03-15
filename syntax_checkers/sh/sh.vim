@@ -38,7 +38,10 @@ function! SyntaxCheckers_sh_sh_GetLocList() dict " {{{1
         \ 'exe': s:GetShell(buf),
         \ 'args_after': '-n' })
 
-    let errorformat = '%f: line %l: %m'
+    let errorformat =
+        \ '%f: line %l: %m,' .
+        \ '%f: syntax error at line %l: %m,' .
+        \ '%f[%l]: %m'
 
     return SyntasticMake({
         \ 'makeprg': makeprg,
