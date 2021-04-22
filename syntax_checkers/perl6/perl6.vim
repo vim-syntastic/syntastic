@@ -15,7 +15,7 @@
 if exists('g:loaded_syntastic_perl6_perl6_checker')
     finish
 endif
-let g:loaded_syntastic_raku_raku_checker = 1
+let g:loaded_syntastic_perl6_perl6_checker = 1
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'perl6',
