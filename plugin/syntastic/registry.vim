@@ -78,6 +78,7 @@ let s:_DEFAULT_CHECKERS = {
         \ 'r':             [],
         \ 'rmd':           [],
         \ 'racket':        ['racket'],
+        \ 'raku':          [],
         \ 'rnc':           ['rnv'],
         \ 'rst':           ['rst2pseudoxml'],
         \ 'ruby':          ['mri'],
