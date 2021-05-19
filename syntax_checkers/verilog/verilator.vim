@@ -27,8 +27,8 @@ endfunction
 function! SyntaxCheckers_verilog_verilator_GetLocList() dict
     return syntastic#c#GetLocList('verilog', 'verilator', {
         \ 'errorformat':
-        \     '%%%trror-%\=%\w%#: %f:%l: %m,' .
-        \     '%%%tarning-%\=%\w%#: %f:%l: %m',
+        \     '%%%trror-%\=%\w%#: %f:%l:%c: %m,' .
+        \     '%%%tarning-%\=%\w%#: %f:%l:%c: %m' ,
         \ 'main_flags': '--lint-only' })
 endfunction
 
