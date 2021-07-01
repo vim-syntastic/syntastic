@@ -39,6 +39,7 @@ function! SyntaxCheckers_sh_sh_GetLocList() dict " {{{1
         \ 'args_after': '-n' })
 
     let errorformat =
+        \ '%f: %tarning: line %l: %m,' .
         \ '%f: line %l: %m,' .
         \ '%f: syntax error at line %l: %m,' .
         \ '%f[%l]: %m'
