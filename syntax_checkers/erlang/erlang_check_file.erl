@@ -61,7 +61,15 @@ which_build_tool(Dir, Profile) ->
     end.
 
 rebar_file(Dir, normal) -> filename:join(Dir, "rebar.config");
-rebar_file(Dir, test)   -> filename:join(Dir, "rebar.test.config").
+rebar_file(Dir, test)   ->
+    TestConfig = filename:join(Dir, "rebar.test.config"),
+    case filelib:is_file(TestConfig) of
+        true ->
+            TestConfig;
+        false ->
+            %% If we can't find "rebar.test.config" try falling back:
+            rebar_file(Dir, normal)
+    end.
 
 erlangmk_file(Dir) -> filename:join(Dir, "erlang.mk").
 
