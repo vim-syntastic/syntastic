@@ -19,15 +19,21 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 function! SyntaxCheckers_go_golangci_lint_GetLocList() dict
-    let makeprg = self.makeprgBuild({ 'args_before':  'run' })
+    let buf = bufnr('')
+
+    let makeprg = self.makeprgBuild({
+        \ 'args_before': 'run',
+        \ 'fname': '.' })
 
     let errorformat =
         \ '%f:%l:%c: %m,' .
+        \ '%f:%l: %m,' .
         \ '%-G%.%#'
 
     return SyntasticMake({
         \ 'makeprg': makeprg,
         \ 'errorformat': errorformat,
+        \ 'cwd': fnamemodify(bufname(buf), ':p:h'),
         \ 'defaults': {'type': 'e'},
         \ 'subtype': 'Style' })
 endfunction
