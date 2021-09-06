@@ -693,8 +693,8 @@ Additionally:
                                           *'g:syntastic_cppcheck_config_file'*
 Type: string
 Default: unset
-File containing compilation flags (such as defines or include directories),
-one option per line (cf. |syntastic-config-files|).
+File containing additional compilation flags (such as defines or include
+directories), one option per line (cf. |syntastic-config-files|).
 
 See also: |syntastic-cpp-cppcheck|.
 
