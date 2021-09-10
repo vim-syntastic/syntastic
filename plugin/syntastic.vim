@@ -695,7 +695,11 @@ endfunction " }}}2
 "
 "return '' if no errors are cached for the buffer
 function! SyntasticStatuslineFlag() abort " {{{2
-    return g:SyntasticLoclist.current().getStatuslineFlag()
+    if exists('g:statusline_winid')
+        return g:SyntasticLoclist.current(winbufnr(g:statusline_winid)).getStatuslineFlag()
+    else
+        return g:SyntasticLoclist.current().getStatuslineFlag()
+    endif
 endfunction " }}}2
 
 " }}}1
