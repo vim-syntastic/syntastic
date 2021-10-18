@@ -45,6 +45,8 @@ function! SyntaxCheckers_erlang_escript_GetLocList() dict
         \ 'post_args_after': post_args })
 
     let errorformat =
+        \ '%W%f:%l:%c: warning: %m,'.
+        \ '%E%f:%l:%c: %m,'.
         \ '%W%f:%l: warning: %m,'.
         \ '%E%f:%l: %m'
 

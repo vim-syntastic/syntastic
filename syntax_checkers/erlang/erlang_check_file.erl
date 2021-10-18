@@ -9,6 +9,7 @@ main([File]) ->
             warn_obsolete_guard,
             warn_unused_import,
             report,
+            brief,
             {i, Dir ++ "/include"}],
     %% `rebar.config` is looked for,
     %% but it is not necessarily the one in the project root.
