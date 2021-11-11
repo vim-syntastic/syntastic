@@ -22,9 +22,7 @@ set cpo&vim
 let s:args_after = {
     \ 'css':  '-f json',
     \ 'html': '-f json',
-    \ 'vue':  '-f json',
-    \ 'less': '-f json -s less',
-    \ 'scss': '-f json -s scss' }
+    \ 'vue':  '-f json' }
 
 function! SyntaxCheckers_css_stylelint_GetLocList() dict
     let makeprg = self.makeprgBuild({ 'args_after': get(s:args_after, self.getFiletype(), '') })

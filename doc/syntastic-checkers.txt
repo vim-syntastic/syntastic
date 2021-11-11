@@ -1844,8 +1844,7 @@ Checker options~
 This checker is initialised using the "makeprgBuild()" function and thus it
 accepts the standard options described at |syntastic-config-makeprg|.
 
-See also: |syntastic-html-stylelint|, |syntastic-less-stylelint|,
-|syntastic-scss-stylelint|, |syntastic-vue-stylelint|.
+See also: |syntastic-html-stylelint|, |syntastic-vue-stylelint|.
 
 ==============================================================================
 SYNTAX CHECKERS FOR CUCUMBER                     *syntastic-checkers-cucumber*
@@ -3053,8 +3052,7 @@ Checker options~
 This checker is initialised using the "makeprgBuild()" function and thus it
 accepts the standard options described at |syntastic-config-makeprg|.
 
-See also: |syntastic-css-stylelint|, |syntastic-less-stylelint|,
-|syntastic-scss-stylelint|, |syntastic-vue-stylelint|.
+See also: |syntastic-css-stylelint|, |syntastic-vue-stylelint|.
 
 ------------------------------------------------------------------------------
 8. textlint                                          *syntastic-html-textlint*
@@ -3887,7 +3885,6 @@ The following checkers are available for LESS (filetype "less"):
 
     1. lessc....................|syntastic-less-lessc|
     2. RECESS...................|syntastic-less-recess|
-    3. stylelint................|syntastic-less-stylelint|
 
 ------------------------------------------------------------------------------
 1. lessc                                                *syntastic-less-lessc*
@@ -3928,25 +3925,6 @@ This checker is initialised using the "makeprgBuild()" function and thus it
 accepts the standard options described at |syntastic-config-makeprg|.
 
 See also: |syntastic-css-recess|.
-
-------------------------------------------------------------------------------
-3. stylelint                                        *syntastic-less-stylelint*
-
-Name:        stylelint
-Maintainer:  Tim Carry <tim@pixelastic.com>
-
-"stylelint" is a style linter for Cascading Stylesheets. See the project's
-page for more information:
-
-    http://stylelint.io/
-
-Checker options~
-
-This checker is initialised using the "makeprgBuild()" function and thus it
-accepts the standard options described at |syntastic-config-makeprg|.
-
-See also: |syntastic-css-stylelint|, |syntastic-html-stylelint|,
-|syntastic-scss-stylelint|, |syntastic-vue-stylelint|.
 
 ==============================================================================
 SYNTAX CHECKERS FOR LEX                               *syntastic-checkers-lex*
@@ -6145,7 +6123,6 @@ The following checkers are available for SCSS (filetype "scss"):
     3. Sass Lint................|syntastic-scss-sass_lint|
     4. SassC....................|syntastic-scss-sassc|
     5. SCSS-lint................|syntastic-scss-scss_lint|
-    6. stylelint................|syntastic-scss-stylelint|
 
 ------------------------------------------------------------------------------
 1. mixedindentlint                            *syntastic-scss-mixedindentlint*
@@ -6247,25 +6224,6 @@ Checker options~
 
 This checker is initialised using the "makeprgBuild()" function and thus it
 accepts the standard options described at |syntastic-config-makeprg|.
-
-------------------------------------------------------------------------------
-6. stylelint                                        *syntastic-scss-stylelint*
-
-Name:        stylelint
-Maintainer:  Tim Carry <tim@pixelastic.com>
-
-"stylelint" is a style linter for Cascading Stylesheets. See the project's
-page for more information:
-
-    http://stylelint.io/
-
-Checker options~
-
-This checker is initialised using the "makeprgBuild()" function and thus it
-accepts the standard options described at |syntastic-config-makeprg|.
-
-See also: |syntastic-css-stylelint|, |syntastic-html-stylelint|,
-|syntastic-less-stylelint|, |syntastic-vue-stylelint|.
 
 ==============================================================================
 SYNTAX CHECKERS FOR SH                                 *syntastic-checkers-sh*
@@ -7553,8 +7511,7 @@ Checker options~
 This checker is initialised using the "makeprgBuild()" function and thus it
 accepts the standard options described at |syntastic-config-makeprg|.
 
-See also: |syntastic-css-stylelint|, |syntastic-html-stylelint|,
-|syntastic-less-stylelint|, |syntastic-scss-stylelint|.
+See also: |syntastic-css-stylelint|, |syntastic-html-stylelint|.
 
 ==============================================================================
 SYNTAX CHECKERS FOR XHTML                           *syntastic-checkers-xhtml*
