@@ -50,7 +50,7 @@ endfunction " }}}1
 function! SyntaxCheckers_python_pylint_GetLocList() dict " {{{1
     let makeprg = self.makeprgBuild({
         \ 'args_after': (s:pylint_new ?
-        \       '-f text --msg-template="{path}:{line}:{column}:{C}: [{symbol}] {msg}" -r n' :
+        \       '-f text --msg-template="{path}:{line}:{column}:{C}: [{msg_id}][{symbol}] {msg}" -r n' :
         \       '-f parseable -r n -i y') })
 
     let errorformat =
