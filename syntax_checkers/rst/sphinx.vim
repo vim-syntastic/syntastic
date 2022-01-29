@@ -10,7 +10,7 @@
 "
 "============================================================================
 
-if exists("g:loaded_syntastic_rst_sphinx_checker")
+if exists('g:loaded_syntastic_rst_sphinx_checker')
     finish
 endif
 let g:loaded_syntastic_rst_sphinx_checker = 1

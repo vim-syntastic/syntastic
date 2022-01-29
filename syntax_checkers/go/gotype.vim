@@ -31,7 +31,7 @@ function! SyntaxCheckers_go_gotype_GetLocList() dict
         if len(parsed_ver)
             let s:go_new = syntastic#util#versionIsAtLeast(parsed_ver, [1, 8])
         else
-            call syntastic#log#error("checker " . self.getCName() . ": can't parse go version (abnormal termination?)")
+            call syntastic#log#error('checker ' . self.getCName() . ': can''t parse go version (abnormal termination?)')
             return []
         endif
     endif

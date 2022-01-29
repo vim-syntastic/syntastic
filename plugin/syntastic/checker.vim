@@ -154,7 +154,7 @@ function! g:SyntasticChecker.getVersion(...) abort " {{{2
             call self.setVersion(parsed_ver)
         else
             call syntastic#log#ndebug(g:_SYNTASTIC_DEBUG_LOCLIST, 'checker output:', split(version_output, "\n", 1))
-            call syntastic#log#error("checker " . self.getCName() . ": can't parse version string (abnormal termination?)")
+            call syntastic#log#error('checker ' . self.getCName() . ': can''t parse version string (abnormal termination?)')
         endif
     endif
     return get(self, '_version', [])

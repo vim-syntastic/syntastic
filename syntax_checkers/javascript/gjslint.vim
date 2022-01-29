@@ -25,11 +25,11 @@ function! SyntaxCheckers_javascript_gjslint_GetLocList() dict
         \ 'args_after': '--check_html --nosummary --unix_mode --nobeep' })
 
     let errorformat =
-        \ "%f:%l:(New Error -%\\?\%n) %m," .
-        \ "%f:%l:(-%\\?%n) %m," .
-        \ "%-G1 files checked," .
-        \ " no errors found.," .
-        \ "%-G%.%#"
+        \ '%f:%l:(New Error -%\\?\%n) %m,' .
+        \ '%f:%l:(-%\\?%n) %m,' .
+        \ '%-G1 files checked,' .
+        \ ' no errors found.,' .
+        \ '%-G%.%#'
 
     return SyntasticMake({
         \ 'makeprg': makeprg,

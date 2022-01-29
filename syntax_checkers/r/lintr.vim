@@ -20,7 +20,7 @@
 "
 " let g:syntastic_enable_r_lintr_checker = 1
 
-if exists("g:loaded_syntastic_r_lintr_checker")
+if exists('g:loaded_syntastic_r_lintr_checker')
     finish
 endif
 let g:loaded_syntastic_r_lintr_checker = 1

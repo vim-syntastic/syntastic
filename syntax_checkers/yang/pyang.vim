@@ -20,7 +20,7 @@ set cpo&vim
 
 function! SyntaxCheckers_yang_pyang_GetHighlightRegex(item)
     let term = matchstr(a:item['text'], '\m"\zs[^"]\+\ze"')
-    return term != '' ? '\V\<' . escape(term, '\') . '\>' : ''
+    return term !=? '' ? '\V\<' . escape(term, '\') . '\>' : ''
 endfunction
 
 function! SyntaxCheckers_yang_pyang_GetLocList() dict

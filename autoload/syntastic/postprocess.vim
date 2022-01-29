@@ -69,7 +69,7 @@ endfunction " }}}2
 function! syntastic#postprocess#iconv(errors) abort " {{{2
     if has('iconv') && &encoding !=# '' && &encoding !=# 'utf-8'
         for e in a:errors
-            let e['text'] = iconv(e['text'], "utf-8", &encoding)
+            let e['text'] = iconv(e['text'], 'utf-8', &encoding)
         endfor
     endif
 
