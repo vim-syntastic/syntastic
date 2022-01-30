@@ -1,3 +1,5 @@
+Syntastic has been superseded by [ALE](https://github.com/dense-analysis/ale). Please consider sending patches only if they fix actual bugs.
+
                    ,
                   / \,,_  .'|
                ,{{| /}}}}/_.'            _____________________________________________
