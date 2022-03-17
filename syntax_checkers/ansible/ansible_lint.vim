@@ -31,7 +31,9 @@ function! SyntaxCheckers_ansible_ansible_lint_GetLocList() dict
     let errorformat =
         \ '%f:%l: [E%n] %m,' .
         \ '%f:%l: [EANSIBLE%n] %m,' .
-        \ '%f:%l: [ANSIBLE%n] %m'
+        \ '%f:%l: [ANSIBLE%n] %m,' .
+        \ '%f:%l:%c %m,' .
+        \ '%f:%l: %m'
 
     let env = syntastic#util#isRunningWindows() ? {} : { 'TERM': 'dumb' }
 
