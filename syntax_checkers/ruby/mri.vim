@@ -37,7 +37,7 @@ endfunction
 
 function! SyntaxCheckers_ruby_mri_GetLocList() dict
     let makeprg = self.makeprgBuild({
-        \ 'args': '-w -T1',
+        \ 'args': '-w',
         \ 'args_after': '-c' })
 
     "this is a hack to filter out a repeated useless warning in rspec files
