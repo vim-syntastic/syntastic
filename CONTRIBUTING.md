@@ -109,9 +109,11 @@ let errorformat =
     \ '%-G%.%#'
 ```
 
+[ale]:              https://github.com/dense-analysis/ale
 [bug_tracker]:      https://github.com/vim-syntastic/syntastic/issues
 [manual]:           https://github.com/vim-syntastic/syntastic/blob/master/doc/syntastic.txt
 [github]:           https://github.com/vim-syntastic/syntastic
 [branches]:         https://github.com/dchelimsky/rspec/wiki/Topic-Branches#using-topic-branches-when-contributing-patches
 [variables]:        http://www.refactoring.com/catalog/extractVariable.html
 [guide]:            https://github.com/vim-syntastic/syntastic/wiki/Syntax-Checker-Guide
+[vim]:              http://www.vim.org/
