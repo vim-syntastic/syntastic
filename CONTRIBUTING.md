@@ -1,14 +1,26 @@
 # CONTRIBUTING
 - - -
-1\. [Bug reports / GitHub issues](#bugreps)  
-2\. [Submitting a patch](#patches)  
-3\. [General style notes](#generalstyle)  
-4\. [Syntax checker notes](#checkerstyle)  
+1\. [Deprecation note](#deprecation)  
+2\. [Bug reports / GitHub issues](#bugreps)  
+3\. [Submitting a patch](#patches)  
+4\. [General style notes](#generalstyle)  
+5\. [Syntax checker notes](#checkerstyle)  
 - - -
+
+<a name="deprecation"></a>
+
+## 1. Deprecation note
+
+This project is no longer maintained.  If you need a syntax checking plugin
+for [Vim][vim] you might be interested in Syntastic's spiritual succesor,
+[ALE][ale].  Although it shares no code with syntastic and it takes a very
+different approach to design, [ALE][ale] can be considered a natural evolution
+of syntastic in terms of goals and functionality.  Check it out, you probably
+won't be disappointed.
 
 <a name="bugreps"></a>
 
-## 1. Bug reports / GitHub issues
+## 2. Bug reports / GitHub issues
 
 Please note that the preferred channel for posting bug reports is the
 [issue tracker at GitHub][bug_tracker]. Reports posted elsewhere are less likely
@@ -36,7 +48,7 @@ too:
 
 <a name="patches"></a>
 
-## 2. Submitting a patch
+## 3. Submitting a patch
 
 Before you consider adding features to syntastic, _please_ spend a few minutes
 (re-)reading the latest version of the [manual][manual]. Syntastic is changing
@@ -59,7 +71,7 @@ features that aren't documented.
 
 <a name="generalstyle"></a>
 
-## 3. General style notes
+## 4. General style notes
 
 Follow the coding conventions/styles used in the syntastic core:
 
@@ -74,7 +86,7 @@ aid readability.
 
 <a name="checkerstyle"></a>
 
-## 4. Syntax checker notes
+## 5. Syntax checker notes
 
 Make sure to read the [guide][guide] if you plan to add new syntax checkers.
 
