@@ -21,7 +21,7 @@ function! SyntaxCheckers_c_cppcheck_GetLocList() dict
     let buf = bufnr('')
 
     let makeprg = self.makeprgBuild({
-        \ 'args': syntastic#c#ReadConfig(syntastic#util#bufVar(buf, 'cppcheck_config_file')),
+        \ 'args_before': syntastic#c#ReadConfig(syntastic#util#bufVar(buf, 'cppcheck_config_file')),
         \ 'args_after': '-q --enable=style' })
 
     let errorformat =
