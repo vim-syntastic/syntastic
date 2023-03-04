@@ -388,7 +388,7 @@ project's root rather than the current directory...__
 
 A. You can set up an `autocmd` to search for the configuration file in the
 current directory and upwards, and add it to the checker's options when found.
-For example for `jscs`:
+For example for `eslint`:
 
 ```vim
 function! FindConfig(prefix, what, where)
@@ -396,9 +396,9 @@ function! FindConfig(prefix, what, where)
     return cfg !=# '' ? ' ' . a:prefix . ' ' . shellescape(cfg) : ''
 endfunction
 
-autocmd FileType javascript let b:syntastic_javascript_jscs_args =
-    \ get(g:, 'syntastic_javascript_jscs_args', '') .
-    \ FindConfig('-c', '.jscsrc', expand('<afile>:p:h', 1))
+autocmd FileType javascript let b:syntastic_javascript_eslint_args =
+    \ get(g:, 'syntastic_javascript_eslint_args', '') .
+    \ FindConfig('-c', '.eslintrc', expand('<afile>:p:h', 1))
 ```
 
 <a name="faqstyle"></a>
